@@ -12,7 +12,8 @@ import (
 	"github.com/theopenlane/httpsling"
 )
 
-func TestQueryRepositoriesUsesEnterpriseGraphQLEndpoint(t *testing.T) {
+// TestQueryRepositoriesUsesConfiguredGraphQLEndpoint verifies that the client uses the configured API URL for GraphQL queries
+func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	t.Parallel()
 
 	var requestPath string

@@ -7,19 +7,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// RepositoryFilter limits repository collection to matching repositories
-	RepositoryFilter string `json:"repositoryFilter,omitempty" jsonschema:"title=Repository Filter Expression"`
-	// SecurityOnly limits collection to security-focused data
-	SecurityOnly bool `json:"securityOnly,omitempty" jsonschema:"title=Collect Security Signals Only"`
-}
-
 // Builder returns the GitHub App definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
+		app := App{Config: cfg}
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -43,8 +35,6 @@ func Builder(cfg Config) definition.Builder {
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/github/app/install",
 				CallbackPath: "/v1/integrations/github/app/callback",
-				Start:        Auth{Config: cfg}.Start,
-				Complete:     Auth{Config: cfg}.Complete,
 			},
 			Clients: []types.ClientRegistration{
 				{
@@ -90,8 +80,8 @@ func Builder(cfg Config) definition.Builder {
 			Webhooks: []types.WebhookRegistration{
 				{
 					Name:   "installation.events",
-					Verify: Webhook{Config: cfg}.Verify,
-					Event:  Webhook{}.Event,
+					Verify: app.Verify,
+					Event:  app.Event,
 					Events: []types.WebhookEventRegistration{
 						{
 							Name:   PingWebhookEvent.Name(),

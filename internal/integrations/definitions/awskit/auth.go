@@ -14,105 +14,12 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-const (
-	// AccountScopeAll indicates operations should run across all accessible accounts
-	AccountScopeAll = "all"
-	// AccountScopeSpecific indicates operations should be limited to explicitly listed accounts
-	AccountScopeSpecific = "specific"
-)
-
-// awsProviderData holds AWS provider data fields used for authentication
-type awsProviderData struct {
-	// Region is the AWS region for API calls
-	Region string `json:"region"`
-	// HomeRegion is the Security Hub home region for aggregated queries
-	HomeRegion string `json:"homeRegion"`
-	// LinkedRegions optionally limits queries to the listed regions
-	LinkedRegions []string `json:"linkedRegions"`
-	// OrganizationID is the AWS Organizations identifier associated with this integration
-	OrganizationID string `json:"organizationId"`
-	// AccountScope controls whether queries should use all accounts or a provided subset
-	AccountScope string `json:"accountScope"`
-	// AccountIDs optionally scopes collection to specific AWS account IDs
-	AccountIDs []string `json:"accountIds"`
-	// RoleARN is the ARN of the role to assume
-	RoleARN string `json:"roleArn"`
-	// AccountID is the AWS account ID
-	AccountID string `json:"accountId"`
-	// ExternalID is the external ID for role assumption
-	ExternalID string `json:"externalId"`
-	// SessionName is the name for the session
-	SessionName string `json:"sessionName"`
-	// SessionDuration is the duration for the session
-	SessionDuration string `json:"sessionDuration"`
-	// AccessKeyID is the AWS access key ID
-	AccessKeyID string `json:"accessKeyId"`
-	// SecretAccessKey is the AWS secret access key
-	SecretAccessKey string `json:"secretAccessKey"`
-	// SessionToken is the AWS session token
-	SessionToken string `json:"sessionToken"`
-}
-
-// Metadata captures common AWS configuration fields stored in provider metadata
-type Metadata struct {
-	// Region is the AWS region for API calls
-	Region string
-	// HomeRegion is the Security Hub home region for aggregated queries
-	HomeRegion string
-	// LinkedRegions optionally limits queries to the listed regions
-	LinkedRegions []string
-	// OrganizationID is the AWS Organizations identifier associated with this integration
-	OrganizationID string
-	// AccountScope controls whether queries should use all accounts or a provided subset
-	AccountScope string
-	// AccountIDs optionally scopes collection to specific AWS account IDs
-	AccountIDs []string
-	// RoleARN is the ARN of the role to assume
-	RoleARN string
-	// AccountID is the AWS account ID
-	AccountID string
-	// ExternalID is the external ID for role assumption
-	ExternalID string
-	// SessionName is the name for the session
-	SessionName string
-	// SessionDuration is the duration for the session
-	SessionDuration time.Duration
-	// AccessKeyID is the AWS access key ID
-	AccessKeyID string
-	// SecretAccessKey is the AWS secret access key
-	SecretAccessKey string
-	// SessionToken is the AWS session token
-	SessionToken string
-}
-
-// AssumeRole captures the optional STS assume-role settings
-type AssumeRole struct {
-	// RoleARN is the ARN of the role to assume
-	RoleARN string
-	// ExternalID is the external ID for role assumption
-	ExternalID string
-	// SessionName is the name for the session
-	SessionName string
-	// SessionDuration is the duration for the session
-	SessionDuration time.Duration
-}
-
-// Credentials captures static AWS access key credentials
-type Credentials struct {
-	// AccessKeyID is the AWS access key ID
-	AccessKeyID string
-	// SecretAccessKey is the AWS secret access key
-	SecretAccessKey string
-	// SessionToken is the AWS session token
-	SessionToken string
-}
-
 // MetadataFromProviderData normalizes AWS metadata from a CredentialSet's ProviderData field,
 // applying a default session name when one is not present in the stored data
 func MetadataFromProviderData(providerData []byte, defaultSessionName string) (Metadata, error) {
-	var decoded awsProviderData
+	var decoded ProviderData
 	if err := jsonx.UnmarshalIfPresent(providerData, &decoded); err != nil {
-		return Metadata{}, err
+		return Metadata{}, ErrMetadataDecode
 	}
 
 	region := lo.CoalesceOrEmpty(decoded.Region, decoded.HomeRegion)
@@ -160,7 +67,7 @@ func BuildAWSConfig(ctx context.Context, region string, creds Credentials, assum
 
 	cfg, err := config.LoadDefaultConfig(ctx, opts...)
 	if err != nil {
-		return cfg, err
+		return cfg, ErrAWSConfigBuildFailed
 	}
 
 	if assume.RoleARN == "" {

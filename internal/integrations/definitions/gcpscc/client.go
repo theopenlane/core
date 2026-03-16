@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+const defaultScope = "https://www.googleapis.com/auth/cloud-platform"
+
 // Client builds GCP Security Command Center clients for one installation
 type Client struct{}
 
@@ -51,21 +53,21 @@ func (Client) FromAny(value any) (*cloudscc.Client, error) {
 }
 
 // metadataFromCredential decodes SCC credential metadata from the credential set
-func metadataFromCredential(credential types.CredentialSet) (credentialMetadata, error) {
+func metadataFromCredential(credential types.CredentialSet) (CredentialSchema, error) {
 	if len(credential.ProviderData) == 0 {
-		return credentialMetadata{}, ErrCredentialMetadataRequired
+		return CredentialSchema{}, ErrCredentialMetadataRequired
 	}
 
-	var meta credentialMetadata
+	var meta CredentialSchema
 	if err := jsonx.UnmarshalIfPresent(credential.ProviderData, &meta); err != nil {
-		return credentialMetadata{}, ErrMetadataDecode
+		return CredentialSchema{}, ErrMetadataDecode
 	}
 
 	return meta.applyDefaults(), nil
 }
 
 // clientOptions builds client options based on available credentials
-func clientOptions(ctx context.Context, meta credentialMetadata, oauthToken string) ([]option.ClientOption, error) {
+func clientOptions(ctx context.Context, meta CredentialSchema, oauthToken string) ([]option.ClientOption, error) {
 	if meta.ServiceAccountKey != "" {
 		creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes)
 		if err != nil {

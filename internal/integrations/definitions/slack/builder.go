@@ -1,32 +1,10 @@
 package slack
 
 import (
-	"encoding/json"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
-
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-}
-
-// MessageOperationInput holds per-invocation parameters for the message.send operation
-type MessageOperationInput struct {
-	// Channel is the Slack channel identifier to post to
-	Channel string `json:"channel" jsonschema:"required,title=Channel"`
-	// Text is the plain-text message content
-	Text string `json:"text,omitempty" jsonschema:"title=Message Text"`
-	// Blocks is a Block Kit payload for rich messages
-	Blocks []json.RawMessage `json:"blocks,omitempty" jsonschema:"title=Block Kit Payload"`
-	// ThreadTS is the thread timestamp for replies
-	ThreadTS string `json:"thread_ts,omitempty" jsonschema:"title=Thread Timestamp"`
-	// UnfurlLinks controls whether links are unfurled
-	UnfurlLinks *bool `json:"unfurl_links,omitempty" jsonschema:"title=Unfurl Links"`
-}
 
 // Builder returns the Slack definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
@@ -63,6 +41,8 @@ func Builder(cfg Config) definition.Builder {
 						"chat:write",
 						"chat:write.public",
 						"chat:write.customize",
+						"channels:read",
+						"groups:read",
 						"team:read",
 						"users:read",
 					},
@@ -92,6 +72,15 @@ func Builder(cfg Config) definition.Builder {
 					ClientRef:   SlackClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      TeamInspect{}.Handle(Client{}),
+				},
+				{
+					Name:         ChannelsListOperation.Name(),
+					Description:  "List Slack channels available for use as notification destinations",
+					Topic:        ChannelsListOperation.Topic(Slug),
+					ClientRef:    SlackClient.ID(),
+					ConfigSchema: providerkit.SchemaFrom[ChannelsListOperationInput](),
+					Policy:       types.ExecutionPolicy{Idempotent: true, Inline: true},
+					Handle:       ChannelsList{}.Handle(Client{}),
 				},
 				{
 					Name:         MessageSendOperation.Name(),

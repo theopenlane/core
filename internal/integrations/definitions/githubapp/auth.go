@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/json"
 	"encoding/pem"
 	"net/url"
 	"strconv"
@@ -24,22 +23,10 @@ const (
 	jwtIssuedAtBackdateSeconds = 30 * time.Second
 )
 
-// Auth executes the GitHub App install flow
-type Auth struct {
+// App executes the GitHub App install flow and webhook verification logic
+type App struct {
 	// Config holds the operator-supplied GitHub App settings
 	Config Config
-}
-
-// InstallStartInput carries runtime state used to construct the install URL
-type InstallStartInput struct {
-	// State carries caller-provided state through the install redirect
-	State string `json:"state"`
-}
-
-// InstallationCallbackState carries the installation ID received from the GitHub callback
-type InstallationCallbackState struct {
-	// InstallationID is the GitHub installation selected during the callback flow
-	InstallationID string `json:"installationId"`
 }
 
 // ProviderData is the provider-specific data stored in the credential ProviderData field
@@ -50,75 +37,34 @@ type ProviderData struct {
 	InstallationID string `json:"installationId"`
 }
 
-// Start begins the GitHub App install flow by returning the installation URL
-func (a Auth) Start(ctx context.Context, input json.RawMessage) (types.AuthStartResult, error) {
-	if err := ctx.Err(); err != nil {
-		return types.AuthStartResult{}, err
+// MintInstallationCredential exchanges one installation ID for a GitHub App installation token.
+func MintInstallationCredential(ctx context.Context, cfg Config, installationID string) (types.CredentialSet, error) {
+	if installationID == "" {
+		return types.CredentialSet{}, ErrInstallationIDMissing
 	}
 
-	var startInput InstallStartInput
-	if err := jsonx.UnmarshalIfPresent(input, &startInput); err != nil {
-		return types.AuthStartResult{}, err
-	}
-
-	if a.Config.AppSlug == "" {
-		return types.AuthStartResult{}, ErrAppSlugMissing
-	}
-
-	installURL := url.URL{
-		Scheme: "https",
-		Host:   "github.com",
-		Path:   "/apps/" + a.Config.AppSlug + "/installations/new",
-	}
-	if startInput.State != "" {
-		query := installURL.Query()
-		query.Set("state", startInput.State)
-		installURL.RawQuery = query.Encode()
-	}
-
-	return types.AuthStartResult{URL: installURL.String()}, nil
-}
-
-// Complete finishes the GitHub App install flow by minting an installation access token
-func (a Auth) Complete(ctx context.Context, _ json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
-	if err := ctx.Err(); err != nil {
-		return types.AuthCompleteResult{}, err
-	}
-
-	var state InstallationCallbackState
-	if err := jsonx.UnmarshalIfPresent(input, &state); err != nil {
-		return types.AuthCompleteResult{}, err
-	}
-
-	if state.InstallationID == "" {
-		return types.AuthCompleteResult{}, ErrInstallationIDMissing
-	}
+	a := App{Config: cfg}
 
 	if a.Config.AppID == "" {
-		return types.AuthCompleteResult{}, ErrAppIDMissing
+		return types.CredentialSet{}, ErrAppIDMissing
 	}
 
-	privateKey := normalizePrivateKey(a.Config.PrivateKey)
-	if privateKey == "" {
-		return types.AuthCompleteResult{}, ErrPrivateKeyMissing
-	}
-
-	jwtToken, err := a.appJWT(privateKey)
+	jwtToken, err := a.appJWT(a.Config.PrivateKey)
 	if err != nil {
-		return types.AuthCompleteResult{}, err
+		return types.CredentialSet{}, err
 	}
 
-	installationToken, err := a.installationToken(ctx, state.InstallationID, jwtToken)
+	installationToken, err := a.installationToken(ctx, installationID, jwtToken)
 	if err != nil {
-		return types.AuthCompleteResult{}, err
+		return types.CredentialSet{}, err
 	}
 
 	providerData, err := jsonx.ToRawMessage(ProviderData{
 		AppID:          a.Config.AppID,
-		InstallationID: state.InstallationID,
+		InstallationID: installationID,
 	})
 	if err != nil {
-		return types.AuthCompleteResult{}, err
+		return types.CredentialSet{}, ErrAuthProviderDataEncode
 	}
 
 	credential := types.CredentialSet{
@@ -133,11 +79,11 @@ func (a Auth) Complete(ctx context.Context, _ json.RawMessage, input json.RawMes
 		credential.OAuthExpiry = &expiry
 	}
 
-	return types.AuthCompleteResult{Credential: credential}, nil
+	return credential, nil
 }
 
 // appJWT signs a short-lived JWT for GitHub App authentication
-func (a Auth) appJWT(privateKey string) (string, error) {
+func (a App) appJWT(privateKey string) (string, error) {
 	key, err := parseRSAPrivateKey(privateKey)
 	if err != nil {
 		return "", err
@@ -184,7 +130,7 @@ func parseRSAPrivateKey(privateKey string) (*rsa.PrivateKey, error) {
 }
 
 // installationToken exchanges an app JWT for an installation access token
-func (a Auth) installationToken(ctx context.Context, installationID string, jwtToken string) (*oauth2.Token, error) {
+func (a App) installationToken(ctx context.Context, installationID string, jwtToken string) (*oauth2.Token, error) {
 	if installationID == "" {
 		return nil, ErrInstallationIDMissing
 	}
@@ -218,7 +164,7 @@ func (a Auth) installationToken(ctx context.Context, installationID string, jwtT
 }
 
 // installationTokenClient builds the GitHub API client used for installation token requests
-func (a Auth) installationTokenClient(ctx context.Context, jwtToken string) *gh.Client {
+func (a App) installationTokenClient(ctx context.Context, jwtToken string) *gh.Client {
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: jwtToken})
 	httpClient := oauth2.NewClient(ctx, source)
 	client := gh.NewClient(httpClient)
@@ -227,19 +173,18 @@ func (a Auth) installationTokenClient(ctx context.Context, jwtToken string) *gh.
 		return client
 	}
 
-	enterpriseClient, err := client.WithEnterpriseURLs(a.Config.APIURL+"/api/v3", a.Config.APIURL)
+	apiURL, err := url.Parse(strings.TrimRight(a.Config.APIURL, "/") + "/api/v3/")
 	if err != nil {
 		return client
 	}
 
-	return enterpriseClient
-}
-
-// normalizePrivateKey rewrites escaped newlines into PEM newlines when needed
-func normalizePrivateKey(value string) string {
-	if strings.Contains(value, "\\n") && !strings.Contains(value, "\n") {
-		return strings.ReplaceAll(value, "\\n", "\n")
+	uploadURL, err := url.Parse(strings.TrimRight(a.Config.APIURL, "/") + "/api/uploads/")
+	if err != nil {
+		return client
 	}
 
-	return value
+	client.BaseURL = apiURL
+	client.UploadURL = uploadURL
+
+	return client
 }

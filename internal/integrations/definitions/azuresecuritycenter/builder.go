@@ -6,36 +6,9 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-var (
-	DefinitionID                     = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
-	HealthDefaultOperation           = types.NewOperationRef[struct{}]("health.default")
-	SecurityPricingOverviewOperation = types.NewOperationRef[struct{}]("security.pricing_overview")
-)
-
-const Slug = "azure_security_center"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label         string `json:"label,omitempty"         jsonschema:"title=Installation Label"`
-	ResourceGroup string `json:"resourceGroup,omitempty" jsonschema:"title=Resource Group"`
-	WorkspaceID   string `json:"workspaceId,omitempty"   jsonschema:"title=Log Analytics Workspace ID"`
-}
-
-// credential holds the Azure Security Center client credentials for one installation
-type credential struct {
-	TenantID       string `json:"tenantId"                jsonschema:"required,title=Tenant ID"`
-	ClientID       string `json:"clientId"                jsonschema:"required,title=Client ID"`
-	ClientSecret   string `json:"clientSecret"            jsonschema:"required,title=Client Secret"`
-	SubscriptionID string `json:"subscriptionId"          jsonschema:"required,title=Subscription ID"`
-	ResourceGroup  string `json:"resourceGroup,omitempty" jsonschema:"title=Resource Group"`
-	WorkspaceID    string `json:"workspaceId,omitempty"   jsonschema:"title=Log Analytics Workspace ID"`
-}
-
 // Builder returns the Azure Security Center definition builder
 func Builder() definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -51,16 +24,16 @@ func Builder() definition.Builder {
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[credential](),
+				Schema: providerkit.SchemaFrom[CredentialSchema](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         SecurityCenterClient.ID(),
 					Description: "Azure management API client for Defender for Cloud",
-					Build:       buildAzureSecurityClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -68,17 +41,17 @@ func Builder() definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Azure Security Center pricings API to verify access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   SecurityCenterClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        SecurityPricingOverviewOperation.Name(),
 					Description: "Collect plan and pricing metadata for Microsoft Defender for Cloud",
 					Topic:       SecurityPricingOverviewOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   SecurityCenterClient.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      runSecurityPricingOperation,
+					Handle:      SecurityPricingOverview{}.Handle(Client{}),
 				},
 			},
 		}, nil

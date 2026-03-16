@@ -2,6 +2,7 @@ package githubapp
 
 import "testing"
 
+// TestBuilderUsesCanonicalRefs verifies that the GitHub App builder wires the canonical definition ID, topics, and operations
 func TestBuilderUsesCanonicalRefs(t *testing.T) {
 	t.Parallel()
 

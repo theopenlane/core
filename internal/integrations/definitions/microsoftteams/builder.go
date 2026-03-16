@@ -6,28 +6,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// TenantID is the Microsoft tenant identifier
-	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
-}
-
-// MessageOperationInput holds per-invocation parameters for the message.send operation
-type MessageOperationInput struct {
-	// TeamID is the target Microsoft Teams team identifier
-	TeamID string `json:"team_id" jsonschema:"required,title=Team ID"`
-	// ChannelID is the target Teams channel identifier
-	ChannelID string `json:"channel_id" jsonschema:"required,title=Channel ID"`
-	// Body is the message body content
-	Body string `json:"body" jsonschema:"required,title=Message Body"`
-	// BodyFormat controls the content type (text or html)
-	BodyFormat string `json:"body_format,omitempty" jsonschema:"title=Body Format"`
-	// Subject is an optional message subject
-	Subject string `json:"subject,omitempty" jsonschema:"title=Subject"`
-}
-
 // Builder returns the Microsoft Teams definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {

@@ -137,7 +137,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
-	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
+	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	github.com/wundergraph/astjson v1.1.0

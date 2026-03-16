@@ -36,6 +36,21 @@
       },
       "type": "array"
     },
+    "azureentraid.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "cache.Config": {
       "properties": {
         "enabled": {
@@ -98,6 +113,33 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config is the config values for the cache-control middleware"
+    },
+    "catalog.Config": {
+      "properties": {
+        "githubapp": {
+          "$ref": "#/$defs/githubapp.Config"
+        },
+        "slack": {
+          "$ref": "#/$defs/slack.Config"
+        },
+        "googleworkspace": {
+          "$ref": "#/$defs/googleworkspace.Config"
+        },
+        "azureentraid": {
+          "$ref": "#/$defs/azureentraid.Config"
+        },
+        "gcpscc": {
+          "$ref": "#/$defs/gcpscc.Config"
+        },
+        "oidcgeneric": {
+          "$ref": "#/$defs/oidcgeneric.Config"
+        },
+        "microsoftteams": {
+          "$ref": "#/$defs/microsoftteams.Config"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "config.Auth": {
       "properties": {
@@ -696,6 +738,27 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "gcpscc.Config": {
+      "properties": {
+        "audience": {
+          "type": "string"
+        },
+        "serviceaccount": {
+          "type": "string"
+        },
+        "subjecttokentype": {
+          "type": "string"
+        },
+        "scopes": {
+          "$ref": "#/$defs/[]string"
+        },
+        "tokenlifetime": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "github.ProviderConfig": {
       "properties": {
         "clientid": {
@@ -723,6 +786,24 @@
         "redirecturl"
       ]
     },
+    "githubapp.Config": {
+      "properties": {
+        "appid": {
+          "type": "string"
+        },
+        "privatekey": {
+          "type": "string"
+        },
+        "webhooksecret": {
+          "type": "string"
+        },
+        "appslug": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "google.ProviderConfig": {
       "properties": {
         "clientid": {
@@ -749,6 +830,21 @@
         "scopes",
         "redirecturl"
       ]
+    },
+    "googleworkspace.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "handlers.CampaignWebhookConfig": {
       "properties": {
@@ -831,12 +927,6 @@
       },
       "type": "object"
     },
-    "map[string]spec.ProviderSpec": {
-      "additionalProperties": {
-        "$ref": "#/$defs/spec.ProviderSpec"
-      },
-      "type": "object"
-    },
     "map[string]string": {
       "additionalProperties": {
         "type": "string"
@@ -847,6 +937,21 @@
       "additionalProperties": {
         "$ref": "#/$defs/tokens.APITokenKeyConfig"
       },
+      "type": "object"
+    },
+    "microsoftteams.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
       "type": "object"
     },
     "mime.Config": {
@@ -867,6 +972,24 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines the config for Mime middleware"
+    },
+    "oidcgeneric.Config": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "discoveryurl": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "ratelimit.Config": {
       "properties": {
@@ -1184,12 +1307,7 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "slog.Logger": {
-      "properties": {},
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "spec.OAuthSpec": {
+    "slack.Config": {
       "properties": {
         "clientid": {
           "type": "string"
@@ -1197,136 +1315,15 @@
         "clientsecret": {
           "type": "string"
         },
-        "AuthURL": {
+        "redirecturl": {
           "type": "string"
-        },
-        "TokenURL": {
-          "type": "string"
-        },
-        "Scopes": {
-          "$ref": "#/$defs/[]string"
-        },
-        "OIDCDiscovery": {
-          "type": "string"
-        },
-        "RedirectURI": {
-          "type": "string"
-        },
-        "UsePKCE": {
-          "type": "boolean"
-        },
-        "AuthParams": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "TokenParams": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "AdditionalHosts": {
-          "$ref": "#/$defs/[]string"
         }
       },
       "additionalProperties": false,
       "type": "object"
     },
-    "spec.PersistenceSpec": {
-      "properties": {
-        "StoreRefreshToken": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "spec.ProviderSpec": {
-      "properties": {
-        "Name": {
-          "type": "string"
-        },
-        "DisplayName": {
-          "type": "string"
-        },
-        "Category": {
-          "type": "string"
-        },
-        "Description": {
-          "type": "string"
-        },
-        "AuthType": {
-          "type": "string"
-        },
-        "AuthStartPath": {
-          "type": "string"
-        },
-        "AuthCallbackPath": {
-          "type": "string"
-        },
-        "Active": {
-          "type": "boolean"
-        },
-        "Visible": {
-          "type": "boolean"
-        },
-        "Tags": {
-          "$ref": "#/$defs/[]string"
-        },
-        "LogoURL": {
-          "type": "string"
-        },
-        "DocsURL": {
-          "type": "string"
-        },
-        "SchemaVersion": {
-          "type": "string"
-        },
-        "oauth": {
-          "$ref": "#/$defs/spec.OAuthSpec"
-        },
-        "UserInfo": {
-          "$ref": "#/$defs/spec.UserInfoSpec"
-        },
-        "CredentialsSchema": true,
-        "Persistence": {
-          "$ref": "#/$defs/spec.PersistenceSpec"
-        },
-        "Labels": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "Metadata": true,
-        "successredirecturl": {
-          "type": "string"
-        },
-        "providerconfig": true
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "spec.UserInfoSpec": {
-      "properties": {
-        "URL": {
-          "type": "string"
-        },
-        "Method": {
-          "type": "string"
-        },
-        "AuthStyle": {
-          "type": "string"
-        },
-        "AuthHeader": {
-          "type": "string"
-        },
-        "IDPath": {
-          "type": "string"
-        },
-        "EmailPath": {
-          "type": "string"
-        },
-        "LoginPath": {
-          "type": "string"
-        },
-        "SecondaryEmailURL": {
-          "type": "string"
-        }
-      },
+    "slog.Logger": {
+      "properties": {},
       "additionalProperties": false,
       "type": "object"
     },
@@ -1931,13 +1928,13 @@
       "$ref": "#/$defs/config.Slack",
       "description": "Slack contains settings for Slack notifications"
     },
-    "integrationproviders": {
-      "$ref": "#/$defs/map[string]spec.ProviderSpec",
-      "description": "IntegrationProviders contains provider spec overrides keyed by provider name."
+    "integrations": {
+      "$ref": "#/$defs/catalog.Config",
+      "description": "Integrations contains operator-level credentials for all v2 integration definitions"
     },
     "integrationsuccessredirecturl": {
       "type": "string",
-      "description": "IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication."
+      "description": "IntegrationSuccessRedirectURL is the URL to redirect to after a successful integration auth flow"
     },
     "workflows": {
       "$ref": "#/$defs/workflows.Config",

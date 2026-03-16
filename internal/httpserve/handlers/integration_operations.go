@@ -57,7 +57,14 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 	integrationID := req.IntegrationID
 
-	if h.WorkflowEngine == nil && operationName != "health.default" {
+	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("operation not registered")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	inlineExecution := operationName == "health.default" || operation.Policy.Inline
+	if h.WorkflowEngine == nil && !inlineExecution {
 		return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
 	}
 
@@ -76,7 +83,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		integrationID = installationRec.ID
 	}
 
-	if operationName == "health.default" {
+	if inlineExecution {
 		var (
 			installationRec *ent.Integration
 			err             error
@@ -103,15 +110,18 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			return h.InternalServerError(ctx, wrapIntegrationError("load credential for", err), openapiCtx)
 		}
 
-		operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
-		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("operation not registered")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-
 		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, installationRec, operation, credential, configDoc)
 		if err != nil {
-			return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
+			if operationName == "health.default" {
+				return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
+			}
+
+			return h.BadRequest(ctx, wrapIntegrationError("execute", err), openapiCtx)
+		}
+
+		summary := "Integration operation completed"
+		if operationName == "health.default" {
+			summary = "Health check completed"
 		}
 
 		return h.Success(ctx, IntegrationOperationResponse{
@@ -119,7 +129,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			Provider:  def.Slug,
 			Operation: operationName,
 			Status:    "ok",
-			Summary:   "Health check completed",
+			Summary:   summary,
 			Details:   output,
 		})
 	}

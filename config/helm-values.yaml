@@ -530,9 +530,33 @@ coreConfiguration:
     newsubscribermessagefile: ""  # @schema type:string
     # -- NewUserMessageFile is the path to the template used for new user notifications
     newusermessagefile: ""  # @schema type:string
-  # -- IntegrationProviders contains provider spec overrides keyed by provider name.
-  integrationproviders: {}
-  # -- IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication.
+  # -- Integrations contains operator-level credentials for all v2 integration definitions
+  integrations:
+    githubapp:
+      appslug: ""  # @schema type:string
+    slack:
+      clientid: ""  # @schema type:string
+      redirecturl: ""  # @schema type:string
+    googleworkspace:
+      clientid: ""  # @schema type:string
+      redirecturl: ""  # @schema type:string
+    azureentraid:
+      clientid: ""  # @schema type:string
+      redirecturl: ""  # @schema type:string
+    gcpscc:
+      audience: ""  # @schema type:string
+      serviceaccount: ""  # @schema type:string
+      subjecttokentype: ""  # @schema type:string
+      scopes: []
+      tokenlifetime: "0s"  # @schema type:integer
+    oidcgeneric:
+      clientid: ""  # @schema type:string
+      discoveryurl: ""  # @schema type:string
+      redirecturl: ""  # @schema type:string
+    microsoftteams:
+      clientid: ""  # @schema type:string
+      redirecturl: ""  # @schema type:string
+  # -- IntegrationSuccessRedirectURL is the URL to redirect to after a successful integration auth flow
   integrationsuccessredirecturl: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
@@ -873,6 +897,70 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
+    # -- core-integrations-githubapp-appid secret configuration
+    core-integrations-githubapp-appid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.githubapp.appid
+      secretKey: "CORE_INTEGRATIONS_GITHUBAPP_APPID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-githubapp-appid"  # @schema type:string
+    # -- core-integrations-githubapp-privatekey secret configuration
+    core-integrations-githubapp-privatekey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.githubapp.privatekey
+      secretKey: "CORE_INTEGRATIONS_GITHUBAPP_PRIVATEKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-githubapp-privatekey"  # @schema type:string
+    # -- core-integrations-githubapp-webhooksecret secret configuration
+    core-integrations-githubapp-webhooksecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.githubapp.webhooksecret
+      secretKey: "CORE_INTEGRATIONS_GITHUBAPP_WEBHOOKSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-githubapp-webhooksecret"  # @schema type:string
+    # -- core-integrations-slack-clientsecret secret configuration
+    core-integrations-slack-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.slack.clientsecret
+      secretKey: "CORE_INTEGRATIONS_SLACK_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-slack-clientsecret"  # @schema type:string
+    # -- core-integrations-googleworkspace-clientsecret secret configuration
+    core-integrations-googleworkspace-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.googleworkspace.clientsecret
+      secretKey: "CORE_INTEGRATIONS_GOOGLEWORKSPACE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-googleworkspace-clientsecret"  # @schema type:string
+    # -- core-integrations-azureentraid-clientsecret secret configuration
+    core-integrations-azureentraid-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.azureentraid.clientsecret
+      secretKey: "CORE_INTEGRATIONS_AZUREENTRAID_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-azureentraid-clientsecret"  # @schema type:string
+    # -- core-integrations-oidcgeneric-clientsecret secret configuration
+    core-integrations-oidcgeneric-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.oidcgeneric.clientsecret
+      secretKey: "CORE_INTEGRATIONS_OIDCGENERIC_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-oidcgeneric-clientsecret"  # @schema type:string
+    # -- core-integrations-microsoftteams-clientsecret secret configuration
+    core-integrations-microsoftteams-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.microsoftteams.clientsecret
+      secretKey: "CORE_INTEGRATIONS_MICROSOFTTEAMS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-microsoftteams-clientsecret"  # @schema type:string
     # -- core-campaignwebhook-resendapikey secret configuration
     core-campaignwebhook-resendapikey:
       # -- Enable this external secret

@@ -1,0 +1,62 @@
+package awssecurityhub
+
+import (
+	"github.com/aws/aws-sdk-go-v2/service/securityhub"
+
+	"github.com/theopenlane/core/internal/integrations/types"
+)
+
+var (
+	// DefinitionID is the stable identifier for the AWS Security Hub integration definition
+	DefinitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
+	SecurityHubClient = types.NewClientRef[*securityhub.Client]()
+	// HealthDefaultOperation is the operation ref for the AWS Security Hub health check
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	// VulnerabilitiesCollectOperation is the operation ref for the Security Hub vulnerabilities collection operation
+	VulnerabilitiesCollectOperation = types.NewOperationRef[VulnerabilitiesCollect]("vulnerabilities.collect")
+)
+
+// Slug is the unique identifier for the AWS Security Hub integration
+const Slug = "aws_security_hub"
+
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty"    jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	// AccountScope controls whether collection covers all delegated accounts or a subset
+	AccountScope string `json:"accountScope,omitempty"  jsonschema:"title=Account Scope"`
+	// AccountIDs lists the specific AWS account IDs used when account scope is specific
+	AccountIDs []string `json:"accountIds,omitempty"    jsonschema:"title=Account IDs"`
+	// LinkedRegions limits findings collection to the listed source regions
+	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
+}
+
+// CredentialSchema holds the AWS STS role and optional static key material for one Security Hub installation
+// Fields are named to match awskit.ProviderData JSON tags so MetadataFromProviderData decodes them correctly
+type CredentialSchema struct {
+	// RoleARN is the cross-account IAM role ARN Openlane should assume in the tenant environment
+	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
+	// ExternalID is the external ID required in the tenant role trust policy
+	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy."`
+	// HomeRegion is the AWS region where Security Hub cross-region aggregation is managed
+	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Security Hub Home Region,description=AWS region where Security Hub cross-region aggregation is managed (e.g. us-east-1)."`
+	// AccountScope controls whether collection covers all delegated accounts or a subset
+	AccountScope string `json:"accountScope,omitempty"    jsonschema:"title=Account Scope,description=Collect from all delegated accounts or restrict to specific account IDs.,enum=all,enum=specific"`
+	// AccountIDs lists the specific AWS account IDs used when account scope is specific
+	AccountIDs []string `json:"accountIds,omitempty"      jsonschema:"title=Account IDs,description=Required when accountScope is specific."`
+	// LinkedRegions limits findings collection to the listed source regions
+	LinkedRegions []string `json:"linkedRegions,omitempty"   jsonschema:"title=Linked Regions,description=Filter findings to these source regions. Empty means all regions."`
+	// AccountID is the AWS account ID for reference
+	AccountID string `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=AWS account ID for reference."`
+	// SessionName is an optional STS session name override
+	SessionName string `json:"sessionName,omitempty"     jsonschema:"title=Session Name,description=Optional STS session name override."`
+	// SessionDuration is an optional STS session duration override
+	SessionDuration string `json:"sessionDuration,omitempty" jsonschema:"title=Session Duration,description=Optional STS session duration (e.g. 1h)."`
+	// AccessKeyID is an optional static source credential when runtime IAM is unavailable
+	AccessKeyID string `json:"accessKeyId,omitempty"     jsonschema:"title=Access Key ID,description=Optional static source credential when runtime IAM is unavailable."`
+	// SecretAccessKey is the AWS secret access key for static credentials
+	SecretAccessKey string `json:"secretAccessKey,omitempty" jsonschema:"title=Secret Access Key"`
+	// SessionToken is the AWS session token for static credentials
+	SessionToken string `json:"sessionToken,omitempty"    jsonschema:"title=Session Token"`
+}

@@ -7,33 +7,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// OrganizationID is the GCP organization identifier
-	OrganizationID string `json:"organizationId,omitempty" jsonschema:"title=Organization ID"`
-	// ProjectIDs limits collection to specific GCP project identifiers
-	ProjectIDs []string `json:"projectIds,omitempty" jsonschema:"title=Project IDs"`
-	// ProjectScope controls whether collection covers all or specific projects
-	ProjectScope string `json:"projectScope,omitempty" jsonschema:"title=Project Scope"`
-	// SourceID is the SCC source identifier
-	SourceID string `json:"sourceId,omitempty" jsonschema:"title=SCC Source ID"`
-}
-
-// CredentialSchema holds the GCP SCC credentials for one installation
-type CredentialSchema struct {
-	OrganizationID           string   `json:"organizationId,omitempty"           jsonschema:"title=Organization ID"`
-	ProjectID                string   `json:"projectId,omitempty"                jsonschema:"title=Project ID"`
-	ProjectScope             string   `json:"projectScope,omitempty"             jsonschema:"title=Project Scope"`
-	ProjectIDs               []string `json:"projectIds,omitempty"               jsonschema:"title=Project IDs"`
-	SourceIDs                []string `json:"sourceIds,omitempty"                jsonschema:"title=SCC Source IDs"`
-	ServiceAccountKey        string   `json:"serviceAccountKey,omitempty"        jsonschema:"title=Service Account Key JSON"`
-	WorkloadIdentityProvider string   `json:"workloadIdentityProvider,omitempty" jsonschema:"title=Workload Identity Provider"`
-	SubjectToken             string   `json:"subjectToken,omitempty"             jsonschema:"title=Subject Token"`
-	FindingFilter            string   `json:"findingFilter,omitempty"            jsonschema:"title=Findings Filter"`
-}
-
 // Builder returns the GCP SCC definition builder with the supplied operator config applied
 func Builder(_ Config) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {

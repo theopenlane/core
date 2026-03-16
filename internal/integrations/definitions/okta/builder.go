@@ -6,20 +6,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// OrgURL is the Okta organization URL
-	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
-}
-
-// credential holds the Okta tenant credentials for one installation
-type credential struct {
-	OrgURL   string `json:"orgUrl"   jsonschema:"required,title=Org URL"`
-	APIToken string `json:"apiToken" jsonschema:"required,title=API Token"`
-}
-
 // Builder returns the Okta definition builder
 func Builder() definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
@@ -41,7 +27,7 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[credential](),
+				Schema: providerkit.SchemaFrom[CredentialSchema](),
 			},
 			Clients: []types.ClientRegistration{
 				{

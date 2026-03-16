@@ -1058,17 +1058,85 @@ data:
       newusermessagefile: {{ .Values.openlane.coreConfiguration.slack.newusermessagefile | quote }}
       {{- end }}
     {{- end }}
-    {{- $mapValue := (.Values.openlane.coreConfiguration.integrationproviders | default (dict)) }}
-    {{- if gt (len $mapValue) 0 }}
-    integrationproviders:
-    {{- toYaml $mapValue | nindent 6 }}
+    {{- if .Values.openlane.coreConfiguration.integrations }}
+    integrations:
+      {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
+      githubapp:
+        {{- if .Values.openlane.coreConfiguration.integrations.githubapp.appslug }}
+        appslug: {{ .Values.openlane.coreConfiguration.integrations.githubapp.appslug | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.slack }}
+      slack:
+        {{- if .Values.openlane.coreConfiguration.integrations.slack.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.slack.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.slack.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.slack.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace }}
+      googleworkspace:
+        {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.googleworkspace.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.googleworkspace.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.azureentraid }}
+      azureentraid:
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.gcpscc }}
+      gcpscc:
+        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.audience }}
+        audience: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.audience | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.serviceaccount }}
+        serviceaccount: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.serviceaccount | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.subjecttokentype }}
+        subjecttokentype: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.subjecttokentype | quote }}
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.gcpscc.scopes | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        scopes:
+        {{- toYaml $sliceValue | nindent 10 }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.tokenlifetime }}
+        tokenlifetime: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.tokenlifetime | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric }}
+      oidcgeneric:
+        {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.oidcgeneric.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric.discoveryurl }}
+        discoveryurl: {{ .Values.openlane.coreConfiguration.integrations.oidcgeneric.discoveryurl | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidcgeneric.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams }}
+      microsoftteams:
+        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationsuccessredirecturl }}
     integrationsuccessredirecturl: {{ .Values.openlane.coreConfiguration.integrationsuccessredirecturl | quote }}
-    {{- else if .Values.domain }}
-    integrationsuccessredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
-    {{- else }}
-    integrationsuccessredirecturl: ""
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

@@ -2,7 +2,6 @@ package awsauditmanager
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 
@@ -23,7 +22,7 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 
 	meta, err := awskit.MetadataFromProviderData(req.Credential.ProviderData, defaultSessionName)
 	if err != nil {
-		return nil, fmt.Errorf("awsauditmanager: metadata decode failed: %w", err)
+		return nil, ErrCredentialMetadataInvalid
 	}
 
 	if meta.RoleARN == "" {
@@ -41,7 +40,7 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 		SessionDuration: meta.SessionDuration,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("awsauditmanager: aws config build failed: %w", err)
+		return nil, ErrAWSConfigBuildFailed
 	}
 
 	return auditmanager.NewFromConfig(cfg), nil

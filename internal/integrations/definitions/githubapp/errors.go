@@ -33,6 +33,28 @@ var (
 	ErrAppSlugMissing = errors.New("githubapp: app slug missing")
 	// ErrClientType indicates the provided client is not a supported type
 	ErrClientType = errors.New("githubapp: unexpected client type")
+	// ErrOperationConfigInvalid indicates operation config could not be decoded
+	ErrOperationConfigInvalid = errors.New("githubapp: operation config invalid")
+	// ErrResultEncode indicates an operation result could not be serialized
+	ErrResultEncode = errors.New("githubapp: result encode failed")
+	// ErrAuthStartInputInvalid indicates auth start input could not be decoded
+	ErrAuthStartInputInvalid = errors.New("githubapp: auth start input invalid")
+	// ErrAuthCompleteInputInvalid indicates auth completion input could not be decoded
+	ErrAuthCompleteInputInvalid = errors.New("githubapp: auth complete input invalid")
+	// ErrAuthProviderDataEncode indicates provider data could not be serialized
+	ErrAuthProviderDataEncode = errors.New("githubapp: auth provider data encode failed")
 	// ErrIngestPayloadEncode indicates a collected GitHub payload could not be serialized for ingest
 	ErrIngestPayloadEncode = errors.New("githubapp: ingest payload encode failed")
+	// ErrWebhookPayloadInvalid indicates the webhook payload could not be decoded
+	ErrWebhookPayloadInvalid = errors.New("githubapp: webhook payload invalid")
+	// ErrWebhookStatePatchEncode indicates the webhook state patch could not be serialized
+	ErrWebhookStatePatchEncode = errors.New("githubapp: webhook state patch encode failed")
+	// ErrWebhookStateMergeFailed indicates provider state merge failed
+	ErrWebhookStateMergeFailed = errors.New("githubapp: webhook state merge failed")
+	// ErrWebhookMetadataEncode indicates webhook metadata could not be encoded
+	ErrWebhookMetadataEncode = errors.New("githubapp: webhook metadata encode failed")
+	// ErrWebhookPersistFailed indicates webhook side effects could not be persisted
+	ErrWebhookPersistFailed = errors.New("githubapp: webhook persist failed")
+	// ErrWebhookIngestFailed indicates webhook ingest failed
+	ErrWebhookIngestFailed = errors.New("githubapp: webhook ingest failed")
 )

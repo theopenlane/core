@@ -25,18 +25,6 @@ Schema for Openlane workflow definitions
 
 ```json
 {
-    "targets": {},
-    "triggers": [
-        {
-            "selector": {}
-        }
-    ],
-    "conditions": [
-        {}
-    ],
-    "actions": [
-        {}
-    ],
     "metadata": {}
 }
 ```
@@ -80,41 +68,15 @@ The object type the workflow applies to
 
 **Items**
 
-**Example**
-
-```json
-[
-    {
-        "selector": {}
-    }
-]
-```
-
 <a name="conditions"></a>
 ## conditions\[\]: array
 
 **Items**
 
-**Example**
-
-```json
-[
-    {}
-]
-```
-
 <a name="actions"></a>
 ## actions\[\]: array
 
 **Items**
-
-**Example**
-
-```json
-[
-    {}
-]
-```
 
 <a name="metadata"></a>
 ## metadata: object

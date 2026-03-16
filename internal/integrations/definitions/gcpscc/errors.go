@@ -19,4 +19,16 @@ var (
 	ErrAccessTokenMissing = errors.New("gcpscc: no access token or service account key")
 	// ErrSecurityCenterClientCreate indicates the SCC client could not be created
 	ErrSecurityCenterClientCreate = errors.New("gcpscc: security center client creation failed")
+	// ErrOperationConfigInvalid indicates operation config could not be decoded
+	ErrOperationConfigInvalid = errors.New("gcpscc: operation config invalid")
+	// ErrListSourcesFailed indicates the source listing request failed
+	ErrListSourcesFailed = errors.New("gcpscc: list sources failed")
+	// ErrListFindingsFailed indicates the findings listing request failed
+	ErrListFindingsFailed = errors.New("gcpscc: list findings failed")
+	// ErrNotificationConfigScanFailed indicates the notification config scan failed
+	ErrNotificationConfigScanFailed = errors.New("gcpscc: notification config scan failed")
+	// ErrFindingEncode indicates a finding payload could not be serialized
+	ErrFindingEncode = errors.New("gcpscc: finding encode failed")
+	// ErrResultEncode indicates an operation result could not be serialized
+	ErrResultEncode = errors.New("gcpscc: result encode failed")
 )

@@ -44,7 +44,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		Provider: configTestProviderID,
 		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 		UserInput: handlers.IntegrationConfigBody(
-			mustMarshalJSON(t, map[string]any{"label": "Production"}),
+			mustMarshalJSON(t, map[string]any{"filterExpr": "payload.severity == \"HIGH\""}),
 		),
 	})
 
@@ -71,7 +71,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	require.NoError(t, err)
 	require.True(t, ok)
 	assert.Contains(t, string(credential.ProviderData), "projectId")
-	assert.Equal(t, "Production", decodeClientConfigLabel(t, stored.Config.ClientConfig))
+	assert.Equal(t, `payload.severity == "HIGH"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinitionID() {
@@ -275,7 +275,7 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) def
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(`{"type":"object","properties":{"label":{"type":"string"}}}`),
+				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
 			},
 			Credentials: &types.CredentialRegistration{
 				Schema: json.RawMessage(`{"type":"object","required":["projectId","serviceAccountEmail"],"properties":{"projectId":{"type":"string"},"serviceAccountEmail":{"type":"string"}}}`),
@@ -325,13 +325,13 @@ func mustMarshalJSON(t *testing.T, value any) []byte {
 	return body
 }
 
-func decodeClientConfigLabel(t *testing.T, raw json.RawMessage) string {
+func decodeClientConfigField(t *testing.T, raw json.RawMessage, key string) string {
 	t.Helper()
 
 	document, err := jsonx.ToMap(raw)
 	require.NoError(t, err)
 
-	label, _ := document["label"].(string)
+	value, _ := document[key].(string)
 
-	return label
+	return value
 }

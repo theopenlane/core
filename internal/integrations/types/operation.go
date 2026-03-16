@@ -14,6 +14,8 @@ type ExecutionPolicy struct {
 	MaxRetries uint `json:"maxRetries,omitempty"`
 	// Idempotent indicates the operation can be safely retried without side effects
 	Idempotent bool `json:"idempotent,omitempty"`
+	// Inline indicates the operation should execute synchronously for direct API callers
+	Inline bool `json:"inline,omitempty"`
 }
 
 // IngestContract declares one ingest target emitted by an operation

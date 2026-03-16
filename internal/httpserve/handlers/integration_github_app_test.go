@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
@@ -54,6 +55,9 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, tc.cfg)}
+			if tc.cfg != nil {
+				h.IntegrationsConfig = catalog.Config{GitHubApp: *tc.cfg}
+			}
 			err := h.validateGitHubAppConfig()
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
@@ -67,7 +71,10 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 // TestGitHubAppInstallURL verifies install URL construction.
 func TestGitHubAppInstallURL(t *testing.T) {
 	cfg := &githubapp.Config{AppSlug: "openlane"}
-	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, cfg)}
+	h := &Handler{
+		IntegrationsRuntime: newGitHubAppRuntimeForTest(t, cfg),
+		IntegrationsConfig:  catalog.Config{GitHubApp: *cfg},
+	}
 
 	installURL, err := h.githubAppInstallURL("state-value")
 	assert.NoError(t, err)

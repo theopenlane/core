@@ -2,7 +2,6 @@ package googleworkspace
 
 import (
 	"context"
-	"fmt"
 
 	"golang.org/x/oauth2"
 	admin "google.golang.org/api/admin/directory/v1"
@@ -24,7 +23,7 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 
 	svc, err := admin.NewService(ctx, option.WithTokenSource(ts))
 	if err != nil {
-		return nil, fmt.Errorf("googleworkspace: admin service build failed: %w", err)
+		return nil, ErrAdminServiceBuildFailed
 	}
 
 	return svc, nil

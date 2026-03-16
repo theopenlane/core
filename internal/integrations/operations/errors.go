@@ -21,6 +21,8 @@ var (
 	ErrIngestMappingNotFound = errors.New("integrations/operations: ingest mapping not found")
 	// ErrIngestFilterFailed indicates the CEL filter evaluation failed
 	ErrIngestFilterFailed = errors.New("integrations/operations: ingest filter failed")
+	// ErrIngestInstallationFilterConfigInvalid indicates the installation filter configuration could not be decoded
+	ErrIngestInstallationFilterConfigInvalid = errors.New("integrations/operations: ingest installation filter config invalid")
 	// ErrIngestTransformFailed indicates the CEL map evaluation failed
 	ErrIngestTransformFailed = errors.New("integrations/operations: ingest transform failed")
 	// ErrIngestMappedDocumentInvalid indicates the mapped payload did not satisfy the generated schema contract

@@ -15,6 +15,8 @@ import (
 // Initialization is skipped if the database client or Gala runtime is nil.
 func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.IntegrationsConfig = s.Config.Settings.Integrations
+
 		if dbClient == nil {
 			return
 		}

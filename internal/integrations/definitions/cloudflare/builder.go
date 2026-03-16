@@ -6,21 +6,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// ZoneIDs limits collection to specific Cloudflare zone identifiers
-	ZoneIDs []string `json:"zoneIds,omitempty" jsonschema:"title=Zone IDs"`
-}
-
-// credential holds the Cloudflare API credentials for one installation
-type CredentialSchema struct {
-	APIToken  string   `json:"apiToken"          jsonschema:"required,title=API Token"`
-	AccountID string   `json:"accountId"         jsonschema:"required,title=Account ID"`
-	ZoneIDs   []string `json:"zoneIds,omitempty" jsonschema:"title=Zone IDs"`
-}
-
 // Builder returns the Cloudflare definition builder
 func Builder() definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {

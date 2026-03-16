@@ -7,31 +7,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	Label         string   `json:"label,omitempty"         jsonschema:"title=Installation Label"`
-	AccountScope  string   `json:"accountScope,omitempty"  jsonschema:"title=Account Scope"`
-	AccountIDs    []string `json:"accountIds,omitempty"    jsonschema:"title=Account IDs"`
-	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
-}
-
-// CredentialSchema holds the AWS STS role and optional static key material for one Security Hub installation
-// Fields are named to match awskit.awsProviderData JSON tags so MetadataFromProviderData decodes them correctly
-type CredentialSchema struct {
-	RoleARN         string   `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
-	ExternalID      string   `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy."`
-	HomeRegion      string   `json:"homeRegion"                jsonschema:"required,title=Security Hub Home Region,description=AWS region where Security Hub cross-region aggregation is managed (e.g. us-east-1)."`
-	AccountScope    string   `json:"accountScope,omitempty"    jsonschema:"title=Account Scope,description=Collect from all delegated accounts or restrict to specific account IDs.,enum=all,enum=specific"`
-	AccountIDs      []string `json:"accountIds,omitempty"      jsonschema:"title=Account IDs,description=Required when accountScope is specific."`
-	LinkedRegions   []string `json:"linkedRegions,omitempty"   jsonschema:"title=Linked Regions,description=Filter findings to these source regions. Empty means all regions."`
-	AccountID       string   `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=AWS account ID for reference."`
-	SessionName     string   `json:"sessionName,omitempty"     jsonschema:"title=Session Name,description=Optional STS session name override."`
-	SessionDuration string   `json:"sessionDuration,omitempty" jsonschema:"title=Session Duration,description=Optional STS session duration (e.g. 1h)."`
-	AccessKeyID     string   `json:"accessKeyId,omitempty"     jsonschema:"title=Access Key ID,description=Optional static source credential when runtime IAM is unavailable."`
-	SecretAccessKey string   `json:"secretAccessKey,omitempty" jsonschema:"title=Secret Access Key"`
-	SessionToken    string   `json:"sessionToken,omitempty"    jsonschema:"title=Session Token"`
-}
-
 // Builder returns the AWS Security Hub definition builder
 func Builder() definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {

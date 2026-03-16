@@ -7,22 +7,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// AdminEmail is the delegated admin email for impersonation
-	AdminEmail string `json:"adminEmail,omitempty" jsonschema:"title=Admin Email"`
-	// CustomerID is the Google Workspace customer identifier
-	CustomerID string `json:"customerId,omitempty" jsonschema:"title=Customer ID"`
-	// OrganizationalUnit limits collection to a specific org unit path
-	OrganizationalUnit string `json:"organizationalUnitPath,omitempty" jsonschema:"title=Organizational Unit Path"`
-	// IncludeSuspended controls whether suspended users are included
-	IncludeSuspended bool `json:"includeSuspendedUsers,omitempty" jsonschema:"title=Include Suspended Users"`
-	// EnableGroupSync controls whether group membership is collected
-	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
-}
-
 // Builder returns the Google Workspace definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
@@ -51,11 +35,18 @@ func Builder(cfg Config) definition.Builder {
 				CallbackPath: "/v1/integrations/oauth/callback",
 				OAuth: &types.OAuthPublicConfig{
 					ClientID:    cfg.ClientID,
-					AuthURL:     googleAuthURL,
-					TokenURL:    googleTokenURL,
+					AuthURL:     "https://accounts.google.com/o/oauth2/v2/auth",
+					TokenURL:    "https://oauth2.googleapis.com/token",
 					RedirectURI: cfg.RedirectURL,
-					Scopes:      googleWorkspaceScopes,
-					AuthParams:  googleWorkspaceAuthParams,
+					Scopes: []string{
+						"https://www.googleapis.com/auth/admin.directory.user.readonly",
+						"https://www.googleapis.com/auth/admin.directory.group.readonly",
+						"https://www.googleapis.com/auth/apps.groups.migration",
+					},
+					AuthParams: map[string]string{
+						"access_type": "offline",
+						"prompt":      "consent",
+					},
 				},
 				ClientSecret: cfg.ClientSecret,
 			},

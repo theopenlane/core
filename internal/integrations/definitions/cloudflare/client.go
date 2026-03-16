@@ -17,7 +17,7 @@ type Client struct{}
 func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
 	var cred CredentialSchema
 	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
-		return nil, err
+		return nil, ErrCredentialInvalid
 	}
 
 	if cred.APIToken == "" {

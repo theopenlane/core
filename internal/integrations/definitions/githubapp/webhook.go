@@ -22,12 +22,6 @@ const (
 	githubWebhookDeliveryHeader = "X-GitHub-Delivery"
 )
 
-// Webhook verifies and resolves inbound GitHub App webhook requests
-type Webhook struct {
-	// Config holds the operator-supplied webhook verification settings.
-	Config Config
-}
-
 // PingWebhook marks a GitHub App webhook endpoint as verified
 type PingWebhook struct{}
 
@@ -81,12 +75,12 @@ type githubWebhookVerificationMetadata struct {
 }
 
 // Verify validates the HMAC-SHA256 signature on an inbound GitHub webhook request
-func (w Webhook) Verify(ctx context.Context, request types.WebhookVerifyRequest) error {
+func (a App) Verify(ctx context.Context, request types.WebhookVerifyRequest) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 
-	if w.Config.WebhookSecret == "" {
+	if a.Config.WebhookSecret == "" {
 		return ErrWebhookSecretMissing
 	}
 
@@ -95,7 +89,7 @@ func (w Webhook) Verify(ctx context.Context, request types.WebhookVerifyRequest)
 		return ErrWebhookSignatureMissing
 	}
 
-	mac := hmac.New(sha256.New, []byte(w.Config.WebhookSecret))
+	mac := hmac.New(sha256.New, []byte(a.Config.WebhookSecret))
 	_, _ = mac.Write(request.Payload)
 	expected := "sha256=" + hex.EncodeToString(mac.Sum(nil))
 	if !hmac.Equal([]byte(signature), []byte(expected)) {
@@ -106,7 +100,7 @@ func (w Webhook) Verify(ctx context.Context, request types.WebhookVerifyRequest)
 }
 
 // Event resolves the inbound webhook payload into one registered GitHub webhook event
-func (Webhook) Event(ctx context.Context, request types.WebhookEventRequest) (types.WebhookReceivedEvent, error) {
+func (App) Event(ctx context.Context, request types.WebhookEventRequest) (types.WebhookReceivedEvent, error) {
 	if err := ctx.Err(); err != nil {
 		return types.WebhookReceivedEvent{}, err
 	}
@@ -118,7 +112,7 @@ func (Webhook) Event(ctx context.Context, request types.WebhookEventRequest) (ty
 
 	var envelope githubWebhookEnvelope
 	if err := jsonx.UnmarshalIfPresent(request.Payload, &envelope); err != nil {
-		return types.WebhookReceivedEvent{}, err
+		return types.WebhookReceivedEvent{}, ErrWebhookPayloadInvalid
 	}
 
 	name := ""
@@ -158,25 +152,29 @@ func (PingWebhook) Handle(ctx context.Context, request types.WebhookHandleReques
 		WebhookVerifiedAt: time.Now().UTC(),
 	})
 	if err != nil {
-		return err
+		return ErrWebhookStatePatchEncode
 	}
 
 	nextState := request.Integration.ProviderState
 	if _, err := nextState.MergeProviderData(Slug, statePatch); err != nil {
-		return err
+		return ErrWebhookStateMergeFailed
 	}
 
 	metadataPatch, err := jsonx.ToMap(githubWebhookVerificationMetadata{
 		GitHubWebhookVerifiedAt: time.Now().UTC(),
 	})
 	if err != nil {
-		return err
+		return ErrWebhookMetadataEncode
 	}
 
-	return request.DB.Integration.UpdateOneID(request.Integration.ID).
+	if err := request.DB.Integration.UpdateOneID(request.Integration.ID).
 		SetProviderState(nextState).
 		SetMetadata(mapx.DeepMergeMapAny(mapx.DeepCloneMapAny(request.Integration.Metadata), metadataPatch)).
-		Exec(ctx)
+		Exec(ctx); err != nil {
+		return ErrWebhookPersistFailed
+	}
+
+	return nil
 }
 
 // Handle sends the GitHub App installation-created Slack notification
@@ -187,7 +185,7 @@ func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.Webh
 
 	var envelope githubWebhookEnvelope
 	if err := jsonx.UnmarshalIfPresent(request.Event.Payload, &envelope); err != nil {
-		return err
+		return ErrWebhookPayloadInvalid
 	}
 
 	org, err := request.DB.Organization.Get(ctx, request.Integration.OwnerID)
@@ -238,10 +236,11 @@ func (SecretScanningAlertWebhook) Handle(ctx context.Context, request types.Webh
 	return ingestGitHubAlert(ctx, request, githubAlertTypeSecretScan)
 }
 
+// ingestGitHubAlert extracts the alert from a webhook payload and routes it for ingest
 func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, variant string) error {
 	var envelope githubWebhookEnvelope
 	if err := jsonx.UnmarshalIfPresent(request.Event.Payload, &envelope); err != nil {
-		return err
+		return ErrWebhookPayloadInvalid
 	}
 
 	resource := githubRepoFromWebhook(envelope.Repository)
@@ -249,7 +248,7 @@ func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, 
 		return nil
 	}
 
-	return request.Ingest(ctx, []types.IngestPayloadSet{
+	if err := request.Ingest(ctx, []types.IngestPayloadSet{
 		{
 			Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
 			Envelopes: []types.MappingEnvelope{
@@ -261,9 +260,14 @@ func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, 
 				},
 			},
 		},
-	})
+	}); err != nil {
+		return ErrWebhookIngestFailed
+	}
+
+	return nil
 }
 
+// githubRepoFromWebhook extracts the best available repository identifier from a webhook payload
 func githubRepoFromWebhook(repo *githubWebhookRepository) string {
 	if repo == nil {
 		return ""

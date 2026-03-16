@@ -1,0 +1,68 @@
+{
+  "name": "azureentraid",
+  "displayName": "Azure Entra ID",
+  "category": "identity",
+  "authType": "oauth2",
+  "authStartPath": "/v1/integrations/oauth/start",
+  "authCallbackPath": "/v1/integrations/oauth/callback",
+  "active": false,
+  "visible": true,
+  "logoUrl": "",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
+  "oauth": {
+    "clientId": "",
+    "clientSecret": "",
+    "authUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+    "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+    "scopes": [
+      "https://graph.microsoft.com/.default",
+      "offline_access"
+    ],
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/oauth/callback"
+  },
+  "userInfo": {
+    "url": "https://graph.microsoft.com/v1.0/me",
+    "method": "GET",
+    "authStyle": "Bearer",
+    "idPath": "id",
+    "emailPath": "mail",
+    "loginPath": "displayName"
+  },
+  "persistence": {
+    "storeRefreshToken": true
+  },
+  "labels": {
+    "vendor": "microsoft",
+    "product": "entra-id"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "tenantId"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this Azure tenant."
+      },
+      "tenantId": {
+        "type": "string",
+        "title": "Tenant ID",
+        "description": "Azure Active Directory tenant ID used for Graph API calls."
+      },
+      "appId": {
+        "type": "string",
+        "title": "Application (Client) ID",
+        "description": "Optional override if you provide a tenant-specific Azure app registration."
+      },
+      "appSecret": {
+        "type": "string",
+        "title": "Application Secret",
+        "description": "Optional secret tied to the provided Application ID."
+      }
+    }
+  },
+  "description": "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata."
+}

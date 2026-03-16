@@ -2,7 +2,6 @@ package awsassets
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
@@ -19,7 +18,7 @@ type Client struct{}
 func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
 	meta, err := awskit.MetadataFromProviderData(req.Credential.ProviderData, awsDefaultSessionName)
 	if err != nil {
-		return nil, fmt.Errorf("awsassets: metadata decode failed: %w", err)
+		return nil, ErrCredentialMetadataInvalid
 	}
 
 	if meta.RoleARN == "" {
@@ -33,7 +32,7 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 		SessionDuration: meta.SessionDuration,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("awsassets: aws config build failed: %w", err)
+		return nil, ErrAWSConfigBuildFailed
 	}
 
 	return sts.NewFromConfig(cfg), nil

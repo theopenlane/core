@@ -26,6 +26,7 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []de
 	t.Helper()
 
 	original := suite.h.IntegrationsRuntime
+	originalConfig := suite.h.IntegrationsConfig
 
 	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
 		DispatchMode: gala.DispatchModeInMemory,
@@ -51,6 +52,7 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []de
 
 	return func() {
 		suite.h.IntegrationsRuntime = original
+		suite.h.IntegrationsConfig = originalConfig
 	}
 }
 
@@ -58,7 +60,10 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []de
 // configured with the GitHub App definition built from cfg. Returns a restore function.
 func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config, successRedirectURL string) func() {
 	t.Helper()
-	return suite.withDefinitionRuntime(t, []definition.Builder{githubapp.Builder(cfg)}, successRedirectURL)
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubapp.Builder(cfg)}, successRedirectURL)
+	suite.h.IntegrationsConfig.GitHubApp = cfg
+
+	return restore
 }
 
 // gcpSCCTestDefinitionBuilder returns a test definition for GCP SCC-style credential config tests.
@@ -96,9 +101,9 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 	userInputSchema, err := json.Marshal(map[string]any{
 		"type": "object",
 		"properties": map[string]any{
-			"label": map[string]any{
+			"filterExpr": map[string]any{
 				"type":  "string",
-				"title": "Installation Label",
+				"title": "Filter Expression",
 			},
 		},
 	})

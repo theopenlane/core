@@ -112,21 +112,15 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://github.com/theopenlane/core/internal/workflows/integration-action-params",
       "properties": {
-        "integration_id": {
-          "type": "string",
-          "description": "Integration identifier"
+        "installation_id": {
+          "type": "string"
         },
-        "provider": {
-          "type": "string",
-          "description": "Provider criteria for integration target resolution"
+        "definition_id": {
+          "type": "string"
         },
         "operation_name": {
           "type": "string",
           "description": "Exact operation name criteria for integration target resolution"
-        },
-        "operation_kind": {
-          "type": "string",
-          "description": "Operation kind criteria for integration target resolution when operation_name is omitted"
         },
         "config": {
           "description": "Integration-specific configuration payload"

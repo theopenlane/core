@@ -6,14 +6,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// Label is the user-defined display label for the installation
-	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	// TenantID is the Azure Entra ID tenant identifier
-	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
-}
-
 // Builder returns the Azure Entra ID definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
