@@ -1613,6 +1613,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
+		Destinations         func(childComplexity int) int
 		EmailTemplateID      func(childComplexity int) int
 		Format               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
@@ -11884,6 +11885,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplateHistory.Description(childComplexity), true
+
+	case "NotificationTemplateHistory.destinations":
+		if e.ComplexityRoot.NotificationTemplateHistory.Destinations == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.Destinations(childComplexity), true
 
 	case "NotificationTemplateHistory.emailTemplateID":
 		if e.ComplexityRoot.NotificationTemplateHistory.EmailTemplateID == nil {
@@ -41701,6 +41709,10 @@ type NotificationTemplateHistory implements Node {
   integration associated with this template
   """
   integrationID: String
+  """
+  optional explicit provider destination identifiers for this template, such as Slack channel IDs
+  """
+  destinations: [String!]
   """
   workflow definition associated with this template
   """

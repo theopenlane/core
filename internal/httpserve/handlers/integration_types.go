@@ -109,8 +109,6 @@ type DefinitionCatalogEntry struct {
 	ID string `json:"id"`
 	// Slug is the human-readable definition alias
 	Slug string `json:"slug"`
-	// Version is the definition version
-	Version string `json:"version"`
 	// Family is the optional grouping label
 	Family string `json:"family,omitempty"`
 	// DisplayName is the UI-facing name

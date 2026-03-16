@@ -21,7 +21,6 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_01HZY6PZQK2T64B7J9QX4N5Z6A",
 			Slug:        "github_app",
-			Version:     "v1",
 			Family:      "github",
 			DisplayName: "GitHub App",
 			Active:      true,
@@ -95,7 +94,6 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first",
 			Slug:        "first",
-			Version:     "v1",
 			DisplayName: "First",
 			Active:      true,
 			Visible:     true,
@@ -111,7 +109,6 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_second",
 			Slug:        "second",
-			Version:     "v1",
 			DisplayName: "Second",
 			Active:      true,
 			Visible:     true,
@@ -143,7 +140,6 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first_same_name",
 			Slug:        "first_same_name",
-			Version:     "v1",
 			DisplayName: "First",
 			Active:      true,
 			Visible:     true,
@@ -159,7 +155,6 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_second_same_name",
 			Slug:        "second_same_name",
-			Version:     "v1",
 			DisplayName: "Second",
 			Active:      true,
 			Visible:     true,
@@ -194,7 +189,6 @@ func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_multi_client",
 			Slug:        "multi_client",
-			Version:     "v1",
 			DisplayName: "Multi Client",
 			Active:      true,
 			Visible:     true,
@@ -259,7 +253,6 @@ func TestRegistryRejectsDuplicateWebhookEventTopicWithinDefinition(t *testing.T)
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_webhook_topic_collision",
 			Slug:        "webhook_topic_collision",
-			Version:     "v1",
 			DisplayName: "Webhook Topic Collision",
 			Active:      true,
 			Visible:     true,
@@ -306,7 +299,6 @@ func TestRegistryRejectsDuplicateSlug(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first",
 			Slug:        "shared_slug",
-			Version:     "v1",
 			DisplayName: "First",
 			Active:      true,
 			Visible:     true,
@@ -316,7 +308,6 @@ func TestRegistryRejectsDuplicateSlug(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_second",
 			Slug:        "shared_slug",
-			Version:     "v1",
 			DisplayName: "Second",
 			Active:      true,
 			Visible:     true,

@@ -7576,6 +7576,8 @@ type CreateNotificationTemplateInput struct {
 	Locale *string `json:"locale,omitempty"`
 	// topic name or wildcard pattern this template targets
 	TopicPattern string `json:"topicPattern"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations []string `json:"destinations,omitempty"`
 	// title template for external channel messages
 	TitleTemplate *string `json:"titleTemplate,omitempty"`
 	// subject template for email notifications
@@ -19427,6 +19429,7 @@ type Integration struct {
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
 	Entities              *EntityConnection               `json:"entities"`
+	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
 }
 
 func (Integration) IsNode() {}
@@ -23608,6 +23611,8 @@ type NotificationTemplate struct {
 	TopicPattern string `json:"topicPattern"`
 	// integration associated with this template
 	IntegrationID *string `json:"integrationID,omitempty"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations []string `json:"destinations,omitempty"`
 	// workflow definition associated with this template
 	WorkflowDefinitionID *string `json:"workflowDefinitionID,omitempty"`
 	// optional email template used for branded email delivery
@@ -41078,6 +41083,10 @@ type UpdateNotificationTemplateInput struct {
 	Locale *string `json:"locale,omitempty"`
 	// topic name or wildcard pattern this template targets
 	TopicPattern *string `json:"topicPattern,omitempty"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations       []string `json:"destinations,omitempty"`
+	AppendDestinations []string `json:"appendDestinations,omitempty"`
+	ClearDestinations  *bool    `json:"clearDestinations,omitempty"`
 	// title template for external channel messages
 	TitleTemplate      *string `json:"titleTemplate,omitempty"`
 	ClearTitleTemplate *bool   `json:"clearTitleTemplate,omitempty"`

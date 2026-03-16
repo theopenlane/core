@@ -32,9 +32,8 @@ const (
 func notificationTestSlackDefinition() types.Definition {
 	return types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:      testSlackDefinitionID,
-			Slug:    "slack",
-			Version: "v1",
+			ID:   testSlackDefinitionID,
+			Slug: "slack",
 		},
 		Operations: []types.OperationRegistration{
 			{
@@ -48,9 +47,8 @@ func notificationTestSlackDefinition() types.Definition {
 func notificationTestTeamsDefinition() types.Definition {
 	return types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:      testTeamsDefinitionID,
-			Slug:    "microsoft_teams",
-			Version: "v1",
+			ID:   testTeamsDefinitionID,
+			Slug: "microsoft_teams",
 		},
 		Operations: []types.OperationRegistration{
 			{

@@ -4893,11 +4893,11 @@ func init() {
 	// notificationtemplate.TopicPatternValidator is a validator for the "topic_pattern" field. It is called by the builders before save.
 	notificationtemplate.TopicPatternValidator = notificationtemplateDescTopicPattern.Validators[0].(func(string) error)
 	// notificationtemplateDescActive is the schema descriptor for active field.
-	notificationtemplateDescActive := notificationtemplateFields[17].Descriptor()
+	notificationtemplateDescActive := notificationtemplateFields[18].Descriptor()
 	// notificationtemplate.DefaultActive holds the default value on creation for the active field.
 	notificationtemplate.DefaultActive = notificationtemplateDescActive.Default.(bool)
 	// notificationtemplateDescVersion is the schema descriptor for version field.
-	notificationtemplateDescVersion := notificationtemplateFields[18].Descriptor()
+	notificationtemplateDescVersion := notificationtemplateFields[19].Descriptor()
 	// notificationtemplate.DefaultVersion holds the default value on creation for the version field.
 	notificationtemplate.DefaultVersion = notificationtemplateDescVersion.Default.(int)
 	// notificationtemplateDescID is the schema descriptor for id field.

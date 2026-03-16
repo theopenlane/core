@@ -13,7 +13,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "azure",
 				DisplayName: "Microsoft Defender for Cloud",
 				Description: "Collect Microsoft Defender for Cloud pricing and plan metadata from an Azure subscription for security posture visibility.",

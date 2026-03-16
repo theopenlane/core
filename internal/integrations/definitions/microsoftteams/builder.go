@@ -13,7 +13,6 @@ func Builder(cfg Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "microsoft",
 				DisplayName: "Microsoft Teams",
 				Description: "Integrate with Microsoft Teams to collect collaboration metadata and send notification messages through Microsoft Graph.",

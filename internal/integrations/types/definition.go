@@ -8,8 +8,6 @@ type DefinitionSpec struct {
 	ID string `json:"id"`
 	// Slug is the human-readable alias for the definition
 	Slug string `json:"slug"`
-	// Version is the manifest or implementation version for the definition
-	Version string `json:"version"`
 	// Family is the optional grouping label for related definitions
 	Family string `json:"family,omitempty"`
 	// DisplayName is the UI-facing name for the definition

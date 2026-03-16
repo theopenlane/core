@@ -15031,6 +15031,7 @@ type CreateNotificationTemplateInput struct {
 	Format               *enums.NotificationTemplateFormat
 	Locale               *string
 	TopicPattern         string
+	Destinations         []string
 	TitleTemplate        *string
 	SubjectTemplate      *string
 	BodyTemplate         *string
@@ -15073,6 +15074,9 @@ func (i *CreateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 		m.SetLocale(*v)
 	}
 	m.SetTopicPattern(i.TopicPattern)
+	if v := i.Destinations; v != nil {
+		m.SetDestinations(v)
+	}
 	if v := i.TitleTemplate; v != nil {
 		m.SetTitleTemplate(*v)
 	}
@@ -15145,6 +15149,9 @@ type UpdateNotificationTemplateInput struct {
 	Format                  *enums.NotificationTemplateFormat
 	Locale                  *string
 	TopicPattern            *string
+	ClearDestinations       bool
+	Destinations            []string
+	AppendDestinations      []string
 	ClearTitleTemplate      bool
 	TitleTemplate           *string
 	ClearSubjectTemplate    bool
@@ -15219,6 +15226,15 @@ func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	}
 	if v := i.TopicPattern; v != nil {
 		m.SetTopicPattern(*v)
+	}
+	if i.ClearDestinations {
+		m.ClearDestinations()
+	}
+	if v := i.Destinations; v != nil {
+		m.SetDestinations(v)
+	}
+	if i.AppendDestinations != nil {
+		m.AppendDestinations(i.Destinations)
 	}
 	if i.ClearTitleTemplate {
 		m.ClearTitleTemplate()

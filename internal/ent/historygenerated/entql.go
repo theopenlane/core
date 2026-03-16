@@ -1690,6 +1690,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notificationtemplatehistory.FieldLocale:               {Type: field.TypeString, Column: notificationtemplatehistory.FieldLocale},
 			notificationtemplatehistory.FieldTopicPattern:         {Type: field.TypeString, Column: notificationtemplatehistory.FieldTopicPattern},
 			notificationtemplatehistory.FieldIntegrationID:        {Type: field.TypeString, Column: notificationtemplatehistory.FieldIntegrationID},
+			notificationtemplatehistory.FieldDestinations:         {Type: field.TypeJSON, Column: notificationtemplatehistory.FieldDestinations},
 			notificationtemplatehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: notificationtemplatehistory.FieldWorkflowDefinitionID},
 			notificationtemplatehistory.FieldEmailTemplateID:      {Type: field.TypeString, Column: notificationtemplatehistory.FieldEmailTemplateID},
 			notificationtemplatehistory.FieldTitleTemplate:        {Type: field.TypeString, Column: notificationtemplatehistory.FieldTitleTemplate},
@@ -10216,6 +10217,11 @@ func (f *NotificationTemplateHistoryFilter) WhereTopicPattern(p entql.StringP) {
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *NotificationTemplateHistoryFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(notificationtemplatehistory.FieldIntegrationID))
+}
+
+// WhereDestinations applies the entql json.RawMessage predicate on the destinations field.
+func (f *NotificationTemplateHistoryFilter) WhereDestinations(p entql.BytesP) {
+	f.Where(p.Field(notificationtemplatehistory.FieldDestinations))
 }
 
 // WhereWorkflowDefinitionID applies the entql string predicate on the workflow_definition_id field.

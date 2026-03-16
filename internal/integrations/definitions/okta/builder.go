@@ -13,7 +13,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "okta",
 				DisplayName: "Okta",
 				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance analysis.",

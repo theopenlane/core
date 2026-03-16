@@ -14,7 +14,9 @@ import (
 // MessageOperationInput holds per-invocation parameters for the message.send operation
 type MessageOperationInput struct {
 	// Channel is the Slack channel identifier to post to
-	Channel string `json:"channel" jsonschema:"required,title=Channel"`
+	Channel string `json:"channel,omitempty" jsonschema:"title=Channel"`
+	// Destinations are Slack channel identifiers to post the same message to
+	Destinations []string `json:"destinations,omitempty" jsonschema:"title=Destinations"`
 	// Text is the plain-text message content
 	Text string `json:"text,omitempty" jsonschema:"title=Message Text"`
 	// Blocks is a Block Kit payload for rich messages
@@ -27,6 +29,16 @@ type MessageOperationInput struct {
 
 // MessageSend sends a Slack message via chat.postMessage
 type MessageSend struct {
+	// Channel is the first channel the message was posted to
+	Channel string `json:"channel,omitempty"`
+	// TS is the first message timestamp
+	TS string `json:"ts,omitempty"`
+	// Deliveries captures every channel delivery performed by the operation
+	Deliveries []MessageDelivery `json:"deliveries,omitempty"`
+}
+
+// MessageDelivery captures one Slack message delivery
+type MessageDelivery struct {
 	// Channel is the channel the message was posted to
 	Channel string `json:"channel"`
 	// TS is the message timestamp
@@ -52,7 +64,8 @@ func (m MessageSend) Handle(client Client) types.OperationHandler {
 
 // Run sends a Slack message via chat.postMessage
 func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageOperationInput) (json.RawMessage, error) {
-	if cfg.Channel == "" {
+	destinations := slackMessageDestinations(cfg)
+	if len(destinations) == 0 {
 		return nil, ErrChannelMissing
 	}
 
@@ -90,13 +103,50 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageOperat
 		opts = append(opts, slackgo.MsgOptionDisableLinkUnfurl())
 	}
 
-	respChannel, ts, err := c.PostMessageContext(ctx, cfg.Channel, opts...)
-	if err != nil {
-		return nil, ErrMessageSendFailed
+	deliveries := make([]MessageDelivery, 0, len(destinations))
+	for _, destination := range destinations {
+		respChannel, ts, err := c.PostMessageContext(ctx, destination, opts...)
+		if err != nil {
+			return nil, ErrMessageSendFailed
+		}
+
+		deliveries = append(deliveries, MessageDelivery{
+			Channel: respChannel,
+			TS:      ts,
+		})
 	}
 
-	return providerkit.EncodeResult(MessageSend{
-		Channel: respChannel,
-		TS:      ts,
-	}, ErrResultEncode)
+	result := MessageSend{
+		Deliveries: deliveries,
+	}
+	if len(deliveries) > 0 {
+		result.Channel = deliveries[0].Channel
+		result.TS = deliveries[0].TS
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
+}
+
+func slackMessageDestinations(cfg MessageOperationInput) []string {
+	destinations := make([]string, 0, len(cfg.Destinations)+1)
+	seen := make(map[string]struct{}, len(cfg.Destinations)+1)
+
+	appendDestination := func(value string) {
+		if value == "" {
+			return
+		}
+		if _, ok := seen[value]; ok {
+			return
+		}
+
+		seen[value] = struct{}{}
+		destinations = append(destinations, value)
+	}
+
+	appendDestination(cfg.Channel)
+	for _, destination := range cfg.Destinations {
+		appendDestination(destination)
+	}
+
+	return destinations
 }

@@ -13,7 +13,6 @@ func Builder(cfg Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "azure",
 				DisplayName: "Azure Entra ID",
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",

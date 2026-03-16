@@ -1753,6 +1753,7 @@ var (
 		{Name: "locale", Type: field.TypeString, Default: "en-US"},
 		{Name: "topic_pattern", Type: field.TypeString},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "destinations", Type: field.TypeJSON, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
 		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
 		{Name: "title_template", Type: field.TypeString, Nullable: true},

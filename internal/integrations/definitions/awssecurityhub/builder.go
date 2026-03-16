@@ -14,7 +14,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "aws",
 				DisplayName: "AWS Security Hub",
 				Description: "Collect AWS Security Hub findings for vulnerability ingestion using STS role assumption in a tenant AWS environment.",

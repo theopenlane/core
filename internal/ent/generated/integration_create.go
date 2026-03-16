@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -33,7 +34,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	integrationtypes "github.com/theopenlane/core/common/openapi"
 )
 
 // IntegrationCreate is the builder for creating a Integration entity.
@@ -308,13 +308,13 @@ func (_c *IntegrationCreate) SetNillablePlatformID(v *string) *IntegrationCreate
 }
 
 // SetProviderMetadata sets the "provider_metadata" field.
-func (_c *IntegrationCreate) SetProviderMetadata(v integrationtypes.IntegrationProviderMetadata) *IntegrationCreate {
+func (_c *IntegrationCreate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationCreate {
 	_c.mutation.SetProviderMetadata(v)
 	return _c
 }
 
 // SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
-func (_c *IntegrationCreate) SetNillableProviderMetadata(v *integrationtypes.IntegrationProviderMetadata) *IntegrationCreate {
+func (_c *IntegrationCreate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationCreate {
 	if v != nil {
 		_c.SetProviderMetadata(*v)
 	}
@@ -322,13 +322,13 @@ func (_c *IntegrationCreate) SetNillableProviderMetadata(v *integrationtypes.Int
 }
 
 // SetConfig sets the "config" field.
-func (_c *IntegrationCreate) SetConfig(v integrationtypes.IntegrationConfig) *IntegrationCreate {
+func (_c *IntegrationCreate) SetConfig(v openapi.IntegrationConfig) *IntegrationCreate {
 	_c.mutation.SetConfig(v)
 	return _c
 }
 
 // SetNillableConfig sets the "config" field if the given value is not nil.
-func (_c *IntegrationCreate) SetNillableConfig(v *integrationtypes.IntegrationConfig) *IntegrationCreate {
+func (_c *IntegrationCreate) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationCreate {
 	if v != nil {
 		_c.SetConfig(*v)
 	}
@@ -336,13 +336,13 @@ func (_c *IntegrationCreate) SetNillableConfig(v *integrationtypes.IntegrationCo
 }
 
 // SetProviderState sets the "provider_state" field.
-func (_c *IntegrationCreate) SetProviderState(v integrationtypes.IntegrationProviderState) *IntegrationCreate {
+func (_c *IntegrationCreate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationCreate {
 	_c.mutation.SetProviderState(v)
 	return _c
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_c *IntegrationCreate) SetNillableProviderState(v *integrationtypes.IntegrationProviderState) *IntegrationCreate {
+func (_c *IntegrationCreate) SetNillableProviderState(v *openapi.IntegrationProviderState) *IntegrationCreate {
 	if v != nil {
 		_c.SetProviderState(*v)
 	}

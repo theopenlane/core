@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
-	integrationtypes "github.com/theopenlane/core/common/openapi"
-
 	"github.com/theopenlane/entx/history"
 )
 
@@ -325,13 +324,13 @@ func (_c *IntegrationHistoryCreate) SetNillablePlatformID(v *string) *Integratio
 }
 
 // SetProviderMetadata sets the "provider_metadata" field.
-func (_c *IntegrationHistoryCreate) SetProviderMetadata(v integrationtypes.IntegrationProviderMetadata) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationHistoryCreate {
 	_c.mutation.SetProviderMetadata(v)
 	return _c
 }
 
 // SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
-func (_c *IntegrationHistoryCreate) SetNillableProviderMetadata(v *integrationtypes.IntegrationProviderMetadata) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationHistoryCreate {
 	if v != nil {
 		_c.SetProviderMetadata(*v)
 	}
@@ -339,13 +338,13 @@ func (_c *IntegrationHistoryCreate) SetNillableProviderMetadata(v *integrationty
 }
 
 // SetConfig sets the "config" field.
-func (_c *IntegrationHistoryCreate) SetConfig(v integrationtypes.IntegrationConfig) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetConfig(v openapi.IntegrationConfig) *IntegrationHistoryCreate {
 	_c.mutation.SetConfig(v)
 	return _c
 }
 
 // SetNillableConfig sets the "config" field if the given value is not nil.
-func (_c *IntegrationHistoryCreate) SetNillableConfig(v *integrationtypes.IntegrationConfig) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationHistoryCreate {
 	if v != nil {
 		_c.SetConfig(*v)
 	}
@@ -353,13 +352,13 @@ func (_c *IntegrationHistoryCreate) SetNillableConfig(v *integrationtypes.Integr
 }
 
 // SetProviderState sets the "provider_state" field.
-func (_c *IntegrationHistoryCreate) SetProviderState(v integrationtypes.IntegrationProviderState) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationHistoryCreate {
 	_c.mutation.SetProviderState(v)
 	return _c
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_c *IntegrationHistoryCreate) SetNillableProviderState(v *integrationtypes.IntegrationProviderState) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetNillableProviderState(v *openapi.IntegrationProviderState) *IntegrationHistoryCreate {
 	if v != nil {
 		_c.SetProviderState(*v)
 	}

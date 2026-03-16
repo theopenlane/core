@@ -40,7 +40,6 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 	entry := DefinitionCatalogEntry{
 		ID:          spec.ID,
 		Slug:        spec.Slug,
-		Version:     spec.Version,
 		Family:      spec.Family,
 		DisplayName: spec.DisplayName,
 		Description: spec.Description,

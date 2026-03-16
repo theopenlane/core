@@ -116,7 +116,6 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			SetOwnerID(caller.OrganizationID).
 			SetName(name).
 			SetDefinitionID(def.ID).
-			SetDefinitionVersion(def.Version).
 			SetDefinitionSlug(def.Slug).
 			SetFamily(def.Family).
 			SetStatus(enums.IntegrationStatusPending).

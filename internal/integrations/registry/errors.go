@@ -7,8 +7,6 @@ var (
 	ErrDefinitionIDRequired = errors.New("integrations/registry: definition id required")
 	// ErrDefinitionSlugRequired indicates a definition is missing its slug
 	ErrDefinitionSlugRequired = errors.New("integrations/registry: definition slug required")
-	// ErrDefinitionVersionRequired indicates a definition is missing its version
-	ErrDefinitionVersionRequired = errors.New("integrations/registry: definition version required")
 	// ErrDefinitionAlreadyRegistered indicates the definition ID is already present
 	ErrDefinitionAlreadyRegistered = errors.New("integrations/registry: definition already registered")
 	// ErrDefinitionSlugAlreadyRegistered indicates another definition already owns the slug

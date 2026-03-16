@@ -13875,6 +13875,10 @@ input CreateNotificationTemplateInput {
 	"""
 	topicPattern: String!
 	"""
+	optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	"""
+	destinations: [String!]
+	"""
 	title template for external channel messages
 	"""
 	titleTemplate: String
@@ -36292,6 +36296,7 @@ type Integration implements Node {
 		"""
 		where: EntityWhereInput
 	): EntityConnection!
+	webhookURLs: Map
 }
 """
 A connection to a list of items.
@@ -49406,6 +49411,10 @@ type NotificationTemplate implements Node {
 	integration associated with this template
 	"""
 	integrationID: ID
+	"""
+	optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	"""
+	destinations: [String!]
 	"""
 	workflow definition associated with this template
 	"""
@@ -87464,6 +87473,12 @@ input UpdateNotificationTemplateInput {
 	topic name or wildcard pattern this template targets
 	"""
 	topicPattern: String
+	"""
+	optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	"""
+	destinations: [String!]
+	appendDestinations: [String!]
+	clearDestinations: Boolean
 	"""
 	title template for external channel messages
 	"""

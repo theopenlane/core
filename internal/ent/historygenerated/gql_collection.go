@@ -8396,6 +8396,11 @@ func (_q *NotificationTemplateHistoryQuery) collectField(ctx context.Context, on
 				selectedFields = append(selectedFields, notificationtemplatehistory.FieldIntegrationID)
 				fieldSeen[notificationtemplatehistory.FieldIntegrationID] = struct{}{}
 			}
+		case "destinations":
+			if _, ok := fieldSeen[notificationtemplatehistory.FieldDestinations]; !ok {
+				selectedFields = append(selectedFields, notificationtemplatehistory.FieldDestinations)
+				fieldSeen[notificationtemplatehistory.FieldDestinations] = struct{}{}
+			}
 		case "workflowDefinitionID":
 			if _, ok := fieldSeen[notificationtemplatehistory.FieldWorkflowDefinitionID]; !ok {
 				selectedFields = append(selectedFields, notificationtemplatehistory.FieldWorkflowDefinitionID)

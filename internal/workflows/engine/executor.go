@@ -502,10 +502,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		return err
 	}
 
-	if len(userTargets) == 0 && len(channelTargets) == 0 {
-		return nil
-	}
-
 	ownerID, err := wfworkflows.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		return err
@@ -517,6 +513,11 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		if err != nil {
 			return err
 		}
+	}
+
+	hasTemplateDestinations := rendered != nil && rendered.Template != nil && len(rendered.Template.Destinations) > 0
+	if len(userTargets) == 0 && len(channelTargets) == 0 && !hasTemplateDestinations {
+		return nil
 	}
 
 	defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
@@ -583,6 +584,12 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 
 	if len(userIDs) > 0 {
 		if err := e.dispatchNotificationIntegrations(ctx, ownerID, channels, integrationRendered, userIDs); err != nil {
+			return err
+		}
+	}
+
+	if hasTemplateDestinations {
+		if err := e.dispatchTemplateNotificationDestinations(ctx, ownerID, integrationRendered); err != nil {
 			return err
 		}
 	}

@@ -269,7 +269,6 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) def
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				Slug:        slug,
-				Version:     "v1",
 				DisplayName: "Config Test",
 				Active:      true,
 				Visible:     true,

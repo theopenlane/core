@@ -1824,11 +1824,11 @@ func init() {
 	// notificationtemplatehistory.DefaultLocale holds the default value on creation for the locale field.
 	notificationtemplatehistory.DefaultLocale = notificationtemplatehistoryDescLocale.Default.(string)
 	// notificationtemplatehistoryDescActive is the schema descriptor for active field.
-	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[32].Descriptor()
+	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[33].Descriptor()
 	// notificationtemplatehistory.DefaultActive holds the default value on creation for the active field.
 	notificationtemplatehistory.DefaultActive = notificationtemplatehistoryDescActive.Default.(bool)
 	// notificationtemplatehistoryDescVersion is the schema descriptor for version field.
-	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[33].Descriptor()
+	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[34].Descriptor()
 	// notificationtemplatehistory.DefaultVersion holds the default value on creation for the version field.
 	notificationtemplatehistory.DefaultVersion = notificationtemplatehistoryDescVersion.Default.(int)
 	// notificationtemplatehistoryDescID is the schema descriptor for id field.

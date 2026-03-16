@@ -3258,6 +3258,9 @@ func (r *Resolver) IdentityHolder() gqlgenerated.IdentityHolderResolver {
 	return &identityHolderResolver{r}
 }
 
+// Integration returns gqlgenerated.IntegrationResolver implementation.
+func (r *Resolver) Integration() gqlgenerated.IntegrationResolver { return &integrationResolver{r} }
+
 // InternalPolicy returns gqlgenerated.InternalPolicyResolver implementation.
 func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
 	return &internalPolicyResolver{r}

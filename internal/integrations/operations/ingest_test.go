@@ -39,7 +39,6 @@ func TestProcessPayloadSetsWithOptionsAppliesInstallationFilterExpr(t *testing.T
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "def_test_installation_filter",
 			Slug:        "test-installation-filter",
-			Version:     "v1",
 			DisplayName: "Test Installation Filter",
 			Active:      true,
 			Visible:     true,
@@ -95,7 +94,6 @@ func TestProcessPayloadSetsWithOptionsRejectsInvalidInstallationFilterConfig(t *
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "def_test_invalid_installation_filter_config",
 			Slug:        "test-invalid-installation-filter-config",
-			Version:     "v1",
 			DisplayName: "Test Invalid Installation Filter Config",
 			Active:      true,
 			Visible:     true,

@@ -14,7 +14,6 @@ func Builder(cfg Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "google",
 				DisplayName: "Google Workspace",
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",

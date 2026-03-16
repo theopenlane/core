@@ -14,7 +14,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "scim",
 				DisplayName: "SCIM Directory Sync",
 				Description: "Synchronize directory objects through SCIM",

@@ -113,7 +113,6 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				Slug:        definitionID,
-				Version:     "v1",
 				DisplayName: "Google Cloud SCC",
 				Description: "Google Cloud Security Command Center integration",
 				Category:    "cloud",
@@ -150,7 +149,6 @@ func githubTestDefinitionBuilder(definitionID string) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				Slug:        definitionID,
-				Version:     "v1",
 				DisplayName: "GitHub",
 				Active:      true,
 				Visible:     true,

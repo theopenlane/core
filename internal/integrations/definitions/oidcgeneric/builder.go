@@ -13,7 +13,6 @@ func Builder(cfg Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "oidc",
 				DisplayName: "Generic OIDC",
 				Description: "Connect Openlane to standards-based OpenID Connect identity providers for federated authentication and claim inspection.",

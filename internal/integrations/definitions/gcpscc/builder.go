@@ -14,7 +14,6 @@ func Builder(_ Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "gcp",
 				DisplayName: "GCP Security Command Center",
 				Description: "Collect Google Cloud Security Command Center findings and settings for security posture reporting.",

@@ -89,7 +89,6 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 			SetOwnerID(caller.OrganizationID).
 			SetName(name).
 			SetDefinitionID(def.ID).
-			SetDefinitionVersion(def.Version).
 			SetDefinitionSlug(def.Slug).
 			SetFamily(def.Family).
 			SetStatus(enums.IntegrationStatusPending)

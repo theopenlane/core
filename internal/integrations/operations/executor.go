@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// RegisterListeners attaches one Gala listener per registered operation topic.
+// RegisterListeners attaches one Gala listener per registered operation topic
 func RegisterListeners(runtime *gala.Gala, reg *registry.Registry, handle func(context.Context, Envelope) error) error {
 	if runtime == nil {
 		return ErrGalaRequired

@@ -13,7 +13,6 @@ func Builder(cfg Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications to channels.",

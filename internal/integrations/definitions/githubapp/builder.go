@@ -16,7 +16,6 @@ func Builder(cfg Config) definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "github",
 				DisplayName: "GitHub App",
 				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",

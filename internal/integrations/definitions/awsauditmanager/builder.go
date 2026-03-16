@@ -13,7 +13,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "aws",
 				DisplayName: "AWS Audit Manager",
 				Description: "Collect AWS Audit Manager assessment metadata for compliance posture checks using STS role assumption.",

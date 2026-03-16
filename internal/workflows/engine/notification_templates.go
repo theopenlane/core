@@ -280,6 +280,35 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 	return nil
 }
 
+// dispatchTemplateNotificationDestinations executes template-scoped provider destinations once per template run
+func (e *WorkflowEngine) dispatchTemplateNotificationDestinations(ctx context.Context, ownerID string, rendered *renderedNotificationTemplate) error {
+	if rendered == nil || rendered.Template == nil || len(rendered.Template.Destinations) == 0 {
+		return nil
+	}
+	if e.integrationRuntime == nil {
+		return ErrIntegrationOperationsRequired
+	}
+
+	config, err := buildTemplateDestinationOperationConfig(rendered.Template.Channel, rendered)
+	if err != nil || len(config) == 0 {
+		return err
+	}
+
+	selection, err := e.resolveNotificationExecutionTarget(ctx, ownerID, rendered.Template, rendered.Template.Channel)
+	if err != nil {
+		return err
+	}
+
+	_, err = e.integrationRuntime.Dispatch(workflows.AllowContext(ctx), operations.DispatchRequest{
+		InstallationID: installationIDForRecord(selection.Installation),
+		Operation:      selection.Operation.Name,
+		Config:         config,
+		RunType:        enums.IntegrationRunTypeEvent,
+	})
+
+	return err
+}
+
 // dispatchChannelNotifications sends notifications to all users for a specific channel
 func (e *WorkflowEngine) dispatchChannelNotifications(ctx context.Context, ownerID string, channel enums.Channel, rendered *renderedNotificationTemplate, userIDs []string) error {
 	selection, err := e.resolveNotificationExecutionTarget(ctx, ownerID, rendered.Template, channel)
@@ -483,6 +512,40 @@ func buildNotificationOperationConfig(channel enums.Channel, preference *generat
 	default:
 		return nil, ErrNotificationChannelUnsupported
 	}
+
+	out, err := json.Marshal(config)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// buildTemplateDestinationOperationConfig builds operation config for template-scoped explicit destinations
+func buildTemplateDestinationOperationConfig(channel enums.Channel, rendered *renderedNotificationTemplate) (json.RawMessage, error) {
+	if rendered == nil || rendered.Template == nil || len(rendered.Template.Destinations) == 0 {
+		return nil, nil
+	}
+
+	switch channel {
+	case enums.ChannelSlack:
+	default:
+		return nil, nil
+	}
+
+	baseConfig, err := buildNotificationOperationConfig(channel, nil, rendered)
+	if err != nil {
+		return nil, err
+	}
+
+	config := map[string]any{}
+	if len(baseConfig) > 0 {
+		if err := json.Unmarshal(baseConfig, &config); err != nil {
+			return nil, err
+		}
+	}
+
+	config["destinations"] = append([]string(nil), rendered.Template.Destinations...)
 
 	out, err := json.Marshal(config)
 	if err != nil {

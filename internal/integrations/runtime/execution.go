@@ -35,7 +35,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		}
 		if len(response) > 0 {
 			result.Metrics = map[string]any{
-				"response": decodeResponse(response),
+				"response": jsonx.DecodeAnyOrNil(response),
 			}
 		}
 		_ = operations.CompleteRun(ctx, db, envelope.RunID, startedAt, result)
@@ -73,7 +73,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		Status:  enums.IntegrationRunStatusSuccess,
 		Summary: "operation completed",
 		Metrics: map[string]any{
-			"response": decodeResponse(response),
+			"response": jsonx.DecodeAnyOrNil(response),
 		},
 	})
 }
@@ -113,17 +113,4 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 	}
 
 	return response, nil
-}
-
-func decodeResponse(value json.RawMessage) any {
-	if len(value) == 0 {
-		return map[string]any{}
-	}
-
-	var decoded any
-	if err := json.Unmarshal(value, &decoded); err != nil {
-		return string(value)
-	}
-
-	return decoded
 }

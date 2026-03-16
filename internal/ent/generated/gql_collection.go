@@ -42128,6 +42128,11 @@ func (_q *NotificationTemplateQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, notificationtemplate.FieldIntegrationID)
 				fieldSeen[notificationtemplate.FieldIntegrationID] = struct{}{}
 			}
+		case "destinations":
+			if _, ok := fieldSeen[notificationtemplate.FieldDestinations]; !ok {
+				selectedFields = append(selectedFields, notificationtemplate.FieldDestinations)
+				fieldSeen[notificationtemplate.FieldDestinations] = struct{}{}
+			}
 		case "workflowDefinitionID":
 			if _, ok := fieldSeen[notificationtemplate.FieldWorkflowDefinitionID]; !ok {
 				selectedFields = append(selectedFields, notificationtemplate.FieldWorkflowDefinitionID)

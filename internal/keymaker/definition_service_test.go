@@ -18,7 +18,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	installationID := "install-1"
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: definitionID, Slug: "github-oauth", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: definitionID, Slug: "github-oauth"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{
@@ -125,7 +125,7 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth"},
 	}
 
 	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i", "no-auth").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
@@ -143,7 +143,7 @@ func TestService_BeginAuthUsesCustomStateToken(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://example.com"}, nil
@@ -171,7 +171,7 @@ func TestService_BeginAuthInstallationDefinitionMismatch(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://example.com"}, nil
@@ -203,7 +203,7 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 	clock := func() time.Time { return now }
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "slack", Slug: "slack", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "slack", Slug: "slack"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://slack.com/oauth"}, nil
@@ -256,7 +256,7 @@ func TestService_CompleteAuthSaveError(t *testing.T) {
 	ctx := context.Background()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "okta", Slug: "okta", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "okta", Slug: "okta"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://okta.com"}, nil
@@ -292,7 +292,7 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 	var receivedCallbackState json.RawMessage
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{
@@ -336,7 +336,7 @@ func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
 	installations := matchingInstallationResolver("i1", "az")
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://login.microsoftonline.com"}, nil

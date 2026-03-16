@@ -13,7 +13,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "aws",
 				DisplayName: "AWS Assets",
 				Description: "Collect AWS asset inventory and account-scoped signals",

@@ -4769,6 +4769,7 @@ var (
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"TEXT", "MARKDOWN", "HTML", "JSON"}, Default: "MARKDOWN"},
 		{Name: "locale", Type: field.TypeString, Default: "en-US"},
 		{Name: "topic_pattern", Type: field.TypeString},
+		{Name: "destinations", Type: field.TypeJSON, Nullable: true},
 		{Name: "title_template", Type: field.TypeString, Nullable: true},
 		{Name: "subject_template", Type: field.TypeString, Nullable: true},
 		{Name: "body_template", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -4793,25 +4794,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notification_templates_email_templates_notification_templates",
-				Columns:    []*schema.Column{NotificationTemplatesColumns[29]},
+				Columns:    []*schema.Column{NotificationTemplatesColumns[30]},
 				RefColumns: []*schema.Column{EmailTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notification_templates_integrations_notification_templates",
-				Columns:    []*schema.Column{NotificationTemplatesColumns[30]},
+				Columns:    []*schema.Column{NotificationTemplatesColumns[31]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notification_templates_organizations_notification_templates",
-				Columns:    []*schema.Column{NotificationTemplatesColumns[31]},
+				Columns:    []*schema.Column{NotificationTemplatesColumns[32]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notification_templates_workflow_definitions_notification_templates",
-				Columns:    []*schema.Column{NotificationTemplatesColumns[32]},
+				Columns:    []*schema.Column{NotificationTemplatesColumns[33]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4820,7 +4821,7 @@ var (
 			{
 				Name:    "notificationtemplate_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotificationTemplatesColumns[31]},
+				Columns: []*schema.Column{NotificationTemplatesColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4828,7 +4829,7 @@ var (
 			{
 				Name:    "notificationtemplate_owner_id_channel_locale_topic_pattern",
 				Unique:  true,
-				Columns: []*schema.Column{NotificationTemplatesColumns[31], NotificationTemplatesColumns[14], NotificationTemplatesColumns[16], NotificationTemplatesColumns[17]},
+				Columns: []*schema.Column{NotificationTemplatesColumns[32], NotificationTemplatesColumns[14], NotificationTemplatesColumns[16], NotificationTemplatesColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4836,7 +4837,7 @@ var (
 			{
 				Name:    "notificationtemplate_owner_id_key",
 				Unique:  true,
-				Columns: []*schema.Column{NotificationTemplatesColumns[31], NotificationTemplatesColumns[11]},
+				Columns: []*schema.Column{NotificationTemplatesColumns[32], NotificationTemplatesColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

@@ -13,7 +13,6 @@ func Builder() definition.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
-				Version:     "v1",
 				Family:      "cloudflare",
 				DisplayName: "Cloudflare",
 				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",

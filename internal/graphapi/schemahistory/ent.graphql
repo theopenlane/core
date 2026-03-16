@@ -20316,6 +20316,10 @@ type NotificationTemplateHistory implements Node {
   """
   integrationID: String
   """
+  optional explicit provider destination identifiers for this template, such as Slack channel IDs
+  """
+  destinations: [String!]
+  """
   workflow definition associated with this template
   """
   workflowDefinitionID: String

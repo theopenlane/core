@@ -31,6 +31,7 @@ type ResolverRoot interface {
 	Evidence() EvidenceResolver
 	Group() GroupResolver
 	IdentityHolder() IdentityHolderResolver
+	Integration() IntegrationResolver
 	InternalPolicy() InternalPolicyResolver
 	Mutation() MutationResolver
 	Notification() NotificationResolver
@@ -2748,6 +2749,7 @@ type ComplexityRoot struct {
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
 		Vulnerabilities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		WebhookURLs              func(childComplexity int) int
 	}
 
 	IntegrationConnection struct {
@@ -4073,6 +4075,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
+		Destinations         func(childComplexity int) int
 		EmailTemplate        func(childComplexity int) int
 		EmailTemplateID      func(childComplexity int) int
 		Format               func(childComplexity int) int
@@ -21260,6 +21263,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Integration.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
+	case "Integration.webhookURLs":
+		if e.ComplexityRoot.Integration.WebhookURLs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.WebhookURLs(childComplexity), true
+
 	case "IntegrationConnection.edges":
 		if e.ComplexityRoot.IntegrationConnection.Edges == nil {
 			break
@@ -31579,6 +31589,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplate.Description(childComplexity), true
+
+	case "NotificationTemplate.destinations":
+		if e.ComplexityRoot.NotificationTemplate.Destinations == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplate.Destinations(childComplexity), true
 
 	case "NotificationTemplate.emailTemplate":
 		if e.ComplexityRoot.NotificationTemplate.EmailTemplate == nil {
@@ -67662,6 +67679,10 @@ input CreateNotificationTemplateInput {
   """
   topicPattern: String!
   """
+  optional explicit provider destination identifiers for this template, such as Slack channel IDs
+  """
+  destinations: [String!]
+  """
   title template for external channel messages
   """
   titleTemplate: String
@@ -94825,6 +94846,10 @@ type NotificationTemplate implements Node {
   integration associated with this template
   """
   integrationID: ID
+  """
+  optional explicit provider destination identifiers for this template, such as Slack channel IDs
+  """
+  destinations: [String!]
   """
   workflow definition associated with this template
   """
@@ -128583,6 +128608,12 @@ input UpdateNotificationTemplateInput {
   """
   topicPattern: String
   """
+  optional explicit provider destination identifiers for this template, such as Slack channel IDs
+  """
+  destinations: [String!]
+  appendDestinations: [String!]
+  clearDestinations: Boolean
+  """
   title template for external channel messages
   """
   titleTemplate: String
@@ -140901,6 +140932,10 @@ type IntegrationDeletePayload {
     Deleted integration ID
     """
     deletedID: ID!
+}
+`, BuiltIn: false},
+	{Name: "../schema/integrationextended.graphql", Input: `extend type Integration {
+    webhookURLs: Map
 }
 `, BuiltIn: false},
 	{Name: "../schema/internalpolicy.graphql", Input: `extend type InternalPolicy {

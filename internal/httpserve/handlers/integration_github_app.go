@@ -169,7 +169,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 			SetName("GitHub App").
 			SetSystemInternalID(in.InstallationID).
 			SetDefinitionID(githubapp.DefinitionID.ID()).
-			SetDefinitionVersion("v1").
 			SetDefinitionSlug(githubAppSlug).
 			SetFamily("github").
 			SetStatus(enums.IntegrationStatusPending).
