@@ -43,6 +43,7 @@ type ResolverRoot interface {
 	WorkflowProposal() WorkflowProposalResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
+	CreateFindingInput() CreateFindingInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateNotificationInput() CreateNotificationInputResolver
@@ -50,12 +51,14 @@ type ResolverRoot interface {
 	CreateScanInput() CreateScanInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
+	CreateVulnerabilityInput() CreateVulnerabilityInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateDiscussionInput() UpdateDiscussionInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateEvidenceInput() UpdateEvidenceInputResolver
+	UpdateFindingInput() UpdateFindingInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
 	UpdateInternalPolicyInput() UpdateInternalPolicyInputResolver
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
@@ -68,6 +71,7 @@ type ResolverRoot interface {
 	UpdateTaskInput() UpdateTaskInputResolver
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
+	UpdateVulnerabilityInput() UpdateVulnerabilityInputResolver
 }
 
 type DirectiveRoot struct {

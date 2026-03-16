@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/common/enums"
@@ -3204,6 +3205,11 @@ func (r *queryResolver) WorkflowObjectRefs(ctx context.Context, after *entgql.Cu
 	return res, err
 }
 
+// SecurityLevel is the resolver for the securityLevel field.
+func (r *createFindingInputResolver) SecurityLevel(ctx context.Context, obj *generated.CreateFindingInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+
 // Channels is the resolver for the channels field.
 func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *generated.CreateNotificationInput, data []string) error {
 	channels := []enums.Channel{}
@@ -3229,6 +3235,61 @@ func (r *createScanInputResolver) VulnerabilityIDs(ctx context.Context, obj *gen
 	obj.VulnerabilityIDs = data
 
 	return nil
+}
+
+// SecurityLevel is the resolver for the securityLevel field.
+func (r *createVulnerabilityInputResolver) SecurityLevel(ctx context.Context, obj *generated.CreateVulnerabilityInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+
+// SecurityLevel is the resolver for the securityLevel field.
+func (r *updateFindingInputResolver) SecurityLevel(ctx context.Context, obj *generated.UpdateFindingInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+
+// ClearSecurityLevel is the resolver for the clearSecurityLevel field.
+func (r *updateFindingInputResolver) ClearSecurityLevel(ctx context.Context, obj *generated.UpdateFindingInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+
+// SecurityLevel is the resolver for the securityLevel field.
+func (r *updateVulnerabilityInputResolver) SecurityLevel(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+
+// ClearSecurityLevel is the resolver for the clearSecurityLevel field.
+func (r *updateVulnerabilityInputResolver) ClearSecurityLevel(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
 }
 
 // ActionPlan returns gqlgenerated.ActionPlanResolver implementation.
@@ -3296,6 +3357,11 @@ func (r *Resolver) CreateEntityInput() gqlgenerated.CreateEntityInputResolver {
 	return &createEntityInputResolver{r}
 }
 
+// CreateFindingInput returns gqlgenerated.CreateFindingInputResolver implementation.
+func (r *Resolver) CreateFindingInput() gqlgenerated.CreateFindingInputResolver {
+	return &createFindingInputResolver{r}
+}
+
 // CreateGroupInput returns gqlgenerated.CreateGroupInputResolver implementation.
 func (r *Resolver) CreateGroupInput() gqlgenerated.CreateGroupInputResolver {
 	return &createGroupInputResolver{r}
@@ -3331,6 +3397,11 @@ func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputR
 	return &createTrustCenterInputResolver{r}
 }
 
+// CreateVulnerabilityInput returns gqlgenerated.CreateVulnerabilityInputResolver implementation.
+func (r *Resolver) CreateVulnerabilityInput() gqlgenerated.CreateVulnerabilityInputResolver {
+	return &createVulnerabilityInputResolver{r}
+}
+
 // UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
 func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
 	return &updateActionPlanInputResolver{r}
@@ -3359,6 +3430,11 @@ func (r *Resolver) UpdateEntityInput() gqlgenerated.UpdateEntityInputResolver {
 // UpdateEvidenceInput returns gqlgenerated.UpdateEvidenceInputResolver implementation.
 func (r *Resolver) UpdateEvidenceInput() gqlgenerated.UpdateEvidenceInputResolver {
 	return &updateEvidenceInputResolver{r}
+}
+
+// UpdateFindingInput returns gqlgenerated.UpdateFindingInputResolver implementation.
+func (r *Resolver) UpdateFindingInput() gqlgenerated.UpdateFindingInputResolver {
+	return &updateFindingInputResolver{r}
 }
 
 // UpdateGroupInput returns gqlgenerated.UpdateGroupInputResolver implementation.
@@ -3421,6 +3497,11 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 	return &updateTrustCenterInputResolver{r}
 }
 
+// UpdateVulnerabilityInput returns gqlgenerated.UpdateVulnerabilityInputResolver implementation.
+func (r *Resolver) UpdateVulnerabilityInput() gqlgenerated.UpdateVulnerabilityInputResolver {
+	return &updateVulnerabilityInputResolver{r}
+}
+
 type actionPlanResolver struct{ *Resolver }
 type campaignResolver struct{ *Resolver }
 type campaignTargetResolver struct{ *Resolver }
@@ -3438,6 +3519,7 @@ type workflowInstanceResolver struct{ *Resolver }
 type workflowProposalResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
+type createFindingInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
 type createNotificationInputResolver struct{ *Resolver }
@@ -3445,12 +3527,14 @@ type createOrganizationInputResolver struct{ *Resolver }
 type createScanInputResolver struct{ *Resolver }
 type createTrustCenterFAQInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
+type createVulnerabilityInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateDiscussionInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateEvidenceInputResolver struct{ *Resolver }
+type updateFindingInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
 type updateInternalPolicyInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
@@ -3463,3 +3547,4 @@ type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
 type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }
+type updateVulnerabilityInputResolver struct{ *Resolver }

@@ -63,6 +63,7 @@ func (Finding) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("security_level"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 		field.String("external_owner_id").
 			Comment("the owner of the finding").

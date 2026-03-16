@@ -9410,7 +9410,6 @@ type CreateFindingInput struct {
 	ScopeName            *string
 	FindingStatusName    *string
 	ExternalID           *string
-	SecurityLevel        *enums.SecurityLevel
 	ExternalOwnerID      *string
 	Source               *string
 	ResourceName         *string
@@ -9496,9 +9495,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
-	}
-	if v := i.SecurityLevel; v != nil {
-		m.SetSecurityLevel(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -9708,8 +9704,6 @@ type UpdateFindingInput struct {
 	FindingStatusName          *string
 	ClearExternalID            bool
 	ExternalID                 *string
-	ClearSecurityLevel         bool
-	SecurityLevel              *enums.SecurityLevel
 	ClearExternalOwnerID       bool
 	ExternalOwnerID            *string
 	ClearSource                bool
@@ -9903,12 +9897,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
-	}
-	if i.ClearSecurityLevel {
-		m.ClearSecurityLevel()
-	}
-	if v := i.SecurityLevel; v != nil {
-		m.SetSecurityLevel(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -27066,7 +27054,6 @@ type CreateVulnerabilityInput struct {
 	ScopeName               *string
 	VulnerabilityStatusName *string
 	ExternalOwnerID         *string
-	SecurityLevel           *enums.SecurityLevel
 	ExternalID              string
 	CveID                   *string
 	Source                  *string
@@ -27141,9 +27128,6 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if v := i.SecurityLevel; v != nil {
-		m.SetSecurityLevel(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.CveID; v != nil {
@@ -27318,8 +27302,6 @@ type UpdateVulnerabilityInput struct {
 	VulnerabilityStatusName      *string
 	ClearExternalOwnerID         bool
 	ExternalOwnerID              *string
-	ClearSecurityLevel           bool
-	SecurityLevel                *enums.SecurityLevel
 	ExternalID                   *string
 	ClearCveID                   bool
 	CveID                        *string
@@ -27485,12 +27467,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if i.ClearSecurityLevel {
-		m.ClearSecurityLevel()
-	}
-	if v := i.SecurityLevel; v != nil {
-		m.SetSecurityLevel(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)

@@ -21,8 +21,7 @@ func HookFindingSeverityLevel() ent.Hook {
 				}
 			}
 
-			_ = score
-			// m.SetFindingSeverityLevelName(severityLevelFromScore(score))
+			m.SetSecurityLevel(severityLevelFromScore(score))
 
 			return next.Mutate(ctx, m)
 		})
