@@ -1,2 +1,2 @@
-// Package azuresecuritycenter provides the Azure Security Center integration definition for integrationsv2
+// Package azuresecuritycenter provides the Azure Security Center integration definition for integrations
 package azuresecuritycenter

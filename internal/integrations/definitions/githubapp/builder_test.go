@@ -1,14 +1,11 @@
 package githubapp
 
-import (
-	"context"
-	"testing"
-)
+import "testing"
 
 func TestBuilderUsesCanonicalRefs(t *testing.T) {
 	t.Parallel()
 
-	definition, err := Builder(Config{})(context.Background())
+	definition, err := Builder(Config{})()
 	if err != nil {
 		t.Fatalf("Builder() error = %v", err)
 	}

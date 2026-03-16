@@ -30,9 +30,9 @@ var (
 	oauthUserIDCookieName = "oauth_user_id"
 )
 
-// StartOAuthFlow initiates the v2 OAuth flow for an integration definition.
+// StartOAuthFlow initiates the OAuth flow for an integration definition.
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleOAuthV2FlowRequest, openapi.OAuthFlowResponse{}, openapiCtx.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleOAuthFlowRequest, openapi.OAuthFlowResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -253,11 +253,24 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
+	installationRecord, err := h.IntegrationsRuntime.ResolveInstallation(reqCtx, callbackCaller.OrganizationID, result.InstallationID, result.DefinitionID)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", result.InstallationID).Msg("failed to reload installation after oauth callback")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.SyncWebhooks(reqCtx, installationRecord); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", result.InstallationID).Msg("failed to sync integration webhooks after oauth callback")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
 	def, _ := h.IntegrationsRuntime.Registry().Definition(result.DefinitionID)
-	redirectURL := buildV2IntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), def.Slug)
+	redirectURL := buildIntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), def.Slug)
 	if redirectURL == "" {
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
@@ -333,28 +346,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	return h.Success(ctx, resp)
 }
 
-// buildV2IntegrationRedirectURL appends provider and status query params to the base redirect URL.
-func buildV2IntegrationRedirectURL(baseURL, slug string) string {
-	if strings.TrimSpace(baseURL) == "" {
-		return ""
-	}
-
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return baseURL
-	}
-
-	q := u.Query()
-	q.Set("provider", strings.ToLower(slug))
-	q.Set("status", "success")
-	q.Set("message", fmt.Sprintf("Successfully connected %s integration", strings.ToLower(slug)))
-	u.RawQuery = q.Encode()
-
-	return u.String()
-}
-
 // buildIntegrationRedirectURL appends provider and status query params to the base redirect URL.
-// Used by v1 flows (GitHub App) that operate on a provider name string.
 func buildIntegrationRedirectURL(baseURL, provider string) string {
 	if strings.TrimSpace(baseURL) == "" {
 		return ""

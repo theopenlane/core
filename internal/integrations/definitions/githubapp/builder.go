@@ -1,8 +1,6 @@
 package githubapp
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -13,17 +11,15 @@ import (
 type UserInput struct {
 	// Label is the user-defined display label for the installation
 	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-
 	// RepositoryFilter limits repository collection to matching repositories
 	RepositoryFilter string `json:"repositoryFilter,omitempty" jsonschema:"title=Repository Filter Expression"`
-
 	// SecurityOnly limits collection to security-focused data
 	SecurityOnly bool `json:"securityOnly,omitempty" jsonschema:"title=Collect Security Signals Only"`
 }
 
 // Builder returns the GitHub App definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -54,7 +50,7 @@ func Builder(cfg Config) definition.Builder {
 				{
 					Ref:         GitHubClient.ID(),
 					Description: "GitHub GraphQL client",
-					Build:       Client{Config: cfg}.Build,
+					Build:       Client{APIURL: cfg.APIURL}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -64,7 +60,7 @@ func Builder(cfg Config) definition.Builder {
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   GitHubClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      HealthCheck{}.Handle(Client{Config: cfg}),
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        RepositorySyncOperation.Name(),
@@ -72,7 +68,7 @@ func Builder(cfg Config) definition.Builder {
 					Topic:       RepositorySyncOperation.Topic(Slug),
 					ClientRef:   GitHubClient.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      RepositorySync{}.Handle(Client{Config: cfg}),
+					Handle:      RepositorySync{}.Handle(Client{}),
 				},
 				{
 					Name:         VulnerabilityCollectOperation.Name(),
@@ -87,7 +83,7 @@ func Builder(cfg Config) definition.Builder {
 							EnsurePayloads: true,
 						},
 					},
-					Handle: VulnerabilityCollect{}.Handle(Client{Config: cfg}),
+					Handle: VulnerabilityCollect{}.Handle(Client{}),
 				},
 			},
 			Mappings: githubAppMappings(),
@@ -95,6 +91,52 @@ func Builder(cfg Config) definition.Builder {
 				{
 					Name:   "installation.events",
 					Verify: Webhook{Config: cfg}.Verify,
+					Event:  Webhook{}.Event,
+					Events: []types.WebhookEventRegistration{
+						{
+							Name:   PingWebhookEvent.Name(),
+							Topic:  PingWebhookEvent.Topic(Slug),
+							Handle: PingWebhook{}.Handle,
+						},
+						{
+							Name:   InstallationCreatedWebhookEvent.Name(),
+							Topic:  InstallationCreatedWebhookEvent.Topic(Slug),
+							Handle: InstallationCreatedWebhook{}.Handle,
+						},
+						{
+							Name:  DependabotAlertWebhookEvent.Name(),
+							Topic: DependabotAlertWebhookEvent.Topic(Slug),
+							Ingest: []types.IngestContract{
+								{
+									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
+									EnsurePayloads: true,
+								},
+							},
+							Handle: DependabotAlertWebhook{}.Handle,
+						},
+						{
+							Name:  CodeScanningAlertWebhookEvent.Name(),
+							Topic: CodeScanningAlertWebhookEvent.Topic(Slug),
+							Ingest: []types.IngestContract{
+								{
+									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
+									EnsurePayloads: true,
+								},
+							},
+							Handle: CodeScanningAlertWebhook{}.Handle,
+						},
+						{
+							Name:  SecretScanningAlertWebhookEvent.Name(),
+							Topic: SecretScanningAlertWebhookEvent.Topic(Slug),
+							Ingest: []types.IngestContract{
+								{
+									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
+									EnsurePayloads: true,
+								},
+							},
+							Handle: SecretScanningAlertWebhook{}.Handle,
+						},
+					},
 				},
 			},
 		}, nil

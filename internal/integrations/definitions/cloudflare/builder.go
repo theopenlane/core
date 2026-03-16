@@ -1,31 +1,21 @@
 package cloudflare
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// HealthCheck identifies the default health check operation
-type HealthCheck struct{}
-
-var (
-	DefinitionID           = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
-)
-
-const Slug = "cloudflare"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label   string   `json:"label,omitempty"   jsonschema:"title=Installation Label"`
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
+	// ZoneIDs limits collection to specific Cloudflare zone identifiers
 	ZoneIDs []string `json:"zoneIds,omitempty" jsonschema:"title=Zone IDs"`
 }
 
 // credential holds the Cloudflare API credentials for one installation
-type credential struct {
+type CredentialSchema struct {
 	APIToken  string   `json:"apiToken"          jsonschema:"required,title=API Token"`
 	AccountID string   `json:"accountId"         jsonschema:"required,title=Account ID"`
 	ZoneIDs   []string `json:"zoneIds,omitempty" jsonschema:"title=Zone IDs"`
@@ -33,9 +23,7 @@ type credential struct {
 
 // Builder returns the Cloudflare definition builder
 func Builder() definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -51,16 +39,16 @@ func Builder() definition.Builder {
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[credential](),
+				Schema: providerkit.SchemaFrom[CredentialSchema](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         CloudflareClient.ID(),
 					Description: "Cloudflare REST API client",
-					Build:       buildCloudflareClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -68,9 +56,9 @@ func Builder() definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify Cloudflare API token via /user/tokens/verify",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   CloudflareClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 			},
 		}, nil

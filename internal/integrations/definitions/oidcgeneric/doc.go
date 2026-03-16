@@ -1,2 +1,2 @@
-// Package oidcgeneric provides the generic OIDC integration definition for integrationsv2
+// Package oidcgeneric provides the generic OIDC integration definition for integrations
 package oidcgeneric

@@ -6,7 +6,6 @@ import (
 	"errors"
 	"testing"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -40,7 +39,7 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 			{
 				Name:  "health.default",
 				Topic: gala.TopicName("integration.github_app.health.default"),
-				Handle: func(context.Context, *generated.Integration, integrationtypes.CredentialSet, any, json.RawMessage) (json.RawMessage, error) {
+				Handle: func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
 					return json.RawMessage(`{"ok":true}`), nil
 				},
 			},

@@ -10,11 +10,15 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
+	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/route"
+	"github.com/theopenlane/core/internal/integrations/definition"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -361,4 +365,155 @@ func (suite *HandlerTestSuite) TestSCIMGroupHandlerCreateDeduplicatesMembers() {
 	suite.Equal(member.ID, suite.getStringField(memberMap, "value"), "member ID should match")
 
 	suite.Equal(displayName, resp["displayName"], "displayName should match")
+}
+
+func (suite *HandlerTestSuite) TestSCIMDirectoryUserHandlerCreateUsesRuntimeIngest() {
+	ctx := context.Background()
+	scimTestUser := suite.userBuilderWithInput(ctx, &userInput{
+		email: ulids.New().String() + "@example.com",
+	})
+
+	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()}, "")
+	defer restore()
+
+	createCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+	scimInteg, err := suite.db.Integration.Create().
+		SetOwnerID(scimTestUser.OrganizationID).
+		SetName("SCIM Directory").
+		SetKind("scim").
+		SetDefinitionID(definitionscim.DefinitionID.ID()).
+		SetDefinitionSlug(definitionscim.Slug).
+		SetConfig(openapi.IntegrationConfig{SCIMProvisionMode: enums.SCIMProvisionModeDirectory}).
+		Save(createCtx)
+	suite.Require().NoError(err)
+
+	suite.router.Handler = suite.h
+	err = route.RegisterRoutes(suite.router)
+	suite.Require().NoError(err)
+
+	email := fmt.Sprintf("directory-user-%s@example.com", strings.ToLower(ulids.New().String()))
+	body := map[string]any{
+		"schemas":  []string{scimUserSchema},
+		"userName": email,
+		"name": map[string]any{
+			"givenName":  "Directory",
+			"familyName": "User",
+		},
+		"displayName": "Directory User",
+	}
+
+	payload, err := json.Marshal(body)
+	suite.Require().NoError(err)
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/scim/%s/v2/Users", scimInteg.ID), bytes.NewReader(payload))
+	req.Header.Set("Content-Type", "application/scim+json")
+	req.Header.Set("Accept", "application/scim+json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(scimTestUser.UserCtx))
+	suite.Require().Equal(http.StatusCreated, rec.Code, rec.Body.String())
+
+	var resp map[string]any
+	suite.Require().NoError(json.Unmarshal(rec.Body.Bytes(), &resp))
+
+	accountID := suite.getStringField(resp, "id")
+	verifyCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+
+	account, err := suite.db.DirectoryAccount.Get(verifyCtx, accountID)
+	suite.Require().NoError(err)
+	suite.Equal(scimInteg.ID, account.IntegrationID)
+	suite.Equal(email, account.ExternalID)
+	suite.Require().NotNil(account.CanonicalEmail)
+	suite.Equal(strings.ToLower(email), *account.CanonicalEmail)
+	suite.Equal("Directory User", account.DisplayName)
+
+	userCount, err := suite.db.User.Query().Where(user.EmailEQ(strings.ToLower(email))).Count(verifyCtx)
+	suite.Require().NoError(err)
+	suite.Equal(0, userCount)
+}
+
+func (suite *HandlerTestSuite) TestSCIMDirectoryGroupHandlerCreateUsesRuntimeIngest() {
+	ctx := context.Background()
+	scimTestUser := suite.userBuilderWithInput(ctx, &userInput{
+		email: ulids.New().String() + "@example.com",
+	})
+
+	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()}, "")
+	defer restore()
+
+	createCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+	scimInteg, err := suite.db.Integration.Create().
+		SetOwnerID(scimTestUser.OrganizationID).
+		SetName("SCIM Directory").
+		SetKind("scim").
+		SetDefinitionID(definitionscim.DefinitionID.ID()).
+		SetDefinitionSlug(definitionscim.Slug).
+		SetConfig(openapi.IntegrationConfig{SCIMProvisionMode: enums.SCIMProvisionModeDirectory}).
+		Save(createCtx)
+	suite.Require().NoError(err)
+
+	suite.router.Handler = suite.h
+	err = route.RegisterRoutes(suite.router)
+	suite.Require().NoError(err)
+
+	email := fmt.Sprintf("directory-member-%s@example.com", strings.ToLower(ulids.New().String()))
+	userPayload, err := json.Marshal(map[string]any{
+		"schemas":  []string{scimUserSchema},
+		"userName": email,
+		"name": map[string]any{
+			"givenName":  "Member",
+			"familyName": "Target",
+		},
+	})
+	suite.Require().NoError(err)
+
+	userReq := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/scim/%s/v2/Users", scimInteg.ID), bytes.NewReader(userPayload))
+	userReq.Header.Set("Content-Type", "application/scim+json")
+	userReq.Header.Set("Accept", "application/scim+json")
+
+	userRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(userRec, userReq.WithContext(scimTestUser.UserCtx))
+	suite.Require().Equal(http.StatusCreated, userRec.Code, userRec.Body.String())
+
+	var createdUser map[string]any
+	suite.Require().NoError(json.Unmarshal(userRec.Body.Bytes(), &createdUser))
+	accountID := suite.getStringField(createdUser, "id")
+
+	groupPayload, err := json.Marshal(map[string]any{
+		"schemas":     []string{scimGroupSchema},
+		"displayName": "SCIM Directory Team",
+		"members": []map[string]any{
+			{"value": accountID},
+			{"value": accountID},
+		},
+	})
+	suite.Require().NoError(err)
+
+	groupReq := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/scim/%s/v2/Groups", scimInteg.ID), bytes.NewReader(groupPayload))
+	groupReq.Header.Set("Content-Type", "application/scim+json")
+	groupReq.Header.Set("Accept", "application/scim+json")
+
+	groupRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(groupRec, groupReq.WithContext(scimTestUser.UserCtx))
+	suite.Require().Equal(http.StatusCreated, groupRec.Code, groupRec.Body.String())
+
+	var resp map[string]any
+	suite.Require().NoError(json.Unmarshal(groupRec.Body.Bytes(), &resp))
+
+	groupID := suite.getStringField(resp, "id")
+	verifyCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
+
+	group, err := suite.db.DirectoryGroup.Get(verifyCtx, groupID)
+	suite.Require().NoError(err)
+	suite.Equal(scimInteg.ID, group.IntegrationID)
+	suite.Equal("SCIM Directory Team", group.ExternalID)
+	suite.Equal("SCIM Directory Team", group.DisplayName)
+
+	memberships, err := suite.db.DirectoryMembership.Query().
+		Where(directorymembership.DirectoryGroupID(group.ID)).
+		All(verifyCtx)
+	suite.Require().NoError(err)
+	suite.Len(memberships, 1)
+	suite.Equal(scimInteg.ID, memberships[0].IntegrationID)
+	suite.Equal(accountID, memberships[0].DirectoryAccountID)
 }

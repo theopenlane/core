@@ -29,20 +29,6 @@ type IntegrationDeps struct {
 	Runtime *integrationsruntime.Runtime
 }
 
-// IntegrationWorkflowMeta ties an integration run back to a workflow action
-type IntegrationWorkflowMeta struct {
-	// InstanceID identifies the workflow instance that triggered the run
-	InstanceID string
-	// ActionKey identifies the workflow action key
-	ActionKey string
-	// ActionIndex captures the workflow action index
-	ActionIndex int
-	// ObjectID identifies the workflow object
-	ObjectID string
-	// ObjectType identifies the workflow object type
-	ObjectType enums.WorkflowObjectType
-}
-
 // IntegrationQueueRequest describes a queued integration operation
 type IntegrationQueueRequest struct {
 	// OrgID identifies the organization requesting the operation
@@ -68,7 +54,7 @@ type IntegrationQueueRequest struct {
 	// RunType identifies the integration run type
 	RunType enums.IntegrationRunType
 	// WorkflowMeta links the operation to a workflow action
-	WorkflowMeta *IntegrationWorkflowMeta
+	WorkflowMeta *operations.WorkflowMeta
 }
 
 // IntegrationQueueResult captures queue results
@@ -137,7 +123,7 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 		operation := op // capture for closure
 		if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[operations.Envelope]{
 			Topic: gala.Topic[operations.Envelope]{Name: operation.Topic},
-			Name:  fmt.Sprintf("engine.integrationsv2.%s", operation.Topic),
+			Name:  fmt.Sprintf("engine.integrations.%s", operation.Topic),
 			Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
 				return e.handleIntegrationOperation(ctx, envelope)
 			},
@@ -188,12 +174,6 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		}
 	}
 
-	if e.integrationRuntime != nil {
-		if _, err := e.integrationRuntime.Registry().Operation(installationRecord.DefinitionID, req.Operation); err != nil {
-			return IntegrationQueueResult{}, err
-		}
-	}
-
 	scopeAllowed, err := evaluateInstallationScope(allowCtx, e.scopeEvaluator, req, installationRecord, req.Operation, req.Config)
 	if err != nil {
 		return IntegrationQueueResult{}, err
@@ -207,17 +187,6 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		runType = enums.IntegrationRunTypeEvent
 	}
 
-	var workflowMeta *operations.WorkflowMeta
-	if req.WorkflowMeta != nil {
-		workflowMeta = &operations.WorkflowMeta{
-			InstanceID:  req.WorkflowMeta.InstanceID,
-			ActionKey:   req.WorkflowMeta.ActionKey,
-			ActionIndex: req.WorkflowMeta.ActionIndex,
-			ObjectID:    req.WorkflowMeta.ObjectID,
-			ObjectType:  req.WorkflowMeta.ObjectType,
-		}
-	}
-
 	result, err := e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
 		InstallationID: installationRecord.ID,
 		Operation:      req.Operation,
@@ -225,10 +194,17 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		Force:          req.Force,
 		ClientForce:    req.ClientForce,
 		RunType:        runType,
-		WorkflowMeta:   workflowMeta,
+		WorkflowMeta:   req.WorkflowMeta,
 	})
 	if err != nil {
-		return IntegrationQueueResult{}, err
+		switch {
+		case errors.Is(err, integrationsruntime.ErrDefinitionNotFound):
+			return IntegrationQueueResult{}, ErrIntegrationDefinitionNotFound
+		case errors.Is(err, integrationsruntime.ErrOperationNotFound):
+			return IntegrationQueueResult{}, ErrIntegrationOperationNotFound
+		default:
+			return IntegrationQueueResult{}, err
+		}
 	}
 
 	return IntegrationQueueResult{
@@ -263,7 +239,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		orgID = integCaller.OrganizationID
 	}
 
-	meta := &IntegrationWorkflowMeta{
+	meta := &operations.WorkflowMeta{
 		InstanceID:  instance.ID,
 		ActionKey:   action.Key,
 		ActionIndex: actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key),
@@ -358,10 +334,15 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		return false, err
 	}
 
+	definitionValue := installationRecord.DefinitionSlug
+	if definitionValue == "" {
+		definitionValue = installationRecord.DefinitionID
+	}
+
 	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, types.ScopeVars{
 		Payload:            req.ScopePayload,
 		Resource:           req.ScopeResource,
-		DefinitionID:       installationRecord.DefinitionID,
+		Definition:         definitionValue,
 		Operation:          operationName,
 		Config:             operationConfig,
 		InstallationConfig: installationConfigRaw,

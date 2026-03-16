@@ -11,13 +11,9 @@ import (
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 	securitycenterpb "cloud.google.com/go/securitycenter/apiv2/securitycenterpb"
 	"github.com/samber/lo"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	"google.golang.org/api/iterator"
-	"google.golang.org/api/option"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -33,8 +29,8 @@ const (
 	sampleConfigsCapacity = 5
 )
 
-// sccCredentialMetadata captures the persisted SCC credential metadata supplied during activation
-type sccCredentialMetadata struct {
+// credentialMetadata captures the persisted SCC credential metadata supplied during activation
+type credentialMetadata struct {
 	ProjectID                string   `json:"projectId,omitempty"`
 	OrganizationID           string   `json:"organizationId,omitempty"`
 	ProjectScope             string   `json:"projectScope,omitempty"`
@@ -51,7 +47,7 @@ type sccCredentialMetadata struct {
 }
 
 // applyDefaults fills in fallback values for missing optional fields
-func (m sccCredentialMetadata) applyDefaults() sccCredentialMetadata {
+func (m credentialMetadata) applyDefaults() credentialMetadata {
 	normalized := m
 	if normalized.ProjectScope == "" {
 		normalized.ProjectScope = projectScopeAll
@@ -62,69 +58,71 @@ func (m sccCredentialMetadata) applyDefaults() sccCredentialMetadata {
 	return normalized
 }
 
-type sccFindingsConfig struct {
-	Filter      string   `json:"filter,omitempty"`
-	SourceID    string   `json:"sourceId,omitempty"`
-	SourceIDs   []string `json:"sourceIds,omitempty"`
-	PageSize    int      `json:"page_size,omitempty"`
-	MaxFindings int      `json:"max_findings,omitempty"`
+// FindingsConfig holds per-invocation parameters for the findings.collect operation
+type FindingsConfig struct {
+	// Filter is a server-side CEL filter for findings
+	Filter string `json:"filter,omitempty"`
+	// SourceID scopes collection to a single SCC source
+	SourceID string `json:"sourceId,omitempty"`
+	// SourceIDs scopes collection to multiple SCC sources
+	SourceIDs []string `json:"sourceIds,omitempty"`
+	// PageSize controls the number of findings per API page
+	PageSize int `json:"page_size,omitempty"`
+	// MaxFindings caps the total number of findings returned
+	MaxFindings int `json:"max_findings,omitempty"`
 }
 
-type sccHealthDetails struct {
+// HealthCheck holds the result of a GCP SCC health check
+type HealthCheck struct {
+	// Parents is the list of SCC parent resources that were probed
 	Parents []string `json:"parents"`
 }
 
-type sccNotificationConfigSample struct {
-	Name        string `json:"name"`
+// NotificationConfigSample holds a single SCC notification config entry
+type NotificationConfigSample struct {
+	// Name is the notification config resource name
+	Name string `json:"name"`
+	// Description is the notification config description
 	Description string `json:"description"`
+	// PubSubTopic is the Pub/Sub topic for the notification config
 	PubSubTopic string `json:"pubsubTopic"`
-	Parent      string `json:"parent"`
+	// Parent is the parent resource for the notification config
+	Parent string `json:"parent"`
 }
 
-type sccSettingsDetails struct {
-	Parents                   []string                      `json:"parents"`
-	NotificationConfigCount   int                           `json:"notificationConfigCount"`
-	SampleNotificationConfigs []sccNotificationConfigSample `json:"sampleNotificationConfigs"`
+// SettingsScan scans GCP SCC notification settings
+type SettingsScan struct {
+	// Parents is the list of SCC parent resources that were scanned
+	Parents []string `json:"parents"`
+	// NotificationConfigCount is the total count of notification configs found
+	NotificationConfigCount int `json:"notificationConfigCount"`
+	// SampleNotificationConfigs holds a representative subset of notification configs
+	SampleNotificationConfigs []NotificationConfigSample `json:"sampleNotificationConfigs"`
 }
 
-// buildSCCClient builds the GCP Security Command Center client for one installation
-func buildSCCClient(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	meta, err := sccMetadataFromCredential(req.Credential)
+// FindingsCollect collects GCP SCC findings for ingest
+type FindingsCollect struct{}
+
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
+
+		return h.Run(ctx, request.Credential, c)
+	}
+}
+
+// Run executes the GCP SCC health check
+func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *cloudscc.Client) (json.RawMessage, error) {
+	meta, err := metadataFromCredential(credential)
 	if err != nil {
 		return nil, err
 	}
 
-	clientOpts, err := sccClientOptions(ctx, meta, req.Credential.OAuthAccessToken)
-	if err != nil {
-		return nil, err
-	}
-
-	opts := append([]option.ClientOption{}, clientOpts...)
-	if meta.ProjectID != "" {
-		opts = append(opts, option.WithQuotaProject(meta.ProjectID))
-	}
-
-	client, err := cloudscc.NewClient(ctx, opts...)
-	if err != nil {
-		return nil, ErrSecurityCenterClientCreate
-	}
-
-	return client, nil
-}
-
-// runHealthOperation verifies GCP SCC access by listing sources for each parent
-func runHealthOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	sccClient, ok := client.(*cloudscc.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	meta, err := sccMetadataFromCredential(credential)
-	if err != nil {
-		return nil, err
-	}
-
-	parents, err := resolveSecurityCenterParents(meta)
+	parents, err := resolveParents(meta)
 	if err != nil {
 		return nil, err
 	}
@@ -135,8 +133,9 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, credentia
 			PageSize: 1,
 		}
 
-		it := sccClient.ListSources(ctx, req)
+		it := c.ListSources(ctx, req)
 		_, err = it.Next()
+
 		if errors.Is(err, iterator.Done) {
 			err = nil
 		}
@@ -146,26 +145,34 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, credentia
 		}
 	}
 
-	return jsonx.ToRawMessage(sccHealthDetails{Parents: parents})
+	return jsonx.ToRawMessage(HealthCheck{Parents: parents})
 }
 
-// runFindingsCollectOperation collects GCP SCC findings from configured sources
-func runFindingsCollectOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, config json.RawMessage) (json.RawMessage, error) {
-	sccClient, ok := client.(*cloudscc.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts findings collection to the generic operation registration boundary
+func (f FindingsCollect) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	meta, err := sccMetadataFromCredential(credential)
+		var cfg FindingsConfig
+		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+			return nil, err
+		}
+
+		return f.Run(ctx, request.Credential, c, cfg)
+	}
+}
+
+// Run collects GCP SCC findings from configured sources
+func (FindingsCollect) Run(ctx context.Context, credential types.CredentialSet, c *cloudscc.Client, cfg FindingsConfig) (json.RawMessage, error) {
+	meta, err := metadataFromCredential(credential)
 	if err != nil {
 		return nil, err
 	}
 
-	var cfg sccFindingsConfig
-	if err := jsonx.UnmarshalIfPresent(config, &cfg); err != nil {
-		return nil, err
-	}
-	sources, err := resolveSecurityCenterSources(meta, cfg)
+	sources, err := resolveSources(meta, cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -176,9 +183,11 @@ func runFindingsCollectOperation(ctx context.Context, _ *generated.Integration, 
 	if pageSize <= 0 {
 		pageSize = findingsPageSize
 	}
+
 	if pageSize > findingsMaxPageSize {
 		pageSize = findingsMaxPageSize
 	}
+
 	if maxFindings := cfg.MaxFindings; maxFindings > 0 && maxFindings < pageSize {
 		pageSize = maxFindings
 	}
@@ -186,9 +195,11 @@ func runFindingsCollectOperation(ctx context.Context, _ *generated.Integration, 
 	maxFindings := cfg.MaxFindings
 	marshaler := protojson.MarshalOptions{UseProtoNames: true}
 	envelopes := make([]types.MappingEnvelope, 0)
+
 	if maxFindings > 0 {
 		envelopes = make([]types.MappingEnvelope, 0, maxFindings)
 	}
+
 	collected := 0
 
 collectLoop:
@@ -199,7 +210,7 @@ collectLoop:
 			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
 		}
 
-		it := sccClient.ListFindings(ctx, req)
+		it := c.ListFindings(ctx, req)
 
 		for {
 			result, err := it.Next()
@@ -238,24 +249,31 @@ collectLoop:
 	})
 }
 
-// runSettingsScanOperation lists SCC notification configs for each parent
-func runSettingsScanOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	sccClient, ok := client.(*cloudscc.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts settings scan to the generic operation registration boundary
+func (s SettingsScan) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	meta, err := sccMetadataFromCredential(credential)
+		return s.Run(ctx, request.Credential, c)
+	}
+}
+
+// Run scans GCP SCC notification configs
+func (SettingsScan) Run(ctx context.Context, credential types.CredentialSet, c *cloudscc.Client) (json.RawMessage, error) {
+	meta, err := metadataFromCredential(credential)
 	if err != nil {
 		return nil, err
 	}
 
-	parents, err := resolveSecurityCenterParents(meta)
+	parents, err := resolveParents(meta)
 	if err != nil {
 		return nil, err
 	}
 
-	configs := make([]sccNotificationConfigSample, 0, sampleConfigsCapacity)
+	configs := make([]NotificationConfigSample, 0, sampleConfigsCapacity)
 	count := 0
 
 	for _, parent := range parents {
@@ -264,7 +282,8 @@ func runSettingsScanOperation(ctx context.Context, _ *generated.Integration, cre
 			PageSize: settingsPageSize,
 		}
 
-		it := sccClient.ListNotificationConfigs(ctx, req)
+		it := c.ListNotificationConfigs(ctx, req)
+
 		for {
 			cfg, err := it.Next()
 			if errors.Is(err, iterator.Done) {
@@ -276,8 +295,9 @@ func runSettingsScanOperation(ctx context.Context, _ *generated.Integration, cre
 			}
 
 			count++
+
 			if len(configs) < cap(configs) {
-				configs = append(configs, sccNotificationConfigSample{
+				configs = append(configs, NotificationConfigSample{
 					Name:        cfg.GetName(),
 					Description: cfg.GetDescription(),
 					PubSubTopic: cfg.GetPubsubTopic(),
@@ -287,79 +307,11 @@ func runSettingsScanOperation(ctx context.Context, _ *generated.Integration, cre
 		}
 	}
 
-	return jsonx.ToRawMessage(sccSettingsDetails{
+	return jsonx.ToRawMessage(SettingsScan{
 		Parents:                   parents,
 		NotificationConfigCount:   count,
 		SampleNotificationConfigs: configs,
 	})
-}
-
-// sccMetadataFromCredential decodes SCC credential metadata from the credential set
-func sccMetadataFromCredential(credential types.CredentialSet) (sccCredentialMetadata, error) {
-	if len(credential.ProviderData) == 0 {
-		return sccCredentialMetadata{}, ErrCredentialMetadataRequired
-	}
-
-	var meta sccCredentialMetadata
-	if err := jsonx.UnmarshalIfPresent(credential.ProviderData, &meta); err != nil {
-		return sccCredentialMetadata{}, ErrMetadataDecode
-	}
-
-	return meta.applyDefaults(), nil
-}
-
-// sccClientOptions builds client options based on available credentials
-func sccClientOptions(ctx context.Context, meta sccCredentialMetadata, oauthToken string) ([]option.ClientOption, error) {
-	if meta.ServiceAccountKey != "" {
-		creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes)
-		if err != nil {
-			return nil, err
-		}
-
-		return []option.ClientOption{option.WithCredentials(creds)}, nil
-	}
-
-	if oauthToken != "" {
-		token := &oauth2.Token{AccessToken: oauthToken}
-		return []option.ClientOption{option.WithTokenSource(oauth2.StaticTokenSource(token))}, nil
-	}
-
-	return nil, ErrAccessTokenMissing
-}
-
-// serviceAccountCredentials parses and validates a service account key
-func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []string) (*google.Credentials, error) {
-	key := normalizeServiceAccountKey(rawKey)
-	if key == "" {
-		return nil, ErrServiceAccountKeyInvalid
-	}
-
-	scopeList := scopes
-	if len(scopeList) == 0 {
-		scopeList = []string{defaultScope}
-	}
-
-	creds, err := google.CredentialsFromJSONWithType(ctx, []byte(key), google.ServiceAccount, scopeList...)
-	if err != nil {
-		return nil, ErrServiceAccountKeyInvalid
-	}
-
-	return creds, nil
-}
-
-// normalizeServiceAccountKey trims and unwraps JSON-encoded service account keys
-func normalizeServiceAccountKey(value string) string {
-	trimmed := strings.TrimSpace(value)
-	if trimmed == "" {
-		return ""
-	}
-
-	var decoded string
-	if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
-		return strings.TrimSpace(decoded)
-	}
-
-	return trimmed
 }
 
 // buildFindingEnvelope serializes a finding into a mapping envelope
@@ -387,8 +339,8 @@ func resolveFindingResource(sourceName string, finding *securitycenterpb.Finding
 	return strings.TrimSpace(sourceName)
 }
 
-// resolveSecurityCenterParents chooses the SCC parent resources used for health/settings checks
-func resolveSecurityCenterParents(meta sccCredentialMetadata) ([]string, error) {
+// resolveParents chooses the SCC parent resources used for health/settings checks
+func resolveParents(meta credentialMetadata) ([]string, error) {
 	if meta.OrganizationID != "" && meta.ProjectScope != projectScopeSpecific {
 		return []string{fmt.Sprintf("organizations/%s", meta.OrganizationID)}, nil
 	}
@@ -402,6 +354,7 @@ func resolveSecurityCenterParents(meta sccCredentialMetadata) ([]string, error) 
 
 			return fmt.Sprintf("projects/%s", value), true
 		})
+
 		parentList = lo.Uniq(parentList)
 
 		if len(parentList) == 0 {
@@ -422,8 +375,8 @@ func resolveSecurityCenterParents(meta sccCredentialMetadata) ([]string, error) 
 	return nil, ErrProjectIDRequired
 }
 
-// resolveSecurityCenterSources resolves source resource names from config and metadata
-func resolveSecurityCenterSources(meta sccCredentialMetadata, cfg sccFindingsConfig) ([]string, error) {
+// resolveSources resolves source resource names from config and metadata
+func resolveSources(meta credentialMetadata, cfg FindingsConfig) ([]string, error) {
 	raw := make([]string, 0, 1+len(meta.SourceIDs))
 
 	if cfg.SourceID != "" {
@@ -434,6 +387,7 @@ func resolveSecurityCenterSources(meta sccCredentialMetadata, cfg sccFindingsCon
 
 	if len(raw) == 0 {
 		raw = append(raw, meta.SourceIDs...)
+
 		if len(raw) == 0 && meta.SourceID != "" {
 			raw = append(raw, meta.SourceID)
 		}
@@ -443,7 +397,7 @@ func resolveSecurityCenterSources(meta sccCredentialMetadata, cfg sccFindingsCon
 		return nil, ErrSourceIDRequired
 	}
 
-	parents, err := resolveSecurityCenterParents(meta)
+	parents, err := resolveParents(meta)
 	if err != nil {
 		return nil, err
 	}
@@ -469,4 +423,19 @@ func resolveSecurityCenterSources(meta sccCredentialMetadata, cfg sccFindingsCon
 	}
 
 	return out, nil
+}
+
+// normalizeServiceAccountKey trims and unwraps JSON-encoded service account keys
+func normalizeServiceAccountKey(value string) string {
+	trimmed := strings.TrimSpace(value)
+	if trimmed == "" {
+		return ""
+	}
+
+	var decoded string
+	if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
+		return strings.TrimSpace(decoded)
+	}
+
+	return trimmed
 }

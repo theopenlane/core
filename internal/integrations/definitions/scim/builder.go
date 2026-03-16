@@ -2,33 +2,32 @@ package scim
 
 import (
 	"context"
+	"encoding/json"
 
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// DirectorySync identifies the directory synchronization operation
-type DirectorySync struct{}
-
-var (
-	DefinitionID           = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
-	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
-)
-
-const Slug = "scim_directory_sync"
-
-// operatorConfig holds operator-owned defaults that apply across all SCIM installations
-type operatorConfig struct {
+// OperatorConfig holds operator-owned defaults that apply across all SCIM installations
+type OperatorConfig struct {
+	// DefaultProvisioningMode is the fallback provisioning mode for new installations
 	DefaultProvisioningMode string `json:"defaultProvisioningMode,omitempty" jsonschema:"title=Default Provisioning Mode"`
-	DefaultBasePath         string `json:"defaultBasePath,omitempty"         jsonschema:"title=Default Base Path"`
+	// DefaultBasePath is the fallback SCIM base path for new installations
+	DefaultBasePath string `json:"defaultBasePath,omitempty" jsonschema:"title=Default Base Path"`
 }
 
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label            string `json:"label,omitempty"            jsonschema:"title=Tenant Label"`
-	TenantKey        string `json:"tenantKey,omitempty"        jsonschema:"title=Tenant Key"`
-	MappingMode      string `json:"mappingMode,omitempty"      jsonschema:"title=Mapping Mode"`
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Tenant Label"`
+	// TenantKey is the SCIM tenant key
+	TenantKey string `json:"tenantKey,omitempty" jsonschema:"title=Tenant Key"`
+	// MappingMode controls how directory objects are mapped
+	MappingMode string `json:"mappingMode,omitempty" jsonschema:"title=Mapping Mode"`
+	// ProvisioningMode controls how directory objects are provisioned
 	ProvisioningMode string `json:"provisioningMode,omitempty" jsonschema:"title=Provisioning Mode"`
 }
 
@@ -41,9 +40,7 @@ type credential struct {
 
 // Builder returns the SCIM definition builder
 func Builder() definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -59,41 +56,42 @@ func Builder() definition.Builder {
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[operatorConfig](),
+				Schema: providerkit.SchemaFrom[OperatorConfig](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
 				Schema: providerkit.SchemaFrom[credential](),
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:         clientRef.ID(),
-					Description: "SCIM API client",
-					Build:       buildSCIMClient,
-				},
 			},
 			Operations: []types.OperationRegistration{
 				{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Synchronize directory state through SCIM",
 					Topic:       DirectorySyncOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      runDirectorySyncOperation,
+					Ingest: []types.IngestContract{
+						{
+							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							EnsurePayloads: true,
+						},
+						{
+							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							EnsurePayloads: true,
+						},
+						{
+							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							EnsurePayloads: true,
+						},
+					},
+					Handle: func(_ context.Context, _ types.OperationRequest) (json.RawMessage, error) {
+						return jsonx.ToRawMessage(DirectorySync{
+							Message: directorySyncAckMessage,
+						})
+					},
 				},
 			},
-			Mappings: []types.MappingRegistration{
-				{Schema: "directory_account", Variant: "default", Spec: types.MappingOverride{Version: "v1"}},
-				{Schema: "directory_group", Variant: "default", Spec: types.MappingOverride{Version: "v1"}},
-			},
-			Webhooks: []types.WebhookRegistration{
-				{
-					Name:   "directory.push",
-					Verify: verifyWebhook,
-				},
-			},
+			Mappings: scimMappings(),
 		}, nil
 	})
 }

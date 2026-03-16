@@ -6,85 +6,99 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-const teamsGraphBaseURL = "https://graph.microsoft.com/v1.0/"
-
-type teamsProfileResponse struct {
+// ProfileResponse is the raw Microsoft Graph /me response shape
+type ProfileResponse struct {
 	ID          string `json:"id"`
 	DisplayName string `json:"displayName"`
 	Mail        string `json:"mail"`
 }
 
-type teamsHealthDetails struct {
-	ID   string `json:"id"`
+// HealthCheck holds the result of a Microsoft Teams health check
+type HealthCheck struct {
+	// ID is the Microsoft Graph user identifier
+	ID string `json:"id"`
+	// Mail is the user's email address
 	Mail string `json:"mail"`
 }
 
-type teamsSampleEntry struct {
-	ID          string `json:"id"`
+// SampleEntry holds a single Teams team entry
+type SampleEntry struct {
+	// ID is the Teams team identifier
+	ID string `json:"id"`
+	// DisplayName is the team display name
 	DisplayName string `json:"displayName"`
 }
 
-type teamsSampleDetails struct {
-	Teams []teamsSampleEntry `json:"teams"`
+// TeamsSample collects a sample of joined Microsoft Teams
+type TeamsSample struct {
+	// Teams is the collected team sample
+	Teams []SampleEntry `json:"teams"`
 }
 
-type teamsMessageSendDetails struct {
-	TeamID    string `json:"teamId"`
+// MessageSend sends a Microsoft Teams channel message
+type MessageSend struct {
+	// TeamID is the target team identifier
+	TeamID string `json:"teamId"`
+	// ChannelID is the target channel identifier
 	ChannelID string `json:"channelId"`
+	// MessageID is the identifier of the created message
 	MessageID string `json:"messageId"`
 }
 
-type teamsChannelMessageBody struct {
+type channelMessageBody struct {
 	ContentType string `json:"contentType"`
 	Content     string `json:"content"`
 }
 
-type teamsChannelMessageRequest struct {
-	Body    teamsChannelMessageBody `json:"body"`
-	Subject string                  `json:"subject,omitempty"`
+type channelMessageRequest struct {
+	Body    channelMessageBody `json:"body"`
+	Subject string             `json:"subject,omitempty"`
 }
 
-// buildGraphClient builds the Microsoft Graph API client for one installation
-func buildGraphClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	token := req.Credential.OAuthAccessToken
-	if token == "" {
-		return nil, ErrOAuthTokenMissing
-	}
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	return providerkit.NewAuthenticatedClient(teamsGraphBaseURL, token, nil), nil
+		return h.Run(ctx, c)
+	}
 }
 
-// runHealthOperation calls /me to verify Teams access
-func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	var profile teamsProfileResponse
+// Run executes the Microsoft Teams health check
+func (HealthCheck) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
+	var profile ProfileResponse
 	if err := c.GetJSON(ctx, "me", &profile); err != nil {
 		return nil, fmt.Errorf("microsoftteams: graph /me failed: %w", err)
 	}
 
-	return jsonx.ToRawMessage(teamsHealthDetails{
+	return jsonx.ToRawMessage(HealthCheck{
 		ID:   profile.ID,
 		Mail: profile.Mail,
 	})
 }
 
-// runTeamsSampleOperation collects a sample of joined Teams for the user
-func runTeamsSampleOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts teams sample to the generic operation registration boundary
+func (t TeamsSample) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
+		return t.Run(ctx, c)
+	}
+}
+
+// Run collects a sample of joined Microsoft Teams
+func (TeamsSample) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
 	var resp struct {
 		Value []struct {
 			ID          string `json:"id"`
@@ -96,29 +110,36 @@ func runTeamsSampleOperation(ctx context.Context, _ *generated.Integration, _ ty
 		return nil, fmt.Errorf("microsoftteams: graph joinedTeams failed: %w", err)
 	}
 
-	samples := make([]teamsSampleEntry, 0, len(resp.Value))
+	samples := make([]SampleEntry, 0, len(resp.Value))
 	for _, team := range resp.Value {
-		samples = append(samples, teamsSampleEntry{
+		samples = append(samples, SampleEntry{
 			ID:          team.ID,
 			DisplayName: team.DisplayName,
 		})
 	}
 
-	return jsonx.ToRawMessage(teamsSampleDetails{Teams: samples})
+	return jsonx.ToRawMessage(TeamsSample{Teams: samples})
 }
 
-// runMessageSendOperation posts a message to a Teams channel
-func runMessageSendOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, config json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts message send to the generic operation registration boundary
+func (m MessageSend) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	var cfg messageOperationInput
-	if err := jsonx.UnmarshalIfPresent(config, &cfg); err != nil {
-		return nil, err
-	}
+		var cfg MessageOperationInput
+		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+			return nil, err
+		}
 
+		return m.Run(ctx, c, cfg)
+	}
+}
+
+// Run sends a Microsoft Teams channel message via Microsoft Graph
+func (MessageSend) Run(ctx context.Context, c *providerkit.AuthenticatedClient, cfg MessageOperationInput) (json.RawMessage, error) {
 	if cfg.TeamID == "" || cfg.ChannelID == "" {
 		return nil, ErrChannelMissing
 	}
@@ -138,8 +159,8 @@ func runMessageSendOperation(ctx context.Context, _ *generated.Integration, _ ty
 		return nil, ErrBodyFormatInvalid
 	}
 
-	payload := teamsChannelMessageRequest{
-		Body: teamsChannelMessageBody{
+	payload := channelMessageRequest{
+		Body: channelMessageBody{
 			ContentType: contentType,
 			Content:     cfg.Body,
 		},
@@ -156,7 +177,7 @@ func runMessageSendOperation(ctx context.Context, _ *generated.Integration, _ ty
 		return nil, fmt.Errorf("microsoftteams: graph channel message failed: %w", err)
 	}
 
-	return jsonx.ToRawMessage(teamsMessageSendDetails{
+	return jsonx.ToRawMessage(MessageSend{
 		TeamID:    cfg.TeamID,
 		ChannelID: cfg.ChannelID,
 		MessageID: resp.ID,

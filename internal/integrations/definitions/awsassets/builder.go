@@ -1,36 +1,20 @@
 package awsassets
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// HealthCheck identifies the default health check operation
-type HealthCheck struct{}
-
-// AssetCollect identifies the asset collection operation
-type AssetCollect struct{}
-
-var (
-	DefinitionID           = types.NewDefinitionRef("def_01K0AWSAST00000000000000001")
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
-	AssetCollectOperation  = types.NewOperationRef[AssetCollect]("asset.collect")
-)
-
-const Slug = "aws_assets"
-
-// operatorConfig holds operator-owned defaults that apply across all AWS Assets installations
-type operatorConfig struct {
+// OperatorConfig holds operator-owned defaults that apply across all AWS Assets installations
+type OperatorConfig struct {
 	DefaultSessionDuration string   `json:"defaultSessionDuration,omitempty" jsonschema:"title=Default Session Duration"`
 	DefaultExternalID      string   `json:"defaultExternalId,omitempty"      jsonschema:"title=Default External ID"`
 	DefaultRegions         []string `json:"defaultRegions,omitempty"         jsonschema:"title=Default Regions"`
 }
 
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
 	Label            string   `json:"label,omitempty"            jsonschema:"title=Installation Label"`
 	AccountSelectors []string `json:"accountSelectors,omitempty" jsonschema:"title=Account Selectors"`
 	RegionSelectors  []string `json:"regionSelectors,omitempty"  jsonschema:"title=Region Selectors"`
@@ -50,9 +34,7 @@ type credential struct {
 
 // Builder returns the AWS Assets definition builder
 func Builder() definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -68,19 +50,19 @@ func Builder() definition.Builder {
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[operatorConfig](),
+				Schema: providerkit.SchemaFrom[OperatorConfig](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
 				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         AWSAssetsClient.ID(),
 					Description: "AWS API client",
-					Build:       buildAWSClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -88,17 +70,17 @@ func Builder() definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate AWS credentials and installation scope",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   AWSAssetsClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        AssetCollectOperation.Name(),
 					Description: "Collect asset inventory from AWS",
 					Topic:       AssetCollectOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   AWSAssetsClient.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      runAssetCollectionOperation,
+					Handle:      AssetCollect{}.Handle(Client{}),
 				},
 			},
 			Mappings: []types.MappingRegistration{

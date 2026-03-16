@@ -1,30 +1,16 @@
 package okta
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// HealthCheck identifies the default health check operation
-type HealthCheck struct{}
-
-// PoliciesCollect identifies the policy collection operation
-type PoliciesCollect struct{}
-
-var (
-	DefinitionID             = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
-	HealthDefaultOperation   = types.NewOperationRef[HealthCheck]("health.default")
-	PoliciesCollectOperation = types.NewOperationRef[PoliciesCollect]("policies.collect")
-)
-
-const Slug = "okta"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label  string `json:"label,omitempty"  jsonschema:"title=Installation Label"`
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
+	// OrgURL is the Okta organization URL
 	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
 }
 
@@ -36,9 +22,7 @@ type credential struct {
 
 // Builder returns the Okta definition builder
 func Builder() definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -54,16 +38,16 @@ func Builder() definition.Builder {
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
 				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         OktaClient.ID(),
 					Description: "Okta API client",
-					Build:       buildOktaClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -71,17 +55,17 @@ func Builder() definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Okta user API to verify API token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   OktaClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        PoliciesCollectOperation.Name(),
 					Description: "Collect sign-on policy metadata for posture analysis",
 					Topic:       PoliciesCollectOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   OktaClient.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      runPoliciesCollectOperation,
+					Handle:      PoliciesCollect{}.Handle(Client{}),
 				},
 			},
 		}, nil

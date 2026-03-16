@@ -1,34 +1,28 @@
 package gcpscc
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-var (
-	DefinitionID             = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
-	HealthDefaultOperation   = types.NewOperationRef[struct{}]("health.default")
-	FindingsCollectOperation = types.NewOperationRef[struct{}]("findings.collect")
-	SettingsScanOperation    = types.NewOperationRef[struct{}]("settings.scan")
-)
-
-const Slug = "gcp_scc"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label          string   `json:"label,omitempty"          jsonschema:"title=Installation Label"`
-	OrganizationID string   `json:"organizationId,omitempty" jsonschema:"title=Organization ID"`
-	ProjectIDs     []string `json:"projectIds,omitempty"     jsonschema:"title=Project IDs"`
-	ProjectScope   string   `json:"projectScope,omitempty"   jsonschema:"title=Project Scope"`
-	SourceID       string   `json:"sourceId,omitempty"       jsonschema:"title=SCC Source ID"`
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
+	// OrganizationID is the GCP organization identifier
+	OrganizationID string `json:"organizationId,omitempty" jsonschema:"title=Organization ID"`
+	// ProjectIDs limits collection to specific GCP project identifiers
+	ProjectIDs []string `json:"projectIds,omitempty" jsonschema:"title=Project IDs"`
+	// ProjectScope controls whether collection covers all or specific projects
+	ProjectScope string `json:"projectScope,omitempty" jsonschema:"title=Project Scope"`
+	// SourceID is the SCC source identifier
+	SourceID string `json:"sourceId,omitempty" jsonschema:"title=SCC Source ID"`
 }
 
-// credential holds the GCP SCC credentials for one installation
-type credential struct {
+// CredentialSchema holds the GCP SCC credentials for one installation
+type CredentialSchema struct {
 	OrganizationID           string   `json:"organizationId,omitempty"           jsonschema:"title=Organization ID"`
 	ProjectID                string   `json:"projectId,omitempty"                jsonschema:"title=Project ID"`
 	ProjectScope             string   `json:"projectScope,omitempty"             jsonschema:"title=Project Scope"`
@@ -42,9 +36,7 @@ type credential struct {
 
 // Builder returns the GCP SCC definition builder with the supplied operator config applied
 func Builder(_ Config) definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -63,16 +55,16 @@ func Builder(_ Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[credential](),
+				Schema: providerkit.SchemaFrom[CredentialSchema](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         SCCClient.ID(),
 					Description: "Google Cloud Security Command Center v2 client",
-					Build:       buildSCCClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -80,16 +72,16 @@ func Builder(_ Config) definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify GCP SCC access by listing findings with a minimal query",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   SCCClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:         FindingsCollectOperation.Name(),
 					Description:  "Collect GCP Security Command Center findings for vulnerability ingestion",
 					Topic:        FindingsCollectOperation.Topic(Slug),
-					ClientRef:    clientRef.ID(),
-					ConfigSchema: providerkit.SchemaFrom[sccFindingsConfig](),
+					ClientRef:    SCCClient.ID(),
+					ConfigSchema: providerkit.SchemaFrom[FindingsConfig](),
 					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest: []types.IngestContract{
 						{
@@ -97,15 +89,15 @@ func Builder(_ Config) definition.Builder {
 							EnsurePayloads: true,
 						},
 					},
-					Handle: runFindingsCollectOperation,
+					Handle: FindingsCollect{}.Handle(Client{}),
 				},
 				{
 					Name:        SettingsScanOperation.Name(),
 					Description: "Scan GCP Security Command Center source and notification settings",
 					Topic:       SettingsScanOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   SCCClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runSettingsScanOperation,
+					Handle:      SettingsScan{}.Handle(Client{}),
 				},
 			},
 			Mappings: gcpsccMappings(),

@@ -35,7 +35,7 @@ type InstallationRecord struct {
 // InstallationLookupFunc resolves one installation used during auth flow validation.
 type InstallationLookupFunc func(ctx context.Context, installationID string) (InstallationRecord, error)
 
-// Service orchestrates auth flows for integrationsv2 definitions
+// Service orchestrates auth flows for integration definitions
 type Service struct {
 	// definitionLookup resolves definition instances by ID
 	definitionLookup DefinitionLookupFunc

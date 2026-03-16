@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -248,6 +250,7 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 	}
 
 	for _, target := range targets {
+		allowCtx := workflows.AllowContext(ctx)
 		selection, err := e.resolveNotificationExecutionTarget(ctx, ownerID, rendered.Template, target.Channel)
 		if err != nil {
 			return err
@@ -263,7 +266,7 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 			return err
 		}
 
-		_, err = e.integrationRuntime.Dispatch(ctx, operations.DispatchRequest{
+		_, err = e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
 			InstallationID: installationIDForRecord(selection.Installation),
 			Operation:      selection.Operation.Name,
 			Config:         config,
@@ -295,6 +298,7 @@ func (e *WorkflowEngine) dispatchChannelNotifications(ctx context.Context, owner
 
 // dispatchUserNotification sends a notification to a single user via integration
 func (e *WorkflowEngine) dispatchUserNotification(ctx context.Context, ownerID, userID string, channel enums.Channel, selection notificationExecutionTarget, rendered *renderedNotificationTemplate) error {
+	allowCtx := workflows.AllowContext(ctx)
 	preference, err := e.loadNotificationPreference(ctx, ownerID, userID, channel)
 	if err != nil {
 		return err
@@ -308,7 +312,7 @@ func (e *WorkflowEngine) dispatchUserNotification(ctx context.Context, ownerID, 
 		return err
 	}
 
-	_, err = e.integrationRuntime.Dispatch(ctx, operations.DispatchRequest{
+	_, err = e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
 		InstallationID: installationIDForRecord(selection.Installation),
 		Operation:      selection.Operation.Name,
 		Config:         config,
@@ -565,13 +569,13 @@ func readConfigString(config map[string]any, key string) string {
 	}
 }
 
-// definitionIDForNotificationChannel maps notification channels to v2 definition IDs
+// definitionIDForNotificationChannel maps notification channels to integration definition IDs
 func definitionIDForNotificationChannel(channel enums.Channel) (string, error) {
 	switch channel {
 	case enums.ChannelSlack:
-		return "def_01K0SLACK000000000000000001", nil
+		return slack.DefinitionID.ID(), nil
 	case enums.ChannelTeams:
-		return "def_01K0MSTEAMS00000000000000001", nil
+		return microsoftteams.DefinitionID.ID(), nil
 	default:
 		return "", ErrNotificationChannelUnsupported
 	}
@@ -580,8 +584,10 @@ func definitionIDForNotificationChannel(channel enums.Channel) (string, error) {
 // operationNameForChannel maps a notification channel to an operation name
 func operationNameForChannel(channel enums.Channel) (string, error) {
 	switch channel {
-	case enums.ChannelSlack, enums.ChannelTeams:
-		return "message.send", nil
+	case enums.ChannelSlack:
+		return slack.MessageSendOperation.Name(), nil
+	case enums.ChannelTeams:
+		return microsoftteams.MessageSendOperation.Name(), nil
 	default:
 		return "", ErrNotificationChannelUnsupported
 	}

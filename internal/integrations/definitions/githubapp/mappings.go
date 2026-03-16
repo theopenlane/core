@@ -78,6 +78,24 @@ var (
 			{key: integrationgenerated.IntegrationMappingVulnerabilityCveID, expr: "payload.security_advisory.cve_id"},
 		},
 	)
+	mapExprCodeScanning = buildMappingExpr(
+		githubAlertTypeCodeScanning,
+		`"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
+		[]celMapEntry{
+			{key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, expr: `payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : payload.rule.severity`},
+			{key: integrationgenerated.IntegrationMappingVulnerabilitySummary, expr: `payload.rule.description != "" ? payload.rule.description : payload.rule.name`},
+			{key: integrationgenerated.IntegrationMappingVulnerabilityDescription, expr: `payload.most_recent_instance.message.text`},
+		},
+	)
+	mapExprSecretScanning = buildMappingExpr(
+		githubAlertTypeSecretScan,
+		`"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
+		[]celMapEntry{
+			{key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, expr: `"high"`},
+			{key: integrationgenerated.IntegrationMappingVulnerabilitySummary, expr: `payload.secret_type_display_name != "" ? payload.secret_type_display_name : payload.secret_type`},
+			{key: integrationgenerated.IntegrationMappingVulnerabilityDescription, expr: `payload.resolution`},
+		},
+	)
 )
 
 // githubAppMappings returns all built-in ingest mappings for the GitHub App definition
@@ -86,6 +104,14 @@ func githubAppMappings() []types.MappingRegistration {
 		githubAlertTypeDependabot: {
 			FilterExpr: "true",
 			MapExpr:    mapExprDependabot,
+		},
+		githubAlertTypeCodeScanning: {
+			FilterExpr: "true",
+			MapExpr:    mapExprCodeScanning,
+		},
+		githubAlertTypeSecretScan: {
+			FilterExpr: "true",
+			MapExpr:    mapExprSecretScanning,
 		},
 	}
 

@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"context"
+	"errors"
 
 	"github.com/samber/do/v2"
 
@@ -10,12 +11,13 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/webhooks"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// Config defines the dependencies required to build the integrationsv2 runtime
+// Config defines the dependencies required to build the integrations runtime
 type Config struct {
 	// DB is the Ent client used by run stores and direct installation queries
 	DB *ent.Client
@@ -39,7 +41,7 @@ type Config struct {
 	SkipExecutorListeners bool
 }
 
-// Runtime bundles the integrationsv2 services behind a do injector
+// Runtime bundles the integrations services behind a do injector
 type Runtime struct {
 	injector           do.Injector
 	successRedirectURL string
@@ -62,13 +64,23 @@ func (r *Runtime) SuccessRedirectURL() string {
 
 // Dispatch enqueues one integration operation through the runtime-managed dispatcher.
 func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) (operations.DispatchResult, error) {
-	return operations.Dispatch(
+	result, err := operations.Dispatch(
 		ctx,
 		do.MustInvoke[*registry.Registry](r.injector),
 		do.MustInvoke[*ent.Client](r.injector),
 		do.MustInvoke[*gala.Gala](r.injector),
 		req,
 	)
+	if err != nil {
+		switch {
+		case errors.Is(err, registry.ErrDefinitionNotFound):
+			return operations.DispatchResult{}, ErrDefinitionNotFound
+		case errors.Is(err, registry.ErrOperationNotFound):
+			return operations.DispatchResult{}, ErrOperationNotFound
+		}
+	}
+
+	return result, err
 }
 
 // NewForTesting constructs a Runtime backed only by the supplied registry.
@@ -84,7 +96,7 @@ func NewForTesting(reg *registry.Registry, successRedirectURL string) *Runtime {
 	}
 }
 
-// New wires the integrationsv2 runtime
+// New wires the integrations runtime
 func New(config Config) (*Runtime, error) {
 	injector := do.New()
 	rt := &Runtime{
@@ -103,12 +115,14 @@ func New(config Config) (*Runtime, error) {
 		}
 
 		builders := config.DefinitionBuilders
-		if len(builders) == 0 {
+		if len(builders) == 0 && config.Registry == nil {
 			builders = catalog.Builders(config.CatalogConfig)
 		}
 
-		if err := definition.RegisterAll(context.Background(), registryInstance, builders...); err != nil {
-			return nil, err
+		if len(builders) > 0 {
+			if err := definition.RegisterAll(registryInstance, builders...); err != nil {
+				return nil, err
+			}
 		}
 
 		return registryInstance, nil
@@ -159,6 +173,16 @@ func New(config Config) (*Runtime, error) {
 		); err != nil {
 			return nil, err
 		}
+	}
+
+	if err := webhooks.RegisterListeners(
+		do.MustInvoke[*gala.Gala](injector),
+		do.MustInvoke[*registry.Registry](injector),
+		func(ctx context.Context, envelope webhooks.Envelope) error {
+			return rt.HandleWebhookEvent(ctx, envelope)
+		},
+	); err != nil {
+		return nil, err
 	}
 
 	return rt, nil

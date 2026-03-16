@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	v2definition "github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/definition"
 )
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
@@ -24,7 +24,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	op.OperationID = "ListIntegrationProviders"
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
-	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{
 		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
 		configTestDefinitionBuilder("def_test_other", "other", false),
 	}, "")

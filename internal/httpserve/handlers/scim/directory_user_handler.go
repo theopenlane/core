@@ -6,16 +6,17 @@ import (
 	"net/http"
 	"strings"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/elimity-com/scim"
 	scimerrors "github.com/elimity-com/scim/errors"
 	scimoptional "github.com/elimity-com/scim/optional"
 	scimschema "github.com/elimity-com/scim/schema"
-	"entgo.io/ent/dialect/sql"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
@@ -39,36 +40,25 @@ func NewDirectoryUserHandler() *DirectoryUserHandler {
 // upserting by (integration_id, external_id) when a match exists.
 func (h *DirectoryUserHandler) Create(r *http.Request, attributes scim.ResourceAttributes) (scim.Resource, error) {
 	ctx := r.Context()
-	client := transaction.FromContext(ctx)
+	client := transaction.FromContext(ctx).Client()
 
 	ic, ok := IntegrationContextFromContext(ctx)
 	if !ok || ic == nil {
 		return scim.Resource{}, ErrIntegrationIDRequired
 	}
 
-	ua, err := ExtractUserAttributes(attributes)
+	da, err := h.syncDirectoryAccount(ctx, client, ic, attributes, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
 
-	existing, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.IntegrationID(ic.IntegrationID), directoryaccount.ExternalID(ua.ExternalID)).
-		Only(ctx)
-	if err != nil && !generated.IsNotFound(err) {
-		return scim.Resource{}, fmt.Errorf("failed to query directory account: %w", err)
-	}
-
-	if existing != nil {
-		return h.updateDirectoryAccount(ctx, client, existing, ua)
-	}
-
-	return h.createDirectoryAccount(ctx, client, ua)
+	return directoryAccountToSCIMResource(da), nil
 }
 
 // Get returns the DirectoryAccount corresponding to the given identifier, scoped by integration
 func (h *DirectoryUserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 	ctx := r.Context()
-	client := transaction.FromContext(ctx)
+	client := transaction.FromContext(ctx).Client()
 
 	ic, ok := IntegrationContextFromContext(ctx)
 	if !ok || ic == nil {
@@ -92,7 +82,7 @@ func (h *DirectoryUserHandler) Get(r *http.Request, id string) (scim.Resource, e
 // GetAll returns a paginated list of DirectoryAccount resources scoped by integration
 func (h *DirectoryUserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (scim.Page, error) {
 	ctx := r.Context()
-	client := transaction.FromContext(ctx)
+	client := transaction.FromContext(ctx).Client()
 
 	ic, ok := IntegrationContextFromContext(ctx)
 	if !ok || ic == nil {
@@ -132,7 +122,7 @@ func (h *DirectoryUserHandler) GetAll(r *http.Request, params scim.ListRequestPa
 // Replace replaces all attributes on the DirectoryAccount identified by id
 func (h *DirectoryUserHandler) Replace(r *http.Request, id string, attributes scim.ResourceAttributes) (scim.Resource, error) {
 	ctx := r.Context()
-	client := transaction.FromContext(ctx)
+	client := transaction.FromContext(ctx).Client()
 
 	ic, ok := IntegrationContextFromContext(ctx)
 	if !ok || ic == nil {
@@ -150,18 +140,21 @@ func (h *DirectoryUserHandler) Replace(r *http.Request, id string, attributes sc
 		return scim.Resource{}, fmt.Errorf("failed to get directory account: %w", err)
 	}
 
-	ua, err := ExtractUserAttributes(attributes)
+	replacement := cloneSCIMAttributes(attributes)
+	replacement["externalId"] = da.ExternalID
+
+	updated, err := h.syncDirectoryAccount(ctx, client, ic, replacement, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
 
-	return h.updateDirectoryAccount(ctx, client, da, ua)
+	return directoryAccountToSCIMResource(updated), nil
 }
 
 // Patch applies a set of patch operations to the DirectoryAccount identified by id
 func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
 	ctx := r.Context()
-	client := transaction.FromContext(ctx)
+	client := transaction.FromContext(ctx).Client()
 
 	ic, ok := IntegrationContextFromContext(ctx)
 	if !ok || ic == nil {
@@ -179,32 +172,23 @@ func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []sc
 		return scim.Resource{}, fmt.Errorf("failed to get directory account: %w", err)
 	}
 
-	update := client.DirectoryAccount.UpdateOne(da)
-	modified := false
-
-	for _, op := range operations {
-		switch strings.ToLower(op.Op) {
-		case scim.PatchOperationReplace, scim.PatchOperationAdd:
-			applyDirectoryAccountPatch(update, op, &modified)
-		case scim.PatchOperationRemove:
-			applyDirectoryAccountRemove(update, op, &modified)
-		}
+	patched := directoryAccountAttributesFromRecord(da)
+	if err := applyDirectoryAccountPatchOperations(patched, operations); err != nil {
+		return scim.Resource{}, err
 	}
 
-	if modified {
-		da, err = update.Save(ctx)
-		if err != nil {
-			return scim.Resource{}, HandleEntError(err, "failed to patch directory account", "constraint violation")
-		}
+	updated, err := h.syncDirectoryAccount(ctx, client, ic, patched, "")
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	return directoryAccountToSCIMResource(da), nil
+	return directoryAccountToSCIMResource(updated), nil
 }
 
 // Delete sets the DirectoryAccount status to DELETED
 func (h *DirectoryUserHandler) Delete(r *http.Request, id string) error {
 	ctx := r.Context()
-	client := transaction.FromContext(ctx)
+	client := transaction.FromContext(ctx).Client()
 
 	ic, ok := IntegrationContextFromContext(ctx)
 	if !ok || ic == nil {
@@ -222,116 +206,113 @@ func (h *DirectoryUserHandler) Delete(r *http.Request, id string) error {
 		return fmt.Errorf("failed to get directory account: %w", err)
 	}
 
-	return client.DirectoryAccount.UpdateOne(da).SetStatus(enums.DirectoryAccountStatusDeleted).Exec(ctx)
+	return h.deleteDirectoryAccount(ctx, client, ic, da)
 }
 
-// createDirectoryAccount creates a new DirectoryAccount record from SCIM user attributes
-func (h *DirectoryUserHandler) createDirectoryAccount(ctx context.Context, client *generated.Tx, ua *UserAttributes) (scim.Resource, error) {
-	create := client.DirectoryAccount.Create().
-		SetExternalID(ua.ExternalID).
-		SetDisplayName(ua.DisplayName)
-
-	if ua.Email != "" {
-		create.SetCanonicalEmail(strings.ToLower(ua.Email))
-	}
-
-	if ua.FirstName != "" {
-		create.SetGivenName(ua.FirstName)
-	}
-
-	if ua.LastName != "" {
-		create.SetFamilyName(ua.LastName)
-	}
-
-	status := enums.DirectoryAccountStatusActive
-	if !ua.Active {
-		status = enums.DirectoryAccountStatusInactive
-	}
-
-	create.SetStatus(status)
-
-	da, err := create.Save(ctx)
+// syncDirectoryAccount upserts one SCIM directory account through Runtime and reloads the normalized record
+func (h *DirectoryUserHandler) syncDirectoryAccount(ctx context.Context, client *generated.Client, ic *IntegrationContext, attributes scim.ResourceAttributes, action string) (*generated.DirectoryAccount, error) {
+	payloadSet, err := buildDirectoryAccountPayloadSet(attributes, action)
 	if err != nil {
-		return scim.Resource{}, HandleEntError(err, "failed to create directory account", fmt.Sprintf("directory account with externalId %s already exists", ua.ExternalID))
+		return nil, handleDirectoryIngestError(err, "directory account payload is invalid")
 	}
 
-	return directoryAccountToSCIMResource(da), nil
-}
-
-// updateDirectoryAccount applies UserAttributes to an existing DirectoryAccount record
-func (h *DirectoryUserHandler) updateDirectoryAccount(ctx context.Context, client *generated.Tx, da *generated.DirectoryAccount, ua *UserAttributes) (scim.Resource, error) {
-	update := client.DirectoryAccount.UpdateOne(da).
-		SetDisplayName(ua.DisplayName)
-
-	if ua.Email != "" {
-		update.SetCanonicalEmail(strings.ToLower(ua.Email))
+	if err := ingestDirectoryPayloadSets(ctx, client, ic, []integrationtypes.IngestPayloadSet{payloadSet}); err != nil {
+		return nil, handleDirectoryIngestError(err, "directory account payload is invalid")
 	}
 
-	if ua.FirstName != "" {
-		update.SetGivenName(ua.FirstName)
-	} else {
-		update.ClearGivenName()
-	}
-
-	if ua.LastName != "" {
-		update.SetFamilyName(ua.LastName)
-	} else {
-		update.ClearFamilyName()
-	}
-
-	status := enums.DirectoryAccountStatusActive
-	if !ua.Active {
-		status = enums.DirectoryAccountStatusInactive
-	}
-
-	update.SetStatus(status)
-
-	updated, err := update.Save(ctx)
+	externalID := directoryAccountExternalID(attributes)
+	da, err := client.DirectoryAccount.Query().
+		Where(directoryaccount.IntegrationID(ic.IntegrationID), directoryaccount.ExternalID(externalID)).
+		Only(ctx)
 	if err != nil {
-		return scim.Resource{}, HandleEntError(err, "failed to update directory account", "constraint violation")
+		if generated.IsNotFound(err) {
+			return nil, ErrDirectoryAccountNotFound
+		}
+
+		return nil, fmt.Errorf("failed to reload directory account: %w", err)
 	}
 
-	return directoryAccountToSCIMResource(updated), nil
+	return da, nil
 }
 
-// applyDirectoryAccountPatch applies a replace/add patch operation to a DirectoryAccount update
-func applyDirectoryAccountPatch(update *generated.DirectoryAccountUpdateOne, op scim.PatchOperation, modified *bool) {
+// deleteDirectoryAccount marks a directory account as deleted through Runtime ingest
+func (h *DirectoryUserHandler) deleteDirectoryAccount(ctx context.Context, client *generated.Client, ic *IntegrationContext, da *generated.DirectoryAccount) error {
+	attributes := directoryAccountAttributesFromRecord(da)
+	_, err := h.syncDirectoryAccount(ctx, client, ic, attributes, scimDeleteAction)
+
+	return err
+}
+
+// applyDirectoryAccountPatchOperations applies SCIM PATCH operations to account attributes before ingest
+func applyDirectoryAccountPatchOperations(attributes scim.ResourceAttributes, operations []scim.PatchOperation) error {
+	for _, op := range operations {
+		switch strings.ToLower(op.Op) {
+		case scim.PatchOperationReplace, scim.PatchOperationAdd:
+			applyDirectoryAccountPatch(attributes, op)
+		case scim.PatchOperationRemove:
+			applyDirectoryAccountRemove(attributes, op)
+		default:
+			return fmt.Errorf("%w: unsupported patch operation %s", ErrInvalidAttributes, op.Op)
+		}
+	}
+
+	return nil
+}
+
+// applyDirectoryAccountPatch applies a replace or add patch operation to SCIM account attributes
+func applyDirectoryAccountPatch(attributes scim.ResourceAttributes, op scim.PatchOperation) {
 	pathStr := ""
 	if op.Path != nil {
 		pathStr = strings.ToLower(op.Path.String())
 	}
 
+	if pathStr == "" {
+		valueMap, ok := op.Value.(map[string]any)
+		if !ok {
+			return
+		}
+
+		mergeSCIMMap(attributes, valueMap)
+
+		return
+	}
+
 	switch pathStr {
 	case "displayname":
 		if v, ok := op.Value.(string); ok && v != "" {
-			update.SetDisplayName(v)
-			*modified = true
+			attributes["displayName"] = v
 		}
 	case "name.givenname":
 		if v, ok := op.Value.(string); ok && v != "" {
-			update.SetGivenName(v)
-			*modified = true
+			name := ensureSCIMMap(attributes, "name")
+			name["givenName"] = v
 		}
 	case "name.familyname":
 		if v, ok := op.Value.(string); ok && v != "" {
-			update.SetFamilyName(v)
-			*modified = true
+			name := ensureSCIMMap(attributes, "name")
+			name["familyName"] = v
 		}
 	case "active":
 		if v, ok := op.Value.(bool); ok {
-			status := enums.DirectoryAccountStatusActive
-			if !v {
-				status = enums.DirectoryAccountStatusInactive
-			}
-
-			update.SetStatus(status)
-			*modified = true
+			attributes["active"] = v
+		}
+	case "username":
+		if v, ok := op.Value.(string); ok && v != "" {
+			attributes["userName"] = v
+		}
+	case "externalid":
+		if v, ok := op.Value.(string); ok && v != "" {
+			attributes["externalId"] = v
+		}
+	case "emails":
+		if v, ok := op.Value.([]any); ok {
+			attributes["emails"] = cloneSCIMValue(v)
 		}
 	}
 }
 
-// applyDirectoryAccountRemove applies a remove patch operation to a DirectoryAccount update
-func applyDirectoryAccountRemove(update *generated.DirectoryAccountUpdateOne, op scim.PatchOperation, modified *bool) {
+// applyDirectoryAccountRemove applies a remove patch operation to SCIM account attributes
+func applyDirectoryAccountRemove(attributes scim.ResourceAttributes, op scim.PatchOperation) {
 	if op.Path == nil {
 		return
 	}
@@ -340,49 +321,20 @@ func applyDirectoryAccountRemove(update *generated.DirectoryAccountUpdateOne, op
 
 	switch pathStr {
 	case "name.givenname":
-		update.ClearGivenName()
-		*modified = true
+		delete(ensureSCIMMap(attributes, "name"), "givenName")
 	case "name.familyname":
-		update.ClearFamilyName()
-		*modified = true
+		delete(ensureSCIMMap(attributes, "name"), "familyName")
+	case "displayname":
+		delete(attributes, "displayName")
+	case "emails":
+		delete(attributes, "emails")
 	}
 }
 
 // directoryAccountToSCIMResource converts a DirectoryAccount entity to a SCIM Resource
 func directoryAccountToSCIMResource(da *generated.DirectoryAccount) scim.Resource {
-	canonicalEmail := ""
-	if da.CanonicalEmail != nil {
-		canonicalEmail = *da.CanonicalEmail
-	}
-
-	givenName := ""
-	if da.GivenName != nil {
-		givenName = *da.GivenName
-	}
-
-	familyName := ""
-	if da.FamilyName != nil {
-		familyName = *da.FamilyName
-	}
-
-	active := da.Status == enums.DirectoryAccountStatusActive
-
-	attrs := scim.ResourceAttributes{
-		scimschema.CommonAttributeID: da.ID,
-		"userName":                   canonicalEmail,
-		"displayName":                da.DisplayName,
-		"name": map[string]any{
-			"givenName":  givenName,
-			"familyName": familyName,
-		},
-		"emails": []map[string]any{
-			{
-				"value":   canonicalEmail,
-				"primary": true,
-			},
-		},
-		"active": active,
-	}
+	attrs := directoryAccountAttributesFromRecord(da)
+	delete(attrs, "externalId")
 
 	externalID := scimoptional.NewString("")
 	if da.ExternalID != "" {
@@ -403,10 +355,51 @@ func directoryAccountToSCIMResource(da *generated.DirectoryAccount) scim.Resourc
 	}
 }
 
+// directoryAccountAttributesFromRecord renders a DirectoryAccount as SCIM attributes for patching and delete ingest
+func directoryAccountAttributesFromRecord(da *generated.DirectoryAccount) scim.ResourceAttributes {
+	canonicalEmail := ""
+	if da.CanonicalEmail != nil {
+		canonicalEmail = *da.CanonicalEmail
+	}
+
+	givenName := ""
+	if da.GivenName != nil {
+		givenName = *da.GivenName
+	}
+
+	familyName := ""
+	if da.FamilyName != nil {
+		familyName = *da.FamilyName
+	}
+
+	attrs := scim.ResourceAttributes{
+		scimschema.CommonAttributeID: da.ID,
+		"externalId":                 da.ExternalID,
+		"userName":                   canonicalEmail,
+		"displayName":                da.DisplayName,
+		"name": map[string]any{
+			"givenName":  givenName,
+			"familyName": familyName,
+		},
+		"active": da.Status == enums.DirectoryAccountStatusActive,
+	}
+
+	if canonicalEmail != "" {
+		attrs["emails"] = []map[string]any{
+			{
+				"value":   canonicalEmail,
+				"primary": true,
+			},
+		}
+	}
+
+	return attrs
+}
+
 // ensureScimSyncRun gets or creates a sentinel DirectorySyncRun for SCIM-sourced directory writes.
 // It queries for an existing run with source_cursor="scim" for the given integration, creating one
 // if none exists, and returns its ID.
-func ensureScimSyncRun(ctx context.Context, client *generated.Tx, integrationID, orgID string) (string, error) {
+func ensureScimSyncRun(ctx context.Context, client *generated.Client, integrationID, orgID string) (string, error) {
 	existing, err := client.DirectorySyncRun.Query().
 		Where(
 			directorysyncrun.IntegrationID(integrationID),

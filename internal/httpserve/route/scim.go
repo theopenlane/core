@@ -61,7 +61,9 @@ func registerSCIMRoutes(router *Router) error {
 
 		ic := &scim.IntegrationContext{
 			IntegrationID: integrationID,
+			Installation:  integ,
 			OrgID:         orgID,
+			Runtime:       router.Handler.IntegrationsRuntime,
 			ProvisionMode: mode,
 		}
 

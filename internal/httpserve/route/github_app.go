@@ -39,20 +39,3 @@ func registerGitHubAppCallbackHandler(router *Router) error {
 
 	return router.AddV1HandlerRoute(config)
 }
-
-// registerGitHubAppWebhookHandler registers the GitHub App webhook handler.
-func registerGitHubAppWebhookHandler(router *Router) error {
-	config := Config{
-		Path:        "/github/app/webhook",
-		Method:      http.MethodPost,
-		Name:        "GitHubAppWebhook",
-		Description: "Handle GitHub App security alert webhooks",
-		Tags:        []string{"webhooks", "integrations"},
-		OperationID: "GitHubAppWebhook",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *unauthenticatedEndpoint,
-		Handler:     router.Handler.GitHubIntegrationWebhookHandler,
-	}
-
-	return router.AddUnversionedHandlerRoute(config)
-}

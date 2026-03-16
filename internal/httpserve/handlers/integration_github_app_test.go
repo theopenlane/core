@@ -1,18 +1,17 @@
 package handlers
 
 import (
-	"context"
 	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/slacknotify"
 )
 
 // newGitHubAppRuntimeForTest builds a minimal integration runtime for unit tests.
@@ -23,7 +22,7 @@ func newGitHubAppRuntimeForTest(t *testing.T, cfg *githubapp.Config) *integratio
 
 	reg := registry.New()
 	if cfg != nil {
-		require.NoError(t, definition.RegisterAll(context.Background(), reg, githubapp.Builder(*cfg)))
+		require.NoError(t, definition.RegisterAll(reg, githubapp.Builder(*cfg)))
 	}
 
 	return integrationsruntime.NewForTesting(reg, "")
@@ -91,13 +90,13 @@ func TestGitHubAppInstallURLMissingSlug(t *testing.T) {
 
 // TestRenderGitHubAppInstallSlackMessage verifies Slack notification message formatting.
 func TestRenderGitHubAppInstallSlackMessage(t *testing.T) {
-	msg, err := hooks.RenderGitHubAppInstallSlackMessage("acme-corp", "Organization", "Acme", "org_123")
+	msg, err := slacknotify.RenderGitHubAppInstallMessage("acme-corp", "Organization", "Acme", "org_123")
 	assert.NoError(t, err)
 	assert.Contains(t, msg, "GitHub organization: acme-corp")
 	assert.Contains(t, msg, "GitHub account type: Organization")
 	assert.Contains(t, msg, "Openlane organization: Acme (org_123)")
 
-	msg, err = hooks.RenderGitHubAppInstallSlackMessage("", "", "", "org_123")
+	msg, err = slacknotify.RenderGitHubAppInstallMessage("", "", "", "org_123")
 	assert.NoError(t, err)
 	assert.Contains(t, msg, "GitHub organization: unknown")
 	assert.Contains(t, msg, "Openlane organization: org_123")

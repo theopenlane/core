@@ -23,10 +23,10 @@ var (
 	ErrInstallationTokenEmpty = errors.New("githubapp: installation token empty")
 	// ErrWebhookSecretMissing indicates the GitHub App webhook secret is missing from operator config
 	ErrWebhookSecretMissing = errors.New("githubapp: webhook secret missing")
+	// ErrWebhookEventMissing indicates the GitHub webhook event header was not sent
+	ErrWebhookEventMissing = errors.New("githubapp: webhook event missing")
 	// ErrWebhookSignatureMissing indicates the GitHub webhook signature header was not sent
 	ErrWebhookSignatureMissing = errors.New("githubapp: webhook signature missing")
-	// ErrWebhookBodyRead indicates the GitHub webhook body could not be read
-	ErrWebhookBodyRead = errors.New("githubapp: webhook body read failed")
 	// ErrWebhookSignatureMismatch indicates the GitHub webhook signature did not match
 	ErrWebhookSignatureMismatch = errors.New("githubapp: webhook signature mismatch")
 	// ErrAppSlugMissing indicates the GitHub App slug is missing from operator config

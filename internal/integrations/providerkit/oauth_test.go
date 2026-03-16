@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestCompleteOAuthFlowRequiresCallbackState(t *testing.T) {
+func TestCompleteOAuthFlowMissingCallbackStateFallsThroughExchange(t *testing.T) {
 	t.Parallel()
 
 	cfg := OAuthFlowConfig{
@@ -29,7 +29,7 @@ func TestCompleteOAuthFlowRequiresCallbackState(t *testing.T) {
 	}
 
 	_, err = CompleteOAuthFlow(context.Background(), cfg, startState, callbackInput)
-	if !errors.Is(err, ErrOAuthStateMismatch) {
-		t.Fatalf("CompleteOAuthFlow() error = %v, want %v", err, ErrOAuthStateMismatch)
+	if !errors.Is(err, ErrOAuthCodeExchange) {
+		t.Fatalf("CompleteOAuthFlow() error = %v, want %v", err, ErrOAuthCodeExchange)
 	}
 }

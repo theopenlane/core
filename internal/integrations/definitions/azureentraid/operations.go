@@ -3,27 +3,31 @@ package azureentraid
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-const azureEntraGraphBaseURL = "https://graph.microsoft.com/v1.0/"
-
-type azureEntraHealthDetails struct {
-	ID          string `json:"id"`
-	TenantID    string `json:"tenantId"`
+// HealthCheck holds the result of an Azure Entra ID health check
+type HealthCheck struct {
+	// ID is the organization identifier
+	ID string `json:"id"`
+	// TenantID is the Azure tenant identifier
+	TenantID string `json:"tenantId"`
+	// DisplayName is the organization display name
 	DisplayName string `json:"displayName"`
 }
 
-type azureEntraTenantDetails struct {
-	ID              string `json:"id"`
-	DisplayName     string `json:"displayName"`
-	VerifiedDomains any    `json:"verifiedDomains"`
+// DirectoryInspect collects Azure Entra ID tenant metadata
+type DirectoryInspect struct {
+	// ID is the organization identifier
+	ID string `json:"id"`
+	// DisplayName is the organization display name
+	DisplayName string `json:"displayName"`
+	// VerifiedDomains is the list of verified domains for the tenant
+	VerifiedDomains any `json:"verifiedDomains"`
 }
 
 type graphOrganization struct {
@@ -37,48 +41,52 @@ type graphOrganizationResponse struct {
 	Value []graphOrganization `json:"value"`
 }
 
-// buildGraphClient builds the Microsoft Graph API client for one installation
-func buildGraphClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	token := req.Credential.OAuthAccessToken
-	if token == "" {
-		return nil, ErrOAuthTokenMissing
-	}
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	return providerkit.NewAuthenticatedClient(azureEntraGraphBaseURL, token, nil), nil
+		return h.Run(ctx, c)
+	}
 }
 
-// runHealthOperation calls /organization to verify tenant access
-func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
+// Run executes the Azure Entra ID health check
+func (HealthCheck) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
 	org, err := fetchOrganization(ctx, c)
 	if err != nil {
 		return nil, err
 	}
 
-	return jsonx.ToRawMessage(azureEntraHealthDetails{
+	return jsonx.ToRawMessage(HealthCheck{
 		ID:          org.ID,
 		TenantID:    org.TenantID,
 		DisplayName: org.DisplayName,
 	})
 }
 
-// runDirectoryInspectOperation collects tenant metadata via Microsoft Graph
-func runDirectoryInspectOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts directory inspect to the generic operation registration boundary
+func (d DirectoryInspect) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
+		return d.Run(ctx, c)
+	}
+}
+
+// Run collects Azure Entra ID tenant metadata via Microsoft Graph
+func (DirectoryInspect) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
 	org, err := fetchOrganization(ctx, c)
 	if err != nil {
 		return nil, err
 	}
 
-	return jsonx.ToRawMessage(azureEntraTenantDetails{
+	return jsonx.ToRawMessage(DirectoryInspect{
 		ID:              org.ID,
 		DisplayName:     org.DisplayName,
 		VerifiedDomains: org.VerifiedDomains,
@@ -93,7 +101,7 @@ func fetchOrganization(ctx context.Context, client *providerkit.AuthenticatedCli
 	}
 
 	if len(resp.Value) == 0 {
-		return graphOrganization{}, errors.New("azureentraid: no organizations returned")
+		return graphOrganization{}, ErrNoOrganizations
 	}
 
 	return resp.Value[0], nil

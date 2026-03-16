@@ -7,11 +7,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	v2definition "github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	IntegrationsRuntime "github.com/theopenlane/core/internal/integrations/runtime"
-	v2types "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
@@ -23,7 +22,7 @@ var githubAppDefinitionID = githubapp.DefinitionID.ID()
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
 // built from the given definition builders. Returns a restore function.
-func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []v2definition.Builder, successRedirectURL string) func() {
+func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []definition.Builder, successRedirectURL string) func() {
 	t.Helper()
 
 	original := suite.h.IntegrationsRuntime
@@ -37,7 +36,7 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []v2
 	credStore, err := keystore.NewStore(suite.db)
 	assert.NoError(t, err)
 
-	rt, err := IntegrationsRuntime.New(IntegrationsRuntime.Config{
+	rt, err := runtime.New(runtime.Config{
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		Keystore:              credStore,
@@ -59,13 +58,13 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []v2
 // configured with the GitHub App definition built from cfg. Returns a restore function.
 func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config, successRedirectURL string) func() {
 	t.Helper()
-	return suite.withDefinitionRuntime(t, []v2definition.Builder{githubapp.Builder(cfg)}, successRedirectURL)
+	return suite.withDefinitionRuntime(t, []definition.Builder{githubapp.Builder(cfg)}, successRedirectURL)
 }
 
 // gcpSCCTestDefinitionBuilder returns a test definition for GCP SCC-style credential config tests.
 // The definition uses definitionID as both Spec.ID and Spec.Slug so registry lookups and DB
 // queries using the same string work correctly.
-func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
+func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 	schema, err := json.Marshal(map[string]any{
 		"type": "object",
 		"required": []string{
@@ -107,9 +106,9 @@ func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
 		panic(err)
 	}
 
-	return v2definition.Builder(func(_ context.Context) (v2types.Definition, error) {
-		return v2types.Definition{
-			DefinitionSpec: v2types.DefinitionSpec{
+	return definition.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				Slug:        definitionID,
 				Version:     "v1",
@@ -120,18 +119,18 @@ func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
 				Visible:     true,
 				Tags:        []string{"cloud", "google"},
 			},
-			UserInput: &v2types.UserInputRegistration{
+			UserInput: &types.UserInputRegistration{
 				Schema: json.RawMessage(userInputSchema),
 			},
-			Credentials: &v2types.CredentialRegistration{
+			Credentials: &types.CredentialRegistration{
 				Schema: json.RawMessage(schema),
 			},
-			Operations: []v2types.OperationRegistration{
+			Operations: []types.OperationRegistration{
 				{
 					Name:        "health.default",
 					Description: "Validate the test credential payload",
 					Topic:       gala.TopicName("integration." + definitionID + ".health.default"),
-					Handle: func(context.Context, *ent.Integration, v2types.CredentialSet, any, json.RawMessage) (json.RawMessage, error) {
+					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
 				},
@@ -143,10 +142,10 @@ func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
 // githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests.
 // The definition has no credentials schema or auth flow; it only needs to be present in
 // the registry so the handler can resolve the provider by ID.
-func githubTestDefinitionBuilder(definitionID string) v2definition.Builder {
-	return v2definition.Builder(func(_ context.Context) (v2types.Definition, error) {
-		return v2types.Definition{
-			DefinitionSpec: v2types.DefinitionSpec{
+func githubTestDefinitionBuilder(definitionID string) definition.Builder {
+	return definition.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				Slug:        definitionID,
 				Version:     "v1",

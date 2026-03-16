@@ -1,2 +1,2 @@
-// Package definitions groups manifest-backed reference definitions for integrationsv2
+// Package definitions groups manifest-backed reference definitions for integrations
 package definitions

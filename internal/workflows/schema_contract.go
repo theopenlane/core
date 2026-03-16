@@ -27,26 +27,25 @@ type WorkflowSchemaTypeDefinition struct {
 
 // WorkflowDefinitionSchemaRootType is the root Go type for workflow definition schema generation
 var WorkflowDefinitionSchemaRootType = WorkflowSchemaTypeDefinition{
-	Name: "WorkflowDefinitionDocument",
-	Type: reflect.TypeOf(models.WorkflowDefinitionDocument{}),
+	Name: "WorkflowDefinitionDocument", Type: reflect.TypeFor[models.WorkflowDefinitionDocument](),
 }
 
 // WorkflowDefinitionSchemaModelTypes are model definition types expected in workflow schema $defs
 var WorkflowDefinitionSchemaModelTypes = []WorkflowSchemaTypeDefinition{
-	{Name: "WorkflowTrigger", Type: reflect.TypeOf(models.WorkflowTrigger{})},
-	{Name: "WorkflowCondition", Type: reflect.TypeOf(models.WorkflowCondition{})},
-	{Name: "WorkflowAction", Type: reflect.TypeOf(models.WorkflowAction{})},
-	{Name: "WorkflowSelector", Type: reflect.TypeOf(models.WorkflowSelector{})},
+	{Name: "WorkflowTrigger", Type: reflect.TypeFor[models.WorkflowTrigger]()},
+	{Name: "WorkflowCondition", Type: reflect.TypeFor[models.WorkflowCondition]()},
+	{Name: "WorkflowAction", Type: reflect.TypeFor[models.WorkflowAction]()},
+	{Name: "WorkflowSelector", Type: reflect.TypeFor[models.WorkflowSelector]()},
 }
 
 // WorkflowDefinitionSchemaExtensionTypes are additional workflow schema definitions beyond the root model graph
 var WorkflowDefinitionSchemaExtensionTypes = []WorkflowSchemaTypeDefinition{
-	{Name: "TargetConfig", Type: reflect.TypeOf(TargetConfig{})},
-	{Name: "ApprovalActionParams", Type: reflect.TypeOf(ApprovalActionParams{})},
-	{Name: "ReviewActionParams", Type: reflect.TypeOf(ReviewActionParams{})},
-	{Name: "NotificationActionParams", Type: reflect.TypeOf(NotificationActionParams{})},
-	{Name: "WebhookActionParams", Type: reflect.TypeOf(WebhookActionParams{})},
-	{Name: "FieldUpdateActionParams", Type: reflect.TypeOf(FieldUpdateActionParams{})},
-	{Name: "IntegrationActionParams", Type: reflect.TypeOf(IntegrationActionParams{})},
-	{Name: "CreateObjectActionParams", Type: reflect.TypeOf(CreateObjectActionParams{})},
+	{Name: "TargetConfig", Type: reflect.TypeFor[TargetConfig]()},
+	{Name: "ApprovalActionParams", Type: reflect.TypeFor[ApprovalActionParams]()},
+	{Name: "ReviewActionParams", Type: reflect.TypeFor[ReviewActionParams]()},
+	{Name: "NotificationActionParams", Type: reflect.TypeFor[NotificationActionParams]()},
+	{Name: "WebhookActionParams", Type: reflect.TypeFor[WebhookActionParams]()},
+	{Name: "FieldUpdateActionParams", Type: reflect.TypeFor[FieldUpdateActionParams]()},
+	{Name: "IntegrationActionParams", Type: reflect.TypeFor[IntegrationActionParams]()},
+	{Name: "CreateObjectActionParams", Type: reflect.TypeFor[CreateObjectActionParams]()},
 }

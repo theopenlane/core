@@ -1,8 +1,6 @@
 package azuresecuritycenter
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -35,7 +33,7 @@ type credential struct {
 
 // Builder returns the Azure Security Center definition builder
 func Builder() definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func() (types.Definition, error) {
 		clientRef := types.NewClientRef[any]()
 
 		return types.Definition{

@@ -8,7 +8,6 @@ import (
 	oktagosdk "github.com/okta/okta-sdk-golang/v5/okta"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -18,58 +17,51 @@ const (
 	sampleSize           = 10
 )
 
-type oktaHealthDetails struct {
-	ID    string `json:"id"`
+// HealthCheck holds the result of an Okta health check
+type HealthCheck struct {
+	// ID is the Okta user identifier
+	ID string `json:"id"`
+	// Login is the Okta user login
 	Login string `json:"login"`
+	// Email is the Okta user email
 	Email string `json:"email"`
 }
 
-type oktaPolicySample struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
+// PolicySample holds a single Okta policy entry
+type PolicySample struct {
+	// ID is the Okta policy identifier
+	ID string `json:"id"`
+	// Name is the policy display name
+	Name string `json:"name"`
+	// Status is the current policy status
 	Status string `json:"status"`
-	Type   string `json:"type"`
+	// Type is the policy type
+	Type string `json:"type"`
 }
 
-type oktaPoliciesDetails struct {
-	Count   int                `json:"count"`
-	Samples []oktaPolicySample `json:"samples"`
+// PoliciesCollect collects Okta sign-on policy metadata
+type PoliciesCollect struct {
+	// Count is the total number of policies collected
+	Count int `json:"count"`
+	// Samples holds a representative subset of collected policies
+	Samples []PolicySample `json:"samples"`
 }
 
-// buildOktaClient builds the Okta API client for one installation
-func buildOktaClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	var cred credential
-	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
-		return nil, err
-	}
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	if cred.APIToken == "" {
-		return nil, ErrAPITokenMissing
+		return h.Run(ctx, c)
 	}
-
-	if cred.OrgURL == "" {
-		return nil, ErrOrgURLMissing
-	}
-
-	cfg, err := oktagosdk.NewConfiguration(
-		oktagosdk.WithOrgUrl(cred.OrgURL),
-		oktagosdk.WithToken(cred.APIToken),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return oktagosdk.NewAPIClient(cfg), nil
 }
 
-// runHealthOperation validates the Okta API token by calling the user endpoint
-func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	oktaClient, ok := client.(*oktagosdk.APIClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	user, _, err := oktaClient.UserAPI.GetUser(ctx, "me").Execute()
+// Run executes the Okta health check
+func (HealthCheck) Run(ctx context.Context, c *oktagosdk.APIClient) (json.RawMessage, error) {
+	user, _, err := c.UserAPI.GetUser(ctx, "me").Execute()
 	if err != nil {
 		return nil, fmt.Errorf("okta: user lookup failed: %w", err)
 	}
@@ -77,28 +69,35 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.C
 	profile := user.GetProfile()
 	login := profile.GetLogin()
 
-	return jsonx.ToRawMessage(oktaHealthDetails{
+	return jsonx.ToRawMessage(HealthCheck{
 		ID:    user.GetId(),
 		Login: login,
 		Email: profile.GetEmail(),
 	})
 }
 
-// runPoliciesCollectOperation collects Okta sign-on policy metadata
-func runPoliciesCollectOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	oktaClient, ok := client.(*oktagosdk.APIClient)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts policy collection to the generic operation registration boundary
+func (p PoliciesCollect) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	policies, _, err := oktaClient.PolicyAPI.ListPolicies(ctx).Type_(oktaSignOnPolicyType).Execute()
+		return p.Run(ctx, c)
+	}
+}
+
+// Run collects Okta sign-on policy metadata
+func (PoliciesCollect) Run(ctx context.Context, c *oktagosdk.APIClient) (json.RawMessage, error) {
+	policies, _, err := c.PolicyAPI.ListPolicies(ctx).Type_(oktaSignOnPolicyType).Execute()
 	if err != nil {
 		return nil, fmt.Errorf("okta: policies fetch failed: %w", err)
 	}
 
-	samples := lo.Map(policies[:min(len(policies), sampleSize)], func(item oktagosdk.ListPolicies200ResponseInner, _ int) oktaPolicySample {
+	samples := lo.Map(policies[:min(len(policies), sampleSize)], func(item oktagosdk.ListPolicies200ResponseInner, _ int) PolicySample {
 		if p := item.OktaSignOnPolicy; p != nil {
-			return oktaPolicySample{
+			return PolicySample{
 				ID:     p.GetId(),
 				Name:   p.GetName(),
 				Status: p.GetStatus(),
@@ -106,10 +105,10 @@ func runPoliciesCollectOperation(ctx context.Context, _ *generated.Integration, 
 			}
 		}
 
-		return oktaPolicySample{}
+		return PolicySample{}
 	})
 
-	return jsonx.ToRawMessage(oktaPoliciesDetails{
+	return jsonx.ToRawMessage(PoliciesCollect{
 		Count:   len(policies),
 		Samples: samples,
 	})

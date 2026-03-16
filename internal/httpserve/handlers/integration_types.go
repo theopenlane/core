@@ -162,8 +162,8 @@ type IntegrationProvidersResponse struct {
 	Providers []DefinitionCatalogEntry `json:"providers"`
 }
 
-// OAuthV2FlowRequest is the request type for starting a v2 OAuth auth flow.
-type OAuthV2FlowRequest struct {
+// OAuthFlowRequest is the request type for starting an OAuth auth flow.
+type OAuthFlowRequest struct {
 	// DefinitionID is the canonical integration definition identifier.
 	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
 	// InstallationID is the optional existing installation to start the auth flow for.
@@ -173,8 +173,8 @@ type OAuthV2FlowRequest struct {
 	UserInput IntegrationConfigBody `json:"userInput,omitempty"`
 }
 
-// Validate validates the OAuthV2FlowRequest.
-func (r *OAuthV2FlowRequest) Validate() error {
+// Validate validates the OAuthFlowRequest.
+func (r *OAuthFlowRequest) Validate() error {
 	if r.DefinitionID == "" {
 		return rout.NewMissingRequiredFieldError("definitionId")
 	}
@@ -182,12 +182,12 @@ func (r *OAuthV2FlowRequest) Validate() error {
 	return nil
 }
 
-// ExampleOAuthV2FlowRequest is an example v2 OAuth flow request for OpenAPI documentation.
-var ExampleOAuthV2FlowRequest = OAuthV2FlowRequest{
+// ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation.
+var ExampleOAuthFlowRequest = OAuthFlowRequest{
 	DefinitionID: "def_01K0SLACK000000000000000001",
 }
 
-// RefreshInstallationCredentialRequest is the v2 request for refreshing an installation's OAuth tokens.
+// RefreshInstallationCredentialRequest is the request for refreshing an installation's OAuth tokens.
 type RefreshInstallationCredentialRequest struct {
 	// InstallationID is the installation to refresh credentials for.
 	InstallationID string `param:"id" json:"installationId" description:"Installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`

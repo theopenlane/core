@@ -6,15 +6,13 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-const vercelAPIBaseURL = "https://api.vercel.com"
-
-type vercelUserResponse struct {
+// UserResponse is the raw Vercel /v2/user response shape
+type UserResponse struct {
 	User struct {
 		ID    string `json:"uid"`
 		Name  string `json:"name"`
@@ -22,62 +20,72 @@ type vercelUserResponse struct {
 	} `json:"user"`
 }
 
-type vercelHealthDetails struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
+// HealthCheck holds the result of a Vercel health check
+type HealthCheck struct {
+	// ID is the Vercel user identifier
+	ID string `json:"id"`
+	// Name is the Vercel user display name
+	Name string `json:"name"`
+	// Email is the Vercel user email
 	Email string `json:"email"`
 }
 
-type vercelProjectSample struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
+// ProjectSample holds a single Vercel project entry
+type ProjectSample struct {
+	// ID is the Vercel project identifier
+	ID string `json:"id"`
+	// Name is the Vercel project name
+	Name string `json:"name"`
+	// Framework is the detected project framework
 	Framework string `json:"framework"`
 }
 
-type vercelProjectsDetails struct {
-	Projects []vercelProjectSample `json:"projects"`
+// ProjectsSample collects and returns a sample of Vercel projects
+type ProjectsSample struct {
+	// Projects is the collected project sample
+	Projects []ProjectSample `json:"projects"`
 }
 
-// buildVercelClient builds the Vercel REST API client for one installation
-func buildVercelClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	var cred credential
-	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
-		return nil, err
-	}
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	if cred.APIToken == "" {
-		return nil, ErrAPITokenMissing
+		return h.Run(ctx, c)
 	}
-
-	return providerkit.NewAuthenticatedClient(vercelAPIBaseURL, cred.APIToken, nil), nil
 }
 
-// runHealthOperation calls /v2/user to verify the Vercel token
-func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	var resp vercelUserResponse
+// Run executes the Vercel health check
+func (HealthCheck) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
+	var resp UserResponse
 	if err := c.GetJSON(ctx, "/v2/user", &resp); err != nil {
 		return nil, fmt.Errorf("vercel: user lookup failed: %w", err)
 	}
 
-	return jsonx.ToRawMessage(vercelHealthDetails{
+	return jsonx.ToRawMessage(HealthCheck{
 		ID:    resp.User.ID,
 		Name:  resp.User.Name,
 		Email: resp.User.Email,
 	})
 }
 
-// runProjectsSampleOperation fetches a small sample of Vercel projects
-func runProjectsSampleOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts projects sample to the generic operation registration boundary
+func (p ProjectsSample) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
+		return p.Run(ctx, c)
+	}
+}
+
+// Run fetches a small sample of Vercel projects
+func (ProjectsSample) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
 	params := url.Values{}
 	params.Set("limit", "5")
 
@@ -93,14 +101,14 @@ func runProjectsSampleOperation(ctx context.Context, _ *generated.Integration, _
 		return nil, fmt.Errorf("vercel: projects fetch failed: %w", err)
 	}
 
-	samples := make([]vercelProjectSample, 0, len(resp.Projects))
+	samples := make([]ProjectSample, 0, len(resp.Projects))
 	for _, p := range resp.Projects {
-		samples = append(samples, vercelProjectSample{
+		samples = append(samples, ProjectSample{
 			ID:        p.ID,
 			Name:      p.Name,
 			Framework: p.Framework,
 		})
 	}
 
-	return jsonx.ToRawMessage(vercelProjectsDetails{Projects: samples})
+	return jsonx.ToRawMessage(ProjectsSample{Projects: samples})
 }

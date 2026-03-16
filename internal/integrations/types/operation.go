@@ -24,8 +24,20 @@ type IngestContract struct {
 	EnsurePayloads bool `json:"ensurePayloads,omitempty"`
 }
 
+// OperationRequest bundles the inputs for executing one definition operation
+type OperationRequest struct {
+	// Integration is the target installation record
+	Integration *generated.Integration
+	// Credential is the installation-scoped credential bundle
+	Credential CredentialSet
+	// Client is the built client instance for this operation when one is registered
+	Client any
+	// Config is the operation-specific configuration payload
+	Config json.RawMessage
+}
+
 // OperationHandler executes one definition operation
-type OperationHandler func(ctx context.Context, integration *generated.Integration, credential CredentialSet, client any, config json.RawMessage) (json.RawMessage, error)
+type OperationHandler func(ctx context.Context, request OperationRequest) (json.RawMessage, error)
 
 // OperationRegistration declares one executable operation for a definition
 type OperationRegistration struct {

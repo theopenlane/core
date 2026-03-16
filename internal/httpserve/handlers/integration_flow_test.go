@@ -14,7 +14,7 @@ import (
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	v2definition "github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -40,7 +40,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 
 	assert.Equal(t, http.StatusOK, startRec.Code)
 	assert.True(t, resp.Success)
@@ -70,7 +70,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.OAuthV2FlowRequest{DefinitionID: "def_invalid_000000000000000000"})
+	body, err := json.Marshal(handlers.OAuthFlowRequest{DefinitionID: "def_invalid_000000000000000000"})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -88,7 +88,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 	op := suite.createImpersonationOperation("StartIntegrationOAuthUnauthorized", "Start integration OAuth flow")
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartOAuthFlow)
 
-	body, err := json.Marshal(handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	body, err := json.Marshal(handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -112,7 +112,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	// OAuth state is embedded in the auth URL, not the session key (startResp.State)
@@ -153,7 +153,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -202,13 +202,13 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
 
-	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{v2definition.Builder(buildTestOAuthDefinition)}, "https://console.openlane.io/integrations")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{definition.Builder(buildTestOAuthDefinition)}, "https://console.openlane.io/integrations")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -244,7 +244,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.OAuthV2FlowRequest{DefinitionID: ""})
+	body, err := json.Marshal(handlers.OAuthFlowRequest{DefinitionID: ""})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -284,7 +284,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -318,7 +318,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -343,7 +343,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
-func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context, request handlers.OAuthV2FlowRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
+func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context, request handlers.OAuthFlowRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
 	t.Helper()
 
 	body, err := json.Marshal(request)

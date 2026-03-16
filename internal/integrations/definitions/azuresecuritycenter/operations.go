@@ -12,7 +12,6 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -99,8 +98,8 @@ func buildAzureSecurityClient(ctx context.Context, req types.ClientBuildRequest)
 }
 
 // runHealthOperation verifies access by fetching Defender pricing data
-func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	apc, ok := client.(*azurePricingsClient)
+func runHealthOperation(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+	apc, ok := request.Client.(*azurePricingsClient)
 	if !ok {
 		return nil, ErrClientType
 	}
@@ -114,8 +113,8 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.C
 }
 
 // runSecurityPricingOperation collects Defender pricing metadata
-func runSecurityPricingOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	apc, ok := client.(*azurePricingsClient)
+func runSecurityPricingOperation(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+	apc, ok := request.Client.(*azurePricingsClient)
 	if !ok {
 		return nil, ErrClientType
 	}

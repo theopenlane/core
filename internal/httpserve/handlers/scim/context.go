@@ -6,6 +6,8 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
 // integrationContextKey is the context key for IntegrationContext
@@ -15,8 +17,12 @@ var integrationContextKey = contextx.NewKey[*IntegrationContext]()
 type IntegrationContext struct {
 	// IntegrationID is the integration record ID from the URL path parameter
 	IntegrationID string
+	// Installation is the resolved integration installation for this request
+	Installation *generated.Integration
 	// OrgID is the organization that owns the integration
 	OrgID string
+	// Runtime executes shared integration ingest logic for this request
+	Runtime *integrationsruntime.Runtime
 	// ProvisionMode controls how SCIM pushes are persisted
 	ProvisionMode enums.SCIMProvisionMode
 }

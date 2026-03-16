@@ -1,32 +1,22 @@
 package azureentraid
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-var (
-	DefinitionID              = types.NewDefinitionRef("def_01K0AZENTRAID000000000000001")
-	HealthDefaultOperation    = types.NewOperationRef[struct{}]("health.default")
-	DirectoryInspectOperation = types.NewOperationRef[struct{}]("directory.inspect")
-)
-
-const Slug = "azure_entra_id"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label    string `json:"label,omitempty"    jsonschema:"title=Installation Label"`
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
+	// TenantID is the Azure Entra ID tenant identifier
 	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
 }
 
 // Builder returns the Azure Entra ID definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -45,7 +35,7 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/oauth/start",
@@ -61,9 +51,9 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         EntraClient.ID(),
 					Description: "Microsoft Graph API client",
-					Build:       buildGraphClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -71,17 +61,17 @@ func Builder(cfg Config) definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Microsoft Graph /organization to verify tenant access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   EntraClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        DirectoryInspectOperation.Name(),
 					Description: "Collect basic tenant metadata via Microsoft Graph",
 					Topic:       DirectoryInspectOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   EntraClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runDirectoryInspectOperation,
+					Handle:      DirectoryInspect{}.Handle(Client{}),
 				},
 			},
 		}, nil

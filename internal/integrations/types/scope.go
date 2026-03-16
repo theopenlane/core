@@ -33,8 +33,8 @@ type ScopeVars struct {
 	Payload json.RawMessage
 	// Resource contains resource identity values
 	Resource string
-	// DefinitionID identifies the definition by canonical ID (exposed as "provider" in CEL for compatibility)
-	DefinitionID string
+	// Definition identifies the definition by slug, falling back to canonical ID when slug is absent (exposed as "provider" in CEL)
+	Definition string
 	// Operation contains operation name values
 	Operation string
 	// Config contains operation config values
@@ -54,7 +54,7 @@ func (v ScopeVars) CELVars() map[string]any {
 	return map[string]any{
 		ScopeVariablePayload:            jsonx.DecodeAnyOrNil(v.Payload),
 		ScopeVariableResource:           v.Resource,
-		ScopeVariableDefinition:         v.DefinitionID,
+		ScopeVariableDefinition:         v.Definition,
 		ScopeVariableOperation:          v.Operation,
 		ScopeVariableConfig:             jsonx.DecodeAnyOrNil(v.Config),
 		ScopeVariableInstallationConfig: jsonx.DecodeAnyOrNil(v.InstallationConfig),

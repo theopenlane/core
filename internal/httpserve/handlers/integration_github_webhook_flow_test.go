@@ -18,17 +18,17 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/slacknotify"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
-// defaultGitHubAppSpec returns a fully-configured GitHub App provider spec for flow tests.
+const integrationWebhookPath = "/v1/integrations/webhook/:integrationID"
+
 func defaultGitHubAppSpec() githubapp.Config {
 	return githubapp.Config{
 		AppID:         "123",
@@ -38,12 +38,35 @@ func defaultGitHubAppSpec() githubapp.Config {
 	}
 }
 
-// TestGitHubWebhookPingUpdatesIntegrationMetadata verifies ping webhook handling updates integration metadata for UI visibility
+func (suite *HandlerTestSuite) registerIntegrationWebhookRoute() {
+	op := suite.createImpersonationOperation("IntegrationWebhook", "Handle one integration webhook delivery")
+	suite.registerRouteOnce(http.MethodPost, integrationWebhookPath, op, suite.h.IntegrationWebhookHandler)
+}
+
+func (suite *HandlerTestSuite) TestIntegrationWebhookRequiresCaller() {
+	t := suite.T()
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
+	defer restore()
+
+	suite.registerIntegrationWebhookRoute()
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/int_123", strings.NewReader(`{}`))
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusUnauthorized, rec.Code)
+}
+
 func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
 	t := suite.T()
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
+
+	suite.registerIntegrationWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -63,16 +86,14 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	require.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
-	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	req = req.WithContext(user.UserCtx)
 
 	rec := httptest.NewRecorder()
-	ctx := suite.e.NewContext(req, rec)
+	suite.e.ServeHTTP(rec, req)
 
-	err = suite.h.GitHubIntegrationWebhookHandler(ctx, nil)
-	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, rec.Code)
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
@@ -91,12 +112,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	require.NotEmpty(t, verifiedAtString)
 }
 
-// TestGitHubWebhookPingRejectsInvalidSignature verifies invalid signatures are rejected before integration lookup/update.
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	t := suite.T()
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
+
+	suite.registerIntegrationWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -116,16 +138,14 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	require.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
-	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("wrong-secret", payload))
 	req = req.WithContext(user.UserCtx)
 
 	rec := httptest.NewRecorder()
-	ctx := suite.e.NewContext(req, rec)
+	suite.e.ServeHTTP(rec, req)
 
-	err = suite.h.GitHubIntegrationWebhookHandler(ctx, nil)
-	require.NoError(t, err)
 	require.Equal(t, http.StatusBadRequest, rec.Code)
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
@@ -140,45 +160,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	assert.False(t, hasMetadata)
 }
 
-// TestGitHubWebhookPingUnknownInstallationAccepted verifies signed webhooks with unknown installations are safely ignored.
-func (suite *HandlerTestSuite) TestGitHubWebhookPingUnknownInstallationAccepted() {
-	t := suite.T()
-
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
-	defer restore()
-
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
-
-	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":999999}}`)
-	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
-	req.Header.Set("X-GitHub-Event", "ping")
-	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(user.UserCtx)
-
-	rec := httptest.NewRecorder()
-	ctx := suite.e.NewContext(req, rec)
-
-	err := suite.h.GitHubIntegrationWebhookHandler(ctx, nil)
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	count, err := suite.db.Integration.Query().
-		Where(
-			integration.OwnerIDEQ(user.OrganizationID),
-			integration.DefinitionIDEQ(githubAppDefinitionID),
-		).
-		Count(user.UserCtx)
-	require.NoError(t, err)
-	require.Zero(t, count)
-}
-
-// TestGitHubWebhookInstallationCreatedSendsTemplatedSlackNotification verifies installation webhooks look up the integration and send template-rendered Slack messages.
 func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplatedSlackNotification() {
 	t := suite.T()
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
+
+	suite.registerIntegrationWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -188,7 +176,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		Exec(user.UserCtx)
 	require.NoError(t, err)
 
-	_, err = suite.db.Integration.Create().
+	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetDefinitionID(githubAppDefinitionID).
@@ -205,22 +193,20 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	recorder := newSlackWebhookRecorder(t)
 	defer recorder.Close()
 
-	hooks.SetSlackConfig(hooks.SlackConfig{WebhookURL: recorder.URL()})
+	slacknotify.SetConfig(slacknotify.SlackConfig{WebhookURL: recorder.URL()})
 	t.Cleanup(func() {
-		hooks.SetSlackConfig(hooks.SlackConfig{})
+		slacknotify.SetConfig(slacknotify.SlackConfig{})
 	})
 
 	payload := []byte(`{"action":"created","installation":{"id":456,"account":{"login":"acme-github-org","type":"Organization"}}}`)
-	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "installation")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	req = req.WithContext(user.UserCtx)
 
 	rec := httptest.NewRecorder()
-	ctx := suite.e.NewContext(req, rec)
+	suite.e.ServeHTTP(rec, req)
 
-	err = suite.h.GitHubIntegrationWebhookHandler(ctx, nil)
-	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, rec.Code)
 
 	bodies := recorder.Bodies()
@@ -237,65 +223,18 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	assert.Equal(t, strings.TrimSpace(expected), strings.TrimSpace(text))
 }
 
-// TestGitHubWebhookInstallationCreatedUnknownInstallationDoesNotNotify verifies unknown installations are ignored before notification.
-func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstallationDoesNotNotify() {
-	t := suite.T()
-
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
-	defer restore()
-
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
-
-	_, err := suite.db.Integration.Create().
-		SetOwnerID(user.OrganizationID).
-		SetName("GitHub App").
-		SetDefinitionID(githubAppDefinitionID).
-		SetDefinitionSlug(githubAppSlug).
-		SetProviderState(func() types.IntegrationProviderState {
-			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
-			require.NoError(t, mergeErr)
-			return doc
-		}()).
-		Save(user.UserCtx)
-	require.NoError(t, err)
-
-	recorder := newSlackWebhookRecorder(t)
-	defer recorder.Close()
-
-	hooks.SetSlackConfig(hooks.SlackConfig{WebhookURL: recorder.URL()})
-	t.Cleanup(func() {
-		hooks.SetSlackConfig(hooks.SlackConfig{})
-	})
-
-	payload := []byte(`{"action":"created","installation":{"id":999999,"account":{"login":"unknown-org","type":"Organization"}}}`)
-	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
-	req.Header.Set("X-GitHub-Event", "installation")
-	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(user.UserCtx)
-
-	rec := httptest.NewRecorder()
-	ctx := suite.e.NewContext(req, rec)
-
-	err = suite.h.GitHubIntegrationWebhookHandler(ctx, nil)
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	assert.Empty(t, recorder.Bodies())
-}
-
-// TestGitHubWebhookDuplicateDeliveryIsIgnored verifies delivery ID dedupe is idempotent and race-safe.
 func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	t := suite.T()
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
+	suite.registerIntegrationWebhookRoute()
+
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	_, err := suite.db.Integration.Create().
+	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetDefinitionID(githubAppDefinitionID).
@@ -312,28 +251,24 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	payload := []byte(`{"action":"created","installation":{"id":456},"repository":{"full_name":"acme/repo"},"alert":{"number":1}}`)
 	deliveryID := "delivery-dup-1"
 
-	firstReq := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
+	firstReq := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
 	firstReq.Header.Set("X-GitHub-Event", "dependabot_alert")
 	firstReq.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	firstReq.Header.Set("X-GitHub-Delivery", deliveryID)
 	firstReq = firstReq.WithContext(user.UserCtx)
 
 	firstRec := httptest.NewRecorder()
-	firstCtx := suite.e.NewContext(firstReq, firstRec)
-	err = suite.h.GitHubIntegrationWebhookHandler(firstCtx, nil)
-	require.NoError(t, err)
+	suite.e.ServeHTTP(firstRec, firstReq)
 	require.Equal(t, http.StatusOK, firstRec.Code)
 
-	secondReq := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
+	secondReq := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
 	secondReq.Header.Set("X-GitHub-Event", "dependabot_alert")
 	secondReq.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	secondReq.Header.Set("X-GitHub-Delivery", deliveryID)
 	secondReq = secondReq.WithContext(user.UserCtx)
 
 	secondRec := httptest.NewRecorder()
-	secondCtx := suite.e.NewContext(secondReq, secondRec)
-	err = suite.h.GitHubIntegrationWebhookHandler(secondCtx, nil)
-	require.NoError(t, err)
+	suite.e.ServeHTTP(secondRec, secondReq)
 	require.Equal(t, http.StatusOK, secondRec.Code)
 
 	dedupeCount, err := suite.db.IntegrationWebhook.Query().
@@ -347,7 +282,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	require.Equal(t, 1, dedupeCount)
 }
 
-// slackWebhookRecorder captures outgoing Slack webhook payloads.
 type slackWebhookRecorder struct {
 	server *httptest.Server
 	mu     sync.Mutex
@@ -429,7 +363,6 @@ func renderGitHubAppInstallTemplate(t *testing.T, data map[string]any) string {
 	return rendered.String()
 }
 
-// githubWebhookSignature builds an HMAC-SHA256 GitHub webhook signature
 func githubWebhookSignature(secret string, payload []byte) string {
 	mac := hmac.New(sha256.New, []byte(secret))
 	_, _ = mac.Write(payload)

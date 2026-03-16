@@ -2,7 +2,6 @@ package githubapp
 
 import (
 	"context"
-	"strings"
 
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
@@ -10,12 +9,10 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-const githubAPIBaseURL = "https://api.github.com"
-
 // Client builds installation-scoped GitHub GraphQL clients
 type Client struct {
-	// Config holds the operator-supplied GitHub App settings
-	Config Config
+	// APIURL overrides the GitHub API host for local tests.
+	APIURL string
 }
 
 // Build constructs the GitHub GraphQL client for one installation
@@ -27,13 +24,11 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	httpClient := oauth2.NewClient(ctx, source)
-
-	endpoint := c.enterpriseGraphQLEndpoint()
-	if endpoint == "" {
-		return githubv4.NewClient(httpClient), nil
+	if c.APIURL != "" {
+		return githubv4.NewEnterpriseClient(c.APIURL+"/api/graphql", httpClient), nil
 	}
 
-	return githubv4.NewEnterpriseClient(endpoint, httpClient), nil
+	return githubv4.NewClient(httpClient), nil
 }
 
 // FromAny casts a registered client instance to the GitHub GraphQL client type
@@ -44,21 +39,6 @@ func (Client) FromAny(value any) (*githubv4.Client, error) {
 	}
 
 	return client, nil
-}
-
-// enterpriseGraphQLEndpoint derives the GraphQL endpoint for GitHub Enterprise installations
-func (c Client) enterpriseGraphQLEndpoint() string {
-	baseURL := strings.TrimRight(c.Config.BaseURL, "/")
-	if baseURL == "" || baseURL == githubAPIBaseURL {
-		return ""
-	}
-
-	enterpriseBaseURL := strings.TrimSuffix(baseURL, "/api/v3")
-	if enterpriseBaseURL == "" {
-		enterpriseBaseURL = baseURL
-	}
-
-	return enterpriseBaseURL + "/api/graphql"
 }
 
 // tokenFromCredential extracts the OAuth access token from a credential set

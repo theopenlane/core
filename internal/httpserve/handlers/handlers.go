@@ -99,7 +99,7 @@ type Handler struct {
 	DefaultTrustCenterDomain string
 	// ObjectStore handles file storage operations
 	ObjectStore *objects.Service
-	// IntegrationsRuntime holds the integrationsv2 runtime components.
+	// IntegrationsRuntime holds the integration runtime components.
 	IntegrationsRuntime *integrationsruntime.Runtime
 	// Gala is the shared event runtime for asynchronous dispatch.
 	Gala *gala.Gala

@@ -1,2 +1,2 @@
-// Package okta provides the Okta integration definition for integrationsv2
+// Package okta provides the Okta integration definition for integrations
 package okta

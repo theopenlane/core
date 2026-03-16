@@ -5,46 +5,48 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-type oidcHealthDetails struct {
+// HealthCheck holds the result of an OIDC health check
+type HealthCheck struct {
+	// Subject is the OIDC subject claim
 	Subject string `json:"sub,omitempty"`
-	Issuer  string `json:"iss,omitempty"`
+	// Issuer is the OIDC issuer claim
+	Issuer string `json:"iss,omitempty"`
 }
 
-type oidcClaimsDetails struct {
+// ClaimsInspect returns stored OIDC claims for inspection
+type ClaimsInspect struct {
+	// Claims is the full set of OIDC claims
 	Claims map[string]any `json:"claims"`
 }
 
-// buildOIDCClient builds an authenticated HTTP client for OIDC userinfo calls
-func buildOIDCClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	token := req.Credential.OAuthAccessToken
-	if token == "" {
-		return nil, ErrOAuthTokenMissing
-	}
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	return providerkit.NewAuthenticatedClient("", token, nil), nil
+		return h.Run(ctx, request.Credential, c)
+	}
 }
 
-// runHealthOperation calls the OIDC userinfo endpoint to validate the token
-func runHealthOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	c, ok := client.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
+// Run executes the OIDC health check
+func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
 	if credential.Claims != nil {
 		sub, _ := credential.Claims["sub"].(string)
 		iss, _ := credential.Claims["iss"].(string)
-		return jsonx.ToRawMessage(oidcHealthDetails{Subject: sub, Issuer: iss})
+
+		return jsonx.ToRawMessage(HealthCheck{Subject: sub, Issuer: iss})
 	}
 
 	if c.BaseURL == "" {
-		return jsonx.ToRawMessage(oidcHealthDetails{})
+		return jsonx.ToRawMessage(HealthCheck{})
 	}
 
 	var resp map[string]any
@@ -55,14 +57,21 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, credentia
 	sub, _ := resp["sub"].(string)
 	iss, _ := resp["iss"].(string)
 
-	return jsonx.ToRawMessage(oidcHealthDetails{Subject: sub, Issuer: iss})
+	return jsonx.ToRawMessage(HealthCheck{Subject: sub, Issuer: iss})
 }
 
-// runClaimsInspectOperation returns stored OIDC claims for inspection
-func runClaimsInspectOperation(_ context.Context, _ *generated.Integration, credential types.CredentialSet, _ any, _ json.RawMessage) (json.RawMessage, error) {
+// Handle adapts claims inspection to the generic operation registration boundary
+func (ci ClaimsInspect) Handle() types.OperationHandler {
+	return func(_ context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		return ci.Run(request.Credential)
+	}
+}
+
+// Run returns the stored OIDC claims
+func (ClaimsInspect) Run(credential types.CredentialSet) (json.RawMessage, error) {
 	if credential.Claims == nil {
-		return jsonx.ToRawMessage(oidcClaimsDetails{Claims: map[string]any{}})
+		return jsonx.ToRawMessage(ClaimsInspect{Claims: map[string]any{}})
 	}
 
-	return jsonx.ToRawMessage(oidcClaimsDetails{Claims: credential.Claims})
+	return jsonx.ToRawMessage(ClaimsInspect{Claims: credential.Claims})
 }

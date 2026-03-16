@@ -1,0 +1,38 @@
+package cloudflare
+
+import (
+	"context"
+
+	cf "github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
+)
+
+// Client builds Cloudflare API clients for one installation
+type Client struct{}
+
+// Build constructs the Cloudflare API client for one installation
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+	var cred CredentialSchema
+	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
+		return nil, err
+	}
+
+	if cred.APIToken == "" {
+		return nil, ErrAPITokenMissing
+	}
+
+	return cf.NewClient(option.WithAPIToken(cred.APIToken)), nil
+}
+
+// FromAny casts a registered client instance to the Cloudflare client type
+func (Client) FromAny(value any) (*cf.Client, error) {
+	c, ok := value.(*cf.Client)
+	if !ok {
+		return nil, ErrClientType
+	}
+
+	return c, nil
+}

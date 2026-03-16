@@ -1,2 +1,2 @@
-// Package slack provides the Slack integration definition for integrationsv2
+// Package slack provides the Slack integration definition for integrations
 package slack

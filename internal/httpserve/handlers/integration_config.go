@@ -12,6 +12,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -54,6 +55,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
 	}
 
+	credentialValidation, err := jsonx.ValidateSchema(def.Credentials.Schema, attrs)
+	if err != nil {
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+	if !credentialValidation.Valid() {
+		return h.InvalidInput(ctx, ErrInvalidInput, openapiCtx)
+	}
+
 	providerData, err := json.Marshal(attrs)
 	if err != nil {
 		return h.InternalServerError(ctx, err, openapiCtx)
@@ -61,6 +70,15 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	userInputProvided := len(payload.UserInput) > 0
 	userInput := json.RawMessage(payload.UserInput)
+	if userInputProvided && def.UserInput != nil && len(def.UserInput.Schema) > 0 {
+		userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, payload.UserInput.ToMap())
+		if err != nil {
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+		if !userInputValidation.Valid() {
+			return h.InvalidInput(ctx, ErrInvalidInput, openapiCtx)
+		}
+	}
 
 	var (
 		installationID  string
@@ -164,6 +182,18 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		}
 
 		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to update integration status")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	installationRec.Status = enums.IntegrationStatusConnected
+	if err := h.IntegrationsRuntime.SyncWebhooks(requestCtx, installationRec); err != nil {
+		if created {
+			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
+		} else if userInputProvided {
+			_ = h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(previousConfig).Exec(requestCtx)
+		}
+
+		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to sync integration webhooks")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 

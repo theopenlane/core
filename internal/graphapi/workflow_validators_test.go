@@ -394,32 +394,32 @@ func TestValidateIntegrationActionParams(t *testing.T) {
 		},
 		{
 			name:    "valid explicit operation name with provider",
-			params:  json.RawMessage(`{"provider":"githubapp","operation_name":"vulnerabilities.collect"}`),
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect"}`),
 			wantErr: nil,
 		},
 		{
 			name:    "valid explicit operation name and integration id",
-			params:  json.RawMessage(`{"integration_id":"int_123","operation_name":"vulnerabilities.collect"}`),
+			params:  json.RawMessage(`{"installation_id":"int_123","operation_name":"vulnerabilities.collect"}`),
 			wantErr: nil,
 		},
 		{
 			name:    "valid explicit operation name for provider",
-			params:  json.RawMessage(`{"provider":"slack","operation_name":"health.default"}`),
+			params:  json.RawMessage(`{"definition_id":"def_01K0SLACK000000000000000001","operation_name":"health.default"}`),
 			wantErr: nil,
 		},
 		{
 			name:    "invalid scope expression",
-			params:  json.RawMessage(`{"provider":"githubapp","operation_name":"vulnerabilities.collect","scope_expression":"provider ="}`),
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect","scope_expression":"provider ="}`),
 			wantErr: ErrIntegrationScopeExpressionInvalid,
 		},
 		{
 			name:    "scope payload without scope expression",
-			params:  json.RawMessage(`{"provider":"githubapp","operation_name":"vulnerabilities.collect","scope_payload":{"key":"value"}}`),
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect","scope_payload":{"key":"value"}}`),
 			wantErr: ErrIntegrationScopeExpressionRequired,
 		},
 		{
 			name:    "valid scope expression",
-			params:  json.RawMessage(`{"provider":"githubapp","operation_name":"vulnerabilities.collect","scope_expression":"provider == 'githubapp' && operation == 'vulnerabilities.collect'"}`),
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect","scope_expression":"provider == 'githubapp' && operation == 'vulnerabilities.collect'"}`),
 			wantErr: nil,
 		},
 	}

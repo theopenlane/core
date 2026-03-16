@@ -3,54 +3,47 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	cf "github.com/cloudflare/cloudflare-go/v6"
-	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/user"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-type cloudflareHealthDetails struct {
-	Status    string `json:"status,omitempty"`
+// HealthCheck holds the result of a Cloudflare health check
+type HealthCheck struct {
+	// Status is the token verification status returned by Cloudflare
+	Status string `json:"status,omitempty"`
+	// ExpiresOn is the token expiry time if set
 	ExpiresOn string `json:"expiresOn,omitempty"`
 }
 
-// buildCloudflareClient builds the Cloudflare API client for one installation
-func buildCloudflareClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	var cred credential
-	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
-		return nil, err
-	}
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
-	if cred.APIToken == "" {
-		return nil, ErrAPITokenMissing
+		return h.Run(ctx, c)
 	}
-
-	return cf.NewClient(option.WithAPIToken(cred.APIToken)), nil
 }
 
-// runHealthOperation verifies the Cloudflare API token via /user/tokens/verify
-func runHealthOperation(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	cfClient, ok := client.(*cf.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	res, err := cfClient.User.Tokens.Verify(ctx)
+// Run executes the Cloudflare token verification
+func (HealthCheck) Run(ctx context.Context, c *cf.Client) (json.RawMessage, error) {
+	res, err := c.User.Tokens.Verify(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("cloudflare: token verification failed: %w", err)
 	}
 
 	if res.Status != user.TokenVerifyResponseStatusActive {
-		return nil, errors.New("cloudflare: token is not active")
+		return nil, ErrTokenNotActive
 	}
 
-	details := cloudflareHealthDetails{
+	details := HealthCheck{
 		Status: string(res.Status),
 	}
 

@@ -1,51 +1,36 @@
 package microsoftteams
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// HealthCheck identifies the default health check operation
-type HealthCheck struct{}
-
-// TeamsSample identifies the teams sample collection operation
-type TeamsSample struct{}
-
-// MessageSend identifies the Teams message send operation
-type MessageSend struct{}
-
-var (
-	DefinitionID           = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
-	TeamsSampleOperation   = types.NewOperationRef[TeamsSample]("teams.sample")
-	MessageSendOperation   = types.NewOperationRef[MessageSend]("message.send")
-)
-
-const Slug = "microsoft_teams"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label    string `json:"label,omitempty"    jsonschema:"title=Installation Label"`
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
+	// TenantID is the Microsoft tenant identifier
 	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
 }
 
-// messageOperationInput holds per-invocation parameters for the message.send operation
-type messageOperationInput struct {
-	TeamID     string `json:"team_id"               jsonschema:"required,title=Team ID"`
-	ChannelID  string `json:"channel_id"            jsonschema:"required,title=Channel ID"`
-	Body       string `json:"body"                  jsonschema:"required,title=Message Body"`
+// MessageOperationInput holds per-invocation parameters for the message.send operation
+type MessageOperationInput struct {
+	// TeamID is the target Microsoft Teams team identifier
+	TeamID string `json:"team_id" jsonschema:"required,title=Team ID"`
+	// ChannelID is the target Teams channel identifier
+	ChannelID string `json:"channel_id" jsonschema:"required,title=Channel ID"`
+	// Body is the message body content
+	Body string `json:"body" jsonschema:"required,title=Message Body"`
+	// BodyFormat controls the content type (text or html)
 	BodyFormat string `json:"body_format,omitempty" jsonschema:"title=Body Format"`
-	Subject    string `json:"subject,omitempty"     jsonschema:"title=Subject"`
+	// Subject is an optional message subject
+	Subject string `json:"subject,omitempty" jsonschema:"title=Subject"`
 }
 
 // Builder returns the Microsoft Teams definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -64,7 +49,7 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/oauth/start",
@@ -80,9 +65,9 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         TeamsClient.ID(),
 					Description: "Microsoft Graph API client",
-					Build:       buildGraphClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -90,25 +75,25 @@ func Builder(cfg Config) definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Graph /me to verify Teams access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   TeamsClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        TeamsSampleOperation.Name(),
 					Description: "Collect a sample of joined teams for the user context",
 					Topic:       TeamsSampleOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   TeamsClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runTeamsSampleOperation,
+					Handle:      TeamsSample{}.Handle(Client{}),
 				},
 				{
 					Name:         MessageSendOperation.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",
 					Topic:        MessageSendOperation.Topic(Slug),
-					ClientRef:    clientRef.ID(),
-					ConfigSchema: providerkit.SchemaFrom[messageOperationInput](),
-					Handle:       runMessageSendOperation,
+					ClientRef:    TeamsClient.ID(),
+					ConfigSchema: providerkit.SchemaFrom[MessageOperationInput](),
+					Handle:       MessageSend{}.Handle(Client{}),
 				},
 			},
 		}, nil

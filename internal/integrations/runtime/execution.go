@@ -96,7 +96,12 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 		}
 	}
 
-	response, err := operation.Handle(ctx, installation, credential, client, jsonx.CloneRawMessage(config))
+	response, err := operation.Handle(ctx, types.OperationRequest{
+		Integration: installation,
+		Credential:  credential,
+		Client:      client,
+		Config:      jsonx.CloneRawMessage(config),
+	})
 	if err != nil {
 		return response, err
 	}

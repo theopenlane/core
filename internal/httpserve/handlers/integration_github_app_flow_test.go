@@ -50,7 +50,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 			_, _ = w.Write([]byte(`{"token":"ghs_test_installation_token","expires_at":"2030-01-01T00:00:00Z"}`))
 		case req.Method == http.MethodPost && req.URL.Path == "/api/graphql":
 			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-			_, _ = w.Write([]byte(`{"data":{"viewer":{"repositories":{"totalCount":1,"nodes":[{"nameWithOwner":"acme/demo","isPrivate":false,"updatedAt":"2030-01-01T00:00:00Z","url":"https://github.example/acme/demo"}],"pageInfo":{"endCursor":"","hasNextPage":false}}}}}`))
+			_, _ = w.Write([]byte(`{"data":{"viewer":{"repositories":{"nodes":[{"nameWithOwner":"acme/demo","isPrivate":false,"updatedAt":"2030-01-01T00:00:00Z","url":"https://github.example/acme/demo"}],"pageInfo":{"endCursor":"","hasNextPage":false}}}}}`))
 		default:
 			http.NotFound(w, req)
 		}
@@ -60,7 +60,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	privateKey := testRSAPrivateKeyPEM(t)
 
 	cfg := githubapp.Config{
-		BaseURL:       mockGitHubAPI.URL + "/api/v3",
+		APIURL:        mockGitHubAPI.URL,
 		AppID:         "123",
 		AppSlug:       "openlane",
 		PrivateKey:    privateKey,
@@ -130,7 +130,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 		case req.Method == http.MethodPost && req.URL.Path == "/api/graphql":
 			repoLookupCalls.Add(1)
 			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-			_, _ = w.Write([]byte(`{"data":{"viewer":{"repositories":{"totalCount":1,"nodes":[{"nameWithOwner":"acme/demo","isPrivate":false,"updatedAt":"2030-01-01T00:00:00Z","url":"https://github.example/acme/demo"}],"pageInfo":{"endCursor":"","hasNextPage":false}}}}}`))
+			_, _ = w.Write([]byte(`{"data":{"viewer":{"repositories":{"nodes":[{"nameWithOwner":"acme/demo","isPrivate":false,"updatedAt":"2030-01-01T00:00:00Z","url":"https://github.example/acme/demo"}],"pageInfo":{"endCursor":"","hasNextPage":false}}}}}`))
 		default:
 			http.NotFound(w, req)
 		}
@@ -139,7 +139,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 
 	privateKey := testRSAPrivateKeyPEM(t)
 	cfg := githubapp.Config{
-		BaseURL:       mockGitHubAPI.URL + "/api/v3",
+		APIURL:        mockGitHubAPI.URL,
 		AppID:         "123",
 		AppSlug:       "openlane",
 		PrivateKey:    privateKey,

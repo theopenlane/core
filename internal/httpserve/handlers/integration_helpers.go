@@ -91,6 +91,10 @@ func integrationHTTPStatus(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, engine.ErrIntegrationScopeConditionFalse):
 		return http.StatusBadRequest
+	case errors.Is(err, engine.ErrIntegrationDefinitionNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, engine.ErrIntegrationOperationNotFound):
+		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError
 	}

@@ -37,9 +37,9 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	v2definition "github.com/theopenlane/core/internal/integrations/definition"
-	IntegrationsRuntime "github.com/theopenlane/core/internal/integrations/runtime"
-	v2types "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
@@ -399,12 +399,12 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 	credStore, err := keystore.NewStore(suite.db)
 	assert.NoError(suite.T(), err)
 
-	rt, err := IntegrationsRuntime.New(IntegrationsRuntime.Config{
+	rt, err := runtime.New(runtime.Config{
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		Keystore:              credStore,
 		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
-		DefinitionBuilders:    []v2definition.Builder{v2definition.Builder(buildTestOAuthDefinition)},
+		DefinitionBuilders:    []definition.Builder{definition.Builder(buildTestOAuthDefinition)},
 		SkipExecutorListeners: true,
 	})
 	assert.NoError(suite.T(), err)
@@ -412,27 +412,27 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 	suite.h.IntegrationsRuntime = rt
 }
 
-func buildTestOAuthDefinition(context.Context) (v2types.Definition, error) {
-	return v2types.Definition{
-		DefinitionSpec: v2types.DefinitionSpec{
+func buildTestOAuthDefinition() (types.Definition, error) {
+	return types.Definition{
+		DefinitionSpec: types.DefinitionSpec{
 			ID:          testOAuthDefinitionID,
 			Slug:        "test-oauth",
 			Version:     "v1",
 			DisplayName: "Test OAuth",
 			Active:      true,
 		},
-		Auth: &v2types.AuthRegistration{
+		Auth: &types.AuthRegistration{
 			Start:    testOAuthStart,
 			Complete: testOAuthComplete,
 		},
 	}, nil
 }
 
-func testOAuthStart(_ context.Context, _ json.RawMessage) (v2types.AuthStartResult, error) {
+func testOAuthStart(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 	oauthState := ulids.New().String()
 	stateBytes, _ := json.Marshal(map[string]string{"state": oauthState})
 
-	return v2types.AuthStartResult{
+	return types.AuthStartResult{
 		URL:   fmt.Sprintf("https://example.com/oauth/authorize?state=%s", oauthState),
 		State: stateBytes,
 	}, nil
@@ -442,19 +442,19 @@ type testCallbackPayload struct {
 	State string `json:"state"`
 }
 
-func testOAuthComplete(_ context.Context, callbackState json.RawMessage, input json.RawMessage) (v2types.AuthCompleteResult, error) {
+func testOAuthComplete(_ context.Context, callbackState json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
 	var cs, inp testCallbackPayload
 	json.Unmarshal(callbackState, &cs) //nolint:errcheck
 	json.Unmarshal(input, &inp)        //nolint:errcheck
 
 	if cs.State != inp.State {
-		return v2types.AuthCompleteResult{}, errors.New("oauth state mismatch")
+		return types.AuthCompleteResult{}, errors.New("oauth state mismatch")
 	}
 
 	expiry := time.Now().Add(time.Hour)
 
-	return v2types.AuthCompleteResult{
-		Credential: v2types.CredentialSet{
+	return types.AuthCompleteResult{
+		Credential: types.CredentialSet{
 			OAuthAccessToken: "test-access-token",
 			OAuthExpiry:      &expiry,
 		},

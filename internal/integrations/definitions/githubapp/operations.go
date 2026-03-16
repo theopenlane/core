@@ -9,7 +9,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -19,17 +18,17 @@ const (
 	defaultPageSize = 50
 	maxPageSize     = 100
 
-	githubAlertTypeDependabot = "dependabot"
+	githubAlertTypeDependabot   = "dependabot"
+	githubAlertTypeCodeScanning = "code_scanning"
+	githubAlertTypeSecretScan   = "secret_scanning"
 )
 
 // VulnerabilityCollectConfig controls the vulnerability collect operation
 type VulnerabilityCollectConfig struct {
 	// MaxRepos caps the number of repositories scanned during one run
 	MaxRepos int `json:"max_repos,omitempty" jsonschema:"description=Optional cap on the number of repositories to scan."`
-
 	// State filters alerts by GitHub vulnerability alert state
 	State string `json:"state,omitempty" jsonschema:"description=Alert state filter (OPEN, DISMISSED, FIXED, AUTO_DISMISSED). Defaults to OPEN.,enum=OPEN,enum=DISMISSED,enum=FIXED,enum=AUTO_DISMISSED"`
-
 	// Severity filters alerts by advisory severity
 	Severity string `json:"severity,omitempty" jsonschema:"description=Optional severity filter (LOW, MODERATE, HIGH, CRITICAL).,enum=LOW,enum=MODERATE,enum=HIGH,enum=CRITICAL"`
 }
@@ -38,19 +37,14 @@ type VulnerabilityCollectConfig struct {
 type VulnerabilityAlertPayload struct {
 	// Number is the GitHub alert number
 	Number int `json:"number,omitempty"`
-
 	// State is the current lifecycle state of the alert
 	State string `json:"state,omitempty"`
-
 	// HTMLURL is the GitHub UI URL for the alert
 	HTMLURL string `json:"html_url,omitempty"`
-
 	// CreatedAt is when GitHub created the alert
 	CreatedAt time.Time `json:"created_at,omitempty"`
-
 	// UpdatedAt is when GitHub last updated the alert
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-
 	// SecurityAdvisory contains the advisory details attached to the alert
 	SecurityAdvisory SecurityAdvisory `json:"security_advisory,omitempty"`
 }
@@ -59,16 +53,12 @@ type VulnerabilityAlertPayload struct {
 type SecurityAdvisory struct {
 	// GHSAID is the GitHub Security Advisory identifier
 	GHSAID string `json:"ghsa_id,omitempty"`
-
 	// Summary is the short advisory summary
 	Summary string `json:"summary,omitempty"`
-
 	// Description is the full advisory description
 	Description string `json:"description,omitempty"`
-
 	// Severity is the advisory severity string reported by GitHub
 	Severity string `json:"severity,omitempty"`
-
 	// CVEID is the advisory CVE identifier when present
 	CVEID string `json:"cve_id,omitempty"`
 }
@@ -116,8 +106,8 @@ type vulnerabilityAlertNode struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, rawClient any, _ json.RawMessage) (json.RawMessage, error) {
-		githubClient, err := client.FromAny(rawClient)
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		githubClient, err := client.FromAny(request.Client)
 		if err != nil {
 			return nil, err
 		}
@@ -138,8 +128,8 @@ func (HealthCheck) Run(ctx context.Context, client *githubv4.Client) (json.RawMe
 
 // Handle adapts repository sync to the generic operation registration boundary
 func (r RepositorySync) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, rawClient any, _ json.RawMessage) (json.RawMessage, error) {
-		githubClient, err := client.FromAny(rawClient)
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		githubClient, err := client.FromAny(request.Client)
 		if err != nil {
 			return nil, err
 		}
@@ -173,14 +163,14 @@ func (RepositorySync) Run(ctx context.Context, client *githubv4.Client) (json.Ra
 
 // Handle adapts vulnerability collection to the generic operation registration boundary
 func (v VulnerabilityCollect) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, _ *generated.Integration, _ types.CredentialSet, rawClient any, config json.RawMessage) (json.RawMessage, error) {
-		githubClient, err := client.FromAny(rawClient)
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		githubClient, err := client.FromAny(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
 		var collectConfig VulnerabilityCollectConfig
-		if err := jsonx.UnmarshalIfPresent(config, &collectConfig); err != nil {
+		if err := jsonx.UnmarshalIfPresent(request.Config, &collectConfig); err != nil {
 			return nil, err
 		}
 
@@ -243,7 +233,7 @@ func queryRepositories(ctx context.Context, client *githubv4.Client, pageSize in
 			}
 		}
 
-		variables := map[string]interface{}{
+		variables := map[string]any{
 			"first": githubv4.Int(pageSize),
 			"after": after,
 		}

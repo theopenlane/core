@@ -2,7 +2,6 @@ package registry
 
 import (
 	"sort"
-	"sync"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -10,11 +9,12 @@ import (
 
 // Registry is the in-memory index of registered definitions
 type Registry struct {
-	mu                     sync.RWMutex
 	definitionsByID        map[string]types.Definition
 	clientsByDefinition    map[string]map[types.ClientID]types.ClientRegistration
 	operationsByDefinition map[string]map[string]types.OperationRegistration
 	operationsByTopic      map[gala.TopicName]types.OperationRegistration
+	webhookEventsByDef     map[string]map[string]map[string]types.WebhookEventRegistration
+	webhookEventsByTopic   map[gala.TopicName]types.WebhookEventRegistration
 }
 
 // New constructs an empty registry
@@ -24,6 +24,8 @@ func New() *Registry {
 		clientsByDefinition:    map[string]map[types.ClientID]types.ClientRegistration{},
 		operationsByDefinition: map[string]map[string]types.OperationRegistration{},
 		operationsByTopic:      map[gala.TopicName]types.OperationRegistration{},
+		webhookEventsByDef:     map[string]map[string]map[string]types.WebhookEventRegistration{},
+		webhookEventsByTopic:   map[gala.TopicName]types.WebhookEventRegistration{},
 	}
 }
 
@@ -41,9 +43,6 @@ func (r *Registry) Register(def types.Definition) error {
 	if def.Version == "" {
 		return ErrDefinitionVersionRequired
 	}
-
-	r.mu.Lock()
-	defer r.mu.Unlock()
 
 	if _, exists := r.definitionsByID[definitionID]; exists {
 		return ErrDefinitionAlreadyRegistered
@@ -96,10 +95,15 @@ func (r *Registry) Register(def types.Definition) error {
 	}
 
 	webhookNames := make(map[string]struct{}, len(def.Webhooks))
+	webhookEventIndex := make(map[string]map[string]types.WebhookEventRegistration, len(def.Webhooks))
 	for _, webhook := range def.Webhooks {
 		name := webhook.Name
 		if name == "" {
 			return ErrWebhookNameRequired
+		}
+
+		if len(webhook.Events) > 0 && webhook.Event == nil {
+			return ErrWebhookEventResolverRequired
 		}
 
 		if _, exists := webhookNames[name]; exists {
@@ -107,14 +111,48 @@ func (r *Registry) Register(def types.Definition) error {
 		}
 
 		webhookNames[name] = struct{}{}
+
+		eventIndex := make(map[string]types.WebhookEventRegistration, len(webhook.Events))
+		for _, event := range webhook.Events {
+			if event.Name == "" {
+				return ErrWebhookNameRequired
+			}
+
+			if event.Topic == "" {
+				return ErrOperationTopicRequired
+			}
+
+			if event.Handle == nil {
+				return ErrWebhookEventHandlerRequired
+			}
+
+			if _, exists := eventIndex[event.Name]; exists {
+				return ErrWebhookAlreadyRegistered
+			}
+
+			if _, exists := r.webhookEventsByTopic[event.Topic]; exists {
+				return ErrOperationTopicAlreadyRegistered
+			}
+
+			eventIndex[event.Name] = event
+		}
+
+		webhookEventIndex[name] = eventIndex
 	}
 
 	r.definitionsByID[definitionID] = def
 	r.clientsByDefinition[definitionID] = clientIndex
 	r.operationsByDefinition[definitionID] = operationIndex
+	r.webhookEventsByDef[definitionID] = webhookEventIndex
 
 	for _, operation := range def.Operations {
 		r.operationsByTopic[operation.Topic] = operation
+	}
+
+	for _, events := range webhookEventIndex {
+		for _, event := range events {
+			r.webhookEventsByTopic[event.Topic] = event
+		}
 	}
 
 	return nil
@@ -122,9 +160,6 @@ func (r *Registry) Register(def types.Definition) error {
 
 // Definition returns one definition by canonical identifier
 func (r *Registry) Definition(id string) (types.Definition, bool) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	definition, ok := r.definitionsByID[id]
 
 	return definition, ok
@@ -132,9 +167,6 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 
 // Client returns one client registration for a definition
 func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegistration, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	clientIndex, ok := r.clientsByDefinition[id]
 	if !ok {
 		return types.ClientRegistration{}, ErrDefinitionNotFound
@@ -150,9 +182,6 @@ func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegis
 
 // Operation returns one operation registration for a definition
 func (r *Registry) Operation(id string, name string) (types.OperationRegistration, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	operationIndex, ok := r.operationsByDefinition[id]
 	if !ok {
 		return types.OperationRegistration{}, ErrDefinitionNotFound
@@ -168,9 +197,6 @@ func (r *Registry) Operation(id string, name string) (types.OperationRegistratio
 
 // Catalog returns all definition specs in stable id order
 func (r *Registry) Catalog() []types.DefinitionSpec {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	out := make([]types.DefinitionSpec, 0, len(r.definitionsByID))
 	for _, definition := range r.definitionsByID {
 		out = append(out, definition.DefinitionSpec)
@@ -185,12 +211,43 @@ func (r *Registry) Catalog() []types.DefinitionSpec {
 
 // Listeners returns all operation registrations in stable topic order
 func (r *Registry) Listeners() []types.OperationRegistration {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	out := make([]types.OperationRegistration, 0, len(r.operationsByTopic))
 	for _, operation := range r.operationsByTopic {
 		out = append(out, operation)
+	}
+
+	sort.Slice(out, func(i, j int) bool {
+		return string(out[i].Topic) < string(out[j].Topic)
+	})
+
+	return out
+}
+
+// WebhookEvent returns one webhook event registration for a definition
+func (r *Registry) WebhookEvent(id string, webhookName string, eventName string) (types.WebhookEventRegistration, error) {
+	webhookIndex, ok := r.webhookEventsByDef[id]
+	if !ok {
+		return types.WebhookEventRegistration{}, ErrDefinitionNotFound
+	}
+
+	eventIndex, ok := webhookIndex[webhookName]
+	if !ok {
+		return types.WebhookEventRegistration{}, ErrWebhookNotFound
+	}
+
+	event, ok := eventIndex[eventName]
+	if !ok {
+		return types.WebhookEventRegistration{}, ErrWebhookNotFound
+	}
+
+	return event, nil
+}
+
+// WebhookListeners returns all webhook event registrations in stable topic order
+func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
+	out := make([]types.WebhookEventRegistration, 0, len(r.webhookEventsByTopic))
+	for _, event := range r.webhookEventsByTopic {
+		out = append(out, event)
 	}
 
 	sort.Slice(out, func(i, j int) bool {

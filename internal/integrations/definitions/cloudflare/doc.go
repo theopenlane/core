@@ -1,2 +1,2 @@
-// Package cloudflare provides the Cloudflare integration definition for integrationsv2
+// Package cloudflare provides the Cloudflare integration definition for integrations
 package cloudflare

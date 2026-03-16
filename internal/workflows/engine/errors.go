@@ -49,6 +49,10 @@ var (
 	ErrIntegrationRegistryRequired = errors.New("integration registry required")
 	// ErrIntegrationOperationsRequired is returned when integration dispatcher is not configured
 	ErrIntegrationOperationsRequired = errors.New("integration dispatcher required")
+	// ErrIntegrationDefinitionNotFound is returned when an integration definition is not found in the registry
+	ErrIntegrationDefinitionNotFound = errors.New("integration definition not found")
+	// ErrIntegrationOperationNotFound is returned when an integration operation is not found in the registry
+	ErrIntegrationOperationNotFound = errors.New("integration operation not found")
 	// ErrIntegrationOperationCriteriaRequired indicates operation name is required
 	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation name required")
 	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation

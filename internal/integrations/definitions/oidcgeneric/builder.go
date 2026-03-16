@@ -1,37 +1,20 @@
 package oidcgeneric
 
 import (
-	"context"
-
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// HealthCheck identifies the default health check operation
-type HealthCheck struct{}
-
-// ClaimsInspect identifies the claims inspection operation
-type ClaimsInspect struct{}
-
-var (
-	DefinitionID           = types.NewDefinitionRef("def_01K0OIDCGEN00000000000000001")
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
-	ClaimsInspectOperation = types.NewOperationRef[ClaimsInspect]("claims.inspect")
-)
-
-const Slug = "oidc_generic"
-
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
 	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
 }
 
 // Builder returns the Generic OIDC definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func(_ context.Context) (types.Definition, error) {
-		clientRef := types.NewClientRef[any]()
-
+	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -50,7 +33,7 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/oauth/start",
@@ -65,9 +48,9 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         clientRef.ID(),
+					Ref:         OIDCClient.ID(),
 					Description: "OIDC userinfo HTTP client",
-					Build:       buildOIDCClient,
+					Build:       Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -75,16 +58,16 @@ func Builder(cfg Config) definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call the configured userinfo endpoint to validate the OIDC token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   clientRef.ID(),
+					ClientRef:   OIDCClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
 					Name:        ClaimsInspectOperation.Name(),
 					Description: "Expose stored ID token claims for downstream checks",
 					Topic:       ClaimsInspectOperation.Topic(Slug),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      runClaimsInspectOperation,
+					Handle:      ClaimsInspect{}.Handle(),
 				},
 			},
 		}, nil

@@ -10,22 +10,21 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
-	defaultSessionName = "openlane-awssecurityhub"
-	defaultPageSize    = int32(100)
-	maxPageSize        = int32(100)
+	defaultPageSize = int32(100)
+	maxPageSize     = int32(100)
 )
 
-// findingsConfig holds per-invocation parameters for the vulnerabilities.collect operation
+// FindingsConfig holds per-invocation parameters for the vulnerabilities.collect operation
 // Severity, RecordState, and WorkflowStatus are pushed to the Security Hub server-side
 // filter so that only matching findings are transferred over the wire
-type findingsConfig struct {
+type FindingsConfig struct {
 	// Severity filters by ASFF severity label. Valid values: INFORMATIONAL, LOW, MEDIUM, HIGH, CRITICAL
 	Severity string `json:"severity,omitempty" jsonschema:"title=Severity Filter,description=ASFF severity label filter (INFORMATIONAL LOW MEDIUM HIGH CRITICAL)."`
 	// RecordState filters by finding record state. Valid values: ACTIVE, ARCHIVED
@@ -34,76 +33,48 @@ type findingsConfig struct {
 	WorkflowStatus string `json:"workflowStatus,omitempty" jsonschema:"title=Workflow Status,description=Finding workflow status filter (NEW NOTIFIED RESOLVED SUPPRESSED)."`
 	// MaxFindings caps the total number of findings returned; 0 means no limit
 	MaxFindings int `json:"maxFindings,omitempty" jsonschema:"title=Max Findings,description=Maximum number of findings to collect. 0 means no limit."`
-	// IncludePayloads controls whether raw finding JSON is included in the output
-	IncludePayloads bool `json:"includePayloads,omitempty" jsonschema:"title=Include Payloads,description=Include raw finding payloads in the operation output."`
 }
 
-type hubHealthDetails struct {
-	Region       string `json:"region"`
-	RoleARN      string `json:"roleArn,omitempty"`
-	HubARN       string `json:"hubArn,omitempty"`
+// HealthCheck holds the result of an AWS Security Hub health check
+type HealthCheck struct {
+	// Region is the AWS region used for the session
+	Region string `json:"region"`
+	// RoleARN is the assumed role ARN when present
+	RoleARN string `json:"roleArn,omitempty"`
+	// HubARN is the Security Hub ARN
+	HubARN string `json:"hubArn,omitempty"`
+	// SubscribedAt is the Security Hub subscription timestamp
 	SubscribedAt string `json:"subscribedAt,omitempty"`
 }
 
-type findingsResult struct {
-	Region         string            `json:"region"`
-	TotalCollected int               `json:"totalCollected"`
-	SeverityCounts map[string]int    `json:"severityCounts"`
-	Findings       []json.RawMessage `json:"findings,omitempty"`
+// VulnerabilitiesCollect collects AWS Security Hub findings
+type VulnerabilitiesCollect struct{}
+
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
+
+		return h.Run(ctx, request.Credential, c)
+	}
 }
 
-// buildSecurityHubClient constructs an AWS Security Hub client using STS AssumeRole
-func buildSecurityHubClient(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	if len(req.Credential.ProviderData) == 0 {
-		return nil, ErrCredentialMetadataRequired
-	}
-
-	meta, err := awskit.MetadataFromProviderData(req.Credential.ProviderData, defaultSessionName)
-	if err != nil {
-		return nil, fmt.Errorf("awssecurityhub: metadata decode failed: %w", err)
-	}
-
-	if meta.RoleARN == "" {
-		return nil, ErrRoleARNMissing
-	}
-
-	if meta.Region == "" {
-		return nil, ErrRegionMissing
-	}
-
-	cfg, err := awskit.BuildAWSConfig(ctx, meta.Region, awskit.CredentialsFromMetadata(meta), awskit.AssumeRole{
-		RoleARN:         meta.RoleARN,
-		ExternalID:      meta.ExternalID,
-		SessionName:     meta.SessionName,
-		SessionDuration: meta.SessionDuration,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("awssecurityhub: aws config build failed: %w", err)
-	}
-
-	return securityhub.NewFromConfig(cfg), nil
-}
-
-// runHealthOperation validates Security Hub access by calling DescribeHub
-// This confirms both that the STS credentials work and that Security Hub is
-// enabled and reachable in the configured home region
-func runHealthOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
-	shClient, ok := client.(*securityhub.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
+// Run validates Security Hub access by calling DescribeHub
+func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client) (json.RawMessage, error) {
 	meta, err := awskit.MetadataFromProviderData(credential.ProviderData, defaultSessionName)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := shClient.DescribeHub(ctx, &securityhub.DescribeHubInput{})
+	resp, err := c.DescribeHub(ctx, &securityhub.DescribeHubInput{})
 	if err != nil {
 		return nil, fmt.Errorf("awssecurityhub: DescribeHub failed: %w", err)
 	}
 
-	details := hubHealthDetails{
+	details := HealthCheck{
 		Region:  meta.Region,
 		RoleARN: meta.RoleARN,
 	}
@@ -119,22 +90,27 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, credentia
 	return jsonx.ToRawMessage(details)
 }
 
-// runVulnerabilitiesCollectOperation collects Security Hub findings using server-side filters
-// Severity, record state, and workflow status are applied via the GetFindings Filters field
-// rather than post-fetch client-side filtering. Pagination stops as soon as MaxFindings is reached
-func runVulnerabilitiesCollectOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, config json.RawMessage) (json.RawMessage, error) {
-	shClient, ok := client.(*securityhub.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
+// Handle adapts vulnerabilities collection to the generic operation registration boundary
+func (v VulnerabilitiesCollect) Handle(client Client) types.OperationHandler {
+	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+		c, err := client.FromAny(request.Client)
+		if err != nil {
+			return nil, err
+		}
 
+		var cfg FindingsConfig
+		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+			return nil, err
+		}
+
+		return v.Run(ctx, request.Credential, c, cfg)
+	}
+}
+
+// Run collects Security Hub findings using server-side filters
+func (VulnerabilitiesCollect) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client, cfg FindingsConfig) (json.RawMessage, error) {
 	meta, err := awskit.MetadataFromProviderData(credential.ProviderData, defaultSessionName)
 	if err != nil {
-		return nil, err
-	}
-
-	var cfg findingsConfig
-	if err := jsonx.UnmarshalIfPresent(config, &cfg); err != nil {
 		return nil, err
 	}
 
@@ -146,11 +122,14 @@ func runVulnerabilitiesCollectOperation(ctx context.Context, _ *generated.Integr
 	filters := buildSecurityHubFilters(meta, cfg)
 
 	var (
-		envelopes      []json.RawMessage
-		total          int
-		nextToken      *string
-		severityCounts = map[string]int{}
+		envelopes []types.MappingEnvelope
+		total     int
+		nextToken *string
 	)
+
+	if cfg.MaxFindings > 0 {
+		envelopes = make([]types.MappingEnvelope, 0, cfg.MaxFindings)
+	}
 
 collectLoop:
 	for {
@@ -162,7 +141,7 @@ collectLoop:
 			input.NextToken = nextToken
 		}
 
-		resp, err := shClient.GetFindings(ctx, input)
+		resp, err := c.GetFindings(ctx, input)
 		if err != nil {
 			return nil, fmt.Errorf("awssecurityhub: GetFindings failed: %w", err)
 		}
@@ -172,24 +151,12 @@ collectLoop:
 				break collectLoop
 			}
 
-			finding := resp.Findings[i]
-
-			if finding.Severity != nil {
-				label := strings.ToLower(string(finding.Severity.Label))
-				if label != "" {
-					severityCounts[label]++
-				}
+			envelope, err := buildFindingEnvelope(resp.Findings[i])
+			if err != nil {
+				return nil, err
 			}
 
-			if cfg.IncludePayloads {
-				payload, err := json.Marshal(finding)
-				if err != nil {
-					return nil, fmt.Errorf("awssecurityhub: finding serialization failed: %w", err)
-				}
-
-				envelopes = append(envelopes, payload)
-			}
-
+			envelopes = append(envelopes, envelope)
 			total++
 		}
 
@@ -200,23 +167,18 @@ collectLoop:
 		nextToken = resp.NextToken
 	}
 
-	result := findingsResult{
-		Region:         meta.Region,
-		TotalCollected: total,
-		SeverityCounts: severityCounts,
-	}
-
-	if cfg.IncludePayloads {
-		result.Findings = envelopes
-	}
-
-	return jsonx.ToRawMessage(result)
+	return jsonx.ToRawMessage([]types.IngestPayloadSet{
+		{
+			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Envelopes: envelopes,
+		},
+	})
 }
 
 // buildSecurityHubFilters constructs a server-side filter from credential metadata and per-invocation config
 // Account and region scoping come from the credential; severity, record state, and workflow status
 // come from the operation config. All filters are applied server-side via the GetFindings API
-func buildSecurityHubFilters(meta awskit.Metadata, cfg findingsConfig) *securityhubtypes.AwsSecurityFindingFilters {
+func buildSecurityHubFilters(meta awskit.Metadata, cfg FindingsConfig) *securityhubtypes.AwsSecurityFindingFilters {
 	var filters securityhubtypes.AwsSecurityFindingFilters
 
 	if meta.AccountScope == awskit.AccountScopeSpecific {
@@ -275,4 +237,32 @@ func toStringFilters(values []string) []securityhubtypes.StringFilter {
 	}
 
 	return out
+}
+
+// buildFindingEnvelope serializes one Security Hub finding into an ingest envelope
+func buildFindingEnvelope(finding securityhubtypes.AwsSecurityFinding) (types.MappingEnvelope, error) {
+	rawPayload, err := json.Marshal(finding)
+	if err != nil {
+		return types.MappingEnvelope{}, fmt.Errorf("awssecurityhub: finding serialization failed: %w", err)
+	}
+
+	return types.MappingEnvelope{
+		Resource: resolveFindingResource(finding),
+		Payload:  rawPayload,
+	}, nil
+}
+
+// resolveFindingResource chooses the best resource identifier for one finding
+func resolveFindingResource(finding securityhubtypes.AwsSecurityFinding) string {
+	for _, resource := range finding.Resources {
+		if resource.Id != nil && *resource.Id != "" {
+			return *resource.Id
+		}
+	}
+
+	if finding.AwsAccountId != nil {
+		return awssdk.ToString(finding.AwsAccountId)
+	}
+
+	return ""
 }

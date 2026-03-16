@@ -46,7 +46,6 @@ type InstallationCallbackState struct {
 type ProviderData struct {
 	// AppID is the GitHub App identifier used to mint installation tokens
 	AppID string `json:"appId"`
-
 	// InstallationID is the installation selected for this credential
 	InstallationID string `json:"installationId"`
 }
@@ -224,17 +223,11 @@ func (a Auth) installationTokenClient(ctx context.Context, jwtToken string) *gh.
 	httpClient := oauth2.NewClient(ctx, source)
 	client := gh.NewClient(httpClient)
 
-	baseURL := strings.TrimRight(a.Config.BaseURL, "/")
-	if baseURL == "" || baseURL == githubAPIBaseURL {
+	if a.Config.APIURL == "" {
 		return client
 	}
 
-	uploadURL := strings.TrimSuffix(baseURL, "/api/v3")
-	if uploadURL == "" {
-		uploadURL = baseURL
-	}
-
-	enterpriseClient, err := client.WithEnterpriseURLs(baseURL, uploadURL)
+	enterpriseClient, err := client.WithEnterpriseURLs(a.Config.APIURL+"/api/v3", a.Config.APIURL)
 	if err != nil {
 		return client
 	}

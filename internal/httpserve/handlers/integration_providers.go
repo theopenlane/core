@@ -30,7 +30,7 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 	})
 }
 
-// buildDefinitionCatalogEntry constructs one catalog entry from a v2 definition
+// buildDefinitionCatalogEntry constructs one catalog entry from an integration definition
 func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 	spec := def.DefinitionSpec
 	entry := DefinitionCatalogEntry{

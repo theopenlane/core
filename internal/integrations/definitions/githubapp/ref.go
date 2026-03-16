@@ -12,6 +12,11 @@ var (
 	HealthDefaultOperation        = types.NewOperationRef[HealthCheck]("health.default")
 	RepositorySyncOperation       = types.NewOperationRef[RepositorySync]("repository.sync")
 	VulnerabilityCollectOperation = types.NewOperationRef[VulnerabilityCollect]("vulnerability.collect")
+	PingWebhookEvent              = types.NewWebhookEventRef[PingWebhook]("ping")
+	InstallationCreatedWebhookEvent = types.NewWebhookEventRef[InstallationCreatedWebhook]("installation.created")
+	DependabotAlertWebhookEvent   = types.NewWebhookEventRef[DependabotAlertWebhook]("dependabot_alert")
+	CodeScanningAlertWebhookEvent = types.NewWebhookEventRef[CodeScanningAlertWebhook]("code_scanning_alert")
+	SecretScanningAlertWebhookEvent = types.NewWebhookEventRef[SecretScanningAlertWebhook]("secret_scanning_alert")
 )
 
 const Slug = "github_app"
