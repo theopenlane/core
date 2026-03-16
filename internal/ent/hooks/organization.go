@@ -21,8 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/entitlements/reconciler"
@@ -366,10 +366,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		}
 	}
 
-	// create default SLA definitions
 	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating default SLA definitions")
-
 		return ctx, err
 	}
 
@@ -385,11 +383,11 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 }
 
 // defaultSLADefinitions maps severity levels to their default SLA days
-var defaultSLADefinitions = map[string]int{
-	"CRITICAL": 7,
-	"HIGH":     14,
-	"MEDIUM":   30,
-	"LOW":      60,
+var defaultSLADefinitions = map[enums.SecurityLevel]int{
+	enums.SecurityLevelLow:      60,
+	enums.SecurityLevelMedium:   30,
+	enums.SecurityLevelHigh:     14,
+	enums.SecurityLevelCritical: 7,
 }
 
 // createDefaultSLADefinitions creates the default SLA definitions for a new org
@@ -410,7 +408,7 @@ func createDefaultSLADefinitions(ctx context.Context, orgID string, client *gene
 	for level, days := range defaultSLADefinitions {
 		builders = append(builders, client.SLADefinition.Create().
 			SetOwnerID(orgID).
-			SetSLADefinitionSeverityLevelName(level).
+			SetSecurityLevel(level).
 			SetSLADays(days),
 		)
 	}
