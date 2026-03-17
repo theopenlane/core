@@ -136,8 +136,8 @@ type CustomEnumFilter struct {
 	SchemaFieldName string
 	// AllowGlobal indicates the enum lookup should use global enums with an empty object type
 	AllowGlobal bool
-	// Autocreate will automatically create the enum if it doesn't exist
-	Autocreate bool
+	// DisableAutoCreate disables auto-creation of the enum if it doesn't exist
+	DisableAutoCreate bool
 }
 
 // HookCustomEnums ensures that a custom enum value exists for the given object type and field
@@ -191,8 +191,7 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			if err != nil {
 				switch generated.IsNotFound(err) {
 				case true:
-					// if the enum does not exist and autocreate is not set to true, return a custom error
-					if !in.Autocreate {
+					if in.DisableAutoCreate {
 						return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
 					}
 
