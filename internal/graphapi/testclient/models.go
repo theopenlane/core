@@ -30076,9 +30076,9 @@ type SLADefinition struct {
 	// remediation service level agreement in days for the severity level
 	SLADays int64 `json:"slaDays"`
 	// incoming source severity
-	SecurityLevel              *enums.SecurityLevel `json:"securityLevel,omitempty"`
-	Owner                      *Organization        `json:"owner,omitempty"`
-	SLADefinitionSeverityLevel *CustomTypeEnum      `json:"slaDefinitionSeverityLevel,omitempty"`
+	SecurityLevel              enums.SecurityLevel `json:"securityLevel"`
+	Owner                      *Organization       `json:"owner,omitempty"`
+	SLADefinitionSeverityLevel *CustomTypeEnum     `json:"slaDefinitionSeverityLevel,omitempty"`
 }
 
 func (SLADefinition) IsNode() {}
@@ -30290,12 +30290,10 @@ type SLADefinitionWhereInput struct {
 	SLADaysLt    *int64  `json:"slaDaysLT,omitempty"`
 	SLADaysLte   *int64  `json:"slaDaysLTE,omitempty"`
 	// security_level field predicates
-	SecurityLevel       *enums.SecurityLevel  `json:"securityLevel,omitempty"`
-	SecurityLevelNeq    *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`
-	SecurityLevelIn     []enums.SecurityLevel `json:"securityLevelIn,omitempty"`
-	SecurityLevelNotIn  []enums.SecurityLevel `json:"securityLevelNotIn,omitempty"`
-	SecurityLevelIsNil  *bool                 `json:"securityLevelIsNil,omitempty"`
-	SecurityLevelNotNil *bool                 `json:"securityLevelNotNil,omitempty"`
+	SecurityLevel      *enums.SecurityLevel  `json:"securityLevel,omitempty"`
+	SecurityLevelNeq   *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`
+	SecurityLevelIn    []enums.SecurityLevel `json:"securityLevelIn,omitempty"`
+	SecurityLevelNotIn []enums.SecurityLevel `json:"securityLevelNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

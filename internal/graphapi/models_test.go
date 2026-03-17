@@ -429,6 +429,13 @@ type AssetBuilder struct {
 	Name string
 }
 
+type SLADefinitionBuilder struct {
+	client *client
+
+	// Fields
+	SLADays int
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -2586,4 +2593,20 @@ func (a *AssetBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Asset {
 		SaveX(ctx)
 
 	return asset
+}
+
+// MustNew SLADefinition builder is used to create, without authz checks, SLA definitions in the database
+func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.SLADefinition {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if s.SLADays == 0 {
+		s.SLADays = 30
+	}
+
+	sla := s.client.db.SLADefinition.Create().
+		SetSLADays(s.SLADays).
+		SetSecurityLevel(enums.SecurityLevelLow).
+		SaveX(ctx)
+
+	return sla
 }

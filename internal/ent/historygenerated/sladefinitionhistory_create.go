@@ -292,6 +292,10 @@ func (_c *SLADefinitionHistoryCreate) defaults() error {
 		v := sladefinitionhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		v := sladefinitionhistory.DefaultSecurityLevel
+		_c.mutation.SetSecurityLevel(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if sladefinitionhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized sladefinitionhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -320,6 +324,9 @@ func (_c *SLADefinitionHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.SLADays(); !ok {
 		return &ValidationError{Name: "sla_days", err: errors.New(`historygenerated: missing required field "SLADefinitionHistory.sla_days"`)}
+	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		return &ValidationError{Name: "security_level", err: errors.New(`historygenerated: missing required field "SLADefinitionHistory.security_level"`)}
 	}
 	if v, ok := _c.mutation.SecurityLevel(); ok {
 		if err := sladefinitionhistory.SecurityLevelValidator(v); err != nil {

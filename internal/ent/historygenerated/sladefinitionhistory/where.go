@@ -1013,16 +1013,6 @@ func SecurityLevelNotIn(vs ...enums.SecurityLevel) predicate.SLADefinitionHistor
 	return predicate.SLADefinitionHistory(sql.FieldNotIn(FieldSecurityLevel, v...))
 }
 
-// SecurityLevelIsNil applies the IsNil predicate on the "security_level" field.
-func SecurityLevelIsNil() predicate.SLADefinitionHistory {
-	return predicate.SLADefinitionHistory(sql.FieldIsNull(FieldSecurityLevel))
-}
-
-// SecurityLevelNotNil applies the NotNil predicate on the "security_level" field.
-func SecurityLevelNotNil() predicate.SLADefinitionHistory {
-	return predicate.SLADefinitionHistory(sql.FieldNotNull(FieldSecurityLevel))
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.SLADefinitionHistory) predicate.SLADefinitionHistory {
 	return predicate.SLADefinitionHistory(sql.AndPredicates(predicates...))

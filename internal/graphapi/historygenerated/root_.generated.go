@@ -50756,7 +50756,7 @@ type SLADefinitionHistory implements Node {
   """
   incoming source severity
   """
-  securityLevel: SLADefinitionHistorySecurityLevel
+  securityLevel: SLADefinitionHistorySecurityLevel!
 }
 """
 A connection to a list of items.
@@ -51036,8 +51036,6 @@ input SLADefinitionHistoryWhereInput {
   securityLevelNEQ: SLADefinitionHistorySecurityLevel
   securityLevelIn: [SLADefinitionHistorySecurityLevel!]
   securityLevelNotIn: [SLADefinitionHistorySecurityLevel!]
-  securityLevelIsNil: Boolean
-  securityLevelNotNil: Boolean
 }
 type ScanHistory implements Node {
   id: ID!

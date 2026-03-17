@@ -54,7 +54,7 @@ func (SLADefinition) Fields() []ent.Field {
 		field.Enum("security_level").
 			Comment("incoming source severity").
 			GoType(enums.SecurityLevel("")).
-			Optional().
+			Default(enums.SecurityLevelNone.String()).
 			Annotations(
 				entgql.OrderField("security_level"),
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),

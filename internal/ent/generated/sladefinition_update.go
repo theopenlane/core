@@ -220,12 +220,6 @@ func (_u *SLADefinitionUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) 
 	return _u
 }
 
-// ClearSecurityLevel clears the value of the "security_level" field.
-func (_u *SLADefinitionUpdate) ClearSecurityLevel() *SLADefinitionUpdate {
-	_u.mutation.ClearSecurityLevel()
-	return _u
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *SLADefinitionUpdate) SetOwner(v *Organization) *SLADefinitionUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -388,9 +382,6 @@ func (_u *SLADefinitionUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(sladefinition.FieldSecurityLevel, field.TypeEnum, value)
-	}
-	if _u.mutation.SecurityLevelCleared() {
-		_spec.ClearField(sladefinition.FieldSecurityLevel, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -663,12 +654,6 @@ func (_u *SLADefinitionUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLeve
 	return _u
 }
 
-// ClearSecurityLevel clears the value of the "security_level" field.
-func (_u *SLADefinitionUpdateOne) ClearSecurityLevel() *SLADefinitionUpdateOne {
-	_u.mutation.ClearSecurityLevel()
-	return _u
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *SLADefinitionUpdateOne) SetOwner(v *Organization) *SLADefinitionUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -861,9 +846,6 @@ func (_u *SLADefinitionUpdateOne) sqlSave(ctx context.Context) (_node *SLADefini
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(sladefinition.FieldSecurityLevel, field.TypeEnum, value)
-	}
-	if _u.mutation.SecurityLevelCleared() {
-		_spec.ClearField(sladefinition.FieldSecurityLevel, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

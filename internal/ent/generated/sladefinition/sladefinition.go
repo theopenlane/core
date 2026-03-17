@@ -121,6 +121,8 @@ var (
 	DefaultID func() string
 )
 
+const DefaultSecurityLevel enums.SecurityLevel = "NONE"
+
 // SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
 func SecurityLevelValidator(sl enums.SecurityLevel) error {
 	switch sl.String() {

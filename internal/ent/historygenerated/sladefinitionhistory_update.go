@@ -220,12 +220,6 @@ func (_u *SLADefinitionHistoryUpdate) SetNillableSecurityLevel(v *enums.Security
 	return _u
 }
 
-// ClearSecurityLevel clears the value of the "security_level" field.
-func (_u *SLADefinitionHistoryUpdate) ClearSecurityLevel() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearSecurityLevel()
-	return _u
-}
-
 // Mutation returns the SLADefinitionHistoryMutation object of the builder.
 func (_u *SLADefinitionHistoryUpdate) Mutation() *SLADefinitionHistoryMutation {
 	return _u.mutation
@@ -371,9 +365,6 @@ func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
-	}
-	if _u.mutation.SecurityLevelCleared() {
-		_spec.ClearField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.SLADefinitionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -584,12 +575,6 @@ func (_u *SLADefinitionHistoryUpdateOne) SetNillableSecurityLevel(v *enums.Secur
 	return _u
 }
 
-// ClearSecurityLevel clears the value of the "security_level" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearSecurityLevel() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearSecurityLevel()
-	return _u
-}
-
 // Mutation returns the SLADefinitionHistoryMutation object of the builder.
 func (_u *SLADefinitionHistoryUpdateOne) Mutation() *SLADefinitionHistoryMutation {
 	return _u.mutation
@@ -765,9 +750,6 @@ func (_u *SLADefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SL
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
-	}
-	if _u.mutation.SecurityLevelCleared() {
-		_spec.ClearField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.SLADefinitionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

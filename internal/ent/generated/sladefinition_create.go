@@ -260,6 +260,10 @@ func (_c *SLADefinitionCreate) defaults() error {
 		v := sladefinition.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		v := sladefinition.DefaultSecurityLevel
+		_c.mutation.SetSecurityLevel(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if sladefinition.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized sladefinition.DefaultID (forgotten import generated/runtime?)")
@@ -292,6 +296,9 @@ func (_c *SLADefinitionCreate) check() error {
 		if err := sladefinition.SLADaysValidator(v); err != nil {
 			return &ValidationError{Name: "sla_days", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.sla_days": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		return &ValidationError{Name: "security_level", err: errors.New(`generated: missing required field "SLADefinition.security_level"`)}
 	}
 	if v, ok := _c.mutation.SecurityLevel(); ok {
 		if err := sladefinition.SecurityLevelValidator(v); err != nil {

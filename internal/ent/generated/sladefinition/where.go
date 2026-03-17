@@ -868,16 +868,6 @@ func SecurityLevelNotIn(vs ...enums.SecurityLevel) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.FieldNotIn(FieldSecurityLevel, v...))
 }
 
-// SecurityLevelIsNil applies the IsNil predicate on the "security_level" field.
-func SecurityLevelIsNil() predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldIsNull(FieldSecurityLevel))
-}
-
-// SecurityLevelNotNil applies the NotNil predicate on the "security_level" field.
-func SecurityLevelNotNil() predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNotNull(FieldSecurityLevel))
-}
-
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.SLADefinition {
 	return predicate.SLADefinition(func(s *sql.Selector) {

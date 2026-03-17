@@ -111666,7 +111666,7 @@ type SLADefinition implements Node {
   """
   incoming source severity
   """
-  securityLevel: SLADefinitionSecurityLevel
+  securityLevel: SLADefinitionSecurityLevel!
   owner: Organization
   slaDefinitionSeverityLevel: CustomTypeEnum
 }
@@ -111903,8 +111903,6 @@ input SLADefinitionWhereInput {
   securityLevelNEQ: SLADefinitionSecurityLevel
   securityLevelIn: [SLADefinitionSecurityLevel!]
   securityLevelNotIn: [SLADefinitionSecurityLevel!]
-  securityLevelIsNil: Boolean
-  securityLevelNotNil: Boolean
   """
   owner edge predicates
   """
