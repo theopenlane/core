@@ -8,6 +8,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
@@ -79,8 +80,7 @@ func TestQuerySLADefinition(t *testing.T) {
 }
 
 func TestQuerySLADefinitions(t *testing.T) {
-	sla1 := (&SLADefinitionBuilder{client: suite.client, SLADays: 7}).MustNew(testUser1.UserCtx, t)
-	sla2 := (&SLADefinitionBuilder{client: suite.client, SLADays: 14}).MustNew(testUser1.UserCtx, t)
+	sla1 := (&SLADefinitionBuilder{client: suite.client, SLADays: 7, SecurityLevel: enums.SecurityLevelNone}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -92,25 +92,25 @@ func TestQuerySLADefinitions(t *testing.T) {
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: 6,
+			expectedResults: 5,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 6,
+			expectedResults: 5,
 		},
 		{
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 6,
+			expectedResults: 5,
 		},
 		{
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: 6,
+			expectedResults: 5,
 		},
 		{
 			name:            "another user, no results from this org",
@@ -130,7 +130,7 @@ func TestQuerySLADefinitions(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, IDs: []string{sla1.ID, sla2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SLADefinitionDeleteOne]{client: suite.client.db.SLADefinition, ID: sla1.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateSLADefinition(t *testing.T) {
@@ -264,9 +264,9 @@ func TestMutationUpdateSLADefinition(t *testing.T) {
 }
 
 func TestMutationDeleteSLADefinition(t *testing.T) {
-	sla1 := (&SLADefinitionBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	sla2 := (&SLADefinitionBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	sla3 := (&SLADefinitionBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	sla1 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelLow}).MustNew(testUser1.UserCtx, t)
+	sla2 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelMedium}).MustNew(testUser1.UserCtx, t)
+	sla3 := (&SLADefinitionBuilder{client: suite.client, SecurityLevel: enums.SecurityLevelHigh}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string

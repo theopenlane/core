@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -337,10 +338,10 @@ type NoteBuilder struct {
 	client *client
 
 	// Fields
-	Text           string
-	TaskID         string
-	FileIDs        []string
-	TrustCenterID  string
+	Text          string
+	TaskID        string
+	FileIDs       []string
+	TrustCenterID string
 }
 
 type ControlImplementationBuilder struct {
@@ -433,7 +434,8 @@ type SLADefinitionBuilder struct {
 	client *client
 
 	// Fields
-	SLADays int
+	SLADays       int
+	SecurityLevel enums.SecurityLevel
 }
 
 // Faker structs with random injected data
@@ -2595,7 +2597,7 @@ func (a *AssetBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Asset {
 	return asset
 }
 
-// MustNew SLADefinition builder is used to create, without authz checks, SLA definitions in the database
+// MustNew SLADefinition builder is used to create, without authz checks, SLA definitions in the database.
 func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.SLADefinition {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -2603,10 +2605,26 @@ func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.S
 		s.SLADays = 30
 	}
 
-	sla := s.client.db.SLADefinition.Create().
-		SetSLADays(s.SLADays).
-		SetSecurityLevel(enums.SecurityLevelLow).
-		SaveX(ctx)
+	if s.SecurityLevel == "" {
+		s.SecurityLevel = enums.SecurityLevelNone
+	}
 
-	return sla
+	sla, err := s.client.db.SLADefinition.Create().
+		SetSLADays(s.SLADays).
+		SetSecurityLevel(s.SecurityLevel).
+		Save(ctx)
+	if err == nil {
+		return sla
+	}
+
+	existing, err := s.client.db.SLADefinition.Query().
+		Where(
+			sladefinition.SecurityLevelEQ(s.SecurityLevel),
+		).
+		Only(ctx)
+	if err != nil {
+		t.Fatalf("failed to find existing SLA definition: %v", err)
+	}
+
+	return existing
 }
