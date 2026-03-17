@@ -53,7 +53,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call Microsoft Graph /organization to verify tenant access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   EntraClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -61,7 +60,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Collect basic tenant metadata via Microsoft Graph",
 					Topic:       DirectoryInspectOperation.Topic(Slug),
 					ClientRef:   EntraClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      DirectoryInspect{}.Handle(Client{}),
 				},
 			},

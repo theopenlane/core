@@ -41,7 +41,6 @@ func Builder() definition.Builder {
 					Description: "Call Okta user API to verify API token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   OktaClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -49,7 +48,6 @@ func Builder() definition.Builder {
 					Description: "Collect sign-on policy metadata for posture analysis",
 					Topic:       PoliciesCollectOperation.Topic(Slug),
 					ClientRef:   OktaClient.ID(),
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      PoliciesCollect{}.Handle(Client{}),
 				},
 			},

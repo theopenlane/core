@@ -3908,9 +3908,9 @@ var (
 				},
 			},
 			{
-				Name:    "integrationwebhook_owner_id_provider_external_event_id",
+				Name:    "integrationwebhook_integration_id_name_external_event_id",
 				Unique:  true,
-				Columns: []*schema.Column{IntegrationWebhooksColumns[20], IntegrationWebhooksColumns[7], IntegrationWebhooksColumns[17]},
+				Columns: []*schema.Column{IntegrationWebhooksColumns[19], IntegrationWebhooksColumns[8], IntegrationWebhooksColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND external_event_id IS NOT NULL",
 				},

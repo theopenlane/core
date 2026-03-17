@@ -31,6 +31,42 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 		return registry.ErrDefinitionNotFound
 	}
 
+	db := do.MustInvoke[*ent.Client](r.injector)
+	existing, err := db.IntegrationWebhook.Query().
+		Where(
+			integrationwebhook.IntegrationIDEQ(installation.ID),
+			integrationwebhook.ExternalEventIDIsNil(),
+		).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	currentWebhooks := make(map[string]struct{}, len(def.Webhooks))
+	for _, webhook := range def.Webhooks {
+		currentWebhooks[webhook.Name] = struct{}{}
+	}
+
+	staleIDs := make([]string, 0, len(existing))
+	for _, webhook := range existing {
+		if webhook.Provider != installation.DefinitionSlug {
+			staleIDs = append(staleIDs, webhook.ID)
+			continue
+		}
+
+		if _, ok := currentWebhooks[webhook.Name]; !ok {
+			staleIDs = append(staleIDs, webhook.ID)
+		}
+	}
+
+	if len(staleIDs) > 0 {
+		if _, err := db.IntegrationWebhook.Delete().
+			Where(integrationwebhook.IDIn(staleIDs...)).
+			Exec(ctx); err != nil {
+			return err
+		}
+	}
+
 	for _, webhook := range def.Webhooks {
 		if _, err := r.ensureWebhook(ctx, installation, webhook); err != nil {
 			return err

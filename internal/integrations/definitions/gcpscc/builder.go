@@ -45,7 +45,6 @@ func Builder(_ Config) definition.Builder {
 					Description: "Verify GCP SCC access by listing findings with a minimal query",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SCCClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -54,7 +53,6 @@ func Builder(_ Config) definition.Builder {
 					Topic:        FindingsCollectOperation.Topic(Slug),
 					ClientRef:    SCCClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[FindingsConfig](),
-					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
@@ -68,7 +66,6 @@ func Builder(_ Config) definition.Builder {
 					Description: "Scan GCP Security Command Center source and notification settings",
 					Topic:       SettingsScanOperation.Topic(Slug),
 					ClientRef:   SCCClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      SettingsScan{}.Handle(Client{}),
 				},
 			},

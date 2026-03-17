@@ -61,7 +61,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call auth.test to ensure the Slack token is valid and scoped correctly",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SlackClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -69,7 +68,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Collect workspace metadata via team.info for posture analysis",
 					Topic:       TeamInspectOperation.Topic(Slug),
 					ClientRef:   SlackClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      TeamInspect{}.Handle(Client{}),
 				},
 				{
@@ -78,7 +76,7 @@ func Builder(cfg Config) definition.Builder {
 					Topic:        ChannelsListOperation.Topic(Slug),
 					ClientRef:    SlackClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[ChannelsListOperationInput](),
-					Policy:       types.ExecutionPolicy{Idempotent: true, Inline: true},
+					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       ChannelsList{}.Handle(Client{}),
 				},
 				{

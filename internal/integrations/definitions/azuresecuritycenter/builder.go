@@ -41,7 +41,6 @@ func Builder() definition.Builder {
 					Description: "Call Azure Security Center pricings API to verify access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SecurityCenterClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -49,7 +48,6 @@ func Builder() definition.Builder {
 					Description: "Collect plan and pricing metadata for Microsoft Defender for Cloud",
 					Topic:       SecurityPricingOverviewOperation.Topic(Slug),
 					ClientRef:   SecurityCenterClient.ID(),
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      SecurityPricingOverview{}.Handle(Client{}),
 				},
 			},

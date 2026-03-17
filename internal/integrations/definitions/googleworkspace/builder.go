@@ -62,7 +62,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call Google Admin SDK users.list to verify the workspace token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   WorkspaceClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -71,7 +70,6 @@ func Builder(cfg Config) definition.Builder {
 					Topic:        DirectorySyncOperation.Topic(Slug),
 					ClientRef:    WorkspaceClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[DirectorySyncConfig](),
-					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

@@ -42,7 +42,6 @@ func Builder() definition.Builder {
 					Description: "Validate Security Hub access via DescribeHub; confirms the assumed role can reach the hub in the configured home region",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SecurityHubClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -51,7 +50,6 @@ func Builder() definition.Builder {
 					Topic:        VulnerabilitiesCollectOperation.Topic(Slug),
 					ClientRef:    SecurityHubClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[FindingsConfig](),
-					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,

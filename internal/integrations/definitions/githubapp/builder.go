@@ -48,7 +48,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Validate the GitHub App installation is reachable",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   GitHubClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -56,7 +55,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Collect repository inventory from the installation",
 					Topic:       RepositorySyncOperation.Topic(Slug),
 					ClientRef:   GitHubClient.ID(),
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      RepositorySync{}.Handle(Client{}),
 				},
 				{
@@ -65,7 +63,6 @@ func Builder(cfg Config) definition.Builder {
 					Topic:        VulnerabilityCollectOperation.Topic(Slug),
 					ClientRef:    GitHubClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[VulnerabilityCollectConfig](),
-					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,

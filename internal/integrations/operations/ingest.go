@@ -54,7 +54,7 @@ type mappedIngestRecord struct {
 	Payload json.RawMessage
 }
 
-// ProcessIngestAsync decodes one operation response into payload sets and emits them via Gala
+// ProcessIngestAsync decodes one operation response into payload sets and routes them through the ingest pipeline
 func ProcessIngestAsync(ctx context.Context, ic IngestContext, operation types.OperationRegistration, response json.RawMessage, options IngestOptions) error {
 	var payloadSets []types.IngestPayloadSet
 	if err := json.Unmarshal(response, &payloadSets); err != nil {
@@ -64,13 +64,17 @@ func ProcessIngestAsync(ctx context.Context, ic IngestContext, operation types.O
 	return EmitPayloadSets(ctx, ic, operation.Name, operation.Ingest, payloadSets, options)
 }
 
-// EmitPayloadSets transforms one batch of mapped payload sets and emits typed second-stage Gala ingest requests
+// EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
 func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
+	if needsDirectorySyncRun(contracts) {
+		// Directory sync runs must finalize in the same process that creates them.
+		return ProcessPayloadSets(ctx, ic, contracts, payloadSets, options)
+	}
+
 	if ic.Runtime == nil {
 		return ErrGalaRequired
 	}
 
-	// Second-stage ingest is asynchronous; do not finalize directory sync runs before listeners finish.
 	options.SkipDirectorySyncRunFinalization = true
 
 	return processPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {

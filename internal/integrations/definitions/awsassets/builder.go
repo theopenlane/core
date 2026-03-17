@@ -44,7 +44,6 @@ func Builder() definition.Builder {
 					Description: "Validate AWS credentials and installation scope",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   AWSAssetsClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -52,7 +51,6 @@ func Builder() definition.Builder {
 					Description: "Collect asset inventory from AWS",
 					Topic:       AssetCollectOperation.Topic(Slug),
 					ClientRef:   AWSAssetsClient.ID(),
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      AssetCollect{}.Handle(Client{}),
 				},
 			},

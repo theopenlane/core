@@ -141,7 +141,7 @@ func (IntegrationWebhook) Fields() []ent.Field {
 // Indexes of the IntegrationWebhook.
 func (IntegrationWebhook) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields(ownerFieldName, "provider", "external_event_id").
+		index.Fields("integration_id", "name", "external_event_id").
 			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL AND external_event_id IS NOT NULL")),
 	}

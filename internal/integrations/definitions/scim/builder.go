@@ -37,14 +37,12 @@ func Builder() definition.Builder {
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate SCIM configuration",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Synchronize directory state through SCIM",
 					Topic:       DirectorySyncOperation.Topic(Slug),
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

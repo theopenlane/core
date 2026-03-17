@@ -53,7 +53,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call Graph /me to verify Teams access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   TeamsClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      HealthCheck{}.Handle(Client{}),
 				},
 				{
@@ -61,7 +60,6 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Collect a sample of joined teams for the user context",
 					Topic:       TeamsSampleOperation.Topic(Slug),
 					ClientRef:   TeamsClient.ID(),
-					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      TeamsSample{}.Handle(Client{}),
 				},
 				{

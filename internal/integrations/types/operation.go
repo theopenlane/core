@@ -8,12 +8,8 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// ExecutionPolicy controls retry and idempotency behavior for one operation
+// ExecutionPolicy controls synchronous execution behavior for one operation
 type ExecutionPolicy struct {
-	// MaxRetries is the maximum number of retry attempts for a failed operation
-	MaxRetries uint `json:"maxRetries,omitempty"`
-	// Idempotent indicates the operation can be safely retried without side effects
-	Idempotent bool `json:"idempotent,omitempty"`
 	// Inline indicates the operation should execute synchronously for direct API callers
 	Inline bool `json:"inline,omitempty"`
 }
@@ -55,7 +51,7 @@ type OperationRegistration struct {
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
 	// OutputSchema is the JSON schema for operation output
 	OutputSchema json.RawMessage `json:"outputSchema,omitempty"`
-	// Policy controls retry and idempotency behavior for the operation
+	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy,omitempty"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
