@@ -84,6 +84,10 @@ func integrationHTTPStatus(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
 		return http.StatusBadRequest
+	case errors.Is(err, integrationsruntime.ErrDefinitionNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, integrationsruntime.ErrOperationNotFound):
+		return http.StatusNotFound
 	case errors.Is(err, engine.ErrInstallationNotFound):
 		return http.StatusNotFound
 	case errors.Is(err, engine.ErrInstallationIDRequired):

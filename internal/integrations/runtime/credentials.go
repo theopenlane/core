@@ -34,6 +34,10 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 
 	installation, err := db.Integration.Get(systemCtx, installationID)
 	if err != nil {
+		if ent.IsNotFound(err) {
+			return ErrInstallationNotFound
+		}
+
 		return err
 	}
 

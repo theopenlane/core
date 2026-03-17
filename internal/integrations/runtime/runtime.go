@@ -63,17 +63,25 @@ func (r *Runtime) Definition(id string) (types.Definition, bool) {
 func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) (operations.DispatchResult, error) {
 	result, err := operations.Dispatch(ctx, do.MustInvoke[*registry.Registry](r.injector), do.MustInvoke[*ent.Client](r.injector), do.MustInvoke[*gala.Gala](r.injector), req)
 	if err != nil {
-		switch {
-		case errors.Is(err, registry.ErrDefinitionNotFound):
-			return operations.DispatchResult{}, ErrDefinitionNotFound
-		case errors.Is(err, registry.ErrOperationNotFound):
-			return operations.DispatchResult{}, operations.ErrDispatchInputInvalid
-		case errors.Is(err, operations.ErrDispatchInputInvalid):
-			return operations.DispatchResult{}, operations.ErrDispatchInputInvalid
-		}
+		return operations.DispatchResult{}, normalizeDispatchError(err)
 	}
 
 	return result, err
+}
+
+func normalizeDispatchError(err error) error {
+	switch {
+	case err == nil:
+		return nil
+	case errors.Is(err, registry.ErrDefinitionNotFound):
+		return ErrDefinitionNotFound
+	case errors.Is(err, registry.ErrOperationNotFound):
+		return ErrOperationNotFound
+	case errors.Is(err, operations.ErrDispatchInputInvalid):
+		return operations.ErrDispatchInputInvalid
+	default:
+		return err
+	}
 }
 
 // NewForTesting constructs a Runtime backed only by the supplied registry.
@@ -127,26 +135,8 @@ func New(config Config) (*Runtime, error) {
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(
 			rt.Definition,
-			rt.PersistAuthCompletion,
-			func(ctx context.Context, installationID string) (keymaker.InstallationRecord, error) {
-				record, err := rt.ResolveInstallation(ctx, "", installationID, "")
-				if err != nil {
-					switch err {
-					case ErrInstallationIDRequired:
-						return keymaker.InstallationRecord{}, keymaker.ErrInstallationIDRequired
-					case ErrInstallationNotFound:
-						return keymaker.InstallationRecord{}, keymaker.ErrInstallationNotFound
-					default:
-						return keymaker.InstallationRecord{}, err
-					}
-				}
-
-				return keymaker.InstallationRecord{
-					ID:           record.ID,
-					OwnerID:      record.OwnerID,
-					DefinitionID: record.DefinitionID,
-				}, nil
-			},
+			rt.persistKeymakerAuthCompletion,
+			rt.lookupKeymakerInstallation,
 			do.MustInvoke[keymaker.AuthStateStore](i),
 			0,
 		), nil
