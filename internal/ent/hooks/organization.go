@@ -382,12 +382,19 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	return ctx, nil
 }
 
+const (
+	defaultSLADaysLow      = 60
+	defaultSLADaysMedium   = 30
+	defaultSLADaysHigh     = 14
+	defaultSLADaysCritical = 7
+)
+
 // defaultSLADefinitions maps severity levels to their default SLA days
 var defaultSLADefinitions = map[enums.SecurityLevel]int{
-	enums.SecurityLevelLow:      60,
-	enums.SecurityLevelMedium:   30,
-	enums.SecurityLevelHigh:     14,
-	enums.SecurityLevelCritical: 7,
+	enums.SecurityLevelLow:      defaultSLADaysLow,
+	enums.SecurityLevelMedium:   defaultSLADaysMedium,
+	enums.SecurityLevelHigh:     defaultSLADaysHigh,
+	enums.SecurityLevelCritical: defaultSLADaysCritical,
 }
 
 // createDefaultSLADefinitions creates the default SLA definitions for a new org
