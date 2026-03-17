@@ -124,11 +124,11 @@ func (c CustomEnumMixin) Hooks() []ent.Hook {
 	}
 
 	in := hooks.CustomEnumFilter{
-		ObjectType:      objectType,
-		Field:           c.fieldName,
-		EdgeFieldName:   c.getEnumEdgeName() + "_id",
-		SchemaFieldName: c.getEnumFieldName(),
-		AllowGlobal:     c.GlobalEnum,
+		ObjectType:        objectType,
+		Field:             c.fieldName,
+		EdgeFieldName:     c.getEnumEdgeName() + "_id",
+		SchemaFieldName:   c.getEnumFieldName(),
+		AllowGlobal:       c.GlobalEnum,
 		DisableAutoCreate: c.DisableAutoCreate,
 	}
 	return []ent.Hook{
