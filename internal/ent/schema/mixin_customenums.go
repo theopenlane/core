@@ -68,7 +68,7 @@ func withGlobalEnum() customEnumOptions {
 }
 
 // withNoEnumAutoCreation disables auto-creation of the enum if it doesn't exist
-func withNoEnumAutoCreation() customEnumOptions {
+func withNoEnumAutoCreation() customEnumOptions { //nolint:unused
 	return func(c *CustomEnumMixin) {
 		c.DisableAutoCreate = true
 	}
