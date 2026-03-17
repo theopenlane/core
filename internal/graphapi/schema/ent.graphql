@@ -14674,6 +14674,7 @@ input CreateTrustCenterSettingInput {
   editorIDs: [ID!]
   logoFileID: ID
   faviconFileID: ID
+  heroImageFileID: ID
 }
 """
 CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -66547,6 +66548,10 @@ type TrustCenterSetting implements Node {
   """
   faviconLocalFileID: ID
   """
+  Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+  """
+  heroImageLocalFileID: ID
+  """
   Theme mode for the trust center
   """
   themeMode: TrustCenterSettingTrustCenterThemeMode
@@ -66666,6 +66671,7 @@ type TrustCenterSetting implements Node {
   ): GroupConnection!
   logoFile: File
   faviconFile: File
+  heroImageFile: File
 }
 """
 A connection to a list of items.
@@ -66977,6 +66983,24 @@ input TrustCenterSettingWhereInput {
   faviconLocalFileIDEqualFold: ID
   faviconLocalFileIDContainsFold: ID
   """
+  hero_image_local_file_id field predicates
+  """
+  heroImageLocalFileID: ID
+  heroImageLocalFileIDNEQ: ID
+  heroImageLocalFileIDIn: [ID!]
+  heroImageLocalFileIDNotIn: [ID!]
+  heroImageLocalFileIDGT: ID
+  heroImageLocalFileIDGTE: ID
+  heroImageLocalFileIDLT: ID
+  heroImageLocalFileIDLTE: ID
+  heroImageLocalFileIDContains: ID
+  heroImageLocalFileIDHasPrefix: ID
+  heroImageLocalFileIDHasSuffix: ID
+  heroImageLocalFileIDIsNil: Boolean
+  heroImageLocalFileIDNotNil: Boolean
+  heroImageLocalFileIDEqualFold: ID
+  heroImageLocalFileIDContainsFold: ID
+  """
   theme_mode field predicates
   """
   themeMode: TrustCenterSettingTrustCenterThemeMode
@@ -67208,6 +67232,11 @@ input TrustCenterSettingWhereInput {
   """
   hasFaviconFile: Boolean
   hasFaviconFileWith: [FileWhereInput!]
+  """
+  hero_image_file edge predicates
+  """
+  hasHeroImageFile: Boolean
+  hasHeroImageFileWith: [FileWhereInput!]
 }
 type TrustCenterSubprocessor implements Node {
   id: ID!
@@ -75461,6 +75490,8 @@ input UpdateTrustCenterSettingInput {
   clearLogoFile: Boolean
   faviconFileID: ID
   clearFaviconFile: Boolean
+  heroImageFileID: ID
+  clearHeroImageFile: Boolean
 }
 """
 UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.

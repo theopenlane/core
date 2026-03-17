@@ -23057,6 +23057,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
 	}
 
+	if heroImageLocalFileID, exists := m.HeroImageLocalFileID(); exists {
+		create = create.SetNillableHeroImageLocalFileID(&heroImageLocalFileID)
+	}
+
 	if themeMode, exists := m.ThemeMode(); exists {
 		create = create.SetThemeMode(themeMode)
 	}
@@ -23234,6 +23238,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID)
 		}
 
+		if heroImageLocalFileID, exists := m.HeroImageLocalFileID(); exists {
+			create = create.SetNillableHeroImageLocalFileID(&heroImageLocalFileID)
+		} else {
+			create = create.SetNillableHeroImageLocalFileID(trustcentersetting.HeroImageLocalFileID)
+		}
+
 		if themeMode, exists := m.ThemeMode(); exists {
 			create = create.SetThemeMode(themeMode)
 		} else {
@@ -23368,6 +23378,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).
 			SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL).
 			SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID).
+			SetNillableHeroImageLocalFileID(trustcentersetting.HeroImageLocalFileID).
 			SetThemeMode(trustcentersetting.ThemeMode).
 			SetPrimaryColor(trustcentersetting.PrimaryColor).
 			SetFont(trustcentersetting.Font).

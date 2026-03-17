@@ -114,6 +114,8 @@ var (
 	ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
 	// ErrTooManyFaviconFiles is returned when a user attempts to upload more than one favicon file
 	ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
+	// ErrTooManyHeroImageFiles is returned when a user attempts to upload more than one hero image file
+	ErrTooManyHeroImageFiles = errors.New("too many hero image files uploaded, only one is allowed")
 	// ErrMissingTrustCenterID is returned when a trust center id is required but not provided
 	ErrMissingTrustCenterID = errors.New("trust center id is required")
 	// ErrMissingFileID is returned when a file id is required but not provided

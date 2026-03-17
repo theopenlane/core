@@ -93,6 +93,13 @@ func (TrustCenterSetting) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
+		field.String("hero_image_local_file_id").
+			Comment("Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 		// Color/font settings
 		field.Enum("theme_mode").
 			Comment("Theme mode for the trust center").
@@ -198,6 +205,15 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 			name:       "favicon_file",
 			t:          File.Type,
 			field:      "favicon_local_file_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(File{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "hero_image_file",
+			t:          File.Type,
+			field:      "hero_image_local_file_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(File{}.Name()),
 			},

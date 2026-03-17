@@ -2869,6 +2869,7 @@ var (
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "theme_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"EASY", "ADVANCED"}, Default: "EASY"},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
 		{Name: "font", Type: field.TypeString, Nullable: true},

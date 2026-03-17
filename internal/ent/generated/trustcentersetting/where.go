@@ -143,6 +143,11 @@ func FaviconLocalFileID(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFaviconLocalFileID, v))
 }
 
+// HeroImageLocalFileID applies equality check predicate on the "hero_image_local_file_id" field. It's identical to HeroImageLocalFileIDEQ.
+func HeroImageLocalFileID(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldHeroImageLocalFileID, v))
+}
+
 // PrimaryColor applies equality check predicate on the "primary_color" field. It's identical to PrimaryColorEQ.
 func PrimaryColor(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldPrimaryColor, v))
@@ -1253,6 +1258,81 @@ func FaviconLocalFileIDContainsFold(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldFaviconLocalFileID, v))
 }
 
+// HeroImageLocalFileIDEQ applies the EQ predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDNEQ applies the NEQ predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDIn applies the In predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldHeroImageLocalFileID, vs...))
+}
+
+// HeroImageLocalFileIDNotIn applies the NotIn predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldHeroImageLocalFileID, vs...))
+}
+
+// HeroImageLocalFileIDGT applies the GT predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDGTE applies the GTE predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDLT applies the LT predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDLTE applies the LTE predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDContains applies the Contains predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDHasPrefix applies the HasPrefix predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDHasSuffix applies the HasSuffix predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDIsNil applies the IsNil predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldHeroImageLocalFileID))
+}
+
+// HeroImageLocalFileIDNotNil applies the NotNil predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldHeroImageLocalFileID))
+}
+
+// HeroImageLocalFileIDEqualFold applies the EqualFold predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDContainsFold applies the ContainsFold predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldHeroImageLocalFileID, v))
+}
+
 // ThemeModeEQ applies the EQ predicate on the "theme_mode" field.
 func ThemeModeEQ(v enums.TrustCenterThemeMode) predicate.TrustCenterSetting {
 	vc := v
@@ -2228,6 +2308,35 @@ func HasFaviconFile() predicate.TrustCenterSetting {
 func HasFaviconFileWith(preds ...predicate.File) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(func(s *sql.Selector) {
 		step := newFaviconFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasHeroImageFile applies the HasEdge predicate on the "hero_image_file" edge.
+func HasHeroImageFile() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, HeroImageFileTable, HeroImageFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHeroImageFileWith applies the HasEdge predicate on the "hero_image_file" edge with a given conditions (other predicates).
+func HasHeroImageFileWith(preds ...predicate.File) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := newHeroImageFileStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TrustCenterSetting

@@ -48,6 +48,7 @@ var validMimeTypes = map[string][]string{
 	"trustCenterDocFile":  {"application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 	"documentDataFile":    {"application/pdf"},
 	"templateFiles":       sharedMimeTypes,
+	"heroImageFile":       {"image/jpeg", "image/png", "image/webp"},
 	"watermarkFile":       {"image/jpeg", "image/png"},
 	"identityHolderFiles": sharedMimeTypes,
 	"entityFiles":         sharedMimeTypes,

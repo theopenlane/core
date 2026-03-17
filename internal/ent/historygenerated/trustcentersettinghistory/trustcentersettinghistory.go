@@ -56,6 +56,8 @@ const (
 	FieldFaviconRemoteURL = "favicon_remote_url"
 	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
 	FieldFaviconLocalFileID = "favicon_local_file_id"
+	// FieldHeroImageLocalFileID holds the string denoting the hero_image_local_file_id field in the database.
+	FieldHeroImageLocalFileID = "hero_image_local_file_id"
 	// FieldThemeMode holds the string denoting the theme_mode field in the database.
 	FieldThemeMode = "theme_mode"
 	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldLogoLocalFileID,
 	FieldFaviconRemoteURL,
 	FieldFaviconLocalFileID,
+	FieldHeroImageLocalFileID,
 	FieldThemeMode,
 	FieldPrimaryColor,
 	FieldFont,
@@ -290,6 +293,11 @@ func ByFaviconRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 // ByFaviconLocalFileID orders the results by the favicon_local_file_id field.
 func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
+}
+
+// ByHeroImageLocalFileID orders the results by the hero_image_local_file_id field.
+func ByHeroImageLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeroImageLocalFileID, opts...).ToFunc()
 }
 
 // ByThemeMode orders the results by the theme_mode field.
