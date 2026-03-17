@@ -5,12 +5,9 @@
 
 # identity_holder-1 is owned by openlane organization
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: identity_holder:identity_holder-1
-# org owner has editor access via organization
-- user: organization:openlane#owner
-  relation: editor
-  object: identity_holder:identity_holder-1
+
 # blocked user
 - user: user:ulid-blocked
   relation: blocked
@@ -20,7 +17,7 @@
 - user: platform:platform-1
   relation: parent
   object: identity_holder:identity_holder-2
-# org owner has editor access via organization
-- user: organization:openlane#owner
-  relation: editor
+
+- user: organization:openlane
+  relation: parent_context
   object: identity_holder:identity_holder-2

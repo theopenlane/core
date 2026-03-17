@@ -1,0 +1,48 @@
+module base
+
+# organization is the highest object access
+# objects can inherit access from the organization
+# or define their own specific access
+type organization
+  relations
+    # organization policies to restrict access
+    define access: [organization#member with email_domains_allowed]
+    # organization owners an super admins have full access to all objects within the organization
+    define full_access: super_admin or owner
+
+    # main permission sets based on roles
+    define can_delete: [service] or owner or can_delete from parent
+    define can_edit: [service] or admin or super_admin or owner or can_edit from parent
+
+    # view access of the organization
+    # includes all members, admins, and owners
+    # also allows users to be given time based access to the organization (e.g. support access)
+    define can_view: [service, user with time_based_grant] or (member and access) or (admin and access) or can_edit or can_view from parent
+
+    # additional fine-grained permissions
+    # allow owner and assigned users to view audit logs
+    define audit_log_viewer: ([user, service] or full_access or audit_log_viewer from parent) and can_view
+
+    define user_in_context: [user]
+
+    # Additional organization level permission definitions for api tokens to view and edit themselves
+    define can_view_service: [service]
+    define can_edit_service: [service]
+
+    # Additional permissions for api tokens to use search
+    define can_view_search: [service]
+
+    # allow members to invite other members
+    define can_invite_members: can_view or can_edit or can_invite_members from parent
+
+    # only allow users with edit access to the org to invite other admins
+    define can_invite_admins: can_edit or can_invite_admins from parent
+
+    # only allow super admins and owners to invite other super admins and owners
+    define can_invite_super_admins: full_access or can_invite_super_admins from parent
+
+    # auditors can be invited by org admins and above
+    define can_invite_auditors: can_edit or can_invite_auditors from parent
+
+    # parent inheritance
+    define parent: [organization]

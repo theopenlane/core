@@ -50,11 +50,12 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 			if err := createProgramMemberAdmin(ctx, objID, m); err != nil {
 				return err
 			}
-		} else {
-			if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
-				return err
-			}
 		}
+		// else {
+		// 	if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
+		// 		return err
+		// 	}
+		// }
 	}
 
 	org, orgExists := m.OwnerID()

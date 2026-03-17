@@ -48,11 +48,11 @@ func (OrgMembership) Fields() []ent.Field {
 	return []ent.Field{
 		field.Enum("role").
 			GoType(enums.Role("")).
-			Values(string(enums.RoleOwner)).
+			Values(enums.RoleOwner.String(), enums.RoleSuperAdmin.String(), enums.RoleAuditor.String()).
 			Annotations(
 				entgql.OrderField("ROLE"),
 			).
-			Default(string(enums.RoleMember)),
+			Default(enums.RoleMember.String()),
 		field.String("organization_id").Immutable(),
 		field.String("user_id").Immutable(),
 	}

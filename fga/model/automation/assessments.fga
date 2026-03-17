@@ -1,0 +1,126 @@
+module automation
+
+# templates (this encompasses things like questionnaires or jsonschemas) and permissions are granted
+# based on the the organization level access or parent objects such as trust centers.
+type template
+  relations
+    # base permissions - these should all be derived permissions except public tuples
+    define can_view: [user:*, service:*] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_template from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_template from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [trust_center]
+
+# document_data is the json data that is associated to a template
+# access to the document_data is inherited from the template
+type document_data
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent
+    define parent_viewer: can_view from parent
+    define parent: [template, user]
+
+# assessments are viewable by organization admin+, by can_edit_assessment, or inherited from the parent objects such as campaigns. They are not viewable by org members (view only) access by default
+type assessment
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor or owner or delegate
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context or audit_log_viewer from parent) and can_view
+
+    define owner: [user, group#member]
+    define delegate: [user, group#member]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent or can_edit_assessment from parent_context or can_edit from parent
+    define parent_viewer: can_view_assessment from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [campaign]
+
+# assessment_response permissions is exclusively based on the parents, it is not inherited from the organization to prevent
+# users that should not have access to responses from seeing all responses
+type assessment_response
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer or response_owner
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent) and can_view
+
+    # the user who filled out the assessment response - they can view their own response
+    define response_owner: [user]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent
+    define parent_viewer: can_view from parent
+    define parent: [assessment, campaign]
+
+# campaign, similar to assessments, are viewable by organization admin+, by can_edit_campaign or inherited from the parent objects such as campaigns. They are not viewable by org members (view only) access by default
+type campaign
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_campaign from parent_context
+    define parent_viewer:  can_view_campaign from parent_context
+    define parent_context: [organization]
+
+# campaign targets permission are based on their parent campaign
+type campaign_target
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent
+    define parent_viewer: can_view from parent
+    define parent: [campaign]

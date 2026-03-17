@@ -214,7 +214,7 @@ func TestQueryControlImplementations(t *testing.T) {
 			name:            "happy path, using api token",
 			client:          apiClient,
 			ctx:             context.Background(),
-			expectedResults: numCIsWithAssociatedControls, // only the ones with linked controls will be returned
+			expectedResults: numCIsWithAssociatedControls + numCIs, // api token has org level access to view all controls
 		},
 		{
 			name:            "happy path, using pat",

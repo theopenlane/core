@@ -205,7 +205,7 @@ func (p IdentityHolder) Mixin() []ent.Mixin {
 		prefix: "IDH",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IdentityHolder](p,
-				withParents(Organization{}, Platform{}),
+				withParents(Platform{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),

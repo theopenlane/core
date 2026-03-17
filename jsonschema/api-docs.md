@@ -877,6 +877,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**modelid**|`string`|id of openFGA model<br/>|no|
 |**createnewmodel**|`boolean`|force create a new model<br/>|no|
 |**modelfile**|`string`|path to the fga model file<br/>|no|
+|**modulefile**|`string`|path to the fga module file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
 |**maxbatchwritesize**|`integer`|maximum number of writes per batch in a transaction<br/>|no|
 

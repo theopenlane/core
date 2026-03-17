@@ -55,7 +55,7 @@ import (
 )
 
 const (
-	fgaModelFile             = "../../../fga/model/model.fga"
+	fgaModuleFile            = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
 )
@@ -96,7 +96,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(map[string]string{
 			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",

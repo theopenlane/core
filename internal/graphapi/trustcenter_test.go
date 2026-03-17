@@ -1659,8 +1659,6 @@ func TestTrustCenterDocStandards(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenterWithPreviewDomain(t *testing.T) {
-	t.Parallel()
-
 	// Create a new test user
 	testUser := suite.userBuilder(context.Background(), t)
 

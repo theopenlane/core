@@ -1,0 +1,134 @@
+module compliance
+
+type standard
+  relations
+    # base permissions - these should all be derived permissions except public tuples
+    define can_view: [user:*, service:*] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_standard from parent_context
+    define parent_viewer: can_view from parent_context or can_view_standard from parent_context or can_view from associated_with
+    define parent_context: [organization]
+
+    # special case for trust center
+    define associated_with: [trust_center]
+
+# control permissions can be inherited from parent objects or based on the organization in context
+type control
+  relations
+    # base permissions - these should all be derived permissions except public tuples
+    define can_view: [user:*, service:*] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor or owner or delegate
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # owner is the group of users that are responsible for the control, they will have full access to the control
+    define owner: [group#member]
+    # delegate is a group of users that are given temporary access to the control, they will have edit but not delete access
+    define delegate: [group#member]
+    define system: [system]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_control from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_control from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [program, standard]
+
+# subcontrols are associated with an organization but do not inherit access from the organization
+# subcontrols inherit access from the their parent control(s)
+type subcontrol
+  relations
+    # base permissions - these should all be derived permissions except public tuples
+    define can_view: [user:*, service:*] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor or owner or delegate
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # owner is the group of users that are responsible for the control, they will have full access to the control
+    define owner: [group#member]
+    # delegate is a group of users that are given temporary access to the control, they will have edit but not delete access
+    define delegate: [group#member]
+    define system: [system]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_subcontrol from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_subcontrol from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [control]
+
+# control objectives inherit access from the associated program or from associated groups
+type control_objective
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_control_objective from parent_context or can_edit from parent
+    define parent_viewer: can_view_control_objective from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [control, subcontrol]
+
+# control implementations inherit access from the associated controls or from associated groups
+type control_implementation
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_control_implementation from parent_context or can_edit from parent
+    define parent_viewer: can_view_control_implementation from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [control, subcontrol]
+
+# mapped controls inherit access based on the parent_context organization
+type mapped_control
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_mapped_control from parent_context
+    define parent_viewer: can_view from parent_context or can_view_mapped_control from parent_context
+    define parent_context: [organization]

@@ -193,11 +193,11 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 		return nil
 	}
 
-	if auth.IsAPITokenAuthentication(ctx) {
-		if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
-			return err
-		}
-	}
+	// if auth.IsAPITokenAuthentication(ctx) {
+	// 	if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	// determine if the group is public
 	publicGroup := true
@@ -258,23 +258,23 @@ func createGroupParentTuple(orgID, groupID string, isPublic bool) ([]fgax.TupleK
 		},
 	}
 
-	groupTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
+	groupTuple, err := getTupleKeyFromRole(req, fgax.ParentContextRelation)
 	if err != nil {
 		return nil, err
 	}
 
 	tuples := []fgax.TupleKey{groupTuple}
 
-	reqOwner := fgax.TupleRequest{
-		SubjectID:       orgID,
-		SubjectType:     generated.TypeOrganization,
-		SubjectRelation: fgax.OwnerRelation,
-		ObjectID:        groupID,
-		ObjectType:      generated.TypeGroup,
-		Relation:        "parent_admin",
-	}
+	// reqOwner := fgax.TupleRequest{
+	// 	SubjectID:       orgID,
+	// 	SubjectType:     generated.TypeOrganization,
+	// 	SubjectRelation: fgax.OwnerRelation,
+	// 	ObjectID:        groupID,
+	// 	ObjectType:      generated.TypeGroup,
+	// 	Relation:        "parent_admin",
+	// }
 
-	tuples = append(tuples, fgax.GetTupleKey(reqOwner))
+	// tuples = append(tuples, fgax.GetTupleKey(reqOwner))
 
 	return tuples, nil
 }

@@ -211,19 +211,6 @@ func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
 	}
 }
 
-// withListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
-func withListObjectsFilter() objectOwnedOption { //nolint:unused
-	return func(o *ObjectOwnedMixin) {
-		o.UseListObjectsFilter = true
-	}
-}
-
-func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:unused
-	return func(o *ObjectOwnedMixin) {
-		o.OwnerFieldName = fieldName
-	}
-}
-
 // withSkipFilterInterceptor allows to skip the filter interceptor for the object owned mixin
 // WARNING: this will bypass all batch or list objects checks from FGA; results will only be filtered
 // based on other interceptors on the schema. For example, if a schema is object owned and has

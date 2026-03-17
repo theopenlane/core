@@ -76,6 +76,7 @@ authz:
     maxbatchwritesize: 100
     modelfile: fga/model/model.fga
     modelid: ""
+    modulefile: ""
     storeid: ""
     storename: openlane
 campaignwebhook:

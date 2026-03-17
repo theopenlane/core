@@ -24,7 +24,7 @@
   object: organization:restricted
 # setup group for group creator access check
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:evidence-creator
   condition:
     name: public_group

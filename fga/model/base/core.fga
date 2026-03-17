@@ -1,0 +1,36 @@
+module base
+
+# this file contains all top level definitions used through all fga models
+
+# user is a human with access to the system
+# the _self relation is used for when the user is the parent of another object
+type user
+  relations
+    define _self: [user]
+    define can_view: _self
+    define can_edit: _self
+    define can_delete: _self
+
+# service is not associated to a particular user, but instead to an organization
+# the _self relation is used for when the service is the parent of another object
+type service
+  relations
+    define _self: [service]
+    define can_view: _self
+    define can_edit: _self
+    define can_delete: _self
+
+# search access for the admin search
+type search
+  relations
+    define admin: [user]
+
+# system admin roles are used to define the highest level of access in the system
+type system
+  relations
+    define system_admin: [user, service]
+
+type feature
+  relations
+    define enabled: [organization]
+

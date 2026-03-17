@@ -1,0 +1,26 @@
+module base
+
+# groups are a subset of an organization that can be used to define more fine-grained access to objects
+# users must be members of the organization to be members of a group
+# groups are all visible to all members of the organization, unless they are blocked
+# groups can only be edited by admins of the group or the parent organization owner
+# groups are commonly used to assigned view/edit permissions to other objects within the organization for group members
+type group
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: viewer
+    define can_edit: editor
+    define can_delete: editor
+
+    # base roles for the group
+    define admin: [user]
+    define member: [user] or admin
+    define editor: admin or parent_editor or parent_admin
+    define viewer: member or parent_viewer
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_group from parent_context
+    define parent_viewer: can_view from parent_context or can_view_group from parent_context
+    define parent_admin: full_access from parent_context
+    define parent_context: [organization with public_group]

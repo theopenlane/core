@@ -141,6 +141,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			NewDocumentMixin(a),
 			newObjectOwnedMixin[generated.ActionPlan](a,
+				withParents(Program{}, Control{}, Review{}),
 				withOrganizationOwner(true),
 				withWorkflowOwnedEdges(),
 			),
@@ -172,6 +173,7 @@ func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
+			policy.CanCreateObjectsUnderParents([]string{Control{}.PluralName(), Program{}.PluralName(), Review{}.PluralName()}),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),
 	)

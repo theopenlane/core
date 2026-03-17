@@ -39,7 +39,7 @@
   relation: owner
   object: organization:contact-org
 - user: organization:contact-org
-  relation: parent
+  relation: parent_context
   object: contact:contact-1
 
 # user-owned files with organization member access

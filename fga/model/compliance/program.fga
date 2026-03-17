@@ -1,0 +1,31 @@
+module compliance
+
+type program
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: deletor
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define deletor: admin or parent_editor
+    define editor: [user, service, group#member] or admin or parent_editor
+    define viewer: [user, service, group#member] or member or editor or parent_viewer or auditor
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+
+    # roles in the program membership
+    define admin: ([user] or full_access from parent_context) and member from parent_context
+    define member: [user] and member from parent_context
+    define auditor: [user]
+
+    # allow members to invite other members
+    define can_invite_members: member or can_edit
+    # only allow users with edit access to the org to invite other admins
+    define can_invite_admins: can_edit
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_program from parent_context
+    define parent_viewer: can_edit from parent_context or can_view_program from parent_context
+    define parent_context: [organization]
+

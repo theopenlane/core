@@ -3,16 +3,8 @@
 # This file is specific to vulnerabilities
 ############################################
 
-# vulnerability-1 is owned by openlane organization
-- user: organization:openlane
-  relation: parent
-  object: vulnerability:vulnerability-1
-# org owner has editor access via organization
-- user: organization:openlane#owner
-  relation: editor
-  object: vulnerability:vulnerability-1
 # blocked user
-- user: user:ulid-blocked
+- user: group:group-blocked#member
   relation: blocked
   object: vulnerability:vulnerability-1
 
@@ -20,15 +12,16 @@
 - user: program:program-1
   relation: parent
   object: vulnerability:vulnerability-2
-# org owner has editor access via organization (program is under openlane)
-- user: organization:openlane#owner
-  relation: editor
-  object: vulnerability:vulnerability-2
+
+- user: user:ulid-of-member
+  relation: admin
+  object: program:program-1
 
 # vulnerability-3 is associated with a scan
-- user: organization:openlane
-  relation: parent
-  object: scan:scan-1
 - user: scan:scan-1
   relation: parent
   object: vulnerability:vulnerability-3
+
+- user: user:ulid-of-member
+  relation: viewer
+  object: scan:scan-1

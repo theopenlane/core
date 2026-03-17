@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -246,7 +247,8 @@ func TestMutationCreateProgram(t *testing.T) {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	groupMemberUserCtx := auth.NewTestContextWithOrgID(groupMember.UserID, testUser1.OrganizationID)
 
 	// Create some edge objects
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -363,7 +365,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			},
 			addGroupToOrg: true,
 			client:        suite.client.api,
-			ctx:           viewOnlyUser.UserCtx,
+			ctx:           groupMemberUserCtx,
 		},
 		{
 			name: "missing required field",

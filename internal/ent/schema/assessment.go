@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -16,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -82,7 +82,10 @@ func (Assessment) Fields() []ent.Field {
 func (a Assessment) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(a),
+			newObjectOwnedMixin[generated.Assessment](a,
+				withParents(Campaign{}),
+				withOrganizationOwner(false),
+			),
 			newGroupPermissionsMixin(),
 		},
 	}.getMixins(a)
@@ -107,12 +110,10 @@ func (a Assessment) Edges() []ent.Edge {
 
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithOnMutationRules(
-			ent.OpDelete|ent.OpDeleteOne,
-			policy.CheckOrgWriteAccess(),
-		),
 		policy.WithMutationRules(
-			privacy.AlwaysAllowRule(),
+			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
+			entfga.CheckEditAccess[*generated.AssessmentMutation](),
 		),
 	)
 }

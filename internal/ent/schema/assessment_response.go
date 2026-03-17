@@ -197,7 +197,7 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.AssessmentResponse](ar,
-				withParents(Assessment{}, Campaign{}, IdentityHolder{}, Entity{}),
+				withParents(Assessment{}, Campaign{}),
 				withOrganizationOwner(true),
 			),
 		},

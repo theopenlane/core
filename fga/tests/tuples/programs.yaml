@@ -8,7 +8,7 @@
   relation: member
   object: organization:openlane
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:group-editor
   condition:
     name: public_group
@@ -22,7 +22,7 @@
   relation: member
   object: organization:openlane
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:group-blocked
   condition:
     name: public_group

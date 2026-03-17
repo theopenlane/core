@@ -86,11 +86,9 @@ func (WorkflowEvent) Modules() []models.OrgModule {
 // Policy of the WorkflowEvent
 func (WorkflowEvent) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckServiceCreateAccess(),
+			entfga.CheckEditAccess[*generated.WorkflowEventMutation](),
 		),
 	)
 }

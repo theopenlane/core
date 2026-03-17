@@ -1,0 +1,33 @@
+module base
+
+# files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
+# user:* and service:* are used for public files (e.g. trust center logos/favicons etc) that are available to all users
+type file
+  relations
+    # base permissions - these should all be derived permissions - but this is a special case with files, that in order to ensure backwards compatibility on things like user avatars + org avatars, we have them under `can_view
+    define can_view: [user:*, service:*, user, service, organization#member] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: deleter
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define deleter: parent_deleter or tc_doc_editor
+    define editor: [user, service, group#member] or parent_editor or deleter
+    define viewer: [user, service, group#member] or editor or parent_viewer or tc_doc_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # special handling for trust center documents - only NDA signed users can view files
+    define tc_doc_viewer: nda_signed from tc_doc_parent
+    define tc_doc_editor: can_edit from tc_doc_parent
+    define tc_doc_deleter: can_delete from tc_doc_parent
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_deleter: full_access from parent_context or can_delete from parent
+    define parent_editor: can_edit from parent_context or can_edit_file from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_file from parent_context or can_view from parent
+    define parent_context: [organization]
+    # NOTE: organization is generally not considered a parent, but for backwards compatibility with files, we are keeping this here - do not replicate on other models
+    define parent: [contact, control, document_data, entity, evidence, export, identity_holder, internal_policy, narrative, note, platform, procedure, program, review, scan, standard, subprocessor, template, trust_center_entity,trust_center_setting, trust_center_subprocessor, trust_center_watermark_config, user, organization]
+    define tc_doc_parent: [trust_center_doc]
+
+

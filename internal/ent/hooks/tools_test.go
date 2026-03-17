@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	fgaModelFile = "../../../fga/model/model.fga"
+	fgaModuleFile = "../../../fga/model/fga.mod"
 )
 
 // TestHookSuite runs all the tests in the TestHookSuite
@@ -75,7 +75,7 @@ func (suite *HookTestSuite) TearDownSuite() {
 func (suite *HookTestSuite) setupClient() *generated.Client {
 	t := suite.T()
 
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModuleFile(fgaModuleFile))
 	ctx := context.Background()
 
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)

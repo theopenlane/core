@@ -1,0 +1,43 @@
+module base
+
+
+# notes are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
+# do not inherit edit permissions from parent here like we do on other objects, only the original user (and org owner) can edit
+type note
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: viewer
+    define can_edit: editor or can_delete
+    define can_delete: editor
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: owner or parent_editor
+    define viewer: editor or parent_viewer
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define owner : [user, service]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: full_access from parent_context
+    define parent_viewer: full_access from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk, evidence, discussion, trust_center_faq]
+
+# similar to notes, discussions are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
+type discussion
+  relations
+        # base permissions - these should all be derived permissions
+    define can_view: viewer
+    define can_edit: editor or can_delete
+    define can_delete: editor
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: owner or parent_editor
+    define viewer: editor or parent_viewer
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define owner : [user, service]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: full_access from parent_context
+    define parent_viewer: full_access from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [control, procedure, internal_policy, subcontrol, control_objective, risk, evidence]

@@ -6,9 +6,6 @@
 - user: program:program-1
   relation: parent
   object: evidence:evidence-1
-- user: user:ulid-admin
-  relation: can_delete
-  object: evidence:evidence-1
 - user: task:task-1
   relation: parent
   object: evidence:evidence-1
@@ -28,7 +25,7 @@
   relation: editor
   object: evidence:evidence-1
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:editor-1
   condition:
     name: public_group

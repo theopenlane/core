@@ -1,0 +1,25 @@
+module base
+
+# this file contains condition based checks used within fga models
+
+# Public groups access; affects the view access of users in the organization
+condition public_group(public: bool) {
+  public == true
+}
+
+# User IP address is within the CIDR range of the company network
+condition in_company_network(user_ip: ipaddress, cidr: string) {
+  user_ip.in_cidr(cidr)
+}
+
+# Time based access to resources
+condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+    current_time < grant_time + grant_duration
+}
+
+# user email domain within the allowed list
+# if there are no restrictions, or a check is done without a domain, it will pass
+# if the email domain is in the allowed list, it will pass
+condition email_domains_allowed(email_domain: string, allowed_domains: list<string>) {
+  allowed_domains == [] || email_domain == "" || email_domain in allowed_domains
+}

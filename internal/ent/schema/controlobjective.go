@@ -120,11 +120,8 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 		prefix:          "CLO",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			// control objectives inherit permissions from the associated programs, but must have an organization as well
-			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
-			// it will also create program parent tuples for the control objective when a program is associated to the control objectives
 			newObjectOwnedMixin[generated.ControlObjective](c,
-				withParents(Program{}, Control{}, Subcontrol{}),
+				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(true),
 			),
 			// add groups permissions with viewer, editor, and blocked groups

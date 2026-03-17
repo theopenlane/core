@@ -121,19 +121,19 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return nil, err
 			}
 
-			// add organization owner editor relation to the object
-			id, err := hooks.GetObjectIDFromEntValue(retVal)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to get object id from ent value")
+			// // add organization owner editor relation to the object
+			// id, err := hooks.GetObjectIDFromEntValue(retVal)
+			// if err != nil {
+			// 	logx.FromContext(ctx).Error().Err(err).Msg("failed to get object id from ent value")
 
-				return nil, err
-			}
+			// 	return nil, err
+			// }
 
-			if err := addOrganizationOwnerEditorRelation(ctx, m, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to add organization owner editor relation")
+			// if err := addOrganizationOwnerEditorRelation(ctx, m, id); err != nil {
+			// 	logx.FromContext(ctx).Error().Err(err).Msg("failed to add organization owner editor relation")
 
-				return nil, err
-			}
+			// 	return nil, err
+			// }
 
 			return retVal, err
 		})
@@ -269,6 +269,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		// sets the owner id on the query for the current organization
+		logx.FromContext(ctx).Warn().Interface("orgIDs", orgIDs).Msg("adding organization filter to query")
 		o.PWithField(q, ownerFieldName, orgIDs)
 
 		return nil

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -159,4 +160,13 @@ func (WorkflowProposal) Annotations() []schema.Annotation {
 			Exclude: true,
 		},
 	}
+}
+
+// Policy of the WorkflowProposal
+func (WorkflowProposal) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckServiceCreateAccess(),
+		),
+	)
 }

@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -48,7 +49,14 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 	// History uses `ref`
 	isHistory := strings.Contains(q.Type(), "History")
 
-	objectType := getFGAObjectType(q)
+	objectType := rule.GetFGAObjectType(q)
+
+	// skip filter if th subject has full organization view access for the object type
+	if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
+		if errors.Is(err, privacy.Allow) {
+			return nil
+		}
+	}
 
 	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType, fgax.CanView)
 	if err != nil {
@@ -98,10 +106,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	if strings.Contains(queryType, "History") {
 		logx.FromContext(ctx).Debug().Msg("adding history relation to list request")
 
-		// this was audit_log_viewer but changed to CanView to be consistent
-		// if you can view an object, you should be able to see the history of it
-		// TODO(sfunk): clean-up this in FGA policies
-		req.Relation = fgax.CanView
+		req.Relation = fgax.CanViewAuditLog
 	}
 
 	logx.FromContext(ctx).Debug().Interface("req", req).Msg("getting authorized object ids")
@@ -161,7 +166,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		return nil, err
 	}
 
-	if skipFilter(ctx, skipperFunc...) {
+	if skipFilter(ctx, q, skipperFunc...) {
 		return next.Query(ctx, query)
 	}
 
@@ -184,9 +189,9 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 			return nil, ErrRetrievingObjects
 		}
 
-		return filterIDList(ctx, ids, getFGAObjectType(q))
+		return filterIDList(ctx, ids, rule.GetFGAObjectType(q))
 	case ent.OpQueryOnlyID:
-		allow, err := singleIDCheck(ctx, v, getFGAObjectType(q))
+		allow, err := singleIDCheck(ctx, v, rule.GetFGAObjectType(q))
 		if err != nil {
 			return nil, err
 		}
@@ -210,7 +215,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	}
 }
 
-func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
+func skipFilter(ctx context.Context, q intercept.Query, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
@@ -219,6 +224,14 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 	if ok := history.IsHistoryRequest(ctx); ok {
 		// skip filtering for history requests
 		return true
+	}
+
+	// skip filter if the subject has full organization view access for the object type
+	objectType := rule.GetFGAObjectType(q)
+	if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
+		if errors.Is(err, privacy.Allow) {
+			return true
+		}
 	}
 
 	// if the custom skipper function is set and returns true, skip the filter
@@ -275,7 +288,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 		return nil, err
 	}
 
-	allowedIDs, err := filterAuthorizedObjectIDs(ctx, getFGAObjectType(q), objectIDs)
+	allowedIDs, err := filterAuthorizedObjectIDs(ctx, rule.GetFGAObjectType(q), objectIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -319,7 +332,7 @@ func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Quer
 		return nil, err
 	}
 
-	allowedIDs, err := filterAuthorizedObjectIDs(ctx, getFGAObjectType(q), objectIDs)
+	allowedIDs, err := filterAuthorizedObjectIDs(ctx, rule.GetFGAObjectType(q), objectIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -331,22 +344,6 @@ func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Quer
 	}
 
 	return v, nil
-}
-
-// getFGAObjectType returns the object type for the query
-// for membership tables, it will return the type with the membership suffix removed
-// e.g. GroupMembership -> Group
-func getFGAObjectType(q intercept.Query) string {
-	// Membership tables should use the object_id field,
-	// e.g. GroupMembership should use group_id
-	isMembership := strings.Contains(q.Type(), "Membership")
-
-	objectType := q.Type()
-	if isMembership {
-		objectType = strings.ReplaceAll(q.Type(), "Membership", "")
-	}
-
-	return objectType
 }
 
 // getObjectIDFromEntValues extracts the object id from a generic ent value (used for list queries)

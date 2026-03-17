@@ -65,7 +65,7 @@ import (
 )
 
 const (
-	fgaModelFile = "../../fga/model/model.fga"
+	fgaModuleFile = "../../fga/model/fga.mod"
 
 	redacted = "*****************************"
 
@@ -152,11 +152,12 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(map[string]string{
 			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
 			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
+			"OPENFGA_MAX_TYPES_PER_AUTHORIZATION_MODEL":   "1000",
 		},
 		))
 

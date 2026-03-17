@@ -5,9 +5,6 @@
 - user: user:ulid-of-admin
   relation: parent # task creator
   object: task:task-1
-- user: organization:openlane#owner
-  relation: editor
-  object: task:task-1
 - user: user:ulid-of-member
   relation: assignee # assignee of the task
   object: task:task-1
@@ -18,14 +15,14 @@
   relation: assigner # assigner of the task
   object: task:task-1
 - user: user:ulid-other-1
-  relation: can_view
-  object: task:task-1 # direct access
+  relation: viewer
+  object: task:task-1 # direct viewer access to task
 - user: program:program-1
   relation: parent
   object: task:task-1 # program has access to task
   # add this here to so its correct for the task; this is a duplicate of the one in controls.yaml
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: control:control-1
 - user: control:control-1
   relation: parent
@@ -48,7 +45,7 @@
   relation: owner
   object: organization:group-org
 - user: organization:group-org
-  relation: parent
+  relation: parent_context
   object: group:group-1
   condition:
     name: public_group

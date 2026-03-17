@@ -15,20 +15,11 @@
 
 # workflow_definition-1 is owned by openlane organization
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: workflow_definition:workflow_definition-1
 
 - user: organization:openlane
-  relation: parent
-  object: workflow_definition:workflow_definition-2
-
-# org owner has editor access to workflow_definition
-- user: organization:openlane#owner
-  relation: editor
-  object: workflow_definition:workflow_definition-1
-
-- user: organization:openlane#owner
-  relation: editor
+  relation: parent_context
   object: workflow_definition:workflow_definition-2
 
 # workflow_instance-1 is owned by openlane organization and linked to workflow_definition-1
@@ -44,7 +35,7 @@
 # add control to parent to test view access to members via parent objects, e.g. all org members can view controls
 # so they should also be able to see workflow instances linked to the control
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: control:control-1
 - user: control:control-1
   relation: parent
@@ -77,7 +68,7 @@
   object: workflow_object_ref:workflow_object_ref-1
 
 # workflow_assignment_target-1 is linked to workflow_assignment-1
-  # Note: system-driven, no editor relation - users can only view based on the parent object
+# Note: system-driven, no editor relation - users can only view based on the parent object
 - user: workflow_assignment:workflow_assignment-1
   relation: parent
   object: workflow_assignment_target:workflow_assignment_target-1
@@ -108,7 +99,7 @@
 
 # setup a group for workflow editor access (only applies to workflow_definition)
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:workflow-editors
   condition:
     name: public_group

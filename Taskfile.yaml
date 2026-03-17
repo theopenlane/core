@@ -68,6 +68,7 @@ tasks:
     deps:
       - task: generate:core
       - task: generate:catalog:smart
+      - task: fga:generate
     cmds:
       - task: generate:openapi:smart
       - task: tidy
@@ -441,7 +442,7 @@ tasks:
   go:build:ci:
     desc: Runs go build for the core server
     cmds:
-      - go build -mod=readonly -a -o bin/core
+      - CGO_ENABLED=0 go build -mod=readonly -a -o bin/core
 
   go:build-cli:
     aliases: [buildcli]

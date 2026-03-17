@@ -193,7 +193,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.EmailTemplate](e,
-				withParents(Organization{}, Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
+				withParents(Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),

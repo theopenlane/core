@@ -105,7 +105,6 @@ func (e EmailBranding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.EmailBranding](e,
-				withParents(Organization{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),

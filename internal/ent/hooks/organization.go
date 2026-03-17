@@ -571,10 +571,10 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 		return createParentOrgTuple(ctx, m, parentOrgID, oID)
 	}
 
-	// if this was created with an API token, do not create an owner but add the service tuple to fga
-	if auth.IsAPITokenAuthentication(ctx) {
-		return addTokenEditPermissions(ctx, m, oID, GetObjectTypeFromEntMutation(m))
-	}
+	// // if this was created with an API token, do not create an owner but add the service tuple to fga
+	// if auth.IsAPITokenAuthentication(ctx) {
+	// 	return addTokenEditPermissions(ctx, m, oID, GetObjectTypeFromEntMutation(m))
+	// }
 
 	// get userID from context
 	userID, err := auth.GetSubjectIDFromContext(ctx)

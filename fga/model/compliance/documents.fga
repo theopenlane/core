@@ -1,0 +1,97 @@
+module compliance
+
+# narratives are associated with an organization but do not inherit access from the organization for base view + edit
+type narrative
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_narrative from parent_context or can_edit from parent
+    define parent_viewer: can_view_narrative from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [program, control]
+
+# action plans are associated with an organization but do not inherit access from the organization for base view + edit
+type action_plan
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_action_plan from parent_context or can_edit from parent
+    define parent_viewer: can_view_action_plan from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [program, control, review]
+
+
+# policies are always assigned to an organization and by default all org members can view but NOT edit
+# edit of policies is restricted to owner, super admin, and those given specific acesss via `policy_manager` or `can_edit_internal_policy` roles
+type internal_policy
+  relations
+    # base permissions - these should all be derived permissions except public tuples
+    define can_view: [user:*, service:*] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor or approver or delegate
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context or audit_log_viewer from parent) and can_view
+
+    # approver is the group of users that are responsible for the approval of changes to the policy, they will have full access to the policy
+    define approver: [group#member]
+    # delegate is a group of users that are given temporary access to the policy, they will have edit but not delete access
+    define delegate: [group#member]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_internal_policy from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_internal_policy from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [program]
+
+
+# procedures are always assigned to an organization and by default all org members can view but NOT edit
+# edit of policies is restricted to owner, super admin, and those given specific access via `policy_manager` or `can_edit_procedure` roles
+type procedure
+  relations
+    # base permissions - these should all be derived permissions except public tuples
+    define can_view: [user:*, service:*] or (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor or approver or delegate
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context or audit_log_viewer from parent) and can_view
+
+    # approver is the group of users that are responsible for the approval of changes to the policy, they will have full access to the policy
+    define approver: [group#member]
+    # delegate is a group of users that are given temporary access to the policy, they will have edit but not delete access
+    define delegate: [group#member]
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit_procedure from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_procedure from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [program]

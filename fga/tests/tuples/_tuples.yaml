@@ -105,13 +105,25 @@
 - user: service:ulid-of-service-editor
   relation: can_create_workflow_proposal
   object: organization:openlane
+- user: service:ulid-of-service-editor
+  relation: compliance_manager
+  object: organization:openlane
+- user: service:ulid-of-service-editor
+  relation: trust_center_manager
+  object: organization:openlane
+- user: service:ulid-of-service-editor
+  relation: campaign_manager
+  object: organization:openlane
+- user: service:ulid-of-service-editor
+  relation: workflow_manager
+  object: organization:openlane
 # setup service user
 - user: service:ulid-of-service-viewer
   relation: can_view
   object: organization:openlane
 # setup programs under org
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: program:program-1
 - user: user:ulid-program-admin
   relation: _self
@@ -139,7 +151,7 @@
   object: organization:openlane
 # setup another program under org
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: program:program-2
 - user: user:ulid-other-3
   relation: _self
@@ -148,7 +160,7 @@
   relation: member
   object: organization:openlane
 # setup an auditor for the first program
-- user: user:ulid-auditor
+- user: user:ulid-program-auditor
   relation: auditor
   object: program:program-1
 # setup org primary owner of another org
@@ -158,3 +170,52 @@
 - user: user:ulid-of-owner-foobar
   relation: owner
   object: organization:foobar
+# setup users for each role
+- user: user:ulid-super-admin
+  relation: super_admin
+  object: organization:openlane
+- user: user:ulid-auditor
+  relation: auditor
+  object: organization:openlane
+- user: user:ulid-risk-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-risk-manager
+  relation: risk_manager
+  object: organization:openlane
+- user: user:ulid-policy-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-policy-manager
+  relation: policy_manager
+  object: organization:openlane
+- user: user:ulid-registry-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-registry-manager
+  relation: registry_manager
+  object: organization:openlane
+- user: user:ulid-group-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-group-manager
+  relation: group_manager
+  object: organization:openlane
+- user: user:ulid-compliance-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-compliance-manager
+  relation: compliance_manager
+  object: organization:openlane
+- user: user:ulid-workflow-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-workflow-manager
+  relation: workflow_manager
+  object: organization:openlane
+- user: user:ulid-campaign-manager
+  relation: member
+  object: organization:openlane
+- user: user:ulid-campaign-manager
+  relation: campaign_manager
+  object: organization:openlane

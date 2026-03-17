@@ -1,0 +1,37 @@
+module example
+
+# This is an example template for objects that are:
+# - object owned with parents
+# - permission also inherited from organization level
+# To Use:
+# 1.  Update all occurrences of `object_name` with the object name
+# 2. Update `parent` with the parent objects defined in the `ObjectOwned` `withParents` definition.
+# Notes:
+# - NEVER add `organization` to the `parent` - this will be done via `parent_context`
+# This gives:
+# - view access to all users in the organization to all instances of object_name
+# - edit access to all org admins+ to all instances of object_name
+# - ability to assign specific object instance access by group, user, service
+# - ability to assign access to all instances of objects via scopes `can_edit_object_name` and `can_view_object_name`
+# - inherited access from the parent objects defined in parent based on can_view and can_edit relations
+# NOTES:
+# - if you do not want all org members to have view access by default, remove "can_view from parent_context" in parent_viewer
+# - if you do not want all org admins to have edit access by default, remove "can_edit from parent_context" in parent_editor
+type object_name
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent_context or can_edit_object_name from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view_object_name from parent_context or can_view from parent
+    define parent_context: [organization]
+    define parent: [parent1, parent2]

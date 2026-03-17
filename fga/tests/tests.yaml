@@ -1,5 +1,5 @@
 name: Openlane
-model_file: ../model/model.fga
+model_file: ../model/fga.mod
 tuple_file: tuples/_tuples.yaml
 tests:
   - name: organization
@@ -50,6 +50,53 @@ tests:
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create
           can_create_workflow_proposal: false # system-driven, only services can create
+      - user: user:ulid-super-admin
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member:
+          super_admin: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: true
+          can_view: true
+          audit_log_viewer: true
+          can_invite_members: true
+          can_invite_super_admins: true
+          can_invite_auditors: true
+          can_invite_admins: true
+          can_create_control: true
+          can_create_subcontrol: true
+          can_create_control_objective: true
+          can_create_group: true
+          can_create_internal_policy: true
+          can_create_mapped_control: true
+          can_create_narrative: true
+          can_create_procedure: true
+          can_create_program: true
+          can_create_risk: true
+          can_create_action_plan: true
+          can_create_scheduled_job: true
+          can_create_standard: true
+          can_create_template: true
+          can_create_evidence: true
+          can_create_trust_center_doc: true
+          can_create_trust_center_subprocessor: true
+          can_create_campaign: true
+          can_create_campaign_target: true
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: true
+          can_create_identity_holder: true
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
       - user: user:ulid-of-member
         object: organization:openlane
         context:
@@ -124,7 +171,6 @@ tests:
           can_create_trust_center_doc: true
           can_create_trust_center_subprocessor: true
           can_create_campaign: true
-          can_create_campaign_target: true
           can_create_finding: true
           can_create_vulnerability: true
           can_create_remediation: true
@@ -347,6 +393,340 @@ tests:
           audit_log_viewer: false
           can_invite_members: false
           can_invite_admins: false
+      - user: user:ulid-auditor
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: false
+          audit_log_viewer: false
+          can_invite_members: false
+          can_invite_admins: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_mapped_control: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: false
+          can_create_action_plan: false
+          can_create_scheduled_job: false
+          can_create_standard: false
+          can_create_template: false
+          can_create_evidence: true
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: true
+          can_create_scan: false
+          can_create_platform: false
+          can_create_entity: false
+          can_create_contact: false
+          can_create_identity_holder: false
+          can_create_asset: false
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
+      - user: user:ulid-risk-manager
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_mapped_control: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: true
+          can_create_action_plan: true
+          can_create_scheduled_job: false
+          can_create_standard: false
+          can_create_template: false
+          can_create_evidence: false
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: false
+          can_create_entity: false
+          can_create_contact: false
+          can_create_identity_holder: false
+          can_create_asset: false
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
+      - user: user:ulid-policy-manager
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: true
+          can_create_mapped_control: false
+          can_create_narrative: false
+          can_create_procedure: true
+          can_create_program: false
+          can_create_risk: false
+          can_create_action_plan: false
+          can_create_scheduled_job: false
+          can_create_standard: false
+          can_create_template: false
+          can_create_evidence: false
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: false
+          can_create_scan: false
+          can_create_platform: false
+          can_create_entity: false
+          can_create_contact: false
+          can_create_identity_holder: false
+          can_create_asset: false
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
+      - user: user:ulid-registry-manager
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_mapped_control: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: false
+          can_create_action_plan: false
+          can_create_scheduled_job: false
+          can_create_standard: false
+          can_create_template: false
+          can_create_evidence: false
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: false
+          can_create_scan: false
+          can_create_platform: true
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
+          can_create_entity: true
+          can_create_contact: true
+          can_create_identity_holder: true
+          can_create_asset: true
+      - user: user:ulid-campaign-manager
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_mapped_control: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: false
+          can_create_action_plan: false
+          can_create_scheduled_job: false
+          can_create_standard: false
+          can_create_template: true
+          can_create_evidence: false
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: true
+          can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: false
+          can_create_scan: false
+          can_create_platform: false
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
+          can_create_entity: false
+          can_create_contact: false
+          can_create_identity_holder: false
+          can_create_asset: false
+          can_create_email_template: true
+          can_create_email_branding: true
+          can_create_notification_template: true
+          can_create_assessment: true
+      - user: user:ulid-compliance-manager
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+          can_create_control: true
+          can_create_subcontrol: true
+          can_create_control_objective: true
+          can_create_group: false
+          can_create_internal_policy: true
+          can_create_mapped_control: true
+          can_create_narrative: true
+          can_create_procedure: true
+          can_create_program: true
+          can_create_risk: true
+          can_create_action_plan: true
+          can_create_scheduled_job: false
+          can_create_standard: true
+          can_create_template: false
+          can_create_evidence: true
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: true
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
+          can_create_entity: true
+          can_create_contact: true
+          can_create_identity_holder: true
+          can_create_asset: true
+      - user: user:ulid-workflow-manager
+        object: organization:openlane
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+          can_create_control: false
+          can_create_subcontrol: false
+          can_create_control_objective: false
+          can_create_group: false
+          can_create_internal_policy: false
+          can_create_mapped_control: false
+          can_create_narrative: false
+          can_create_procedure: false
+          can_create_program: false
+          can_create_risk: false
+          can_create_action_plan: false
+          can_create_scheduled_job: true
+          can_create_standard: false
+          can_create_template: false
+          can_create_evidence: false
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
+          can_create_campaign: false
+          can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: false
+          can_create_scan: false
+          can_create_platform: false
+          can_create_entity: false
+          can_create_contact: false
+          can_create_identity_holder: false
+          can_create_asset: false
+          can_create_workflow_definition: true
+          can_create_workflow_object_ref: false
+          can_create_workflow_assignment_target: false
+          can_create_workflow_event: false
+          can_create_workflow_proposal: false
     list_objects:
       - user: user:ulid-of-owner
         type: organization
@@ -402,7 +782,7 @@ tests:
         context:
           relation: can_view
         assertions:
-          parent: true
+          parent_context: true
       - user: user:ulid-of-owner
         object: group:cat-lovers
         assertions:
@@ -658,6 +1038,8 @@ tests:
           can_delete: false
       - user: user:ulid-of-member-3 # member has access task 2 via control association
         object: task:task-2
+        context:
+          email_domain: example.com
         assertions:
           can_view: true
           can_edit: false
@@ -690,6 +1072,12 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      # - user: user:ulid-super-admin
+      #   object: procedure:procedure-1
+      #   assertions:
+      #     can_view: true
+      #     can_edit: true
+      #     can_delete: true
       - user: user:ulid-group-editor # editor of the procedure should have edit permissions
         object: procedure:procedure-1
         assertions:
@@ -719,7 +1107,13 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
+          # - user: user:ulid-policy-manager
+          #   object: procedure:procedure-1
+          #   assertions:
+          #     can_view: true
+          #     can_edit: true
+          #     can_delete: true
   - name: internal policies
     description: policies are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
     tuple_file: tuples/policies.yaml
@@ -748,7 +1142,13 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
-      - user: user:ulid-auditor # auditor of the program should have view permissions
+      - user: user:ulid-program-auditor # auditor of the program should have view permissions
+        object: internal_policy:internal_policy-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-auditor
         object: internal_policy:internal_policy-1
         assertions:
           can_view: true
@@ -773,7 +1173,7 @@ tests:
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
   - name: programs
     description: programs are associated with an organization
     tuple_file: tuples/programs.yaml
@@ -794,6 +1194,18 @@ tests:
         object: program:program-1
         assertions:
           can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-compliance-manager # compliance manager should have permissions based on their role
+        object: program:program-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-auditor # auditor of the program should have view
+        object: program:program-1
+        assertions:
+          can_view: true
           can_edit: false
           can_delete: false
   - name: asset
@@ -874,27 +1286,18 @@ tests:
     description: findings can be associated with organizations or programs and permissions are inherited accordingly
     tuple_file: tuples/findings.yaml
     check:
-      - user: user:ulid-of-owner # org owner has full access
-        object: finding:finding-1
+      - user: user:ulid-of-member # is a member of program that is parent of finding
+        object: finding:finding-2
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
-          audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
-        object: finding:finding-1
-        context:
-          email_domain: "example.com"
+      - user: user:ulid-of-member # can_edit parent control, so can edit finding
+        object: finding:finding-3
         assertions:
           can_view: true
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-blocked # blocked user has no access
-        object: finding:finding-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
+          can_edit: true
+          can_delete: true
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: finding:finding-1
         assertions:
@@ -907,37 +1310,10 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-of-owner # org owner has full access to scan-associated finding
-        object: finding:finding-3
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
   - name: vulnerability
     description: vulnerabilities can be associated with organizations or programs and permissions are inherited accordingly
     tuple_file: tuples/vulnerabilities.yaml
     check:
-      - user: user:ulid-of-owner # org owner has full access
-        object: vulnerability:vulnerability-1
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
-          audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
-        object: vulnerability:vulnerability-1
-        context:
-          email_domain: "example.com"
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-blocked # blocked user has no access
-        object: vulnerability:vulnerability-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
       - user: user:ulid-of-owner-foobar # user of another org has no access
         object: vulnerability:vulnerability-1
         assertions:
@@ -950,8 +1326,14 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-of-owner # org owner has full access to scan-associated vulnerability
+      - user: user:ulid-of-member # org member can view scan so they can view vulnerability
         object: vulnerability:vulnerability-3
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member # program admin has full access program-associated vulnerability
+        object: vulnerability:vulnerability-2
         assertions:
           can_view: true
           can_edit: true
@@ -960,34 +1342,7 @@ tests:
     description: remediations can be associated with organizations or findings and permissions are inherited accordingly
     tuple_file: tuples/remediations.yaml
     check:
-      - user: user:ulid-of-owner # org owner has full access
-        object: remediation:remediation-1
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
-          audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
-        object: remediation:remediation-1
-        context:
-          email_domain: "example.com"
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-blocked # blocked user has no access
-        object: remediation:remediation-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-of-owner-foobar # user of another org has no access
-        object: remediation:remediation-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-of-owner # org owner has full access to finding-associated remediation
+      - user: user:ulid-of-member # org member can view due to parent edit access to vulnerability
         object: remediation:remediation-2
         assertions:
           can_view: true
@@ -997,35 +1352,10 @@ tests:
     description: scans can be associated with organizations or platforms and permissions are inherited accordingly
     tuple_file: tuples/scans.yaml
     check:
-      - user: user:ulid-of-owner # org owner has full access
-        object: scan:scan-1
-        assertions:
-          can_view: true
-          can_edit: true
-          can_delete: true
-          audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-admin
         object: scan:scan-1
         context:
           email_domain: "example.com"
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-blocked # blocked user has no access
-        object: scan:scan-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-of-owner-foobar # user of another org has no access
-        object: scan:scan-1
-        assertions:
-          can_view: false
-          can_edit: false
-          can_delete: false
-      - user: user:ulid-of-owner # org owner has full access to platform-associated scan
-        object: scan:scan-2
         assertions:
           can_view: true
           can_edit: true
@@ -1065,7 +1395,7 @@ tests:
     description: identity_holders are associated with organizations or platforms and permissions are inherited accordingly
     tuple_file: tuples/identity_holders.yaml
     check:
-      - user: user:ulid-of-owner # org owner has full access
+      - user: user:ulid-of-owner # org owner has full access by parent_context
         object: identity_holder:identity_holder-1
         assertions:
           can_view: true
@@ -1102,18 +1432,24 @@ tests:
     description: evidence are always with an organization, and can be linked to many objects within the system
     tuple_file: tuples/evidence.yaml
     check:
-      - user: user:ulid-admin # has can_delete permission on the evidence
+      - user: user:ulid-super-admin # has full permission on the evidence
         object: evidence:evidence-1
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-admin # by default has no access to evidence until it's linked to a parent object, which would commonly be control, etc.
+        object: evidence:evidence-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
       - user: user:ulid-task-assignee # assignee of the task that has access to the evidence via the task
         object: evidence:evidence-1
         assertions:
           can_view: true
           can_edit: true
-          can_delete: false
+          can_delete: true
       - user: user:ulid-member # member of the program that has access to the evidence via the program
         object: evidence:evidence-1
         assertions:
@@ -1160,18 +1496,24 @@ tests:
     check:
       - user: user:ulid-of-member # member of the program that has access to the control
         object: control:control-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-another-member # no access to the control
         object: control:control-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member-2 # member of the parent organization that has access to the control
         object: control:control-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1202,12 +1544,16 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control
         object: subcontrol:subcontrol-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member-3 # access to the control from the parent control
         object: subcontrol:subcontrol-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1232,12 +1578,16 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control objective via the control
         object: control_objective:control_objective-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-of-member-3 # access to the control objective from the parent control
         object: control_objective:control_objective-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1292,6 +1642,8 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control objective via the subcontrol
         object: control_objective:control_objective-3
+        context:
+          email_domain: example.com
         assertions:
           can_view: true
           can_edit: false
@@ -1358,6 +1710,8 @@ tests:
           can_delete: false
       - user: user:ulid-of-member
         object: mapped_control:mapped_control-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1434,6 +1788,8 @@ tests:
           can_delete: false
       - user: user:ulid-of-member
         object: standard:standard-org-custom
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -1527,15 +1883,47 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      # campaign with organization parent - org member can view
+      # campaign with organization parent - org member has no access unless given explicitly
       - user: user:ulid-of-member
         object: campaign:campaign-1
         context:
           email_domain: "example.com"
         assertions:
-          can_view: true
+          can_view: false
           can_edit: false
           can_delete: false
+      - user: user:ulid-of-member # group access given, user has full edit access
+        object: campaign:campaign-3
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-another-member # campaign manager has access to all campaigns in the org
+        object: campaign:campaign-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-another-member # campaign manager has access to all campaigns in the org
+        object: campaign:campaign-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-another-member # campaign manager has access to all campaigns in the org
+        object: campaign:campaign-3
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
       # campaign with organization parent - blocked user has no access
       - user: user:ulid-blocked
         object: campaign:campaign-1
@@ -1743,7 +2131,7 @@ tests:
         context:
           email_domain: "example.com"
         assertions:
-          can_view: true 
+          can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)
@@ -1891,6 +2279,8 @@ tests:
             - workflow_definition:workflow_definition-2
       - user: user:ulid-of-member
         type: workflow_definition
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: [] # org member cannot view workflow definitions by default
           can_edit: [] # no edit access to any workflow definitions
@@ -1905,6 +2295,8 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_instance
+        context:
+          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_instance:workflow_instance-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -1928,6 +2320,8 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_object_ref
+        context:
+          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_object_ref:workflow_object_ref-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -1943,6 +2337,8 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_assignment_target
+        context:
+          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_assignment_target:workflow_assignment_target-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -1958,6 +2354,8 @@ tests:
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-member
         type: workflow_event
+        context:
+          email_domain: "example.com"
         assertions:
           can_view:
             - workflow_event:workflow_event-1 # can only see via control, cannot access the other one that doesn't have a parent control
@@ -2069,6 +2467,30 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+      - user: user:anon_signed-nda
+        object: trust_center_doc:tcdoc-3
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_signed-nda
+        object: file:file-3
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_unsigned-nda
+        object: trust_center_doc:tcdoc-3
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_unsigned-nda
+        object: file:file-3
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
       - user: user:tc-viewer-1
         object: trust_center_doc:tcdoc-1
         assertions:
@@ -2081,7 +2503,6 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-
       - user: user:tc-owner-2
         object: trust_center_doc:tcdoc-2
         assertions:
@@ -2090,6 +2511,8 @@ tests:
           can_delete: true
       - user: user:tc-viewer-2
         object: trust_center_doc:tcdoc-2
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false

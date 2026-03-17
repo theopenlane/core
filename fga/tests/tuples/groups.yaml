@@ -5,7 +5,7 @@
 
 # setup group with owner
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:cat-lovers
   condition:
     name: public_group
@@ -13,7 +13,7 @@
       public: true
 # setup private group with owner
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: group:cat-haters
   condition:
     name: public_group

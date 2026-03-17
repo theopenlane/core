@@ -270,7 +270,7 @@ func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Entity](e,
-				withParents(Organization{}, TrustCenterEntity{}, Platform{}, SystemDetail{}),
+				withParents(TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),

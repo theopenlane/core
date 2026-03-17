@@ -25,8 +25,6 @@ import (
 func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 	t := suite.T()
 
-	// add handler
-	// Create operation for VerifySubscriptionHandler
 	operation := suite.createImpersonationOperation("VerifySubscriptionHandler", "Verify subscription")
 	suite.registerTestHandler("GET", "subscribe/verify", operation, suite.h.VerifySubscriptionHandler)
 

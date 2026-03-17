@@ -3,8 +3,11 @@
 # This file is specific to controls
 ############################################
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: control:control-1
+- user: organization:openlane
+  relation: parent_context
+  object: control:control-2
 - user: program:program-1
   relation: parent
   object: control:control-1
@@ -44,7 +47,7 @@
 - user: subcontrol:subcontrol-1
   relation: parent
   object: control_objective:control_objective-2
-- user: program:program-1
+- user: control:control-2
   relation: parent
   object: control_objective:control_objective-3
 - user: group:control-owner-1#member
@@ -62,7 +65,7 @@
   object: organization:tc-org-1
 ## trust center controls (publicly visible on trust center)
 - user: organization:tc-org-1
-  relation: parent
+  relation: parent_context
   object: control:ots-01.1
 - user: standard:standard-trust-center
   relation: parent
@@ -72,17 +75,17 @@
   object: control:ots-01.1
 ## trust center controls (not visible on trust center)
 - user: organization:tc-org-1
-  relation: parent
+  relation: parent_context
   object: control:ots-01.2
 - user: standard:standard-trust-center
   relation: parent
   object: control:ots-01.2
 ## mapped controls
 - user: organization:openlane
-  relation: parent
+  relation: parent_context
   object: mapped_control:mapped_control-1
 - user: organization:another-org
-  relation: parent
+  relation: parent_context
   object: mapped_control:mapped_control-2
 - user: user:ulid-group-mapped-control-1-editor
   relation: member

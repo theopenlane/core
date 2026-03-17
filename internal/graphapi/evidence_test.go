@@ -164,10 +164,10 @@ func TestQueryEvidences(t *testing.T) {
 			expectedResults: 0,
 		},
 		{
-			name:            "happy path, using api token, access not automatically granted",
+			name:            "happy path, using api token, includes evidence scope",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat, which is for the org owner so access is granted",

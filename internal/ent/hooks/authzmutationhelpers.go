@@ -404,34 +404,34 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 	return ids, nil
 }
 
-// addTokenEditPermissions adds the edit permissions for the api token to the object
-func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
-	subjectID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
+// // addTokenEditPermissions adds the edit permissions for the api token to the object
+// func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
+// 	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+// 	if err != nil {
+// 		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
-		return err
-	}
+// 		return err
+// 	}
 
-	req := fgax.TupleRequest{
-		SubjectID:   subjectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
-		Relation:    fgax.CanEdit,
-		ObjectID:    oID,
-		ObjectType:  objectType,
-	}
+// 	req := fgax.TupleRequest{
+// 		SubjectID:   subjectID,
+// 		SubjectType: auth.GetAuthzSubjectType(ctx),
+// 		Relation:    fgax.CanEdit,
+// 		ObjectID:    oID,
+// 		ObjectType:  objectType,
+// 	}
 
-	logx.FromContext(ctx).Debug().Interface("request", req).
-		Msg("creating edit tuples for api token")
+// 	logx.FromContext(ctx).Debug().Interface("request", req).
+// 		Msg("creating edit tuples for api token")
 
-	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+// 	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+// 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for token edit permissions")
 
-		return ErrInternalServerError
-	}
+// 		return ErrInternalServerError
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 // getOrgMemberID gets the org member id for the user in the organization if they are a member
 func getOrgMemberID(ctx context.Context, m utils.GenericMutation, userID string, orgID string) (string, error) {

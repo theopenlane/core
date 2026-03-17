@@ -5,9 +5,12 @@
 - user: user:ulid-admin
   relation: owner
   object: note:note-1
-- user: organization:openlane#owner
-  relation: editor
+- user: organization:openlane
+  relation: parent_context
+  object: note:note-1
+- user: evidence:evidence-1
+  relation: parent
   object: note:note-1
 - user: user:ulid-other-1
-  relation: can_view
-  object: note:note-1 # direct access
+  relation: editor
+  object: evidence:evidence-1

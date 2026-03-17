@@ -13,8 +13,6 @@ import (
 )
 
 func TestMutationCreateProgramWithMembers(t *testing.T) {
-	t.Parallel()
-
 	// setup a separate user
 	user := suite.userBuilder(context.Background(), t)
 
@@ -119,8 +117,6 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 }
 
 func TestMutationCreateFullProgram(t *testing.T) {
-	t.Parallel()
-
 	// setup a separate user
 	user := suite.userBuilder(context.Background(), t)
 
