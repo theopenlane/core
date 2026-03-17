@@ -12,8 +12,10 @@ import (
 )
 
 const (
+	// oktaSignOnPolicyType is the Okta policy type identifier for sign-on policies
 	oktaSignOnPolicyType = "OKTA_SIGN_ON"
-	sampleSize           = 10
+	// sampleSize is the maximum number of policies to include in the sample result
+	sampleSize = 10
 )
 
 // PolicySample holds a single Okta policy entry

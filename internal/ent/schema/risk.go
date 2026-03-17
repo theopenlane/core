@@ -55,10 +55,14 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			),
 		field.String("integration_id").
 			Comment("integration that surfaced this risk, when sourced via integration ingest").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
 		field.Time("observed_at").
 			Comment("time when this risk was last observed by the source integration").
 			GoType(models.DateTime{}).
@@ -88,6 +92,7 @@ func (Risk) Fields() []ent.Field {
 					oscalgen.OSCALFieldRoleTitle,
 					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 				),
+				entx.IntegrationMappingField().UpsertKey(),
 			).
 			Comment("the name of the risk"),
 		field.Enum("status").
@@ -300,9 +305,8 @@ func (r Risk) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("risk"),
 		),
 		entx.IntegrationMappingSchema().
-			Exclude("stakeholder_id", "delegate_id").
-			UpsertKeys("external_id", "name").
-			DefaultOperation("risks.collect"),
+			StockPersist().
+			Exclude("stakeholder_id", "delegate_id"),
 	}
 }
 

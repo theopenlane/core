@@ -127,6 +127,7 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageOperat
 	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
+// slackMessageDestinations returns a deduplicated ordered list of target channel IDs from the operation config
 func slackMessageDestinations(cfg MessageOperationInput) []string {
 	destinations := make([]string, 0, len(cfg.Destinations)+1)
 	seen := make(map[string]struct{}, len(cfg.Destinations)+1)

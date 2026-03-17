@@ -4,7 +4,22 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/pkg/gala"
 )
+
+// IngestContext holds the stable per-integration dependencies shared across all ingest call paths
+type IngestContext struct {
+	// Registry is the integration definition registry used to resolve mappings and definitions
+	Registry *registry.Registry
+	// DB is the ent client used for persistence
+	DB *ent.Client
+	// Runtime is the Gala instance used for async emit; nil on the synchronous persist path
+	Runtime *gala.Gala
+	// Installation is the integration record being ingested into
+	Installation *ent.Integration
+}
 
 // WorkflowMeta carries optional workflow linkage for workflow-triggered operations
 type WorkflowMeta struct {
@@ -46,6 +61,24 @@ type DispatchResult struct {
 	EventID string
 	// Status is the run status at dispatch time
 	Status enums.IntegrationRunStatus
+}
+
+// WebhookEnvelope is the durable payload emitted for one inbound integration webhook event
+type WebhookEnvelope struct {
+	// IntegrationID is the installation identifier that received the webhook
+	IntegrationID string `json:"integrationId"`
+	// DefinitionID is the integration definition identifier
+	DefinitionID string `json:"definitionId"`
+	// Webhook is the webhook name within the definition
+	Webhook string `json:"webhook"`
+	// Event is the normalized event name within the webhook
+	Event string `json:"event"`
+	// DeliveryID is the provider-assigned delivery identifier for deduplication
+	DeliveryID string `json:"deliveryId,omitempty"`
+	// Payload is the raw webhook request body
+	Payload json.RawMessage `json:"payload"`
+	// Headers contains the inbound HTTP request headers
+	Headers map[string]string `json:"headers,omitempty"`
 }
 
 // Envelope is the payload emitted to the operation topic

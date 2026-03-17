@@ -14,7 +14,7 @@ var schemaReflector = &jsonschema.Reflector{
 	RequiredFromJSONSchemaTags: true,
 }
 
-// SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON.
+// SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON
 // Returns nil if schema marshaling fails.
 func SchemaFrom[T any]() json.RawMessage {
 	schema := schemaReflector.Reflect(new(T))

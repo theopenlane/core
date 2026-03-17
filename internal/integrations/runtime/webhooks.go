@@ -12,18 +12,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/integrations/webhooks"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
-)
-
-const (
-	webhookDeliveryAccepted = "accepted"
-	webhookDeliveryDuplicate = "duplicate"
-	webhookDeliveryFailed   = "failed"
 )
 
 // SyncWebhooks ensures the persisted webhook rows match the definition contract for one installation
@@ -126,7 +120,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, installation *ent.In
 		return err
 	}
 
-	receipt := do.MustInvoke[*gala.Gala](r.injector).EmitWithHeaders(ctx, registration.Topic, webhooks.Envelope{
+	receipt := do.MustInvoke[*gala.Gala](r.injector).EmitWithHeaders(ctx, registration.Topic, operations.WebhookEnvelope{
 		IntegrationID: installation.ID,
 		DefinitionID:  installation.DefinitionID,
 		Webhook:       webhookName,
@@ -148,7 +142,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, installation *ent.In
 }
 
 // HandleWebhookEvent processes one emitted integration webhook envelope
-func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope webhooks.Envelope) error {
+func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
 	installation, err := r.ResolveInstallation(ctx, "", envelope.IntegrationID, envelope.DefinitionID)
 	if err != nil {
 		return err
@@ -175,13 +169,23 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope webhooks.Enve
 			Headers:    maps.Clone(envelope.Headers),
 		},
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
-			return operations.ProcessPayloadSets(
+			return operations.EmitPayloadSets(
 				ingestCtx,
-				r.Registry(),
-				do.MustInvoke[*ent.Client](r.injector),
-				installation,
+				operations.IngestContext{
+					Registry:     r.Registry(),
+					DB:           do.MustInvoke[*ent.Client](r.injector),
+					Runtime:      do.MustInvoke[*gala.Gala](r.injector),
+					Installation: installation,
+				},
+				envelope.Webhook,
 				registration.Ingest,
 				payloadSets,
+				operations.IngestOptions{
+					Source:       integrationgenerated.IntegrationIngestSourceWebhook,
+					Webhook:      envelope.Webhook,
+					WebhookEvent: envelope.Event,
+					DeliveryID:   envelope.DeliveryID,
+				},
 			)
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {
@@ -198,6 +202,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope webhooks.Enve
 	})
 }
 
+// ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration
 func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integration, registration types.WebhookRegistration) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name

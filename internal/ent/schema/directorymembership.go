@@ -47,7 +47,10 @@ func (DirectoryMembership) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that owns this directory membership").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory membership").
 			Optional().
@@ -56,15 +59,24 @@ func (DirectoryMembership) Fields() []ent.Field {
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
+			),
 		field.String("directory_account_id").
 			Comment("directory account participating in this membership").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
 		field.String("directory_group_id").
 			Comment("directory group associated with this membership").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
 		field.Enum("role").
 			Comment("membership role reported by the provider").
 			GoType(enums.DirectoryMembershipRole("")).
@@ -193,8 +205,6 @@ func (DirectoryMembership) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
-		entx.IntegrationMappingSchema().
-			UpsertKeys("directory_account_id", "directory_group_id", "directory_sync_run_id").
-			DefaultOperation("directory.sync"),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

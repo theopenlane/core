@@ -17,8 +17,11 @@ import (
 )
 
 const (
-	githubSignatureHeader       = "X-Hub-Signature-256"
-	githubWebhookEventHeader    = "X-GitHub-Event"
+	// githubSignatureHeader is the HTTP header carrying the HMAC-SHA256 webhook signature
+	githubSignatureHeader = "X-Hub-Signature-256"
+	// githubWebhookEventHeader is the HTTP header carrying the GitHub event type name
+	githubWebhookEventHeader = "X-GitHub-Event"
+	// githubWebhookDeliveryHeader is the HTTP header carrying the provider-assigned delivery ID
 	githubWebhookDeliveryHeader = "X-GitHub-Delivery"
 )
 
@@ -37,40 +40,63 @@ type CodeScanningAlertWebhook struct{}
 // SecretScanningAlertWebhook ingests one secret scanning alert from the webhook payload
 type SecretScanningAlertWebhook struct{}
 
+// githubWebhookEnvelope is the common wrapper decoded from all inbound GitHub webhook payloads
 type githubWebhookEnvelope struct {
-	Action       string                     `json:"action"`
+	// Action is the event action sub-type (e.g. "created", "dismissed")
+	Action string `json:"action"`
+	// Installation identifies the GitHub App installation that sent the event
 	Installation *githubWebhookInstallation `json:"installation"`
-	Repository   *githubWebhookRepository   `json:"repository"`
-	Alert        json.RawMessage            `json:"alert"`
+	// Repository is the repository the event originated from, if any
+	Repository *githubWebhookRepository `json:"repository"`
+	// Alert is the raw alert payload for security alert event types
+	Alert json.RawMessage `json:"alert"`
 }
 
+// githubWebhookInstallation represents the installation object within a GitHub webhook payload
 type githubWebhookInstallation struct {
-	ID         int64                 `json:"id"`
-	Account    *githubWebhookAccount `json:"account"`
-	TargetType string                `json:"target_type"`
+	// ID is the numeric GitHub App installation identifier
+	ID int64 `json:"id"`
+	// Account is the account (user or organization) that owns the installation
+	Account *githubWebhookAccount `json:"account"`
+	// TargetType indicates whether the installation target is a user or organization
+	TargetType string `json:"target_type"`
 }
 
+// githubWebhookAccount represents the account object nested within a GitHub webhook installation
 type githubWebhookAccount struct {
+	// Login is the GitHub account login name
 	Login string `json:"login"`
-	Type  string `json:"type"`
+	// Type is the account type (User or Organization)
+	Type string `json:"type"`
 }
 
+// githubWebhookRepository represents the repository object within a GitHub webhook payload
 type githubWebhookRepository struct {
-	FullName string                 `json:"full_name"`
-	Name     string                 `json:"name"`
-	HTMLURL  string                 `json:"html_url"`
-	Owner    githubWebhookRepoOwner `json:"owner"`
+	// FullName is the slug-style full repository name (owner/repo)
+	FullName string `json:"full_name"`
+	// Name is the short repository name without the owner prefix
+	Name string `json:"name"`
+	// HTMLURL is the browser URL for the repository
+	HTMLURL string `json:"html_url"`
+	// Owner is the repository owner login information
+	Owner githubWebhookRepoOwner `json:"owner"`
 }
 
+// githubWebhookRepoOwner holds the owner login from a GitHub webhook repository object
 type githubWebhookRepoOwner struct {
+	// Login is the owner's GitHub login name
 	Login string `json:"login"`
 }
 
+// githubWebhookVerificationStatePatch is the provider state patch written on successful ping verification
 type githubWebhookVerificationStatePatch struct {
+	// WebhookVerifiedAt records the UTC timestamp of the verified ping event
 	WebhookVerifiedAt time.Time `json:"webhookVerifiedAt"`
 }
 
+// githubWebhookVerificationMetadata is the integration metadata patch written on successful ping verification
 type githubWebhookVerificationMetadata struct {
+	// GitHubWebhookVerifiedAt records the UTC timestamp of the verified ping event
 	GitHubWebhookVerifiedAt time.Time `json:"githubWebhookVerifiedAt"`
 }
 

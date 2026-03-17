@@ -36,15 +36,24 @@ func ingestDirectoryPayloadSets(ctx context.Context, client *generated.Client, i
 		return err
 	}
 
-	return ic.Runtime.IngestPayloadSets(
+	contracts := make([]integrationtypes.IngestContract, 0, len(payloadSets))
+	for _, ps := range payloadSets {
+		contracts = append(contracts, integrationtypes.IngestContract{Schema: ps.Schema})
+	}
+
+	return integrationops.ProcessPayloadSets(
 		ctx,
-		client,
-		installation,
-		integrationscim.DirectorySyncOperation.Name(),
+		integrationops.IngestContext{
+			Registry:     ic.Runtime.Registry(),
+			DB:           client,
+			Installation: installation,
+		},
+		contracts,
 		payloadSets,
-		integrationsruntime.IngestOptions{
-			DirectorySyncRunID:               syncRunID,
+		integrationops.IngestOptions{
+			DirectorySyncRunID:              syncRunID,
 			SkipDirectorySyncRunFinalization: true,
+			Source:                           integrationgenerated.IntegrationIngestSourceDirect,
 		},
 	)
 }
@@ -79,7 +88,6 @@ func handleDirectoryIngestError(err error, detail string) error {
 			Status:   400,
 		}
 	case errors.Is(err, integrationops.ErrIngestMappedDocumentInvalid),
-		errors.Is(err, integrationops.ErrIngestRequiredKeyMissing),
 		errors.Is(err, integrationops.ErrIngestUpsertKeyMissing):
 		return scimerrors.ScimError{
 			ScimType: scimerrors.ScimTypeInvalidValue,

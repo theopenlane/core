@@ -11,19 +11,26 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// securityPricingSampleSize is the maximum number of pricing records included in the overview sample
 const securityPricingSampleSize = 10
 
-// SecurityPricingSample holds a representative Defender pricing record.
+// SecurityPricingSample holds a representative Defender pricing record
 type SecurityPricingSample struct {
-	Name      string `json:"name"`
-	Tier      string `json:"tier"`
-	SubPlan   string `json:"subPlan"`
+	// Name is the Defender pricing resource name
+	Name string `json:"name"`
+	// Tier is the Defender pricing tier (e.g. Free, Standard)
+	Tier string `json:"tier"`
+	// SubPlan is the optional Defender pricing sub-plan identifier
+	SubPlan string `json:"subPlan"`
+	// FreeTrial is the remaining free trial duration, if any
 	FreeTrial string `json:"freeTrial"`
 }
 
-// SecurityPricingOverview summarizes Defender pricing metadata.
+// SecurityPricingOverview summarizes Defender pricing metadata
 type SecurityPricingOverview struct {
-	Count   int                     `json:"count"`
+	// Count is the total number of pricing records returned
+	Count int `json:"count"`
+	// Samples is a representative subset of up to securityPricingSampleSize pricing records
 	Samples []SecurityPricingSample `json:"samples"`
 }
 

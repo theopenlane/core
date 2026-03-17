@@ -8,8 +8,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// celMapEntry holds one key-expression pair for building CEL object literal mapping expressions
 type celMapEntry struct {
-	key  string
+	// key is the target field name in the mapped output document
+	key string
+	// expr is the CEL expression that produces the value for key
 	expr string
 }
 
@@ -41,6 +44,7 @@ func celMapExpr(entries []celMapEntry) string {
 	return b.String()
 }
 
+// mapExprFinding is the CEL mapping expression for GCP Security Command Center finding payloads
 var mapExprFinding = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, expr: `'name' in payload ? payload.name : ""`},
 	{key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, expr: "resource"},

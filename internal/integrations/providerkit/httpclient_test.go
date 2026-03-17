@@ -49,30 +49,6 @@ func TestAuthenticatedClientGetJSON(t *testing.T) {
 	}
 }
 
-func TestAuthenticatedClientGetJSONWithParams(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if got := r.URL.Query().Get("limit"); got != "5" {
-			t.Fatalf("expected limit=5, got %q", got)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"ok":true}`))
-	}))
-	t.Cleanup(server.Close)
-
-	client := NewAuthenticatedClient(server.URL, "token", nil)
-	params := url.Values{}
-	params.Set("limit", "5")
-	var out struct {
-		OK bool `json:"ok"`
-	}
-
-	if err := client.GetJSONWithParams(context.Background(), "/items", params, &out); err != nil {
-		t.Fatalf("GetJSONWithParams error: %v", err)
-	}
-	if !out.OK {
-		t.Fatalf("expected ok response")
-	}
-}
 
 func TestAuthenticatedClientPostJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

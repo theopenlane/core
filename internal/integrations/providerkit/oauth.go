@@ -2,22 +2,19 @@ package providerkit
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/hex"
 	"encoding/json"
 	"maps"
 	"slices"
 
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
-
-const oauthStateBytes = 32
 
 // OAuthFlowConfig describes OAuth2 or OIDC endpoint configuration for a definition's auth flow
 type OAuthFlowConfig struct {
@@ -64,9 +61,9 @@ func StartOAuthFlow(ctx context.Context, cfg OAuthFlowConfig) (types.AuthStartRe
 		return types.AuthStartResult{}, err
 	}
 
-	csrfState, err := generateOAuthState()
+	csrfState, err := auth.GenerateOAuthState(0)
 	if err != nil {
-		return types.AuthStartResult{}, err
+		return types.AuthStartResult{}, ErrOAuthStateGeneration
 	}
 
 	authURL := rp.AuthURL(csrfState, rparty, buildAuthURLOpts(cfg.AuthParams)...)
@@ -178,16 +175,6 @@ func buildOAuthCredential(token *oauth2.Token, claims *oidc.IDTokenClaims) (type
 	}
 
 	return cs, nil
-}
-
-// generateOAuthState produces a cryptographically random hex CSRF state value
-func generateOAuthState() (string, error) {
-	b := make([]byte, oauthStateBytes)
-	if _, err := rand.Read(b); err != nil {
-		return "", ErrOAuthStateGeneration
-	}
-
-	return hex.EncodeToString(b), nil
 }
 
 // buildAuthURLOpts converts extra auth parameters into rp.AuthURLOpt values

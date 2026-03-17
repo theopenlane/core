@@ -16,23 +16,34 @@ import (
 )
 
 const (
-	celParserRecursionLimit    = 250
-	celExpressionSizeLimit     = 100_000
+	// celParserRecursionLimit caps the CEL parser recursion depth to prevent stack overflows
+	celParserRecursionLimit = 250
+	// celExpressionSizeLimit caps the maximum CEL expression byte length
+	celExpressionSizeLimit = 100_000
+	// celInterruptCheckFrequency controls how often the CEL evaluator checks for context cancellation
 	celInterruptCheckFrequency = 100
-	celTimeout                 = 100 * time.Millisecond
+	// celTimeout is the maximum wall-clock time allowed for a single CEL evaluation
+	celTimeout = 100 * time.Millisecond
 
 	// celVarEnvelope is the CEL variable name bound to the alert envelope map
 	celVarEnvelope = "envelope"
-	celVarVariant  = "variant"
+	// celVarVariant is the CEL variable name bound to the envelope variant field
+	celVarVariant = "variant"
+	// celVarResource is the CEL variable name bound to the envelope resource field
 	celVarResource = "resource"
-	celVarAction   = "action"
-	celVarPayload  = "payload"
+	// celVarAction is the CEL variable name bound to the envelope action field
+	celVarAction = "action"
+	// celVarPayload is the CEL variable name bound to the envelope payload field
+	celVarPayload = "payload"
 )
 
 var (
+	// celEvalOnce guards single initialization of the shared CEL evaluator
 	celEvalOnce sync.Once
-	celEval     *celx.Evaluator
-	celEvalErr  error
+	// celEval is the lazily-initialized shared CEL evaluator instance
+	celEval *celx.Evaluator
+	// celEvalErr holds the initialization error, if any, from the first celEvalOnce.Do call
+	celEvalErr error
 )
 
 // getEvaluator returns the shared CEL evaluator, initializing it once on first call

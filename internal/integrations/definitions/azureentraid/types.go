@@ -20,10 +20,13 @@ var (
 const Slug = "azure_entra_id"
 
 const (
-	azureAuthURL  = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+	// azureAuthURL is the Microsoft identity platform authorization endpoint for the Azure Entra ID OAuth flow
+	azureAuthURL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+	// azureTokenURL is the Microsoft identity platform token endpoint for the Azure Entra ID OAuth flow
 	azureTokenURL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 )
 
+// azureEntraScopes lists the Microsoft Graph OAuth scopes requested for the Azure Entra ID flow
 var azureEntraScopes = []string{
 	"https://graph.microsoft.com/.default",
 	"offline_access",

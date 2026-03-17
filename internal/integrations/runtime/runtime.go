@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/integrations/webhooks"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
@@ -31,24 +30,18 @@ type Config struct {
 	DefinitionBuilders []definition.Builder
 	// Keystore provides credential persistence and installation-scoped client pooling
 	Keystore *keystore.Store
-	// RedisClient provides the shared Redis client used for ephemeral integration auth state.
+	// RedisClient provides the shared Redis client used for ephemeral integration auth state
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
-	// SkipExecutorListeners disables automatic Gala listener registration for the executor.
-	// Set this when a workflow engine will register its own listeners that wrap the executor,
-	// to prevent double execution of operations on the same topics.
+	// SkipExecutorListeners disables automatic Gala listener registration for the executor
 	SkipExecutorListeners bool
 }
 
 // Runtime bundles the integrations services behind a do injector
 type Runtime struct {
+	// injector holds all wired integration dependencies
 	injector do.Injector
-}
-
-// Injector returns the underlying dependency injector
-func (r *Runtime) Injector() do.Injector {
-	return r.injector
 }
 
 // Registry returns the definition registry
@@ -56,25 +49,19 @@ func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
 }
 
-// Catalog returns all registered definition specs in stable id order.
+// Catalog returns all registered definition specs in stable id order
 func (r *Runtime) Catalog() []types.DefinitionSpec {
 	return do.MustInvoke[*registry.Registry](r.injector).Catalog()
 }
 
-// Definition returns one definition by canonical identifier.
+// Definition returns one definition by canonical identifier
 func (r *Runtime) Definition(id string) (types.Definition, bool) {
 	return do.MustInvoke[*registry.Registry](r.injector).Definition(id)
 }
 
-// Dispatch enqueues one integration operation through the runtime-managed dispatcher.
+// Dispatch enqueues one integration operation through the runtime-managed dispatcher
 func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) (operations.DispatchResult, error) {
-	result, err := operations.Dispatch(
-		ctx,
-		do.MustInvoke[*registry.Registry](r.injector),
-		do.MustInvoke[*ent.Client](r.injector),
-		do.MustInvoke[*gala.Gala](r.injector),
-		req,
-	)
+	result, err := operations.Dispatch(ctx, do.MustInvoke[*registry.Registry](r.injector), do.MustInvoke[*ent.Client](r.injector), do.MustInvoke[*gala.Gala](r.injector), req)
 	if err != nil {
 		switch {
 		case errors.Is(err, registry.ErrDefinitionNotFound):
@@ -90,8 +77,7 @@ func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) 
 }
 
 // NewForTesting constructs a Runtime backed only by the supplied registry.
-// Calling methods that require DB, Gala, or Keystore will panic.
-// Use only in unit tests that exercise registry lookup without executing operations.
+// Use only in unit tests that exercise registry lookup without executing operations
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
@@ -146,7 +132,7 @@ func New(config Config) (*Runtime, error) {
 				record, err := rt.ResolveInstallation(ctx, "", installationID, "")
 				if err != nil {
 					switch err {
-					case ErrInstallationRequired, ErrInstallationIDRequired:
+					case ErrInstallationIDRequired:
 						return keymaker.InstallationRecord{}, keymaker.ErrInstallationIDRequired
 					case ErrInstallationNotFound:
 						return keymaker.InstallationRecord{}, keymaker.ErrInstallationNotFound
@@ -174,22 +160,18 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
+	var operationHandle func(context.Context, operations.Envelope) error
 	if !config.SkipExecutorListeners {
-		if err := operations.RegisterListeners(
-			do.MustInvoke[*gala.Gala](injector),
-			do.MustInvoke[*registry.Registry](injector),
-			func(ctx context.Context, envelope operations.Envelope) error {
-				return rt.HandleOperation(ctx, envelope)
-			},
-		); err != nil {
-			return nil, err
+		operationHandle = func(ctx context.Context, envelope operations.Envelope) error {
+			return rt.HandleOperation(ctx, envelope)
 		}
 	}
 
-	if err := webhooks.RegisterListeners(
+	if err := operations.RegisterRuntimeListeners(
 		do.MustInvoke[*gala.Gala](injector),
 		do.MustInvoke[*registry.Registry](injector),
-		func(ctx context.Context, envelope webhooks.Envelope) error {
+		operationHandle,
+		func(ctx context.Context, envelope operations.WebhookEnvelope) error {
 			return rt.HandleWebhookEvent(ctx, envelope)
 		},
 	); err != nil {

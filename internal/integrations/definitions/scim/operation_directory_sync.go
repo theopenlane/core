@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// directorySyncAckMessage is the static message returned when the SCIM directory sync is invoked
 const directorySyncAckMessage = "scim is push-based; sync is triggered by the external identity provider"
 
 // DirectorySync is a no-op placeholder result for push-based SCIM directory sync

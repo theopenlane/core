@@ -22,7 +22,7 @@ type RunResult struct {
 	Metrics map[string]any
 }
 
-// CreatePendingRun inserts one pending run record for a dispatch request.
+// CreatePendingRun inserts one pending run record for a dispatch request
 func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, req DispatchRequest) (*ent.IntegrationRun, error) {
 	if installation == nil {
 		return nil, ErrInstallationIDRequired
@@ -48,16 +48,7 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 		Save(ctx)
 }
 
-// GetRun resolves one persisted run record.
-func GetRun(ctx context.Context, db *ent.Client, runID string) (*ent.IntegrationRun, error) {
-	if runID == "" {
-		return nil, ErrRunIDRequired
-	}
-
-	return db.IntegrationRun.Get(ctx, runID)
-}
-
-// MarkRunRunning transitions one run to running.
+// MarkRunRunning transitions one run to running
 func MarkRunRunning(ctx context.Context, db *ent.Client, runID string) error {
 	if runID == "" {
 		return ErrRunIDRequired
@@ -69,7 +60,7 @@ func MarkRunRunning(ctx context.Context, db *ent.Client, runID string) error {
 		Exec(ctx)
 }
 
-// CompleteRun writes the final run outcome.
+// CompleteRun writes the final run outcome
 func CompleteRun(ctx context.Context, db *ent.Client, runID string, startedAt time.Time, result RunResult) error {
 	if runID == "" {
 		return ErrRunIDRequired

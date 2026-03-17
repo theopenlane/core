@@ -35,14 +35,20 @@ type MessageSend struct {
 	MessageID string `json:"messageId"`
 }
 
+// channelMessageBody is the Graph API chat message body payload
 type channelMessageBody struct {
+	// ContentType is the content type of the message body (text or html)
 	ContentType string `json:"contentType"`
-	Content     string `json:"content"`
+	// Content is the message body text
+	Content string `json:"content"`
 }
 
+// channelMessageRequest is the Graph API request payload for creating a channel message
 type channelMessageRequest struct {
-	Body    channelMessageBody `json:"body"`
-	Subject string             `json:"subject,omitempty"`
+	// Body holds the message body content and format
+	Body channelMessageBody `json:"body"`
+	// Subject is the optional message subject line
+	Subject string `json:"subject,omitempty"`
 }
 
 // Handle adapts message send to the generic operation registration boundary

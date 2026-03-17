@@ -1,7 +1,8 @@
 package registry
 
 import (
-	"sort"
+	"cmp"
+	"slices"
 
 	"github.com/samber/lo"
 
@@ -71,47 +72,23 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 
 // Client returns one client registration for a definition
 func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegistration, error) {
-	entry, ok := r.definitions[id]
-	if !ok {
-		return types.ClientRegistration{}, ErrDefinitionNotFound
-	}
-
-	client, ok := entry.clients[clientID]
-	if !ok {
-		return types.ClientRegistration{}, ErrClientNotFound
-	}
-
-	return client, nil
+	return lookupInEntry(r, id, clientID, func(e definitionEntry) map[types.ClientID]types.ClientRegistration {
+		return e.clients
+	}, ErrClientNotFound)
 }
 
 // Operation returns one operation registration for a definition
 func (r *Registry) Operation(id string, name string) (types.OperationRegistration, error) {
-	entry, ok := r.definitions[id]
-	if !ok {
-		return types.OperationRegistration{}, ErrDefinitionNotFound
-	}
-
-	operation, ok := entry.operations[name]
-	if !ok {
-		return types.OperationRegistration{}, ErrOperationNotFound
-	}
-
-	return operation, nil
+	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.OperationRegistration {
+		return e.operations
+	}, ErrOperationNotFound)
 }
 
 // Webhook returns one webhook registration for a definition
 func (r *Registry) Webhook(id string, name string) (types.WebhookRegistration, error) {
-	entry, ok := r.definitions[id]
-	if !ok {
-		return types.WebhookRegistration{}, ErrDefinitionNotFound
-	}
-
-	webhook, ok := entry.webhooks[name]
-	if !ok {
-		return types.WebhookRegistration{}, ErrWebhookNotFound
-	}
-
-	return webhook, nil
+	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.WebhookRegistration {
+		return e.webhooks
+	}, ErrWebhookNotFound)
 }
 
 // Catalog returns all definition specs in stable id order
@@ -120,8 +97,8 @@ func (r *Registry) Catalog() []types.DefinitionSpec {
 		return entry.definition.DefinitionSpec
 	})
 
-	sort.Slice(out, func(i, j int) bool {
-		return out[i].ID < out[j].ID
+	slices.SortFunc(out, func(a, b types.DefinitionSpec) int {
+		return cmp.Compare(a.ID, b.ID)
 	})
 
 	return out
@@ -141,10 +118,10 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrDefinitionAlreadyRegistered
 	}
 
-	for _, entry := range r.definitions {
-		if entry.definition.Slug == def.Slug {
-			return ErrDefinitionSlugAlreadyRegistered
-		}
+	if lo.ContainsBy(lo.Values(r.definitions), func(e definitionEntry) bool {
+		return e.definition.Slug == def.Slug
+	}) {
+		return ErrDefinitionSlugAlreadyRegistered
 	}
 
 	return nil
@@ -212,11 +189,9 @@ func (r *Registry) indexOperations(operations []types.OperationRegistration, cli
 			return nil, ErrOperationAlreadyRegistered
 		}
 
-		if _, exists := localTopics[operation.Topic]; exists {
-			return nil, ErrOperationTopicAlreadyRegistered
-		}
-
-		if _, exists := r.operationsByTopic[operation.Topic]; exists {
+		_, local := localTopics[operation.Topic]
+		_, global := r.operationsByTopic[operation.Topic]
+		if local || global {
 			return nil, ErrOperationTopicAlreadyRegistered
 		}
 
@@ -273,11 +248,9 @@ func (r *Registry) indexWebhooks(webhooks []types.WebhookRegistration) (map[stri
 				return nil, nil, ErrWebhookAlreadyRegistered
 			}
 
-			if _, exists := localTopics[event.Topic]; exists {
-				return nil, nil, ErrOperationTopicAlreadyRegistered
-			}
-
-			if _, exists := r.webhookEventsByTopic[event.Topic]; exists {
+			_, local := localTopics[event.Topic]
+			_, global := r.webhookEventsByTopic[event.Topic]
+			if local || global {
 				return nil, nil, ErrOperationTopicAlreadyRegistered
 			}
 
@@ -293,12 +266,10 @@ func (r *Registry) indexWebhooks(webhooks []types.WebhookRegistration) (map[stri
 
 // Listeners returns all operation registrations in stable topic order
 func (r *Registry) Listeners() []types.OperationRegistration {
-	out := lo.MapToSlice(r.operationsByTopic, func(_ gala.TopicName, operation types.OperationRegistration) types.OperationRegistration {
-		return operation
-	})
+	out := lo.Values(r.operationsByTopic)
 
-	sort.Slice(out, func(i, j int) bool {
-		return out[i].Topic < out[j].Topic
+	slices.SortFunc(out, func(a, b types.OperationRegistration) int {
+		return cmp.Compare(a.Topic, b.Topic)
 	})
 
 	return out
@@ -326,13 +297,27 @@ func (r *Registry) WebhookEvent(id string, webhookName string, eventName string)
 
 // WebhookListeners returns all webhook event registrations in stable topic order
 func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
-	out := lo.MapToSlice(r.webhookEventsByTopic, func(_ gala.TopicName, event types.WebhookEventRegistration) types.WebhookEventRegistration {
-		return event
-	})
+	out := lo.Values(r.webhookEventsByTopic)
 
-	sort.Slice(out, func(i, j int) bool {
-		return out[i].Topic < out[j].Topic
+	slices.SortFunc(out, func(a, b types.WebhookEventRegistration) int {
+		return cmp.Compare(a.Topic, b.Topic)
 	})
 
 	return out
+}
+
+// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap
+func lookupInEntry[K comparable, V any](r *Registry, id string, key K, getMap func(definitionEntry) map[K]V, notFoundErr error) (V, error) {
+	entry, ok := r.definitions[id]
+	if !ok {
+		var zero V
+		return zero, ErrDefinitionNotFound
+	}
+
+	val, ok := getMap(entry)[key]
+	if !ok {
+		return val, notFoundErr
+	}
+
+	return val, nil
 }

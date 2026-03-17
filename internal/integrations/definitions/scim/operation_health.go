@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// healthCheckAckMessage is the static message returned when the SCIM health check is invoked
 const healthCheckAckMessage = "scim health check is a no-op for push-based installations"
 
 // HealthCheck is a no-op success result for SCIM credential validation

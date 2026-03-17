@@ -36,7 +36,10 @@ type UserInput struct {
 
 // credential holds the inbound or outbound authentication material for one SCIM installation
 type credential struct {
-	BaseURL       string `json:"baseUrl,omitempty"       jsonschema:"title=SCIM Base URL"`
-	Token         string `json:"token,omitempty"         jsonschema:"title=Bearer Token"`
+	// BaseURL is the base URL of the SCIM server for outbound requests
+	BaseURL string `json:"baseUrl,omitempty"       jsonschema:"title=SCIM Base URL"`
+	// Token is the bearer token used for outbound SCIM requests
+	Token string `json:"token,omitempty"         jsonschema:"title=Bearer Token"`
+	// InboundSecret is the shared secret used to authenticate inbound SCIM pushes
 	InboundSecret string `json:"inboundSecret,omitempty" jsonschema:"title=Inbound Secret"`
 }

@@ -10,8 +10,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// celMapEntry holds one key-expression pair for building CEL object literal mapping expressions
 type celMapEntry struct {
-	key  string
+	// key is the target field name in the mapped output document
+	key string
+	// expr is the CEL expression that produces the value for key
 	expr string
 }
 
@@ -68,6 +71,7 @@ func buildMappingExpr(category, externalIDExpr string, extras []celMapEntry) str
 }
 
 var (
+	// mapExprDependabot is the CEL mapping expression for Dependabot alert payloads
 	mapExprDependabot = buildMappingExpr(
 		githubAlertTypeDependabot,
 		`"github:" + resource + ":dependabot:" + (payload.number != 0 ? string(payload.number) : (payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown"))`,
@@ -78,6 +82,7 @@ var (
 			{key: integrationgenerated.IntegrationMappingVulnerabilityCveID, expr: "payload.security_advisory.cve_id"},
 		},
 	)
+	// mapExprCodeScanning is the CEL mapping expression for code scanning alert payloads
 	mapExprCodeScanning = buildMappingExpr(
 		githubAlertTypeCodeScanning,
 		`"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
@@ -87,6 +92,7 @@ var (
 			{key: integrationgenerated.IntegrationMappingVulnerabilityDescription, expr: `payload.most_recent_instance.message.text`},
 		},
 	)
+	// mapExprSecretScanning is the CEL mapping expression for secret scanning alert payloads
 	mapExprSecretScanning = buildMappingExpr(
 		githubAlertTypeSecretScan,
 		`"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,

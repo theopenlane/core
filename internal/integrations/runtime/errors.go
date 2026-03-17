@@ -5,6 +5,8 @@ import "errors"
 var (
 	// ErrOwnerIDRequired indicates installation resolution requires an owner id when resolving by definition
 	ErrOwnerIDRequired = errors.New("integrations/runtime: owner id required")
+	// ErrDefinitionIDRequired indicates installation resolution requires a definition id when no explicit installation id is given
+	ErrDefinitionIDRequired = errors.New("integrations/runtime: definition id required")
 	// ErrInstallationRequired indicates the installation record dependency is missing
 	ErrInstallationRequired = errors.New("integrations/runtime: installation required")
 	// ErrInstallationIDRequired indicates installation resolution requires an installation id when owner plus definition is ambiguous

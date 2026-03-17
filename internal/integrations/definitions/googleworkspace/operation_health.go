@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// healthMaxResults is the maximum number of users to fetch during a health probe
 const healthMaxResults = int64(1)
 
 // HealthCheck holds the result of a Google Workspace health check

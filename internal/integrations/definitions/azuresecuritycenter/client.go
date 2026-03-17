@@ -15,9 +15,12 @@ import (
 )
 
 const (
+	// azureSubscriptionScopePrefix is the ARM resource scope prefix for subscription-level requests
 	azureSubscriptionScopePrefix = "subscriptions/"
-	defaultAzureScope            = "https://management.azure.com/.default"
-	azureTokenURLTemplate        = "https://login.microsoftonline.com/%s/oauth2/v2.0/token"
+	// defaultAzureScope is the Azure Resource Manager OAuth scope for management API access
+	defaultAzureScope = "https://management.azure.com/.default"
+	// azureTokenURLTemplate is the Microsoft identity platform token endpoint template, parameterized by tenant ID
+	azureTokenURLTemplate = "https://login.microsoftonline.com/%s/oauth2/v2.0/token"
 )
 
 // Client builds Azure Defender for Cloud clients for one installation
@@ -25,13 +28,16 @@ type Client struct{}
 
 // staticAzureCredential implements azcore.TokenCredential for a pre-obtained bearer token
 type staticAzureCredential struct {
+	// token is the pre-obtained bearer token returned on every GetToken call
 	token string
 }
 
 // azurePricingsClient wraps a PricingsClient with its subscription scope
 type azurePricingsClient struct {
+	// client is the underlying Azure Defender for Cloud pricings client
 	client *armsecurity.PricingsClient
-	scope  string
+	// scope is the ARM subscription scope string used for pricings queries
+	scope string
 }
 
 // GetToken satisfies azcore.TokenCredential for a pre-obtained bearer token

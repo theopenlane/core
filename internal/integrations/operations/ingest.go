@@ -3,77 +3,116 @@ package operations
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// IngestOptions carries the minimal ingest-time metadata needed by persistence.
+// IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
-	DirectorySyncRunID               string
+	// DirectorySyncRunID is the database ID of the DirectorySyncRun record that groups all
+	// directory-related ingest records (accounts, groups, memberships) from one sync batch;
+	// created at the start of processing and finalized when the batch completes
+	DirectorySyncRunID string
+	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory
+	// sync run after processing; set when the caller is responsible for finalization (e.g. async path)
 	SkipDirectorySyncRunFinalization bool
+	// Source identifies the mechanism that produced the ingest data (e.g. webhook, poll, manual)
+	Source integrationgenerated.IntegrationIngestSource
+	// RunID is a caller-supplied correlation identifier for the overall operation run (e.g. a polling
+	// job invocation); propagated into Gala message headers for distributed tracing — not a DB entity
+	RunID string
+	// Webhook is the webhook name or identifier that triggered this ingest, if applicable
+	Webhook string
+	// WebhookEvent is the event type reported by the webhook provider (e.g. "push", "member_added")
+	WebhookEvent string
+	// DeliveryID is the provider-assigned delivery identifier for webhook payloads, used for deduplication
+	DeliveryID string
+	// WorkflowMeta carries workflow instance context when ingest is triggered from a workflow action
+	WorkflowMeta *WorkflowMeta
 }
 
+// installationFilterConfig holds per-installation CEL filter configuration stored in the integration's client config
 type installationFilterConfig struct {
+	// FilterExpr is a CEL expression evaluated against each ingest envelope; non-matching envelopes are dropped
 	FilterExpr string `json:"filterExpr,omitempty"`
 }
 
-// ProcessIngest decodes one operation response into payload sets and persists them.
-func ProcessIngest(ctx context.Context, reg *registry.Registry, db *ent.Client, installation *ent.Integration, operation types.OperationRegistration, response json.RawMessage) error {
+// mappedIngestRecord is the result of applying a mapping expression to one ingest envelope
+type mappedIngestRecord struct {
+	// Schema is the integration mapping schema name identifying the target ent type
+	Schema string
+	// Variant is the provider-specific sub-type within the schema (e.g. "user" vs "service_account")
+	Variant string
+	// Payload is the mapped JSON document ready for unmarshaling into the ent create input type
+	Payload json.RawMessage
+}
+
+// ProcessIngestAsync decodes one operation response into payload sets and emits them via Gala
+func ProcessIngestAsync(ctx context.Context, ic IngestContext, operation types.OperationRegistration, response json.RawMessage, options IngestOptions) error {
 	var payloadSets []types.IngestPayloadSet
 	if err := json.Unmarshal(response, &payloadSets); err != nil {
 		return fmt.Errorf("%w: %w", ErrIngestPayloadsInvalid, err)
 	}
 
-	return ProcessPayloadSets(ctx, reg, db, installation, operation.Ingest, payloadSets)
+	return EmitPayloadSets(ctx, ic, operation.Name, operation.Ingest, payloadSets, options)
 }
 
-// ProcessPayloadSets persists one batch of mapped payload sets with default options.
-func ProcessPayloadSets(ctx context.Context, reg *registry.Registry, db *ent.Client, installation *ent.Integration, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet) error {
-	return ProcessPayloadSetsWithOptions(ctx, reg, db, installation, contracts, payloadSets, IngestOptions{})
-}
-
-// ProcessPayloadSetsWithOptions persists one batch of mapped payload sets.
-func ProcessPayloadSetsWithOptions(ctx context.Context, reg *registry.Registry, db *ent.Client, installation *ent.Integration, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) (err error) {
-	if reg == nil || db == nil || installation == nil {
-		return ErrIngestPersistFailed
+// EmitPayloadSets transforms one batch of mapped payload sets and emits typed second-stage Gala ingest requests
+func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
+	if ic.Runtime == nil {
+		return ErrGalaRequired
 	}
 
-	definition, ok := reg.Definition(installation.DefinitionID)
+	// Second-stage ingest is asynchronous; do not finalize directory sync runs before listeners finish.
+	options.SkipDirectorySyncRunFinalization = true
+
+	return processPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+		return emitMappedRecord(handleCtx, ic.Runtime, ic.Installation, operationName, record, options)
+	})
+}
+
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously
+func ProcessPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
+	return processPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+		return persistMappedRecord(handleCtx, ic.DB, ic.Installation, record.Schema, record.Payload)
+	})
+}
+
+// processPayloadSets is the shared core for both async emit and sync persist paths
+func processPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
+	definition, ok := ic.Registry.Definition(ic.Installation.DefinitionID)
 	if !ok {
 		return ErrIngestDefinitionNotFound
 	}
 
-	installationFilterExpr, err := resolveInstallationFilterExpr(installation)
+	installationFilterExpr, err := resolveInstallationFilterExpr(ic.Installation)
 	if err != nil {
 		return ErrIngestInstallationFilterConfigInvalid
 	}
 
 	directorySyncRunID := options.DirectorySyncRunID
 	if directorySyncRunID == "" && needsDirectorySyncRun(contracts) {
-		directorySyncRunID, err = createDirectorySyncRun(ctx, db, installation)
+		directorySyncRunID, err = createDirectorySyncRun(ctx, ic.DB, ic.Installation)
 		if err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
 	}
 
+	if directorySyncRunID != "" {
+		ctx = withDirectorySyncRunID(ctx, directorySyncRunID)
+	}
+
 	shouldFinalizeDirectorySyncRun := directorySyncRunID != "" && needsDirectorySyncRun(contracts) && !options.SkipDirectorySyncRunFinalization
 	if shouldFinalizeDirectorySyncRun {
 		defer func() {
-			if finalizeErr := finalizeDirectorySyncRun(ctx, db, directorySyncRunID, err); finalizeErr != nil && err == nil {
+			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, err); finalizeErr != nil && err == nil {
 				err = finalizeErr
 			}
 		}()
@@ -88,7 +127,15 @@ func ProcessPayloadSetsWithOptions(ctx context.Context, reg *registry.Registry, 
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
-			if err := ingestRecord(ctx, db, installation, definition, payloadSet.Schema, envelope, installationFilterExpr, directorySyncRunID); err != nil {
+			record, include, recordErr := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
+			if recordErr != nil {
+				return recordErr
+			}
+			if !include {
+				continue
+			}
+
+			if err := handle(ctx, record); err != nil {
 				return err
 			}
 		}
@@ -97,346 +144,34 @@ func ProcessPayloadSetsWithOptions(ctx context.Context, reg *registry.Registry, 
 	return nil
 }
 
-func ingestRecord(ctx context.Context, db *ent.Client, installation *ent.Integration, definition types.Definition, schema string, envelope types.MappingEnvelope, installationFilterExpr string, directorySyncRunID string) error {
+// mapIngestRecord applies user-defined CEL expression filters over the data envelope so that we can filter out the data we import
+func mapIngestRecord(ctx context.Context, definition types.Definition, schema string, envelope types.MappingEnvelope, installationFilterExpr string) (mappedIngestRecord, bool, error) {
 	mapping, found := findMapping(definition.Mappings, schema, envelope.Variant)
 	if !found {
-		return ErrIngestMappingNotFound
+		return mappedIngestRecord{}, false, ErrIngestMappingNotFound
 	}
 
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
-		return ErrIngestFilterFailed
+		return mappedIngestRecord{}, false, ErrIngestFilterFailed
 	}
 	if !matched {
-		return nil
+		return mappedIngestRecord{}, false, nil
 	}
 
 	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestTransformFailed, err)
+		return mappedIngestRecord{}, false, fmt.Errorf("%w: %w", ErrIngestTransformFailed, err)
 	}
 
-	switch schema {
-	case integrationgenerated.IntegrationMappingSchemaDirectoryAccount:
-		return upsertDirectoryAccount(ctx, db, installation, directorySyncRunID, mapped)
-	case integrationgenerated.IntegrationMappingSchemaDirectoryGroup:
-		return upsertDirectoryGroup(ctx, db, installation, directorySyncRunID, mapped)
-	case integrationgenerated.IntegrationMappingSchemaDirectoryMembership:
-		return upsertDirectoryMembership(ctx, db, installation, directorySyncRunID, mapped)
-	case integrationgenerated.IntegrationMappingSchemaVulnerability:
-		return upsertVulnerability(ctx, db, installation, mapped)
-	default:
-		return ErrIngestUnsupportedSchema
-	}
+	return mappedIngestRecord{
+		Schema:  schema,
+		Variant: envelope.Variant,
+		Payload: mapped,
+	}, true, nil
 }
 
-func upsertDirectoryAccount(ctx context.Context, db *ent.Client, installation *ent.Integration, directorySyncRunID string, mapped json.RawMessage) error {
-	var createInput ent.CreateDirectoryAccountInput
-	if err := json.Unmarshal(mapped, &createInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if createInput.OwnerID == nil && installation.OwnerID != "" {
-		createInput.OwnerID = &installation.OwnerID
-	}
-	if createInput.IntegrationID == nil {
-		createInput.IntegrationID = &installation.ID
-	}
-	if createInput.PlatformID == nil && installation.PlatformID != "" {
-		createInput.PlatformID = &installation.PlatformID
-	}
-	if createInput.DirectorySyncRunID == nil && directorySyncRunID != "" {
-		createInput.DirectorySyncRunID = &directorySyncRunID
-	}
-
-	if createInput.IntegrationID == nil || *createInput.IntegrationID == "" || createInput.DirectorySyncRunID == nil || *createInput.DirectorySyncRunID == "" || createInput.ExternalID == "" {
-		return ErrIngestUpsertKeyMissing
-	}
-
-	existing, err := db.DirectoryAccount.Query().
-		Where(
-			directoryaccount.IntegrationID(*createInput.IntegrationID),
-			directoryaccount.DirectorySyncRunID(*createInput.DirectorySyncRunID),
-			directoryaccount.ExternalID(createInput.ExternalID),
-		).
-		Only(ctx)
-	if err != nil {
-		if !ent.IsNotFound(err) {
-			if ent.IsNotSingular(err) {
-				return ErrIngestUpsertConflict
-			}
-
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-		}
-
-		if _, err := db.DirectoryAccount.Create().SetInput(createInput).Save(ctx); err != nil {
-			return wrapIngestPersistError(err)
-		}
-
-		return nil
-	}
-
-	var updateInput ent.UpdateDirectoryAccountInput
-	if err := json.Unmarshal(mapped, &updateInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if _, err := db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(updateInput).Save(ctx); err != nil {
-		return wrapIngestPersistError(err)
-	}
-
-	return nil
-}
-
-func upsertDirectoryGroup(ctx context.Context, db *ent.Client, installation *ent.Integration, directorySyncRunID string, mapped json.RawMessage) error {
-	var createInput ent.CreateDirectoryGroupInput
-	if err := json.Unmarshal(mapped, &createInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if createInput.OwnerID == nil && installation.OwnerID != "" {
-		createInput.OwnerID = &installation.OwnerID
-	}
-	if createInput.IntegrationID == "" {
-		createInput.IntegrationID = installation.ID
-	}
-	if createInput.PlatformID == nil && installation.PlatformID != "" {
-		createInput.PlatformID = &installation.PlatformID
-	}
-	if createInput.DirectorySyncRunID == "" {
-		createInput.DirectorySyncRunID = directorySyncRunID
-	}
-
-	if createInput.IntegrationID == "" || createInput.DirectorySyncRunID == "" || createInput.ExternalID == "" {
-		return ErrIngestUpsertKeyMissing
-	}
-
-	existing, err := db.DirectoryGroup.Query().
-		Where(
-			directorygroup.IntegrationID(createInput.IntegrationID),
-			directorygroup.DirectorySyncRunID(createInput.DirectorySyncRunID),
-			directorygroup.ExternalID(createInput.ExternalID),
-		).
-		Only(ctx)
-	if err != nil {
-		if !ent.IsNotFound(err) {
-			if ent.IsNotSingular(err) {
-				return ErrIngestUpsertConflict
-			}
-
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-		}
-
-		if _, err := db.DirectoryGroup.Create().SetInput(createInput).Save(ctx); err != nil {
-			return wrapIngestPersistError(err)
-		}
-
-		return nil
-	}
-
-	var updateInput ent.UpdateDirectoryGroupInput
-	if err := json.Unmarshal(mapped, &updateInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if _, err := db.DirectoryGroup.UpdateOneID(existing.ID).SetInput(updateInput).Save(ctx); err != nil {
-		return wrapIngestPersistError(err)
-	}
-
-	return nil
-}
-
-func upsertDirectoryMembership(ctx context.Context, db *ent.Client, installation *ent.Integration, directorySyncRunID string, mapped json.RawMessage) error {
-	var createInput ent.CreateDirectoryMembershipInput
-	if err := json.Unmarshal(mapped, &createInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if createInput.OwnerID == nil && installation.OwnerID != "" {
-		createInput.OwnerID = &installation.OwnerID
-	}
-	if createInput.IntegrationID == "" {
-		createInput.IntegrationID = installation.ID
-	}
-	if createInput.PlatformID == nil && installation.PlatformID != "" {
-		createInput.PlatformID = &installation.PlatformID
-	}
-	if createInput.DirectorySyncRunID == "" {
-		createInput.DirectorySyncRunID = directorySyncRunID
-	}
-
-	if createInput.IntegrationID == "" || createInput.DirectorySyncRunID == "" || createInput.DirectoryAccountID == "" || createInput.DirectoryGroupID == "" {
-		return ErrIngestUpsertKeyMissing
-	}
-
-	accountSnapshot, err := db.DirectoryAccount.Query().
-		Where(
-			directoryaccount.IntegrationID(createInput.IntegrationID),
-			directoryaccount.DirectorySyncRunID(createInput.DirectorySyncRunID),
-			directoryaccount.ExternalID(createInput.DirectoryAccountID),
-		).
-		Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return fmt.Errorf("%w: directory account snapshot not found", ErrIngestPersistFailed)
-		}
-		if ent.IsNotSingular(err) {
-			return ErrIngestUpsertConflict
-		}
-
-		return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-	}
-
-	groupSnapshot, err := db.DirectoryGroup.Query().
-		Where(
-			directorygroup.IntegrationID(createInput.IntegrationID),
-			directorygroup.DirectorySyncRunID(createInput.DirectorySyncRunID),
-			directorygroup.ExternalID(createInput.DirectoryGroupID),
-		).
-		Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return fmt.Errorf("%w: directory group snapshot not found", ErrIngestPersistFailed)
-		}
-		if ent.IsNotSingular(err) {
-			return ErrIngestUpsertConflict
-		}
-
-		return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-	}
-
-	createInput.DirectoryAccountID = accountSnapshot.ID
-	createInput.DirectoryGroupID = groupSnapshot.ID
-
-	existing, err := db.DirectoryMembership.Query().
-		Where(
-			directorymembership.DirectoryAccountID(createInput.DirectoryAccountID),
-			directorymembership.DirectoryGroupID(createInput.DirectoryGroupID),
-			directorymembership.DirectorySyncRunID(createInput.DirectorySyncRunID),
-		).
-		Only(ctx)
-	if err != nil {
-		if !ent.IsNotFound(err) {
-			if ent.IsNotSingular(err) {
-				return ErrIngestUpsertConflict
-			}
-
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-		}
-
-		if _, err := db.DirectoryMembership.Create().SetInput(createInput).Save(ctx); err != nil {
-			return wrapIngestPersistError(err)
-		}
-
-		return nil
-	}
-
-	var updateInput ent.UpdateDirectoryMembershipInput
-	if err := json.Unmarshal(mapped, &updateInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if _, err := db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(updateInput).Save(ctx); err != nil {
-		return wrapIngestPersistError(err)
-	}
-
-	return nil
-}
-
-func upsertVulnerability(ctx context.Context, db *ent.Client, installation *ent.Integration, mapped json.RawMessage) error {
-	var createInput ent.CreateVulnerabilityInput
-	if err := json.Unmarshal(mapped, &createInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if createInput.OwnerID == nil && installation.OwnerID != "" {
-		createInput.OwnerID = &installation.OwnerID
-	}
-	if len(createInput.IntegrationIDs) == 0 {
-		createInput.IntegrationIDs = []string{installation.ID}
-	}
-
-	if createInput.ExternalID == "" && (createInput.CveID == nil || *createInput.CveID == "") {
-		return ErrIngestUpsertKeyMissing
-	}
-
-	var (
-		ownerID    string
-		byExternal *ent.Vulnerability
-		byCVE      *ent.Vulnerability
-		err        error
-	)
-	if createInput.OwnerID != nil {
-		ownerID = *createInput.OwnerID
-	}
-
-	if createInput.ExternalID != "" {
-		byExternal, err = db.Vulnerability.Query().
-			Where(
-				vulnerability.OwnerID(ownerID),
-				vulnerability.ExternalID(createInput.ExternalID),
-			).
-			Only(ctx)
-		if err != nil && !ent.IsNotFound(err) {
-			if ent.IsNotSingular(err) {
-				return ErrIngestUpsertConflict
-			}
-
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-		}
-		if ent.IsNotFound(err) {
-			byExternal = nil
-		}
-	}
-
-	if createInput.CveID != nil && *createInput.CveID != "" {
-		byCVE, err = db.Vulnerability.Query().
-			Where(
-				vulnerability.OwnerID(ownerID),
-				vulnerability.CveID(*createInput.CveID),
-			).
-			Only(ctx)
-		if err != nil && !ent.IsNotFound(err) {
-			if ent.IsNotSingular(err) {
-				return ErrIngestUpsertConflict
-			}
-
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-		}
-		if ent.IsNotFound(err) {
-			byCVE = nil
-		}
-	}
-
-	if byExternal != nil && byCVE != nil && byExternal.ID != byCVE.ID {
-		return ErrIngestUpsertConflict
-	}
-
-	existing := byExternal
-	if existing == nil {
-		existing = byCVE
-	}
-
-	if existing == nil {
-		if _, err := db.Vulnerability.Create().SetInput(createInput).Save(ctx); err != nil {
-			return wrapIngestPersistError(err)
-		}
-
-		return nil
-	}
-
-	var updateInput ent.UpdateVulnerabilityInput
-	if err := json.Unmarshal(mapped, &updateInput); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if _, err := db.Vulnerability.UpdateOneID(existing.ID).SetInput(updateInput).Save(ctx); err != nil {
-		return wrapIngestPersistError(err)
-	}
-
-	return nil
-}
-
+// resolveInstallationFilterExpr pulls the per-installation filter expression out of the config
 func resolveInstallationFilterExpr(installation *ent.Integration) (string, error) {
 	if installation == nil {
 		return "", nil
@@ -450,6 +185,7 @@ func resolveInstallationFilterExpr(installation *ent.Integration) (string, error
 	return cfg.FilterExpr, nil
 }
 
+// envelopeIncludedByFilters evaluates the installation-level and mapping-level filter expressions against the data envelope
 func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr string, mappingFilterExpr string, envelope types.MappingEnvelope) (bool, error) {
 	matched, err := providerkit.EvalFilter(ctx, installationFilterExpr, envelope)
 	if err != nil {
@@ -462,6 +198,7 @@ func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr strin
 	return providerkit.EvalFilter(ctx, mappingFilterExpr, envelope)
 }
 
+// findMapping looks up the mapping spec for the given schema and variant
 func findMapping(mappings []types.MappingRegistration, schema string, variant string) (types.MappingOverride, bool) {
 	for _, mapping := range mappings {
 		if mapping.Schema == schema && mapping.Variant == variant {
@@ -472,6 +209,7 @@ func findMapping(mappings []types.MappingRegistration, schema string, variant st
 	return types.MappingOverride{}, false
 }
 
+// contractIncludesSchema checks whether the given list of contracts includes a contract for the given schema
 func contractIncludesSchema(contracts []types.IngestContract, schema string) bool {
 	for _, contract := range contracts {
 		if contract.Schema == schema {
@@ -482,6 +220,7 @@ func contractIncludesSchema(contracts []types.IngestContract, schema string) boo
 	return false
 }
 
+// needsDirectorySyncRun checks whether any of the given contracts require a directory sync run to be created
 func needsDirectorySyncRun(contracts []types.IngestContract) bool {
 	for _, contract := range contracts {
 		switch contract.Schema {
@@ -495,6 +234,7 @@ func needsDirectorySyncRun(contracts []types.IngestContract) bool {
 	return false
 }
 
+// createDirectorySyncRun creates a new directory sync run in the database and returns its ID so that we can pass it down into the ingest context
 func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *ent.Integration) (string, error) {
 	create := db.DirectorySyncRun.Create().
 		SetIntegrationID(installation.ID).
@@ -515,6 +255,7 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 	return run.ID, nil
 }
 
+// finalizeDirectorySyncRun marks the directory sync run as completed or failed
 func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, ingestErr error) error {
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
 		SetCompletedAt(time.Now())
@@ -530,23 +271,18 @@ func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySync
 	return update.Exec(ctx)
 }
 
+// wrapIngestPersistError wraps the known errors from persistence operations so we don't need the same boilerplate in multiple functions
 func wrapIngestPersistError(err error) error {
 	if err == nil {
 		return nil
 	}
 
-	var validationErr *ent.ValidationError
-	if errors.As(err, &validationErr) {
-		if strings.Contains(validationErr.Error(), "missing required field") || strings.Contains(validationErr.Error(), "missing required edge") {
-			return fmt.Errorf("%w: %w", ErrIngestRequiredKeyMissing, err)
-		}
-
+	switch {
+	case ent.IsValidationError(err):
 		return fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
-	}
-
-	if ent.IsConstraintError(err) {
+	case ent.IsNotSingular(err), ent.IsConstraintError(err):
 		return fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
+	default:
+		return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 	}
-
-	return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 }

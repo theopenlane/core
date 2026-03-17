@@ -17,7 +17,9 @@ type GraphQLClient interface {
 	Query(ctx context.Context, q any, variables map[string]any) error
 }
 
+// graphQLClient wraps graphql.Client to satisfy the GraphQLClient interface
 type graphQLClient struct {
+	// client is the underlying shurcooL GraphQL client
 	client *graphql.Client
 }
 

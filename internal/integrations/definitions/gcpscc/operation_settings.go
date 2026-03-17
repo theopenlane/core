@@ -14,7 +14,9 @@ import (
 )
 
 const (
-	settingsPageSize      = 10
+	// settingsPageSize is the number of notification configs requested per paginated API call
+	settingsPageSize = 10
+	// sampleConfigsCapacity is the pre-allocated capacity for the notification config sample slice
 	sampleConfigsCapacity = 5
 )
 

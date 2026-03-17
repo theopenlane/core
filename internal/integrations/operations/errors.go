@@ -31,8 +31,6 @@ var (
 	ErrIngestTransformFailed = errors.New("integrations/operations: ingest transform failed")
 	// ErrIngestMappedDocumentInvalid indicates the mapped payload did not satisfy the generated schema contract
 	ErrIngestMappedDocumentInvalid = errors.New("integrations/operations: ingest mapped document invalid")
-	// ErrIngestRequiredKeyMissing indicates the mapped payload omitted a required generated field
-	ErrIngestRequiredKeyMissing = errors.New("integrations/operations: ingest required key missing")
 	// ErrIngestUpsertKeyMissing indicates the mapped payload omitted every generated upsert key
 	ErrIngestUpsertKeyMissing = errors.New("integrations/operations: ingest upsert key missing")
 	// ErrIngestUpsertConflict indicates the generated upsert keys matched more than one record

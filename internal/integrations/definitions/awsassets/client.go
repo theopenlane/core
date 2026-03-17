@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// awsDefaultSessionName is the STS session name used when no override is present in the credential metadata
 const awsDefaultSessionName = "openlane-awsassets"
 
 // Client builds AWS STS clients for one AWS Assets installation

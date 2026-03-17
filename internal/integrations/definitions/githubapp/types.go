@@ -31,9 +31,12 @@ var (
 const Slug = "github_app"
 
 const (
-	githubAlertTypeDependabot   = "dependabot"
+	// githubAlertTypeDependabot is the variant name for Dependabot security alert payloads
+	githubAlertTypeDependabot = "dependabot"
+	// githubAlertTypeCodeScanning is the variant name for code scanning alert payloads
 	githubAlertTypeCodeScanning = "code_scanning"
-	githubAlertTypeSecretScan   = "secret_scanning"
+	// githubAlertTypeSecretScan is the variant name for secret scanning alert payloads
+	githubAlertTypeSecretScan = "secret_scanning"
 )
 
 // UserInput holds installation-specific configuration collected from the user

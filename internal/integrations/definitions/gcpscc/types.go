@@ -26,7 +26,9 @@ var (
 const Slug = "gcp_scc"
 
 const (
-	projectScopeAll      = "all"
+	// projectScopeAll indicates collection should target all GCP projects in the organization
+	projectScopeAll = "all"
+	// projectScopeSpecific indicates collection should target only the explicitly listed project IDs
 	projectScopeSpecific = "specific"
 )
 

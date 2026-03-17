@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// defaultSessionName is the STS session name used when no override is present in the credential metadata
 const defaultSessionName = "openlane-awssecurityhub"
 
 // Client builds AWS Security Hub clients for one installation

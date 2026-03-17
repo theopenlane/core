@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// assessmentsPageSize is the number of assessments requested per paginated API call
 const assessmentsPageSize = int32(100)
 
 // AssessmentsConfig holds per-invocation parameters for the assessments.list operation

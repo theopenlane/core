@@ -3,20 +3,10 @@ package providerkit
 import "errors"
 
 var (
-	// ErrFilterExprInvalid is returned when a filter CEL expression cannot be compiled or the evaluator cannot be initialized
-	ErrFilterExprInvalid = errors.New("filter expression invalid")
-	// ErrMapExprInvalid is returned when a map CEL expression cannot be compiled or the evaluator cannot be initialized
-	ErrMapExprInvalid = errors.New("map expression invalid")
 	// ErrFilterExprEval is returned when a filter CEL expression fails during evaluation
 	ErrFilterExprEval = errors.New("filter expression evaluation failed")
 	// ErrMapExprEval is returned when a map CEL expression fails during evaluation
 	ErrMapExprEval = errors.New("map expression evaluation failed")
-	// ErrOAuthTokenMissing indicates the OAuth token is not present in the credential set
-	ErrOAuthTokenMissing = errors.New("providerkit: oauth token missing")
-	// ErrAccessTokenEmpty indicates the access token field is empty
-	ErrAccessTokenEmpty = errors.New("providerkit: access token empty")
-	// ErrAPITokenMissing indicates the API token is not present in the credential set
-	ErrAPITokenMissing = errors.New("providerkit: api token missing")
 	// ErrHTTPRequestFailed indicates an HTTP request returned a non-2xx status
 	ErrHTTPRequestFailed = errors.New("providerkit: http request failed")
 	// ErrOAuthRelyingPartyInit indicates Zitadel relying party construction failed

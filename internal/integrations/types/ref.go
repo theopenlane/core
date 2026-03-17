@@ -21,6 +21,7 @@ func (r DefinitionRef) ID() string {
 	return r.id
 }
 
+// clientKey is an unexported zero-size struct used as a unique generic type parameter to prevent ClientID aliasing
 type clientKey struct{ _ bool }
 
 // ClientID is the opaque in-process identity for one registered client

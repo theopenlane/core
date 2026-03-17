@@ -132,6 +132,7 @@ func (Asset) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("source_identifier"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			),
 		field.String("cost_center").
 			Comment("cost center associated with the asset").
@@ -162,7 +163,10 @@ func (Asset) Fields() []ent.Field {
 			Optional(),
 		field.String("integration_id").
 			Comment("integration that discovered this asset, when sourced via integration ingest").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
 		field.Time("observed_at").
 			Comment("time when this asset was last observed by the source integration").
 			GoType(models.DateTime{}).
@@ -277,9 +281,8 @@ func (a Asset) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("inventory-item"),
 		),
 		entx.IntegrationMappingSchema().
-			Exclude("source_platform_id").
-			UpsertKeys("source_identifier").
-			DefaultOperation("assets.collect"),
+			StockPersist().
+			Exclude("source_platform_id"),
 	}
 }
 

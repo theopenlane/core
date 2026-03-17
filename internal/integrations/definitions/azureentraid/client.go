@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// azureEntraGraphBaseURL is the base URL for the Microsoft Graph API v1.0 endpoint
 const azureEntraGraphBaseURL = "https://graph.microsoft.com/v1.0/"
 
 // Client builds Microsoft Graph API clients for one installation

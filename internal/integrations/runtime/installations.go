@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 )
 
-// ResolveInstallation resolves one installation by explicit ID or by owner plus definition.
+// ResolveInstallation resolves one installation by explicit ID or by owner plus definition
 func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installationID string, definitionID string) (*ent.Integration, error) {
 	db := do.MustInvoke[*ent.Client](r.injector)
 	if installationID != "" {
@@ -19,11 +19,7 @@ func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installation
 
 		record, err := query.Only(ctx)
 		if err != nil {
-			if ent.IsNotFound(err) {
-				return nil, ErrInstallationNotFound
-			}
-
-			return nil, err
+			return nil, wrapInstallationQueryError(err)
 		}
 
 		if definitionID != "" && record.DefinitionID != string(definitionID) {
@@ -34,7 +30,7 @@ func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installation
 	}
 
 	if definitionID == "" {
-		return nil, ErrInstallationRequired
+		return nil, ErrDefinitionIDRequired
 	}
 
 	if ownerID == "" {
@@ -48,16 +44,22 @@ func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installation
 		).
 		Only(ctx)
 	if err != nil {
-		if ent.IsNotSingular(err) {
-			return nil, ErrInstallationIDRequired
-		}
-
-		if ent.IsNotFound(err) {
-			return nil, ErrInstallationNotFound
-		}
-
-		return nil, err
+		return nil, wrapInstallationQueryError(err)
 	}
 
 	return record, nil
+}
+
+// wrapInstallationQueryError maps ent Only(ctx) result errors to installation-specific sentinels
+func wrapInstallationQueryError(err error) error {
+	switch {
+	case err == nil:
+		return nil
+	case ent.IsNotFound(err):
+		return ErrInstallationNotFound
+	case ent.IsNotSingular(err):
+		return ErrInstallationIDRequired
+	default:
+		return err
+	}
 }

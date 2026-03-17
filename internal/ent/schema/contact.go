@@ -74,6 +74,7 @@ func (Contact) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
@@ -105,10 +106,14 @@ func (Contact) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			),
 		field.String("integration_id").
 			Comment("integration that sourced this contact, when populated via integration ingest").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
 		field.Time("observed_at").
 			Comment("time when this contact was last observed by the source integration").
 			GoType(models.DateTime{}).
@@ -168,8 +173,6 @@ func (c Contact) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
-		entx.IntegrationMappingSchema().
-			UpsertKeys("external_id", "email").
-			DefaultOperation("contacts.sync"),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

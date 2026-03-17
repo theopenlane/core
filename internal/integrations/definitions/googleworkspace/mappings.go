@@ -8,8 +8,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// celMapEntry holds one key-expression pair for building CEL object literal mapping expressions
 type celMapEntry struct {
-	key  string
+	// key is the target field name in the mapped output document
+	key string
+	// expr is the CEL expression that produces the value for key
 	expr string
 }
 
@@ -41,6 +44,7 @@ func celMapExpr(entries []celMapEntry) string {
 	return b.String()
 }
 
+// mapExprDirectoryAccount is the CEL mapping expression for Google Workspace user payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, expr: `'id' in payload ? payload.id : ""`},
 	{key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, expr: `'primaryEmail' in payload ? payload.primaryEmail : ""`},
@@ -55,6 +59,7 @@ var mapExprDirectoryAccount = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, expr: "payload"},
 })
 
+// mapExprDirectoryGroup is the CEL mapping expression for Google Workspace group payloads mapped to DirectoryGroup
 var mapExprDirectoryGroup = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryGroupExternalID, expr: `'id' in payload ? payload.id : ""`},
 	{key: integrationgenerated.IntegrationMappingDirectoryGroupEmail, expr: `'email' in payload ? payload.email : ""`},
@@ -65,6 +70,7 @@ var mapExprDirectoryGroup = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryGroupProfile, expr: "payload"},
 })
 
+// mapExprDirectoryMembership is the CEL mapping expression for Google Workspace membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, expr: `'member' in payload && payload.member != null && 'id' in payload.member && payload.member.id != "" ? payload.member.id : ('member' in payload && payload.member != null && 'email' in payload.member ? payload.member.email : "")`},
 	{key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, expr: `'group' in payload && payload.group != null && 'id' in payload.group && payload.group.id != "" ? payload.group.id : ('group' in payload && payload.group != null && 'email' in payload.group ? payload.group.email : "")`},

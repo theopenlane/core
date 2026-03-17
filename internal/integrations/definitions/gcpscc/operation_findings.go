@@ -21,7 +21,9 @@ import (
 )
 
 const (
-	findingsPageSize    = 100
+	// findingsPageSize is the default number of SCC findings requested per paginated API call
+	findingsPageSize = 100
+	// findingsMaxPageSize is the maximum number of findings that can be requested per API page
 	findingsMaxPageSize = 1000
 )
 

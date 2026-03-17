@@ -8,8 +8,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// celMapEntry holds one key-expression pair for building CEL object literal mapping expressions
 type celMapEntry struct {
-	key  string
+	// key is the target field name in the mapped output document
+	key string
+	// expr is the CEL expression that produces the value for key
 	expr string
 }
 
@@ -41,6 +44,7 @@ func celMapExpr(entries []celMapEntry) string {
 	return b.String()
 }
 
+// mapExprDirectoryAccount is the CEL mapping expression for SCIM user payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, expr: `'externalId' in payload && payload.externalId != "" ? payload.externalId : ('userName' in payload && payload.userName != "" ? payload.userName : ('emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] ? payload.emails[0].value : ""))`},
 	{key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, expr: `'emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] && payload.emails[0].value != "" ? payload.emails[0].value : ('userName' in payload ? payload.userName : "")`},
@@ -52,6 +56,7 @@ var mapExprDirectoryAccount = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, expr: "payload"},
 })
 
+// mapExprDirectoryGroup is the CEL mapping expression for SCIM group payloads mapped to DirectoryGroup
 var mapExprDirectoryGroup = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryGroupExternalID, expr: `'externalId' in payload && payload.externalId != "" ? payload.externalId : ('displayName' in payload ? payload.displayName : "")`},
 	{key: integrationgenerated.IntegrationMappingDirectoryGroupDisplayName, expr: `'displayName' in payload ? payload.displayName : ""`},
@@ -60,6 +65,7 @@ var mapExprDirectoryGroup = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryGroupProfile, expr: "payload"},
 })
 
+// mapExprDirectoryMembership is the CEL mapping expression for SCIM group membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, expr: `'member' in payload && payload.member != null && 'value' in payload.member ? payload.member.value : ""`},
 	{key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, expr: `'group' in payload && payload.group != null && 'externalId' in payload.group ? payload.group.externalId : ""`},

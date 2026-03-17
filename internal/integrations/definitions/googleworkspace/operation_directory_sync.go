@@ -17,10 +17,14 @@ import (
 )
 
 const (
+	// directoryDefaultPageSize is the number of records to request per page when listing users, groups, and members
 	directoryDefaultPageSize = int64(200)
-	userDirectoryFields      = "nextPageToken,users(id,primaryEmail,name/fullName,name/givenName,name/familyName,orgUnitPath,suspended,archived,isEnforcedIn2Sv,isEnrolledIn2Sv,lastLoginTime,creationTime,deletionTime,customerId)"
-	groupDirectoryFields     = "nextPageToken,groups(id,email,name,description,directMembersCount,adminCreated,etag)"
-	memberDirectoryFields    = "nextPageToken,members(id,email,role,type,status,delivery_settings)"
+	// userDirectoryFields is the Google Admin SDK field mask for user listing requests
+	userDirectoryFields = "nextPageToken,users(id,primaryEmail,name/fullName,name/givenName,name/familyName,orgUnitPath,suspended,archived,isEnforcedIn2Sv,isEnrolledIn2Sv,lastLoginTime,creationTime,deletionTime,customerId)"
+	// groupDirectoryFields is the Google Admin SDK field mask for group listing requests
+	groupDirectoryFields = "nextPageToken,groups(id,email,name,description,directMembersCount,adminCreated,etag)"
+	// memberDirectoryFields is the Google Admin SDK field mask for group member listing requests
+	memberDirectoryFields = "nextPageToken,members(id,email,role,type,status,delivery_settings)"
 )
 
 // DirectorySyncConfig controls the directory sync operation
@@ -39,14 +43,20 @@ type DirectorySyncConfig struct {
 	IncludeGroups *bool `json:"includeGroups,omitempty" jsonschema:"title=Sync Groups"`
 }
 
+// directoryEntityRef is a lightweight reference to a directory user or group by ID and email
 type directoryEntityRef struct {
-	ID    string `json:"id,omitempty"`
+	// ID is the stable Google directory identifier for the entity
+	ID string `json:"id,omitempty"`
+	// Email is the primary email address of the entity
 	Email string `json:"email,omitempty"`
 }
 
+// directoryMembershipPayload is the envelope payload for a single group membership record
 type directoryMembershipPayload struct {
-	Group  directoryEntityRef `json:"group"`
-	Member *admin.Member      `json:"member,omitempty"`
+	// Group is the group the member belongs to
+	Group directoryEntityRef `json:"group"`
+	// Member is the group member record returned by the Admin SDK
+	Member *admin.Member `json:"member,omitempty"`
 }
 
 // DirectorySync collects Google Workspace directory users for ingest

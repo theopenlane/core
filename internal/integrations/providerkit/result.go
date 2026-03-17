@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// EncodeResult serializes an operation result and maps any encode failure to the caller-supplied error.
+// EncodeResult serializes an operation result and maps any encode failure to the caller-supplied error
 func EncodeResult(value any, encodeErr error) (json.RawMessage, error) {
 	raw, err := jsonx.ToRawMessage(value)
 	if err != nil {
@@ -17,14 +17,14 @@ func EncodeResult(value any, encodeErr error) (json.RawMessage, error) {
 	return raw, nil
 }
 
-// MarshalEnvelope serializes a provider payload into one mapping envelope.
+// MarshalEnvelope serializes a provider payload into one mapping envelope
 func MarshalEnvelope(resource string, payload any, encodeErr error) (types.MappingEnvelope, error) {
 	return MarshalEnvelopeVariant("", resource, payload, encodeErr)
 }
 
-// MarshalEnvelopeVariant serializes a provider payload into one mapping envelope for a specific variant.
+// MarshalEnvelopeVariant serializes a provider payload into one mapping envelope for a specific variant
 func MarshalEnvelopeVariant(variant string, resource string, payload any, encodeErr error) (types.MappingEnvelope, error) {
-	raw, err := json.Marshal(payload)
+	raw, err := jsonx.ToRawMessage(payload)
 	if err != nil {
 		return types.MappingEnvelope{}, encodeErr
 	}
@@ -32,12 +32,12 @@ func MarshalEnvelopeVariant(variant string, resource string, payload any, encode
 	return RawEnvelopeVariant(variant, resource, raw), nil
 }
 
-// RawEnvelope wraps an already-serialized provider payload in a mapping envelope.
+// RawEnvelope wraps an already-serialized provider payload in a mapping envelope
 func RawEnvelope(resource string, payload json.RawMessage) types.MappingEnvelope {
 	return RawEnvelopeVariant("", resource, payload)
 }
 
-// RawEnvelopeVariant wraps an already-serialized provider payload in a variant-specific mapping envelope.
+// RawEnvelopeVariant wraps an already-serialized provider payload in a variant-specific mapping envelope
 func RawEnvelopeVariant(variant string, resource string, payload json.RawMessage) types.MappingEnvelope {
 	return types.MappingEnvelope{
 		Variant:  variant,

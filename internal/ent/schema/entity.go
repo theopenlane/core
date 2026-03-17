@@ -62,6 +62,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				entx.IntegrationMappingField().UpsertKey(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -267,6 +268,7 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			),
 		field.Time("observed_at").
 			Comment("time when this entity was last observed by the source integration").
@@ -402,9 +404,8 @@ func (e Entity) Annotations() []schema.Annotation {
 			entx.WithOrgOwned(),
 		),
 		entx.IntegrationMappingSchema().
-			Exclude("entity_type_id", "linked_asset_ids").
-			UpsertKeys("external_id", "name").
-			DefaultOperation("entities.collect"),
+			StockPersist().
+			Exclude("entity_type_id", "linked_asset_ids"),
 	}
 }
 

@@ -10,6 +10,7 @@ import (
 
 // HealthCheck reports whether Defender pricing data can be listed
 type HealthCheck struct {
+	// Count is the number of Defender pricing records returned by the health probe
 	Count int `json:"count"`
 }
 

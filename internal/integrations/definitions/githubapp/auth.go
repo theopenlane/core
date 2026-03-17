@@ -19,7 +19,9 @@ import (
 )
 
 const (
-	defaultJWTExpiry           = 9 * time.Minute
+	// defaultJWTExpiry is the default expiry duration for GitHub App JWTs (max 10 minutes per GitHub docs)
+	defaultJWTExpiry = 9 * time.Minute
+	// jwtIssuedAtBackdateSeconds is the amount of time to backdate the JWT iat claim to account for clock skew
 	jwtIssuedAtBackdateSeconds = 30 * time.Second
 )
 

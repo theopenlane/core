@@ -1,10 +1,13 @@
 package microsoftteams
 
 const (
-	teamsAuthURL  = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+	// teamsAuthURL is the Microsoft identity platform authorization endpoint for the Teams OAuth flow
+	teamsAuthURL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+	// teamsTokenURL is the Microsoft identity platform token endpoint for the Teams OAuth flow
 	teamsTokenURL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 )
 
+// teamsScopes lists the Microsoft Graph OAuth scopes requested for the Teams flow
 var teamsScopes = []string{
 	"https://graph.microsoft.com/User.Read",
 	"https://graph.microsoft.com/Team.ReadBasic.All",

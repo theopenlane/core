@@ -52,17 +52,26 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("optional integration that owns this directory account when sourced by an integration").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+			),
 		field.String("directory_sync_run_id").
 			Comment("optional sync run that produced this snapshot").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
+			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory account").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
 		field.String("identity_holder_id").
 			Comment("deduplicated identity holder linked to this directory account").
 			Optional().
@@ -82,6 +91,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 				entgql.OrderField("external_id"),
 			),
 		field.String("secondary_key").
@@ -93,6 +103,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
 				entgql.OrderField("canonical_email"),
 			),
 		field.String("display_name").

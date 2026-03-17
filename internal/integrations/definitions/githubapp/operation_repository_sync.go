@@ -13,23 +13,33 @@ import (
 )
 
 const (
+	// defaultPageSize is the number of repositories to request per page when listing
 	defaultPageSize = 50
-	maxPageSize     = 100
+	// maxPageSize is the maximum number of repositories per page allowed by the GitHub API
+	maxPageSize = 100
 )
 
 // RepositorySync lists repositories accessible to the installation
 type RepositorySync struct{}
 
+// pageInfo holds GitHub GraphQL cursor pagination state
 type pageInfo struct {
-	EndCursor   string
+	// EndCursor is the cursor to pass as the after argument in the next page request
+	EndCursor string
+	// HasNextPage reports whether there are more pages to fetch
 	HasNextPage bool
 }
 
+// repositoryNode is a single repository record returned by the GitHub GraphQL API
 type repositoryNode struct {
+	// NameWithOwner is the full repository name in owner/repo format
 	NameWithOwner string
-	IsPrivate     bool
-	UpdatedAt     time.Time
-	URL           string `graphql:"url"`
+	// IsPrivate reports whether the repository is private
+	IsPrivate bool
+	// UpdatedAt is the timestamp of the most recent push or metadata update
+	UpdatedAt time.Time
+	// URL is the canonical web URL of the repository
+	URL string `graphql:"url"`
 }
 
 // Handle adapts repository sync to the generic operation registration boundary

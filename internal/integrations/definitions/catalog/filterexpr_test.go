@@ -26,6 +26,7 @@ func TestBuiltInDefinitionsUserInputSchemaIncludesFilterExpr(t *testing.T) {
 	}
 }
 
+// schemaProperties resolves the properties map from a JSON Schema document, following $ref when present
 func schemaProperties(t *testing.T, raw json.RawMessage) map[string]json.RawMessage {
 	t.Helper()
 

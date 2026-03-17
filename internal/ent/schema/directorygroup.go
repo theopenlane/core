@@ -49,21 +49,31 @@ func (DirectoryGroup) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that owns this directory group").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory group").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
+			),
 		field.String("external_id").
 			Comment("stable identifier from the directory system").
 			NotEmpty().
 			Immutable().
 			Annotations(
+				entx.IntegrationMappingField().LookupKey(),
 				entgql.OrderField("external_id"),
 			),
 		field.String("email").
@@ -222,8 +232,6 @@ func (g DirectoryGroup) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.IntegrationMappingSchema().
-			UpsertKeys("external_id", "integration_id").
-			DefaultOperation("directory.sync"),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

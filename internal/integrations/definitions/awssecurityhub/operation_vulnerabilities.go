@@ -17,8 +17,10 @@ import (
 )
 
 const (
+	// defaultPageSize is the default number of Security Hub findings requested per paginated API call
 	defaultPageSize = int32(100)
-	maxPageSize     = int32(100)
+	// maxPageSize is the maximum number of findings that can be requested per API page
+	maxPageSize = int32(100)
 )
 
 // FindingsConfig holds per-invocation parameters for the vulnerabilities.collect operation

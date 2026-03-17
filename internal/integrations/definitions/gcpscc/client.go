@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// defaultScope is the GCP OAuth scope requested when no explicit scopes are provided
 const defaultScope = "https://www.googleapis.com/auth/cloud-platform"
 
 // Client builds GCP Security Command Center clients for one installation

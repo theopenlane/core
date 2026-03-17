@@ -9,9 +9,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -21,7 +23,9 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integr
 		return nil, ErrInstallationRequired
 	}
 
-	return r.executeResolvedOperation(ctx, installation, operation, credential, config, false)
+	return r.executeResolvedOperation(ctx, installation, operation, credential, config, false, operations.IngestOptions{
+		Source: integrationgenerated.IntegrationIngestSourceOperation,
+	})
 }
 
 // HandleOperation executes one queued operation envelope through the runtime-managed dependencies.
@@ -46,6 +50,14 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return err
 	}
 
+	ingestOptions := operations.IngestOptions{
+		Source: integrationgenerated.IntegrationIngestSourceOperation,
+		RunID:  envelope.RunID,
+	}
+	if envelope.WorkflowMeta != nil {
+		ingestOptions.Source = integrationgenerated.IntegrationIngestSourceWorkflow
+	}
+
 	installation, err := db.Integration.Get(ctx, envelope.InstallationID)
 	if err != nil {
 		return failRun(err, nil)
@@ -64,7 +76,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		credential = types.CredentialSet{}
 	}
 
-	response, err := r.executeResolvedOperation(ctx, installation, operation, credential, envelope.Config, envelope.ClientForce)
+	response, err := r.executeResolvedOperation(ctx, installation, operation, credential, envelope.Config, envelope.ClientForce, ingestOptions)
 	if err != nil {
 		return failRun(err, response)
 	}
@@ -78,7 +90,8 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	})
 }
 
-func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credential types.CredentialSet, config json.RawMessage, clientForce bool) (json.RawMessage, error) {
+// executeResolvedOperation executes the given operation with the input integration and registered Operation
+func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credential types.CredentialSet, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, error) {
 	var (
 		client any
 		err    error
@@ -107,7 +120,12 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 	}
 
 	if len(operation.Ingest) > 0 {
-		if err := operations.ProcessIngest(ctx, r.Registry(), do.MustInvoke[*ent.Client](r.injector), installation, operation, response); err != nil {
+		if err := operations.ProcessIngestAsync(ctx, operations.IngestContext{
+			Registry:     r.Registry(),
+			DB:           do.MustInvoke[*ent.Client](r.injector),
+			Runtime:      do.MustInvoke[*gala.Gala](r.injector),
+			Installation: installation,
+		}, operation, response, ingestOptions); err != nil {
 			return nil, err
 		}
 	}

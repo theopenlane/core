@@ -402,7 +402,8 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 	installation, err := e.integrationRuntime.ResolveInstallation(workflows.AllowContext(ctx), ownerID, installationID, def.ID)
 	if err != nil {
 		switch {
-		case errors.Is(err, integrationsruntime.ErrInstallationRequired):
+		case errors.Is(err, integrationsruntime.ErrInstallationRequired),
+			errors.Is(err, integrationsruntime.ErrDefinitionIDRequired):
 			return notificationExecutionTarget{}, ErrInstallationRequired
 		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
 			return notificationExecutionTarget{}, ErrInstallationIDRequired

@@ -161,7 +161,8 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	installationRecord, err := e.integrationRuntime.ResolveInstallation(allowCtx, orgID, req.InstallationID, req.DefinitionID)
 	if err != nil {
 		switch {
-		case errors.Is(err, integrationsruntime.ErrInstallationRequired):
+		case errors.Is(err, integrationsruntime.ErrInstallationRequired),
+			errors.Is(err, integrationsruntime.ErrDefinitionIDRequired):
 			return IntegrationQueueResult{}, ErrInstallationRequired
 		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
 			return IntegrationQueueResult{}, ErrInstallationIDRequired
