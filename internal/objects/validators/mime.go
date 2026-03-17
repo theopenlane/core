@@ -29,11 +29,17 @@ var sharedMimeTypes = []string{
 	"application/json", "application/json; charset=utf-8",
 }
 
+var evidenceMimeTypes = []string{
+	"video/quicktime",
+	"video/mp4",
+	"video/webm",
+}
+
 var validMimeTypes = map[string][]string{
 	"avatarFile":          {"image/jpeg", "image/png", "image/webp"},
 	"logoFile":            {"image/jpeg", "image/png", "image/svg+xml", "image/webp"},
 	"faviconFile":         {"image/jpeg", "image/png", "image/x-icon"},
-	"evidenceFiles":       sharedMimeTypes,
+	"evidenceFiles":       append(sharedMimeTypes, evidenceMimeTypes...),
 	"noteFiles":           sharedMimeTypes,
 	"exportFiles":         {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8", "application/zip"},
 	"procedureFile":       importSchemaMimeTypes,
