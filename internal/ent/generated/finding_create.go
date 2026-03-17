@@ -294,6 +294,20 @@ func (_c *FindingCreate) SetNillableExternalID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetStatus sets the "status" field.
+func (_c *FindingCreate) SetStatus(v string) *FindingCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableStatus(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
 // SetSecurityLevel sets the "security_level" field.
 func (_c *FindingCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingCreate {
 	_c.mutation.SetSecurityLevel(v)
@@ -1165,6 +1179,10 @@ func (_c *FindingCreate) defaults() error {
 		v := finding.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		v := finding.DefaultSecurityLevel
+		_c.mutation.SetSecurityLevel(v)
+	}
 	if _, ok := _c.mutation.Categories(); !ok {
 		v := finding.DefaultCategories
 		_c.mutation.SetCategories(v)
@@ -1310,6 +1328,10 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+		_node.Status = value
 	}
 	if value, ok := _c.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)

@@ -69,6 +69,7 @@ func (s SLADefinition) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s),
 			newCustomEnumMixin(s, withEnumFieldName("severity_level")),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins(s)
 }
@@ -81,7 +82,7 @@ func (SLADefinition) Edges() []ent.Edge {
 // Indexes of the SLADefinition
 func (SLADefinition) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("sla_definition_severity_level_id", ownerFieldName).
+		index.Fields("security_level", ownerFieldName).
 			Unique().
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),

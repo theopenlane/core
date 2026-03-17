@@ -1100,6 +1100,7 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
+		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		SystemInternalID   func(childComplexity int) int
 		SystemOwned        func(childComplexity int) int
@@ -2961,6 +2962,7 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
+		Status                  func(childComplexity int) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -9161,6 +9163,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.State(childComplexity), true
+
+	case "FindingHistory.status":
+		if e.ComplexityRoot.FindingHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.Status(childComplexity), true
 
 	case "FindingHistory.stepsToReproduce":
 		if e.ComplexityRoot.FindingHistory.StepsToReproduce == nil {
@@ -19643,6 +19652,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.SourceUpdatedAt(childComplexity), true
+
+	case "VulnerabilityHistory.status":
+		if e.ComplexityRoot.VulnerabilityHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.Status(childComplexity), true
 
 	case "VulnerabilityHistory.summary":
 		if e.ComplexityRoot.VulnerabilityHistory.Summary == nil {
@@ -34759,6 +34775,10 @@ type FindingHistory implements Node {
   """
   externalID: String
   """
+  lifecycle status of the finding
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
+  """
   incoming source severity
   """
   securityLevel: FindingHistorySecurityLevel
@@ -35299,6 +35319,24 @@ input FindingHistoryWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -59565,7 +59603,11 @@ type VulnerabilityHistory implements Node {
   """
   externalOwnerID: String
   """
-  incoming source severity
+  lifecycle status of the vulnerability
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
+  """
+  lifecycle status of the vulnerability
   """
   securityLevel: VulnerabilityHistorySecurityLevel
   """
@@ -60074,6 +60116,24 @@ input VulnerabilityHistoryWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
   """
   security_level field predicates
   """

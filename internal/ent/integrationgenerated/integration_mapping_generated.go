@@ -90,6 +90,7 @@ const (
 	IntegrationMappingVulnerabilitySeverity = "severity"
 	IntegrationMappingVulnerabilitySource = "source"
 	IntegrationMappingVulnerabilitySourceUpdatedAt = "sourceUpdatedAt"
+	IntegrationMappingVulnerabilityStatus = "status"
 	IntegrationMappingVulnerabilitySummary = "summary"
 	IntegrationMappingVulnerabilitySystemInternalID = "systemInternalID"
 	IntegrationMappingVulnerabilityTags = "tags"
@@ -573,6 +574,13 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				UpsertKey: false,
 			},
 			{
+				InputKey: "status",
+				EntField: "status",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
 				InputKey: "summary",
 				EntField: "summary",
 				Type: "string",
@@ -653,6 +661,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"severity": {},
 			"source": {},
 			"sourceUpdatedAt": {},
+			"status": {},
 			"summary": {},
 			"systemInternalID": {},
 			"tags": {},

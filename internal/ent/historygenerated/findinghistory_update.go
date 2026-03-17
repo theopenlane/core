@@ -306,6 +306,26 @@ func (_u *FindingHistoryUpdate) ClearExternalID() *FindingHistoryUpdate {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *FindingHistoryUpdate) SetStatus(v string) *FindingHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableStatus(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingHistoryUpdate) ClearStatus() *FindingHistoryUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetSecurityLevel sets the "security_level" field.
 func (_u *FindingHistoryUpdate) SetSecurityLevel(v enums.SecurityLevel) *FindingHistoryUpdate {
 	_u.mutation.SetSecurityLevel(v)
@@ -1208,6 +1228,12 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(findinghistory.FieldStatus, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)
 	}
@@ -1750,6 +1776,26 @@ func (_u *FindingHistoryUpdateOne) SetNillableExternalID(v *string) *FindingHist
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingHistoryUpdateOne) ClearExternalID() *FindingHistoryUpdateOne {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *FindingHistoryUpdateOne) SetStatus(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableStatus(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingHistoryUpdateOne) ClearStatus() *FindingHistoryUpdateOne {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -2684,6 +2730,12 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(findinghistory.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)

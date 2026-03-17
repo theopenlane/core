@@ -88,6 +88,8 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
 			case "securityLevel":
 				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
@@ -308,6 +310,8 @@ func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ con
 				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
 			case "securityLevel":
 				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
@@ -528,6 +532,8 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
 			case "securityLevel":
 				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
@@ -748,6 +754,8 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
 			case "securityLevel":
 				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":

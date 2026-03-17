@@ -13567,6 +13567,10 @@ type FindingHistory implements Node {
 	"""
 	externalID: String
 	"""
+	lifecycle status of the finding
+	"""
+	status: String @deprecated(reason: "Use `finding_status_name` instead.")
+	"""
 	incoming source severity
 	"""
 	securityLevel: FindingHistorySecurityLevel
@@ -14107,6 +14111,24 @@ input FindingHistoryWhereInput {
 	externalIDNotNil: Boolean
 	externalIDEqualFold: String
 	externalIDContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
 	"""
 	security_level field predicates
 	"""
@@ -38411,7 +38433,11 @@ type VulnerabilityHistory implements Node {
 	"""
 	externalOwnerID: String
 	"""
-	incoming source severity
+	lifecycle status of the vulnerability
+	"""
+	status: String @deprecated(reason: "Use `vulnerability_status_name` instead.")
+	"""
+	lifecycle status of the vulnerability
 	"""
 	securityLevel: VulnerabilityHistorySecurityLevel
 	"""
@@ -38920,6 +38946,24 @@ input VulnerabilityHistoryWhereInput {
 	externalOwnerIDNotNil: Boolean
 	externalOwnerIDEqualFold: String
 	externalOwnerIDContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
 	"""
 	security_level field predicates
 	"""

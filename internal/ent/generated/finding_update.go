@@ -325,6 +325,26 @@ func (_u *FindingUpdate) ClearExternalID() *FindingUpdate {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *FindingUpdate) SetStatus(v string) *FindingUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableStatus(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingUpdate) ClearStatus() *FindingUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetSecurityLevel sets the "security_level" field.
 func (_u *FindingUpdate) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdate {
 	_u.mutation.SetSecurityLevel(v)
@@ -2027,6 +2047,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
@@ -3740,6 +3766,26 @@ func (_u *FindingUpdateOne) SetNillableExternalID(v *string) *FindingUpdateOne {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdateOne) ClearExternalID() *FindingUpdateOne {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *FindingUpdateOne) SetStatus(v string) *FindingUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableStatus(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingUpdateOne) ClearStatus() *FindingUpdateOne {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -5475,6 +5521,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)

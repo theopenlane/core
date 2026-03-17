@@ -59,11 +59,21 @@ type SLADefinitionEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// SLADefinitionSeverityLevel holds the value of the sla_definition_severity_level edge.
 	SLADefinitionSeverityLevel *CustomTypeEnum `json:"sla_definition_severity_level,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [5]map[string]int
+
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedViewers       map[string][]*Group
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -86,6 +96,33 @@ func (e SLADefinitionEdges) SLADefinitionSeverityLevelOrErr() (*CustomTypeEnum, 
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "sla_definition_severity_level"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e SLADefinitionEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e SLADefinitionEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e SLADefinitionEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[4] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -225,6 +262,21 @@ func (_m *SLADefinition) QuerySLADefinitionSeverityLevel() *CustomTypeEnumQuery 
 	return NewSLADefinitionClient(_m.config).QuerySLADefinitionSeverityLevel(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the SLADefinition entity.
+func (_m *SLADefinition) QueryBlockedGroups() *GroupQuery {
+	return NewSLADefinitionClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the SLADefinition entity.
+func (_m *SLADefinition) QueryEditors() *GroupQuery {
+	return NewSLADefinitionClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the SLADefinition entity.
+func (_m *SLADefinition) QueryViewers() *GroupQuery {
+	return NewSLADefinitionClient(_m.config).QueryViewers(_m)
+}
+
 // Update returns a builder for updating this SLADefinition.
 // Note that you need to call SLADefinition.Unwrap() before calling this method if this SLADefinition
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -288,6 +340,78 @@ func (_m *SLADefinition) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SLADefinition) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SLADefinition) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SLADefinition) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SLADefinition) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SLADefinition) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SLADefinition) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // SLADefinitions is a parsable slice of SLADefinition.

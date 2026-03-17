@@ -6745,6 +6745,8 @@ type CreateFindingInput struct {
 	FindingStatusName *string `json:"findingStatusName,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
+	// lifecycle status of the finding
+	Status *string `json:"status,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -8155,9 +8157,12 @@ type CreateSLADefinitionInput struct {
 	// the severity_level of the sla_definition
 	SLADefinitionSeverityLevelName *string `json:"slaDefinitionSeverityLevelName,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                      int64   `json:"slaDays"`
-	OwnerID                      *string `json:"ownerID,omitempty"`
-	SLADefinitionSeverityLevelID *string `json:"slaDefinitionSeverityLevelID,omitempty"`
+	SLADays                      int64    `json:"slaDays"`
+	OwnerID                      *string  `json:"ownerID,omitempty"`
+	SLADefinitionSeverityLevelID *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
+	BlockedGroupIDs              []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                    []string `json:"editorIDs,omitempty"`
+	ViewerIDs                    []string `json:"viewerIDs,omitempty"`
 }
 
 // CreateScanInput is used for create Scan object.
@@ -8920,6 +8925,8 @@ type CreateVulnerabilityInput struct {
 	VulnerabilityStatusName *string `json:"vulnerabilityStatusName,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// lifecycle status of the vulnerability
+	Status *string `json:"status,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID string `json:"externalID"`
 	// CVE identifier for the vulnerability when applicable
@@ -16067,6 +16074,8 @@ type Finding struct {
 	FindingStatusID *string `json:"findingStatusID,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
+	// lifecycle status of the finding
+	Status *string `json:"status,omitempty"`
 	// incoming source severity
 	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// the owner of the finding
@@ -16712,6 +16721,22 @@ type FindingWhereInput struct {
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// status field predicates
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 	// security_level field predicates
 	SecurityLevel       *enums.SecurityLevel  `json:"securityLevel,omitempty"`
 	SecurityLevelNeq    *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`
@@ -30079,6 +30104,9 @@ type SLADefinition struct {
 	SecurityLevel              enums.SecurityLevel `json:"securityLevel"`
 	Owner                      *Organization       `json:"owner,omitempty"`
 	SLADefinitionSeverityLevel *CustomTypeEnum     `json:"slaDefinitionSeverityLevel,omitempty"`
+	BlockedGroups              *GroupConnection    `json:"blockedGroups"`
+	Editors                    *GroupConnection    `json:"editors"`
+	Viewers                    *GroupConnection    `json:"viewers"`
 }
 
 func (SLADefinition) IsNode() {}
@@ -30300,6 +30328,15 @@ type SLADefinitionWhereInput struct {
 	// sla_definition_severity_level edge predicates
 	HasSLADefinitionSeverityLevel     *bool                       `json:"hasSLADefinitionSeverityLevel,omitempty"`
 	HasSLADefinitionSeverityLevelWith []*CustomTypeEnumWhereInput `json:"hasSLADefinitionSeverityLevelWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -39636,6 +39673,9 @@ type UpdateFindingInput struct {
 	// external identifier from the integration source for the finding
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// lifecycle status of the finding
+	Status      *string `json:"status,omitempty"`
+	ClearStatus *bool   `json:"clearStatus,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
@@ -42064,11 +42104,20 @@ type UpdateSLADefinitionInput struct {
 	SLADefinitionSeverityLevelName      *string `json:"slaDefinitionSeverityLevelName,omitempty"`
 	ClearSLADefinitionSeverityLevelName *bool   `json:"clearSLADefinitionSeverityLevelName,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                         *int64  `json:"slaDays,omitempty"`
-	OwnerID                         *string `json:"ownerID,omitempty"`
-	ClearOwner                      *bool   `json:"clearOwner,omitempty"`
-	SLADefinitionSeverityLevelID    *string `json:"slaDefinitionSeverityLevelID,omitempty"`
-	ClearSLADefinitionSeverityLevel *bool   `json:"clearSLADefinitionSeverityLevel,omitempty"`
+	SLADays                         *int64   `json:"slaDays,omitempty"`
+	OwnerID                         *string  `json:"ownerID,omitempty"`
+	ClearOwner                      *bool    `json:"clearOwner,omitempty"`
+	SLADefinitionSeverityLevelID    *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
+	ClearSLADefinitionSeverityLevel *bool    `json:"clearSLADefinitionSeverityLevel,omitempty"`
+	AddBlockedGroupIDs              []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs           []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups              *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                    []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                 []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors                    *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs                    []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs                 []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers                    *bool    `json:"clearViewers,omitempty"`
 }
 
 // UpdateScanInput is used for update Scan object.
@@ -43249,6 +43298,9 @@ type UpdateVulnerabilityInput struct {
 	// owner of the vulnerability
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
+	// lifecycle status of the vulnerability
+	Status      *string `json:"status,omitempty"`
+	ClearStatus *bool   `json:"clearStatus,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID *string `json:"externalID,omitempty"`
 	// CVE identifier for the vulnerability when applicable
@@ -44251,7 +44303,9 @@ type Vulnerability struct {
 	VulnerabilityStatusID *string `json:"vulnerabilityStatusID,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
-	// incoming source severity
+	// lifecycle status of the vulnerability
+	Status *string `json:"status,omitempty"`
+	// lifecycle status of the vulnerability
 	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID string `json:"externalID"`
@@ -44675,6 +44729,22 @@ type VulnerabilityWhereInput struct {
 	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
 	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
 	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// status field predicates
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 	// security_level field predicates
 	SecurityLevel       *enums.SecurityLevel  `json:"securityLevel,omitempty"`
 	SecurityLevelNeq    *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`

@@ -1217,23 +1217,23 @@ func init() {
 	// findinghistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	findinghistory.DefaultSystemOwned = findinghistoryDescSystemOwned.Default.(bool)
 	// findinghistoryDescCategories is the schema descriptor for categories field.
-	findinghistoryDescCategories := findinghistoryFields[30].Descriptor()
+	findinghistoryDescCategories := findinghistoryFields[31].Descriptor()
 	// findinghistory.DefaultCategories holds the default value on creation for the categories field.
 	findinghistory.DefaultCategories = findinghistoryDescCategories.Default.([]string)
 	// findinghistoryDescOpen is the schema descriptor for open field.
-	findinghistoryDescOpen := findinghistoryFields[38].Descriptor()
+	findinghistoryDescOpen := findinghistoryFields[39].Descriptor()
 	// findinghistory.DefaultOpen holds the default value on creation for the open field.
 	findinghistory.DefaultOpen = findinghistoryDescOpen.Default.(bool)
 	// findinghistoryDescReferences is the schema descriptor for references field.
-	findinghistoryDescReferences := findinghistoryFields[47].Descriptor()
+	findinghistoryDescReferences := findinghistoryFields[48].Descriptor()
 	// findinghistory.DefaultReferences holds the default value on creation for the references field.
 	findinghistory.DefaultReferences = findinghistoryDescReferences.Default.([]string)
 	// findinghistoryDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findinghistoryDescStepsToReproduce := findinghistoryFields[48].Descriptor()
+	findinghistoryDescStepsToReproduce := findinghistoryFields[49].Descriptor()
 	// findinghistory.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	findinghistory.DefaultStepsToReproduce = findinghistoryDescStepsToReproduce.Default.([]string)
 	// findinghistoryDescTargets is the schema descriptor for targets field.
-	findinghistoryDescTargets := findinghistoryFields[49].Descriptor()
+	findinghistoryDescTargets := findinghistoryFields[50].Descriptor()
 	// findinghistory.DefaultTargets holds the default value on creation for the targets field.
 	findinghistory.DefaultTargets = findinghistoryDescTargets.Default.([]string)
 	// findinghistoryDescID is the schema descriptor for id field.
@@ -3144,19 +3144,19 @@ func init() {
 	// vulnerabilityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerabilityhistory.DefaultSystemOwned = vulnerabilityhistoryDescSystemOwned.Default.(bool)
 	// vulnerabilityhistoryDescOpen is the schema descriptor for open field.
-	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[38].Descriptor()
+	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[39].Descriptor()
 	// vulnerabilityhistory.DefaultOpen holds the default value on creation for the open field.
 	vulnerabilityhistory.DefaultOpen = vulnerabilityhistoryDescOpen.Default.(bool)
 	// vulnerabilityhistoryDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[39].Descriptor()
+	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[40].Descriptor()
 	// vulnerabilityhistory.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerabilityhistory.DefaultBlocking = vulnerabilityhistoryDescBlocking.Default.(bool)
 	// vulnerabilityhistoryDescReferences is the schema descriptor for references field.
-	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[43].Descriptor()
+	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[44].Descriptor()
 	// vulnerabilityhistory.DefaultReferences holds the default value on creation for the references field.
 	vulnerabilityhistory.DefaultReferences = vulnerabilityhistoryDescReferences.Default.([]string)
 	// vulnerabilityhistoryDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[44].Descriptor()
+	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[45].Descriptor()
 	// vulnerabilityhistory.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerabilityhistory.DefaultImpacts = vulnerabilityhistoryDescImpacts.Default.([]string)
 	// vulnerabilityhistoryDescID is the schema descriptor for id field.

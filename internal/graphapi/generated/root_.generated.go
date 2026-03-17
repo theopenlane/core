@@ -2195,6 +2195,7 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
+		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID   func(childComplexity int) int
@@ -5392,9 +5393,11 @@ type ComplexityRoot struct {
 	}
 
 	SLADefinition struct {
+		BlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CreatedAt                      func(childComplexity int) int
 		CreatedBy                      func(childComplexity int) int
 		DisplayID                      func(childComplexity int) int
+		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                             func(childComplexity int) int
 		Owner                          func(childComplexity int) int
 		OwnerID                        func(childComplexity int) int
@@ -5406,6 +5409,7 @@ type ComplexityRoot struct {
 		Tags                           func(childComplexity int) int
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
+		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	SLADefinitionBulkCreatePayload struct {
@@ -6967,6 +6971,7 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
+		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
@@ -18234,6 +18239,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Finding.State(childComplexity), true
+
+	case "Finding.status":
+		if e.ComplexityRoot.Finding.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.Status(childComplexity), true
 
 	case "Finding.stepsToReproduce":
 		if e.ComplexityRoot.Finding.StepsToReproduce == nil {
@@ -40700,6 +40712,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskUpdatePayload.Risk(childComplexity), true
 
+	case "SLADefinition.blockedGroups":
+		if e.ComplexityRoot.SLADefinition.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_SLADefinition_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SLADefinition.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "SLADefinition.createdAt":
 		if e.ComplexityRoot.SLADefinition.CreatedAt == nil {
 			break
@@ -40720,6 +40744,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SLADefinition.DisplayID(childComplexity), true
+
+	case "SLADefinition.editors":
+		if e.ComplexityRoot.SLADefinition.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_SLADefinition_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SLADefinition.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "SLADefinition.id":
 		if e.ComplexityRoot.SLADefinition.ID == nil {
@@ -40797,6 +40833,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SLADefinition.UpdatedBy(childComplexity), true
+
+	case "SLADefinition.viewers":
+		if e.ComplexityRoot.SLADefinition.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_SLADefinition_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SLADefinition.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "SLADefinitionBulkCreatePayload.slaDefinitions":
 		if e.ComplexityRoot.SLADefinitionBulkCreatePayload.SLADefinitions == nil {
@@ -48114,6 +48162,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Vulnerability.SourceUpdatedAt(childComplexity), true
+
+	case "Vulnerability.status":
+		if e.ComplexityRoot.Vulnerability.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.Status(childComplexity), true
 
 	case "Vulnerability.subcontrols":
 		if e.ComplexityRoot.Vulnerability.Subcontrols == nil {
@@ -66079,6 +66134,10 @@ input CreateFindingInput {
   """
   externalID: String
   """
+  lifecycle status of the finding
+  """
+  status: String
+  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -68253,6 +68312,9 @@ input CreateSLADefinitionInput {
   slaDays: Int!
   ownerID: ID
   slaDefinitionSeverityLevelID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -69408,6 +69470,10 @@ input CreateVulnerabilityInput {
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
   """
   external identifier from the integration source for the vulnerability
   """
@@ -80938,6 +81004,10 @@ type Finding implements Node {
   """
   externalID: String
   """
+  lifecycle status of the finding
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
+  """
   incoming source severity
   """
   securityLevel: FindingSecurityLevel
@@ -82384,6 +82454,24 @@ input FindingWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -111669,6 +111757,99 @@ type SLADefinition implements Node {
   securityLevel: SLADefinitionSecurityLevel!
   owner: Organization
   slaDefinitionSeverityLevel: CustomTypeEnum
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
 }
 """
 A connection to a list of items.
@@ -111913,6 +112094,21 @@ input SLADefinitionWhereInput {
   """
   hasSLADefinitionSeverityLevel: Boolean
   hasSLADefinitionSeverityLevelWith: [CustomTypeEnumWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -125961,6 +126157,11 @@ input UpdateFindingInput {
   externalID: String
   clearExternalID: Boolean
   """
+  lifecycle status of the finding
+  """
+  status: String
+  clearStatus: Boolean
+  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -129120,6 +129321,15 @@ input UpdateSLADefinitionInput {
   clearOwner: Boolean
   slaDefinitionSeverityLevelID: ID
   clearSLADefinitionSeverityLevel: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -130713,6 +130923,11 @@ input UpdateVulnerabilityInput {
   """
   externalOwnerID: String
   clearExternalOwnerID: Boolean
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
+  clearStatus: Boolean
   """
   external identifier from the integration source for the vulnerability
   """
@@ -132589,7 +132804,11 @@ type Vulnerability implements Node {
   """
   externalOwnerID: String
   """
-  incoming source severity
+  lifecycle status of the vulnerability
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
+  """
+  lifecycle status of the vulnerability
   """
   securityLevel: VulnerabilitySecurityLevel
   """
@@ -133615,6 +133834,24 @@ input VulnerabilityWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
   """
   security_level field predicates
   """

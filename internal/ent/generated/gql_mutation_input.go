@@ -9410,6 +9410,7 @@ type CreateFindingInput struct {
 	ScopeName            *string
 	FindingStatusName    *string
 	ExternalID           *string
+	Status               *string
 	ExternalOwnerID      *string
 	Source               *string
 	ResourceName         *string
@@ -9494,6 +9495,9 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -9700,6 +9704,8 @@ type UpdateFindingInput struct {
 	FindingStatusName          *string
 	ClearExternalID            bool
 	ExternalID                 *string
+	ClearStatus                bool
+	Status                     *string
 	ClearExternalOwnerID       bool
 	ExternalOwnerID            *string
 	ClearSource                bool
@@ -9891,6 +9897,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -21398,6 +21410,9 @@ type CreateSLADefinitionInput struct {
 	SLADays                        int
 	OwnerID                        *string
 	SLADefinitionSeverityLevelID   *string
+	BlockedGroupIDs                []string
+	EditorIDs                      []string
+	ViewerIDs                      []string
 }
 
 // Mutate applies the CreateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -21414,6 +21429,15 @@ func (i *CreateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	}
 	if v := i.SLADefinitionSeverityLevelID; v != nil {
 		m.SetSLADefinitionSeverityLevelID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 }
 
@@ -21435,6 +21459,15 @@ type UpdateSLADefinitionInput struct {
 	OwnerID                             *string
 	ClearSLADefinitionSeverityLevel     bool
 	SLADefinitionSeverityLevelID        *string
+	ClearBlockedGroups                  bool
+	AddBlockedGroupIDs                  []string
+	RemoveBlockedGroupIDs               []string
+	ClearEditors                        bool
+	AddEditorIDs                        []string
+	RemoveEditorIDs                     []string
+	ClearViewers                        bool
+	AddViewerIDs                        []string
+	RemoveViewerIDs                     []string
 }
 
 // Mutate applies the UpdateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -21468,6 +21501,33 @@ func (i *UpdateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	}
 	if v := i.SLADefinitionSeverityLevelID; v != nil {
 		m.SetSLADefinitionSeverityLevelID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 }
 
@@ -27042,6 +27102,7 @@ type CreateVulnerabilityInput struct {
 	ScopeName               *string
 	VulnerabilityStatusName *string
 	ExternalOwnerID         *string
+	Status                  *string
 	ExternalID              string
 	CveID                   *string
 	Source                  *string
@@ -27115,6 +27176,9 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.CveID; v != nil {
@@ -27286,6 +27350,8 @@ type UpdateVulnerabilityInput struct {
 	VulnerabilityStatusName      *string
 	ClearExternalOwnerID         bool
 	ExternalOwnerID              *string
+	ClearStatus                  bool
+	Status                       *string
 	ExternalID                   *string
 	ClearCveID                   bool
 	CveID                        *string
@@ -27449,6 +27515,12 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)

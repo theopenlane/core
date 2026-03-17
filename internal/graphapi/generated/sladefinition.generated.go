@@ -80,6 +80,12 @@ func (ec *executionContext) fieldContext_SLADefinitionBulkCreatePayload_slaDefin
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevel(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_SLADefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_SLADefinition_viewers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
 		},
@@ -168,6 +174,12 @@ func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_slaDefin
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevel(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_SLADefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_SLADefinition_viewers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
 		},
@@ -256,6 +268,12 @@ func (ec *executionContext) fieldContext_SLADefinitionCreatePayload_slaDefinitio
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevel(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_SLADefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_SLADefinition_viewers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
 		},
@@ -344,6 +362,12 @@ func (ec *executionContext) fieldContext_SLADefinitionUpdatePayload_slaDefinitio
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevel(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_SLADefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_SLADefinition_viewers(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
 		},

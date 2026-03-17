@@ -12570,6 +12570,10 @@ input CreateFindingInput {
 	"""
 	externalID: String
 	"""
+	lifecycle status of the finding
+	"""
+	status: String
+	"""
 	the owner of the finding
 	"""
 	externalOwnerID: String
@@ -14801,6 +14805,9 @@ input CreateSLADefinitionInput {
 	slaDays: Int!
 	ownerID: ID
 	slaDefinitionSeverityLevelID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -16034,6 +16041,10 @@ input CreateVulnerabilityInput {
 	owner of the vulnerability
 	"""
 	externalOwnerID: String
+	"""
+	lifecycle status of the vulnerability
+	"""
+	status: String
 	"""
 	external identifier from the integration source for the vulnerability
 	"""
@@ -28403,6 +28414,10 @@ type Finding implements Node {
 	"""
 	externalID: String
 	"""
+	lifecycle status of the finding
+	"""
+	status: String @deprecated(reason: "Use `finding_status_name` instead.")
+	"""
 	incoming source severity
 	"""
 	securityLevel: FindingSecurityLevel
@@ -29943,6 +29958,24 @@ input FindingWhereInput {
 	externalIDNotNil: Boolean
 	externalIDEqualFold: String
 	externalIDContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
 	"""
 	security_level field predicates
 	"""
@@ -69586,6 +69619,99 @@ type SLADefinition implements Node {
 	securityLevel: SLADefinitionSecurityLevel!
 	owner: Organization
 	slaDefinitionSeverityLevel: CustomTypeEnum
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 }
 """
 Return response for createBulkSLADefinition mutation
@@ -69888,6 +70014,21 @@ input SLADefinitionWhereInput {
 	"""
 	hasSLADefinitionSeverityLevel: Boolean
 	hasSLADefinitionSeverityLevelWith: [CustomTypeEnumWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -85105,6 +85246,11 @@ input UpdateFindingInput {
 	externalID: String
 	clearExternalID: Boolean
 	"""
+	lifecycle status of the finding
+	"""
+	status: String
+	clearStatus: Boolean
+	"""
 	the owner of the finding
 	"""
 	externalOwnerID: String
@@ -88294,6 +88440,15 @@ input UpdateSLADefinitionInput {
 	clearOwner: Boolean
 	slaDefinitionSeverityLevelID: ID
 	clearSLADefinitionSeverityLevel: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -89910,6 +90065,11 @@ input UpdateVulnerabilityInput {
 	"""
 	externalOwnerID: String
 	clearExternalOwnerID: Boolean
+	"""
+	lifecycle status of the vulnerability
+	"""
+	status: String
+	clearStatus: Boolean
 	"""
 	external identifier from the integration source for the vulnerability
 	"""
@@ -91893,7 +92053,11 @@ type Vulnerability implements Node {
 	"""
 	externalOwnerID: String
 	"""
-	incoming source severity
+	lifecycle status of the vulnerability
+	"""
+	status: String @deprecated(reason: "Use `vulnerability_status_name` instead.")
+	"""
+	lifecycle status of the vulnerability
 	"""
 	securityLevel: VulnerabilitySecurityLevel
 	"""
@@ -93024,6 +93188,24 @@ input VulnerabilityWhereInput {
 	externalOwnerIDNotNil: Boolean
 	externalOwnerIDEqualFold: String
 	externalOwnerIDContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
 	"""
 	security_level field predicates
 	"""

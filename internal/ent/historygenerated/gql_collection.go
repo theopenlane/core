@@ -5515,6 +5515,11 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldExternalID)
 				fieldSeen[findinghistory.FieldExternalID] = struct{}{}
 			}
+		case "status":
+			if _, ok := fieldSeen[findinghistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldStatus)
+				fieldSeen[findinghistory.FieldStatus] = struct{}{}
+			}
 		case "securityLevel":
 			if _, ok := fieldSeen[findinghistory.FieldSecurityLevel]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldSecurityLevel)
@@ -14828,6 +14833,11 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldExternalOwnerID)
 				fieldSeen[vulnerabilityhistory.FieldExternalOwnerID] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldStatus)
+				fieldSeen[vulnerabilityhistory.FieldStatus] = struct{}{}
 			}
 		case "securityLevel":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldSecurityLevel]; !ok {

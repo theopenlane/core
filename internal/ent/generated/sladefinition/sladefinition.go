@@ -48,6 +48,12 @@ const (
 	EdgeOwner = "owner"
 	// EdgeSLADefinitionSeverityLevel holds the string denoting the sla_definition_severity_level edge name in mutations.
 	EdgeSLADefinitionSeverityLevel = "sla_definition_severity_level"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
+	// EdgeViewers holds the string denoting the viewers edge name in mutations.
+	EdgeViewers = "viewers"
 	// Table holds the table name of the sladefinition in the database.
 	Table = "sla_definitions"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -64,6 +70,27 @@ const (
 	SLADefinitionSeverityLevelInverseTable = "custom_type_enums"
 	// SLADefinitionSeverityLevelColumn is the table column denoting the sla_definition_severity_level relation/edge.
 	SLADefinitionSeverityLevelColumn = "sla_definition_severity_level_id"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "sla_definition_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "sla_definition_editors"
+	// ViewersTable is the table that holds the viewers relation/edge.
+	ViewersTable = "groups"
+	// ViewersInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ViewersInverseTable = "groups"
+	// ViewersColumn is the table column denoting the viewers relation/edge.
+	ViewersColumn = "sla_definition_viewers"
 )
 
 // Columns holds all SQL columns for sladefinition fields.
@@ -100,7 +127,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -214,6 +241,48 @@ func BySLADefinitionSeverityLevelField(field string, opts ...sql.OrderTermOption
 		sqlgraph.OrderByNeighborTerms(s, newSLADefinitionSeverityLevelStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByViewersCount orders the results by viewers count.
+func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
+	}
+}
+
+// ByViewers orders the results by viewers terms.
+func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -226,6 +295,27 @@ func newSLADefinitionSeverityLevelStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SLADefinitionSeverityLevelInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, SLADefinitionSeverityLevelTable, SLADefinitionSeverityLevelColumn),
+	)
+}
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+	)
+}
+func newViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
 	)
 }
 

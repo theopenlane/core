@@ -1258,6 +1258,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			finding.FieldFindingStatusName:  {Type: field.TypeString, Column: finding.FieldFindingStatusName},
 			finding.FieldFindingStatusID:    {Type: field.TypeString, Column: finding.FieldFindingStatusID},
 			finding.FieldExternalID:         {Type: field.TypeString, Column: finding.FieldExternalID},
+			finding.FieldStatus:             {Type: field.TypeString, Column: finding.FieldStatus},
 			finding.FieldSecurityLevel:      {Type: field.TypeEnum, Column: finding.FieldSecurityLevel},
 			finding.FieldExternalOwnerID:    {Type: field.TypeString, Column: finding.FieldExternalOwnerID},
 			finding.FieldSource:             {Type: field.TypeString, Column: finding.FieldSource},
@@ -3467,6 +3468,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusName},
 			vulnerability.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusID},
 			vulnerability.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
+			vulnerability.FieldStatus:                  {Type: field.TypeString, Column: vulnerability.FieldStatus},
 			vulnerability.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerability.FieldSecurityLevel},
 			vulnerability.FieldExternalID:              {Type: field.TypeString, Column: vulnerability.FieldExternalID},
 			vulnerability.FieldCveID:                   {Type: field.TypeString, Column: vulnerability.FieldCveID},
@@ -13598,6 +13600,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"SLADefinition",
 		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   sladefinition.BlockedGroupsTable,
+			Columns: []string{sladefinition.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"SLADefinition",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   sladefinition.EditorsTable,
+			Columns: []string{sladefinition.EditorsColumn},
+			Bidi:    false,
+		},
+		"SLADefinition",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   sladefinition.ViewersTable,
+			Columns: []string{sladefinition.ViewersColumn},
+			Bidi:    false,
+		},
+		"SLADefinition",
+		"Group",
 	)
 	graph.MustAddE(
 		"owner",
@@ -26130,6 +26168,11 @@ func (f *FindingFilter) WhereFindingStatusID(p entql.StringP) {
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldExternalID))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *FindingFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(finding.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.
@@ -39388,6 +39431,48 @@ func (f *SLADefinitionFilter) WhereHasSLADefinitionSeverityLevelWith(preds ...pr
 	})))
 }
 
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *SLADefinitionFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *SLADefinitionFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *SLADefinitionFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *SLADefinitionFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *SLADefinitionFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *SLADefinitionFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *ScanQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -45283,6 +45368,11 @@ func (f *VulnerabilityFilter) WhereVulnerabilityStatusID(p entql.StringP) {
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldExternalOwnerID))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *VulnerabilityFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.

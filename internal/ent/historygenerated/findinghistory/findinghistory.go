@@ -64,6 +64,8 @@ const (
 	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
 	FieldSecurityLevel = "security_level"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -165,6 +167,7 @@ var Columns = []string{
 	FieldFindingStatusName,
 	FieldFindingStatusID,
 	FieldExternalID,
+	FieldStatus,
 	FieldSecurityLevel,
 	FieldExternalOwnerID,
 	FieldSource,
@@ -257,6 +260,8 @@ func OperationValidator(o history.OpType) error {
 		return fmt.Errorf("findinghistory: invalid enum value for operation field: %q", o)
 	}
 }
+
+const DefaultSecurityLevel enums.SecurityLevel = "NONE"
 
 // SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
 func SecurityLevelValidator(sl enums.SecurityLevel) error {
@@ -379,6 +384,11 @@ func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // BySecurityLevel orders the results by the security_level field.
