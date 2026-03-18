@@ -679,8 +679,8 @@ github.com/theopenlane/gqlgen-plugins v0.14.5 h1:LJwpxaVC/JeXJoDb8wOZOmiSxltSCbx
 github.com/theopenlane/gqlgen-plugins v0.14.5/go.mod h1:fUjo1cVKEAPLhtRrH+iJtrfivCNp+GxVSB/UJgVBDuA=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.27.1 h1:oGXRdge/f6c6NLrxJKgBNI4jh5R3MEHxg609613ki3I=
-github.com/theopenlane/iam v0.27.1/go.mod h1:L1FDG5mamWxEYZvoqKvuVV7/tGJRdaM41DmDB4vRyKc=
+github.com/theopenlane/iam v0.27.2 h1:yik3YIOy878JqMc4+tgjj8fKzylJ3CDPs/+uaPyABsI=
+github.com/theopenlane/iam v0.27.2/go.mod h1:L1FDG5mamWxEYZvoqKvuVV7/tGJRdaM41DmDB4vRyKc=
 github.com/theopenlane/newman v0.2.2 h1:TADWEoD9vOJonRqPKTUePMudpoRq7w6K7Vdy5RdapWw=
 github.com/theopenlane/newman v0.2.2/go.mod h1:nUyyNIxUIfKpPLf4oO/v1bFp5Ca8P42FG0ObxyEp/pA=
 github.com/theopenlane/oscalot v0.1.0 h1:ExYiMU4Q1ezbGq77sxkgahmfmc46L+2NqB39fg0HXjU=
@@ -770,6 +770,7 @@ go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.65.0/go.mod h1:
 go.opentelemetry.io/otel v1.42.0 h1:lSQGzTgVR3+sgJDAU/7/ZMjN9Z+vUip7leaqBKy4sho=
 go.opentelemetry.io/otel v1.42.0/go.mod h1:lJNsdRMxCUIWuMlVJWzecSMuNjE7dOYyWlqOXWkdqCc=
 go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.41.0 h1:ao6Oe+wSebTlQ1OEht7jlYTzQKE+pnx/iNywFvTbuuI=
+go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.41.0/go.mod h1:u3T6vz0gh/NVzgDgiwkgLxpsSF6PaPmo2il0apGJbls=
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.41.0 h1:inYW9ZhgqiDqh6BioM7DVHHzEGVq76Db5897WLGZ5Go=
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.41.0/go.mod h1:Izur+Wt8gClgMJqO/cZ8wdeeMryJ/xxiOVgFSSfpDTY=
 go.opentelemetry.io/otel/metric v1.42.0 h1:2jXG+3oZLNXEPfNmnpxKDeZsFI5o4J+nz6xUlaFdF/4=
