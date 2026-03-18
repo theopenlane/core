@@ -12,6 +12,8 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
+replace github.com/theopenlane/iam => ../iam/
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.38.1

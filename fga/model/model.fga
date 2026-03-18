@@ -848,7 +848,7 @@ type trust_center_entity
 type trust_center_nda_request
   relations
     define can_view: [user, service] or parent_viewer or viewer
-    define can_edit: [user, service] or parent_editor or editor or member from parent
+    define can_edit: [user, service] or parent_editor or editor
     define can_delete: [user, service] or parent_deleter or editor
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
@@ -856,7 +856,6 @@ type trust_center_nda_request
     define parent: [trust_center, user, service]
     define editor: [group#member]
     define viewer: editor
-    define member: member from parent
 
 type trust_center_faq
   relations
