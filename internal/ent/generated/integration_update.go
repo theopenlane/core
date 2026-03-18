@@ -398,6 +398,26 @@ func (_u *IntegrationUpdate) ClearConfig() *IntegrationUpdate {
 	return _u
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_u *IntegrationUpdate) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationUpdate {
+	_u.mutation.SetInstallationMetadata(v)
+	return _u
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationUpdate {
+	if v != nil {
+		_u.SetInstallationMetadata(*v)
+	}
+	return _u
+}
+
+// ClearInstallationMetadata clears the value of the "installation_metadata" field.
+func (_u *IntegrationUpdate) ClearInstallationMetadata() *IntegrationUpdate {
+	_u.mutation.ClearInstallationMetadata()
+	return _u
+}
+
 // SetProviderState sets the "provider_state" field.
 func (_u *IntegrationUpdate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationUpdate {
 	_u.mutation.SetProviderState(v)
@@ -1397,6 +1417,12 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ConfigCleared() {
 		_spec.ClearField(integration.FieldConfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integration.FieldInstallationMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.InstallationMetadataCleared() {
+		_spec.ClearField(integration.FieldInstallationMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)
@@ -2768,6 +2794,26 @@ func (_u *IntegrationUpdateOne) ClearConfig() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_u *IntegrationUpdateOne) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationUpdateOne {
+	_u.mutation.SetInstallationMetadata(v)
+	return _u
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetInstallationMetadata(*v)
+	}
+	return _u
+}
+
+// ClearInstallationMetadata clears the value of the "installation_metadata" field.
+func (_u *IntegrationUpdateOne) ClearInstallationMetadata() *IntegrationUpdateOne {
+	_u.mutation.ClearInstallationMetadata()
+	return _u
+}
+
 // SetProviderState sets the "provider_state" field.
 func (_u *IntegrationUpdateOne) SetProviderState(v openapi.IntegrationProviderState) *IntegrationUpdateOne {
 	_u.mutation.SetProviderState(v)
@@ -3797,6 +3843,12 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.ConfigCleared() {
 		_spec.ClearField(integration.FieldConfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integration.FieldInstallationMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.InstallationMetadataCleared() {
+		_spec.ClearField(integration.FieldInstallationMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)

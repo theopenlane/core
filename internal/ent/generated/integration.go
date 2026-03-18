@@ -67,6 +67,8 @@ type Integration struct {
 	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// runtime configuration for operations, scheduling, and mappings
 	Config openapi.IntegrationConfig `json:"config,omitempty"`
+	// stable, non-secret installation identity metadata for the provider
+	InstallationMetadata openapi.IntegrationInstallationMetadata `json:"installation_metadata,omitempty"`
 	// provider-specific integration state captured during auth/config
 	ProviderState openapi.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
@@ -374,7 +376,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -545,6 +547,14 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Config); err != nil {
 					return fmt.Errorf("unmarshal field config: %w", err)
+				}
+			}
+		case integration.FieldInstallationMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field installation_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.InstallationMetadata); err != nil {
+					return fmt.Errorf("unmarshal field installation_metadata: %w", err)
 				}
 			}
 		case integration.FieldProviderState:
@@ -830,6 +840,9 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("config=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Config))
+	builder.WriteString(", ")
+	builder.WriteString("installation_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.InstallationMetadata))
 	builder.WriteString(", ")
 	builder.WriteString("provider_state=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderState))

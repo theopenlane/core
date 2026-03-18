@@ -1554,6 +1554,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldPlatformID:               {Type: field.TypeString, Column: integration.FieldPlatformID},
 			integration.FieldProviderMetadata:         {Type: field.TypeJSON, Column: integration.FieldProviderMetadata},
 			integration.FieldConfig:                   {Type: field.TypeJSON, Column: integration.FieldConfig},
+			integration.FieldInstallationMetadata:     {Type: field.TypeJSON, Column: integration.FieldInstallationMetadata},
 			integration.FieldProviderState:            {Type: field.TypeJSON, Column: integration.FieldProviderState},
 			integration.FieldMetadata:                 {Type: field.TypeJSON, Column: integration.FieldMetadata},
 			integration.FieldDefinitionID:             {Type: field.TypeString, Column: integration.FieldDefinitionID},
@@ -29246,6 +29247,11 @@ func (f *IntegrationFilter) WhereProviderMetadata(p entql.BytesP) {
 // WhereConfig applies the entql json.RawMessage predicate on the config field.
 func (f *IntegrationFilter) WhereConfig(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldConfig))
+}
+
+// WhereInstallationMetadata applies the entql json.RawMessage predicate on the installation_metadata field.
+func (f *IntegrationFilter) WhereInstallationMetadata(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldInstallationMetadata))
 }
 
 // WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.

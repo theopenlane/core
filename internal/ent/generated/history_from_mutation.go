@@ -11521,6 +11521,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetConfig(config)
 	}
 
+	if installationMetadata, exists := m.InstallationMetadata(); exists {
+		create = create.SetInstallationMetadata(installationMetadata)
+	}
+
 	if providerState, exists := m.ProviderState(); exists {
 		create = create.SetProviderState(providerState)
 	}
@@ -11716,6 +11720,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetConfig(integration.Config)
 		}
 
+		if installationMetadata, exists := m.InstallationMetadata(); exists {
+			create = create.SetInstallationMetadata(installationMetadata)
+		} else {
+			create = create.SetInstallationMetadata(integration.InstallationMetadata)
+		}
+
 		if providerState, exists := m.ProviderState(); exists {
 			create = create.SetProviderState(providerState)
 		} else {
@@ -11821,6 +11831,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetPlatformID(integration.PlatformID).
 			SetProviderMetadata(integration.ProviderMetadata).
 			SetConfig(integration.Config).
+			SetInstallationMetadata(integration.InstallationMetadata).
 			SetProviderState(integration.ProviderState).
 			SetMetadata(integration.Metadata).
 			SetDefinitionID(integration.DefinitionID).

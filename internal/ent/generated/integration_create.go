@@ -335,6 +335,20 @@ func (_c *IntegrationCreate) SetNillableConfig(v *openapi.IntegrationConfig) *In
 	return _c
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_c *IntegrationCreate) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationCreate {
+	_c.mutation.SetInstallationMetadata(v)
+	return _c
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationCreate {
+	if v != nil {
+		_c.SetInstallationMetadata(*v)
+	}
+	return _c
+}
+
 // SetProviderState sets the "provider_state" field.
 func (_c *IntegrationCreate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationCreate {
 	_c.mutation.SetProviderState(v)
@@ -938,6 +952,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Config(); ok {
 		_spec.SetField(integration.FieldConfig, field.TypeJSON, value)
 		_node.Config = value
+	}
+	if value, ok := _c.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integration.FieldInstallationMetadata, field.TypeJSON, value)
+		_node.InstallationMetadata = value
 	}
 	if value, ok := _c.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)

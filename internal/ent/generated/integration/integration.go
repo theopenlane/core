@@ -62,6 +62,8 @@ const (
 	FieldProviderMetadata = "provider_metadata"
 	// FieldConfig holds the string denoting the config field in the database.
 	FieldConfig = "config"
+	// FieldInstallationMetadata holds the string denoting the installation_metadata field in the database.
+	FieldInstallationMetadata = "installation_metadata"
 	// FieldProviderState holds the string denoting the provider_state field in the database.
 	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
@@ -289,6 +291,7 @@ var Columns = []string{
 	FieldPlatformID,
 	FieldProviderMetadata,
 	FieldConfig,
+	FieldInstallationMetadata,
 	FieldProviderState,
 	FieldMetadata,
 	FieldDefinitionID,

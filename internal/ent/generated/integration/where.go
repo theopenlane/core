@@ -1498,6 +1498,16 @@ func ConfigNotNil() predicate.Integration {
 	return predicate.Integration(sql.FieldNotNull(FieldConfig))
 }
 
+// InstallationMetadataIsNil applies the IsNil predicate on the "installation_metadata" field.
+func InstallationMetadataIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldInstallationMetadata))
+}
+
+// InstallationMetadataNotNil applies the NotNil predicate on the "installation_metadata" field.
+func InstallationMetadataNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldInstallationMetadata))
+}
+
 // ProviderStateIsNil applies the IsNil predicate on the "provider_state" field.
 func ProviderStateIsNil() predicate.Integration {
 	return predicate.Integration(sql.FieldIsNull(FieldProviderState))
