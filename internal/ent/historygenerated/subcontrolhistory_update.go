@@ -342,6 +342,26 @@ func (_u *SubcontrolHistoryUpdate) ClearImplementationDescription() *SubcontrolH
 	return _u
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_u *SubcontrolHistoryUpdate) SetPublicRepresentation(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetPublicRepresentation(v)
+	return _u
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillablePublicRepresentation(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetPublicRepresentation(*v)
+	}
+	return _u
+}
+
+// ClearPublicRepresentation clears the value of the "public_representation" field.
+func (_u *SubcontrolHistoryUpdate) ClearPublicRepresentation() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearPublicRepresentation()
+	return _u
+}
+
 // SetSource sets the "source" field.
 func (_u *SubcontrolHistoryUpdate) SetSource(v enums.ControlSource) *SubcontrolHistoryUpdate {
 	_u.mutation.SetSource(v)
@@ -359,6 +379,26 @@ func (_u *SubcontrolHistoryUpdate) SetNillableSource(v *enums.ControlSource) *Su
 // ClearSource clears the value of the "source" field.
 func (_u *SubcontrolHistoryUpdate) ClearSource() *SubcontrolHistoryUpdate {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceName sets the "source_name" field.
+func (_u *SubcontrolHistoryUpdate) SetSourceName(v string) *SubcontrolHistoryUpdate {
+	_u.mutation.SetSourceName(v)
+	return _u
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableSourceName(v *string) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetSourceName(*v)
+	}
+	return _u
+}
+
+// ClearSourceName clears the value of the "source_name" field.
+func (_u *SubcontrolHistoryUpdate) ClearSourceName() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearSourceName()
 	return _u
 }
 
@@ -997,11 +1037,23 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.ImplementationDescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldImplementationDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.PublicRepresentation(); ok {
+		_spec.SetField(subcontrolhistory.FieldPublicRepresentation, field.TypeString, value)
+	}
+	if _u.mutation.PublicRepresentationCleared() {
+		_spec.ClearField(subcontrolhistory.FieldPublicRepresentation, field.TypeString)
+	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SourceName(); ok {
+		_spec.SetField(subcontrolhistory.FieldSourceName, field.TypeString, value)
+	}
+	if _u.mutation.SourceNameCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)
@@ -1516,6 +1568,26 @@ func (_u *SubcontrolHistoryUpdateOne) ClearImplementationDescription() *Subcontr
 	return _u
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_u *SubcontrolHistoryUpdateOne) SetPublicRepresentation(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetPublicRepresentation(v)
+	return _u
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillablePublicRepresentation(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetPublicRepresentation(*v)
+	}
+	return _u
+}
+
+// ClearPublicRepresentation clears the value of the "public_representation" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearPublicRepresentation() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearPublicRepresentation()
+	return _u
+}
+
 // SetSource sets the "source" field.
 func (_u *SubcontrolHistoryUpdateOne) SetSource(v enums.ControlSource) *SubcontrolHistoryUpdateOne {
 	_u.mutation.SetSource(v)
@@ -1533,6 +1605,26 @@ func (_u *SubcontrolHistoryUpdateOne) SetNillableSource(v *enums.ControlSource) 
 // ClearSource clears the value of the "source" field.
 func (_u *SubcontrolHistoryUpdateOne) ClearSource() *SubcontrolHistoryUpdateOne {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceName sets the "source_name" field.
+func (_u *SubcontrolHistoryUpdateOne) SetSourceName(v string) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetSourceName(v)
+	return _u
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableSourceName(v *string) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetSourceName(*v)
+	}
+	return _u
+}
+
+// ClearSourceName clears the value of the "source_name" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearSourceName() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearSourceName()
 	return _u
 }
 
@@ -2201,11 +2293,23 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	if _u.mutation.ImplementationDescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldImplementationDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.PublicRepresentation(); ok {
+		_spec.SetField(subcontrolhistory.FieldPublicRepresentation, field.TypeString, value)
+	}
+	if _u.mutation.PublicRepresentationCleared() {
+		_spec.ClearField(subcontrolhistory.FieldPublicRepresentation, field.TypeString)
+	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SourceName(); ok {
+		_spec.SetField(subcontrolhistory.FieldSourceName, field.TypeString, value)
+	}
+	if _u.mutation.SourceNameCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)

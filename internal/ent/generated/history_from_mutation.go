@@ -3014,8 +3014,16 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetImplementationDescription(implementationDescription)
 	}
 
+	if publicRepresentation, exists := m.PublicRepresentation(); exists {
+		create = create.SetPublicRepresentation(publicRepresentation)
+	}
+
 	if source, exists := m.Source(); exists {
 		create = create.SetSource(source)
+	}
+
+	if sourceName, exists := m.SourceName(); exists {
+		create = create.SetNillableSourceName(&sourceName)
 	}
 
 	if referenceFramework, exists := m.ReferenceFramework(); exists {
@@ -3287,10 +3295,22 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetImplementationDescription(control.ImplementationDescription)
 		}
 
+		if publicRepresentation, exists := m.PublicRepresentation(); exists {
+			create = create.SetPublicRepresentation(publicRepresentation)
+		} else {
+			create = create.SetPublicRepresentation(control.PublicRepresentation)
+		}
+
 		if source, exists := m.Source(); exists {
 			create = create.SetSource(source)
 		} else {
 			create = create.SetSource(control.Source)
+		}
+
+		if sourceName, exists := m.SourceName(); exists {
+			create = create.SetNillableSourceName(&sourceName)
+		} else {
+			create = create.SetNillableSourceName(control.SourceName)
 		}
 
 		if referenceFramework, exists := m.ReferenceFramework(); exists {
@@ -3533,7 +3553,9 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(control.Status).
 			SetImplementationStatus(control.ImplementationStatus).
 			SetImplementationDescription(control.ImplementationDescription).
+			SetPublicRepresentation(control.PublicRepresentation).
 			SetSource(control.Source).
+			SetNillableSourceName(control.SourceName).
 			SetNillableReferenceFramework(control.ReferenceFramework).
 			SetNillableReferenceFrameworkRevision(control.ReferenceFrameworkRevision).
 			SetCategory(control.Category).
@@ -19985,8 +20007,16 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetImplementationDescription(implementationDescription)
 	}
 
+	if publicRepresentation, exists := m.PublicRepresentation(); exists {
+		create = create.SetPublicRepresentation(publicRepresentation)
+	}
+
 	if source, exists := m.Source(); exists {
 		create = create.SetSource(source)
+	}
+
+	if sourceName, exists := m.SourceName(); exists {
+		create = create.SetNillableSourceName(&sourceName)
 	}
 
 	if referenceFramework, exists := m.ReferenceFramework(); exists {
@@ -20234,10 +20264,22 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetImplementationDescription(subcontrol.ImplementationDescription)
 		}
 
+		if publicRepresentation, exists := m.PublicRepresentation(); exists {
+			create = create.SetPublicRepresentation(publicRepresentation)
+		} else {
+			create = create.SetPublicRepresentation(subcontrol.PublicRepresentation)
+		}
+
 		if source, exists := m.Source(); exists {
 			create = create.SetSource(source)
 		} else {
 			create = create.SetSource(subcontrol.Source)
+		}
+
+		if sourceName, exists := m.SourceName(); exists {
+			create = create.SetNillableSourceName(&sourceName)
+		} else {
+			create = create.SetNillableSourceName(subcontrol.SourceName)
 		}
 
 		if referenceFramework, exists := m.ReferenceFramework(); exists {
@@ -20444,7 +20486,9 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetStatus(subcontrol.Status).
 			SetImplementationStatus(subcontrol.ImplementationStatus).
 			SetImplementationDescription(subcontrol.ImplementationDescription).
+			SetPublicRepresentation(subcontrol.PublicRepresentation).
 			SetSource(subcontrol.Source).
+			SetNillableSourceName(subcontrol.SourceName).
 			SetNillableReferenceFramework(subcontrol.ReferenceFramework).
 			SetNillableReferenceFrameworkRevision(subcontrol.ReferenceFrameworkRevision).
 			SetCategory(subcontrol.Category).

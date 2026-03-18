@@ -88,8 +88,12 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -326,8 +330,12 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -564,8 +572,12 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -802,8 +814,12 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":

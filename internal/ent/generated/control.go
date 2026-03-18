@@ -63,8 +63,12 @@ type Control struct {
 	ImplementationStatus enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription string `json:"implementation_description,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation string `json:"public_representation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"source_name,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"reference_framework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -606,7 +610,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker, control.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldExternalUUID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldImplementationStatus, control.FieldImplementationDescription, control.FieldPublicRepresentation, control.FieldSource, control.FieldSourceName, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -756,11 +760,24 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ImplementationDescription = value.String
 			}
+		case control.FieldPublicRepresentation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field public_representation", values[i])
+			} else if value.Valid {
+				_m.PublicRepresentation = value.String
+			}
 		case control.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				_m.Source = enums.ControlSource(value.String)
+			}
+		case control.FieldSourceName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_name", values[i])
+			} else if value.Valid {
+				_m.SourceName = new(string)
+				*_m.SourceName = value.String
 			}
 		case control.FieldReferenceFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1265,8 +1282,16 @@ func (_m *Control) String() string {
 	builder.WriteString("implementation_description=")
 	builder.WriteString(_m.ImplementationDescription)
 	builder.WriteString(", ")
+	builder.WriteString("public_representation=")
+	builder.WriteString(_m.PublicRepresentation)
+	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
+	if v := _m.SourceName; v != nil {
+		builder.WriteString("source_name=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")

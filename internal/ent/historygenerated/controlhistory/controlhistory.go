@@ -64,8 +64,12 @@ const (
 	FieldImplementationStatus = "implementation_status"
 	// FieldImplementationDescription holds the string denoting the implementation_description field in the database.
 	FieldImplementationDescription = "implementation_description"
+	// FieldPublicRepresentation holds the string denoting the public_representation field in the database.
+	FieldPublicRepresentation = "public_representation"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldSourceName holds the string denoting the source_name field in the database.
+	FieldSourceName = "source_name"
 	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
 	FieldReferenceFramework = "reference_framework"
 	// FieldReferenceFrameworkRevision holds the string denoting the reference_framework_revision field in the database.
@@ -157,7 +161,9 @@ var Columns = []string{
 	FieldStatus,
 	FieldImplementationStatus,
 	FieldImplementationDescription,
+	FieldPublicRepresentation,
 	FieldSource,
+	FieldSourceName,
 	FieldReferenceFramework,
 	FieldReferenceFrameworkRevision,
 	FieldCategory,
@@ -391,9 +397,19 @@ func ByImplementationDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImplementationDescription, opts...).ToFunc()
 }
 
+// ByPublicRepresentation orders the results by the public_representation field.
+func ByPublicRepresentation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPublicRepresentation, opts...).ToFunc()
+}
+
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// BySourceName orders the results by the source_name field.
+func BySourceName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceName, opts...).ToFunc()
 }
 
 // ByReferenceFramework orders the results by the reference_framework field.

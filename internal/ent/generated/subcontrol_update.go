@@ -358,6 +358,26 @@ func (_u *SubcontrolUpdate) ClearImplementationDescription() *SubcontrolUpdate {
 	return _u
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_u *SubcontrolUpdate) SetPublicRepresentation(v string) *SubcontrolUpdate {
+	_u.mutation.SetPublicRepresentation(v)
+	return _u
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillablePublicRepresentation(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetPublicRepresentation(*v)
+	}
+	return _u
+}
+
+// ClearPublicRepresentation clears the value of the "public_representation" field.
+func (_u *SubcontrolUpdate) ClearPublicRepresentation() *SubcontrolUpdate {
+	_u.mutation.ClearPublicRepresentation()
+	return _u
+}
+
 // SetSource sets the "source" field.
 func (_u *SubcontrolUpdate) SetSource(v enums.ControlSource) *SubcontrolUpdate {
 	_u.mutation.SetSource(v)
@@ -375,6 +395,26 @@ func (_u *SubcontrolUpdate) SetNillableSource(v *enums.ControlSource) *Subcontro
 // ClearSource clears the value of the "source" field.
 func (_u *SubcontrolUpdate) ClearSource() *SubcontrolUpdate {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceName sets the "source_name" field.
+func (_u *SubcontrolUpdate) SetSourceName(v string) *SubcontrolUpdate {
+	_u.mutation.SetSourceName(v)
+	return _u
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableSourceName(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetSourceName(*v)
+	}
+	return _u
+}
+
+// ClearSourceName clears the value of the "source_name" field.
+func (_u *SubcontrolUpdate) ClearSourceName() *SubcontrolUpdate {
+	_u.mutation.ClearSourceName()
 	return _u
 }
 
@@ -1617,11 +1657,23 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.ImplementationDescriptionCleared() {
 		_spec.ClearField(subcontrol.FieldImplementationDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.PublicRepresentation(); ok {
+		_spec.SetField(subcontrol.FieldPublicRepresentation, field.TypeString, value)
+	}
+	if _u.mutation.PublicRepresentationCleared() {
+		_spec.ClearField(subcontrol.FieldPublicRepresentation, field.TypeString)
+	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(subcontrol.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SourceName(); ok {
+		_spec.SetField(subcontrol.FieldSourceName, field.TypeString, value)
+	}
+	if _u.mutation.SourceNameCleared() {
+		_spec.ClearField(subcontrol.FieldSourceName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)
@@ -2987,6 +3039,26 @@ func (_u *SubcontrolUpdateOne) ClearImplementationDescription() *SubcontrolUpdat
 	return _u
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_u *SubcontrolUpdateOne) SetPublicRepresentation(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetPublicRepresentation(v)
+	return _u
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillablePublicRepresentation(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetPublicRepresentation(*v)
+	}
+	return _u
+}
+
+// ClearPublicRepresentation clears the value of the "public_representation" field.
+func (_u *SubcontrolUpdateOne) ClearPublicRepresentation() *SubcontrolUpdateOne {
+	_u.mutation.ClearPublicRepresentation()
+	return _u
+}
+
 // SetSource sets the "source" field.
 func (_u *SubcontrolUpdateOne) SetSource(v enums.ControlSource) *SubcontrolUpdateOne {
 	_u.mutation.SetSource(v)
@@ -3004,6 +3076,26 @@ func (_u *SubcontrolUpdateOne) SetNillableSource(v *enums.ControlSource) *Subcon
 // ClearSource clears the value of the "source" field.
 func (_u *SubcontrolUpdateOne) ClearSource() *SubcontrolUpdateOne {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceName sets the "source_name" field.
+func (_u *SubcontrolUpdateOne) SetSourceName(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetSourceName(v)
+	return _u
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableSourceName(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetSourceName(*v)
+	}
+	return _u
+}
+
+// ClearSourceName clears the value of the "source_name" field.
+func (_u *SubcontrolUpdateOne) ClearSourceName() *SubcontrolUpdateOne {
+	_u.mutation.ClearSourceName()
 	return _u
 }
 
@@ -4276,11 +4368,23 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	if _u.mutation.ImplementationDescriptionCleared() {
 		_spec.ClearField(subcontrol.FieldImplementationDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.PublicRepresentation(); ok {
+		_spec.SetField(subcontrol.FieldPublicRepresentation, field.TypeString, value)
+	}
+	if _u.mutation.PublicRepresentationCleared() {
+		_spec.ClearField(subcontrol.FieldPublicRepresentation, field.TypeString)
+	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(subcontrol.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SourceName(); ok {
+		_spec.SetField(subcontrol.FieldSourceName, field.TypeString, value)
+	}
+	if _u.mutation.SourceNameCleared() {
+		_spec.ClearField(subcontrol.FieldSourceName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)

@@ -4254,9 +4254,17 @@ type ControlHistory implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlHistoryControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -4766,6 +4774,24 @@ input ControlHistoryWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: ControlHistoryControlSource
@@ -4774,6 +4800,24 @@ input ControlHistoryWhereInput {
   sourceNotIn: [ControlHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -31334,9 +31378,17 @@ type SubcontrolHistory implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolHistoryControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -31815,6 +31867,24 @@ input SubcontrolHistoryWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: SubcontrolHistoryControlSource
@@ -31823,6 +31893,24 @@ input SubcontrolHistoryWhereInput {
   sourceNotIn: [SubcontrolHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """

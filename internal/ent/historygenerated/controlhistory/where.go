@@ -148,6 +148,16 @@ func ImplementationDescription(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldImplementationDescription, v))
 }
 
+// PublicRepresentation applies equality check predicate on the "public_representation" field. It's identical to PublicRepresentationEQ.
+func PublicRepresentation(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldPublicRepresentation, v))
+}
+
+// SourceName applies equality check predicate on the "source_name" field. It's identical to SourceNameEQ.
+func SourceName(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldSourceName, v))
+}
+
 // ReferenceFramework applies equality check predicate on the "reference_framework" field. It's identical to ReferenceFrameworkEQ.
 func ReferenceFramework(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldReferenceFramework, v))
@@ -1463,6 +1473,81 @@ func ImplementationDescriptionContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldImplementationDescription, v))
 }
 
+// PublicRepresentationEQ applies the EQ predicate on the "public_representation" field.
+func PublicRepresentationEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationNEQ applies the NEQ predicate on the "public_representation" field.
+func PublicRepresentationNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationIn applies the In predicate on the "public_representation" field.
+func PublicRepresentationIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldPublicRepresentation, vs...))
+}
+
+// PublicRepresentationNotIn applies the NotIn predicate on the "public_representation" field.
+func PublicRepresentationNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldPublicRepresentation, vs...))
+}
+
+// PublicRepresentationGT applies the GT predicate on the "public_representation" field.
+func PublicRepresentationGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationGTE applies the GTE predicate on the "public_representation" field.
+func PublicRepresentationGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationLT applies the LT predicate on the "public_representation" field.
+func PublicRepresentationLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationLTE applies the LTE predicate on the "public_representation" field.
+func PublicRepresentationLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationContains applies the Contains predicate on the "public_representation" field.
+func PublicRepresentationContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationHasPrefix applies the HasPrefix predicate on the "public_representation" field.
+func PublicRepresentationHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationHasSuffix applies the HasSuffix predicate on the "public_representation" field.
+func PublicRepresentationHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationIsNil applies the IsNil predicate on the "public_representation" field.
+func PublicRepresentationIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldPublicRepresentation))
+}
+
+// PublicRepresentationNotNil applies the NotNil predicate on the "public_representation" field.
+func PublicRepresentationNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldPublicRepresentation))
+}
+
+// PublicRepresentationEqualFold applies the EqualFold predicate on the "public_representation" field.
+func PublicRepresentationEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationContainsFold applies the ContainsFold predicate on the "public_representation" field.
+func PublicRepresentationContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldPublicRepresentation, v))
+}
+
 // SourceEQ applies the EQ predicate on the "source" field.
 func SourceEQ(v enums.ControlSource) predicate.ControlHistory {
 	vc := v
@@ -1501,6 +1586,81 @@ func SourceIsNil() predicate.ControlHistory {
 // SourceNotNil applies the NotNil predicate on the "source" field.
 func SourceNotNil() predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldNotNull(FieldSource))
+}
+
+// SourceNameEQ applies the EQ predicate on the "source_name" field.
+func SourceNameEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldSourceName, v))
+}
+
+// SourceNameNEQ applies the NEQ predicate on the "source_name" field.
+func SourceNameNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldSourceName, v))
+}
+
+// SourceNameIn applies the In predicate on the "source_name" field.
+func SourceNameIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldSourceName, vs...))
+}
+
+// SourceNameNotIn applies the NotIn predicate on the "source_name" field.
+func SourceNameNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldSourceName, vs...))
+}
+
+// SourceNameGT applies the GT predicate on the "source_name" field.
+func SourceNameGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldSourceName, v))
+}
+
+// SourceNameGTE applies the GTE predicate on the "source_name" field.
+func SourceNameGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldSourceName, v))
+}
+
+// SourceNameLT applies the LT predicate on the "source_name" field.
+func SourceNameLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldSourceName, v))
+}
+
+// SourceNameLTE applies the LTE predicate on the "source_name" field.
+func SourceNameLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldSourceName, v))
+}
+
+// SourceNameContains applies the Contains predicate on the "source_name" field.
+func SourceNameContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldSourceName, v))
+}
+
+// SourceNameHasPrefix applies the HasPrefix predicate on the "source_name" field.
+func SourceNameHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldSourceName, v))
+}
+
+// SourceNameHasSuffix applies the HasSuffix predicate on the "source_name" field.
+func SourceNameHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldSourceName, v))
+}
+
+// SourceNameIsNil applies the IsNil predicate on the "source_name" field.
+func SourceNameIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldSourceName))
+}
+
+// SourceNameNotNil applies the NotNil predicate on the "source_name" field.
+func SourceNameNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldSourceName))
+}
+
+// SourceNameEqualFold applies the EqualFold predicate on the "source_name" field.
+func SourceNameEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldSourceName, v))
+}
+
+// SourceNameContainsFold applies the ContainsFold predicate on the "source_name" field.
+func SourceNameContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldSourceName, v))
 }
 
 // ReferenceFrameworkEQ applies the EQ predicate on the "reference_framework" field.

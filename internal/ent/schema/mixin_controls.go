@@ -293,6 +293,12 @@ var controlFields = []ent.Field{
 				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			),
 		),
+	field.Text("public_representation").
+		Optional().
+		Annotations(
+			entx.FieldSearchable(),
+		).
+		Comment("a public representation of the control that can be shared with external parties without revealing sensitive information"),
 	field.Enum("source").
 		GoType(enums.ControlSource("")).
 		Optional().
@@ -302,6 +308,10 @@ var controlFields = []ent.Field{
 		).
 		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
+	field.String("source_name").
+		Optional().
+		Nillable().
+		Comment("name of the source of the controls if not directly from a standard"),
 	field.String("reference_framework").
 		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").
 		Nillable().

@@ -1857,10 +1857,20 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldImplementationDescription)
 				fieldSeen[controlhistory.FieldImplementationDescription] = struct{}{}
 			}
+		case "publicRepresentation":
+			if _, ok := fieldSeen[controlhistory.FieldPublicRepresentation]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldPublicRepresentation)
+				fieldSeen[controlhistory.FieldPublicRepresentation] = struct{}{}
+			}
 		case "source":
 			if _, ok := fieldSeen[controlhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldSource)
 				fieldSeen[controlhistory.FieldSource] = struct{}{}
+			}
+		case "sourceName":
+			if _, ok := fieldSeen[controlhistory.FieldSourceName]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldSourceName)
+				fieldSeen[controlhistory.FieldSourceName] = struct{}{}
 			}
 		case "referenceFramework":
 			if _, ok := fieldSeen[controlhistory.FieldReferenceFramework]; !ok {
@@ -11845,10 +11855,20 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationDescription)
 				fieldSeen[subcontrolhistory.FieldImplementationDescription] = struct{}{}
 			}
+		case "publicRepresentation":
+			if _, ok := fieldSeen[subcontrolhistory.FieldPublicRepresentation]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldPublicRepresentation)
+				fieldSeen[subcontrolhistory.FieldPublicRepresentation] = struct{}{}
+			}
 		case "source":
 			if _, ok := fieldSeen[subcontrolhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldSource)
 				fieldSeen[subcontrolhistory.FieldSource] = struct{}{}
+			}
+		case "sourceName":
+			if _, ok := fieldSeen[subcontrolhistory.FieldSourceName]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldSourceName)
+				fieldSeen[subcontrolhistory.FieldSourceName] = struct{}{}
 			}
 		case "referenceFramework":
 			if _, ok := fieldSeen[subcontrolhistory.FieldReferenceFramework]; !ok {

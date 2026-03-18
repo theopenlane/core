@@ -6249,9 +6249,17 @@ type Control implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -8987,6 +8995,24 @@ input ControlWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: ControlControlSource
@@ -8995,6 +9021,24 @@ input ControlWhereInput {
   sourceNotIn: [ControlControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -10254,9 +10298,17 @@ input CreateControlInput {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -14043,9 +14095,17 @@ input CreateSubcontrolInput {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -60052,9 +60112,17 @@ type Subcontrol implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -60909,6 +60977,24 @@ input SubcontrolWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: SubcontrolControlSource
@@ -60917,6 +61003,24 @@ input SubcontrolWhereInput {
   sourceNotIn: [SubcontrolControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -69833,10 +69937,20 @@ input UpdateControlInput {
   implementationDescription: String
   clearImplementationDescription: Boolean
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  clearPublicRepresentation: Boolean
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
   clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
+  clearSourceName: Boolean
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
@@ -75180,10 +75294,20 @@ input UpdateSubcontrolInput {
   implementationDescription: String
   clearImplementationDescription: Boolean
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  clearPublicRepresentation: Boolean
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
   clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
+  clearSourceName: Boolean
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """

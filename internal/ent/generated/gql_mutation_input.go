@@ -2806,7 +2806,9 @@ type CreateControlInput struct {
 	Status                     *enums.ControlStatus
 	ImplementationStatus       *enums.ControlImplementationStatus
 	ImplementationDescription  *string
+	PublicRepresentation       *string
 	Source                     *enums.ControlSource
+	SourceName                 *string
 	ReferenceFramework         *string
 	ReferenceFrameworkRevision *string
 	Category                   *string
@@ -2900,8 +2902,14 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ImplementationDescription; v != nil {
 		m.SetImplementationDescription(*v)
 	}
+	if v := i.PublicRepresentation; v != nil {
+		m.SetPublicRepresentation(*v)
+	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.SourceName; v != nil {
+		m.SetSourceName(*v)
 	}
 	if v := i.ReferenceFramework; v != nil {
 		m.SetReferenceFramework(*v)
@@ -3104,8 +3112,12 @@ type UpdateControlInput struct {
 	ImplementationStatus            *enums.ControlImplementationStatus
 	ClearImplementationDescription  bool
 	ImplementationDescription       *string
+	ClearPublicRepresentation       bool
+	PublicRepresentation            *string
 	ClearSource                     bool
 	Source                          *enums.ControlSource
+	ClearSourceName                 bool
+	SourceName                      *string
 	ClearReferenceFrameworkRevision bool
 	ReferenceFrameworkRevision      *string
 	ClearCategory                   bool
@@ -3327,11 +3339,23 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ImplementationDescription; v != nil {
 		m.SetImplementationDescription(*v)
 	}
+	if i.ClearPublicRepresentation {
+		m.ClearPublicRepresentation()
+	}
+	if v := i.PublicRepresentation; v != nil {
+		m.SetPublicRepresentation(*v)
+	}
 	if i.ClearSource {
 		m.ClearSource()
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearSourceName {
+		m.ClearSourceName()
+	}
+	if v := i.SourceName; v != nil {
+		m.SetSourceName(*v)
 	}
 	if i.ClearReferenceFrameworkRevision {
 		m.ClearReferenceFrameworkRevision()
@@ -22602,7 +22626,9 @@ type CreateSubcontrolInput struct {
 	Status                     *enums.ControlStatus
 	ImplementationStatus       *enums.ControlImplementationStatus
 	ImplementationDescription  *string
+	PublicRepresentation       *string
 	Source                     *enums.ControlSource
+	SourceName                 *string
 	ReferenceFramework         *string
 	ReferenceFrameworkRevision *string
 	Category                   *string
@@ -22678,8 +22704,14 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ImplementationDescription; v != nil {
 		m.SetImplementationDescription(*v)
 	}
+	if v := i.PublicRepresentation; v != nil {
+		m.SetPublicRepresentation(*v)
+	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.SourceName; v != nil {
+		m.SetSourceName(*v)
 	}
 	if v := i.ReferenceFramework; v != nil {
 		m.SetReferenceFramework(*v)
@@ -22826,8 +22858,12 @@ type UpdateSubcontrolInput struct {
 	ImplementationStatus            *enums.ControlImplementationStatus
 	ClearImplementationDescription  bool
 	ImplementationDescription       *string
+	ClearPublicRepresentation       bool
+	PublicRepresentation            *string
 	ClearSource                     bool
 	Source                          *enums.ControlSource
+	ClearSourceName                 bool
+	SourceName                      *string
 	ClearReferenceFrameworkRevision bool
 	ReferenceFrameworkRevision      *string
 	ClearCategory                   bool
@@ -22999,11 +23035,23 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ImplementationDescription; v != nil {
 		m.SetImplementationDescription(*v)
 	}
+	if i.ClearPublicRepresentation {
+		m.ClearPublicRepresentation()
+	}
+	if v := i.PublicRepresentation; v != nil {
+		m.SetPublicRepresentation(*v)
+	}
 	if i.ClearSource {
 		m.ClearSource()
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearSourceName {
+		m.ClearSourceName()
+	}
+	if v := i.SourceName; v != nil {
+		m.SetSourceName(*v)
 	}
 	if i.ClearReferenceFrameworkRevision {
 		m.ClearReferenceFrameworkRevision()

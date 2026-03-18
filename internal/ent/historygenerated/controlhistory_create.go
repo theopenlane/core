@@ -293,6 +293,20 @@ func (_c *ControlHistoryCreate) SetNillableImplementationDescription(v *string) 
 	return _c
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_c *ControlHistoryCreate) SetPublicRepresentation(v string) *ControlHistoryCreate {
+	_c.mutation.SetPublicRepresentation(v)
+	return _c
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillablePublicRepresentation(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetPublicRepresentation(*v)
+	}
+	return _c
+}
+
 // SetSource sets the "source" field.
 func (_c *ControlHistoryCreate) SetSource(v enums.ControlSource) *ControlHistoryCreate {
 	_c.mutation.SetSource(v)
@@ -303,6 +317,20 @@ func (_c *ControlHistoryCreate) SetSource(v enums.ControlSource) *ControlHistory
 func (_c *ControlHistoryCreate) SetNillableSource(v *enums.ControlSource) *ControlHistoryCreate {
 	if v != nil {
 		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceName sets the "source_name" field.
+func (_c *ControlHistoryCreate) SetSourceName(v string) *ControlHistoryCreate {
+	_c.mutation.SetSourceName(v)
+	return _c
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableSourceName(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetSourceName(*v)
 	}
 	return _c
 }
@@ -938,9 +966,17 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
 		_node.ImplementationDescription = value
 	}
+	if value, ok := _c.mutation.PublicRepresentation(); ok {
+		_spec.SetField(controlhistory.FieldPublicRepresentation, field.TypeString, value)
+		_node.PublicRepresentation = value
+	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceName(); ok {
+		_spec.SetField(controlhistory.FieldSourceName, field.TypeString, value)
+		_node.SourceName = &value
 	}
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)

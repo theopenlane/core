@@ -744,6 +744,7 @@ type ComplexityRoot struct {
 		Platforms                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		PublicRepresentation       func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
 		ReferenceFrameworkRevision func(childComplexity int) int
@@ -760,6 +761,7 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		Standard                   func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
@@ -5798,6 +5800,7 @@ type ComplexityRoot struct {
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
 		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		PublicRepresentation       func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
 		ReferenceFrameworkRevision func(childComplexity int) int
@@ -5808,6 +5811,7 @@ type ComplexityRoot struct {
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
 		SubcontrolKind             func(childComplexity int) int
@@ -11047,6 +11051,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "Control.publicRepresentation":
+		if e.ComplexityRoot.Control.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.PublicRepresentation(childComplexity), true
+
 	case "Control.refCode":
 		if e.ComplexityRoot.Control.RefCode == nil {
 			break
@@ -11183,6 +11194,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.Source(childComplexity), true
+
+	case "Control.sourceName":
+		if e.ComplexityRoot.Control.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.SourceName(childComplexity), true
 
 	case "Control.standard":
 		if e.ComplexityRoot.Control.Standard == nil {
@@ -42801,6 +42819,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 
+	case "Subcontrol.publicRepresentation":
+		if e.ComplexityRoot.Subcontrol.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.PublicRepresentation(childComplexity), true
+
 	case "Subcontrol.refCode":
 		if e.ComplexityRoot.Subcontrol.RefCode == nil {
 			break
@@ -42880,6 +42905,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.Source(childComplexity), true
+
+	case "Subcontrol.sourceName":
+		if e.ComplexityRoot.Subcontrol.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.SourceName(childComplexity), true
 
 	case "Subcontrol.status":
 		if e.ComplexityRoot.Subcontrol.Status == nil {
@@ -60799,9 +60831,17 @@ type Control implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -63537,6 +63577,24 @@ input ControlWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: ControlControlSource
@@ -63545,6 +63603,24 @@ input ControlWhereInput {
   sourceNotIn: [ControlControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -64804,9 +64880,17 @@ input CreateControlInput {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -68593,9 +68677,17 @@ input CreateSubcontrolInput {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -114602,9 +114694,17 @@ type Subcontrol implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -115459,6 +115559,24 @@ input SubcontrolWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: SubcontrolControlSource
@@ -115467,6 +115585,24 @@ input SubcontrolWhereInput {
   sourceNotIn: [SubcontrolControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -124383,10 +124519,20 @@ input UpdateControlInput {
   implementationDescription: String
   clearImplementationDescription: Boolean
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  clearPublicRepresentation: Boolean
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
   clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
+  clearSourceName: Boolean
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
@@ -129730,10 +129876,20 @@ input UpdateSubcontrolInput {
   implementationDescription: String
   clearImplementationDescription: Boolean
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  clearPublicRepresentation: Boolean
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
   clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
+  clearSourceName: Boolean
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """

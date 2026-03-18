@@ -275,6 +275,20 @@ func (_c *SubcontrolCreate) SetNillableImplementationDescription(v *string) *Sub
 	return _c
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_c *SubcontrolCreate) SetPublicRepresentation(v string) *SubcontrolCreate {
+	_c.mutation.SetPublicRepresentation(v)
+	return _c
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillablePublicRepresentation(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetPublicRepresentation(*v)
+	}
+	return _c
+}
+
 // SetSource sets the "source" field.
 func (_c *SubcontrolCreate) SetSource(v enums.ControlSource) *SubcontrolCreate {
 	_c.mutation.SetSource(v)
@@ -285,6 +299,20 @@ func (_c *SubcontrolCreate) SetSource(v enums.ControlSource) *SubcontrolCreate {
 func (_c *SubcontrolCreate) SetNillableSource(v *enums.ControlSource) *SubcontrolCreate {
 	if v != nil {
 		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceName sets the "source_name" field.
+func (_c *SubcontrolCreate) SetSourceName(v string) *SubcontrolCreate {
+	_c.mutation.SetSourceName(v)
+	return _c
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableSourceName(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetSourceName(*v)
 	}
 	return _c
 }
@@ -1067,9 +1095,17 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldImplementationDescription, field.TypeString, value)
 		_node.ImplementationDescription = value
 	}
+	if value, ok := _c.mutation.PublicRepresentation(); ok {
+		_spec.SetField(subcontrol.FieldPublicRepresentation, field.TypeString, value)
+		_node.PublicRepresentation = value
+	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceName(); ok {
+		_spec.SetField(subcontrol.FieldSourceName, field.TypeString, value)
+		_node.SourceName = &value
 	}
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)
