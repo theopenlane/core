@@ -2355,6 +2355,44 @@ type RiskUpdatePayload struct {
 	Risk *generated.Risk `json:"risk"`
 }
 
+// Return response for createBulkSLADefinition mutation
+type SLADefinitionBulkCreatePayload struct {
+	// Created slaDefinitions
+	SLADefinitions []*generated.SLADefinition `json:"slaDefinitions,omitempty"`
+}
+
+// Return response for deleteBulkSLADefinition mutation
+type SLADefinitionBulkDeletePayload struct {
+	// Deleted slaDefinition IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSLADefinition mutation
+type SLADefinitionBulkUpdatePayload struct {
+	// Updated slaDefinitions
+	SLADefinitions []*generated.SLADefinition `json:"slaDefinitions,omitempty"`
+	// IDs of the updated slaDefinitions
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createSLADefinition mutation
+type SLADefinitionCreatePayload struct {
+	// Created slaDefinition
+	SLADefinition *generated.SLADefinition `json:"slaDefinition"`
+}
+
+// Return response for deleteSLADefinition mutation
+type SLADefinitionDeletePayload struct {
+	// Deleted slaDefinition ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateSLADefinition mutation
+type SLADefinitionUpdatePayload struct {
+	// Updated slaDefinition
+	SLADefinition *generated.SLADefinition `json:"slaDefinition"`
+}
+
 // Return response for createBulkScan mutation
 type ScanBulkCreatePayload struct {
 	// Created scans

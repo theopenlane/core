@@ -59,6 +59,7 @@ type SchemaConfig struct {
 	RemediationHistory                string // RemediationHistory table.
 	ReviewHistory                     string // ReviewHistory table.
 	RiskHistory                       string // RiskHistory table.
+	SLADefinitionHistory              string // SLADefinitionHistory table.
 	ScanHistory                       string // ScanHistory table.
 	ScheduledJobHistory               string // ScheduledJobHistory table.
 	StandardHistory                   string // StandardHistory table.

@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
 	"github.com/theopenlane/entx/history"
@@ -266,6 +267,34 @@ func (_c *FindingHistoryCreate) SetNillableScopeID(v *string) *FindingHistoryCre
 	return _c
 }
 
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_c *FindingHistoryCreate) SetFindingStatusName(v string) *FindingHistoryCreate {
+	_c.mutation.SetFindingStatusName(v)
+	return _c
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableFindingStatusName(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetFindingStatusName(*v)
+	}
+	return _c
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_c *FindingHistoryCreate) SetFindingStatusID(v string) *FindingHistoryCreate {
+	_c.mutation.SetFindingStatusID(v)
+	return _c
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableFindingStatusID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetFindingStatusID(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -276,6 +305,34 @@ func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
 func (_c *FindingHistoryCreate) SetNillableExternalID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *FindingHistoryCreate) SetStatus(v string) *FindingHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableStatus(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_c *FindingHistoryCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingHistoryCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
 	}
 	return _c
 }
@@ -646,20 +703,6 @@ func (_c *FindingHistoryCreate) SetNillableRemediationSLA(v *int) *FindingHistor
 	return _c
 }
 
-// SetStatus sets the "status" field.
-func (_c *FindingHistoryCreate) SetStatus(v string) *FindingHistoryCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *FindingHistoryCreate) SetNillableStatus(v *string) *FindingHistoryCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
 // SetEventTime sets the "event_time" field.
 func (_c *FindingHistoryCreate) SetEventTime(v models.DateTime) *FindingHistoryCreate {
 	_c.mutation.SetEventTime(v)
@@ -808,6 +851,10 @@ func (_c *FindingHistoryCreate) defaults() error {
 		v := findinghistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		v := findinghistory.DefaultSecurityLevel
+		_c.mutation.SetSecurityLevel(v)
+	}
 	if _, ok := _c.mutation.Categories(); !ok {
 		v := findinghistory.DefaultCategories
 		_c.mutation.SetCategories(v)
@@ -853,6 +900,11 @@ func (_c *FindingHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`historygenerated: missing required field "FindingHistory.display_id"`)}
+	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := findinghistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "FindingHistory.security_level": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -966,9 +1018,25 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
 	}
+	if value, ok := _c.mutation.FindingStatusName(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
+		_node.FindingStatusName = value
+	}
+	if value, ok := _c.mutation.FindingStatusID(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusID, field.TypeString, value)
+		_node.FindingStatusID = value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
+		_node.Status = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)
+		_node.SecurityLevel = value
 	}
 	if value, ok := _c.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(findinghistory.FieldExternalOwnerID, field.TypeString, value)
@@ -1085,10 +1153,6 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.RemediationSLA(); ok {
 		_spec.SetField(findinghistory.FieldRemediationSLA, field.TypeInt, value)
 		_node.RemediationSLA = value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
-		_node.Status = value
 	}
 	if value, ok := _c.mutation.EventTime(); ok {
 		_spec.SetField(findinghistory.FieldEventTime, field.TypeTime, value)

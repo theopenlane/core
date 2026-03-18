@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
@@ -1216,23 +1217,23 @@ func init() {
 	// findinghistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	findinghistory.DefaultSystemOwned = findinghistoryDescSystemOwned.Default.(bool)
 	// findinghistoryDescCategories is the schema descriptor for categories field.
-	findinghistoryDescCategories := findinghistoryFields[27].Descriptor()
+	findinghistoryDescCategories := findinghistoryFields[31].Descriptor()
 	// findinghistory.DefaultCategories holds the default value on creation for the categories field.
 	findinghistory.DefaultCategories = findinghistoryDescCategories.Default.([]string)
 	// findinghistoryDescOpen is the schema descriptor for open field.
-	findinghistoryDescOpen := findinghistoryFields[35].Descriptor()
+	findinghistoryDescOpen := findinghistoryFields[39].Descriptor()
 	// findinghistory.DefaultOpen holds the default value on creation for the open field.
 	findinghistory.DefaultOpen = findinghistoryDescOpen.Default.(bool)
 	// findinghistoryDescReferences is the schema descriptor for references field.
-	findinghistoryDescReferences := findinghistoryFields[44].Descriptor()
+	findinghistoryDescReferences := findinghistoryFields[48].Descriptor()
 	// findinghistory.DefaultReferences holds the default value on creation for the references field.
 	findinghistory.DefaultReferences = findinghistoryDescReferences.Default.([]string)
 	// findinghistoryDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findinghistoryDescStepsToReproduce := findinghistoryFields[45].Descriptor()
+	findinghistoryDescStepsToReproduce := findinghistoryFields[49].Descriptor()
 	// findinghistory.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	findinghistory.DefaultStepsToReproduce = findinghistoryDescStepsToReproduce.Default.([]string)
 	// findinghistoryDescTargets is the schema descriptor for targets field.
-	findinghistoryDescTargets := findinghistoryFields[46].Descriptor()
+	findinghistoryDescTargets := findinghistoryFields[50].Descriptor()
 	// findinghistory.DefaultTargets holds the default value on creation for the targets field.
 	findinghistory.DefaultTargets = findinghistoryDescTargets.Default.([]string)
 	// findinghistoryDescID is the schema descriptor for id field.
@@ -2325,6 +2326,41 @@ func init() {
 	riskhistoryDescID := riskhistoryFields[9].Descriptor()
 	// riskhistory.DefaultID holds the default value on creation for the id field.
 	riskhistory.DefaultID = riskhistoryDescID.Default.(func() string)
+	sladefinitionhistory.Policy = privacy.NewPolicies(historyschema.SLADefinitionHistory{})
+	sladefinitionhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := sladefinitionhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	sladefinitionhistoryInters := historyschema.SLADefinitionHistory{}.Interceptors()
+	sladefinitionhistory.Interceptors[0] = sladefinitionhistoryInters[0]
+	sladefinitionhistoryFields := historyschema.SLADefinitionHistory{}.Fields()
+	_ = sladefinitionhistoryFields
+	// sladefinitionhistoryDescHistoryTime is the schema descriptor for history_time field.
+	sladefinitionhistoryDescHistoryTime := sladefinitionhistoryFields[0].Descriptor()
+	// sladefinitionhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	sladefinitionhistory.DefaultHistoryTime = sladefinitionhistoryDescHistoryTime.Default.(func() time.Time)
+	// sladefinitionhistoryDescCreatedAt is the schema descriptor for created_at field.
+	sladefinitionhistoryDescCreatedAt := sladefinitionhistoryFields[3].Descriptor()
+	// sladefinitionhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sladefinitionhistory.DefaultCreatedAt = sladefinitionhistoryDescCreatedAt.Default.(func() time.Time)
+	// sladefinitionhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	sladefinitionhistoryDescUpdatedAt := sladefinitionhistoryFields[4].Descriptor()
+	// sladefinitionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sladefinitionhistory.DefaultUpdatedAt = sladefinitionhistoryDescUpdatedAt.Default.(func() time.Time)
+	// sladefinitionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sladefinitionhistory.UpdateDefaultUpdatedAt = sladefinitionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sladefinitionhistoryDescTags is the schema descriptor for tags field.
+	sladefinitionhistoryDescTags := sladefinitionhistoryFields[11].Descriptor()
+	// sladefinitionhistory.DefaultTags holds the default value on creation for the tags field.
+	sladefinitionhistory.DefaultTags = sladefinitionhistoryDescTags.Default.([]string)
+	// sladefinitionhistoryDescID is the schema descriptor for id field.
+	sladefinitionhistoryDescID := sladefinitionhistoryFields[9].Descriptor()
+	// sladefinitionhistory.DefaultID holds the default value on creation for the id field.
+	sladefinitionhistory.DefaultID = sladefinitionhistoryDescID.Default.(func() string)
 	scanhistory.Policy = privacy.NewPolicies(historyschema.ScanHistory{})
 	scanhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -3108,19 +3144,19 @@ func init() {
 	// vulnerabilityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerabilityhistory.DefaultSystemOwned = vulnerabilityhistoryDescSystemOwned.Default.(bool)
 	// vulnerabilityhistoryDescOpen is the schema descriptor for open field.
-	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[36].Descriptor()
+	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[39].Descriptor()
 	// vulnerabilityhistory.DefaultOpen holds the default value on creation for the open field.
 	vulnerabilityhistory.DefaultOpen = vulnerabilityhistoryDescOpen.Default.(bool)
 	// vulnerabilityhistoryDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[37].Descriptor()
+	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[40].Descriptor()
 	// vulnerabilityhistory.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerabilityhistory.DefaultBlocking = vulnerabilityhistoryDescBlocking.Default.(bool)
 	// vulnerabilityhistoryDescReferences is the schema descriptor for references field.
-	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[41].Descriptor()
+	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[44].Descriptor()
 	// vulnerabilityhistory.DefaultReferences holds the default value on creation for the references field.
 	vulnerabilityhistory.DefaultReferences = vulnerabilityhistoryDescReferences.Default.([]string)
 	// vulnerabilityhistoryDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[42].Descriptor()
+	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[45].Descriptor()
 	// vulnerabilityhistory.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerabilityhistory.DefaultImpacts = vulnerabilityhistoryDescImpacts.Default.([]string)
 	// vulnerabilityhistoryDescID is the schema descriptor for id field.

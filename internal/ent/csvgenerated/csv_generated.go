@@ -1143,6 +1143,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"SLADefinition": {
+		SchemaName: "SLADefinition",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"Scan": {
 		SchemaName: "Scan",
 		Rules: []CSVReferenceRule{
@@ -2561,6 +2566,24 @@ type RiskCSVUpdateInput struct {
 
 // CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.
 func (RiskCSVUpdateInput) CSVInputWrapper() {}
+
+// SLADefinitionCSVInput wraps CreateSLADefinitionInput with CSV reference columns.
+type SLADefinitionCSVInput struct {
+	Input generated.CreateSLADefinitionInput
+}
+
+// CSVInputWrapper marks SLADefinitionCSVInput for CSV header preprocessing.
+func (SLADefinitionCSVInput) CSVInputWrapper() {}
+
+// SLADefinitionCSVUpdateInput wraps UpdateSLADefinitionInput with CSV reference columns for bulk updates.
+type SLADefinitionCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateSLADefinitionInput
+}
+
+// CSVInputWrapper marks SLADefinitionCSVUpdateInput for CSV header preprocessing.
+func (SLADefinitionCSVUpdateInput) CSVInputWrapper() {}
 
 // ScanCSVInput wraps CreateScanInput with CSV reference columns.
 type ScanCSVInput struct {

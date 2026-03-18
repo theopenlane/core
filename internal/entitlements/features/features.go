@@ -69,6 +69,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Scan":                       {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
 	"ScheduledJob":               {models.CatalogComplianceModule},
 	"ScheduledJobRun":            {models.CatalogComplianceModule},
+	"SLADefinition":              {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
 	"Standard":                   {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon, models.CatalogRiskManagementAddon, models.CatalogEntityManagementModule, models.CatalogTrustCenterModule},
 	"Subcontrol":                 {models.CatalogComplianceModule},
 	"Subprocessor":               {models.CatalogTrustCenterModule},

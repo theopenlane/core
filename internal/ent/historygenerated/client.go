@@ -72,6 +72,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
@@ -208,6 +209,8 @@ type Client struct {
 	ReviewHistory *ReviewHistoryClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
+	SLADefinitionHistory *SLADefinitionHistoryClient
 	// ScanHistory is the client for interacting with the ScanHistory builders.
 	ScanHistory *ScanHistoryClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
@@ -327,6 +330,7 @@ func (c *Client) init() {
 	c.RemediationHistory = NewRemediationHistoryClient(c.config)
 	c.ReviewHistory = NewReviewHistoryClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
+	c.SLADefinitionHistory = NewSLADefinitionHistoryClient(c.config)
 	c.ScanHistory = NewScanHistoryClient(c.config)
 	c.ScheduledJobHistory = NewScheduledJobHistoryClient(c.config)
 	c.StandardHistory = NewStandardHistoryClient(c.config)
@@ -519,6 +523,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		RemediationHistory:                NewRemediationHistoryClient(cfg),
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
+		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
 		ScanHistory:                       NewScanHistoryClient(cfg),
 		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
 		StandardHistory:                   NewStandardHistoryClient(cfg),
@@ -614,6 +619,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		RemediationHistory:                NewRemediationHistoryClient(cfg),
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
+		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
 		ScanHistory:                       NewScanHistoryClient(cfg),
 		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
 		StandardHistory:                   NewStandardHistoryClient(cfg),
@@ -685,16 +691,17 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OrgSubscriptionHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
-		c.SubcontrolHistory, c.SubprocessorHistory, c.SystemDetailHistory,
-		c.TaskHistory, c.TemplateHistory, c.TrustCenterComplianceHistory,
-		c.TrustCenterDocHistory, c.TrustCenterEntityHistory, c.TrustCenterFAQHistory,
-		c.TrustCenterHistory, c.TrustCenterNDARequestHistory,
-		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
-		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
-		c.VulnerabilityHistory, c.WorkflowAssignmentHistory,
-		c.WorkflowAssignmentTargetHistory, c.WorkflowDefinitionHistory,
-		c.WorkflowEventHistory, c.WorkflowInstanceHistory, c.WorkflowObjectRefHistory,
+		c.RiskHistory, c.SLADefinitionHistory, c.ScanHistory, c.ScheduledJobHistory,
+		c.StandardHistory, c.SubcontrolHistory, c.SubprocessorHistory,
+		c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
+		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
+		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
+		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
+		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
+		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
+		c.WorkflowDefinitionHistory, c.WorkflowEventHistory, c.WorkflowInstanceHistory,
+		c.WorkflowObjectRefHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -720,16 +727,17 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OrgSubscriptionHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
-		c.SubcontrolHistory, c.SubprocessorHistory, c.SystemDetailHistory,
-		c.TaskHistory, c.TemplateHistory, c.TrustCenterComplianceHistory,
-		c.TrustCenterDocHistory, c.TrustCenterEntityHistory, c.TrustCenterFAQHistory,
-		c.TrustCenterHistory, c.TrustCenterNDARequestHistory,
-		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
-		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
-		c.VulnerabilityHistory, c.WorkflowAssignmentHistory,
-		c.WorkflowAssignmentTargetHistory, c.WorkflowDefinitionHistory,
-		c.WorkflowEventHistory, c.WorkflowInstanceHistory, c.WorkflowObjectRefHistory,
+		c.RiskHistory, c.SLADefinitionHistory, c.ScanHistory, c.ScheduledJobHistory,
+		c.StandardHistory, c.SubcontrolHistory, c.SubprocessorHistory,
+		c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
+		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
+		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
+		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
+		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
+		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
+		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
+		c.WorkflowDefinitionHistory, c.WorkflowEventHistory, c.WorkflowInstanceHistory,
+		c.WorkflowObjectRefHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -890,6 +898,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ReviewHistory.mutate(ctx, m)
 	case *RiskHistoryMutation:
 		return c.RiskHistory.mutate(ctx, m)
+	case *SLADefinitionHistoryMutation:
+		return c.SLADefinitionHistory.mutate(ctx, m)
 	case *ScanHistoryMutation:
 		return c.ScanHistory.mutate(ctx, m)
 	case *ScheduledJobHistoryMutation:
@@ -7695,6 +7705,141 @@ func (c *RiskHistoryClient) mutate(ctx context.Context, m *RiskHistoryMutation) 
 	}
 }
 
+// SLADefinitionHistoryClient is a client for the SLADefinitionHistory schema.
+type SLADefinitionHistoryClient struct {
+	config
+}
+
+// NewSLADefinitionHistoryClient returns a client for the SLADefinitionHistory from the given config.
+func NewSLADefinitionHistoryClient(c config) *SLADefinitionHistoryClient {
+	return &SLADefinitionHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sladefinitionhistory.Hooks(f(g(h())))`.
+func (c *SLADefinitionHistoryClient) Use(hooks ...Hook) {
+	c.hooks.SLADefinitionHistory = append(c.hooks.SLADefinitionHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sladefinitionhistory.Intercept(f(g(h())))`.
+func (c *SLADefinitionHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SLADefinitionHistory = append(c.inters.SLADefinitionHistory, interceptors...)
+}
+
+// Create returns a builder for creating a SLADefinitionHistory entity.
+func (c *SLADefinitionHistoryClient) Create() *SLADefinitionHistoryCreate {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpCreate)
+	return &SLADefinitionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SLADefinitionHistory entities.
+func (c *SLADefinitionHistoryClient) CreateBulk(builders ...*SLADefinitionHistoryCreate) *SLADefinitionHistoryCreateBulk {
+	return &SLADefinitionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SLADefinitionHistoryClient) MapCreateBulk(slice any, setFunc func(*SLADefinitionHistoryCreate, int)) *SLADefinitionHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SLADefinitionHistoryCreateBulk{err: fmt.Errorf("calling to SLADefinitionHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SLADefinitionHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SLADefinitionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SLADefinitionHistory.
+func (c *SLADefinitionHistoryClient) Update() *SLADefinitionHistoryUpdate {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpUpdate)
+	return &SLADefinitionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SLADefinitionHistoryClient) UpdateOne(_m *SLADefinitionHistory) *SLADefinitionHistoryUpdateOne {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpUpdateOne, withSLADefinitionHistory(_m))
+	return &SLADefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SLADefinitionHistoryClient) UpdateOneID(id string) *SLADefinitionHistoryUpdateOne {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpUpdateOne, withSLADefinitionHistoryID(id))
+	return &SLADefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SLADefinitionHistory.
+func (c *SLADefinitionHistoryClient) Delete() *SLADefinitionHistoryDelete {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpDelete)
+	return &SLADefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SLADefinitionHistoryClient) DeleteOne(_m *SLADefinitionHistory) *SLADefinitionHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SLADefinitionHistoryClient) DeleteOneID(id string) *SLADefinitionHistoryDeleteOne {
+	builder := c.Delete().Where(sladefinitionhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SLADefinitionHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for SLADefinitionHistory.
+func (c *SLADefinitionHistoryClient) Query() *SLADefinitionHistoryQuery {
+	return &SLADefinitionHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSLADefinitionHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SLADefinitionHistory entity by its id.
+func (c *SLADefinitionHistoryClient) Get(ctx context.Context, id string) (*SLADefinitionHistory, error) {
+	return c.Query().Where(sladefinitionhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SLADefinitionHistoryClient) GetX(ctx context.Context, id string) *SLADefinitionHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SLADefinitionHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.SLADefinitionHistory
+	return append(hooks[:len(hooks):len(hooks)], sladefinitionhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SLADefinitionHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.SLADefinitionHistory
+	return append(inters[:len(inters):len(inters)], sladefinitionhistory.Interceptors[:]...)
+}
+
+func (c *SLADefinitionHistoryClient) mutate(ctx context.Context, m *SLADefinitionHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SLADefinitionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SLADefinitionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SLADefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SLADefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown SLADefinitionHistory mutation op: %q", m.Op())
+	}
+}
+
 // ScanHistoryClient is a client for the ScanHistory schema.
 type ScanHistoryClient struct {
 	config
@@ -11222,13 +11367,14 @@ type (
 		NotificationTemplateHistory, OrgMembershipHistory, OrgSubscriptionHistory,
 		OrganizationHistory, OrganizationSettingHistory, PlatformHistory,
 		ProcedureHistory, ProgramHistory, ProgramMembershipHistory, RemediationHistory,
-		ReviewHistory, RiskHistory, ScanHistory, ScheduledJobHistory, StandardHistory,
-		SubcontrolHistory, SubprocessorHistory, SystemDetailHistory, TaskHistory,
-		TemplateHistory, TrustCenterComplianceHistory, TrustCenterDocHistory,
-		TrustCenterEntityHistory, TrustCenterFAQHistory, TrustCenterHistory,
-		TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
+		ReviewHistory, RiskHistory, SLADefinitionHistory, ScanHistory,
+		ScheduledJobHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
+		SystemDetailHistory, TaskHistory, TemplateHistory,
+		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Hook
@@ -11248,13 +11394,14 @@ type (
 		NotificationTemplateHistory, OrgMembershipHistory, OrgSubscriptionHistory,
 		OrganizationHistory, OrganizationSettingHistory, PlatformHistory,
 		ProcedureHistory, ProgramHistory, ProgramMembershipHistory, RemediationHistory,
-		ReviewHistory, RiskHistory, ScanHistory, ScheduledJobHistory, StandardHistory,
-		SubcontrolHistory, SubprocessorHistory, SystemDetailHistory, TaskHistory,
-		TemplateHistory, TrustCenterComplianceHistory, TrustCenterDocHistory,
-		TrustCenterEntityHistory, TrustCenterFAQHistory, TrustCenterHistory,
-		TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
+		ReviewHistory, RiskHistory, SLADefinitionHistory, ScanHistory,
+		ScheduledJobHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
+		SystemDetailHistory, TaskHistory, TemplateHistory,
+		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Interceptor

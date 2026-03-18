@@ -1309,6 +1309,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "finding_status": {
+	ObjectType:      "finding_status",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
@@ -2600,6 +2604,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "scan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "sla_definitions": {
+	ObjectType:      "sla_definition",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "subprocessors": {
 	ObjectType:      "subprocessor",
 	SkipEditCheck:   false,
@@ -3346,6 +3354,27 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+},
+}, "sla_definition": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "sla_definition_severity_level": {
+	ObjectType:      "sla_definition_severity_level",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "scan": {"owner": {
 	ObjectType:      "owner",
@@ -4148,6 +4177,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "scope": {
 	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "vulnerability_status": {
+	ObjectType:      "vulnerability_status",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "integrations": {

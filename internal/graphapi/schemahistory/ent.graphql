@@ -13473,9 +13473,25 @@ type FindingHistory implements Node {
   """
   scopeID: String
   """
+  the status of the finding
+  """
+  findingStatusName: String
+  """
+  the status of the finding
+  """
+  findingStatusID: String
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
+  """
+  lifecycle status of the finding
+  """
+  status: String @deprecated(reason: "Use `finding_status_name` instead.")
+  """
+  incoming source severity
+  """
+  securityLevel: FindingHistorySecurityLevel
   """
   the owner of the finding
   """
@@ -13593,10 +13609,6 @@ type FindingHistory implements Node {
   """
   remediationSLA: Int
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   timestamp when the finding was last observed by the source
   """
   eventTime: DateTime
@@ -13680,9 +13692,20 @@ enum FindingHistoryOrderField {
   created_at
   updated_at
   external_id
+  security_level
   external_owner_id
   category
   severity
+}
+"""
+FindingHistorySecurityLevel is enum for the field security_level
+"""
+enum FindingHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 FindingHistoryWhereInput is used for filtering FindingHistory objects.
@@ -13953,6 +13976,42 @@ input FindingHistoryWhereInput {
   scopeIDEqualFold: String
   scopeIDContainsFold: String
   """
+  finding_status_name field predicates
+  """
+  findingStatusName: String
+  findingStatusNameNEQ: String
+  findingStatusNameIn: [String!]
+  findingStatusNameNotIn: [String!]
+  findingStatusNameGT: String
+  findingStatusNameGTE: String
+  findingStatusNameLT: String
+  findingStatusNameLTE: String
+  findingStatusNameContains: String
+  findingStatusNameHasPrefix: String
+  findingStatusNameHasSuffix: String
+  findingStatusNameIsNil: Boolean
+  findingStatusNameNotNil: Boolean
+  findingStatusNameEqualFold: String
+  findingStatusNameContainsFold: String
+  """
+  finding_status_id field predicates
+  """
+  findingStatusID: String
+  findingStatusIDNEQ: String
+  findingStatusIDIn: [String!]
+  findingStatusIDNotIn: [String!]
+  findingStatusIDGT: String
+  findingStatusIDGTE: String
+  findingStatusIDLT: String
+  findingStatusIDLTE: String
+  findingStatusIDContains: String
+  findingStatusIDHasPrefix: String
+  findingStatusIDHasSuffix: String
+  findingStatusIDIsNil: Boolean
+  findingStatusIDNotNil: Boolean
+  findingStatusIDEqualFold: String
+  findingStatusIDContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -13970,6 +14029,33 @@ input FindingHistoryWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: FindingHistorySecurityLevel
+  securityLevelNEQ: FindingHistorySecurityLevel
+  securityLevelIn: [FindingHistorySecurityLevel!]
+  securityLevelNotIn: [FindingHistorySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_owner_id field predicates
   """
@@ -14322,24 +14408,6 @@ input FindingHistoryWhereInput {
   remediationSLALTE: Int
   remediationSLAIsNil: Boolean
   remediationSLANotNil: Boolean
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   event_time field predicates
   """
@@ -26433,6 +26501,37 @@ type Query {
     """
     where: RiskHistoryWhereInput
   ): RiskHistoryConnection!
+  slaDefinitionHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SLADefinitionHistories returned from the connection.
+    """
+    orderBy: SLADefinitionHistoryOrder
+
+    """
+    Filtering options for SLADefinitionHistories returned from the connection.
+    """
+    where: SLADefinitionHistoryWhereInput
+  ): SLADefinitionHistoryConnection!
   scanHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -29368,6 +29467,323 @@ input RiskHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+}
+type SLADefinitionHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: SLADefinitionHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelID: String
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int!
+  """
+  incoming source severity
+  """
+  securityLevel: SLADefinitionHistorySecurityLevel!
+}
+"""
+A connection to a list of items.
+"""
+type SLADefinitionHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [SLADefinitionHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SLADefinitionHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SLADefinitionHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+SLADefinitionHistoryOpType is enum for the field operation
+"""
+enum SLADefinitionHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for SLADefinitionHistory connections
+"""
+input SLADefinitionHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SLADefinitionHistories.
+  """
+  field: SLADefinitionHistoryOrderField!
+}
+"""
+Properties by which SLADefinitionHistory connections can be ordered.
+"""
+enum SLADefinitionHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  sla_days
+  security_level
+}
+"""
+SLADefinitionHistorySecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+SLADefinitionHistoryWhereInput is used for filtering SLADefinitionHistory objects.
+Input was generated by ent.
+"""
+input SLADefinitionHistoryWhereInput {
+  not: SLADefinitionHistoryWhereInput
+  and: [SLADefinitionHistoryWhereInput!]
+  or: [SLADefinitionHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: SLADefinitionHistoryOpType
+  operationNEQ: SLADefinitionHistoryOpType
+  operationIn: [SLADefinitionHistoryOpType!]
+  operationNotIn: [SLADefinitionHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  sla_definition_severity_level_name field predicates
+  """
+  slaDefinitionSeverityLevelName: String
+  slaDefinitionSeverityLevelNameNEQ: String
+  slaDefinitionSeverityLevelNameIn: [String!]
+  slaDefinitionSeverityLevelNameNotIn: [String!]
+  slaDefinitionSeverityLevelNameGT: String
+  slaDefinitionSeverityLevelNameGTE: String
+  slaDefinitionSeverityLevelNameLT: String
+  slaDefinitionSeverityLevelNameLTE: String
+  slaDefinitionSeverityLevelNameContains: String
+  slaDefinitionSeverityLevelNameHasPrefix: String
+  slaDefinitionSeverityLevelNameHasSuffix: String
+  slaDefinitionSeverityLevelNameIsNil: Boolean
+  slaDefinitionSeverityLevelNameNotNil: Boolean
+  slaDefinitionSeverityLevelNameEqualFold: String
+  slaDefinitionSeverityLevelNameContainsFold: String
+  """
+  sla_definition_severity_level_id field predicates
+  """
+  slaDefinitionSeverityLevelID: String
+  slaDefinitionSeverityLevelIDNEQ: String
+  slaDefinitionSeverityLevelIDIn: [String!]
+  slaDefinitionSeverityLevelIDNotIn: [String!]
+  slaDefinitionSeverityLevelIDGT: String
+  slaDefinitionSeverityLevelIDGTE: String
+  slaDefinitionSeverityLevelIDLT: String
+  slaDefinitionSeverityLevelIDLTE: String
+  slaDefinitionSeverityLevelIDContains: String
+  slaDefinitionSeverityLevelIDHasPrefix: String
+  slaDefinitionSeverityLevelIDHasSuffix: String
+  slaDefinitionSeverityLevelIDIsNil: Boolean
+  slaDefinitionSeverityLevelIDNotNil: Boolean
+  slaDefinitionSeverityLevelIDEqualFold: String
+  slaDefinitionSeverityLevelIDContainsFold: String
+  """
+  sla_days field predicates
+  """
+  slaDays: Int
+  slaDaysNEQ: Int
+  slaDaysIn: [Int!]
+  slaDaysNotIn: [Int!]
+  slaDaysGT: Int
+  slaDaysGTE: Int
+  slaDaysLT: Int
+  slaDaysLTE: Int
+  """
+  security_level field predicates
+  """
+  securityLevel: SLADefinitionHistorySecurityLevel
+  securityLevelNEQ: SLADefinitionHistorySecurityLevel
+  securityLevelIn: [SLADefinitionHistorySecurityLevel!]
+  securityLevelNotIn: [SLADefinitionHistorySecurityLevel!]
 }
 type ScanHistory implements Node {
   id: ID!
@@ -37907,9 +38323,25 @@ type VulnerabilityHistory implements Node {
   """
   scopeID: String
   """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusID: String
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String @deprecated(reason: "Use `vulnerability_status_name` instead.")
+  """
+  lifecycle status of the vulnerability
+  """
+  securityLevel: VulnerabilityHistorySecurityLevel
   """
   external identifier from the integration source for the vulnerability
   """
@@ -37950,10 +38382,6 @@ type VulnerabilityHistory implements Node {
   priority assigned to the vulnerability
   """
   priority: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   short summary of the vulnerability details
   """
@@ -38082,10 +38510,21 @@ enum VulnerabilityHistoryOrderField {
   created_at
   updated_at
   external_owner_id
+  security_level
   external_id
   cve_id
   category
   severity
+}
+"""
+VulnerabilityHistorySecurityLevel is enum for the field security_level
+"""
+enum VulnerabilityHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 VulnerabilityHistoryWhereInput is used for filtering VulnerabilityHistory objects.
@@ -38356,6 +38795,42 @@ input VulnerabilityHistoryWhereInput {
   scopeIDEqualFold: String
   scopeIDContainsFold: String
   """
+  vulnerability_status_name field predicates
+  """
+  vulnerabilityStatusName: String
+  vulnerabilityStatusNameNEQ: String
+  vulnerabilityStatusNameIn: [String!]
+  vulnerabilityStatusNameNotIn: [String!]
+  vulnerabilityStatusNameGT: String
+  vulnerabilityStatusNameGTE: String
+  vulnerabilityStatusNameLT: String
+  vulnerabilityStatusNameLTE: String
+  vulnerabilityStatusNameContains: String
+  vulnerabilityStatusNameHasPrefix: String
+  vulnerabilityStatusNameHasSuffix: String
+  vulnerabilityStatusNameIsNil: Boolean
+  vulnerabilityStatusNameNotNil: Boolean
+  vulnerabilityStatusNameEqualFold: String
+  vulnerabilityStatusNameContainsFold: String
+  """
+  vulnerability_status_id field predicates
+  """
+  vulnerabilityStatusID: String
+  vulnerabilityStatusIDNEQ: String
+  vulnerabilityStatusIDIn: [String!]
+  vulnerabilityStatusIDNotIn: [String!]
+  vulnerabilityStatusIDGT: String
+  vulnerabilityStatusIDGTE: String
+  vulnerabilityStatusIDLT: String
+  vulnerabilityStatusIDLTE: String
+  vulnerabilityStatusIDContains: String
+  vulnerabilityStatusIDHasPrefix: String
+  vulnerabilityStatusIDHasSuffix: String
+  vulnerabilityStatusIDIsNil: Boolean
+  vulnerabilityStatusIDNotNil: Boolean
+  vulnerabilityStatusIDEqualFold: String
+  vulnerabilityStatusIDContainsFold: String
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -38373,6 +38848,33 @@ input VulnerabilityHistoryWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: VulnerabilityHistorySecurityLevel
+  securityLevelNEQ: VulnerabilityHistorySecurityLevel
+  securityLevelIn: [VulnerabilityHistorySecurityLevel!]
+  securityLevelNotIn: [VulnerabilityHistorySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_id field predicates
   """
@@ -38536,24 +39038,6 @@ input VulnerabilityHistoryWhereInput {
   priorityNotNil: Boolean
   priorityEqualFold: String
   priorityContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   summary field predicates
   """

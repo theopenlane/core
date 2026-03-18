@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
@@ -153,9 +154,24 @@ func ScopeID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldScopeID, v))
 }
 
+// FindingStatusName applies equality check predicate on the "finding_status_name" field. It's identical to FindingStatusNameEQ.
+func FindingStatusName(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusID applies equality check predicate on the "finding_status_id" field. It's identical to FindingStatusIDEQ.
+func FindingStatusID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusID, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldExternalID, v))
+}
+
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldStatus, v))
 }
 
 // ExternalOwnerID applies equality check predicate on the "external_owner_id" field. It's identical to ExternalOwnerIDEQ.
@@ -276,11 +292,6 @@ func Vector(v string) predicate.FindingHistory {
 // RemediationSLA applies equality check predicate on the "remediation_sla" field. It's identical to RemediationSLAEQ.
 func RemediationSLA(v int) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldRemediationSLA, v))
-}
-
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldEQ(FieldStatus, v))
 }
 
 // EventTime applies equality check predicate on the "event_time" field. It's identical to EventTimeEQ.
@@ -1433,6 +1444,156 @@ func ScopeIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldScopeID, v))
 }
 
+// FindingStatusNameEQ applies the EQ predicate on the "finding_status_name" field.
+func FindingStatusNameEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameNEQ applies the NEQ predicate on the "finding_status_name" field.
+func FindingStatusNameNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameIn applies the In predicate on the "finding_status_name" field.
+func FindingStatusNameIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldFindingStatusName, vs...))
+}
+
+// FindingStatusNameNotIn applies the NotIn predicate on the "finding_status_name" field.
+func FindingStatusNameNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldFindingStatusName, vs...))
+}
+
+// FindingStatusNameGT applies the GT predicate on the "finding_status_name" field.
+func FindingStatusNameGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameGTE applies the GTE predicate on the "finding_status_name" field.
+func FindingStatusNameGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameLT applies the LT predicate on the "finding_status_name" field.
+func FindingStatusNameLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameLTE applies the LTE predicate on the "finding_status_name" field.
+func FindingStatusNameLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameContains applies the Contains predicate on the "finding_status_name" field.
+func FindingStatusNameContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameHasPrefix applies the HasPrefix predicate on the "finding_status_name" field.
+func FindingStatusNameHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameHasSuffix applies the HasSuffix predicate on the "finding_status_name" field.
+func FindingStatusNameHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameIsNil applies the IsNil predicate on the "finding_status_name" field.
+func FindingStatusNameIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldFindingStatusName))
+}
+
+// FindingStatusNameNotNil applies the NotNil predicate on the "finding_status_name" field.
+func FindingStatusNameNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldFindingStatusName))
+}
+
+// FindingStatusNameEqualFold applies the EqualFold predicate on the "finding_status_name" field.
+func FindingStatusNameEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameContainsFold applies the ContainsFold predicate on the "finding_status_name" field.
+func FindingStatusNameContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingStatusName, v))
+}
+
+// FindingStatusIDEQ applies the EQ predicate on the "finding_status_id" field.
+func FindingStatusIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDNEQ applies the NEQ predicate on the "finding_status_id" field.
+func FindingStatusIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDIn applies the In predicate on the "finding_status_id" field.
+func FindingStatusIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldFindingStatusID, vs...))
+}
+
+// FindingStatusIDNotIn applies the NotIn predicate on the "finding_status_id" field.
+func FindingStatusIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldFindingStatusID, vs...))
+}
+
+// FindingStatusIDGT applies the GT predicate on the "finding_status_id" field.
+func FindingStatusIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDGTE applies the GTE predicate on the "finding_status_id" field.
+func FindingStatusIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDLT applies the LT predicate on the "finding_status_id" field.
+func FindingStatusIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDLTE applies the LTE predicate on the "finding_status_id" field.
+func FindingStatusIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDContains applies the Contains predicate on the "finding_status_id" field.
+func FindingStatusIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDHasPrefix applies the HasPrefix predicate on the "finding_status_id" field.
+func FindingStatusIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDHasSuffix applies the HasSuffix predicate on the "finding_status_id" field.
+func FindingStatusIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDIsNil applies the IsNil predicate on the "finding_status_id" field.
+func FindingStatusIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldFindingStatusID))
+}
+
+// FindingStatusIDNotNil applies the NotNil predicate on the "finding_status_id" field.
+func FindingStatusIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldFindingStatusID))
+}
+
+// FindingStatusIDEqualFold applies the EqualFold predicate on the "finding_status_id" field.
+func FindingStatusIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDContainsFold applies the ContainsFold predicate on the "finding_status_id" field.
+func FindingStatusIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingStatusID, v))
+}
+
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
 func ExternalIDEQ(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldExternalID, v))
@@ -1506,6 +1667,121 @@ func ExternalIDEqualFold(v string) predicate.FindingHistory {
 // ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
 func ExternalIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldExternalID, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusContains applies the Contains predicate on the "status" field.
+func StatusContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldStatus, v))
+}
+
+// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
+func StatusHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldStatus, v))
+}
+
+// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
+func StatusHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldStatus))
+}
+
+// StatusEqualFold applies the EqualFold predicate on the "status" field.
+func StatusEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldStatus, v))
+}
+
+// StatusContainsFold applies the ContainsFold predicate on the "status" field.
+func StatusContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldStatus, v))
+}
+
+// SecurityLevelEQ applies the EQ predicate on the "security_level" field.
+func SecurityLevelEQ(v enums.SecurityLevel) predicate.FindingHistory {
+	vc := v
+	return predicate.FindingHistory(sql.FieldEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelNEQ applies the NEQ predicate on the "security_level" field.
+func SecurityLevelNEQ(v enums.SecurityLevel) predicate.FindingHistory {
+	vc := v
+	return predicate.FindingHistory(sql.FieldNEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelIn applies the In predicate on the "security_level" field.
+func SecurityLevelIn(vs ...enums.SecurityLevel) predicate.FindingHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.FindingHistory(sql.FieldIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelNotIn applies the NotIn predicate on the "security_level" field.
+func SecurityLevelNotIn(vs ...enums.SecurityLevel) predicate.FindingHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.FindingHistory(sql.FieldNotIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelIsNil applies the IsNil predicate on the "security_level" field.
+func SecurityLevelIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldSecurityLevel))
+}
+
+// SecurityLevelNotNil applies the NotNil predicate on the "security_level" field.
+func SecurityLevelNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldSecurityLevel))
 }
 
 // ExternalOwnerIDEQ applies the EQ predicate on the "external_owner_id" field.
@@ -2956,81 +3232,6 @@ func RemediationSLAIsNil() predicate.FindingHistory {
 // RemediationSLANotNil applies the NotNil predicate on the "remediation_sla" field.
 func RemediationSLANotNil() predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldNotNull(FieldRemediationSLA))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldHasSuffix(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.FindingHistory {
-	return predicate.FindingHistory(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // EventTimeEQ applies the EQ predicate on the "event_time" field.

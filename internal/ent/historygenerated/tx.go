@@ -114,6 +114,8 @@ type Tx struct {
 	ReviewHistory *ReviewHistoryClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
+	SLADefinitionHistory *SLADefinitionHistoryClient
 	// ScanHistory is the client for interacting with the ScanHistory builders.
 	ScanHistory *ScanHistoryClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
@@ -347,6 +349,7 @@ func (tx *Tx) init() {
 	tx.RemediationHistory = NewRemediationHistoryClient(tx.config)
 	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.SLADefinitionHistory = NewSLADefinitionHistoryClient(tx.config)
 	tx.ScanHistory = NewScanHistoryClient(tx.config)
 	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)

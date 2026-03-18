@@ -611,6 +611,18 @@ func (f RiskHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.RiskHistoryMutation", m)
 }
 
+// The SLADefinitionHistoryFunc type is an adapter to allow the use of ordinary
+// function as SLADefinitionHistory mutator.
+type SLADefinitionHistoryFunc func(context.Context, *historygenerated.SLADefinitionHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SLADefinitionHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.SLADefinitionHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.SLADefinitionHistoryMutation", m)
+}
+
 // The ScanHistoryFunc type is an adapter to allow the use of ordinary
 // function as ScanHistory mutator.
 type ScanHistoryFunc func(context.Context, *historygenerated.ScanHistoryMutation) (historygenerated.Value, error)

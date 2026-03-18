@@ -75,6 +75,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -425,6 +426,11 @@ var riskImplementors = []string{"Risk", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Risk) IsNode() {}
+
+var sladefinitionImplementors = []string{"SLADefinition", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*SLADefinition) IsNode() {}
 
 var scanImplementors = []string{"Scan", "Node"}
 
@@ -1207,6 +1213,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(risk.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, riskImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case sladefinition.Table:
+		query := c.SLADefinition.Query().
+			Where(sladefinition.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, sladefinitionImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2568,6 +2583,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Risk.Query().
 			Where(risk.IDIn(ids...))
 		query, err := query.CollectFields(ctx, riskImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case sladefinition.Table:
+		query := c.SLADefinition.Query().
+			Where(sladefinition.IDIn(ids...))
+		query, err := query.CollectFields(ctx, sladefinitionImplementors...)
 		if err != nil {
 			return nil, err
 		}
