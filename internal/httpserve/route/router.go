@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // convertEchoPathToOpenAPI converts Echo's :param syntax to OpenAPI's {param} syntax
@@ -99,7 +98,7 @@ func (r *Router) handleSpecialResponses(operationID string, openAPIContext *hand
 		r.addJSONResponse(openAPIContext, "User information", "application/json")
 	case "Livez", "Ready":
 		r.addJSONResponse(openAPIContext, "Health check status", "application/json")
-	case "StripeWebhook":
+	case "StripeWebhook", "ResendWebhook":
 		r.addPlainTextResponse(openAPIContext, "Webhook acknowledgment")
 	default:
 		// All other endpoints register their responses via h.Success() calls during registration
@@ -158,12 +157,19 @@ var (
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
 type Router struct {
-	Echo           *echo.Echo
-	OAS            *openapi3.T
-	Handler        *handlers.Handler
-	StartConfig    *echo.StartConfig
-	LocalFilePath  string
-	Logger         *echo.Logger
+	// Echo is the underlying Echo router instance.
+	Echo *echo.Echo
+	// OAS is the OpenAPI spec being assembled.
+	OAS *openapi3.T
+	// Handler provides the HTTP handlers wired into routes.
+	Handler *handlers.Handler
+	// StartConfig holds Echo start configuration.
+	StartConfig *echo.StartConfig
+	// LocalFilePath points to static file roots for local assets.
+	LocalFilePath string
+	// Logger is the Echo logger used by the router.
+	Logger *echo.Logger
+	// SchemaRegistry registers and resolves OpenAPI schemas.
 	SchemaRegistry SchemaRegistry
 }
 
@@ -304,20 +310,31 @@ func (r *Router) Base() *echo.Group {
 
 // Config holds the configuration for a route with automatic OpenAPI registration
 type Config struct {
-	Path          string
-	Method        string
-	Name          string
-	Description   string
-	Tags          []string
-	OperationID   string
-	Security      *openapi3.SecurityRequirements
-	Middlewares   []echo.MiddlewareFunc
-	Handler       func(echo.Context, *handlers.OpenAPIContext) error
+	// Path is the route path pattern.
+	Path string
+	// Method is the HTTP method for the route.
+	Method string
+	// Name is the OpenAPI summary for the route.
+	Name string
+	// Description is the OpenAPI description for the route.
+	Description string
+	// Tags are the OpenAPI tags for grouping.
+	Tags []string
+	// OperationID is the OpenAPI operation ID.
+	OperationID string
+	// Security defines OpenAPI security requirements for the route.
+	Security *openapi3.SecurityRequirements
+	// Middlewares are applied before the handler.
+	Middlewares []echo.MiddlewareFunc
+	// Handler is the OpenAPI-aware handler function.
+	Handler func(echo.Context, *handlers.OpenAPIContext) error
+	// SimpleHandler is used for routes without OpenAPI context.
 	SimpleHandler func(echo.Context) error // For handlers that don't need OpenAPI context
 }
 
 // registrationContext is a special echo.Context implementation used during OpenAPI registration
 type registrationContext struct {
+	// Context embeds an Echo context for registration-mode requests.
 	echo.Context
 	ctx    context.Context
 	method string
@@ -326,7 +343,7 @@ type registrationContext struct {
 // newRegistrationContext creates a new registration context with the HTTP method
 func newRegistrationContext(method string) *registrationContext {
 	// Create a base context with registration marker
-	baseCtx := contextx.With(context.Background(), common.RegistrationMarker{})
+	baseCtx := common.WithRegistrationMarker(context.Background())
 
 	return &registrationContext{
 		Context: echo.New().NewContext(nil, nil),
@@ -603,6 +620,8 @@ func RegisterRoutes(router *Router) error {
 		registerOAuthRegisterHandler,
 		registerIntegrationOAuthStartHandler,
 		registerIntegrationOAuthCallbackHandler,
+		registerGitHubAppInstallHandler,
+		registerGitHubAppCallbackHandler,
 		registerRefreshIntegrationTokenHandler,
 		registerIntegrationProvidersHandler,
 		registerIntegrationConfigHandler,
@@ -631,17 +650,25 @@ func RegisterRoutes(router *Router) error {
 		registerTrustCenterAnonymousJWTHandler,
 		registerQuestionnaireHandler,
 		registerQuestionnaireSubmitHandler,
+		registerResendQuestionnaireHandler,
 		registerStartImpersonationHandler,
 		registerEndImpersonationHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,
 		registerSCIMRoutes,
+		registerResendWebhookHandler,
+		registerGitHubAppWebhookHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into
 		// it's own service/binary
 		registerJobRunnerRegistrationHandler,
 	}
+
+	if router.Handler.CloudflareConfig.Enabled {
+		routeHandlers = append(routeHandlers, registerCloudflareSnapshotHandler)
+	}
+
 	// Register the Stripe webhook endpoint only when the entitlements
 	// client has been configured. This ensures the server can run without
 	// requiring Stripe credentials or webhook support

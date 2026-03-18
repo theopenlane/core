@@ -56,6 +56,19 @@ const (
 	FieldSkipReason = "skip_reason"
 )
 
+// ActionFields returns an action-aware set of observability fields with optional overrides.
+func ActionFields(actionKey string, extra Fields) Fields {
+	if len(extra) == 0 {
+		return Fields{
+			FieldActionKey: actionKey,
+		}
+	}
+
+	return lo.Assign(Fields{
+		FieldActionKey: actionKey,
+	}, extra)
+}
+
 const (
 	msgOpFailed   = "workflow op failed"
 	msgOpSkipped  = "workflow op skipped"
@@ -93,22 +106,20 @@ func (o *Observer) begin(ctx context.Context, op Operation, fields Fields) *Scop
 	}
 }
 
-// handleEmit handles errors emitted by the event bus using context metadata when available
-func (o *Observer) handleEmit(ctx context.Context, op Operation, fields Fields, topic string, errCh <-chan error) error {
+// HandleEmitError records a synchronous emit error with operation metadata.
+func (o *Observer) HandleEmitError(ctx context.Context, op Operation, fields Fields, topic string, err error) {
+	o.handleEmitError(ctx, op, fields, topic, err)
+}
+
+// handleEmitError records a synchronous emit error with operation metadata
+func (o *Observer) handleEmitError(ctx context.Context, op Operation, fields Fields, topic string, err error) {
+	if err == nil {
+		return
+	}
+
 	logger := logx.FromContext(ctx).With().EmbedObject(op).Fields(fields).Str(FieldTopic, topic).Logger()
-
-	go func() {
-		for err := range errCh {
-			if err == nil {
-				continue
-			}
-
-			logger.Error().Err(err).Msg(msgEmitFailed)
-			metrics.RecordWorkflowEmitError(topic, string(op.Origin))
-		}
-	}()
-
-	return nil
+	logger.Error().Err(err).Msg(msgEmitFailed)
+	metrics.RecordWorkflowEmitError(topic, string(op.Origin))
 }
 
 // warn logs a standardized workflow warning without starting a scope

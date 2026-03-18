@@ -18,16 +18,22 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -719,6 +725,26 @@ func (_u *PlatformUpdate) ClearWorkflowEligibleMarker() *PlatformUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *PlatformUpdate) SetExternalUUID(v string) *PlatformUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableExternalUUID(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *PlatformUpdate) ClearExternalUUID() *PlatformUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *PlatformUpdate) SetName(v string) *PlatformUpdate {
 	_u.mutation.SetName(v)
@@ -1335,6 +1361,81 @@ func (_u *PlatformUpdate) AddIdentityHolders(v ...*IdentityHolder) *PlatformUpda
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *PlatformUpdate) AddIntegrationIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *PlatformUpdate) AddIntegrations(v ...*Integration) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
+func (_u *PlatformUpdate) AddDirectorySyncRunIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.AddDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *PlatformUpdate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectorySyncRunIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *PlatformUpdate) AddDirectoryAccountIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *PlatformUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_u *PlatformUpdate) AddDirectoryGroupIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.AddDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_u *PlatformUpdate) AddDirectoryGroups(v ...*DirectoryGroup) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *PlatformUpdate) AddDirectoryMembershipIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *PlatformUpdate) AddDirectoryMemberships(v ...*DirectoryMembership) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *PlatformUpdate) AddWorkflowObjectRefIDs(ids ...string) *PlatformUpdate {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -1443,6 +1544,25 @@ func (_u *PlatformUpdate) AddGeneratedScans(v ...*Scan) *PlatformUpdate {
 // SetPlatformOwner sets the "platform_owner" edge to the User entity.
 func (_u *PlatformUpdate) SetPlatformOwner(v *User) *PlatformUpdate {
 	return _u.SetPlatformOwnerID(v.ID)
+}
+
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_u *PlatformUpdate) SetSystemDetailID(id string) *PlatformUpdate {
+	_u.mutation.SetSystemDetailID(id)
+	return _u
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableSystemDetailID(id *string) *PlatformUpdate {
+	if id != nil {
+		_u = _u.SetSystemDetailID(*id)
+	}
+	return _u
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdate) SetSystemDetail(v *SystemDetail) *PlatformUpdate {
+	return _u.SetSystemDetailID(v.ID)
 }
 
 // Mutation returns the PlatformMutation object of the builder.
@@ -1819,6 +1939,111 @@ func (_u *PlatformUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *PlatformU
 	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *PlatformUpdate) ClearIntegrations() *PlatformUpdate {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *PlatformUpdate) RemoveIntegrationIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *PlatformUpdate) RemoveIntegrations(v ...*Integration) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearDirectorySyncRuns clears all "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *PlatformUpdate) ClearDirectorySyncRuns() *PlatformUpdate {
+	_u.mutation.ClearDirectorySyncRuns()
+	return _u
+}
+
+// RemoveDirectorySyncRunIDs removes the "directory_sync_runs" edge to DirectorySyncRun entities by IDs.
+func (_u *PlatformUpdate) RemoveDirectorySyncRunIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.RemoveDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// RemoveDirectorySyncRuns removes "directory_sync_runs" edges to DirectorySyncRun entities.
+func (_u *PlatformUpdate) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectorySyncRunIDs(ids...)
+}
+
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *PlatformUpdate) ClearDirectoryAccounts() *PlatformUpdate {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *PlatformUpdate) RemoveDirectoryAccountIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *PlatformUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
+func (_u *PlatformUpdate) ClearDirectoryGroups() *PlatformUpdate {
+	_u.mutation.ClearDirectoryGroups()
+	return _u
+}
+
+// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
+func (_u *PlatformUpdate) RemoveDirectoryGroupIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.RemoveDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
+func (_u *PlatformUpdate) RemoveDirectoryGroups(v ...*DirectoryGroup) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryGroupIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *PlatformUpdate) ClearDirectoryMemberships() *PlatformUpdate {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *PlatformUpdate) RemoveDirectoryMembershipIDs(ids ...string) *PlatformUpdate {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *PlatformUpdate) RemoveDirectoryMemberships(v ...*DirectoryMembership) *PlatformUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
+}
+
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
 func (_u *PlatformUpdate) ClearWorkflowObjectRefs() *PlatformUpdate {
 	_u.mutation.ClearWorkflowObjectRefs()
@@ -1969,6 +2194,12 @@ func (_u *PlatformUpdate) RemoveGeneratedScans(v ...*Scan) *PlatformUpdate {
 // ClearPlatformOwner clears the "platform_owner" edge to the User entity.
 func (_u *PlatformUpdate) ClearPlatformOwner() *PlatformUpdate {
 	_u.mutation.ClearPlatformOwner()
+	return _u
+}
+
+// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdate) ClearSystemDetail() *PlatformUpdate {
+	_u.mutation.ClearSystemDetail()
 	return _u
 }
 
@@ -2170,6 +2401,12 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(platform.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(platform.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(platform.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(platform.FieldName, field.TypeString, value)
@@ -3387,6 +3624,246 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.WorkflowObjectRefsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3749,6 +4226,37 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4448,6 +4956,26 @@ func (_u *PlatformUpdateOne) ClearWorkflowEligibleMarker() *PlatformUpdateOne {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *PlatformUpdateOne) SetExternalUUID(v string) *PlatformUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableExternalUUID(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *PlatformUpdateOne) ClearExternalUUID() *PlatformUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *PlatformUpdateOne) SetName(v string) *PlatformUpdateOne {
 	_u.mutation.SetName(v)
@@ -5064,6 +5592,81 @@ func (_u *PlatformUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *PlatformU
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_u *PlatformUpdateOne) AddIntegrationIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.AddIntegrationIDs(ids...)
+	return _u
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_u *PlatformUpdateOne) AddIntegrations(v ...*Integration) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationIDs(ids...)
+}
+
+// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
+func (_u *PlatformUpdateOne) AddDirectorySyncRunIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.AddDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *PlatformUpdateOne) AddDirectorySyncRuns(v ...*DirectorySyncRun) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectorySyncRunIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *PlatformUpdateOne) AddDirectoryAccountIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *PlatformUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_u *PlatformUpdateOne) AddDirectoryGroupIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.AddDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_u *PlatformUpdateOne) AddDirectoryGroups(v ...*DirectoryGroup) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *PlatformUpdateOne) AddDirectoryMembershipIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *PlatformUpdateOne) AddDirectoryMemberships(v ...*DirectoryMembership) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *PlatformUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *PlatformUpdateOne {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -5172,6 +5775,25 @@ func (_u *PlatformUpdateOne) AddGeneratedScans(v ...*Scan) *PlatformUpdateOne {
 // SetPlatformOwner sets the "platform_owner" edge to the User entity.
 func (_u *PlatformUpdateOne) SetPlatformOwner(v *User) *PlatformUpdateOne {
 	return _u.SetPlatformOwnerID(v.ID)
+}
+
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_u *PlatformUpdateOne) SetSystemDetailID(id string) *PlatformUpdateOne {
+	_u.mutation.SetSystemDetailID(id)
+	return _u
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableSystemDetailID(id *string) *PlatformUpdateOne {
+	if id != nil {
+		_u = _u.SetSystemDetailID(*id)
+	}
+	return _u
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdateOne) SetSystemDetail(v *SystemDetail) *PlatformUpdateOne {
+	return _u.SetSystemDetailID(v.ID)
 }
 
 // Mutation returns the PlatformMutation object of the builder.
@@ -5548,6 +6170,111 @@ func (_u *PlatformUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *Platfo
 	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
+// ClearIntegrations clears all "integrations" edges to the Integration entity.
+func (_u *PlatformUpdateOne) ClearIntegrations() *PlatformUpdateOne {
+	_u.mutation.ClearIntegrations()
+	return _u
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to Integration entities by IDs.
+func (_u *PlatformUpdateOne) RemoveIntegrationIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.RemoveIntegrationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrations removes "integrations" edges to Integration entities.
+func (_u *PlatformUpdateOne) RemoveIntegrations(v ...*Integration) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearDirectorySyncRuns clears all "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *PlatformUpdateOne) ClearDirectorySyncRuns() *PlatformUpdateOne {
+	_u.mutation.ClearDirectorySyncRuns()
+	return _u
+}
+
+// RemoveDirectorySyncRunIDs removes the "directory_sync_runs" edge to DirectorySyncRun entities by IDs.
+func (_u *PlatformUpdateOne) RemoveDirectorySyncRunIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.RemoveDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// RemoveDirectorySyncRuns removes "directory_sync_runs" edges to DirectorySyncRun entities.
+func (_u *PlatformUpdateOne) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectorySyncRunIDs(ids...)
+}
+
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *PlatformUpdateOne) ClearDirectoryAccounts() *PlatformUpdateOne {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *PlatformUpdateOne) RemoveDirectoryAccountIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *PlatformUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccount) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
+func (_u *PlatformUpdateOne) ClearDirectoryGroups() *PlatformUpdateOne {
+	_u.mutation.ClearDirectoryGroups()
+	return _u
+}
+
+// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
+func (_u *PlatformUpdateOne) RemoveDirectoryGroupIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.RemoveDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
+func (_u *PlatformUpdateOne) RemoveDirectoryGroups(v ...*DirectoryGroup) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryGroupIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *PlatformUpdateOne) ClearDirectoryMemberships() *PlatformUpdateOne {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *PlatformUpdateOne) RemoveDirectoryMembershipIDs(ids ...string) *PlatformUpdateOne {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *PlatformUpdateOne) RemoveDirectoryMemberships(v ...*DirectoryMembership) *PlatformUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
+}
+
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
 func (_u *PlatformUpdateOne) ClearWorkflowObjectRefs() *PlatformUpdateOne {
 	_u.mutation.ClearWorkflowObjectRefs()
@@ -5698,6 +6425,12 @@ func (_u *PlatformUpdateOne) RemoveGeneratedScans(v ...*Scan) *PlatformUpdateOne
 // ClearPlatformOwner clears the "platform_owner" edge to the User entity.
 func (_u *PlatformUpdateOne) ClearPlatformOwner() *PlatformUpdateOne {
 	_u.mutation.ClearPlatformOwner()
+	return _u
+}
+
+// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdateOne) ClearSystemDetail() *PlatformUpdateOne {
+	_u.mutation.ClearSystemDetail()
 	return _u
 }
 
@@ -5929,6 +6662,12 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(platform.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(platform.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(platform.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(platform.FieldName, field.TypeString, value)
@@ -7146,6 +7885,246 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.WorkflowObjectRefsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7508,6 +8487,37 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

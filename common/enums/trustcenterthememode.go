@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 type TrustCenterThemeMode string
 
@@ -17,46 +13,22 @@ var (
 	TrustCenterThemeModeInvalid TrustCenterThemeMode = "INVALID"
 )
 
+var trustCenterThemeModeValues = []TrustCenterThemeMode{TrustCenterThemeModeEasy, TrustCenterThemeModeAdvanced}
+
 // Values returns a slice of strings that represents all the possible values of the TrustCenterThemeMode enum.
 // Possible default values are "EASY" and "ADVANCED"
-func (TrustCenterThemeMode) Values() (kinds []string) {
-	for _, s := range []TrustCenterThemeMode{TrustCenterThemeModeEasy, TrustCenterThemeModeAdvanced} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (TrustCenterThemeMode) Values() []string { return stringValues(trustCenterThemeModeValues) }
 
 // String returns the TrustCenterThemeMode as a string
-func (r TrustCenterThemeMode) String() string {
-	return string(r)
-}
+func (r TrustCenterThemeMode) String() string { return string(r) }
 
 // ToTrustCenterThemeMode returns the trust center theme mode enum based on string input
 func ToTrustCenterThemeMode(r string) *TrustCenterThemeMode {
-	switch r := strings.ToUpper(r); r {
-	case TrustCenterThemeModeEasy.String():
-		return &TrustCenterThemeModeEasy
-	case TrustCenterThemeModeAdvanced.String():
-		return &TrustCenterThemeModeAdvanced
-	default:
-		return &TrustCenterThemeModeInvalid
-	}
+	return parse(r, trustCenterThemeModeValues, &TrustCenterThemeModeInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r TrustCenterThemeMode) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r TrustCenterThemeMode) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *TrustCenterThemeMode) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for TrustCenterThemeMode, got: %T", v) //nolint:err113
-	}
-
-	*r = TrustCenterThemeMode(str)
-
-	return nil
-}
+func (r *TrustCenterThemeMode) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

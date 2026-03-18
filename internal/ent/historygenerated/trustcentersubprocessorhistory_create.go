@@ -141,6 +141,34 @@ func (_c *TrustCenterSubprocessorHistoryCreate) SetNillableDeletedBy(v *string) 
 	return _c
 }
 
+// SetTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field.
+func (_c *TrustCenterSubprocessorHistoryCreate) SetTrustCenterSubprocessorKindName(v string) *TrustCenterSubprocessorHistoryCreate {
+	_c.mutation.SetTrustCenterSubprocessorKindName(v)
+	return _c
+}
+
+// SetNillableTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field if the given value is not nil.
+func (_c *TrustCenterSubprocessorHistoryCreate) SetNillableTrustCenterSubprocessorKindName(v *string) *TrustCenterSubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterSubprocessorKindName(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field.
+func (_c *TrustCenterSubprocessorHistoryCreate) SetTrustCenterSubprocessorKindID(v string) *TrustCenterSubprocessorHistoryCreate {
+	_c.mutation.SetTrustCenterSubprocessorKindID(v)
+	return _c
+}
+
+// SetNillableTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field if the given value is not nil.
+func (_c *TrustCenterSubprocessorHistoryCreate) SetNillableTrustCenterSubprocessorKindID(v *string) *TrustCenterSubprocessorHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterSubprocessorKindID(*v)
+	}
+	return _c
+}
+
 // SetSubprocessorID sets the "subprocessor_id" field.
 func (_c *TrustCenterSubprocessorHistoryCreate) SetSubprocessorID(v string) *TrustCenterSubprocessorHistoryCreate {
 	_c.mutation.SetSubprocessorID(v)
@@ -164,12 +192,6 @@ func (_c *TrustCenterSubprocessorHistoryCreate) SetNillableTrustCenterID(v *stri
 // SetCountries sets the "countries" field.
 func (_c *TrustCenterSubprocessorHistoryCreate) SetCountries(v []string) *TrustCenterSubprocessorHistoryCreate {
 	_c.mutation.SetCountries(v)
-	return _c
-}
-
-// SetCategory sets the "category" field.
-func (_c *TrustCenterSubprocessorHistoryCreate) SetCategory(v string) *TrustCenterSubprocessorHistoryCreate {
-	_c.mutation.SetCategory(v)
 	return _c
 }
 
@@ -271,9 +293,6 @@ func (_c *TrustCenterSubprocessorHistoryCreate) check() error {
 	if _, ok := _c.mutation.SubprocessorID(); !ok {
 		return &ValidationError{Name: "subprocessor_id", err: errors.New(`historygenerated: missing required field "TrustCenterSubprocessorHistory.subprocessor_id"`)}
 	}
-	if _, ok := _c.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`historygenerated: missing required field "TrustCenterSubprocessorHistory.category"`)}
-	}
 	return nil
 }
 
@@ -346,6 +365,14 @@ func (_c *TrustCenterSubprocessorHistoryCreate) createSpec() (*TrustCenterSubpro
 		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.TrustCenterSubprocessorKindName(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString, value)
+		_node.TrustCenterSubprocessorKindName = value
+	}
+	if value, ok := _c.mutation.TrustCenterSubprocessorKindID(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString, value)
+		_node.TrustCenterSubprocessorKindID = value
+	}
 	if value, ok := _c.mutation.SubprocessorID(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldSubprocessorID, field.TypeString, value)
 		_node.SubprocessorID = value
@@ -357,10 +384,6 @@ func (_c *TrustCenterSubprocessorHistoryCreate) createSpec() (*TrustCenterSubpro
 	if value, ok := _c.mutation.Countries(); ok {
 		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
 		_node.Countries = value
-	}
-	if value, ok := _c.mutation.Category(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldCategory, field.TypeString, value)
-		_node.Category = value
 	}
 	return _node, _spec
 }

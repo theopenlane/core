@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -21,7 +22,8 @@ import (
 // CreateProcedure is the resolver for the createProcedure field.
 func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -46,7 +48,8 @@ func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureF
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, ownerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, ownerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -69,7 +72,8 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,7 +84,7 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 
 // CreateBulkCSVProcedure is the resolver for the createBulkCSVProcedure field.
 func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateProcedureInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ProcedureCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -93,13 +97,27 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateProcedure(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Procedure", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateProcedureInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateProcedure(ctx, inputs)
 }
 
 // UpdateBulkProcedure is the resolver for the updateBulkProcedure field.
@@ -119,7 +137,8 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -160,6 +179,26 @@ func (r *mutationResolver) DeleteBulkProcedure(ctx context.Context, ids []string
 	}
 
 	return r.bulkDeleteProcedure(ctx, ids)
+}
+
+// UpdateBulkCSVProcedure is the resolver for the updateBulkCSVProcedure field.
+func (r *mutationResolver) UpdateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ProcedureCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Procedure", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVProcedure(ctx, data)
 }
 
 // HasPendingWorkflow is the resolver for the hasPendingWorkflow field.

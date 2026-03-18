@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -56,6 +57,7 @@ type FileQuery struct {
 	withProgram                     *ProgramQuery
 	withPlatform                    *PlatformQuery
 	withEvidence                    *EvidenceQuery
+	withIdentityHolder              *IdentityHolderQuery
 	withScan                        *ScanQuery
 	withEvents                      *EventQuery
 	withIntegrations                *IntegrationQuery
@@ -76,6 +78,7 @@ type FileQuery struct {
 	withNamedProgram                map[string]*ProgramQuery
 	withNamedPlatform               map[string]*PlatformQuery
 	withNamedEvidence               map[string]*EvidenceQuery
+	withNamedIdentityHolder         map[string]*IdentityHolderQuery
 	withNamedScan                   map[string]*ScanQuery
 	withNamedEvents                 map[string]*EventQuery
 	withNamedIntegrations           map[string]*IntegrationQuery
@@ -413,6 +416,31 @@ func (_q *FileQuery) QueryEvidence() *EvidenceQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.EvidenceFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder chains the current query on the "identity_holder" edge.
+func (_q *FileQuery) QueryIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.IdentityHolderTable, file.IdentityHolderPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -798,6 +826,7 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withProgram:                _q.withProgram.Clone(),
 		withPlatform:               _q.withPlatform.Clone(),
 		withEvidence:               _q.withEvidence.Clone(),
+		withIdentityHolder:         _q.withIdentityHolder.Clone(),
 		withScan:                   _q.withScan.Clone(),
 		withEvents:                 _q.withEvents.Clone(),
 		withIntegrations:           _q.withIntegrations.Clone(),
@@ -941,6 +970,17 @@ func (_q *FileQuery) WithEvidence(opts ...func(*EvidenceQuery)) *FileQuery {
 		opt(query)
 	}
 	_q.withEvidence = query
+	return _q
+}
+
+// WithIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithIdentityHolder(opts ...func(*IdentityHolderQuery)) *FileQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolder = query
 	return _q
 }
 
@@ -1106,7 +1146,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withOrganization != nil,
@@ -1119,6 +1159,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withProgram != nil,
 			_q.withPlatform != nil,
 			_q.withEvidence != nil,
+			_q.withIdentityHolder != nil,
 			_q.withScan != nil,
 			_q.withEvents != nil,
 			_q.withIntegrations != nil,
@@ -1235,6 +1276,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *File) { n.Edges.Evidence = []*Evidence{} },
 			func(n *File, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolder; query != nil {
+		if err := _q.loadIdentityHolder(ctx, query, nodes,
+			func(n *File) { n.Edges.IdentityHolder = []*IdentityHolder{} },
+			func(n *File, e *IdentityHolder) { n.Edges.IdentityHolder = append(n.Edges.IdentityHolder, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1358,6 +1406,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *File) { n.appendNamedEvidence(name) },
 			func(n *File, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolder {
+		if err := _q.loadIdentityHolder(ctx, query, nodes,
+			func(n *File) { n.appendNamedIdentityHolder(name) },
+			func(n *File, e *IdentityHolder) { n.appendNamedIdentityHolder(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2096,6 +2151,68 @@ func (_q *FileQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nod
 	}
 	return nil
 }
+func (_q *FileQuery) loadIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*File, init func(*File), assign func(*File, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.IdentityHolderTable)
+		joinT.Schema(_q.schemaConfig.IdentityHolderFiles)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(file.IdentityHolderPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.IdentityHolderPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.IdentityHolderPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holder" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *FileQuery) loadScan(ctx context.Context, query *ScanQuery, nodes []*File, init func(*File), assign func(*File, *Scan)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*File)
@@ -2654,6 +2771,20 @@ func (_q *FileQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)
 		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
 	}
 	_q.withNamedEvidence[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolder tells the query-builder to eager-load the nodes that are connected to the "identity_holder"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedIdentityHolder(name string, opts ...func(*IdentityHolderQuery)) *FileQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolder == nil {
+		_q.withNamedIdentityHolder = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolder[name] = query
 	return _q
 }
 

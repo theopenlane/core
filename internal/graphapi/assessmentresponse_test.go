@@ -7,12 +7,16 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
+// TestQueryAssessmentResponse verifies fetching a single assessment response.
 func TestQueryAssessmentResponse(t *testing.T) {
 	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	response1 := (&AssessmentResponseBuilder{
@@ -97,6 +101,7 @@ func TestQueryAssessmentResponse(t *testing.T) {
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(testUser1.UserCtx, t)
 }
 
+// TestQueryAssessmentResponses verifies listing assessment responses.
 func TestQueryAssessmentResponses(t *testing.T) {
 	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	response1 := (&AssessmentResponseBuilder{
@@ -159,6 +164,158 @@ func TestQueryAssessmentResponses(t *testing.T) {
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment3.TemplateID}).MustDelete(anotherUser.UserCtx, t)
 }
 
+// TestAssessmentResponseCampaignIsolation ensures responses are isolated per campaign.
+func TestAssessmentResponseCampaignIsolation(t *testing.T) {
+	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+
+	campaignA, err := suite.client.db.Campaign.Create().
+		SetName("Campaign A").
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetRecurrenceFrequency(enums.FrequencyYearly).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	campaignB, err := suite.client.db.Campaign.Create().
+		SetName("Campaign B").
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetRecurrenceFrequency(enums.FrequencyYearly).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	email := gofakeit.Email()
+	responseA, err := suite.client.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaignA.ID).
+		SetEmail(email).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	responseB, err := suite.client.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaignB.ID).
+		SetEmail(email).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	countA, err := suite.client.db.AssessmentResponse.Query().
+		Where(
+			assessmentresponse.CampaignIDEQ(campaignA.ID),
+			assessmentresponse.EmailEqualFold(email),
+		).
+		Count(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, countA))
+
+	countB, err := suite.client.db.AssessmentResponse.Query().
+		Where(
+			assessmentresponse.CampaignIDEQ(campaignB.ID),
+			assessmentresponse.EmailEqualFold(email),
+		).
+		Count(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, countB))
+
+	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{responseA.ID, responseB.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, IDs: []string{campaignA.ID, campaignB.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(testUser1.UserCtx, t)
+}
+
+// TestAssessmentResponseUpdatesCampaignTargetsAndCompletion verifies campaign rollups on completion.
+func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
+	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+
+	campaignObj, err := suite.client.db.Campaign.Create().
+		SetName("Campaign Target Sync").
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetRecurrenceFrequency(enums.FrequencyYearly).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	emails := []string{"alpha@example.com", "beta@example.com"}
+	targetIDs := make([]string, 0, len(emails))
+	for _, email := range emails {
+		target, err := suite.client.db.CampaignTarget.Create().
+			SetOwnerID(testUser1.OrganizationID).
+			SetCampaignID(campaignObj.ID).
+			SetEmail(email).
+			Save(ctx)
+		assert.NilError(t, err)
+		targetIDs = append(targetIDs, target.ID)
+	}
+
+	responseA, err := suite.client.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaignObj.ID).
+		SetEmail(emails[0]).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	responseB, err := suite.client.db.AssessmentResponse.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetAssessmentID(assessment.ID).
+		SetCampaignID(campaignObj.ID).
+		SetEmail(emails[1]).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	_, err = suite.client.db.AssessmentResponse.UpdateOneID(responseA.ID).
+		SetStatus(enums.AssessmentResponseStatusCompleted).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	targetA, err := suite.client.db.CampaignTarget.Query().
+		Where(
+			campaigntarget.CampaignIDEQ(campaignObj.ID),
+			campaigntarget.EmailEqualFold(emails[0]),
+		).
+		Only(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(enums.AssessmentResponseStatusCompleted, targetA.Status))
+
+	targetB, err := suite.client.db.CampaignTarget.Query().
+		Where(
+			campaigntarget.CampaignIDEQ(campaignObj.ID),
+			campaigntarget.EmailEqualFold(emails[1]),
+		).
+		Only(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(enums.AssessmentResponseStatusNotStarted, targetB.Status))
+
+	campaignAfterFirst, err := suite.client.db.Campaign.Query().
+		Where(campaign.IDEQ(campaignObj.ID)).
+		Only(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, campaignAfterFirst.Status != enums.CampaignStatusCompleted)
+
+	_, err = suite.client.db.AssessmentResponse.UpdateOneID(responseB.ID).
+		SetStatus(enums.AssessmentResponseStatusCompleted).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	campaignAfterSecond, err := suite.client.db.Campaign.Query().
+		Where(campaign.IDEQ(campaignObj.ID)).
+		Only(ctx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(enums.CampaignStatusCompleted, campaignAfterSecond.Status))
+	assert.Check(t, !campaignAfterSecond.IsActive)
+
+	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{responseA.ID, responseB.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: targetIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignObj.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(testUser1.UserCtx, t)
+}
+
+// TestMutationCreateAssessmentResponse validates create mutation behavior.
 func TestMutationCreateAssessmentResponse(t *testing.T) {
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -277,6 +434,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment2.TemplateID}).MustDelete(testUser2.UserCtx, t)
 }
 
+// TestMutationDeleteAssessmentResponse validates delete mutation behavior.
 func TestMutationDeleteAssessmentResponse(t *testing.T) {
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	response1 := (&AssessmentResponseBuilder{

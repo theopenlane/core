@@ -92,6 +92,10 @@ const (
 	FieldAssessmentID = "assessment_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
+	FieldEmailBrandingID = "email_branding_id"
+	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
+	FieldEmailTemplateID = "email_template_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -108,6 +112,10 @@ const (
 	EdgeAssessment = "assessment"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
+	// EdgeEmailBranding holds the string denoting the email_branding edge name in mutations.
+	EdgeEmailBranding = "email_branding"
+	// EdgeEmailTemplate holds the string denoting the email_template edge name in mutations.
+	EdgeEmailTemplate = "email_template"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
 	EdgeEntity = "entity"
 	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
@@ -122,6 +130,8 @@ const (
 	EdgeGroups = "groups"
 	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
 	EdgeIdentityHolders = "identity_holders"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the campaign in the database.
@@ -176,6 +186,20 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
+	// EmailBrandingTable is the table that holds the email_branding relation/edge.
+	EmailBrandingTable = "campaigns"
+	// EmailBrandingInverseTable is the table name for the EmailBranding entity.
+	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
+	EmailBrandingInverseTable = "email_brandings"
+	// EmailBrandingColumn is the table column denoting the email_branding relation/edge.
+	EmailBrandingColumn = "email_branding_id"
+	// EmailTemplateTable is the table that holds the email_template relation/edge.
+	EmailTemplateTable = "campaigns"
+	// EmailTemplateInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplateInverseTable = "email_templates"
+	// EmailTemplateColumn is the table column denoting the email_template relation/edge.
+	EmailTemplateColumn = "email_template_id"
 	// EntityTable is the table that holds the entity relation/edge.
 	EntityTable = "campaigns"
 	// EntityInverseTable is the table name for the Entity entity.
@@ -217,6 +241,11 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_campaigns"
+	// ControlsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlsInverseTable = "controls"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -266,6 +295,8 @@ var Columns = []string{
 	FieldEntityID,
 	FieldAssessmentID,
 	FieldMetadata,
+	FieldEmailBrandingID,
+	FieldEmailTemplateID,
 }
 
 var (
@@ -290,6 +321,9 @@ var (
 	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
 	// primary key for the identity_holders relation (M2M).
 	IdentityHoldersPrimaryKey = []string{"campaign_id", "identity_holder_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "campaign_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -562,6 +596,16 @@ func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
 }
 
+// ByEmailBrandingID orders the results by the email_branding_id field.
+func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
+}
+
+// ByEmailTemplateID orders the results by the email_template_id field.
+func ByEmailTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailTemplateID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -636,6 +680,20 @@ func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTemplateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEmailBrandingField orders the results by email_branding field.
+func ByEmailBrandingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEmailTemplateField orders the results by email_template field.
+func ByEmailTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -730,6 +788,20 @@ func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+	}
+}
+
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -799,6 +871,20 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 	)
 }
+func newEmailBrandingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailBrandingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+	)
+}
+func newEmailTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EmailTemplateTable, EmailTemplateColumn),
+	)
+}
 func newEntityStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -846,6 +932,13 @@ func newIdentityHoldersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
+func newControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

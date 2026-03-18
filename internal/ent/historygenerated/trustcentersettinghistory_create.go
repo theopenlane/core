@@ -268,6 +268,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableFaviconLocalFileID(v *stri
 	return _c
 }
 
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_c *TrustCenterSettingHistoryCreate) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetHeroImageLocalFileID(v)
+	return _c
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetHeroImageLocalFileID(*v)
+	}
+	return _c
+}
+
 // SetThemeMode sets the "theme_mode" field.
 func (_c *TrustCenterSettingHistoryCreate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetThemeMode(v)
@@ -446,6 +460,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNdaApprovalRequired(v bool) *Trust
 func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryCreate {
 	if v != nil {
 		_c.SetNdaApprovalRequired(*v)
+	}
+	return _c
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_c *TrustCenterSettingHistoryCreate) SetStatusPageURL(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetStatusPageURL(v)
+	return _c
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableStatusPageURL(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetStatusPageURL(*v)
 	}
 	return _c
 }
@@ -679,6 +707,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
 		_node.FaviconLocalFileID = &value
 	}
+	if value, ok := _c.mutation.HeroImageLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
+		_node.HeroImageLocalFileID = &value
+	}
 	if value, ok := _c.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
 		_node.ThemeMode = value
@@ -730,6 +762,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
+	}
+	if value, ok := _c.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
+		_node.StatusPageURL = &value
 	}
 	return _node, _spec
 }

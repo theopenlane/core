@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -202,6 +203,20 @@ func (_c *TrustCenterCreate) SetPirschIdentificationCode(v string) *TrustCenterC
 func (_c *TrustCenterCreate) SetNillablePirschIdentificationCode(v *string) *TrustCenterCreate {
 	if v != nil {
 		_c.SetPirschIdentificationCode(*v)
+	}
+	return _c
+}
+
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_c *TrustCenterCreate) SetPirschAccessLink(v string) *TrustCenterCreate {
+	_c.mutation.SetPirschAccessLink(v)
+	return _c
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillablePirschAccessLink(v *string) *TrustCenterCreate {
+	if v != nil {
+		_c.SetPirschAccessLink(*v)
 	}
 	return _c
 }
@@ -455,6 +470,21 @@ func (_c *TrustCenterCreate) AddTrustCenterNdaRequests(v ...*TrustCenterNDAReque
 	return _c.AddTrustCenterNdaRequestIDs(ids...)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_c *TrustCenterCreate) AddTrustCenterFaqIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddTrustCenterFaqIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_c *TrustCenterCreate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterFaqIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_c *TrustCenterCreate) Mutation() *TrustCenterMutation {
 	return _c.mutation
@@ -529,6 +559,11 @@ func (_c *TrustCenterCreate) check() error {
 	if v, ok := _c.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PirschAccessLink(); ok {
+		if err := trustcenter.PirschAccessLinkValidator(v); err != nil {
+			return &ValidationError{Name: "pirsch_access_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.pirsch_access_link": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.PreviewStatus(); ok {
@@ -616,6 +651,10 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PirschIdentificationCode(); ok {
 		_spec.SetField(trustcenter.FieldPirschIdentificationCode, field.TypeString, value)
 		_node.PirschIdentificationCode = value
+	}
+	if value, ok := _c.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenter.FieldPirschAccessLink, field.TypeString, value)
+		_node.PirschAccessLink = value
 	}
 	if value, ok := _c.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
@@ -881,6 +920,23 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterFAQ
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

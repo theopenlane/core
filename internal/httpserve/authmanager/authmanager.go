@@ -6,13 +6,12 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/ulids"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -108,7 +107,7 @@ func (a *Client) generateAnonymousSession(ctx context.Context, w http.ResponseWr
 
 // GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
 func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, uuid.New().String())
+	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -124,7 +123,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 
 // GenerateAnonymousQuestionnaireSession creates a new auth session for the anonymous questionnaire user
 func (a *Client) GenerateAnonymousQuestionnaireSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetAssessmentID string, email string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("%s%s", AnonQuestionnaireJWTPrefix, uuid.New().String())
+	anonUserID := fmt.Sprintf("%s%s", AnonQuestionnaireJWTPrefix, targetAssessmentID)
 
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -268,29 +267,29 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		return orgID, nil
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get authenticated user context")
-
-		return "", err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		// don't log here, the caller is already logging this when it is actually an issue, otherwise it is expected
+		// because it is happening during the login flow
+		return "", auth.ErrNoAuthUser
 	}
 
 	// if no org is provided, check with the authenticated org
 	if orgID == "" {
-		orgID = au.OrganizationID
+		orgID = caller.OrganizationID
 	}
 
 	// ensure user is already a member of the destination organization
 	req := fgax.AccessCheck{
-		SubjectID:   au.SubjectID,
+		SubjectID:   caller.SubjectID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
-		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	allow, err := a.db.Authz.CheckOrgReadAccess(ctx, req)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to check access")
+		logx.FromContext(ctx).Error().Err(err).Str("user_id", caller.SubjectID).Str("org_id", orgID).Msg("unable to check org read access")
 
 		return "", err
 	}
@@ -304,12 +303,10 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	// to authenticate
 	newOrgID, err := a.updateDefaultOrg(ctx, user, orgID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to update default org")
+		logx.FromContext(ctx).Error().Err(err).Str("user_id", user.ID).Str("org_id", orgID).Msg("unable to update default org")
 
 		return "", err
 	}
-
-	logx.FromContext(ctx).Error().Str("user_id", user.ID).Str("attempted_org_id", orgID).Str("new_org_id", newOrgID).Msg("user does not have access to the requested organization, switching to new default organization")
 
 	return newOrgID, generated.ErrPermissionDenied
 }
@@ -421,8 +418,8 @@ func skipOrgValidation(ctx context.Context) bool {
 		return true
 	}
 
-	// skip on org creation
-	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+	// skip on internal operations (e.g. org creation)
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation) {
 		return true
 	}
 

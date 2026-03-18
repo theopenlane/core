@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/core/common/enums"
@@ -18,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/logx"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // HookGroup runs on group mutations to set default values that are not provided
@@ -51,8 +51,10 @@ func HookGroup() ent.Hook {
 				// trim trailing whitespace from the name
 				m.SetName(strings.TrimSpace(name))
 
-				url := gravatar.New(name, nil)
-				m.SetGravatarLogoURL(url)
+				if _, exists := m.GravatarLogoURL(); !exists {
+					url := gravatar.New(name, nil)
+					m.SetGravatarLogoURL(url)
+				}
 
 				// if managed, the user's name ( and thus group name )
 				// may include special characters. this makes sure to clean them
@@ -60,6 +62,18 @@ func HookGroup() ent.Hook {
 				isManaged, _ := m.IsManaged()
 				if isManaged {
 					m.SetName(StripInvalidChars(name))
+				}
+			}
+
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				var err error
+
+				ctx, err = processSingleMutationFile(ctx, m, "avatarFile", "group", ErrTooManyAvatarFiles,
+					func(mut *generated.GroupMutation, id string) { mut.SetAvatarLocalFileID(id) },
+				)
+				if err != nil {
+					return nil, err
 				}
 			}
 
@@ -87,9 +101,10 @@ func HookManagedGroups() ent.Hook {
 				return nil, err
 			}
 
-			// allow general allow context to bypass managed group check
+			// allow general allow context or managed group bypass to modify managed groups
 			_, allowCtx := privacy.DecisionFromContext(ctx)
-			_, allowManagedCtx := contextx.From[ManagedContextKey](ctx)
+			caller, _ := auth.CallerFromContext(ctx)
+			allowManagedCtx := caller != nil && caller.Has(auth.CapBypassManagedGroup)
 
 			// before returning the error, we need to allow for edges to be updated
 			// if they are permissions edges

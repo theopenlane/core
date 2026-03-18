@@ -118,4 +118,3 @@ func (ClearTrustCenterCacheArgs) Kind() string { return "clear_trust_center_cach
 func (ClearTrustCenterCacheArgs) InsertOpts() river.InsertOpts {
 	return river.InsertOpts{Queue: QueueTrustcenter}
 }
-

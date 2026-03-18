@@ -19,6 +19,11 @@ extend type Mutation{
         values of the entity
         """
         input: CreateEntityInput!
+        """
+        entity type name allows the name of the entity type to be passed in over an id
+        """
+        entityTypeName: String
+        entityFiles: [Upload!]
     ): EntityCreatePayload!
     """
     Create multiple new entities
@@ -28,6 +33,10 @@ extend type Mutation{
         values of the entity
         """
         input: [CreateEntityInput!]
+        """
+        entity type name allows the name of the entity type to be passed in over an id, this is applied to all created entities
+        """
+        entityTypeName: String
     ): EntityBulkCreatePayload!
     """
     Create multiple new entities via file upload
@@ -37,6 +46,10 @@ extend type Mutation{
         csv file containing values of the entity
         """
         input: Upload!
+        """
+        entity type name allows the name of the entity type to be passed in over an id, this is applied to all created entities
+        """
+        entityTypeName: String
     ): EntityBulkCreatePayload!
     """
     Update an existing entity
@@ -50,6 +63,7 @@ extend type Mutation{
         New values for the entity
         """
         input: UpdateEntityInput!
+        entityFiles: [Upload!]
     ): EntityUpdatePayload!
     """
     Delete an existing entity
@@ -69,6 +83,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): EntityBulkDeletePayload!
+    """
+    Update multiple existing entitys
+    """
+    updateBulkEntity(
+        """
+        IDs of the entitys to update
+        """
+        ids: [ID!]!
+        """
+        values to update the entitys with
+        """
+        input: UpdateEntityInput!
+    ): EntityBulkUpdatePayload!
+    """
+    Update multiple existing entitys via file upload
+    """
+    updateBulkCSVEntity(
+        """
+        csv file containing values of the entity, must include ID column
+        """
+        input: Upload!
+    ): EntityBulkUpdatePayload!
 }
 
 """
@@ -119,4 +155,18 @@ type EntityBulkDeletePayload {
     Deleted entity IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkEntity mutation
+"""
+type EntityBulkUpdatePayload {
+    """
+    Updated entitys
+    """
+    entities: [Entity!]
+    """
+    IDs of the updated entitys
+    """
+    updatedIDs: [ID!]
 }

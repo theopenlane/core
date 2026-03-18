@@ -12,10 +12,16 @@ type info struct {
 }
 
 // ExportableSchemas contains all schemas that have Exportable annotation
-var ExportableSchemas = map[string]info{"CONTROL": info{
+var ExportableSchemas = map[string]info{"ASSET": info{
+	hasOwnerField:       false,
+	hasSystemOwnedField: false,
+}, "CONTROL": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,
 }, "DIRECTORY_MEMBERSHIP": info{
+	hasOwnerField:       false,
+	hasSystemOwnedField: false,
+}, "ENTITY": info{
 	hasOwnerField:       false,
 	hasSystemOwnedField: false,
 }, "EVIDENCE": info{
@@ -24,6 +30,9 @@ var ExportableSchemas = map[string]info{"CONTROL": info{
 }, "FINDING": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,
+}, "IDENTITY_HOLDER": info{
+	hasOwnerField:       false,
+	hasSystemOwnedField: false,
 }, "INTERNAL_POLICY": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: false,
@@ -45,8 +54,14 @@ var ExportableSchemas = map[string]info{"CONTROL": info{
 }, "SUBSCRIBER": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: false,
+}, "SYSTEM_DETAIL": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
 }, "TASK": info{
 	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "TRUST_CENTER_FAQ": info{
+	hasOwnerField:       false,
 	hasSystemOwnedField: false,
 }, "TRUST_CENTER_SUBPROCESSOR": info{
 	hasOwnerField:       false,

@@ -10,11 +10,13 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -55,12 +57,41 @@ func (Asset) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the asset, e.g. matts computer, office router, IP address, etc").
 			NotEmpty().
-			Annotations(entgql.OrderField("name"), entx.FieldSearchable()),
+			Annotations(
+				entgql.OrderField("name"),
+				entx.FieldSearchable(),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			),
+		field.String("display_name").
+			Comment("the display name of the asset").
+			MaxLen(nameMaxLen).
+			Optional().
+			NotEmpty().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("display_name"),
+			),
 		field.String("description").
-			Optional(),
+			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			),
 		field.String("identifier").
 			Optional().
-			Comment("unique identifier like domain, device id, etc"),
+			Comment("unique identifier like domain, device id, etc").
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleInventoryItemIdentifier,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("website").
 			Comment("the website of the asset, if applicable").
 			Optional(),
@@ -92,7 +123,10 @@ func (Asset) Fields() []ent.Field {
 			),
 		field.String("source_platform_id").
 			Comment("the platform that sourced the asset record").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("SourcePlatformName").MatchOn("name").CreateIfMissing(),
+			),
 		field.String("source_identifier").
 			Comment("the identifier used by the source platform for the asset").
 			Optional().
@@ -134,7 +168,7 @@ func (a Asset) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Asset](a,
-				withParents(Organization{}, Platform{}),
+				withParents(Organization{}, Platform{}, Entity{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),
@@ -200,6 +234,12 @@ func (a Asset) Modules() []models.OrgModule {
 	}
 }
 
+func (Asset) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookAssetCreate(),
+	}
+}
+
 // Policy of the Asset
 func (a Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
@@ -218,6 +258,11 @@ func (a Asset) Policy() ent.Policy {
 func (a Asset) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("inventory-item"),
+		),
 	}
 }
 

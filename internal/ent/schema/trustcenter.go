@@ -76,6 +76,10 @@ func (TrustCenter) Fields() []ent.Field {
 		field.String("pirsch_identification_code").
 			Comment("Pirsch ID code").
 			Optional(),
+		field.String("pirsch_access_link").
+			Comment("Pirsch access link").
+			Validate(validator.ValidateURL()).
+			Optional(),
 		field.Enum("preview_status").
 			GoType(enums.TrustCenterPreviewStatus("")).
 			Default(enums.TrustCenterPreviewStatusNone.String()).
@@ -115,6 +119,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Organization{}.Name()),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -124,6 +129,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Organization{}.Name()),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -153,13 +159,13 @@ func (t TrustCenter) Edges() []ent.Edge {
 			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema:    t,
-			name:          "subprocessors",
-			edgeSchema:    TrustCenterSubprocessor{},
-			cascadeDelete: "TrustCenter",
+			fromSchema: t,
+			name:       "subprocessors",
+			edgeSchema: TrustCenterSubprocessor{},
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
+			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
@@ -201,6 +207,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 			edgeSchema:    TrustCenterNDARequest{},
 			cascadeDelete: "TrustCenter",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "faqs",
+			edgeSchema:    TrustCenterFAQ{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 
@@ -225,6 +237,7 @@ func (t TrustCenter) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			rule.AllowIfTrustCenterEditor(),
 		),
 	)
 }

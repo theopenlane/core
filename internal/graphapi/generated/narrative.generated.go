@@ -132,6 +132,110 @@ func (ec *executionContext) fieldContext_NarrativeBulkDeletePayload_deletedIDs(_
 	return fc, nil
 }
 
+func (ec *executionContext) _NarrativeBulkUpdatePayload_narratives(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeBulkUpdatePayload_narratives,
+		func(ctx context.Context) (any, error) {
+			return obj.Narratives, nil
+		},
+		nil,
+		ec.marshalONarrative2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_NarrativeBulkUpdatePayload_narratives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NarrativeBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Narrative_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Narrative_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Narrative_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Narrative_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Narrative_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Narrative_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Narrative_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Narrative_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Narrative_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Narrative_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Narrative_systemInternalID(ctx, field)
+			case "name":
+				return ec.fieldContext_Narrative_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Narrative_description(ctx, field)
+			case "details":
+				return ec.fieldContext_Narrative_details(ctx, field)
+			case "owner":
+				return ec.fieldContext_Narrative_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Narrative_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Narrative_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Narrative_viewers(ctx, field)
+			case "satisfies":
+				return ec.fieldContext_Narrative_satisfies(ctx, field)
+			case "programs":
+				return ec.fieldContext_Narrative_programs(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Narrative_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Narrative_procedures(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Narrative", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NarrativeBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_NarrativeBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_NarrativeBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NarrativeBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NarrativeCreatePayload_narrative(ctx context.Context, field graphql.CollectedField, obj *model.NarrativeCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -345,10 +449,10 @@ func (ec *executionContext) _NarrativeBulkCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -384,10 +488,48 @@ func (ec *executionContext) _NarrativeBulkDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var narrativeBulkUpdatePayloadImplementors = []string{"NarrativeBulkUpdatePayload"}
+
+func (ec *executionContext) _NarrativeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.NarrativeBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, narrativeBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NarrativeBulkUpdatePayload")
+		case "narratives":
+			out.Values[i] = ec._NarrativeBulkUpdatePayload_narratives(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._NarrativeBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -423,10 +565,10 @@ func (ec *executionContext) _NarrativeCreatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -462,10 +604,10 @@ func (ec *executionContext) _NarrativeDeletePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -501,10 +643,10 @@ func (ec *executionContext) _NarrativeUpdatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -545,6 +687,20 @@ func (ec *executionContext) marshalNNarrativeBulkDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._NarrativeBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNNarrativeBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeBulkUpdatePayload) graphql.Marshaler {
+	return ec._NarrativeBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNNarrativeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NarrativeBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNNarrativeCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeCreatePayload) graphql.Marshaler {

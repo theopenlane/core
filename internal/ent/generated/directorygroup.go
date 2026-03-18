@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 )
 
 // DirectoryGroup is the model entity for the DirectoryGroup schema.
@@ -47,6 +48,8 @@ type DirectoryGroup struct {
 	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory group
 	IntegrationID string `json:"integration_id,omitempty"`
+	// optional platform associated with this directory group
+	PlatformID string `json:"platform_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// stable identifier from the directory system
@@ -77,10 +80,8 @@ type DirectoryGroup struct {
 	SourceVersion *string `json:"source_version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DirectoryGroupQuery when eager-loading is set.
-	Edges                               DirectoryGroupEdges `json:"edges"`
-	directory_sync_run_directory_groups *string
-	integration_directory_groups        *string
-	selectValues                        sql.SelectValues
+	Edges        DirectoryGroupEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // DirectoryGroupEdges holds the relations/edges for other nodes in the graph.
@@ -95,6 +96,8 @@ type DirectoryGroupEdges struct {
 	Integration *Integration `json:"integration,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRun *DirectorySyncRun `json:"directory_sync_run,omitempty"`
+	// platform associated with this directory group
+	Platform *Platform `json:"platform,omitempty"`
 	// Accounts holds the value of the accounts edge.
 	Accounts []*DirectoryAccount `json:"accounts,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
@@ -103,9 +106,9 @@ type DirectoryGroupEdges struct {
 	Members []*DirectoryMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedAccounts           map[string][]*DirectoryAccount
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
@@ -167,10 +170,21 @@ func (e DirectoryGroupEdges) DirectorySyncRunOrErr() (*DirectorySyncRun, error) 
 	return nil, &NotLoadedError{edge: "directory_sync_run"}
 }
 
+// PlatformOrErr returns the Platform value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryGroupEdges) PlatformOrErr() (*Platform, error) {
+	if e.Platform != nil {
+		return e.Platform, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: platform.Label}
+	}
+	return nil, &NotLoadedError{edge: "platform"}
+}
+
 // AccountsOrErr returns the Accounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryGroupEdges) AccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Accounts, nil
 	}
 	return nil, &NotLoadedError{edge: "accounts"}
@@ -179,7 +193,7 @@ func (e DirectoryGroupEdges) AccountsOrErr() ([]*DirectoryAccount, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryGroupEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -188,7 +202,7 @@ func (e DirectoryGroupEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryGroupEdges) MembersOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -205,14 +219,10 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygroup.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion:
+		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
-		case directorygroup.ForeignKeys[0]: // directory_sync_run_directory_groups
-			values[i] = new(sql.NullString)
-		case directorygroup.ForeignKeys[1]: // integration_directory_groups
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -308,6 +318,12 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationID = value.String
 			}
+		case directorygroup.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
 		case directorygroup.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field directory_sync_run_id", values[i])
@@ -398,20 +414,6 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
-		case directorygroup.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field directory_sync_run_directory_groups", values[i])
-			} else if value.Valid {
-				_m.directory_sync_run_directory_groups = new(string)
-				*_m.directory_sync_run_directory_groups = value.String
-			}
-		case directorygroup.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field integration_directory_groups", values[i])
-			} else if value.Valid {
-				_m.integration_directory_groups = new(string)
-				*_m.integration_directory_groups = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -448,6 +450,11 @@ func (_m *DirectoryGroup) QueryIntegration() *IntegrationQuery {
 // QueryDirectorySyncRun queries the "directory_sync_run" edge of the DirectoryGroup entity.
 func (_m *DirectoryGroup) QueryDirectorySyncRun() *DirectorySyncRunQuery {
 	return NewDirectoryGroupClient(_m.config).QueryDirectorySyncRun(_m)
+}
+
+// QueryPlatform queries the "platform" edge of the DirectoryGroup entity.
+func (_m *DirectoryGroup) QueryPlatform() *PlatformQuery {
+	return NewDirectoryGroupClient(_m.config).QueryPlatform(_m)
 }
 
 // QueryAccounts queries the "accounts" edge of the DirectoryGroup entity.
@@ -523,6 +530,9 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)

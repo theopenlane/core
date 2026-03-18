@@ -574,6 +574,26 @@ func (_u *AssetHistoryUpdate) SetNillableName(v *string) *AssetHistoryUpdate {
 	return _u
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_u *AssetHistoryUpdate) SetDisplayName(v string) *AssetHistoryUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableDisplayName(v *string) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssetHistoryUpdate) ClearDisplayName() *AssetHistoryUpdate {
+	_u.mutation.ClearDisplayName()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *AssetHistoryUpdate) SetDescription(v string) *AssetHistoryUpdate {
 	_u.mutation.SetDescription(v)
@@ -1114,6 +1134,12 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assethistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(assethistory.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(assethistory.FieldDisplayName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(assethistory.FieldDescription, field.TypeString, value)
@@ -1766,6 +1792,26 @@ func (_u *AssetHistoryUpdateOne) SetNillableName(v *string) *AssetHistoryUpdateO
 	return _u
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_u *AssetHistoryUpdateOne) SetDisplayName(v string) *AssetHistoryUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableDisplayName(v *string) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssetHistoryUpdateOne) ClearDisplayName() *AssetHistoryUpdateOne {
+	_u.mutation.ClearDisplayName()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *AssetHistoryUpdateOne) SetDescription(v string) *AssetHistoryUpdateOne {
 	_u.mutation.SetDescription(v)
@@ -2336,6 +2382,12 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assethistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(assethistory.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(assethistory.FieldDisplayName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(assethistory.FieldDescription, field.TypeString, value)

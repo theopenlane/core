@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -39,9 +40,10 @@ func (r *identityHolderResolver) WorkflowTimeline(ctx context.Context, obj *gene
 }
 
 // CreateIdentityHolder is the resolver for the createIdentityHolder field.
-func (r *mutationResolver) CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput) (*model.IdentityHolderCreatePayload, error) {
+func (r *mutationResolver) CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -65,8 +67,9 @@ func (r *mutationResolver) CreateBulkIdentityHolder(ctx context.Context, input [
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -76,7 +79,7 @@ func (r *mutationResolver) CreateBulkIdentityHolder(ctx context.Context, input [
 
 // CreateBulkCSVIdentityHolder is the resolver for the createBulkCSVIdentityHolder field.
 func (r *mutationResolver) CreateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateIdentityHolderInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.IdentityHolderCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -89,24 +92,39 @@ func (r *mutationResolver) CreateBulkCSVIdentityHolder(ctx context.Context, inpu
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateIdentityHolder(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "IdentityHolder", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateIdentityHolderInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateIdentityHolder(ctx, inputs)
 }
 
 // UpdateIdentityHolder is the resolver for the updateIdentityHolder field.
-func (r *mutationResolver) UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderUpdatePayload, error) {
+func (r *mutationResolver) UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).IdentityHolder.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -138,6 +156,44 @@ func (r *mutationResolver) DeleteIdentityHolder(ctx context.Context, id string) 
 	return &model.IdentityHolderDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// DeleteBulkIdentityHolder is the resolver for the deleteBulkIdentityHolder field.
+func (r *mutationResolver) DeleteBulkIdentityHolder(ctx context.Context, ids []string) (*model.IdentityHolderBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteIdentityHolder(ctx, ids)
+}
+
+// UpdateBulkIdentityHolder is the resolver for the updateBulkIdentityHolder field.
+func (r *mutationResolver) UpdateBulkIdentityHolder(ctx context.Context, ids []string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateIdentityHolder(ctx, ids, input)
+}
+
+// UpdateBulkCSVIdentityHolder is the resolver for the updateBulkCSVIdentityHolder field.
+func (r *mutationResolver) UpdateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.IdentityHolderCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "IdentityHolder", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVIdentityHolder(ctx, data)
 }
 
 // IdentityHolder is the resolver for the identityHolder field.

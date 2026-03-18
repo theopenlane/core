@@ -48,6 +48,11 @@ func (DirectorySyncRun) Fields() []ent.Field {
 			Comment("integration this sync run executed for").
 			NotEmpty().
 			Immutable(),
+		field.String("platform_id").
+			Comment("optional platform associated with this sync run").
+			Optional().
+			NotEmpty().
+			Immutable(),
 		field.Enum("status").
 			Comment("current state of the sync run").
 			GoType(enums.DirectorySyncRunStatus("")).
@@ -103,13 +108,20 @@ func (r DirectorySyncRun) Mixin() []ent.Mixin {
 // Edges of the DirectorySyncRun
 func (r DirectorySyncRun) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: r,
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			required:   true,
 			immutable:  true,
 			comment:    "integration that executed this sync run",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			immutable:  true,
+			comment:    "platform associated with this sync run",
 		}),
 		defaultEdgeToWithPagination(r, DirectoryAccount{}),
 		defaultEdgeToWithPagination(r, DirectoryGroup{}),
@@ -122,6 +134,7 @@ func (DirectorySyncRun) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "started_at").
 			Annotations(),
+		index.Fields("platform_id", "started_at"),
 	}
 }
 

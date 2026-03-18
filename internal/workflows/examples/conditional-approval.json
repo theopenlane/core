@@ -1,0 +1,42 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theopenlane/core/main/jsonschema/workflow-definition.schema.json",
+  "name": "Conditional Control Approval",
+  "description": "Approval required only for specific control categories",
+  "schemaType": "Control",
+  "workflowKind": "APPROVAL",
+  "version": "1.0",
+  "triggers": [
+    {
+      "operation": "UPDATE",
+      "objectType": "Control",
+      "fields": ["status"],
+      "description": "Triggered when control status changes"
+    }
+  ],
+  "conditions": [
+    {
+      "expression": "object.category == \"Technical\" && 'status' in changed_fields",
+      "description": "Only for Technical category controls when status changes"
+    }
+  ],
+  "actions": [
+    {
+      "key": "approval",
+      "type": "REQUEST_APPROVAL",
+      "description": "Request approval for technical control status change",
+      "params": {
+        "targets": [
+          {"type": "USER", "id": "<TECHNICAL_LEAD_USER_ID>"}
+        ],
+        "required": true,
+        "label": "Technical control status approval",
+        "fields": ["status"]
+      }
+    }
+  ],
+  "metadata": {
+    "author": "Openlane",
+    "category": "compliance",
+    "categories": ["Technical"]
+  }
+}

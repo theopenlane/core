@@ -99,6 +99,42 @@
       "type": "object",
       "description": "Config is the config values for the cache-control middleware"
     },
+    "config.APIKeySpec": {
+      "properties": {
+        "KeyLabel": {
+          "type": "string"
+        },
+        "HeaderName": {
+          "type": "string"
+        },
+        "QueryParam": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "config.AWSFederationSpec": {
+      "properties": {
+        "RoleARN": {
+          "type": "string"
+        },
+        "SessionName": {
+          "type": "string"
+        },
+        "Duration": {
+          "type": "integer"
+        },
+        "Region": {
+          "type": "string"
+        },
+        "ExternalID": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "config.Auth": {
       "properties": {
         "enabled": {
@@ -125,20 +161,41 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
-    "config.EmailWebhook": {
+    "config.GitHubAppSpec": {
       "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled is a flag to enable or disable email webhooks"
+        "BaseURL": {
+          "type": "string"
         },
-        "resendsecret": {
-          "type": "string",
-          "description": "ResendSecret is the signing secret used to verify Resend webhook payloads"
+        "TokenTTL": {
+          "type": "integer"
+        },
+        "AppSlug": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "EmailWebhook contains webhook configuration for email providers (e.g., Resend)."
+      "type": "object"
+    },
+    "config.GoogleWorkloadIdentitySpec": {
+      "properties": {
+        "Audience": {
+          "type": "string"
+        },
+        "TargetServiceAccount": {
+          "type": "string"
+        },
+        "Scopes": {
+          "$ref": "#/$defs/[]string"
+        },
+        "TokenLifetime": {
+          "type": "integer"
+        },
+        "SubjectTokenType": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "config.KeyWatcher": {
       "properties": {
@@ -149,19 +206,59 @@
         "keydir": {
           "type": "string",
           "description": "KeyDir is the path to the directory containing PEM keys for JWT signing"
-        },
-        "externalsecretsintegration": {
-          "type": "boolean",
-          "description": "ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)"
-        },
-        "secretmanager": {
-          "type": "string",
-          "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
+    },
+    "config.OAuthSpec": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "AuthURL": {
+          "type": "string"
+        },
+        "TokenURL": {
+          "type": "string"
+        },
+        "Scopes": {
+          "$ref": "#/$defs/[]string"
+        },
+        "OIDCDiscovery": {
+          "type": "string"
+        },
+        "RedirectURI": {
+          "type": "string"
+        },
+        "UsePKCE": {
+          "type": "boolean"
+        },
+        "AuthParams": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "TokenParams": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "AdditionalHosts": {
+          "$ref": "#/$defs/[]string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "config.PersistenceSpec": {
+      "properties": {
+        "StoreRefreshToken": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "config.PoolConfig": {
       "properties": {
@@ -173,6 +270,84 @@
       "additionalProperties": false,
       "type": "object",
       "description": "PoolConfig contains the settings for the goroutine pool"
+    },
+    "config.ProviderSpec": {
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "DisplayName": {
+          "type": "string"
+        },
+        "Category": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "AuthType": {
+          "type": "string"
+        },
+        "AuthStartPath": {
+          "type": "string"
+        },
+        "AuthCallbackPath": {
+          "type": "string"
+        },
+        "Active": {
+          "type": "boolean"
+        },
+        "Visible": {
+          "type": "boolean"
+        },
+        "Tags": {
+          "$ref": "#/$defs/[]string"
+        },
+        "LogoURL": {
+          "type": "string"
+        },
+        "DocsURL": {
+          "type": "string"
+        },
+        "SchemaVersion": {
+          "type": "string"
+        },
+        "oauth": {
+          "$ref": "#/$defs/config.OAuthSpec"
+        },
+        "APIKey": {
+          "$ref": "#/$defs/config.APIKeySpec"
+        },
+        "UserInfo": {
+          "$ref": "#/$defs/config.UserInfoSpec"
+        },
+        "GoogleWorkloadIdentity": {
+          "$ref": "#/$defs/config.GoogleWorkloadIdentitySpec"
+        },
+        "GitHubApp": {
+          "$ref": "#/$defs/config.GitHubAppSpec"
+        },
+        "AWSSTS": {
+          "$ref": "#/$defs/config.AWSFederationSpec"
+        },
+        "CredentialsSchema": {
+          "$ref": "#/$defs/map[string]interface {}"
+        },
+        "Persistence": {
+          "$ref": "#/$defs/config.PersistenceSpec"
+        },
+        "Labels": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "Metadata": {
+          "$ref": "#/$defs/map[string]interface {}"
+        },
+        "Defaults": {
+          "$ref": "#/$defs/map[string]interface {}"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "config.Server": {
       "properties": {
@@ -219,10 +394,6 @@
         "secure": {
           "$ref": "#/$defs/secure.Config",
           "description": "Secure contains settings for the secure middleware"
-        },
-        "redirects": {
-          "$ref": "#/$defs/redirect.Config",
-          "description": "Redirect contains settings for the redirect middleware"
         },
         "cachecontrol": {
           "$ref": "#/$defs/cachecontrol.Config",
@@ -271,6 +442,10 @@
         "trustcenterpreviewzoneid": {
           "type": "string",
           "description": "TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain"
+        },
+        "notificationlookbackdays": {
+          "type": "integer",
+          "description": "NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription\nUnread notifications are always pulled regardless of this setting"
         }
       },
       "additionalProperties": false,
@@ -321,6 +496,36 @@
       "additionalProperties": false,
       "type": "object",
       "description": "TLS settings for the server for secure connections"
+    },
+    "config.UserInfoSpec": {
+      "properties": {
+        "URL": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "AuthStyle": {
+          "type": "string"
+        },
+        "AuthHeader": {
+          "type": "string"
+        },
+        "IDPath": {
+          "type": "string"
+        },
+        "EmailPath": {
+          "type": "string"
+        },
+        "LoginPath": {
+          "type": "string"
+        },
+        "SecondaryEmailURL": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "cors.Config": {
       "properties": {
@@ -769,6 +974,83 @@
         "redirecturl"
       ]
     },
+    "handlers.CampaignWebhookConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles the campaign webhook handler"
+        },
+        "resendapikey": {
+          "type": "string",
+          "description": "ResendAPIKey is the API key used for Resend client initialization"
+        },
+        "resendsecret": {
+          "type": "string",
+          "description": "ResendSecret is the signing secret used to verify Resend webhook payloads"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "CampaignWebhookConfig contains webhook configuration for campaign-related email providers."
+    },
+    "handlers.CloudflareConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles the Cloudflare snapshot handler"
+        },
+        "apitoken": {
+          "type": "string",
+          "description": "APIToken is the API token used for Cloudflare client initialization"
+        },
+        "accountid": {
+          "type": "string",
+          "description": "AccountID is the Cloudflare account ID to use for snapshot operations"
+        },
+        "clientid": {
+          "type": "string",
+          "description": "ClientID is the Cloudflare Access client ID for shortlink API requests"
+        },
+        "clientsecret": {
+          "type": "string",
+          "description": "ClientSecret is the Cloudflare Access client secret for shortlink API requests"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "CloudflareConfig contains configuration for Cloudflare integration."
+    },
+    "handlers.IntegrationGitHubAppConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles the GitHub App integration handlers."
+        },
+        "appid": {
+          "type": "string",
+          "description": "AppID is the GitHub App ID used for JWT signing."
+        },
+        "appslug": {
+          "type": "string",
+          "description": "AppSlug is the GitHub App slug used for the install URL."
+        },
+        "privatekey": {
+          "type": "string",
+          "description": "PrivateKey is the PEM-encoded GitHub App private key."
+        },
+        "webhooksecret": {
+          "type": "string",
+          "description": "WebhookSecret is the shared secret used to validate GitHub webhooks."
+        },
+        "successredirecturl": {
+          "type": "string",
+          "description": "SuccessRedirectURL is the URL to redirect to after successful installation."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration."
+    },
     "handlers.IntegrationOauthProviderConfig": {
       "properties": {
         "enabled": {
@@ -813,6 +1095,15 @@
       },
       "type": "object"
     },
+    "map[string]config.ProviderSpec": {
+      "additionalProperties": {
+        "$ref": "#/$defs/config.ProviderSpec"
+      },
+      "type": "object"
+    },
+    "map[string]interface {}": {
+      "type": "object"
+    },
     "map[string]river.QueueConfig": {
       "additionalProperties": {
         "$ref": "#/$defs/river.QueueConfig"
@@ -849,63 +1140,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines the config for Mime middleware"
-    },
-    "otelx.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "environment": {
-          "type": "string"
-        },
-        "stdout": {
-          "$ref": "#/$defs/otelx.StdOut"
-        },
-        "otlp": {
-          "$ref": "#/$defs/otelx.OTLP"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "otelx.OTLP": {
-      "properties": {
-        "endpoint": {
-          "type": "string"
-        },
-        "insecure": {
-          "type": "boolean"
-        },
-        "certificate": {
-          "type": "string"
-        },
-        "headers": {
-          "$ref": "#/$defs/[]string"
-        },
-        "compression": {
-          "type": "string"
-        },
-        "timeout": {
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "otelx.StdOut": {
-      "properties": {
-        "pretty": {
-          "type": "boolean"
-        },
-        "disabletimestamp": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
     },
     "ratelimit.Config": {
       "properties": {
@@ -979,25 +1213,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "RateOption defines a distinct rate limiting window and request allowance."
-    },
-    "redirect.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if the redirect middleware should be enabled"
-        },
-        "redirects": {
-          "$ref": "#/$defs/map[string]string",
-          "description": "Redirects is a map of paths to redirect to"
-        },
-        "code": {
-          "type": "integer",
-          "description": "Code is the HTTP status code to use for the redirect"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Config contains the types used in executing redirects via the redirect middleware"
     },
     "river.Config": {
       "properties": {
@@ -1218,6 +1433,24 @@
           "type": "boolean"
         },
         "samesite": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "shortlinks.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "endpointurl": {
           "type": "string"
         }
       },
@@ -1542,6 +1775,9 @@
         },
         "assessmentaccessduration": {
           "type": "integer"
+        },
+        "trustcenterndarequestaccessduration": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
@@ -1728,6 +1964,30 @@
         },
         "cel": {
           "$ref": "#/$defs/workflows.CELConfig"
+        },
+        "gala": {
+          "$ref": "#/$defs/workflows.GalaConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "workflows.GalaConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "workercount": {
+          "type": "integer"
+        },
+        "maxretries": {
+          "type": "integer"
+        },
+        "failonenqueueerror": {
+          "type": "boolean"
+        },
+        "queuename": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1771,10 +2031,6 @@
       "$ref": "#/$defs/cache.Config",
       "description": "Redis contains the redis configuration for the key-value store"
     },
-    "tracer": {
-      "$ref": "#/$defs/otelx.Config",
-      "description": "Tracer contains the tracing config for opentelemetry"
-    },
     "email": {
       "$ref": "#/$defs/emailtemplates.Config",
       "description": "Email contains email sending configuration for the server"
@@ -1811,13 +2067,29 @@
       "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
       "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
     },
+    "integrationproviders": {
+      "$ref": "#/$defs/map[string]config.ProviderSpec",
+      "description": "IntegrationProviders contains provider spec overrides keyed by provider name."
+    },
+    "integrationgithubapp": {
+      "$ref": "#/$defs/handlers.IntegrationGitHubAppConfig",
+      "description": "IntegrationGitHubApp contains configuration for GitHub App integrations"
+    },
     "workflows": {
       "$ref": "#/$defs/workflows.Config",
       "description": "Workflows contains the configuration for the workflows engine"
     },
-    "emailwebhook": {
-      "$ref": "#/$defs/config.EmailWebhook",
-      "description": "EmailWebhook contains webhook configuration for email providers"
+    "campaignwebhook": {
+      "$ref": "#/$defs/handlers.CampaignWebhookConfig",
+      "description": "CampaignWebhook contains webhook configuration for campaign-related email providers"
+    },
+    "cloudflare": {
+      "$ref": "#/$defs/handlers.CloudflareConfig",
+      "description": "Cloudflare contains configuration for Cloudflare integration"
+    },
+    "shortlinks": {
+      "$ref": "#/$defs/shortlinks.Config",
+      "description": "Shortlinks contains configuration for the URL shortening service"
     }
   },
   "additionalProperties": false,

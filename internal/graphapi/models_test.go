@@ -16,11 +16,11 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -42,6 +43,7 @@ type OrganizationBuilder struct {
 	Features []models.OrgModule
 
 	// Fields
+	SystemOrg      bool
 	Name           string
 	DisplayName    string
 	Description    *string
@@ -153,6 +155,19 @@ type EntityTypeBuilder struct {
 
 	// Fields
 	Name string
+}
+
+type IdentityHolderBuilder struct {
+	client *client
+
+	// Fields
+	FullName   string
+	Email      string
+	Phone      string
+	Title      string
+	Department string
+	Team       string
+	Location   string
 }
 
 type ContactBuilder struct {
@@ -323,9 +338,10 @@ type NoteBuilder struct {
 	client *client
 
 	// Fields
-	Text    string
-	TaskID  string
-	FileIDs []string
+	Text          string
+	TaskID        string
+	FileIDs       []string
+	TrustCenterID string
 }
 
 type ControlImplementationBuilder struct {
@@ -407,6 +423,21 @@ type CustomTypeEnumBuilder struct {
 	Field       string
 }
 
+type AssetBuilder struct {
+	client *client
+
+	// Fields
+	Name string
+}
+
+type SLADefinitionBuilder struct {
+	client *client
+
+	// Fields
+	SLADays       int
+	SecurityLevel enums.SecurityLevel
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -470,7 +501,8 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 
 	// Special handling for standards - update them to be private before deletion
 	// Only do this for system admins
-	if _, ok := any(c.client).(*ent.StandardClient); ok && auth.IsSystemAdminFromContext(ctx) {
+	stdAdminCaller, stdAdminOk := auth.CallerFromContext(ctx)
+	if _, ok := any(c.client).(*ent.StandardClient); ok && stdAdminOk && stdAdminCaller != nil && stdAdminCaller.Has(auth.CapSystemAdmin) {
 		if c.ID != "" {
 			err := suite.client.db.Standard.UpdateOneID(c.ID).SetIsPublic(false).Exec(ctx)
 			requireNoError(t, err)
@@ -505,6 +537,13 @@ func setContext(ctx context.Context, db *ent.Client) context.Context {
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
 	ctx = setContext(ctx, o.client.db)
+
+	if o.SystemOrg {
+		systemOrg, err := o.client.db.Organization.Create().SetID(consts.SystemAdminOrgID).SetName("System Admin Organization").SetDisplayName("System Admin Organization").SetPersonalOrg(true).SetDescription("Organization for system administrators").Save(ctx)
+		requireNoError(t, err)
+
+		return systemOrg
+	}
 
 	if o.Name == "" {
 		o.Name = randomName(t)
@@ -641,13 +680,30 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
 	ctx = setContext(ctx, w.client.db)
 
+	ip := getValidIPAddress(t)
 	wn, err := w.client.db.JobRunner.Create().
 		SetName(randomName(t)).
-		SetIPAddress(gofakeit.IPv4Address()).
+		SetIPAddress(ip).
 		Save(ctx)
 	requireNoError(t, err)
 
 	return wn
+}
+
+func getValidIPAddress(t *testing.T) string {
+	maxAttempts := 10
+	attempts := 0
+	for {
+		ip := gofakeit.IPv4Address()
+		if err := models.ValidateIP(ip); err == nil {
+			return ip
+		}
+		attempts++
+
+		if attempts >= maxAttempts {
+			t.Fail()
+		}
+	}
 }
 
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process
@@ -898,6 +954,52 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		SetDisplayName(e.DisplayName).
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return entity
+}
+
+// MustNew identity holder builder is used to create, without authz checks, identity holders in the database
+func (i *IdentityHolderBuilder) MustNew(ctx context.Context, t *testing.T) *ent.IdentityHolder {
+	ctx = setContext(ctx, i.client.db)
+
+	if i.FullName == "" {
+		i.FullName = gofakeit.Name()
+	}
+
+	if i.Email == "" {
+		i.Email = gofakeit.Email()
+	}
+
+	if i.Phone == "" {
+		i.Phone = gofakeit.Phone()
+	}
+
+	if i.Title == "" {
+		i.Title = gofakeit.JobTitle()
+	}
+
+	if i.Department == "" {
+		i.Department = gofakeit.JobDescriptor()
+	}
+
+	if i.Team == "" {
+		i.Team = gofakeit.AppName()
+	}
+
+	if i.Location == "" {
+		i.Location = gofakeit.City()
+	}
+
+	entity, err := i.client.db.IdentityHolder.Create().
+		SetFullName(i.FullName).
+		SetEmail(i.Email).
+		SetPhoneNumber(i.Phone).
+		SetTitle(i.Title).
+		SetDepartment(i.Department).
+		SetTeam(i.Team).
+		SetLocation(i.Location).
 		Save(ctx)
 	requireNoError(t, err)
 
@@ -1421,6 +1523,10 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 		mutation.AddFileIDs(n.FileIDs...)
 	}
 
+	if n.TrustCenterID != "" {
+		mutation.SetTrustCenterID(n.TrustCenterID)
+	}
+
 	note, err := mutation.Save(ctx)
 	requireNoError(t, err)
 
@@ -1838,10 +1944,11 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	// Create the organization parent tuple for the trust center
 	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		requireNoError(t, err)
+	orgCaller, orgCallerOk := auth.CallerFromContext(ctx)
+	if !orgCallerOk || orgCaller == nil {
+		requireNoError(t, auth.ErrNoAuthUser)
 	}
+	orgID := orgCaller.OrganizationID
 
 	parentReq := fgax.TupleRequest{
 		SubjectID:   orgID,
@@ -2224,7 +2331,7 @@ func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ass
 }
 
 // MustNew assessment response builder creates responses without authz checks
-// This uses the QuestionnaireContextKey to bypass auth, simulating anonymous user creation
+// This uses a questionnaire caller to bypass auth, simulating anonymous user creation
 func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T) *ent.AssessmentResponse {
 	ctx = setContext(ctx, arb.client.db)
 
@@ -2248,9 +2355,9 @@ func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T)
 		arb.OwnerID = assessment.OwnerID
 	}
 
-	// Use QuestionnaireContextKey to bypass auth checks (simulates anonymous JWT)
+	// Use questionnaire caller to bypass auth checks (simulates anonymous JWT)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(arb.OwnerID, "", "", ""))
 
 	mutation := arb.client.db.AssessmentResponse.Create().
 		SetAssessmentID(arb.AssessmentID).
@@ -2473,4 +2580,51 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	requireNoError(t, err)
 
 	return customTypeEnum
+}
+
+// MustNew asset builder is used to create, without authz checks, assets in the database
+func (a *AssetBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Asset {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if a.Name == "" {
+		a.Name = gofakeit.AppName()
+	}
+
+	asset := a.client.db.Asset.Create().
+		SetName(a.Name).
+		SaveX(ctx)
+
+	return asset
+}
+
+// MustNew SLADefinition builder is used to create, without authz checks, SLA definitions in the database.
+func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.SLADefinition {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if s.SLADays == 0 {
+		s.SLADays = 30
+	}
+
+	if s.SecurityLevel == "" {
+		s.SecurityLevel = enums.SecurityLevelNone
+	}
+
+	sla, err := s.client.db.SLADefinition.Create().
+		SetSLADays(s.SLADays).
+		SetSecurityLevel(s.SecurityLevel).
+		Save(ctx)
+	if err == nil {
+		return sla
+	}
+
+	existing, err := s.client.db.SLADefinition.Query().
+		Where(
+			sladefinition.SecurityLevelEQ(s.SecurityLevel),
+		).
+		Only(ctx)
+	if err != nil {
+		t.Fatalf("failed to find existing SLA definition: %v", err)
+	}
+
+	return existing
 }

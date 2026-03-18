@@ -13,6 +13,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -42,15 +43,16 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/integrations/providers"
-	"github.com/theopenlane/core/pkg/integrations/registry"
+	"github.com/theopenlane/core/pkg/gala"
 	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 
@@ -114,7 +116,7 @@ type HandlerTestSuite struct {
 	sharedSessionManager sessions.Store[map[string]any]
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
-	sharedPool           *soiree.Pool
+	sharedPool           *gala.Pool
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
@@ -178,9 +180,9 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	}
 
 	// shared pool to avoid worker pool creation
-	suite.sharedPool = soiree.NewPool(
-		soiree.WithWorkers(100), //nolint:mnd
-		soiree.WithPoolName("ent_client_pool"),
+	suite.sharedPool = gala.NewPool(
+		gala.WithWorkers(100), //nolint:mnd
+		gala.WithPoolName("ent_client_pool"),
 	)
 }
 
@@ -399,7 +401,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		DisplayName: "GitHub",
 		Category:    "code",
 		AuthType:    types.AuthKindOAuth2,
-		Active:      true,
+		Active:      lo.ToPtr(true),
 		OAuth: &config.OAuthSpec{
 			ClientID:     "test-client",
 			ClientSecret: "test-secret",
@@ -417,22 +419,25 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		},
 	}
 
-	reg, err := registry.NewRegistry(ctx)
+	reg, err := registry.NewRegistry(ctx, nil)
 	require.NoError(suite.T(), err)
 	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
 
-	sessions := keymaker.NewMemorySessionStore()
-	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	assert.NoError(suite.T(), err)
-
 	suite.h.IntegrationRegistry = reg
 	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
-	suite.h.KeymakerService = svc
 
 	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
 	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
 	assert.NoError(suite.T(), err)
 	suite.h.IntegrationOperations = manager
+
+	sessions := keymaker.NewMemorySessionStore()
+	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	assert.NoError(suite.T(), err)
+
+	activationSvc, err := activation.NewService(svc, store, suite.h.IntegrationOperations, reg)
+	assert.NoError(suite.T(), err)
+	suite.h.IntegrationActivation = activationSvc
 }
 
 type testOAuthProvider struct {

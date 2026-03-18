@@ -74,7 +74,9 @@ type WorkflowAssignmentHistory struct {
 	// Group that acted on the decision (if applicable)
 	ActorGroupID string `json:"actor_group_id,omitempty"`
 	// Optional notes about the assignment
-	Notes        string `json:"notes,omitempty"`
+	Notes string `json:"notes,omitempty"`
+	// Timestamp when the assignment is due for delegation or escalation checks
+	DueAt        *time.Time `json:"due_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -91,7 +93,7 @@ func (*WorkflowAssignmentHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case workflowassignmenthistory.FieldID, workflowassignmenthistory.FieldRef, workflowassignmenthistory.FieldCreatedBy, workflowassignmenthistory.FieldUpdatedBy, workflowassignmenthistory.FieldDeletedBy, workflowassignmenthistory.FieldDisplayID, workflowassignmenthistory.FieldOwnerID, workflowassignmenthistory.FieldWorkflowInstanceID, workflowassignmenthistory.FieldAssignmentKey, workflowassignmenthistory.FieldRole, workflowassignmenthistory.FieldLabel, workflowassignmenthistory.FieldStatus, workflowassignmenthistory.FieldActorUserID, workflowassignmenthistory.FieldActorGroupID, workflowassignmenthistory.FieldNotes:
 			values[i] = new(sql.NullString)
-		case workflowassignmenthistory.FieldHistoryTime, workflowassignmenthistory.FieldCreatedAt, workflowassignmenthistory.FieldUpdatedAt, workflowassignmenthistory.FieldDeletedAt, workflowassignmenthistory.FieldDecidedAt:
+		case workflowassignmenthistory.FieldHistoryTime, workflowassignmenthistory.FieldCreatedAt, workflowassignmenthistory.FieldUpdatedAt, workflowassignmenthistory.FieldDeletedAt, workflowassignmenthistory.FieldDecidedAt, workflowassignmenthistory.FieldDueAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -281,6 +283,13 @@ func (_m *WorkflowAssignmentHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.Notes = value.String
 			}
+		case workflowassignmenthistory.FieldDueAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field due_at", values[i])
+			} else if value.Valid {
+				_m.DueAt = new(time.Time)
+				*_m.DueAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -396,6 +405,11 @@ func (_m *WorkflowAssignmentHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("notes=")
 	builder.WriteString(_m.Notes)
+	builder.WriteString(", ")
+	if v := _m.DueAt; v != nil {
+		builder.WriteString("due_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -605,13 +605,13 @@ func (_u *EntityHistoryUpdate) ClearEntityTypeID() *EntityHistoryUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *EntityHistoryUpdate) SetStatus(v string) *EntityHistoryUpdate {
+func (_u *EntityHistoryUpdate) SetStatus(v enums.EntityStatus) *EntityHistoryUpdate {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EntityHistoryUpdate) SetNillableStatus(v *string) *EntityHistoryUpdate {
+func (_u *EntityHistoryUpdate) SetNillableStatus(v *enums.EntityStatus) *EntityHistoryUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -1180,6 +1180,11 @@ func (_u *EntityHistoryUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *EntityHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := entityhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := entityhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.review_frequency": %w`, err)}
@@ -1406,10 +1411,10 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 		_spec.ClearField(entityhistory.FieldEntityTypeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(entityhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
-		_spec.ClearField(entityhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(entityhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ApprovedForUse(); ok {
 		_spec.SetField(entityhistory.FieldApprovedForUse, field.TypeBool, value)
@@ -2178,13 +2183,13 @@ func (_u *EntityHistoryUpdateOne) ClearEntityTypeID() *EntityHistoryUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (_u *EntityHistoryUpdateOne) SetStatus(v string) *EntityHistoryUpdateOne {
+func (_u *EntityHistoryUpdateOne) SetStatus(v enums.EntityStatus) *EntityHistoryUpdateOne {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EntityHistoryUpdateOne) SetNillableStatus(v *string) *EntityHistoryUpdateOne {
+func (_u *EntityHistoryUpdateOne) SetNillableStatus(v *enums.EntityStatus) *EntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -2766,6 +2771,11 @@ func (_u *EntityHistoryUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *EntityHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := entityhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := entityhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.review_frequency": %w`, err)}
@@ -3009,10 +3019,10 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 		_spec.ClearField(entityhistory.FieldEntityTypeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(entityhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
-		_spec.ClearField(entityhistory.FieldStatus, field.TypeString)
+		_spec.ClearField(entityhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ApprovedForUse(); ok {
 		_spec.SetField(entityhistory.FieldApprovedForUse, field.TypeBool, value)

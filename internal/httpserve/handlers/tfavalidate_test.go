@@ -31,72 +31,79 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 	operation := suite.createImpersonationOperation("ValidateTOTP", "Validate TOTP code")
 	suite.registerTestHandler("POST", "2fa/validate", operation, suite.h.ValidateTOTP)
 
-	tfaSetting := suite.db.TFASetting.Create().
-		SetTotpAllowed(true).
-		SetOwnerID(testUser1.ID).
-		SaveX(testUser1.UserCtx)
+	// Create a fresh TFA-enabled user per subtest to avoid time-window and reuse
+	// collisions between tests.
+	newTFAUser := func(t *testing.T) (context.Context, string, []string) {
+		t.Helper()
 
-	updateTFASetting, err := suite.db.TFASetting.UpdateOne(tfaSetting).
-		SetVerified(true).
-		Save(testUser1.UserCtx)
+		user := suite.userBuilderWithInput(context.Background(), &userInput{
+			confirmedUser: true,
+			tfaEnabled:    true,
+		})
 
-	require.NoError(t, err)
+		tfaSetting := suite.db.TFASetting.Create().
+			SetTotpAllowed(true).
+			SetOwnerID(user.ID).
+			SaveX(user.UserCtx)
 
-	testCases := []struct {
+		updateTFASetting, err := suite.db.TFASetting.UpdateOne(tfaSetting).
+			SetVerified(true).
+			Save(user.UserCtx)
+		require.NoError(t, err)
+		require.NotNil(t, updateTFASetting.TfaSecret)
+
+		return user.UserCtx, *updateTFASetting.TfaSecret, updateTFASetting.RecoveryCodes
+	}
+
+	type testCase struct {
 		name           string
 		generateCode   bool
 		code           string
-		recoveryCode   string
-		ctx            context.Context
+		recoveryIndex  int
 		expectedErr    string
 		expectedStatus int
-	}{
+	}
+
+	testCases := []testCase{
 		{
 			name:           "empty totp code",
-			ctx:            testUser1.UserCtx,
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "totp_code is required",
+			recoveryIndex:  -1,
 		},
 		{
 			name:           "happy path",
-			ctx:            testUser1.UserCtx,
 			generateCode:   true,
 			expectedStatus: http.StatusOK,
+			recoveryIndex:  -1,
 		},
 		{
 			name:           "invalid totp code",
-			ctx:            testUser1.UserCtx,
 			code:           "123456",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    "incorrect code provided",
+			recoveryIndex:  -1,
 		},
 		{
 			name:           "recovery code",
-			ctx:            testUser1.UserCtx,
-			recoveryCode:   updateTFASetting.RecoveryCodes[0],
+			recoveryIndex:  0,
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name:           "cannot reuse the same recovery code",
-			ctx:            testUser1.UserCtx,
-			recoveryCode:   updateTFASetting.RecoveryCodes[0],
-			expectedStatus: http.StatusBadRequest,
-			expectedErr:    "invalid code provided",
-		},
-		{
 			name:           "recovery code, 2nd code",
-			ctx:            testUser1.UserCtx,
-			recoveryCode:   updateTFASetting.RecoveryCodes[7],
+			recoveryIndex:  7,
 			expectedStatus: http.StatusOK,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			code := tc.code
+			ctx, secret, recoveryCodes := newTFAUser(t)
 
+			code := tc.code
+			var err error
 			if tc.generateCode {
-				code, err = totpGenerator(*updateTFASetting.TfaSecret)
+				code, err = totpGenerator(secret)
 				require.NoError(t, err)
 			}
 
@@ -104,8 +111,9 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 				TOTPCode: code,
 			}
 
-			if tc.recoveryCode != "" {
-				tfaJSON.RecoveryCode = tc.recoveryCode
+			if tc.recoveryIndex >= 0 {
+				require.Less(t, tc.recoveryIndex, len(recoveryCodes))
+				tfaJSON.RecoveryCode = recoveryCodes[tc.recoveryIndex]
 			}
 
 			body, err := json.Marshal(tfaJSON)
@@ -120,7 +128,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(tc.ctx))
+			suite.e.ServeHTTP(recorder, req.WithContext(ctx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -142,6 +150,49 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			}
 		})
 	}
+
+	// Keep recovery code reuse in a single subtest to assert stateful behavior deterministically.
+	t.Run("cannot reuse the same recovery code", func(t *testing.T) {
+		ctx, _, recoveryCodes := newTFAUser(t)
+		require.NotEmpty(t, recoveryCodes)
+		recoveryCode := recoveryCodes[0]
+
+		send := func() (*httptest.ResponseRecorder, *models.TFAReply) {
+			tfaJSON := models.TFARequest{
+				RecoveryCode: recoveryCode,
+			}
+
+			body, err := json.Marshal(tfaJSON)
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/2fa/validate", strings.NewReader(string(body)))
+			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+			recorder := httptest.NewRecorder()
+			suite.e.ServeHTTP(recorder, req.WithContext(ctx))
+
+			res := recorder.Result()
+			defer res.Body.Close()
+
+			var out *models.TFAReply
+			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
+				t.Error("error parsing response", err)
+			}
+
+			return recorder, out
+		}
+
+		recorder, out := send()
+		assert.Equal(t, http.StatusOK, recorder.Code)
+		require.NotNil(t, out)
+		assert.True(t, out.Success)
+
+		recorder, out = send()
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		require.NotNil(t, out)
+		require.NotNil(t, out.Error)
+		assert.Contains(t, out.Error, "invalid code provided")
+	})
 }
 
 // totpGenerator generates a TOTP code using the secret

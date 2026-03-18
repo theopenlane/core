@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -218,6 +220,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -358,6 +362,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -498,6 +504,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -593,10 +601,10 @@ func (ec *executionContext) _EvidenceBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -632,10 +640,10 @@ func (ec *executionContext) _EvidenceBulkDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -670,10 +678,10 @@ func (ec *executionContext) _EvidenceBulkUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -709,10 +717,10 @@ func (ec *executionContext) _EvidenceCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -748,10 +756,10 @@ func (ec *executionContext) _EvidenceDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -787,10 +795,10 @@ func (ec *executionContext) _EvidenceUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

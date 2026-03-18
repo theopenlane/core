@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -20,7 +21,8 @@ import (
 // CreateTagDefinition is the resolver for the createTagDefinition field.
 func (r *mutationResolver) CreateTagDefinition(ctx context.Context, input generated.CreateTagDefinitionInput) (*model.TagDefinitionCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -44,7 +46,8 @@ func (r *mutationResolver) CreateBulkTagDefinition(ctx context.Context, input []
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -55,7 +58,7 @@ func (r *mutationResolver) CreateBulkTagDefinition(ctx context.Context, input []
 
 // CreateBulkCSVTagDefinition is the resolver for the createBulkCSVTagDefinition field.
 func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input graphql.Upload) (*model.TagDefinitionBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTagDefinitionInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.TagDefinitionCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -68,13 +71,27 @@ func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateTagDefinition(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "TagDefinition", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTagDefinitionInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTagDefinition(ctx, inputs)
 }
 
 // UpdateTagDefinition is the resolver for the updateTagDefinition field.
@@ -85,7 +102,8 @@ func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, i
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

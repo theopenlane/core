@@ -1,11 +1,8 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
+// DNSVerificationStatus is a custom type for DNS verification status.
 type DNSVerificationStatus string
 
 var (
@@ -28,95 +25,33 @@ var (
 	DNSVerificationStatusInvalid            DNSVerificationStatus = "INVALID"
 )
 
-func (DNSVerificationStatus) Values() (kinds []string) {
-	v := []DNSVerificationStatus{
-		DNSVerificationStatusActive,
-		DNSVerificationStatusPending,
-		DNSVerificationStatusActiveRedeploying,
-		DNSVerificationStatusMoved,
-		DNSVerificationStatusPendingDeletion,
-		DNSVerificationStatusDeleted,
-		DNSVerificationStatusPendingBlocked,
-		DNSVerificationStatusPendingMigration,
-		DNSVerificationStatusPendingProvisioned,
-		DNSVerificationStatusTestPending,
-		DNSVerificationStatusTestActive,
-		DNSVerificationStatusTestActiveApex,
-		DNSVerificationStatusTestBlocked,
-		DNSVerificationStatusTestFailed,
-		DNSVerificationStatusProvisioned,
-		DNSVerificationStatusBlocked,
-	}
-	for _, s := range v {
-		kinds = append(kinds, string(s))
-	}
-
-	return kinds
+var dnsVerificationStatusValues = []DNSVerificationStatus{
+	DNSVerificationStatusActive, DNSVerificationStatusPending, DNSVerificationStatusActiveRedeploying,
+	DNSVerificationStatusMoved, DNSVerificationStatusPendingDeletion, DNSVerificationStatusDeleted,
+	DNSVerificationStatusPendingBlocked, DNSVerificationStatusPendingMigration, DNSVerificationStatusPendingProvisioned,
+	DNSVerificationStatusTestPending, DNSVerificationStatusTestActive, DNSVerificationStatusTestActiveApex,
+	DNSVerificationStatusTestBlocked, DNSVerificationStatusTestFailed, DNSVerificationStatusProvisioned,
+	DNSVerificationStatusBlocked,
 }
+
+// Values returns all valid DNSVerificationStatus values as strings.
+func (DNSVerificationStatus) Values() []string { return stringValues(dnsVerificationStatusValues) }
 
 // String returns the DNSVerificationStatus as a string
-func (r DNSVerificationStatus) String() string {
-	return string(r)
-}
+func (r DNSVerificationStatus) String() string { return string(r) }
 
-// ToDNSVerificationStatus returns the user status enum based on string input
+// ToDNSVerificationStatus returns the DNS verification status enum based on string input
 func ToDNSVerificationStatus(r string) *DNSVerificationStatus {
-	rUpper := strings.ToUpper(r)
-	switch rUpper {
-	case DNSVerificationStatusActive.String():
-		return &DNSVerificationStatusActive
-	case DNSVerificationStatusPending.String():
-		return &DNSVerificationStatusPending
-	case DNSVerificationStatusActiveRedeploying.String():
-		return &DNSVerificationStatusActiveRedeploying
-	case DNSVerificationStatusMoved.String():
-		return &DNSVerificationStatusMoved
-	case DNSVerificationStatusPendingDeletion.String():
-		return &DNSVerificationStatusPendingDeletion
-	case DNSVerificationStatusDeleted.String():
-		return &DNSVerificationStatusDeleted
-	case DNSVerificationStatusPendingBlocked.String():
-		return &DNSVerificationStatusPendingBlocked
-	case DNSVerificationStatusPendingMigration.String():
-		return &DNSVerificationStatusPendingMigration
-	case DNSVerificationStatusPendingProvisioned.String():
-		return &DNSVerificationStatusPendingProvisioned
-	case DNSVerificationStatusTestPending.String():
-		return &DNSVerificationStatusTestPending
-	case DNSVerificationStatusTestActive.String():
-		return &DNSVerificationStatusTestActive
-	case DNSVerificationStatusTestActiveApex.String():
-		return &DNSVerificationStatusTestActiveApex
-	case DNSVerificationStatusTestBlocked.String():
-		return &DNSVerificationStatusTestBlocked
-	case DNSVerificationStatusTestFailed.String():
-		return &DNSVerificationStatusTestFailed
-	case DNSVerificationStatusProvisioned.String():
-		return &DNSVerificationStatusProvisioned
-	case DNSVerificationStatusBlocked.String():
-		return &DNSVerificationStatusBlocked
-	default:
-		return &DNSVerificationStatusInvalid
-	}
+	return parse(r, dnsVerificationStatusValues, &DNSVerificationStatusInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r DNSVerificationStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r DNSVerificationStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *DNSVerificationStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for DNSVerificationStatus, got: %T", v) //nolint:err113
-	}
+func (r *DNSVerificationStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
 
-	*r = DNSVerificationStatus(str)
-
-	return nil
-}
-
+// SSLVerificationStatus is a custom type for SSL verification status.
 type SSLVerificationStatus string
 
 var (
@@ -144,106 +79,29 @@ var (
 	SSLVerificationStatusInvalid              SSLVerificationStatus = "INVALID"
 )
 
-func (SSLVerificationStatus) Values() (kinds []string) {
-	v := []SSLVerificationStatus{
-		SSLVerificationStatusInitializing,
-		SSLVerificationStatusPendingValidation,
-		SSLVerificationStatusDeleted,
-		SSLVerificationStatusPendingIssuance,
-		SSLVerificationStatusPendingDeployment,
-		SSLVerificationStatusPendingDeletion,
-		SSLVerificationStatusPendingExpiration,
-		SSLVerificationStatusExpired,
-		SSLVerificationStatusActive,
-		SSLVerificationStatusInitializingTimedOut,
-		SSLVerificationStatusValidationTimedOut,
-		SSLVerificationStatusIssuanceTimedOut,
-		SSLVerificationStatusDeploymentTimedOut,
-		SSLVerificationStatusDeletionTimedOut,
-		SSLVerificationStatusPendingCleanup,
-		SSLVerificationStatusStagingDeployment,
-		SSLVerificationStatusStagingActive,
-		SSLVerificationStatusDeactivating,
-		SSLVerificationStatusInactive,
-		SSLVerificationStatusBackupIssued,
-		SSLVerificationStatusHoldingDeployment,
-	}
-	for _, s := range v {
-		kinds = append(kinds, string(s))
-	}
-
-	return kinds
+var sslVerificationStatusValues = []SSLVerificationStatus{
+	SSLVerificationStatusInitializing, SSLVerificationStatusPendingValidation, SSLVerificationStatusDeleted,
+	SSLVerificationStatusPendingIssuance, SSLVerificationStatusPendingDeployment, SSLVerificationStatusPendingDeletion,
+	SSLVerificationStatusPendingExpiration, SSLVerificationStatusExpired, SSLVerificationStatusActive,
+	SSLVerificationStatusInitializingTimedOut, SSLVerificationStatusValidationTimedOut, SSLVerificationStatusIssuanceTimedOut,
+	SSLVerificationStatusDeploymentTimedOut, SSLVerificationStatusDeletionTimedOut, SSLVerificationStatusPendingCleanup,
+	SSLVerificationStatusStagingDeployment, SSLVerificationStatusStagingActive, SSLVerificationStatusDeactivating,
+	SSLVerificationStatusInactive, SSLVerificationStatusBackupIssued, SSLVerificationStatusHoldingDeployment,
 }
+
+// Values returns all valid SSLVerificationStatus values as strings.
+func (SSLVerificationStatus) Values() []string { return stringValues(sslVerificationStatusValues) }
 
 // String returns the SSLVerificationStatus as a string
-func (r SSLVerificationStatus) String() string {
-	return string(r)
-}
+func (r SSLVerificationStatus) String() string { return string(r) }
 
-// ToSSLVerificationStatus returns the user status enum based on string input
+// ToSSLVerificationStatus returns the SSL verification status enum based on string input
 func ToSSLVerificationStatus(r string) *SSLVerificationStatus {
-	rUpper := strings.ToUpper(r)
-	switch rUpper {
-	case SSLVerificationStatusInitializing.String():
-		return &SSLVerificationStatusInitializing
-	case SSLVerificationStatusPendingValidation.String():
-		return &SSLVerificationStatusPendingValidation
-	case SSLVerificationStatusDeleted.String():
-		return &SSLVerificationStatusDeleted
-	case SSLVerificationStatusPendingIssuance.String():
-		return &SSLVerificationStatusPendingIssuance
-	case SSLVerificationStatusPendingDeployment.String():
-		return &SSLVerificationStatusPendingDeployment
-	case SSLVerificationStatusPendingDeletion.String():
-		return &SSLVerificationStatusPendingDeletion
-	case SSLVerificationStatusPendingExpiration.String():
-		return &SSLVerificationStatusPendingExpiration
-	case SSLVerificationStatusExpired.String():
-		return &SSLVerificationStatusExpired
-	case SSLVerificationStatusActive.String():
-		return &SSLVerificationStatusActive
-	case SSLVerificationStatusInitializingTimedOut.String():
-		return &SSLVerificationStatusInitializingTimedOut
-	case SSLVerificationStatusValidationTimedOut.String():
-		return &SSLVerificationStatusValidationTimedOut
-	case SSLVerificationStatusIssuanceTimedOut.String():
-		return &SSLVerificationStatusIssuanceTimedOut
-	case SSLVerificationStatusDeploymentTimedOut.String():
-		return &SSLVerificationStatusDeploymentTimedOut
-	case SSLVerificationStatusDeletionTimedOut.String():
-		return &SSLVerificationStatusDeletionTimedOut
-	case SSLVerificationStatusPendingCleanup.String():
-		return &SSLVerificationStatusPendingCleanup
-	case SSLVerificationStatusStagingDeployment.String():
-		return &SSLVerificationStatusStagingDeployment
-	case SSLVerificationStatusStagingActive.String():
-		return &SSLVerificationStatusStagingActive
-	case SSLVerificationStatusDeactivating.String():
-		return &SSLVerificationStatusDeactivating
-	case SSLVerificationStatusInactive.String():
-		return &SSLVerificationStatusInactive
-	case SSLVerificationStatusBackupIssued.String():
-		return &SSLVerificationStatusBackupIssued
-	case SSLVerificationStatusHoldingDeployment.String():
-		return &SSLVerificationStatusHoldingDeployment
-	default:
-		return &SSLVerificationStatusInvalid
-	}
+	return parse(r, sslVerificationStatusValues, &SSLVerificationStatusInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r SSLVerificationStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r SSLVerificationStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *SSLVerificationStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for SSLVerificationStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = SSLVerificationStatus(str)
-
-	return nil
-}
+func (r *SSLVerificationStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

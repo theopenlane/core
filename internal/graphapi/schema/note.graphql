@@ -71,6 +71,15 @@ extend input UpdateEvidenceInput {
     deleteComment: ID
 }
 
+extend input CreateTrustCenterFAQInput {
+    createNote: CreateNoteInput
+}
+
+extend input UpdateTrustCenterFAQInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input UpdateTrustCenterInput {
     """
     adds a post for the trust center feed
@@ -185,6 +194,23 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): InternalPolicyUpdatePayload!
+    """
+    Update an existing trust center FAQ comment
+    """
+    updateTrustCenterFAQComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): TrustCenterFAQUpdatePayload!
      """
     Update an existing trust center post
     """

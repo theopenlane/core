@@ -6,7 +6,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -25,11 +24,11 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 
 	referer := ctx.Request().URL.Query().Get("referer")
 
-	// 1. create the auth allowContext with the TrustCenterContext
+	// 1. create the auth allowContext with a bootstrap trust center caller
 	reqCtx := ctx.Request().Context()
 	// Allow database queries for trust center lookup without authentication
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.TrustCenterContextKey{})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewTrustCenterBootstrapCaller(""))
 
 	// 2. parse the URL out of the `in`
 	if referer == "" {

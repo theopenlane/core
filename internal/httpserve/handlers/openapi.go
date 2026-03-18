@@ -15,31 +15,17 @@ var (
 	AuthenticatedSecurity = BearerSecurity()
 	// PublicSecurity for public endpoints with no authentication
 	PublicSecurity = &openapi3.SecurityRequirements{}
-	// AllAuthSecurity for endpoints accepting any authentication method
-	AllAuthSecurity = AllSecurityRequirements()
 )
 
 // Error Response Patterns for common error combinations
 var (
 	// StandardAuthErrors for typical authenticated endpoints
 	StandardAuthErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusInternalServerError}
-	// PublicEndpointErrors for public endpoints
-	PublicEndpointErrors = []int{http.StatusBadRequest, http.StatusInternalServerError}
-	// AdminOnlyErrors for admin-only endpoints
-	AdminOnlyErrors = []int{http.StatusBadRequest, http.StatusUnauthorized, http.StatusForbidden, http.StatusInternalServerError}
 )
 
 // AuthEndpointDesc creates a description for authenticated endpoints
 func AuthEndpointDesc(action, resource string) string {
 	return fmt.Sprintf("%s %s. Requires authentication.", action, resource)
-}
-
-func PublicEndpointDesc(action, resource string) string {
-	return fmt.Sprintf("%s %s. No authentication required.", action, resource)
-}
-
-func AdminEndpointDesc(action, resource string) string {
-	return fmt.Sprintf("%s %s. Requires admin privileges.", action, resource)
 }
 
 // commonResponse creates a response that references a common error schema
@@ -80,20 +66,6 @@ func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Ope
 	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(body))}
 }
 
-// AddQueryParameter is used to add a query parameter definition to the OpenAPI schema (e.g ?name=value)
-func (h *Handler) AddQueryParameter(paramName string, op *openapi3.Operation) {
-	param := openapi3.NewQueryParameter(paramName).WithSchema(openapi3.NewStringSchema())
-
-	op.AddParameter(param)
-}
-
-// AddPathParameter is used to add a path parameter definition to the OpenAPI schema (e.g. /users/{id})
-func (h *Handler) AddPathParameter(paramName string, op *openapi3.Operation) {
-	param := openapi3.NewPathParameter(paramName).WithSchema(openapi3.NewStringSchema())
-
-	op.AddParameter(param)
-}
-
 // AddResponse is used to add a response definition to the OpenAPI schema
 func (h *Handler) AddResponse(name string, description string, body interface{}, op *openapi3.Operation, status int) {
 	response := openapi3.NewResponse().
@@ -114,29 +86,11 @@ func BearerSecurity() *openapi3.SecurityRequirements {
 	}
 }
 
-// oauthSecurity is used to add a oauth security definition to the OpenAPI schema
-func OauthSecurity() *openapi3.SecurityRequirements {
-	return &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"oauth2": []string{},
-		},
-	}
-}
-
 // basicSecurity is used to add a basic security definition to the OpenAPI schema
 func BasicSecurity() *openapi3.SecurityRequirements {
 	return &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
 			"basic": []string{},
-		},
-	}
-}
-
-// apiKeySecurity is used to add a apiKey security definition to the OpenAPI schema
-func APIKeySecurity() *openapi3.SecurityRequirements {
-	return &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"apiKey": []string{},
 		},
 	}
 }

@@ -19,6 +19,42 @@ func (c *ActionPlanClient) ApplyFieldUpdates(ctx context.Context, id string, upd
 	applied := 0
 	for field, value := range updates {
 		switch field {
+		case "status":
+			if value == nil {
+				update.ClearStatus()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[enums.DocumentStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "details":
+			if value == nil {
+				update.ClearDetails()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[string](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDetails(v)
+			applied++
+		case "details_json":
+			if value == nil {
+				update.ClearDetailsJSON()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[[]interface{}](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDetailsJSON(v)
+			applied++
 		case "workflow_eligible_marker":
 			if value == nil {
 				update.ClearWorkflowEligibleMarker()
@@ -487,6 +523,42 @@ func (c *InternalPolicyClient) ApplyFieldUpdates(ctx context.Context, id string,
 	applied := 0
 	for field, value := range updates {
 		switch field {
+		case "status":
+			if value == nil {
+				update.ClearStatus()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[enums.DocumentStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "details":
+			if value == nil {
+				update.ClearDetails()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[string](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDetails(v)
+			applied++
+		case "details_json":
+			if value == nil {
+				update.ClearDetailsJSON()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[[]interface{}](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDetailsJSON(v)
+			applied++
 		case "workflow_eligible_marker":
 			if value == nil {
 				update.ClearWorkflowEligibleMarker()
@@ -592,6 +664,42 @@ func (c *ProcedureClient) ApplyFieldUpdates(ctx context.Context, id string, upda
 	applied := 0
 	for field, value := range updates {
 		switch field {
+		case "status":
+			if value == nil {
+				update.ClearStatus()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[enums.DocumentStatus](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetStatus(v)
+			applied++
+		case "details":
+			if value == nil {
+				update.ClearDetails()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[string](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDetails(v)
+			applied++
+		case "details_json":
+			if value == nil {
+				update.ClearDetailsJSON()
+				applied++
+				continue
+			}
+			v, err := coerceWorkflowValue[[]interface{}](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.SetDetailsJSON(v)
+			applied++
 		case "workflow_eligible_marker":
 			if value == nil {
 				update.ClearWorkflowEligibleMarker()

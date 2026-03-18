@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -70,7 +71,7 @@ func (r *mutationResolver) CreateBulkTrustCenterDoc(ctx context.Context, input [
 
 // CreateBulkCSVTrustCenterDoc is the resolver for the createBulkCSVTrustCenterDoc field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterDocInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterDocCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -81,7 +82,16 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, inpu
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateTrustCenterDoc(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterDoc", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTrustCenterDocInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTrustCenterDoc(ctx, inputs)
 }
 
 // UpdateTrustCenterDoc is the resolver for the updateTrustCenterDoc field.
@@ -135,6 +145,26 @@ func (r *mutationResolver) DeleteBulkTrustCenterDoc(ctx context.Context, ids []s
 	}
 
 	return r.bulkDeleteTrustCenterDoc(ctx, ids)
+}
+
+// UpdateBulkCSVTrustCenterDoc is the resolver for the updateBulkCSVTrustCenterDoc field.
+func (r *mutationResolver) UpdateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterDocCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterDoc", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVTrustCenterDoc(ctx, data)
 }
 
 // TrustCenterDoc is the resolver for the trustCenterDoc field.

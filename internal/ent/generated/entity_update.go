@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -619,13 +620,13 @@ func (_u *EntityUpdate) ClearEntityTypeID() *EntityUpdate {
 }
 
 // SetStatus sets the "status" field.
-func (_u *EntityUpdate) SetStatus(v string) *EntityUpdate {
+func (_u *EntityUpdate) SetStatus(v enums.EntityStatus) *EntityUpdate {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EntityUpdate) SetNillableStatus(v *string) *EntityUpdate {
+func (_u *EntityUpdate) SetNillableStatus(v *enums.EntityStatus) *EntityUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -1430,6 +1431,21 @@ func (_u *EntityUpdate) AddIdentityHolders(v ...*IdentityHolder) *EntityUpdate {
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *EntityUpdate) AddControlIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *EntityUpdate) AddControls(v ...*Control) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *EntityUpdate) AddPlatformIDs(ids ...string) *EntityUpdate {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -1875,6 +1891,27 @@ func (_u *EntityUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *EntityUpdat
 	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *EntityUpdate) ClearControls() *EntityUpdate {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *EntityUpdate) RemoveControlIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *EntityUpdate) RemoveControls(v ...*Control) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *EntityUpdate) ClearPlatforms() *EntityUpdate {
 	_u.mutation.ClearPlatforms()
@@ -2001,6 +2038,11 @@ func (_u *EntityUpdate) check() error {
 	if v, ok := _u.mutation.Domains(); ok {
 		if err := entity.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := entity.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Entity.status": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.StatusPageURL(); ok {
@@ -2173,10 +2215,10 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(entity.FieldStatus, field.TypeString, value)
+		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
-		_spec.ClearField(entity.FieldStatus, field.TypeString)
+		_spec.ClearField(entity.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ApprovedForUse(); ok {
 		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)
@@ -3399,6 +3441,54 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4167,13 +4257,13 @@ func (_u *EntityUpdateOne) ClearEntityTypeID() *EntityUpdateOne {
 }
 
 // SetStatus sets the "status" field.
-func (_u *EntityUpdateOne) SetStatus(v string) *EntityUpdateOne {
+func (_u *EntityUpdateOne) SetStatus(v enums.EntityStatus) *EntityUpdateOne {
 	_u.mutation.SetStatus(v)
 	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EntityUpdateOne) SetNillableStatus(v *string) *EntityUpdateOne {
+func (_u *EntityUpdateOne) SetNillableStatus(v *enums.EntityStatus) *EntityUpdateOne {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
@@ -4978,6 +5068,21 @@ func (_u *EntityUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *EntityUpdat
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *EntityUpdateOne) AddControlIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *EntityUpdateOne) AddControls(v ...*Control) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *EntityUpdateOne) AddPlatformIDs(ids ...string) *EntityUpdateOne {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -5423,6 +5528,27 @@ func (_u *EntityUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *EntityUp
 	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *EntityUpdateOne) ClearControls() *EntityUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *EntityUpdateOne) RemoveControlIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *EntityUpdateOne) RemoveControls(v ...*Control) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *EntityUpdateOne) ClearPlatforms() *EntityUpdateOne {
 	_u.mutation.ClearPlatforms()
@@ -5562,6 +5688,11 @@ func (_u *EntityUpdateOne) check() error {
 	if v, ok := _u.mutation.Domains(); ok {
 		if err := entity.DomainsValidator(v); err != nil {
 			return &ValidationError{Name: "domains", err: fmt.Errorf(`generated: validator failed for field "Entity.domains": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := entity.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Entity.status": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.StatusPageURL(); ok {
@@ -5751,10 +5882,10 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 		_spec.ClearField(entity.FieldDomains, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(entity.FieldStatus, field.TypeString, value)
+		_spec.SetField(entity.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
-		_spec.ClearField(entity.FieldStatus, field.TypeString)
+		_spec.ClearField(entity.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ApprovedForUse(); ok {
 		_spec.SetField(entity.FieldApprovedForUse, field.TypeBool, value)
@@ -6972,6 +7103,54 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -2,7 +2,7 @@ package objects
 
 // Mutation represents any ent mutation that can provide ID and Type
 type Mutation interface {
-	ID() (string, error)
+	ID() (string, bool)
 	Type() string
 }
 
@@ -23,13 +23,8 @@ func NewGenericMutationAdapter[T any](mutation T, idFunc func(T) (string, bool),
 }
 
 // ID implements the Mutation interface
-func (a *GenericMutationAdapter[T]) ID() (string, error) {
-	id, exists := a.idFunc(a.mutation)
-	if !exists {
-		return "", ErrMutationIDNotFound
-	}
-
-	return id, nil
+func (a *GenericMutationAdapter[T]) ID() (string, bool) {
+	return a.idFunc(a.mutation)
 }
 
 // Type implements the Mutation interface

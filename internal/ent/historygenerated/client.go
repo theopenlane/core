@@ -37,6 +37,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -55,6 +57,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -68,14 +72,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -136,6 +143,10 @@ type Client struct {
 	DiscussionHistory *DiscussionHistoryClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
 	DocumentDataHistory *DocumentDataHistoryClient
+	// EmailBrandingHistory is the client for interacting with the EmailBrandingHistory builders.
+	EmailBrandingHistory *EmailBrandingHistoryClient
+	// EmailTemplateHistory is the client for interacting with the EmailTemplateHistory builders.
+	EmailTemplateHistory *EmailTemplateHistoryClient
 	// EntityHistory is the client for interacting with the EntityHistory builders.
 	EntityHistory *EntityHistoryClient
 	// EntityTypeHistory is the client for interacting with the EntityTypeHistory builders.
@@ -172,6 +183,10 @@ type Client struct {
 	NarrativeHistory *NarrativeHistoryClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
+	// NotificationPreferenceHistory is the client for interacting with the NotificationPreferenceHistory builders.
+	NotificationPreferenceHistory *NotificationPreferenceHistoryClient
+	// NotificationTemplateHistory is the client for interacting with the NotificationTemplateHistory builders.
+	NotificationTemplateHistory *NotificationTemplateHistoryClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
 	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
@@ -194,6 +209,8 @@ type Client struct {
 	ReviewHistory *ReviewHistoryClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
+	SLADefinitionHistory *SLADefinitionHistoryClient
 	// ScanHistory is the client for interacting with the ScanHistory builders.
 	ScanHistory *ScanHistoryClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
@@ -204,6 +221,8 @@ type Client struct {
 	SubcontrolHistory *SubcontrolHistoryClient
 	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
 	SubprocessorHistory *SubprocessorHistoryClient
+	// SystemDetailHistory is the client for interacting with the SystemDetailHistory builders.
+	SystemDetailHistory *SystemDetailHistoryClient
 	// TaskHistory is the client for interacting with the TaskHistory builders.
 	TaskHistory *TaskHistoryClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
@@ -214,6 +233,8 @@ type Client struct {
 	TrustCenterDocHistory *TrustCenterDocHistoryClient
 	// TrustCenterEntityHistory is the client for interacting with the TrustCenterEntityHistory builders.
 	TrustCenterEntityHistory *TrustCenterEntityHistoryClient
+	// TrustCenterFAQHistory is the client for interacting with the TrustCenterFAQHistory builders.
+	TrustCenterFAQHistory *TrustCenterFAQHistoryClient
 	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
 	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterNDARequestHistory is the client for interacting with the TrustCenterNDARequestHistory builders.
@@ -276,6 +297,8 @@ func (c *Client) init() {
 	c.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(c.config)
 	c.DiscussionHistory = NewDiscussionHistoryClient(c.config)
 	c.DocumentDataHistory = NewDocumentDataHistoryClient(c.config)
+	c.EmailBrandingHistory = NewEmailBrandingHistoryClient(c.config)
+	c.EmailTemplateHistory = NewEmailTemplateHistoryClient(c.config)
 	c.EntityHistory = NewEntityHistoryClient(c.config)
 	c.EntityTypeHistory = NewEntityTypeHistoryClient(c.config)
 	c.EvidenceHistory = NewEvidenceHistoryClient(c.config)
@@ -294,6 +317,8 @@ func (c *Client) init() {
 	c.MappedControlHistory = NewMappedControlHistoryClient(c.config)
 	c.NarrativeHistory = NewNarrativeHistoryClient(c.config)
 	c.NoteHistory = NewNoteHistoryClient(c.config)
+	c.NotificationPreferenceHistory = NewNotificationPreferenceHistoryClient(c.config)
+	c.NotificationTemplateHistory = NewNotificationTemplateHistoryClient(c.config)
 	c.OrgMembershipHistory = NewOrgMembershipHistoryClient(c.config)
 	c.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(c.config)
 	c.OrganizationHistory = NewOrganizationHistoryClient(c.config)
@@ -305,16 +330,19 @@ func (c *Client) init() {
 	c.RemediationHistory = NewRemediationHistoryClient(c.config)
 	c.ReviewHistory = NewReviewHistoryClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
+	c.SLADefinitionHistory = NewSLADefinitionHistoryClient(c.config)
 	c.ScanHistory = NewScanHistoryClient(c.config)
 	c.ScheduledJobHistory = NewScheduledJobHistoryClient(c.config)
 	c.StandardHistory = NewStandardHistoryClient(c.config)
 	c.SubcontrolHistory = NewSubcontrolHistoryClient(c.config)
 	c.SubprocessorHistory = NewSubprocessorHistoryClient(c.config)
+	c.SystemDetailHistory = NewSystemDetailHistoryClient(c.config)
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
 	c.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(c.config)
 	c.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(c.config)
 	c.TrustCenterEntityHistory = NewTrustCenterEntityHistoryClient(c.config)
+	c.TrustCenterFAQHistory = NewTrustCenterFAQHistoryClient(c.config)
 	c.TrustCenterHistory = NewTrustCenterHistoryClient(c.config)
 	c.TrustCenterNDARequestHistory = NewTrustCenterNDARequestHistoryClient(c.config)
 	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
@@ -462,6 +490,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		DirectoryMembershipHistory:        NewDirectoryMembershipHistoryClient(cfg),
 		DiscussionHistory:                 NewDiscussionHistoryClient(cfg),
 		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
+		EmailBrandingHistory:              NewEmailBrandingHistoryClient(cfg),
+		EmailTemplateHistory:              NewEmailTemplateHistoryClient(cfg),
 		EntityHistory:                     NewEntityHistoryClient(cfg),
 		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
 		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
@@ -480,6 +510,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
 		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
 		NoteHistory:                       NewNoteHistoryClient(cfg),
+		NotificationPreferenceHistory:     NewNotificationPreferenceHistoryClient(cfg),
+		NotificationTemplateHistory:       NewNotificationTemplateHistoryClient(cfg),
 		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
 		OrgSubscriptionHistory:            NewOrgSubscriptionHistoryClient(cfg),
 		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
@@ -491,16 +523,19 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		RemediationHistory:                NewRemediationHistoryClient(cfg),
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
+		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
 		ScanHistory:                       NewScanHistoryClient(cfg),
 		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
 		StandardHistory:                   NewStandardHistoryClient(cfg),
 		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
+		SystemDetailHistory:               NewSystemDetailHistoryClient(cfg),
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		TemplateHistory:                   NewTemplateHistoryClient(cfg),
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
 		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
 		TrustCenterEntityHistory:          NewTrustCenterEntityHistoryClient(cfg),
+		TrustCenterFAQHistory:             NewTrustCenterFAQHistoryClient(cfg),
 		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
 		TrustCenterNDARequestHistory:      NewTrustCenterNDARequestHistoryClient(cfg),
 		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
@@ -551,6 +586,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		DirectoryMembershipHistory:        NewDirectoryMembershipHistoryClient(cfg),
 		DiscussionHistory:                 NewDiscussionHistoryClient(cfg),
 		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
+		EmailBrandingHistory:              NewEmailBrandingHistoryClient(cfg),
+		EmailTemplateHistory:              NewEmailTemplateHistoryClient(cfg),
 		EntityHistory:                     NewEntityHistoryClient(cfg),
 		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
 		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
@@ -569,6 +606,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
 		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
 		NoteHistory:                       NewNoteHistoryClient(cfg),
+		NotificationPreferenceHistory:     NewNotificationPreferenceHistoryClient(cfg),
+		NotificationTemplateHistory:       NewNotificationTemplateHistoryClient(cfg),
 		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
 		OrgSubscriptionHistory:            NewOrgSubscriptionHistoryClient(cfg),
 		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
@@ -580,16 +619,19 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		RemediationHistory:                NewRemediationHistoryClient(cfg),
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
+		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
 		ScanHistory:                       NewScanHistoryClient(cfg),
 		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
 		StandardHistory:                   NewStandardHistoryClient(cfg),
 		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
+		SystemDetailHistory:               NewSystemDetailHistoryClient(cfg),
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		TemplateHistory:                   NewTemplateHistoryClient(cfg),
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
 		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
 		TrustCenterEntityHistory:          NewTrustCenterEntityHistoryClient(cfg),
+		TrustCenterFAQHistory:             NewTrustCenterFAQHistoryClient(cfg),
 		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
 		TrustCenterNDARequestHistory:      NewTrustCenterNDARequestHistoryClient(cfg),
 		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
@@ -638,19 +680,22 @@ func (c *Client) Use(hooks ...Hook) {
 		c.ControlHistory, c.ControlImplementationHistory, c.ControlObjectiveHistory,
 		c.CustomDomainHistory, c.DNSVerificationHistory, c.DirectoryAccountHistory,
 		c.DirectoryGroupHistory, c.DirectoryMembershipHistory, c.DiscussionHistory,
-		c.DocumentDataHistory, c.EntityHistory, c.EntityTypeHistory, c.EvidenceHistory,
-		c.FileHistory, c.FindingControlHistory, c.FindingHistory, c.GroupHistory,
+		c.DocumentDataHistory, c.EmailBrandingHistory, c.EmailTemplateHistory,
+		c.EntityHistory, c.EntityTypeHistory, c.EvidenceHistory, c.FileHistory,
+		c.FindingControlHistory, c.FindingHistory, c.GroupHistory,
 		c.GroupMembershipHistory, c.GroupSettingHistory, c.HushHistory,
 		c.IdentityHolderHistory, c.IntegrationHistory, c.InternalPolicyHistory,
 		c.JobTemplateHistory, c.MappableDomainHistory, c.MappedControlHistory,
-		c.NarrativeHistory, c.NoteHistory, c.OrgMembershipHistory,
+		c.NarrativeHistory, c.NoteHistory, c.NotificationPreferenceHistory,
+		c.NotificationTemplateHistory, c.OrgMembershipHistory,
 		c.OrgSubscriptionHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
-		c.SubcontrolHistory, c.SubprocessorHistory, c.TaskHistory, c.TemplateHistory,
+		c.RiskHistory, c.SLADefinitionHistory, c.ScanHistory, c.ScheduledJobHistory,
+		c.StandardHistory, c.SubcontrolHistory, c.SubprocessorHistory,
+		c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterHistory,
+		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
 		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
@@ -671,19 +716,22 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.ControlHistory, c.ControlImplementationHistory, c.ControlObjectiveHistory,
 		c.CustomDomainHistory, c.DNSVerificationHistory, c.DirectoryAccountHistory,
 		c.DirectoryGroupHistory, c.DirectoryMembershipHistory, c.DiscussionHistory,
-		c.DocumentDataHistory, c.EntityHistory, c.EntityTypeHistory, c.EvidenceHistory,
-		c.FileHistory, c.FindingControlHistory, c.FindingHistory, c.GroupHistory,
+		c.DocumentDataHistory, c.EmailBrandingHistory, c.EmailTemplateHistory,
+		c.EntityHistory, c.EntityTypeHistory, c.EvidenceHistory, c.FileHistory,
+		c.FindingControlHistory, c.FindingHistory, c.GroupHistory,
 		c.GroupMembershipHistory, c.GroupSettingHistory, c.HushHistory,
 		c.IdentityHolderHistory, c.IntegrationHistory, c.InternalPolicyHistory,
 		c.JobTemplateHistory, c.MappableDomainHistory, c.MappedControlHistory,
-		c.NarrativeHistory, c.NoteHistory, c.OrgMembershipHistory,
+		c.NarrativeHistory, c.NoteHistory, c.NotificationPreferenceHistory,
+		c.NotificationTemplateHistory, c.OrgMembershipHistory,
 		c.OrgSubscriptionHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
-		c.SubcontrolHistory, c.SubprocessorHistory, c.TaskHistory, c.TemplateHistory,
+		c.RiskHistory, c.SLADefinitionHistory, c.ScanHistory, c.ScheduledJobHistory,
+		c.StandardHistory, c.SubcontrolHistory, c.SubprocessorHistory,
+		c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterHistory,
+		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
 		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
@@ -784,6 +832,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.DiscussionHistory.mutate(ctx, m)
 	case *DocumentDataHistoryMutation:
 		return c.DocumentDataHistory.mutate(ctx, m)
+	case *EmailBrandingHistoryMutation:
+		return c.EmailBrandingHistory.mutate(ctx, m)
+	case *EmailTemplateHistoryMutation:
+		return c.EmailTemplateHistory.mutate(ctx, m)
 	case *EntityHistoryMutation:
 		return c.EntityHistory.mutate(ctx, m)
 	case *EntityTypeHistoryMutation:
@@ -820,6 +872,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.NarrativeHistory.mutate(ctx, m)
 	case *NoteHistoryMutation:
 		return c.NoteHistory.mutate(ctx, m)
+	case *NotificationPreferenceHistoryMutation:
+		return c.NotificationPreferenceHistory.mutate(ctx, m)
+	case *NotificationTemplateHistoryMutation:
+		return c.NotificationTemplateHistory.mutate(ctx, m)
 	case *OrgMembershipHistoryMutation:
 		return c.OrgMembershipHistory.mutate(ctx, m)
 	case *OrgSubscriptionHistoryMutation:
@@ -842,6 +898,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ReviewHistory.mutate(ctx, m)
 	case *RiskHistoryMutation:
 		return c.RiskHistory.mutate(ctx, m)
+	case *SLADefinitionHistoryMutation:
+		return c.SLADefinitionHistory.mutate(ctx, m)
 	case *ScanHistoryMutation:
 		return c.ScanHistory.mutate(ctx, m)
 	case *ScheduledJobHistoryMutation:
@@ -852,6 +910,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.SubcontrolHistory.mutate(ctx, m)
 	case *SubprocessorHistoryMutation:
 		return c.SubprocessorHistory.mutate(ctx, m)
+	case *SystemDetailHistoryMutation:
+		return c.SystemDetailHistory.mutate(ctx, m)
 	case *TaskHistoryMutation:
 		return c.TaskHistory.mutate(ctx, m)
 	case *TemplateHistoryMutation:
@@ -862,6 +922,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterDocHistory.mutate(ctx, m)
 	case *TrustCenterEntityHistoryMutation:
 		return c.TrustCenterEntityHistory.mutate(ctx, m)
+	case *TrustCenterFAQHistoryMutation:
+		return c.TrustCenterFAQHistory.mutate(ctx, m)
 	case *TrustCenterHistoryMutation:
 		return c.TrustCenterHistory.mutate(ctx, m)
 	case *TrustCenterNDARequestHistoryMutation:
@@ -3187,6 +3249,276 @@ func (c *DocumentDataHistoryClient) mutate(ctx context.Context, m *DocumentDataH
 		return (&DocumentDataHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("historygenerated: unknown DocumentDataHistory mutation op: %q", m.Op())
+	}
+}
+
+// EmailBrandingHistoryClient is a client for the EmailBrandingHistory schema.
+type EmailBrandingHistoryClient struct {
+	config
+}
+
+// NewEmailBrandingHistoryClient returns a client for the EmailBrandingHistory from the given config.
+func NewEmailBrandingHistoryClient(c config) *EmailBrandingHistoryClient {
+	return &EmailBrandingHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `emailbrandinghistory.Hooks(f(g(h())))`.
+func (c *EmailBrandingHistoryClient) Use(hooks ...Hook) {
+	c.hooks.EmailBrandingHistory = append(c.hooks.EmailBrandingHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `emailbrandinghistory.Intercept(f(g(h())))`.
+func (c *EmailBrandingHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EmailBrandingHistory = append(c.inters.EmailBrandingHistory, interceptors...)
+}
+
+// Create returns a builder for creating a EmailBrandingHistory entity.
+func (c *EmailBrandingHistoryClient) Create() *EmailBrandingHistoryCreate {
+	mutation := newEmailBrandingHistoryMutation(c.config, OpCreate)
+	return &EmailBrandingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EmailBrandingHistory entities.
+func (c *EmailBrandingHistoryClient) CreateBulk(builders ...*EmailBrandingHistoryCreate) *EmailBrandingHistoryCreateBulk {
+	return &EmailBrandingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EmailBrandingHistoryClient) MapCreateBulk(slice any, setFunc func(*EmailBrandingHistoryCreate, int)) *EmailBrandingHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EmailBrandingHistoryCreateBulk{err: fmt.Errorf("calling to EmailBrandingHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EmailBrandingHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EmailBrandingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EmailBrandingHistory.
+func (c *EmailBrandingHistoryClient) Update() *EmailBrandingHistoryUpdate {
+	mutation := newEmailBrandingHistoryMutation(c.config, OpUpdate)
+	return &EmailBrandingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EmailBrandingHistoryClient) UpdateOne(_m *EmailBrandingHistory) *EmailBrandingHistoryUpdateOne {
+	mutation := newEmailBrandingHistoryMutation(c.config, OpUpdateOne, withEmailBrandingHistory(_m))
+	return &EmailBrandingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EmailBrandingHistoryClient) UpdateOneID(id string) *EmailBrandingHistoryUpdateOne {
+	mutation := newEmailBrandingHistoryMutation(c.config, OpUpdateOne, withEmailBrandingHistoryID(id))
+	return &EmailBrandingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EmailBrandingHistory.
+func (c *EmailBrandingHistoryClient) Delete() *EmailBrandingHistoryDelete {
+	mutation := newEmailBrandingHistoryMutation(c.config, OpDelete)
+	return &EmailBrandingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EmailBrandingHistoryClient) DeleteOne(_m *EmailBrandingHistory) *EmailBrandingHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EmailBrandingHistoryClient) DeleteOneID(id string) *EmailBrandingHistoryDeleteOne {
+	builder := c.Delete().Where(emailbrandinghistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EmailBrandingHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for EmailBrandingHistory.
+func (c *EmailBrandingHistoryClient) Query() *EmailBrandingHistoryQuery {
+	return &EmailBrandingHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEmailBrandingHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EmailBrandingHistory entity by its id.
+func (c *EmailBrandingHistoryClient) Get(ctx context.Context, id string) (*EmailBrandingHistory, error) {
+	return c.Query().Where(emailbrandinghistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EmailBrandingHistoryClient) GetX(ctx context.Context, id string) *EmailBrandingHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *EmailBrandingHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.EmailBrandingHistory
+	return append(hooks[:len(hooks):len(hooks)], emailbrandinghistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *EmailBrandingHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.EmailBrandingHistory
+	return append(inters[:len(inters):len(inters)], emailbrandinghistory.Interceptors[:]...)
+}
+
+func (c *EmailBrandingHistoryClient) mutate(ctx context.Context, m *EmailBrandingHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EmailBrandingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EmailBrandingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EmailBrandingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EmailBrandingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown EmailBrandingHistory mutation op: %q", m.Op())
+	}
+}
+
+// EmailTemplateHistoryClient is a client for the EmailTemplateHistory schema.
+type EmailTemplateHistoryClient struct {
+	config
+}
+
+// NewEmailTemplateHistoryClient returns a client for the EmailTemplateHistory from the given config.
+func NewEmailTemplateHistoryClient(c config) *EmailTemplateHistoryClient {
+	return &EmailTemplateHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `emailtemplatehistory.Hooks(f(g(h())))`.
+func (c *EmailTemplateHistoryClient) Use(hooks ...Hook) {
+	c.hooks.EmailTemplateHistory = append(c.hooks.EmailTemplateHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `emailtemplatehistory.Intercept(f(g(h())))`.
+func (c *EmailTemplateHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EmailTemplateHistory = append(c.inters.EmailTemplateHistory, interceptors...)
+}
+
+// Create returns a builder for creating a EmailTemplateHistory entity.
+func (c *EmailTemplateHistoryClient) Create() *EmailTemplateHistoryCreate {
+	mutation := newEmailTemplateHistoryMutation(c.config, OpCreate)
+	return &EmailTemplateHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EmailTemplateHistory entities.
+func (c *EmailTemplateHistoryClient) CreateBulk(builders ...*EmailTemplateHistoryCreate) *EmailTemplateHistoryCreateBulk {
+	return &EmailTemplateHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EmailTemplateHistoryClient) MapCreateBulk(slice any, setFunc func(*EmailTemplateHistoryCreate, int)) *EmailTemplateHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EmailTemplateHistoryCreateBulk{err: fmt.Errorf("calling to EmailTemplateHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EmailTemplateHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EmailTemplateHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EmailTemplateHistory.
+func (c *EmailTemplateHistoryClient) Update() *EmailTemplateHistoryUpdate {
+	mutation := newEmailTemplateHistoryMutation(c.config, OpUpdate)
+	return &EmailTemplateHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EmailTemplateHistoryClient) UpdateOne(_m *EmailTemplateHistory) *EmailTemplateHistoryUpdateOne {
+	mutation := newEmailTemplateHistoryMutation(c.config, OpUpdateOne, withEmailTemplateHistory(_m))
+	return &EmailTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EmailTemplateHistoryClient) UpdateOneID(id string) *EmailTemplateHistoryUpdateOne {
+	mutation := newEmailTemplateHistoryMutation(c.config, OpUpdateOne, withEmailTemplateHistoryID(id))
+	return &EmailTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EmailTemplateHistory.
+func (c *EmailTemplateHistoryClient) Delete() *EmailTemplateHistoryDelete {
+	mutation := newEmailTemplateHistoryMutation(c.config, OpDelete)
+	return &EmailTemplateHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EmailTemplateHistoryClient) DeleteOne(_m *EmailTemplateHistory) *EmailTemplateHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EmailTemplateHistoryClient) DeleteOneID(id string) *EmailTemplateHistoryDeleteOne {
+	builder := c.Delete().Where(emailtemplatehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EmailTemplateHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for EmailTemplateHistory.
+func (c *EmailTemplateHistoryClient) Query() *EmailTemplateHistoryQuery {
+	return &EmailTemplateHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEmailTemplateHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EmailTemplateHistory entity by its id.
+func (c *EmailTemplateHistoryClient) Get(ctx context.Context, id string) (*EmailTemplateHistory, error) {
+	return c.Query().Where(emailtemplatehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EmailTemplateHistoryClient) GetX(ctx context.Context, id string) *EmailTemplateHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *EmailTemplateHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.EmailTemplateHistory
+	return append(hooks[:len(hooks):len(hooks)], emailtemplatehistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *EmailTemplateHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.EmailTemplateHistory
+	return append(inters[:len(inters):len(inters)], emailtemplatehistory.Interceptors[:]...)
+}
+
+func (c *EmailTemplateHistoryClient) mutate(ctx context.Context, m *EmailTemplateHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EmailTemplateHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EmailTemplateHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EmailTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EmailTemplateHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown EmailTemplateHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -5620,6 +5952,276 @@ func (c *NoteHistoryClient) mutate(ctx context.Context, m *NoteHistoryMutation) 
 	}
 }
 
+// NotificationPreferenceHistoryClient is a client for the NotificationPreferenceHistory schema.
+type NotificationPreferenceHistoryClient struct {
+	config
+}
+
+// NewNotificationPreferenceHistoryClient returns a client for the NotificationPreferenceHistory from the given config.
+func NewNotificationPreferenceHistoryClient(c config) *NotificationPreferenceHistoryClient {
+	return &NotificationPreferenceHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `notificationpreferencehistory.Hooks(f(g(h())))`.
+func (c *NotificationPreferenceHistoryClient) Use(hooks ...Hook) {
+	c.hooks.NotificationPreferenceHistory = append(c.hooks.NotificationPreferenceHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `notificationpreferencehistory.Intercept(f(g(h())))`.
+func (c *NotificationPreferenceHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.NotificationPreferenceHistory = append(c.inters.NotificationPreferenceHistory, interceptors...)
+}
+
+// Create returns a builder for creating a NotificationPreferenceHistory entity.
+func (c *NotificationPreferenceHistoryClient) Create() *NotificationPreferenceHistoryCreate {
+	mutation := newNotificationPreferenceHistoryMutation(c.config, OpCreate)
+	return &NotificationPreferenceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of NotificationPreferenceHistory entities.
+func (c *NotificationPreferenceHistoryClient) CreateBulk(builders ...*NotificationPreferenceHistoryCreate) *NotificationPreferenceHistoryCreateBulk {
+	return &NotificationPreferenceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NotificationPreferenceHistoryClient) MapCreateBulk(slice any, setFunc func(*NotificationPreferenceHistoryCreate, int)) *NotificationPreferenceHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NotificationPreferenceHistoryCreateBulk{err: fmt.Errorf("calling to NotificationPreferenceHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NotificationPreferenceHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NotificationPreferenceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for NotificationPreferenceHistory.
+func (c *NotificationPreferenceHistoryClient) Update() *NotificationPreferenceHistoryUpdate {
+	mutation := newNotificationPreferenceHistoryMutation(c.config, OpUpdate)
+	return &NotificationPreferenceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NotificationPreferenceHistoryClient) UpdateOne(_m *NotificationPreferenceHistory) *NotificationPreferenceHistoryUpdateOne {
+	mutation := newNotificationPreferenceHistoryMutation(c.config, OpUpdateOne, withNotificationPreferenceHistory(_m))
+	return &NotificationPreferenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NotificationPreferenceHistoryClient) UpdateOneID(id string) *NotificationPreferenceHistoryUpdateOne {
+	mutation := newNotificationPreferenceHistoryMutation(c.config, OpUpdateOne, withNotificationPreferenceHistoryID(id))
+	return &NotificationPreferenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for NotificationPreferenceHistory.
+func (c *NotificationPreferenceHistoryClient) Delete() *NotificationPreferenceHistoryDelete {
+	mutation := newNotificationPreferenceHistoryMutation(c.config, OpDelete)
+	return &NotificationPreferenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NotificationPreferenceHistoryClient) DeleteOne(_m *NotificationPreferenceHistory) *NotificationPreferenceHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NotificationPreferenceHistoryClient) DeleteOneID(id string) *NotificationPreferenceHistoryDeleteOne {
+	builder := c.Delete().Where(notificationpreferencehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NotificationPreferenceHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for NotificationPreferenceHistory.
+func (c *NotificationPreferenceHistoryClient) Query() *NotificationPreferenceHistoryQuery {
+	return &NotificationPreferenceHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNotificationPreferenceHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a NotificationPreferenceHistory entity by its id.
+func (c *NotificationPreferenceHistoryClient) Get(ctx context.Context, id string) (*NotificationPreferenceHistory, error) {
+	return c.Query().Where(notificationpreferencehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NotificationPreferenceHistoryClient) GetX(ctx context.Context, id string) *NotificationPreferenceHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *NotificationPreferenceHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.NotificationPreferenceHistory
+	return append(hooks[:len(hooks):len(hooks)], notificationpreferencehistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *NotificationPreferenceHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.NotificationPreferenceHistory
+	return append(inters[:len(inters):len(inters)], notificationpreferencehistory.Interceptors[:]...)
+}
+
+func (c *NotificationPreferenceHistoryClient) mutate(ctx context.Context, m *NotificationPreferenceHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NotificationPreferenceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NotificationPreferenceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NotificationPreferenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NotificationPreferenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown NotificationPreferenceHistory mutation op: %q", m.Op())
+	}
+}
+
+// NotificationTemplateHistoryClient is a client for the NotificationTemplateHistory schema.
+type NotificationTemplateHistoryClient struct {
+	config
+}
+
+// NewNotificationTemplateHistoryClient returns a client for the NotificationTemplateHistory from the given config.
+func NewNotificationTemplateHistoryClient(c config) *NotificationTemplateHistoryClient {
+	return &NotificationTemplateHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `notificationtemplatehistory.Hooks(f(g(h())))`.
+func (c *NotificationTemplateHistoryClient) Use(hooks ...Hook) {
+	c.hooks.NotificationTemplateHistory = append(c.hooks.NotificationTemplateHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `notificationtemplatehistory.Intercept(f(g(h())))`.
+func (c *NotificationTemplateHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.NotificationTemplateHistory = append(c.inters.NotificationTemplateHistory, interceptors...)
+}
+
+// Create returns a builder for creating a NotificationTemplateHistory entity.
+func (c *NotificationTemplateHistoryClient) Create() *NotificationTemplateHistoryCreate {
+	mutation := newNotificationTemplateHistoryMutation(c.config, OpCreate)
+	return &NotificationTemplateHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of NotificationTemplateHistory entities.
+func (c *NotificationTemplateHistoryClient) CreateBulk(builders ...*NotificationTemplateHistoryCreate) *NotificationTemplateHistoryCreateBulk {
+	return &NotificationTemplateHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NotificationTemplateHistoryClient) MapCreateBulk(slice any, setFunc func(*NotificationTemplateHistoryCreate, int)) *NotificationTemplateHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NotificationTemplateHistoryCreateBulk{err: fmt.Errorf("calling to NotificationTemplateHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NotificationTemplateHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NotificationTemplateHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for NotificationTemplateHistory.
+func (c *NotificationTemplateHistoryClient) Update() *NotificationTemplateHistoryUpdate {
+	mutation := newNotificationTemplateHistoryMutation(c.config, OpUpdate)
+	return &NotificationTemplateHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NotificationTemplateHistoryClient) UpdateOne(_m *NotificationTemplateHistory) *NotificationTemplateHistoryUpdateOne {
+	mutation := newNotificationTemplateHistoryMutation(c.config, OpUpdateOne, withNotificationTemplateHistory(_m))
+	return &NotificationTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NotificationTemplateHistoryClient) UpdateOneID(id string) *NotificationTemplateHistoryUpdateOne {
+	mutation := newNotificationTemplateHistoryMutation(c.config, OpUpdateOne, withNotificationTemplateHistoryID(id))
+	return &NotificationTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for NotificationTemplateHistory.
+func (c *NotificationTemplateHistoryClient) Delete() *NotificationTemplateHistoryDelete {
+	mutation := newNotificationTemplateHistoryMutation(c.config, OpDelete)
+	return &NotificationTemplateHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NotificationTemplateHistoryClient) DeleteOne(_m *NotificationTemplateHistory) *NotificationTemplateHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NotificationTemplateHistoryClient) DeleteOneID(id string) *NotificationTemplateHistoryDeleteOne {
+	builder := c.Delete().Where(notificationtemplatehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NotificationTemplateHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for NotificationTemplateHistory.
+func (c *NotificationTemplateHistoryClient) Query() *NotificationTemplateHistoryQuery {
+	return &NotificationTemplateHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNotificationTemplateHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a NotificationTemplateHistory entity by its id.
+func (c *NotificationTemplateHistoryClient) Get(ctx context.Context, id string) (*NotificationTemplateHistory, error) {
+	return c.Query().Where(notificationtemplatehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NotificationTemplateHistoryClient) GetX(ctx context.Context, id string) *NotificationTemplateHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *NotificationTemplateHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.NotificationTemplateHistory
+	return append(hooks[:len(hooks):len(hooks)], notificationtemplatehistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *NotificationTemplateHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.NotificationTemplateHistory
+	return append(inters[:len(inters):len(inters)], notificationtemplatehistory.Interceptors[:]...)
+}
+
+func (c *NotificationTemplateHistoryClient) mutate(ctx context.Context, m *NotificationTemplateHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NotificationTemplateHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NotificationTemplateHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NotificationTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NotificationTemplateHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown NotificationTemplateHistory mutation op: %q", m.Op())
+	}
+}
+
 // OrgMembershipHistoryClient is a client for the OrgMembershipHistory schema.
 type OrgMembershipHistoryClient struct {
 	config
@@ -7103,6 +7705,141 @@ func (c *RiskHistoryClient) mutate(ctx context.Context, m *RiskHistoryMutation) 
 	}
 }
 
+// SLADefinitionHistoryClient is a client for the SLADefinitionHistory schema.
+type SLADefinitionHistoryClient struct {
+	config
+}
+
+// NewSLADefinitionHistoryClient returns a client for the SLADefinitionHistory from the given config.
+func NewSLADefinitionHistoryClient(c config) *SLADefinitionHistoryClient {
+	return &SLADefinitionHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sladefinitionhistory.Hooks(f(g(h())))`.
+func (c *SLADefinitionHistoryClient) Use(hooks ...Hook) {
+	c.hooks.SLADefinitionHistory = append(c.hooks.SLADefinitionHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sladefinitionhistory.Intercept(f(g(h())))`.
+func (c *SLADefinitionHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SLADefinitionHistory = append(c.inters.SLADefinitionHistory, interceptors...)
+}
+
+// Create returns a builder for creating a SLADefinitionHistory entity.
+func (c *SLADefinitionHistoryClient) Create() *SLADefinitionHistoryCreate {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpCreate)
+	return &SLADefinitionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SLADefinitionHistory entities.
+func (c *SLADefinitionHistoryClient) CreateBulk(builders ...*SLADefinitionHistoryCreate) *SLADefinitionHistoryCreateBulk {
+	return &SLADefinitionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SLADefinitionHistoryClient) MapCreateBulk(slice any, setFunc func(*SLADefinitionHistoryCreate, int)) *SLADefinitionHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SLADefinitionHistoryCreateBulk{err: fmt.Errorf("calling to SLADefinitionHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SLADefinitionHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SLADefinitionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SLADefinitionHistory.
+func (c *SLADefinitionHistoryClient) Update() *SLADefinitionHistoryUpdate {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpUpdate)
+	return &SLADefinitionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SLADefinitionHistoryClient) UpdateOne(_m *SLADefinitionHistory) *SLADefinitionHistoryUpdateOne {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpUpdateOne, withSLADefinitionHistory(_m))
+	return &SLADefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SLADefinitionHistoryClient) UpdateOneID(id string) *SLADefinitionHistoryUpdateOne {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpUpdateOne, withSLADefinitionHistoryID(id))
+	return &SLADefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SLADefinitionHistory.
+func (c *SLADefinitionHistoryClient) Delete() *SLADefinitionHistoryDelete {
+	mutation := newSLADefinitionHistoryMutation(c.config, OpDelete)
+	return &SLADefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SLADefinitionHistoryClient) DeleteOne(_m *SLADefinitionHistory) *SLADefinitionHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SLADefinitionHistoryClient) DeleteOneID(id string) *SLADefinitionHistoryDeleteOne {
+	builder := c.Delete().Where(sladefinitionhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SLADefinitionHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for SLADefinitionHistory.
+func (c *SLADefinitionHistoryClient) Query() *SLADefinitionHistoryQuery {
+	return &SLADefinitionHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSLADefinitionHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SLADefinitionHistory entity by its id.
+func (c *SLADefinitionHistoryClient) Get(ctx context.Context, id string) (*SLADefinitionHistory, error) {
+	return c.Query().Where(sladefinitionhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SLADefinitionHistoryClient) GetX(ctx context.Context, id string) *SLADefinitionHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SLADefinitionHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.SLADefinitionHistory
+	return append(hooks[:len(hooks):len(hooks)], sladefinitionhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SLADefinitionHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.SLADefinitionHistory
+	return append(inters[:len(inters):len(inters)], sladefinitionhistory.Interceptors[:]...)
+}
+
+func (c *SLADefinitionHistoryClient) mutate(ctx context.Context, m *SLADefinitionHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SLADefinitionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SLADefinitionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SLADefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SLADefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown SLADefinitionHistory mutation op: %q", m.Op())
+	}
+}
+
 // ScanHistoryClient is a client for the ScanHistory schema.
 type ScanHistoryClient struct {
 	config
@@ -7778,6 +8515,141 @@ func (c *SubprocessorHistoryClient) mutate(ctx context.Context, m *SubprocessorH
 	}
 }
 
+// SystemDetailHistoryClient is a client for the SystemDetailHistory schema.
+type SystemDetailHistoryClient struct {
+	config
+}
+
+// NewSystemDetailHistoryClient returns a client for the SystemDetailHistory from the given config.
+func NewSystemDetailHistoryClient(c config) *SystemDetailHistoryClient {
+	return &SystemDetailHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `systemdetailhistory.Hooks(f(g(h())))`.
+func (c *SystemDetailHistoryClient) Use(hooks ...Hook) {
+	c.hooks.SystemDetailHistory = append(c.hooks.SystemDetailHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `systemdetailhistory.Intercept(f(g(h())))`.
+func (c *SystemDetailHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SystemDetailHistory = append(c.inters.SystemDetailHistory, interceptors...)
+}
+
+// Create returns a builder for creating a SystemDetailHistory entity.
+func (c *SystemDetailHistoryClient) Create() *SystemDetailHistoryCreate {
+	mutation := newSystemDetailHistoryMutation(c.config, OpCreate)
+	return &SystemDetailHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SystemDetailHistory entities.
+func (c *SystemDetailHistoryClient) CreateBulk(builders ...*SystemDetailHistoryCreate) *SystemDetailHistoryCreateBulk {
+	return &SystemDetailHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SystemDetailHistoryClient) MapCreateBulk(slice any, setFunc func(*SystemDetailHistoryCreate, int)) *SystemDetailHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SystemDetailHistoryCreateBulk{err: fmt.Errorf("calling to SystemDetailHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SystemDetailHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SystemDetailHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SystemDetailHistory.
+func (c *SystemDetailHistoryClient) Update() *SystemDetailHistoryUpdate {
+	mutation := newSystemDetailHistoryMutation(c.config, OpUpdate)
+	return &SystemDetailHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SystemDetailHistoryClient) UpdateOne(_m *SystemDetailHistory) *SystemDetailHistoryUpdateOne {
+	mutation := newSystemDetailHistoryMutation(c.config, OpUpdateOne, withSystemDetailHistory(_m))
+	return &SystemDetailHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SystemDetailHistoryClient) UpdateOneID(id string) *SystemDetailHistoryUpdateOne {
+	mutation := newSystemDetailHistoryMutation(c.config, OpUpdateOne, withSystemDetailHistoryID(id))
+	return &SystemDetailHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SystemDetailHistory.
+func (c *SystemDetailHistoryClient) Delete() *SystemDetailHistoryDelete {
+	mutation := newSystemDetailHistoryMutation(c.config, OpDelete)
+	return &SystemDetailHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SystemDetailHistoryClient) DeleteOne(_m *SystemDetailHistory) *SystemDetailHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SystemDetailHistoryClient) DeleteOneID(id string) *SystemDetailHistoryDeleteOne {
+	builder := c.Delete().Where(systemdetailhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SystemDetailHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for SystemDetailHistory.
+func (c *SystemDetailHistoryClient) Query() *SystemDetailHistoryQuery {
+	return &SystemDetailHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSystemDetailHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SystemDetailHistory entity by its id.
+func (c *SystemDetailHistoryClient) Get(ctx context.Context, id string) (*SystemDetailHistory, error) {
+	return c.Query().Where(systemdetailhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SystemDetailHistoryClient) GetX(ctx context.Context, id string) *SystemDetailHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SystemDetailHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.SystemDetailHistory
+	return append(hooks[:len(hooks):len(hooks)], systemdetailhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SystemDetailHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.SystemDetailHistory
+	return append(inters[:len(inters):len(inters)], systemdetailhistory.Interceptors[:]...)
+}
+
+func (c *SystemDetailHistoryClient) mutate(ctx context.Context, m *SystemDetailHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SystemDetailHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SystemDetailHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SystemDetailHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SystemDetailHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown SystemDetailHistory mutation op: %q", m.Op())
+	}
+}
+
 // TaskHistoryClient is a client for the TaskHistory schema.
 type TaskHistoryClient struct {
 	config
@@ -8450,6 +9322,141 @@ func (c *TrustCenterEntityHistoryClient) mutate(ctx context.Context, m *TrustCen
 		return (&TrustCenterEntityHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("historygenerated: unknown TrustCenterEntityHistory mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterFAQHistoryClient is a client for the TrustCenterFAQHistory schema.
+type TrustCenterFAQHistoryClient struct {
+	config
+}
+
+// NewTrustCenterFAQHistoryClient returns a client for the TrustCenterFAQHistory from the given config.
+func NewTrustCenterFAQHistoryClient(c config) *TrustCenterFAQHistoryClient {
+	return &TrustCenterFAQHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterfaqhistory.Hooks(f(g(h())))`.
+func (c *TrustCenterFAQHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterFAQHistory = append(c.hooks.TrustCenterFAQHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterfaqhistory.Intercept(f(g(h())))`.
+func (c *TrustCenterFAQHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterFAQHistory = append(c.inters.TrustCenterFAQHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterFAQHistory entity.
+func (c *TrustCenterFAQHistoryClient) Create() *TrustCenterFAQHistoryCreate {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpCreate)
+	return &TrustCenterFAQHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterFAQHistory entities.
+func (c *TrustCenterFAQHistoryClient) CreateBulk(builders ...*TrustCenterFAQHistoryCreate) *TrustCenterFAQHistoryCreateBulk {
+	return &TrustCenterFAQHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterFAQHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterFAQHistoryCreate, int)) *TrustCenterFAQHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterFAQHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterFAQHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterFAQHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterFAQHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterFAQHistory.
+func (c *TrustCenterFAQHistoryClient) Update() *TrustCenterFAQHistoryUpdate {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterFAQHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterFAQHistoryClient) UpdateOne(_m *TrustCenterFAQHistory) *TrustCenterFAQHistoryUpdateOne {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpUpdateOne, withTrustCenterFAQHistory(_m))
+	return &TrustCenterFAQHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterFAQHistoryClient) UpdateOneID(id string) *TrustCenterFAQHistoryUpdateOne {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpUpdateOne, withTrustCenterFAQHistoryID(id))
+	return &TrustCenterFAQHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterFAQHistory.
+func (c *TrustCenterFAQHistoryClient) Delete() *TrustCenterFAQHistoryDelete {
+	mutation := newTrustCenterFAQHistoryMutation(c.config, OpDelete)
+	return &TrustCenterFAQHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterFAQHistoryClient) DeleteOne(_m *TrustCenterFAQHistory) *TrustCenterFAQHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterFAQHistoryClient) DeleteOneID(id string) *TrustCenterFAQHistoryDeleteOne {
+	builder := c.Delete().Where(trustcenterfaqhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterFAQHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterFAQHistory.
+func (c *TrustCenterFAQHistoryClient) Query() *TrustCenterFAQHistoryQuery {
+	return &TrustCenterFAQHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterFAQHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterFAQHistory entity by its id.
+func (c *TrustCenterFAQHistoryClient) Get(ctx context.Context, id string) (*TrustCenterFAQHistory, error) {
+	return c.Query().Where(trustcenterfaqhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterFAQHistoryClient) GetX(ctx context.Context, id string) *TrustCenterFAQHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterFAQHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterFAQHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterfaqhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterFAQHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterFAQHistory
+	return append(inters[:len(inters):len(inters)], trustcenterfaqhistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterFAQHistoryClient) mutate(ctx context.Context, m *TrustCenterFAQHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterFAQHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterFAQHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterFAQHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterFAQHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown TrustCenterFAQHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -10351,20 +11358,23 @@ type (
 		ControlImplementationHistory, ControlObjectiveHistory, CustomDomainHistory,
 		DNSVerificationHistory, DirectoryAccountHistory, DirectoryGroupHistory,
 		DirectoryMembershipHistory, DiscussionHistory, DocumentDataHistory,
-		EntityHistory, EntityTypeHistory, EvidenceHistory, FileHistory,
-		FindingControlHistory, FindingHistory, GroupHistory, GroupMembershipHistory,
-		GroupSettingHistory, HushHistory, IdentityHolderHistory, IntegrationHistory,
-		InternalPolicyHistory, JobTemplateHistory, MappableDomainHistory,
-		MappedControlHistory, NarrativeHistory, NoteHistory, OrgMembershipHistory,
-		OrgSubscriptionHistory, OrganizationHistory, OrganizationSettingHistory,
-		PlatformHistory, ProcedureHistory, ProgramHistory, ProgramMembershipHistory,
-		RemediationHistory, ReviewHistory, RiskHistory, ScanHistory,
+		EmailBrandingHistory, EmailTemplateHistory, EntityHistory, EntityTypeHistory,
+		EvidenceHistory, FileHistory, FindingControlHistory, FindingHistory,
+		GroupHistory, GroupMembershipHistory, GroupSettingHistory, HushHistory,
+		IdentityHolderHistory, IntegrationHistory, InternalPolicyHistory,
+		JobTemplateHistory, MappableDomainHistory, MappedControlHistory,
+		NarrativeHistory, NoteHistory, NotificationPreferenceHistory,
+		NotificationTemplateHistory, OrgMembershipHistory, OrgSubscriptionHistory,
+		OrganizationHistory, OrganizationSettingHistory, PlatformHistory,
+		ProcedureHistory, ProgramHistory, ProgramMembershipHistory, RemediationHistory,
+		ReviewHistory, RiskHistory, SLADefinitionHistory, ScanHistory,
 		ScheduledJobHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
-		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
-		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterHistory,
-		TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
+		SystemDetailHistory, TaskHistory, TemplateHistory,
+		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Hook
@@ -10375,20 +11385,23 @@ type (
 		ControlImplementationHistory, ControlObjectiveHistory, CustomDomainHistory,
 		DNSVerificationHistory, DirectoryAccountHistory, DirectoryGroupHistory,
 		DirectoryMembershipHistory, DiscussionHistory, DocumentDataHistory,
-		EntityHistory, EntityTypeHistory, EvidenceHistory, FileHistory,
-		FindingControlHistory, FindingHistory, GroupHistory, GroupMembershipHistory,
-		GroupSettingHistory, HushHistory, IdentityHolderHistory, IntegrationHistory,
-		InternalPolicyHistory, JobTemplateHistory, MappableDomainHistory,
-		MappedControlHistory, NarrativeHistory, NoteHistory, OrgMembershipHistory,
-		OrgSubscriptionHistory, OrganizationHistory, OrganizationSettingHistory,
-		PlatformHistory, ProcedureHistory, ProgramHistory, ProgramMembershipHistory,
-		RemediationHistory, ReviewHistory, RiskHistory, ScanHistory,
+		EmailBrandingHistory, EmailTemplateHistory, EntityHistory, EntityTypeHistory,
+		EvidenceHistory, FileHistory, FindingControlHistory, FindingHistory,
+		GroupHistory, GroupMembershipHistory, GroupSettingHistory, HushHistory,
+		IdentityHolderHistory, IntegrationHistory, InternalPolicyHistory,
+		JobTemplateHistory, MappableDomainHistory, MappedControlHistory,
+		NarrativeHistory, NoteHistory, NotificationPreferenceHistory,
+		NotificationTemplateHistory, OrgMembershipHistory, OrgSubscriptionHistory,
+		OrganizationHistory, OrganizationSettingHistory, PlatformHistory,
+		ProcedureHistory, ProgramHistory, ProgramMembershipHistory, RemediationHistory,
+		ReviewHistory, RiskHistory, SLADefinitionHistory, ScanHistory,
 		ScheduledJobHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
-		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
-		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterHistory,
-		TrustCenterNDARequestHistory, TrustCenterSettingHistory,
-		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
-		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
+		SystemDetailHistory, TaskHistory, TemplateHistory,
+		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
+		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
+		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Interceptor

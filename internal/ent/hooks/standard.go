@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -94,7 +94,7 @@ func HookStandardDelete() ent.Hook {
 				return nil, ErrPublicStandardCannotBeDeleted
 			}
 
-			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
+			ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")))
 
 			// remove standard_id mapping from org owned controls
 			err = m.Client().Control.Update().ClearStandardID().
@@ -207,7 +207,9 @@ func HookStandardPublicAccessTuples() ent.Hook {
 
 			if len(writes) > 0 || len(deletes) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
-					return retVal, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to update relationship tuples for standard public access transition")
+
+					return retVal, ErrInternalServerError
 				}
 			}
 
@@ -414,10 +416,5 @@ func checkStandardLogoFile(ctx context.Context, m *generated.StandardMutation) (
 
 	m.SetLogoFileID(logoFiles[0].ID)
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut *generated.StandardMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.StandardMutation) string { return mut.Type() },
-	)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
+	return pkgobjects.ProcessFilesForMutation(ctx, m, logoKey)
 }

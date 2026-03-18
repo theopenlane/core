@@ -17,6 +17,7 @@ mutation CreateTrustCenterDomain($input: CreateTrustCenterDomainInput!) {
       tags
       updatedAt
       updatedBy
+      trustCenterID
     }
   }
 }

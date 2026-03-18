@@ -298,6 +298,26 @@ func (_u *RiskUpdate) ClearScopeID() *RiskUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *RiskUpdate) SetExternalUUID(v string) *RiskUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableExternalUUID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *RiskUpdate) ClearExternalUUID() *RiskUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *RiskUpdate) SetName(v string) *RiskUpdate {
 	_u.mutation.SetName(v)
@@ -1349,6 +1369,12 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(risk.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(risk.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)
@@ -2659,6 +2685,26 @@ func (_u *RiskUpdateOne) ClearScopeID() *RiskUpdateOne {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *RiskUpdateOne) SetExternalUUID(v string) *RiskUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableExternalUUID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *RiskUpdateOne) ClearExternalUUID() *RiskUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *RiskUpdateOne) SetName(v string) *RiskUpdateOne {
 	_u.mutation.SetName(v)
@@ -3740,6 +3786,12 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(risk.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(risk.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)

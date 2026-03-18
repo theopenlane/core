@@ -54,7 +54,7 @@ var (
 	// ErrInvalidUserContext is returned when user context does not match authenticated user
 	ErrInvalidUserContext = errors.New("invalid user context")
 	// ErrNoAuthUser is returned when the user couldn't be identified by the request
-	ErrNoAuthUser = errors.New("could not identify authenticated user in request")
+	ErrNoAuthUser = errors.New("could not identify authenticated user in request internal")
 	// ErrPassWordResetTokenInvalid is returned when the provided token and secret do not match the stored
 	ErrPassWordResetTokenInvalid = errors.New("password reset token invalid")
 	// ErrNonUniquePassword is returned when the password was already used
@@ -149,6 +149,10 @@ var (
 	ErrLoginFailed = errors.New("login failed, please check your credentials and try again")
 	// ErrUnableToVerifyToken is returned when unable to verify a token
 	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
+	// ErrResendWebhookDisabled is returned when resend webhook is not enabled
+	ErrResendWebhookDisabled = errors.New("resend webhook is not enabled")
+	// ErrResendWebhookMissingID is returned when resend webhook is missing svix-id header
+	ErrResendWebhookMissingID = errors.New("resend webhook is missing svix-id header")
 )
 
 var (

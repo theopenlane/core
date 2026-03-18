@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
 			case "faviconLocalFileID":
 				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
+			case "heroImageLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
 			case "themeMode":
 				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
 			case "primaryColor":
@@ -106,6 +108,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
 			case "ndaApprovalRequired":
 				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -114,6 +118,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":
 				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
+			case "heroImageFile":
+				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},
@@ -173,6 +179,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
 			case "faviconLocalFileID":
 				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
+			case "heroImageLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
 			case "themeMode":
 				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
 			case "primaryColor":
@@ -199,6 +207,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
 			case "ndaApprovalRequired":
 				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -207,6 +217,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":
 				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
+			case "heroImageFile":
+				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},
@@ -295,6 +307,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
 			case "faviconLocalFileID":
 				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
+			case "heroImageLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
 			case "themeMode":
 				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
 			case "primaryColor":
@@ -321,6 +335,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
 			case "ndaApprovalRequired":
 				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+			case "statusPageURL":
+				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -329,6 +345,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":
 				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
+			case "heroImageFile":
+				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},
@@ -370,10 +388,10 @@ func (ec *executionContext) _TrustCenterSettingBulkCreatePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -409,10 +427,10 @@ func (ec *executionContext) _TrustCenterSettingCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -448,10 +466,10 @@ func (ec *executionContext) _TrustCenterSettingDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -487,10 +505,10 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

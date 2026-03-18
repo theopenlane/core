@@ -1,11 +1,8 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
+// DocumentType is a custom type representing the type of a document.
 type DocumentType string
 
 var (
@@ -17,46 +14,22 @@ var (
 	DocumentTypeInvalid DocumentType = "INVALID"
 )
 
+var documentTypeValues = []DocumentType{RootTemplate, Document}
+
 // Values returns a slice of strings that represents all the possible values of the DocumentType enum.
 // Possible default values are "ROOTTEMPLATE", "DOCUMENT"
-func (DocumentType) Values() (kinds []string) {
-	for _, s := range []DocumentType{RootTemplate, Document} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (DocumentType) Values() []string { return stringValues(documentTypeValues) }
 
 // String returns the DocumentType as a string
-func (r DocumentType) String() string {
-	return string(r)
-}
+func (r DocumentType) String() string { return string(r) }
 
 // ToDocumentType returns the user status enum based on string input
 func ToDocumentType(r string) *DocumentType {
-	switch r := strings.ToUpper(r); r {
-	case RootTemplate.String():
-		return &RootTemplate
-	case Document.String():
-		return &Document
-	default:
-		return &DocumentTypeInvalid
-	}
+	return parse(r, documentTypeValues, &DocumentTypeInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r DocumentType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r DocumentType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *DocumentType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for DocumentType, got: %T", v) //nolint:err113
-	}
-
-	*r = DocumentType(str)
-
-	return nil
-}
+func (r *DocumentType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

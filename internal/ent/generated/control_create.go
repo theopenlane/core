@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -24,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -32,6 +34,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -144,6 +148,20 @@ func (_c *ControlCreate) SetTags(v []string) *ControlCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *ControlCreate) SetExternalUUID(v string) *ControlCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableExternalUUID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ControlCreate) SetTitle(v string) *ControlCreate {
 	_c.mutation.SetTitle(v)
@@ -240,6 +258,48 @@ func (_c *ControlCreate) SetNillableStatus(v *enums.ControlStatus) *ControlCreat
 	return _c
 }
 
+// SetImplementationStatus sets the "implementation_status" field.
+func (_c *ControlCreate) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlCreate {
+	_c.mutation.SetImplementationStatus(v)
+	return _c
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlCreate {
+	if v != nil {
+		_c.SetImplementationStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_c *ControlCreate) SetImplementationDescription(v string) *ControlCreate {
+	_c.mutation.SetImplementationDescription(v)
+	return _c
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableImplementationDescription(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetImplementationDescription(*v)
+	}
+	return _c
+}
+
+// SetPublicRepresentation sets the "public_representation" field.
+func (_c *ControlCreate) SetPublicRepresentation(v string) *ControlCreate {
+	_c.mutation.SetPublicRepresentation(v)
+	return _c
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_c *ControlCreate) SetNillablePublicRepresentation(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetPublicRepresentation(*v)
+	}
+	return _c
+}
+
 // SetSource sets the "source" field.
 func (_c *ControlCreate) SetSource(v enums.ControlSource) *ControlCreate {
 	_c.mutation.SetSource(v)
@@ -250,6 +310,20 @@ func (_c *ControlCreate) SetSource(v enums.ControlSource) *ControlCreate {
 func (_c *ControlCreate) SetNillableSource(v *enums.ControlSource) *ControlCreate {
 	if v != nil {
 		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceName sets the "source_name" field.
+func (_c *ControlCreate) SetSourceName(v string) *ControlCreate {
+	_c.mutation.SetSourceName(v)
+	return _c
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableSourceName(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetSourceName(*v)
 	}
 	return _c
 }
@@ -580,6 +654,34 @@ func (_c *ControlCreate) SetNillableStandardID(v *string) *ControlCreate {
 	return _c
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_c *ControlCreate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlCreate {
+	_c.mutation.SetTrustCenterVisibility(v)
+	return _c
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlCreate {
+	if v != nil {
+		_c.SetTrustCenterVisibility(*v)
+	}
+	return _c
+}
+
+// SetIsTrustCenterControl sets the "is_trust_center_control" field.
+func (_c *ControlCreate) SetIsTrustCenterControl(v bool) *ControlCreate {
+	_c.mutation.SetIsTrustCenterControl(v)
+	return _c
+}
+
+// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableIsTrustCenterControl(v *bool) *ControlCreate {
+	if v != nil {
+		_c.SetIsTrustCenterControl(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ControlCreate) SetID(v string) *ControlCreate {
 	_c.mutation.SetID(v)
@@ -874,6 +976,81 @@ func (_c *ControlCreate) AddScans(v ...*Scan) *ControlCreate {
 	return _c.AddScanIDs(ids...)
 }
 
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_c *ControlCreate) AddEntityIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_c *ControlCreate) AddEntities(v ...*Entity) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *ControlCreate) AddIdentityHolderIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *ControlCreate) AddIdentityHolders(v ...*IdentityHolder) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *ControlCreate) AddCampaignIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *ControlCreate) AddCampaigns(v ...*Campaign) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *ControlCreate) AddRemediationIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *ControlCreate) AddRemediations(v ...*Remediation) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *ControlCreate) AddReviewIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *ControlCreate) AddReviews(v ...*Review) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
 func (_c *ControlCreate) AddFindingIDs(ids ...string) *ControlCreate {
 	_c.mutation.AddFindingIDs(ids...)
@@ -1053,6 +1230,10 @@ func (_c *ControlCreate) defaults() error {
 		v := control.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ImplementationStatus(); !ok {
+		v := control.DefaultImplementationStatus
+		_c.mutation.SetImplementationStatus(v)
+	}
 	if _, ok := _c.mutation.Source(); !ok {
 		v := control.DefaultSource
 		_c.mutation.SetSource(v)
@@ -1064,6 +1245,14 @@ func (_c *ControlCreate) defaults() error {
 	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
 		v := control.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
+	if _, ok := _c.mutation.TrustCenterVisibility(); !ok {
+		v := control.DefaultTrustCenterVisibility
+		_c.mutation.SetTrustCenterVisibility(v)
+	}
+	if _, ok := _c.mutation.IsTrustCenterControl(); !ok {
+		v := control.DefaultIsTrustCenterControl
+		_c.mutation.SetIsTrustCenterControl(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if control.DefaultID == nil {
@@ -1090,6 +1279,11 @@ func (_c *ControlCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.ImplementationStatus(); ok {
+		if err := control.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`generated: validator failed for field "Control.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
@@ -1111,6 +1305,11 @@ func (_c *ControlCreate) check() error {
 	if v, ok := _c.mutation.RefCode(); ok {
 		if err := control.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.TrustCenterVisibility(); ok {
+		if err := control.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`generated: validator failed for field "Control.trust_center_visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -1181,6 +1380,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(control.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(control.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -1209,9 +1412,25 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := _c.mutation.ImplementationStatus(); ok {
+		_spec.SetField(control.FieldImplementationStatus, field.TypeEnum, value)
+		_node.ImplementationStatus = value
+	}
+	if value, ok := _c.mutation.ImplementationDescription(); ok {
+		_spec.SetField(control.FieldImplementationDescription, field.TypeString, value)
+		_node.ImplementationDescription = value
+	}
+	if value, ok := _c.mutation.PublicRepresentation(); ok {
+		_spec.SetField(control.FieldPublicRepresentation, field.TypeString, value)
+		_node.PublicRepresentation = value
+	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceName(); ok {
+		_spec.SetField(control.FieldSourceName, field.TypeString, value)
+		_node.SourceName = &value
 	}
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(control.FieldReferenceFramework, field.TypeString, value)
@@ -1300,6 +1519,14 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
+	}
+	if value, ok := _c.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(control.FieldTrustCenterVisibility, field.TypeEnum, value)
+		_node.TrustCenterVisibility = value
+	}
+	if value, ok := _c.mutation.IsTrustCenterControl(); ok {
+		_spec.SetField(control.FieldIsTrustCenterControl, field.TypeBool, value)
+		_node.IsTrustCenterControl = value
 	}
 	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1712,6 +1939,91 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.EntitiesTable,
+			Columns: control.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.IdentityHoldersTable,
+			Columns: control.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.CampaignsTable,
+			Columns: control.CampaignsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlCampaigns
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.RemediationControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

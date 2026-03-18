@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -82,8 +84,16 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -142,6 +152,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -190,6 +204,16 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -284,6 +308,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -300,8 +326,16 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -360,6 +394,10 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -408,6 +446,16 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -502,6 +550,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -518,8 +568,16 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -578,6 +636,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -626,6 +688,16 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -720,6 +792,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -736,8 +810,16 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Control_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Control_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -796,6 +878,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -844,6 +930,16 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -905,10 +1001,10 @@ func (ec *executionContext) _ControlBulkCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -944,10 +1040,10 @@ func (ec *executionContext) _ControlBulkDeletePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -982,10 +1078,10 @@ func (ec *executionContext) _ControlBulkUpdatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -1021,10 +1117,10 @@ func (ec *executionContext) _ControlCreatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -1060,10 +1156,10 @@ func (ec *executionContext) _ControlDeletePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -1099,10 +1195,10 @@ func (ec *executionContext) _ControlUpdatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

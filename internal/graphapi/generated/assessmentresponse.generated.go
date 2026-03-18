@@ -104,6 +104,8 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
 			case "documentDataID":
 				return ec.fieldContext_AssessmentResponse_documentDataID(ctx, field)
+			case "isDraft":
+				return ec.fieldContext_AssessmentResponse_isDraft(ctx, field)
 			case "owner":
 				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
 			case "assessment":
@@ -189,10 +191,10 @@ func (ec *executionContext) _AssessmentResponseCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -228,10 +230,10 @@ func (ec *executionContext) _AssessmentResponseDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

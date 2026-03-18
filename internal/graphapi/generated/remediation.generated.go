@@ -169,6 +169,205 @@ func (ec *executionContext) fieldContext_RemediationBulkCreatePayload_remediatio
 	return fc, nil
 }
 
+func (ec *executionContext) _RemediationBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RemediationBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RemediationBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_RemediationBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RemediationBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _RemediationBulkUpdatePayload_remediations(ctx context.Context, field graphql.CollectedField, obj *model.RemediationBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RemediationBulkUpdatePayload_remediations,
+		func(ctx context.Context) (any, error) {
+			return obj.Remediations, nil
+		},
+		nil,
+		ec.marshalORemediation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_RemediationBulkUpdatePayload_remediations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RemediationBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Remediation_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Remediation_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Remediation_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Remediation_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Remediation_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Remediation_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Remediation_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Remediation_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Remediation_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Remediation_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Remediation_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Remediation_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Remediation_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Remediation_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Remediation_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Remediation_externalID(ctx, field)
+			case "externalOwnerID":
+				return ec.fieldContext_Remediation_externalOwnerID(ctx, field)
+			case "title":
+				return ec.fieldContext_Remediation_title(ctx, field)
+			case "state":
+				return ec.fieldContext_Remediation_state(ctx, field)
+			case "intent":
+				return ec.fieldContext_Remediation_intent(ctx, field)
+			case "summary":
+				return ec.fieldContext_Remediation_summary(ctx, field)
+			case "explanation":
+				return ec.fieldContext_Remediation_explanation(ctx, field)
+			case "instructions":
+				return ec.fieldContext_Remediation_instructions(ctx, field)
+			case "ownerReference":
+				return ec.fieldContext_Remediation_ownerReference(ctx, field)
+			case "repositoryURI":
+				return ec.fieldContext_Remediation_repositoryURI(ctx, field)
+			case "pullRequestURI":
+				return ec.fieldContext_Remediation_pullRequestURI(ctx, field)
+			case "ticketReference":
+				return ec.fieldContext_Remediation_ticketReference(ctx, field)
+			case "dueAt":
+				return ec.fieldContext_Remediation_dueAt(ctx, field)
+			case "completedAt":
+				return ec.fieldContext_Remediation_completedAt(ctx, field)
+			case "prGeneratedAt":
+				return ec.fieldContext_Remediation_prGeneratedAt(ctx, field)
+			case "error":
+				return ec.fieldContext_Remediation_error(ctx, field)
+			case "source":
+				return ec.fieldContext_Remediation_source(ctx, field)
+			case "externalURI":
+				return ec.fieldContext_Remediation_externalURI(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Remediation_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_Remediation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Remediation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Remediation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Remediation_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Remediation_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Remediation_scope(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Remediation_integrations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Remediation_scans(ctx, field)
+			case "findings":
+				return ec.fieldContext_Remediation_findings(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Remediation_vulnerabilities(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Remediation_actionPlans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Remediation_tasks(ctx, field)
+			case "controls":
+				return ec.fieldContext_Remediation_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Remediation_subcontrols(ctx, field)
+			case "risks":
+				return ec.fieldContext_Remediation_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_Remediation_programs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Remediation_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Remediation_entities(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Remediation_reviews(ctx, field)
+			case "comments":
+				return ec.fieldContext_Remediation_comments(ctx, field)
+			case "files":
+				return ec.fieldContext_Remediation_files(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Remediation", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _RemediationBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RemediationBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_RemediationBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_RemediationBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RemediationBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _RemediationCreatePayload_remediation(ctx context.Context, field graphql.CollectedField, obj *model.RemediationCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -514,10 +713,87 @@ func (ec *executionContext) _RemediationBulkCreatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var remediationBulkDeletePayloadImplementors = []string{"RemediationBulkDeletePayload"}
+
+func (ec *executionContext) _RemediationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.RemediationBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, remediationBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RemediationBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._RemediationBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var remediationBulkUpdatePayloadImplementors = []string{"RemediationBulkUpdatePayload"}
+
+func (ec *executionContext) _RemediationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.RemediationBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, remediationBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RemediationBulkUpdatePayload")
+		case "remediations":
+			out.Values[i] = ec._RemediationBulkUpdatePayload_remediations(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._RemediationBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -553,10 +829,10 @@ func (ec *executionContext) _RemediationCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -592,10 +868,10 @@ func (ec *executionContext) _RemediationDeletePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -631,10 +907,10 @@ func (ec *executionContext) _RemediationUpdatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -661,6 +937,34 @@ func (ec *executionContext) marshalNRemediationBulkCreatePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._RemediationBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNRemediationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationBulkDeletePayload) graphql.Marshaler {
+	return ec._RemediationBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRemediationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RemediationBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNRemediationBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationBulkUpdatePayload) graphql.Marshaler {
+	return ec._RemediationBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRemediationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RemediationBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNRemediationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationCreatePayload) graphql.Marshaler {

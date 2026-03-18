@@ -37,10 +37,12 @@ func AllowIfSelf() privacy.QueryMutationRule {
 			return privacy.Allow
 		}
 
-		userID, err := auth.GetSubjectIDFromContext(ctx)
-		if err != nil {
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil || caller.SubjectID == "" {
 			return privacy.Skipf("anonymous viewer")
 		}
+
+		userID := caller.SubjectID
 
 		switch actualFilter := f.(type) {
 		case UserIDFilter:

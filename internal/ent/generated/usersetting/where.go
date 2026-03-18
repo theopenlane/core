@@ -103,6 +103,21 @@ func UserID(v string) predicate.UserSetting {
 	return predicate.UserSetting(sql.FieldEQ(FieldUserID, v))
 }
 
+// DelegateUserID applies equality check predicate on the "delegate_user_id" field. It's identical to DelegateUserIDEQ.
+func DelegateUserID(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateStartAt applies equality check predicate on the "delegate_start_at" field. It's identical to DelegateStartAtEQ.
+func DelegateStartAt(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEQ(FieldDelegateStartAt, v))
+}
+
+// DelegateEndAt applies equality check predicate on the "delegate_end_at" field. It's identical to DelegateEndAtEQ.
+func DelegateEndAt(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEQ(FieldDelegateEndAt, v))
+}
+
 // Locked applies equality check predicate on the "locked" field. It's identical to LockedEQ.
 func Locked(v bool) predicate.UserSetting {
 	return predicate.UserSetting(sql.FieldEQ(FieldLocked, v))
@@ -596,6 +611,181 @@ func UserIDEqualFold(v string) predicate.UserSetting {
 // UserIDContainsFold applies the ContainsFold predicate on the "user_id" field.
 func UserIDContainsFold(v string) predicate.UserSetting {
 	return predicate.UserSetting(sql.FieldContainsFold(FieldUserID, v))
+}
+
+// DelegateUserIDEQ applies the EQ predicate on the "delegate_user_id" field.
+func DelegateUserIDEQ(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDNEQ applies the NEQ predicate on the "delegate_user_id" field.
+func DelegateUserIDNEQ(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIn applies the In predicate on the "delegate_user_id" field.
+func DelegateUserIDIn(vs ...string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDNotIn applies the NotIn predicate on the "delegate_user_id" field.
+func DelegateUserIDNotIn(vs ...string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDGT applies the GT predicate on the "delegate_user_id" field.
+func DelegateUserIDGT(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldGT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDGTE applies the GTE predicate on the "delegate_user_id" field.
+func DelegateUserIDGTE(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldGTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLT applies the LT predicate on the "delegate_user_id" field.
+func DelegateUserIDLT(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldLT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLTE applies the LTE predicate on the "delegate_user_id" field.
+func DelegateUserIDLTE(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldLTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContains applies the Contains predicate on the "delegate_user_id" field.
+func DelegateUserIDContains(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldContains(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasPrefix applies the HasPrefix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasPrefix(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldHasPrefix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasSuffix applies the HasSuffix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasSuffix(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldHasSuffix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIsNil applies the IsNil predicate on the "delegate_user_id" field.
+func DelegateUserIDIsNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIsNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDNotNil applies the NotNil predicate on the "delegate_user_id" field.
+func DelegateUserIDNotNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDEqualFold applies the EqualFold predicate on the "delegate_user_id" field.
+func DelegateUserIDEqualFold(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEqualFold(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContainsFold applies the ContainsFold predicate on the "delegate_user_id" field.
+func DelegateUserIDContainsFold(v string) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldContainsFold(FieldDelegateUserID, v))
+}
+
+// DelegateStartAtEQ applies the EQ predicate on the "delegate_start_at" field.
+func DelegateStartAtEQ(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEQ(FieldDelegateStartAt, v))
+}
+
+// DelegateStartAtNEQ applies the NEQ predicate on the "delegate_start_at" field.
+func DelegateStartAtNEQ(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNEQ(FieldDelegateStartAt, v))
+}
+
+// DelegateStartAtIn applies the In predicate on the "delegate_start_at" field.
+func DelegateStartAtIn(vs ...time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIn(FieldDelegateStartAt, vs...))
+}
+
+// DelegateStartAtNotIn applies the NotIn predicate on the "delegate_start_at" field.
+func DelegateStartAtNotIn(vs ...time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotIn(FieldDelegateStartAt, vs...))
+}
+
+// DelegateStartAtGT applies the GT predicate on the "delegate_start_at" field.
+func DelegateStartAtGT(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldGT(FieldDelegateStartAt, v))
+}
+
+// DelegateStartAtGTE applies the GTE predicate on the "delegate_start_at" field.
+func DelegateStartAtGTE(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldGTE(FieldDelegateStartAt, v))
+}
+
+// DelegateStartAtLT applies the LT predicate on the "delegate_start_at" field.
+func DelegateStartAtLT(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldLT(FieldDelegateStartAt, v))
+}
+
+// DelegateStartAtLTE applies the LTE predicate on the "delegate_start_at" field.
+func DelegateStartAtLTE(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldLTE(FieldDelegateStartAt, v))
+}
+
+// DelegateStartAtIsNil applies the IsNil predicate on the "delegate_start_at" field.
+func DelegateStartAtIsNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIsNull(FieldDelegateStartAt))
+}
+
+// DelegateStartAtNotNil applies the NotNil predicate on the "delegate_start_at" field.
+func DelegateStartAtNotNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotNull(FieldDelegateStartAt))
+}
+
+// DelegateEndAtEQ applies the EQ predicate on the "delegate_end_at" field.
+func DelegateEndAtEQ(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldEQ(FieldDelegateEndAt, v))
+}
+
+// DelegateEndAtNEQ applies the NEQ predicate on the "delegate_end_at" field.
+func DelegateEndAtNEQ(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNEQ(FieldDelegateEndAt, v))
+}
+
+// DelegateEndAtIn applies the In predicate on the "delegate_end_at" field.
+func DelegateEndAtIn(vs ...time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIn(FieldDelegateEndAt, vs...))
+}
+
+// DelegateEndAtNotIn applies the NotIn predicate on the "delegate_end_at" field.
+func DelegateEndAtNotIn(vs ...time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotIn(FieldDelegateEndAt, vs...))
+}
+
+// DelegateEndAtGT applies the GT predicate on the "delegate_end_at" field.
+func DelegateEndAtGT(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldGT(FieldDelegateEndAt, v))
+}
+
+// DelegateEndAtGTE applies the GTE predicate on the "delegate_end_at" field.
+func DelegateEndAtGTE(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldGTE(FieldDelegateEndAt, v))
+}
+
+// DelegateEndAtLT applies the LT predicate on the "delegate_end_at" field.
+func DelegateEndAtLT(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldLT(FieldDelegateEndAt, v))
+}
+
+// DelegateEndAtLTE applies the LTE predicate on the "delegate_end_at" field.
+func DelegateEndAtLTE(v time.Time) predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldLTE(FieldDelegateEndAt, v))
+}
+
+// DelegateEndAtIsNil applies the IsNil predicate on the "delegate_end_at" field.
+func DelegateEndAtIsNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldIsNull(FieldDelegateEndAt))
+}
+
+// DelegateEndAtNotNil applies the NotNil predicate on the "delegate_end_at" field.
+func DelegateEndAtNotNil() predicate.UserSetting {
+	return predicate.UserSetting(sql.FieldNotNull(FieldDelegateEndAt))
 }
 
 // LockedEQ applies the EQ predicate on the "locked" field.

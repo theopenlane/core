@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -41,67 +41,18 @@ func (e *WorkflowCreationError) Unwrap() error {
 	return e.Err
 }
 
-// BuildProposedChanges materializes mutation values (including cleared fields) for workflow proposals.
-func BuildProposedChanges(m utils.GenericMutation, changedFields []string) map[string]any {
-	clearedSet := lo.SliceToMap(m.ClearedFields(), func(f string) (string, struct{}) {
-		return f, struct{}{}
-	})
-
-	proposed := make(map[string]any, len(changedFields))
-	for _, field := range changedFields {
-		if val, ok := m.Field(field); ok {
-			proposed[field] = val
-			continue
-		}
-		if _, ok := clearedSet[field]; ok {
-			proposed[field] = nil
-		}
-	}
-
-	return proposed
-}
-
-// DefinitionMatchesTrigger reports whether the workflow definition has a trigger that matches the event type and changed fields.
-func DefinitionMatchesTrigger(doc models.WorkflowDefinitionDocument, eventType string, changedFields []string) bool {
-	targetEvent := strings.ToUpper(eventType)
-
-	for _, trigger := range doc.Triggers {
-		if trigger.Operation != "" {
-			if targetEvent == "" || strings.ToUpper(trigger.Operation) != targetEvent {
-				continue
-			}
-		}
-
-		if len(trigger.Fields) == 0 && len(trigger.Edges) == 0 {
-			return true
-		}
-
-		allFields := append([]string(nil), trigger.Fields...)
-		allFields = append(allFields, trigger.Edges...)
-		if len(allFields) == 0 {
-			return true
-		}
-
-		if len(lo.Intersect(allFields, changedFields)) > 0 {
-			return true
-		}
-	}
-
-	return false
-}
-
 // ResolveOwnerID returns the provided owner ID or derives it from the context when empty.
 func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
 	if ownerID != "" {
 		return ownerID, nil
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return "", err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return "", auth.ErrNoAuthUser
 	}
 
-	return orgID, nil
+	return caller.OrganizationID, nil
 }
 
 // WorkflowInstanceBuilderParams defines the inputs for creating a workflow instance + object ref.
@@ -189,9 +140,9 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 		return nil, nil
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, err
+	proposalCaller, proposalOk := auth.CallerFromContext(ctx)
+	if !proposalOk || proposalCaller == nil || proposalCaller.OrganizationID == "" {
+		return nil, auth.ErrNoAuthUser
 	}
 
 	queryBase := func() *generated.WorkflowProposalQuery {
@@ -199,7 +150,7 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 			Where(
 				workflowproposal.WorkflowObjectRefIDIn(objRefIDs...),
 				workflowproposal.DomainKeyEQ(domainKey),
-				workflowproposal.OwnerIDEQ(orgID),
+				workflowproposal.OwnerIDEQ(proposalCaller.OrganizationID),
 			)
 	}
 
@@ -221,10 +172,9 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 		return proposal, nil
 	}
 
-	stateGroups := make([][]enums.WorkflowProposalState, 0, len(priorityStates)+1)
-	for _, state := range priorityStates {
-		stateGroups = append(stateGroups, []enums.WorkflowProposalState{state})
-	}
+	stateGroups := lo.Map(priorityStates, func(state enums.WorkflowProposalState, _ int) []enums.WorkflowProposalState {
+		return []enums.WorkflowProposalState{state}
+	})
 	stateGroups = append(stateGroups, states)
 
 	for _, group := range stateGroups {
@@ -240,9 +190,10 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 	return nil, nil
 }
 
-// ValidateCELExpression ensures the expression compiles against the standard workflow CEL environment.
-func ValidateCELExpression(expression string) error {
-	env, err := NewCELEnvWithConfig(NewDefaultConfig())
+// ValidateCELExpression ensures the expression compiles against a CEL environment
+// configured with the provided workflow config and scope.
+func ValidateCELExpression(cfg *Config, scope CELExpressionScope, expression string) error {
+	env, err := NewCELEnv(cfg, scope)
 	if err != nil {
 		return err
 	}
@@ -257,4 +208,38 @@ func ValidateCELExpression(expression string) error {
 	}
 
 	return nil
+}
+
+// ResolveUserDisplayName fetches a user by ID and returns their display name (FirstName LastName).
+// If the user cannot be found or has no name, returns the original userID as fallback.
+func ResolveUserDisplayName(ctx context.Context, client *generated.Client, userID string) string {
+	user, err := client.User.Get(ctx, userID)
+	if err != nil {
+		return userID
+	}
+
+	name := strings.TrimSpace(user.FirstName + " " + user.LastName)
+	if name == "" {
+		return userID
+	}
+
+	return name
+}
+
+// GetObjectUpdatedBy extracts the UpdatedBy field from an Object's Node if available.
+// Returns empty string if the object or node is nil, or if UpdatedBy is not accessible.
+func GetObjectUpdatedBy(obj *Object) string {
+	if obj == nil || obj.Node == nil {
+		return ""
+	}
+
+	var fields struct {
+		UpdatedBy string `json:"updated_by"`
+	}
+
+	if err := jsonx.RoundTrip(obj.Node, &fields); err != nil {
+		return ""
+	}
+
+	return fields.UpdatedBy
 }

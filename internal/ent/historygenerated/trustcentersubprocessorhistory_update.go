@@ -106,37 +106,43 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) ClearDeletedBy() *TrustCenterSub
 	return _u
 }
 
-// SetSubprocessorID sets the "subprocessor_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetSubprocessorID(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetSubprocessorID(v)
+// SetTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field.
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterSubprocessorKindName(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetTrustCenterSubprocessorKindName(v)
 	return _u
 }
 
-// SetNillableSubprocessorID sets the "subprocessor_id" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableSubprocessorID(v *string) *TrustCenterSubprocessorHistoryUpdate {
+// SetNillableTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field if the given value is not nil.
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterSubprocessorKindName(v *string) *TrustCenterSubprocessorHistoryUpdate {
 	if v != nil {
-		_u.SetSubprocessorID(*v)
+		_u.SetTrustCenterSubprocessorKindName(*v)
 	}
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterID(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
+// ClearTrustCenterSubprocessorKindName clears the value of the "trust_center_subprocessor_kind_name" field.
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterSubprocessorKindName() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearTrustCenterSubprocessorKindName()
 	return _u
 }
 
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterSubprocessorHistoryUpdate {
+// SetTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field.
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterSubprocessorKindID(v string) *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.SetTrustCenterSubprocessorKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field if the given value is not nil.
+func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterSubprocessorKindID(v *string) *TrustCenterSubprocessorHistoryUpdate {
 	if v != nil {
-		_u.SetTrustCenterID(*v)
+		_u.SetTrustCenterSubprocessorKindID(*v)
 	}
 	return _u
 }
 
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterID() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
+// ClearTrustCenterSubprocessorKindID clears the value of the "trust_center_subprocessor_kind_id" field.
+func (_u *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterSubprocessorKindID() *TrustCenterSubprocessorHistoryUpdate {
+	_u.mutation.ClearTrustCenterSubprocessorKindID()
 	return _u
 }
 
@@ -155,20 +161,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) AppendCountries(v []string) *Tru
 // ClearCountries clears the value of the "countries" field.
 func (_u *TrustCenterSubprocessorHistoryUpdate) ClearCountries() *TrustCenterSubprocessorHistoryUpdate {
 	_u.mutation.ClearCountries()
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetCategory(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableCategory(v *string) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
 	return _u
 }
 
@@ -267,11 +259,17 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_n
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.SubprocessorID(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldSubprocessorID, field.TypeString, value)
+	if value, ok := _u.mutation.TrustCenterSubprocessorKindName(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString, value)
+	if _u.mutation.TrustCenterSubprocessorKindNameCleared() {
+		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterSubprocessorKindID(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterSubprocessorKindIDCleared() {
+		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
@@ -286,9 +284,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_n
 	}
 	if _u.mutation.CountriesCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldCategory, field.TypeString, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSubprocessorHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -386,37 +381,43 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedBy() *TrustCenter
 	return _u
 }
 
-// SetSubprocessorID sets the "subprocessor_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetSubprocessorID(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetSubprocessorID(v)
+// SetTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterSubprocessorKindName(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetTrustCenterSubprocessorKindName(v)
 	return _u
 }
 
-// SetNillableSubprocessorID sets the "subprocessor_id" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableSubprocessorID(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+// SetNillableTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field if the given value is not nil.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterSubprocessorKindName(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
 	if v != nil {
-		_u.SetSubprocessorID(*v)
+		_u.SetTrustCenterSubprocessorKindName(*v)
 	}
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
+// ClearTrustCenterSubprocessorKindName clears the value of the "trust_center_subprocessor_kind_name" field.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterSubprocessorKindName() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterSubprocessorKindName()
 	return _u
 }
 
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
+// SetTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterSubprocessorKindID(v string) *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.SetTrustCenterSubprocessorKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field if the given value is not nil.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterSubprocessorKindID(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
 	if v != nil {
-		_u.SetTrustCenterID(*v)
+		_u.SetTrustCenterSubprocessorKindID(*v)
 	}
 	return _u
 }
 
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterID() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
+// ClearTrustCenterSubprocessorKindID clears the value of the "trust_center_subprocessor_kind_id" field.
+func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterSubprocessorKindID() *TrustCenterSubprocessorHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterSubprocessorKindID()
 	return _u
 }
 
@@ -435,20 +436,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) AppendCountries(v []string) *
 // ClearCountries clears the value of the "countries" field.
 func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearCountries() *TrustCenterSubprocessorHistoryUpdateOne {
 	_u.mutation.ClearCountries()
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetCategory(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableCategory(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
 	return _u
 }
 
@@ -577,11 +564,17 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) 
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.SubprocessorID(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldSubprocessorID, field.TypeString, value)
+	if value, ok := _u.mutation.TrustCenterSubprocessorKindName(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString, value)
+	if _u.mutation.TrustCenterSubprocessorKindNameCleared() {
+		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterSubprocessorKindID(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterSubprocessorKindIDCleared() {
+		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
@@ -596,9 +589,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) 
 	}
 	if _u.mutation.CountriesCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldCategory, field.TypeString, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSubprocessorHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

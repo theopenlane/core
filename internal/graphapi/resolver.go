@@ -8,7 +8,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/ravilushqa/otelgqlgen"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
@@ -19,7 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/gala"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
@@ -36,12 +36,13 @@ const (
 // Resolver provides a graph response resolver
 type Resolver struct {
 	db                *ent.Client
-	pool              *soiree.Pool
+	pool              *gala.Pool
 	extensionsEnabled bool
 	uploader          *objects.Service
 	isDevelopment     bool
 	complexityLimit   int
 	maxResultLimit    *int
+	workflowsConfig   workflows.Config
 
 	// subscription settings
 	subscriptionSettings
@@ -72,13 +73,18 @@ type subscriptionSettings struct {
 	sseKeepAliveInterval time.Duration
 	// authOptions for authenticating websocket connections
 	authOptions *mwauth.Options
+	// notificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
+	// Unread notifications are always pulled regardless of this setting
+	notificationLookbackDays int
 }
 
 // NewResolver returns a resolver configured with the given ent client
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
+	defaultWorkflows := workflows.NewDefaultConfig()
 	return &Resolver{
-		db:       db,
-		uploader: u,
+		db:              db,
+		uploader:        u,
+		workflowsConfig: *defaultWorkflows,
 		subscriptionSettings: subscriptionSettings{
 			websocketPingInterval: defaultWebsocketPingInterval,
 			sseKeepAliveInterval:  defaultSSEKeepAliveInterval,
@@ -161,8 +167,6 @@ func (r *Resolver) Handler() *Handler {
 	common.WithResultLimit(srv, r.maxResultLimit)
 
 	common.WithMetrics(srv)
-
-	srv.Use(otelgqlgen.Middleware())
 
 	h := &Handler{
 		r:              r,

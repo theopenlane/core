@@ -238,6 +238,24 @@ func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 	return v
 }
 
+func (ec *executionContext) unmarshalOAny2interface(ctx context.Context, v any) (any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalAny(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAny2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalAny(v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOAny2ᚕinterfaceᚄ(ctx context.Context, v any) ([]any, error) {
 	if v == nil {
 		return nil, nil
@@ -530,6 +548,32 @@ func (ec *executionContext) marshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlan
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOExportMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐExportMetadata(ctx context.Context, v any) (models.ExportMetadata, error) {
+	var res models.ExportMetadata
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOExportMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐExportMetadata(ctx context.Context, sel ast.SelectionSet, v models.ExportMetadata) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOExportMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐExportMetadata(ctx context.Context, v any) (*models.ExportMetadata, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.ExportMetadata)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOExportMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐExportMetadata(ctx context.Context, sel ast.SelectionSet, v *models.ExportMetadata) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, v any) ([]models.ImplementationGuidance, error) {

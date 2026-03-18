@@ -1,0 +1,39 @@
+# campaign with organization parent
+- user: organization:openlane
+  relation: parent
+  object: campaign:campaign-1
+
+# campaign with user parent (for webhook/service contexts)
+- user: user:ulid-of-owner
+  relation: parent
+  object: campaign:campaign-2
+
+# campaign with service parent
+- user: service:ulid-of-service-editor
+  relation: parent
+  object: campaign:campaign-3
+
+# campaign_target with campaign parent
+- user: campaign:campaign-1
+  relation: parent
+  object: campaign_target:target-1
+
+# campaign_target with user parent (for webhook/service contexts)
+- user: user:ulid-of-owner
+  relation: parent
+  object: campaign_target:target-2
+
+# campaign_target with service parent
+- user: service:ulid-of-service-editor
+  relation: parent
+  object: campaign_target:target-3
+
+# blocked user on campaign
+- user: user:ulid-blocked
+  relation: blocked
+  object: campaign:campaign-1
+
+# blocked user on campaign_target
+- user: user:ulid-blocked
+  relation: blocked
+  object: campaign_target:target-1

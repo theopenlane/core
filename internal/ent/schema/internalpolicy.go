@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -16,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // InternalPolicy defines the policy schema.
@@ -45,8 +48,20 @@ func (InternalPolicy) PluralName() string {
 
 // Fields returns policy fields.
 func (InternalPolicy) Fields() []ent.Field {
-	// other fields are defined in the mixins
-	return []ent.Field{}
+	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
+	}
 }
 
 // Edges of the InternalPolicy
@@ -54,7 +69,17 @@ func (i InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(i, ControlObjective{}),
 		defaultEdgeToWithPagination(i, ControlImplementation{}),
-		defaultEdgeToWithPagination(i, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToControlID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			},
+		}),
 		defaultEdgeToWithPagination(i, Subcontrol{}),
 		defaultEdgeToWithPagination(i, Procedure{}),
 		defaultEdgeToWithPagination(i, Narrative{}),
@@ -139,6 +164,10 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("component"),
+		),
 	}
 }
 
@@ -168,6 +197,7 @@ func (i InternalPolicy) Policy() ent.Policy {
 				Program{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),
 		),
 	)

@@ -50,6 +50,11 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Comment("integration that owns this directory group").
 			NotEmpty().
 			Immutable(),
+		field.String("platform_id").
+			Comment("optional platform associated with this directory group").
+			Optional().
+			NotEmpty().
+			Immutable(),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
@@ -144,7 +149,7 @@ func (g DirectoryGroup) Mixin() []ent.Mixin {
 // Edges of the DirectoryGroup
 func (g DirectoryGroup) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: g,
 			edgeSchema: Integration{},
 			field:      "integration_id",
@@ -152,13 +157,20 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 			immutable:  true,
 			comment:    "integration that owns this directory group",
 		}),
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: g,
 			edgeSchema: DirectorySyncRun{},
 			field:      "directory_sync_run_id",
 			required:   true,
 			immutable:  true,
 			comment:    "sync run that produced this snapshot",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			immutable:  true,
+			comment:    "platform associated with this directory group",
 		}),
 		edge.From("accounts", DirectoryAccount.Type).
 			Ref("groups").
@@ -181,8 +193,10 @@ func (DirectoryGroup) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "external_id", "directory_sync_run_id").
 			Unique(),
+		index.Fields("platform_id", "external_id"),
 		index.Fields("directory_sync_run_id", "email"),
 		index.Fields("integration_id", "email"),
+		index.Fields("platform_id", "email"),
 		index.Fields(ownerFieldName, "email"),
 	}
 }

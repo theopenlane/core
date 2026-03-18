@@ -142,12 +142,7 @@ func (w *ConsoleWriter) writeFields(evt event, buf *bytes.Buffer) {
 		buf.WriteByte(' ')
 	}
 
-	fieldMap := make(map[string]struct{}, len(fields))
-	for _, field := range fields {
-		fieldMap[field] = struct{}{}
-	}
-
-	if _, ok := fieldMap[zerolog.ErrorFieldName]; ok {
+	if slices.Contains(fields, zerolog.ErrorFieldName) {
 		fields = append([]string{zerolog.ErrorFieldName}, fields...)
 		for i := 1; i < len(fields); i++ {
 			if fields[i] == zerolog.ErrorFieldName {

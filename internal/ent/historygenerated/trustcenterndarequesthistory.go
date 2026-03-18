@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -57,7 +58,17 @@ type TrustCenterNDARequestHistory struct {
 	// access level requested
 	AccessLevel enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
 	// status of the NDA request
-	Status       enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	Status enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt *models.DateTime `json:"approved_at,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID *string `json:"approved_by_user_id,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt *models.DateTime `json:"signed_at,omitempty"`
+	// ID of the signed NDA document data
+	DocumentDataID *string `json:"document_data_id,omitempty"`
+	// ID of the template file at the time the NDA was signed
+	FileID       *string `json:"file_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -66,11 +77,13 @@ func (*TrustCenterNDARequestHistory) scanValues(columns []string) ([]any, error)
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case trustcenterndarequesthistory.FieldApprovedAt, trustcenterndarequesthistory.FieldSignedAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case trustcenterndarequesthistory.FieldTags:
 			values[i] = new([]byte)
 		case trustcenterndarequesthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterndarequesthistory.FieldID, trustcenterndarequesthistory.FieldRef, trustcenterndarequesthistory.FieldCreatedBy, trustcenterndarequesthistory.FieldUpdatedBy, trustcenterndarequesthistory.FieldDeletedBy, trustcenterndarequesthistory.FieldTrustCenterID, trustcenterndarequesthistory.FieldFirstName, trustcenterndarequesthistory.FieldLastName, trustcenterndarequesthistory.FieldEmail, trustcenterndarequesthistory.FieldCompanyName, trustcenterndarequesthistory.FieldReason, trustcenterndarequesthistory.FieldAccessLevel, trustcenterndarequesthistory.FieldStatus:
+		case trustcenterndarequesthistory.FieldID, trustcenterndarequesthistory.FieldRef, trustcenterndarequesthistory.FieldCreatedBy, trustcenterndarequesthistory.FieldUpdatedBy, trustcenterndarequesthistory.FieldDeletedBy, trustcenterndarequesthistory.FieldTrustCenterID, trustcenterndarequesthistory.FieldFirstName, trustcenterndarequesthistory.FieldLastName, trustcenterndarequesthistory.FieldEmail, trustcenterndarequesthistory.FieldCompanyName, trustcenterndarequesthistory.FieldReason, trustcenterndarequesthistory.FieldAccessLevel, trustcenterndarequesthistory.FieldStatus, trustcenterndarequesthistory.FieldApprovedByUserID, trustcenterndarequesthistory.FieldDocumentDataID, trustcenterndarequesthistory.FieldFileID:
 			values[i] = new(sql.NullString)
 		case trustcenterndarequesthistory.FieldHistoryTime, trustcenterndarequesthistory.FieldCreatedAt, trustcenterndarequesthistory.FieldUpdatedAt, trustcenterndarequesthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -207,6 +220,41 @@ func (_m *TrustCenterNDARequestHistory) assignValues(columns []string, values []
 			} else if value.Valid {
 				_m.Status = enums.TrustCenterNDARequestStatus(value.String)
 			}
+		case trustcenterndarequesthistory.FieldApprovedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field approved_at", values[i])
+			} else if value.Valid {
+				_m.ApprovedAt = new(models.DateTime)
+				*_m.ApprovedAt = *value.S.(*models.DateTime)
+			}
+		case trustcenterndarequesthistory.FieldApprovedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approved_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ApprovedByUserID = new(string)
+				*_m.ApprovedByUserID = value.String
+			}
+		case trustcenterndarequesthistory.FieldSignedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field signed_at", values[i])
+			} else if value.Valid {
+				_m.SignedAt = new(models.DateTime)
+				*_m.SignedAt = *value.S.(*models.DateTime)
+			}
+		case trustcenterndarequesthistory.FieldDocumentDataID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field document_data_id", values[i])
+			} else if value.Valid {
+				_m.DocumentDataID = new(string)
+				*_m.DocumentDataID = value.String
+			}
+		case trustcenterndarequesthistory.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -300,6 +348,31 @@ func (_m *TrustCenterNDARequestHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.ApprovedAt; v != nil {
+		builder.WriteString("approved_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ApprovedByUserID; v != nil {
+		builder.WriteString("approved_by_user_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SignedAt; v != nil {
+		builder.WriteString("signed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.DocumentDataID; v != nil {
+		builder.WriteString("document_data_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

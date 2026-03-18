@@ -39,6 +39,9 @@ type SchemaConfig struct {
 	ControlEditors                     string // Control-editors->Group table.
 	ControlAssets                      string // Control-assets->Asset table.
 	ControlScans                       string // Control-scans->Scan table.
+	ControlEntities                    string // Control-entities->Entity table.
+	ControlIdentityHolders             string // Control-identity_holders->IdentityHolder table.
+	ControlCampaigns                   string // Control-campaigns->Campaign table.
 	ControlControlImplementations      string // Control-control_implementations->ControlImplementation table.
 	ControlImplementation              string // ControlImplementation table.
 	ControlImplementationBlockedGroups string // ControlImplementation-blocked_groups->Group table.
@@ -61,6 +64,8 @@ type SchemaConfig struct {
 	Discussion                         string // Discussion table.
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
+	EmailBranding                      string // EmailBranding table.
+	EmailTemplate                      string // EmailTemplate table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.
 	EntityBlockedGroups                string // Entity-blocked_groups->Group table.
@@ -87,6 +92,8 @@ type SchemaConfig struct {
 	Finding                            string // Finding table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
+	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
+	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
 	FindingControl                     string // FindingControl table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.
@@ -103,6 +110,7 @@ type SchemaConfig struct {
 	IdentityHolderAssets               string // IdentityHolder-assets->Asset table.
 	IdentityHolderEntities             string // IdentityHolder-entities->Entity table.
 	IdentityHolderTasks                string // IdentityHolder-tasks->Task table.
+	IdentityHolderFiles                string // IdentityHolder-files->File table.
 	ImpersonationEvent                 string // ImpersonationEvent table.
 	Integration                        string // Integration table.
 	IntegrationSecrets                 string // Integration-secrets->Hush table.
@@ -112,6 +120,8 @@ type SchemaConfig struct {
 	IntegrationReviews                 string // Integration-reviews->Review table.
 	IntegrationRemediations            string // Integration-remediations->Remediation table.
 	IntegrationActionPlans             string // Integration-action_plans->ActionPlan table.
+	IntegrationRun                     string // IntegrationRun table.
+	IntegrationWebhook                 string // IntegrationWebhook table.
 	InternalPolicy                     string // InternalPolicy table.
 	InternalPolicyBlockedGroups        string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyEditors              string // InternalPolicy-editors->Group table.
@@ -145,6 +155,8 @@ type SchemaConfig struct {
 	NarrativeViewers                   string // Narrative-viewers->Group table.
 	Note                               string // Note table.
 	Notification                       string // Notification table.
+	NotificationPreference             string // NotificationPreference table.
+	NotificationTemplate               string // NotificationTemplate table.
 	Onboarding                         string // Onboarding table.
 	OrgMembership                      string // OrgMembership table.
 	OrgMembershipEvents                string // OrgMembership-events->Event table.
@@ -205,14 +217,17 @@ type SchemaConfig struct {
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
+	RemediationControls                string // Remediation-controls->Control table.
 	Review                             string // Review table.
 	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
+	ReviewControls                     string // Review-controls->Control table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.
 	RiskViewers                        string // Risk-viewers->Group table.
 	RiskActionPlans                    string // Risk-action_plans->ActionPlan table.
 	RiskTasks                          string // Risk-tasks->Task table.
+	SLADefinition                      string // SLADefinition table.
 	Scan                               string // Scan table.
 	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
 	ScanEditors                        string // Scan-editors->Group table.
@@ -237,6 +252,7 @@ type SchemaConfig struct {
 	Subprocessor                       string // Subprocessor table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
+	SystemDetail                       string // SystemDetail table.
 	TFASetting                         string // TFASetting table.
 	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.
@@ -247,6 +263,7 @@ type SchemaConfig struct {
 	TrustCenterCompliance              string // TrustCenterCompliance table.
 	TrustCenterDoc                     string // TrustCenterDoc table.
 	TrustCenterEntity                  string // TrustCenterEntity table.
+	TrustCenterFAQ                     string // TrustCenterFAQ table.
 	TrustCenterNDARequest              string // TrustCenterNDARequest table.
 	TrustCenterSetting                 string // TrustCenterSetting table.
 	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.

@@ -9,10 +9,9 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
 )
 
 func TestQueryTrustCenterEntity(t *testing.T) {
@@ -32,10 +31,10 @@ func TestQueryTrustCenterEntity(t *testing.T) {
 		errorMsg string
 	}{
 		{
-			name:    "happy path",
+			name:    "happy path as admin",
 			queryID: trustCenterEntity.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     adminUser.UserCtx,
 		},
 		{
 			name:    "happy path, using api token",
@@ -104,16 +103,7 @@ func TestQueryTrustCenterEntities(t *testing.T) {
 		TrustCenterID: trustCenter.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 	logoFile := createLogoUpload()
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
@@ -190,21 +180,12 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
 	patClient := suite.setupPatClient(testUser, t)
 
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+	viewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -265,7 +246,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				Name: "Unauthorized Entity",
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -325,16 +306,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		TrustCenterID: trustCenter.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
-	createLogoUpload := func() *graphql.Upload {
-		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-		assert.NilError(t, err)
-		return &graphql.Upload{
-			File:        logoFile.RawFile,
-			Filename:    logoFile.OriginalName,
-			Size:        logoFile.Size,
-			ContentType: logoFile.ContentType,
-		}
-	}
+	createLogoUpload := logoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -351,12 +323,12 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 			ctx:     testUser1.UserCtx,
 		},
 		{
-			name: "happy path, full input",
+			name: "happy path, full input as admin",
 			request: testclient.UpdateTrustCenterEntityInput{
 				URL: lo.ToPtr("https://example.com"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "happy path, with logo file",
@@ -455,10 +427,10 @@ func TestMutationDeleteTrustCenterEntity(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:       "happy path, delete trustcenter entity",
+			name:       "happy path, delete trustcenter as admin",
 			idToDelete: trustCenterEntity1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        adminUser.UserCtx,
 		},
 		{
 			name:       "happy path, using api token",

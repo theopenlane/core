@@ -26,6 +26,14 @@ type APITokenBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkAPIToken mutation
+type APITokenBulkUpdatePayload struct {
+	// Updated apiTokens
+	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
+	// IDs of the updated apiTokens
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createAPIToken mutation
 type APITokenCreatePayload struct {
 	// Created apiToken
@@ -42,6 +50,12 @@ type APITokenDeletePayload struct {
 type APITokenUpdatePayload struct {
 	// Updated apiToken
 	APIToken *generated.APIToken `json:"apiToken"`
+}
+
+// Return response for markNotificationsAsRead mutation
+type ActionNotificationsReadPayload struct {
+	// Updated notification IDs
+	ReadIDs []*string `json:"readIDs"`
 }
 
 // Return response for createBulkActionPlan mutation
@@ -136,6 +150,14 @@ type AssetBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkAsset mutation
+type AssetBulkUpdatePayload struct {
+	// Updated assets
+	Assets []*generated.Asset `json:"assets,omitempty"`
+	// IDs of the updated assets
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createAsset mutation
 type AssetCreatePayload struct {
 	// Created asset
@@ -154,6 +176,12 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
+// Return response for approveNDARequests or denyNDARequests mutation
+type BulkUpdateStatusPayload struct {
+	// Updated nda request IDs
+	TotalUpdated int `json:"totalUpdated"`
+}
+
 // Return response for createBulkCampaign mutation
 type CampaignBulkCreatePayload struct {
 	// Created campaigns
@@ -166,10 +194,28 @@ type CampaignCreatePayload struct {
 	Campaign *generated.Campaign `json:"campaign"`
 }
 
+// Return response for createCampaignWithTargets mutation
+type CampaignCreateWithTargetsPayload struct {
+	// Created campaign
+	Campaign *generated.Campaign `json:"campaign"`
+	// Created campaign targets
+	CampaignTargets []*generated.CampaignTarget `json:"campaignTargets,omitempty"`
+}
+
 // Return response for deleteCampaign mutation
 type CampaignDeletePayload struct {
 	// Deleted campaign ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for launchCampaign mutation
+type CampaignLaunchPayload struct {
+	// Updated campaign
+	Campaign *generated.Campaign `json:"campaign"`
+	// Number of targets queued for send
+	QueuedCount int `json:"queuedCount"`
+	// Number of targets skipped
+	SkippedCount int `json:"skippedCount"`
 }
 
 // Return response for createBulkCampaignTarget mutation
@@ -194,6 +240,16 @@ type CampaignTargetDeletePayload struct {
 type CampaignTargetUpdatePayload struct {
 	// Updated campaignTarget
 	CampaignTarget *generated.CampaignTarget `json:"campaignTarget"`
+}
+
+// Return response for sendCampaignTestEmail mutation
+type CampaignTestEmailPayload struct {
+	// Campaign used for the test send
+	Campaign *generated.Campaign `json:"campaign"`
+	// Number of emails queued for send
+	QueuedCount int `json:"queuedCount"`
+	// Number of emails skipped
+	SkippedCount int `json:"skippedCount"`
 }
 
 // Return response for updateCampaign mutation
@@ -340,6 +396,16 @@ type ControlCategoryOrder struct {
 	Field ControlCategoryOrderField `json:"field"`
 }
 
+// ControlChange describes the diffs for a single control identified by refCode
+type ControlChange struct {
+	// The ref_code of the control
+	RefCode string `json:"refCode"`
+	// The title of the control at the new revision
+	Title string `json:"title"`
+	// Field-level diffs for this control
+	Diffs []*ControlFieldDiff `json:"diffs"`
+}
+
 // Return response for createControl mutation
 type ControlCreatePayload struct {
 	// Created control
@@ -350,6 +416,40 @@ type ControlCreatePayload struct {
 type ControlDeletePayload struct {
 	// Deleted control ID
 	DeletedID string `json:"deletedID"`
+}
+
+// ControlDiffInput is used to compare all controls under a standard across two revisions
+type ControlDiffInput struct {
+	// ID of the standard to compare controls for
+	StandardID string `json:"standardID"`
+	// base revision to compare from (e.g. "v1.0.0")
+	OldRevision string `json:"oldRevision"`
+	// target revision to compare to (e.g. "v2.0.0")
+	NewRevision string `json:"newRevision"`
+}
+
+// ControlDiffPayload contains the field-level diffs between two revisions of all controls under a standard
+type ControlDiffPayload struct {
+	// The standard ID being compared
+	StandardID string `json:"standardID"`
+	// The base revision
+	OldRevision string `json:"oldRevision"`
+	// The target revision
+	NewRevision string `json:"newRevision"`
+	// Per-control changes between the two revisions
+	Changes []*ControlChange `json:"changes"`
+}
+
+// ControlFieldDiff describes a single field that differs between two control revisions
+type ControlFieldDiff struct {
+	// Field name (snake_case)
+	Field string `json:"field"`
+	// Value in the old revision
+	OldValue any `json:"oldValue,omitempty"`
+	// Value in the new revision
+	NewValue any `json:"newValue,omitempty"`
+	// Unified diff text when applicable
+	Diff *string `json:"diff,omitempty"`
 }
 
 type ControlGroup struct {
@@ -376,6 +476,14 @@ type ControlImplementationBulkCreatePayload struct {
 type ControlImplementationBulkDeletePayload struct {
 	// Deleted controlImplementation IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkControlImplementation mutation
+type ControlImplementationBulkUpdatePayload struct {
+	// Updated controlImplementations
+	ControlImplementations []*generated.ControlImplementation `json:"controlImplementations,omitempty"`
+	// IDs of the updated controlImplementations
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createControlImplementation mutation
@@ -408,6 +516,14 @@ type ControlObjectiveBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkControlObjective mutation
+type ControlObjectiveBulkUpdatePayload struct {
+	// Updated controlObjectives
+	ControlObjectives []*generated.ControlObjective `json:"controlObjectives,omitempty"`
+	// IDs of the updated controlObjectives
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createControlObjective mutation
 type ControlObjectiveCreatePayload struct {
 	// Created controlObjective
@@ -430,6 +546,14 @@ type ControlObjectiveUpdatePayload struct {
 type ControlUpdatePayload struct {
 	// Updated control
 	Control *generated.Control `json:"control"`
+}
+
+// Input for createCampaignWithTargets mutation
+type CreateCampaignWithTargetsInput struct {
+	// values of the campaign
+	Campaign *generated.CreateCampaignInput `json:"campaign"`
+	// list of targets to create for the campaign
+	Targets []*generated.CreateCampaignTargetInput `json:"targets,omitempty"`
 }
 
 type CreateControlWithSubcontrolsInput struct {
@@ -508,6 +632,8 @@ type CreateTrustCenterPreviewSettingInput struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
+	// hero image local file ID
+	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
 }
 
 // Return response for createBulkCustomDomain mutation
@@ -520,6 +646,14 @@ type CustomDomainBulkCreatePayload struct {
 type CustomDomainBulkDeletePayload struct {
 	// Deleted customDomain IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkCustomDomain mutation
+type CustomDomainBulkUpdatePayload struct {
+	// Updated customDomains
+	CustomDomains []*generated.CustomDomain `json:"customDomains,omitempty"`
+	// IDs of the updated customDomains
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createCustomDomain mutation
@@ -580,6 +714,14 @@ type DNSVerificationBulkCreatePayload struct {
 type DNSVerificationBulkDeletePayload struct {
 	// Deleted dnsVerification IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkDNSVerification mutation
+type DNSVerificationBulkUpdatePayload struct {
+	// Updated dnsVerifications
+	DNSVerifications []*generated.DNSVerification `json:"dnsVerifications,omitempty"`
+	// IDs of the updated dnsVerifications
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createDNSVerification mutation
@@ -732,6 +874,14 @@ type DocumentDataBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkDocumentData mutation
+type DocumentDataBulkUpdatePayload struct {
+	// Updated documentDatas
+	DocumentData []*generated.DocumentData `json:"documentData,omitempty"`
+	// IDs of the updated documentDatas
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createDocumentData mutation
 type DocumentDataCreatePayload struct {
 	// Created documentData
@@ -750,6 +900,82 @@ type DocumentDataUpdatePayload struct {
 	DocumentData *generated.DocumentData `json:"documentData"`
 }
 
+// Return response for createBulkEmailBranding mutation
+type EmailBrandingBulkCreatePayload struct {
+	// Created emailBrandings
+	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
+}
+
+// Return response for deleteBulkEmailBranding mutation
+type EmailBrandingBulkDeletePayload struct {
+	// Deleted emailBranding IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEmailBranding mutation
+type EmailBrandingBulkUpdatePayload struct {
+	// Updated emailBrandings
+	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
+	// IDs of the updated emailBrandings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createEmailBranding mutation
+type EmailBrandingCreatePayload struct {
+	// Created emailBranding
+	EmailBranding *generated.EmailBranding `json:"emailBranding"`
+}
+
+// Return response for deleteEmailBranding mutation
+type EmailBrandingDeletePayload struct {
+	// Deleted emailBranding ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateEmailBranding mutation
+type EmailBrandingUpdatePayload struct {
+	// Updated emailBranding
+	EmailBranding *generated.EmailBranding `json:"emailBranding"`
+}
+
+// Return response for createBulkEmailTemplate mutation
+type EmailTemplateBulkCreatePayload struct {
+	// Created emailTemplates
+	EmailTemplates []*generated.EmailTemplate `json:"emailTemplates,omitempty"`
+}
+
+// Return response for deleteBulkEmailTemplate mutation
+type EmailTemplateBulkDeletePayload struct {
+	// Deleted emailTemplate IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEmailTemplate mutation
+type EmailTemplateBulkUpdatePayload struct {
+	// Updated emailTemplates
+	EmailTemplates []*generated.EmailTemplate `json:"emailTemplates,omitempty"`
+	// IDs of the updated emailTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createEmailTemplate mutation
+type EmailTemplateCreatePayload struct {
+	// Created emailTemplate
+	EmailTemplate *generated.EmailTemplate `json:"emailTemplate"`
+}
+
+// Return response for deleteEmailTemplate mutation
+type EmailTemplateDeletePayload struct {
+	// Deleted emailTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateEmailTemplate mutation
+type EmailTemplateUpdatePayload struct {
+	// Updated emailTemplate
+	EmailTemplate *generated.EmailTemplate `json:"emailTemplate"`
+}
+
 // Return response for createBulkEntity mutation
 type EntityBulkCreatePayload struct {
 	// Created entities
@@ -760,6 +986,14 @@ type EntityBulkCreatePayload struct {
 type EntityBulkDeletePayload struct {
 	// Deleted entity IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEntity mutation
+type EntityBulkUpdatePayload struct {
+	// Updated entitys
+	Entities []*generated.Entity `json:"entities,omitempty"`
+	// IDs of the updated entitys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createEntity mutation
@@ -784,6 +1018,14 @@ type EntityTypeBulkCreatePayload struct {
 type EntityTypeBulkDeletePayload struct {
 	// Deleted entityType IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEntityType mutation
+type EntityTypeBulkUpdatePayload struct {
+	// Updated entityTypes
+	EntityTypes []*generated.EntityType `json:"entityTypes,omitempty"`
+	// IDs of the updated entityTypes
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createEntityType mutation
@@ -820,6 +1062,14 @@ type EventBulkCreatePayload struct {
 type EventBulkDeletePayload struct {
 	// Deleted event IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEvent mutation
+type EventBulkUpdatePayload struct {
+	// Updated events
+	Events []*generated.Event `json:"events,omitempty"`
+	// IDs of the updated events
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createEvent mutation
@@ -920,6 +1170,20 @@ type FindingBulkCreatePayload struct {
 	Findings []*generated.Finding `json:"findings,omitempty"`
 }
 
+// Return response for deleteBulkFinding mutation
+type FindingBulkDeletePayload struct {
+	// Deleted finding IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkFinding mutation
+type FindingBulkUpdatePayload struct {
+	// Updated findings
+	Findings []*generated.Finding `json:"findings,omitempty"`
+	// IDs of the updated findings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createBulkFindingControl mutation
 type FindingControlBulkCreatePayload struct {
 	// Created findingControls
@@ -974,6 +1238,14 @@ type GroupBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkGroup mutation
+type GroupBulkUpdatePayload struct {
+	// Updated groups
+	Groups []*generated.Group `json:"groups,omitempty"`
+	// IDs of the updated groups
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createGroup mutation
 type GroupCreatePayload struct {
 	// Created group
@@ -1003,6 +1275,14 @@ type GroupMembershipBulkCreatePayload struct {
 type GroupMembershipBulkDeletePayload struct {
 	// Deleted groupMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkGroupMembership mutation
+type GroupMembershipBulkUpdatePayload struct {
+	// Updated groupMemberships
+	GroupMemberships []*generated.GroupMembership `json:"groupMemberships,omitempty"`
+	// IDs of the updated groupMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createGroupMembership mutation
@@ -1132,6 +1412,14 @@ type GroupSettingBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkGroupSetting mutation
+type GroupSettingBulkUpdatePayload struct {
+	// Updated groupSettings
+	GroupSettings []*generated.GroupSetting `json:"groupSettings,omitempty"`
+	// IDs of the updated groupSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createGroupSetting mutation
 type GroupSettingCreatePayload struct {
 	// Created groupSetting
@@ -1198,6 +1486,20 @@ type HushUpdatePayload struct {
 type IdentityHolderBulkCreatePayload struct {
 	// Created identityHolders
 	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+}
+
+// Return response for deleteBulkIdentityHolder mutation
+type IdentityHolderBulkDeletePayload struct {
+	// Deleted identityHolder IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkIdentityHolder mutation
+type IdentityHolderBulkUpdatePayload struct {
+	// Updated identityHolders
+	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+	// IDs of the updated identityHolders
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createIdentityHolder mutation
@@ -1272,6 +1574,14 @@ type InviteBulkCreatePayload struct {
 type InviteBulkDeletePayload struct {
 	// Deleted invite IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkInvite mutation
+type InviteBulkUpdatePayload struct {
+	// Updated invites
+	Invites []*generated.Invite `json:"invites,omitempty"`
+	// IDs of the updated invites
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createInvite mutation
@@ -1376,6 +1686,14 @@ type JobTemplateBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkJobTemplate mutation
+type JobTemplateBulkUpdatePayload struct {
+	// Updated jobTemplates
+	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
+	// IDs of the updated jobTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createJobTemplate mutation
 type JobTemplateCreatePayload struct {
 	// Created jobTemplate
@@ -1394,6 +1712,16 @@ type JobTemplateUpdatePayload struct {
 	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
 }
 
+// Input for launchCampaign mutation
+type LaunchCampaignInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Whether to resend emails to previously-sent targets
+	Resend *bool `json:"resend,omitempty"`
+	// Optional time to schedule the campaign launch or resend
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
 // Return response for createBulkMappableDomain mutation
 type MappableDomainBulkCreatePayload struct {
 	// Created mappableDomains
@@ -1404,6 +1732,14 @@ type MappableDomainBulkCreatePayload struct {
 type MappableDomainBulkDeletePayload struct {
 	// Deleted mappableDomain IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkMappableDomain mutation
+type MappableDomainBulkUpdatePayload struct {
+	// Updated mappableDomains
+	MappableDomains []*generated.MappableDomain `json:"mappableDomains,omitempty"`
+	// IDs of the updated mappableDomains
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createMappableDomain mutation
@@ -1436,6 +1772,14 @@ type MappedControlBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkMappedControl mutation
+type MappedControlBulkUpdatePayload struct {
+	// Updated mappedControls
+	MappedControls []*generated.MappedControl `json:"mappedControls,omitempty"`
+	// IDs of the updated mappedControls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createMappedControl mutation
 type MappedControlCreatePayload struct {
 	// Created mappedControl
@@ -1466,6 +1810,14 @@ type NarrativeBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkNarrative mutation
+type NarrativeBulkUpdatePayload struct {
+	// Updated narratives
+	Narratives []*generated.Narrative `json:"narratives,omitempty"`
+	// IDs of the updated narratives
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createNarrative mutation
 type NarrativeCreatePayload struct {
 	// Created narrative
@@ -1488,6 +1840,82 @@ type NarrativeUpdatePayload struct {
 type NoteDeletePayload struct {
 	// Deleted comment ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkNotificationPreference mutation
+type NotificationPreferenceBulkCreatePayload struct {
+	// Created notificationPreferences
+	NotificationPreferences []*generated.NotificationPreference `json:"notificationPreferences,omitempty"`
+}
+
+// Return response for deleteBulkNotificationPreference mutation
+type NotificationPreferenceBulkDeletePayload struct {
+	// Deleted notificationPreference IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNotificationPreference mutation
+type NotificationPreferenceBulkUpdatePayload struct {
+	// Updated notificationPreferences
+	NotificationPreferences []*generated.NotificationPreference `json:"notificationPreferences,omitempty"`
+	// IDs of the updated notificationPreferences
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createNotificationPreference mutation
+type NotificationPreferenceCreatePayload struct {
+	// Created notificationPreference
+	NotificationPreference *generated.NotificationPreference `json:"notificationPreference"`
+}
+
+// Return response for deleteNotificationPreference mutation
+type NotificationPreferenceDeletePayload struct {
+	// Deleted notificationPreference ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateNotificationPreference mutation
+type NotificationPreferenceUpdatePayload struct {
+	// Updated notificationPreference
+	NotificationPreference *generated.NotificationPreference `json:"notificationPreference"`
+}
+
+// Return response for createBulkNotificationTemplate mutation
+type NotificationTemplateBulkCreatePayload struct {
+	// Created notificationTemplates
+	NotificationTemplates []*generated.NotificationTemplate `json:"notificationTemplates,omitempty"`
+}
+
+// Return response for deleteBulkNotificationTemplate mutation
+type NotificationTemplateBulkDeletePayload struct {
+	// Deleted notificationTemplate IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNotificationTemplate mutation
+type NotificationTemplateBulkUpdatePayload struct {
+	// Updated notificationTemplates
+	NotificationTemplates []*generated.NotificationTemplate `json:"notificationTemplates,omitempty"`
+	// IDs of the updated notificationTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createNotificationTemplate mutation
+type NotificationTemplateCreatePayload struct {
+	// Created notificationTemplate
+	NotificationTemplate *generated.NotificationTemplate `json:"notificationTemplate"`
+}
+
+// Return response for deleteNotificationTemplate mutation
+type NotificationTemplateDeletePayload struct {
+	// Deleted notificationTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateNotificationTemplate mutation
+type NotificationTemplateUpdatePayload struct {
+	// Updated notificationTemplate
+	NotificationTemplate *generated.NotificationTemplate `json:"notificationTemplate"`
 }
 
 // Return response for updateNotification mutation
@@ -1519,6 +1947,14 @@ type OrgMembershipBulkCreatePayload struct {
 type OrgMembershipBulkDeletePayload struct {
 	// Deleted orgMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkOrgMembership mutation
+type OrgMembershipBulkUpdatePayload struct {
+	// Updated orgMemberships
+	OrgMemberships []*generated.OrgMembership `json:"orgMemberships,omitempty"`
+	// IDs of the updated orgMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createOrgMembership mutation
@@ -1567,6 +2003,14 @@ type OrganizationSettingBulkCreatePayload struct {
 type OrganizationSettingBulkDeletePayload struct {
 	// Deleted organizationSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkOrganizationSetting mutation
+type OrganizationSettingBulkUpdatePayload struct {
+	// Updated organizationSettings
+	OrganizationSettings []*generated.OrganizationSetting `json:"organizationSettings,omitempty"`
+	// IDs of the updated organizationSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createOrganizationSetting mutation
@@ -1699,6 +2143,14 @@ type ProgramBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkProgram mutation
+type ProgramBulkUpdatePayload struct {
+	// Updated programs
+	Programs []*generated.Program `json:"programs,omitempty"`
+	// IDs of the updated programs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createProgram mutation
 type ProgramCreatePayload struct {
 	// Created program
@@ -1721,6 +2173,14 @@ type ProgramMembershipBulkCreatePayload struct {
 type ProgramMembershipBulkDeletePayload struct {
 	// Deleted programMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkProgramMembership mutation
+type ProgramMembershipBulkUpdatePayload struct {
+	// Updated programMemberships
+	ProgramMemberships []*generated.ProgramMembership `json:"programMemberships,omitempty"`
+	// IDs of the updated programMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createProgramMembership mutation
@@ -1747,10 +2207,32 @@ type ProgramUpdatePayload struct {
 	Program *generated.Program `json:"program"`
 }
 
+// Input for adminReassignWorkflowAssignment mutation
+type ReassignWorkflowAssignmentInput struct {
+	// ID of the workflow assignment to reassign
+	ID string `json:"id"`
+	// New targets for the assignment
+	Targets []*WorkflowAssignmentTargetInput `json:"targets"`
+}
+
 // Return response for createBulkRemediation mutation
 type RemediationBulkCreatePayload struct {
 	// Created remediations
 	Remediations []*generated.Remediation `json:"remediations,omitempty"`
+}
+
+// Return response for deleteBulkRemediation mutation
+type RemediationBulkDeletePayload struct {
+	// Deleted remediation IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkRemediation mutation
+type RemediationBulkUpdatePayload struct {
+	// Updated remediations
+	Remediations []*generated.Remediation `json:"remediations,omitempty"`
+	// IDs of the updated remediations
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createRemediation mutation
@@ -1771,10 +2253,50 @@ type RemediationUpdatePayload struct {
 	Remediation *generated.Remediation `json:"remediation"`
 }
 
+// Input for resendCampaignIncompleteTargets mutation
+type ResendCampaignIncompleteInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// Optional time to schedule the resend for incomplete targets
+	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
+// Input for resolving a vulnerability
+type ResolveVulnerabilityInput struct {
+	// status to set on the vulnerability (resolved, dismissed, fixed, etc.)
+	Status string `json:"status"`
+	// optional reason for the resolution (false_positive, wont_fix, etc.)
+	Reason *string `json:"reason,omitempty"`
+	// optional notes or context for the resolution
+	Details *string `json:"details,omitempty"`
+	// when true, create a Review record linked to the vulnerability
+	CreateReview *bool `json:"createReview,omitempty"`
+	// optional review title override
+	ReviewTitle *string `json:"reviewTitle,omitempty"`
+	// optional review category override (defaults to resolution)
+	ReviewCategory *string `json:"reviewCategory,omitempty"`
+	// optional review state override (defaults to the resolution status)
+	ReviewState *string `json:"reviewState,omitempty"`
+}
+
 // Return response for createBulkReview mutation
 type ReviewBulkCreatePayload struct {
 	// Created reviews
 	Reviews []*generated.Review `json:"reviews,omitempty"`
+}
+
+// Return response for deleteBulkReview mutation
+type ReviewBulkDeletePayload struct {
+	// Deleted trustCenterNDARequest IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkReview mutation
+type ReviewBulkUpdatePayload struct {
+	// Updated reviews
+	Reviews []*generated.Review `json:"reviews,omitempty"`
+	// IDs of the updated reviews
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createReview mutation
@@ -1833,6 +2355,44 @@ type RiskUpdatePayload struct {
 	Risk *generated.Risk `json:"risk"`
 }
 
+// Return response for createBulkSLADefinition mutation
+type SLADefinitionBulkCreatePayload struct {
+	// Created slaDefinitions
+	SLADefinitions []*generated.SLADefinition `json:"slaDefinitions,omitempty"`
+}
+
+// Return response for deleteBulkSLADefinition mutation
+type SLADefinitionBulkDeletePayload struct {
+	// Deleted slaDefinition IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSLADefinition mutation
+type SLADefinitionBulkUpdatePayload struct {
+	// Updated slaDefinitions
+	SLADefinitions []*generated.SLADefinition `json:"slaDefinitions,omitempty"`
+	// IDs of the updated slaDefinitions
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createSLADefinition mutation
+type SLADefinitionCreatePayload struct {
+	// Created slaDefinition
+	SLADefinition *generated.SLADefinition `json:"slaDefinition"`
+}
+
+// Return response for deleteSLADefinition mutation
+type SLADefinitionDeletePayload struct {
+	// Deleted slaDefinition ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateSLADefinition mutation
+type SLADefinitionUpdatePayload struct {
+	// Updated slaDefinition
+	SLADefinition *generated.SLADefinition `json:"slaDefinition"`
+}
+
 // Return response for createBulkScan mutation
 type ScanBulkCreatePayload struct {
 	// Created scans
@@ -1883,6 +2443,14 @@ type ScheduledJobBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkScheduledJob mutation
+type ScheduledJobBulkUpdatePayload struct {
+	// Updated scheduledJobs
+	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
+	// IDs of the updated scheduledJobs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createScheduledJob mutation
 type ScheduledJobCreatePayload struct {
 	// Created scheduledJob
@@ -1923,45 +2491,58 @@ type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
 	// Identifies the total count of items in the connection.
-	TotalCount          int                                     `json:"totalCount"`
-	ActionPlans         *generated.ActionPlanConnection         `json:"actionPlans,omitempty"`
-	Assessments         *generated.AssessmentConnection         `json:"assessments,omitempty"`
-	AssessmentResponses *generated.AssessmentResponseConnection `json:"assessmentResponses,omitempty"`
-	Assets              *generated.AssetConnection              `json:"assets,omitempty"`
-	Campaigns           *generated.CampaignConnection           `json:"campaigns,omitempty"`
-	CampaignTargets     *generated.CampaignTargetConnection     `json:"campaignTargets,omitempty"`
-	Contacts            *generated.ContactConnection            `json:"contacts,omitempty"`
-	Controls            *generated.ControlConnection            `json:"controls,omitempty"`
-	ControlObjectives   *generated.ControlObjectiveConnection   `json:"controlObjectives,omitempty"`
-	CustomTypeEnums     *generated.CustomTypeEnumConnection     `json:"customTypeEnums,omitempty"`
-	Entities            *generated.EntityConnection             `json:"entities,omitempty"`
-	Evidences           *generated.EvidenceConnection           `json:"evidences,omitempty"`
-	Findings            *generated.FindingConnection            `json:"findings,omitempty"`
-	Groups              *generated.GroupConnection              `json:"groups,omitempty"`
-	IdentityHolders     *generated.IdentityHolderConnection     `json:"identityHolders,omitempty"`
-	InternalPolicies    *generated.InternalPolicyConnection     `json:"internalPolicies,omitempty"`
-	Invites             *generated.InviteConnection             `json:"invites,omitempty"`
-	JobRunners          *generated.JobRunnerConnection          `json:"jobRunners,omitempty"`
-	JobTemplates        *generated.JobTemplateConnection        `json:"jobTemplates,omitempty"`
-	Narratives          *generated.NarrativeConnection          `json:"narratives,omitempty"`
-	Organizations       *generated.OrganizationConnection       `json:"organizations,omitempty"`
-	Platforms           *generated.PlatformConnection           `json:"platforms,omitempty"`
-	Procedures          *generated.ProcedureConnection          `json:"procedures,omitempty"`
-	Programs            *generated.ProgramConnection            `json:"programs,omitempty"`
-	Remediations        *generated.RemediationConnection        `json:"remediations,omitempty"`
-	Reviews             *generated.ReviewConnection             `json:"reviews,omitempty"`
-	Risks               *generated.RiskConnection               `json:"risks,omitempty"`
-	Scans               *generated.ScanConnection               `json:"scans,omitempty"`
-	Standards           *generated.StandardConnection           `json:"standards,omitempty"`
-	Subcontrols         *generated.SubcontrolConnection         `json:"subcontrols,omitempty"`
-	Subprocessors       *generated.SubprocessorConnection       `json:"subprocessors,omitempty"`
-	Subscribers         *generated.SubscriberConnection         `json:"subscribers,omitempty"`
-	TagDefinitions      *generated.TagDefinitionConnection      `json:"tagDefinitions,omitempty"`
-	Tasks               *generated.TaskConnection               `json:"tasks,omitempty"`
-	Templates           *generated.TemplateConnection           `json:"templates,omitempty"`
-	TrustCenterEntities *generated.TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
-	Vulnerabilities     *generated.VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
-	SearchContext       []*models.SearchContext                 `json:"searchContext,omitempty"`
+	TotalCount            int                                       `json:"totalCount"`
+	ActionPlans           *generated.ActionPlanConnection           `json:"actionPlans,omitempty"`
+	Assessments           *generated.AssessmentConnection           `json:"assessments,omitempty"`
+	AssessmentResponses   *generated.AssessmentResponseConnection   `json:"assessmentResponses,omitempty"`
+	Assets                *generated.AssetConnection                `json:"assets,omitempty"`
+	Campaigns             *generated.CampaignConnection             `json:"campaigns,omitempty"`
+	CampaignTargets       *generated.CampaignTargetConnection       `json:"campaignTargets,omitempty"`
+	Contacts              *generated.ContactConnection              `json:"contacts,omitempty"`
+	Controls              *generated.ControlConnection              `json:"controls,omitempty"`
+	ControlObjectives     *generated.ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
+	CustomTypeEnums       *generated.CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
+	EmailBrandings        *generated.EmailBrandingConnection        `json:"emailBrandings,omitempty"`
+	EmailTemplates        *generated.EmailTemplateConnection        `json:"emailTemplates,omitempty"`
+	Entities              *generated.EntityConnection               `json:"entities,omitempty"`
+	Evidences             *generated.EvidenceConnection             `json:"evidences,omitempty"`
+	Findings              *generated.FindingConnection              `json:"findings,omitempty"`
+	Groups                *generated.GroupConnection                `json:"groups,omitempty"`
+	IdentityHolders       *generated.IdentityHolderConnection       `json:"identityHolders,omitempty"`
+	Integrations          *generated.IntegrationConnection          `json:"integrations,omitempty"`
+	InternalPolicies      *generated.InternalPolicyConnection       `json:"internalPolicies,omitempty"`
+	Invites               *generated.InviteConnection               `json:"invites,omitempty"`
+	JobRunners            *generated.JobRunnerConnection            `json:"jobRunners,omitempty"`
+	JobTemplates          *generated.JobTemplateConnection          `json:"jobTemplates,omitempty"`
+	Narratives            *generated.NarrativeConnection            `json:"narratives,omitempty"`
+	NotificationTemplates *generated.NotificationTemplateConnection `json:"notificationTemplates,omitempty"`
+	Organizations         *generated.OrganizationConnection         `json:"organizations,omitempty"`
+	Platforms             *generated.PlatformConnection             `json:"platforms,omitempty"`
+	Procedures            *generated.ProcedureConnection            `json:"procedures,omitempty"`
+	Programs              *generated.ProgramConnection              `json:"programs,omitempty"`
+	Remediations          *generated.RemediationConnection          `json:"remediations,omitempty"`
+	Reviews               *generated.ReviewConnection               `json:"reviews,omitempty"`
+	Risks                 *generated.RiskConnection                 `json:"risks,omitempty"`
+	Scans                 *generated.ScanConnection                 `json:"scans,omitempty"`
+	Standards             *generated.StandardConnection             `json:"standards,omitempty"`
+	Subcontrols           *generated.SubcontrolConnection           `json:"subcontrols,omitempty"`
+	Subprocessors         *generated.SubprocessorConnection         `json:"subprocessors,omitempty"`
+	Subscribers           *generated.SubscriberConnection           `json:"subscribers,omitempty"`
+	SystemDetails         *generated.SystemDetailConnection         `json:"systemDetails,omitempty"`
+	TagDefinitions        *generated.TagDefinitionConnection        `json:"tagDefinitions,omitempty"`
+	Tasks                 *generated.TaskConnection                 `json:"tasks,omitempty"`
+	Templates             *generated.TemplateConnection             `json:"templates,omitempty"`
+	TrustCenterEntities   *generated.TrustCenterEntityConnection    `json:"trustCenterEntities,omitempty"`
+	Vulnerabilities       *generated.VulnerabilityConnection        `json:"vulnerabilities,omitempty"`
+	SearchContext         []*models.SearchContext                   `json:"searchContext,omitempty"`
+}
+
+// Input for sendCampaignTestEmail mutation
+type SendCampaignTestEmailInput struct {
+	// ID of the campaign
+	CampaignID string `json:"campaignID"`
+	// List of recipient emails to send the test to
+	Emails []string `json:"emails"`
 }
 
 // Return response for createBulkStandard mutation
@@ -1998,6 +2579,14 @@ type SubcontrolBulkCreatePayload struct {
 type SubcontrolBulkDeletePayload struct {
 	// Deleted subcontrol IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSubcontrol mutation
+type SubcontrolBulkUpdatePayload struct {
+	// Updated subcontrols
+	Subcontrols []*generated.Subcontrol `json:"subcontrols,omitempty"`
+	// IDs of the updated subcontrols
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createSubcontrol mutation
@@ -2094,6 +2683,44 @@ type SubscriberUpdatePayload struct {
 type Subscription struct {
 }
 
+// Return response for createBulkSystemDetail mutation
+type SystemDetailBulkCreatePayload struct {
+	// Created systemDetails
+	SystemDetails []*generated.SystemDetail `json:"systemDetails,omitempty"`
+}
+
+// Return response for deleteBulkSystemDetail mutation
+type SystemDetailBulkDeletePayload struct {
+	// Deleted systemDetail IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSystemDetail mutation
+type SystemDetailBulkUpdatePayload struct {
+	// Updated systemDetails
+	SystemDetails []*generated.SystemDetail `json:"systemDetails,omitempty"`
+	// IDs of the updated systemDetails
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createSystemDetail mutation
+type SystemDetailCreatePayload struct {
+	// Created systemDetail
+	SystemDetail *generated.SystemDetail `json:"systemDetail"`
+}
+
+// Return response for deleteSystemDetail mutation
+type SystemDetailDeletePayload struct {
+	// Deleted systemDetail ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateSystemDetail mutation
+type SystemDetailUpdatePayload struct {
+	// Updated systemDetail
+	SystemDetail *generated.SystemDetail `json:"systemDetail"`
+}
+
 // Return response for createTFASetting mutation
 type TFASettingCreatePayload struct {
 	// Created tfaSetting
@@ -2185,6 +2812,14 @@ type TemplateBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkTemplate mutation
+type TemplateBulkUpdatePayload struct {
+	// Updated templates
+	Templates []*generated.Template `json:"templates,omitempty"`
+	// IDs of the updated templates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createTemplate mutation
 type TemplateCreatePayload struct {
 	// Created template
@@ -2203,6 +2838,11 @@ type TemplateUpdatePayload struct {
 	Template *generated.Template `json:"template"`
 }
 
+// Return response for requestNewTrustCenterToken mutation
+type TrustCenterAccessTokenPayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createBulkTrustCenterCompliance mutation
 type TrustCenterComplianceBulkCreatePayload struct {
 	// Created trustCenterCompliances
@@ -2213,6 +2853,14 @@ type TrustCenterComplianceBulkCreatePayload struct {
 type TrustCenterComplianceBulkDeletePayload struct {
 	// Deleted trustCenterCompliance IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterCompliance mutation
+type TrustCenterComplianceBulkUpdatePayload struct {
+	// Updated trustCenterCompliances
+	TrustCenterCompliances []*generated.TrustCenterCompliance `json:"trustCenterCompliances,omitempty"`
+	// IDs of the updated trustCenterCompliances
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createTrustCenterCompliance mutation
@@ -2312,6 +2960,44 @@ type TrustCenterEntityUpdatePayload struct {
 	TrustCenterEntity *generated.TrustCenterEntity `json:"trustCenterEntity"`
 }
 
+// Return response for createBulkTrustCenterFAQ mutation
+type TrustCenterFAQBulkCreatePayload struct {
+	// Created trustCenterFAQs
+	TrustCenterFAQs []*generated.TrustCenterFAQ `json:"trustCenterFAQs,omitempty"`
+}
+
+// Return response for deleteBulkTrustCenterFAQ mutation
+type TrustCenterFAQBulkDeletePayload struct {
+	// Deleted trustCenterFAQ IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterFAQ mutation
+type TrustCenterFAQBulkUpdatePayload struct {
+	// Updated trustCenterFAQs
+	TrustCenterFAQs []*generated.TrustCenterFAQ `json:"trustCenterFAQs,omitempty"`
+	// IDs of the updated trustCenterFAQs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createTrustCenterFAQ mutation
+type TrustCenterFAQCreatePayload struct {
+	// Created trustCenterFAQ
+	TrustCenterFaq *generated.TrustCenterFAQ `json:"trustCenterFAQ"`
+}
+
+// Return response for deleteTrustCenterFAQ mutation
+type TrustCenterFAQDeletePayload struct {
+	// Deleted trustCenterFAQ ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterFAQ mutation
+type TrustCenterFAQUpdatePayload struct {
+	// Updated trustCenterFAQ
+	TrustCenterFaq *generated.TrustCenterFAQ `json:"trustCenterFAQ"`
+}
+
 type TrustCenterNDACreatePayload struct {
 	Template *generated.Template `json:"template"`
 }
@@ -2320,6 +3006,12 @@ type TrustCenterNDACreatePayload struct {
 type TrustCenterNDARequestBulkCreatePayload struct {
 	// Created trustCenterNDARequests
 	TrustCenterNDARequests []*generated.TrustCenterNDARequest `json:"trustCenterNDARequests,omitempty"`
+}
+
+// Return response for deleteBulkTrustCenterNDARequest mutation
+type TrustCenterNDARequestBulkDeletePayload struct {
+	// Deleted trustCenterNDARequest IDs
+	DeletedIDs []string `json:"deletedIDs"`
 }
 
 // Return response for createTrustCenterNDARequest mutation
@@ -2449,6 +3141,14 @@ type UpdateDiscussionsInput struct {
 	Input *generated.UpdateDiscussionInput `json:"input"`
 }
 
+// Input for updateWorkflowProposalChanges mutation
+type UpdateWorkflowProposalChangesInput struct {
+	// ID of the workflow proposal to update
+	ID string `json:"id"`
+	// New proposed changes for the approval domain
+	Changes map[string]any `json:"changes"`
+}
+
 // Return response for createBulkUser mutation
 type UserBulkCreatePayload struct {
 	// Created users
@@ -2479,6 +3179,14 @@ type UserSettingBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkUserSetting mutation
+type UserSettingBulkUpdatePayload struct {
+	// Updated userSettings
+	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
+	// IDs of the updated userSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createUserSetting mutation
 type UserSettingCreatePayload struct {
 	// Created userSetting
@@ -2503,6 +3211,20 @@ type VulnerabilityBulkCreatePayload struct {
 	Vulnerabilities []*generated.Vulnerability `json:"vulnerabilities,omitempty"`
 }
 
+// Return response for deleteBulkVulnerability mutation
+type VulnerabilityBulkDeletePayload struct {
+	// Deleted vulnerability IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVulnerability mutation
+type VulnerabilityBulkUpdatePayload struct {
+	// Updated vulnerabilities
+	Vulnerabilities []*generated.Vulnerability `json:"vulnerabilities,omitempty"`
+	// IDs of the updated vulnerabilities
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createVulnerability mutation
 type VulnerabilityCreatePayload struct {
 	// Created vulnerability
@@ -2513,6 +3235,34 @@ type VulnerabilityCreatePayload struct {
 type VulnerabilityDeletePayload struct {
 	// Deleted vulnerability ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for resolveVulnerability mutation
+type VulnerabilityResolvePayload struct {
+	// Resolved vulnerability
+	Vulnerability *generated.Vulnerability `json:"vulnerability"`
+	// Review record created for the resolution, if requested
+	Review *generated.Review `json:"review,omitempty"`
+}
+
+// Aggregated vulnerability summary for dashboards.
+type VulnerabilitySummary struct {
+	// Total vulnerabilities matching the filter.
+	Total int `json:"total"`
+	// Counts grouped by severity.
+	BySeverity []*VulnerabilitySummaryBucket `json:"bySeverity"`
+	// Counts grouped by source.
+	BySource []*VulnerabilitySummaryBucket `json:"bySource"`
+	// Counts grouped by status.
+	ByStatus []*VulnerabilitySummaryBucket `json:"byStatus"`
+}
+
+// Summary bucket for vulnerability groupings.
+type VulnerabilitySummaryBucket struct {
+	// Bucket label such as severity or source.
+	Key string `json:"key"`
+	// Count of vulnerabilities in this bucket.
+	Count int `json:"count"`
 }
 
 // Return response for updateVulnerability mutation
@@ -2533,10 +3283,26 @@ type WorkflowAssignmentApprovePayload struct {
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
 }
 
+// Return response for adminReassignWorkflowAssignment mutation
+type WorkflowAssignmentReassignPayload struct {
+	// Updated workflow assignment
+	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
+}
+
 // Return response for rejectWorkflowAssignment mutation
 type WorkflowAssignmentRejectPayload struct {
 	// Rejected workflow assignment
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
+}
+
+// Input target for reassigning workflow assignments
+type WorkflowAssignmentTargetInput struct {
+	// Target type (USER, GROUP, ROLE, RESOLVER)
+	Type enums.WorkflowTargetType `json:"type"`
+	// Target ID for USER/GROUP/ROLE targets
+	ID *string `json:"id,omitempty"`
+	// Resolver key for RESOLVER targets
+	ResolverKey *string `json:"resolverKey,omitempty"`
 }
 
 // Return response for createBulkWorkflowDefinition mutation
@@ -2563,6 +3329,22 @@ type WorkflowDefinitionUpdatePayload struct {
 	WorkflowDefinition *generated.WorkflowDefinition `json:"workflowDefinition"`
 }
 
+// WorkflowFieldDiff describes a proposed change for a single field.
+type WorkflowFieldDiff struct {
+	// Field name (snake_case)
+	Field string `json:"field"`
+	// Human-friendly field label when available
+	Label *string `json:"label,omitempty"`
+	// Field type metadata when available
+	Type *string `json:"type,omitempty"`
+	// Current field value
+	CurrentValue any `json:"currentValue,omitempty"`
+	// Proposed field value
+	ProposedValue any `json:"proposedValue,omitempty"`
+	// Unified diff for the field (when applicable)
+	Diff *string `json:"diff,omitempty"`
+}
+
 // Metadata for a workflow-eligible field
 type WorkflowFieldMetadata struct {
 	// The field name (snake_case)
@@ -2571,6 +3353,18 @@ type WorkflowFieldMetadata struct {
 	Label string `json:"label"`
 	// Field data type
 	Type string `json:"type"`
+}
+
+// Return response for workflow instance admin operations
+type WorkflowInstanceAdminPayload struct {
+	// Updated workflow instance
+	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
+}
+
+// Return response for bulk workflow instance admin operations
+type WorkflowInstanceBulkAdminPayload struct {
+	// IDs of workflow instances updated
+	UpdatedIDs []string `json:"updatedIDs"`
 }
 
 // Workflow metadata including supported object types and their fields
@@ -2589,8 +3383,48 @@ type WorkflowObjectTypeMetadata struct {
 	Description string `json:"description"`
 	// List of fields that can be tracked in workflows for this type
 	EligibleFields []*WorkflowFieldMetadata `json:"eligibleFields"`
+	// List of edges that can be tracked in workflows for this type
+	EligibleEdges []string `json:"eligibleEdges"`
 	// Available resolver keys for this object type
 	ResolverKeys []string `json:"resolverKeys"`
+}
+
+// WorkflowProposalPreview describes the proposed changes alongside current values and diffs.
+type WorkflowProposalPreview struct {
+	// ID of the workflow proposal
+	ProposalID string `json:"proposalID"`
+	// Stable key representing the approval domain for this proposal
+	DomainKey string `json:"domainKey"`
+	// Current state of the proposal
+	State enums.WorkflowProposalState `json:"state"`
+	// Timestamp when the proposal was submitted
+	SubmittedAt *models.DateTime `json:"submittedAt,omitempty"`
+	// User who submitted the proposal
+	SubmittedByUserID *string `json:"submittedByUserID,omitempty"`
+	// Proposed changes for the approval domain
+	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
+	// Current values for the proposed fields
+	CurrentValues map[string]any `json:"currentValues,omitempty"`
+	// Field-level diffs for the proposed changes
+	Diffs []*WorkflowFieldDiff `json:"diffs"`
+}
+
+// Return response for submitWorkflowProposal mutation
+type WorkflowProposalSubmitPayload struct {
+	// Submitted workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+}
+
+// Return response for updateWorkflowProposalChanges mutation
+type WorkflowProposalUpdatePayload struct {
+	// Updated workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+}
+
+// Return response for withdrawWorkflowProposal mutation
+type WorkflowProposalWithdrawPayload struct {
+	// Withdrawn workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
 }
 
 // Properties by which ControlCategory connections can be ordered.

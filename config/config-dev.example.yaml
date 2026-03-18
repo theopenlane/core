@@ -27,7 +27,10 @@ server:
   # tls settings
   tls:
     enabled: false
-
+campaignwebhook:
+    enabled: false
+    resendapikey: ""
+    resendsecret: ""
 # db settings
 db:
   debug: true
@@ -176,3 +179,17 @@ subscription:
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
+integrationgithubapp:
+    enabled: false
+    appid: ""
+    appslug: ""
+    privatekey: ""
+    webhooksecret: ""
+    successredirecturl: ""
+
+cloudflare:
+    apitoken: ""
+    accountid: ""
+    clientid: ""
+    clientsecret: ""
+    enabled: false

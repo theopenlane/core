@@ -17,6 +17,7 @@ load_template() {
         if [[ "$arg" == *"="* ]]; then
             key="${arg%%=*}"
             value="${arg#*=}"
+            value=$(printf '%b' "$value")
             content="${content//\{\{${key}\}\}/$value}"
         fi
     done
@@ -38,8 +39,5 @@ EOF
 echo "----- Substitution test -----"
 load_template tmp/test.md \
   "TAG=v1.2.3" \
-  "SUMMARY=Line one
-Line two
-Line three" \
+  "SUMMARY=Line one\nLine two\nLine three" \
   "COMMIT=abc123"
-

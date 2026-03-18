@@ -19,14 +19,14 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // ObjectOwnedMixin is a mixin for object owned entities
@@ -99,7 +99,7 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 	}
 
 	if (!o.IncludeOrganizationOwner) && o.AllowEmptyForSystemAdmin {
-		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if WithOrganizationOwner is false")
+		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if withOrganizationOwner is false")
 	}
 
 	// setup the correct interceptor
@@ -188,6 +188,25 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 		}
 
 		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+	}
+}
+
+// withOrganizationOwnerServiceOnly adds the organization owner_id field and interceptor
+// but does NOT add the editor relation tuple. This is for system-driven objects where
+// only services should be able to create/edit/delete, but users can view based on org membership.
+// It also replaces the default tuple update hook with one that skips creating user parent tuples.
+func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.IncludeOrganizationOwner = true
+
+		if skipSystemAdmin {
+			o.AllowEmptyForSystemAdmin = skipSystemAdmin
+		}
+
+		// Replace the default tuple update hook with a service-only version
+		// that skips creating user parent tuples (since users are not allowed as parent types)
+		o.HookFuncs = []HookFunc{serviceOnlyTupleUpdateFunc, orgHookCreateServiceOnlyFunc}
 		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
 	}
 }
@@ -356,11 +375,7 @@ var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutat
 		return true
 	}
 
-	if _, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); ok {
-		return true
-	}
-
-	if _, ok := contextx.From[auth.QuestionnaireContextKey](ctx); ok {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassFGA) {
 		return true
 	}
 
@@ -382,18 +397,25 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	)
 }
 
+// serviceOnlyTupleUpdateFunc is a hook function for service-only objects that skips
+// creating user parent tuples (since users are not allowed as parent types in the FGA model)
+var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
+	ownerRelation := fgax.ParentRelation
+	if o.OwnerRelation != "" {
+		ownerRelation = o.OwnerRelation
+	}
+
+	return hook.On(
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, skipUserParentTupleFunc),
+		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+	)
+}
+
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins
 func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context) (bool, error) {
-	if o.AllowEmptyForSystemAdmin {
-		isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return false, err
-		}
-
+	if o.AllowEmptyForSystemAdmin && auth.IsSystemAdminFromContext(ctx) {
 		// skip hook for system admins to create system level objects
-		if isAdmin {
-			return true, nil
-		}
+		return true, nil
 	}
 
 	return false, nil

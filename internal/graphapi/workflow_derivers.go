@@ -90,17 +90,17 @@ func deriveWorkflowDefinitionApprovalFields(doc *models.WorkflowDefinitionDocume
 // deriveWorkflowDefinitionApprovalSubmissionMode extracts the approval submission mode from a workflow definition
 func deriveWorkflowDefinitionApprovalSubmissionMode(doc *models.WorkflowDefinitionDocument) enums.WorkflowApprovalSubmissionMode {
 	if doc == nil {
-		return enums.WorkflowApprovalSubmissionModeManualSubmit
+		return enums.WorkflowApprovalSubmissionModeAutoSubmit
 	}
 
 	mode := doc.ApprovalSubmissionMode
 	if mode == "" {
-		return enums.WorkflowApprovalSubmissionModeManualSubmit
+		return enums.WorkflowApprovalSubmissionModeAutoSubmit
 	}
 
 	if parsed := enums.ToWorkflowApprovalSubmissionMode(mode.String()); parsed != nil {
 		return *parsed
 	}
 
-	return enums.WorkflowApprovalSubmissionModeManualSubmit
+	return enums.WorkflowApprovalSubmissionModeAutoSubmit
 }

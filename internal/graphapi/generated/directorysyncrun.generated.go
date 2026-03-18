@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunBulkCreatePayload_direc
 				return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
 			case "status":
 				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
 			case "startedAt":
@@ -102,6 +104,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunBulkCreatePayload_direc
 				return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
 			case "integration":
 				return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
 			case "directoryGroups":
@@ -163,6 +167,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunCreatePayload_directory
 				return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
 			case "status":
 				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
 			case "startedAt":
@@ -189,6 +195,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunCreatePayload_directory
 				return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
 			case "integration":
 				return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
 			case "directoryGroups":
@@ -279,6 +287,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunUpdatePayload_directory
 				return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
 			case "status":
 				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
 			case "startedAt":
@@ -305,6 +315,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunUpdatePayload_directory
 				return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
 			case "integration":
 				return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
 			case "directoryGroups":
@@ -352,10 +364,10 @@ func (ec *executionContext) _DirectorySyncRunBulkCreatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -391,10 +403,10 @@ func (ec *executionContext) _DirectorySyncRunCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -430,10 +442,10 @@ func (ec *executionContext) _DirectorySyncRunDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -469,10 +481,10 @@ func (ec *executionContext) _DirectorySyncRunUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

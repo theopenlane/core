@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -21,7 +20,7 @@ func TestCELValue(t *testing.T) {
 
 	obj := &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}
 	value := obj.CELValue()
-	require.IsType(t, map[string]any{}, value)
+	assert.IsType(t, map[string]any{}, value)
 
 	mapped := value.(map[string]any)
 	assert.Equal(t, "obj1", mapped["id"])
@@ -39,7 +38,8 @@ func TestBuildCELVarsDefault(t *testing.T) {
 	celContextBuilders = nil
 
 	obj := &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}
-	vars := BuildCELVars(obj, []string{"status"}, []string{"edge"}, map[string][]string{"a": []string{"1"}}, map[string][]string{"b": []string{"2"}}, "UPDATE", "user1")
+	proposed := map[string]any{"status": "APPROVED"}
+	vars := BuildCELVars(obj, []string{"status"}, []string{"edge"}, map[string][]string{"a": []string{"1"}}, map[string][]string{"b": []string{"2"}}, "UPDATE", "user1", proposed)
 
 	assert.Equal(t, obj.CELValue(), vars["object"])
 	assert.Equal(t, []string{"status"}, vars["changed_fields"])
@@ -48,6 +48,7 @@ func TestBuildCELVarsDefault(t *testing.T) {
 	assert.Equal(t, map[string][]string{"b": []string{"2"}}, vars["removed_ids"])
 	assert.Equal(t, "UPDATE", vars["event_type"])
 	assert.Equal(t, "user1", vars["user_id"])
+	assert.Equal(t, proposed, vars["proposed_changes"])
 }
 
 // TestBuildCELVarsCustomBuilder verifies custom CEL context builders
@@ -57,11 +58,11 @@ func TestBuildCELVarsCustomBuilder(t *testing.T) {
 	celContextBuilders = nil
 
 	expected := map[string]any{"custom": true}
-	RegisterCELContextBuilder(func(_ *Object, _ []string, _ []string, _ map[string][]string, _ map[string][]string, _ string, _ string) map[string]any {
+	RegisterCELContextBuilder(func(_ *Object, _ []string, _ []string, _ map[string][]string, _ map[string][]string, _ string, _ string, _ map[string]any) map[string]any {
 		return expected
 	})
 
-	vars := BuildCELVars(nil, nil, nil, nil, nil, "", "")
+	vars := BuildCELVars(nil, nil, nil, nil, nil, "", "", nil)
 	assert.Equal(t, expected, vars)
 }
 
@@ -82,7 +83,7 @@ func TestObjectFromRef(t *testing.T) {
 	}
 
 	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expected, obj)
 }
 
@@ -94,7 +95,7 @@ func TestBuildAssignmentContext(t *testing.T) {
 
 	ctx := context.Background()
 	vars, err := BuildAssignmentContext(ctx, nil, "")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Nil(t, vars)
 
 	assignmentContextBuilder = func(_ context.Context, _ *generated.Client, instanceID string) (map[string]any, error) {
@@ -102,7 +103,7 @@ func TestBuildAssignmentContext(t *testing.T) {
 	}
 
 	vars, err = BuildAssignmentContext(ctx, nil, "instance-1")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"instance_id": "instance-1"}, vars)
 }
 
@@ -116,7 +117,7 @@ func TestRegisterObjectRefResolver(t *testing.T) {
 	})
 
 	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, "obj", obj.ID)
 }
 
@@ -143,13 +144,40 @@ func TestRegisterAssignmentContextBuilder(t *testing.T) {
 	})
 
 	out, err := BuildAssignmentContext(context.Background(), nil, "instance-2")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"instance_id": "instance-2"}, out)
 }
 
 func TestObservabilityFields(t *testing.T) {
 	var nilObj *Object
 	assert.Nil(t, nilObj.ObservabilityFields())
+
+	// Register an observability fields builder that matches the expected behavior
+	old := observabilityFieldsBuilder
+	RegisterObservabilityFieldsBuilder(func(obj *Object) map[string]any {
+		if obj == nil {
+			return nil
+		}
+		fields := map[string]any{
+			observability.FieldObjectType: obj.Type.String(),
+		}
+		switch obj.Type {
+		case enums.WorkflowObjectTypeActionPlan:
+			fields[workflowobjectref.FieldActionPlanID] = obj.ID
+		case enums.WorkflowObjectTypeControl:
+			fields[workflowobjectref.FieldControlID] = obj.ID
+		case enums.WorkflowObjectTypeEvidence:
+			fields[workflowobjectref.FieldEvidenceID] = obj.ID
+		case enums.WorkflowObjectTypeInternalPolicy:
+			fields[workflowobjectref.FieldInternalPolicyID] = obj.ID
+		case enums.WorkflowObjectTypeProcedure:
+			fields[workflowobjectref.FieldProcedureID] = obj.ID
+		case enums.WorkflowObjectTypeSubcontrol:
+			fields[workflowobjectref.FieldSubcontrolID] = obj.ID
+		}
+		return fields
+	})
+	t.Cleanup(func() { observabilityFieldsBuilder = old })
 
 	cases := map[enums.WorkflowObjectType]string{
 		enums.WorkflowObjectTypeActionPlan:     workflowobjectref.FieldActionPlanID,

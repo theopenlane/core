@@ -86,6 +86,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Default(enums.DocumentDraft.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
+				entx.FieldWorkflowEligible(),
 			).
 			Optional().
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
@@ -93,12 +94,14 @@ func getDocumentFields(documentType string) []ent.Field {
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment(fmt.Sprintf("details of the %s", documentType)),
 		field.JSON("details_json", []any{}).
 			Optional().
 			Annotations(
 				entgql.Type("[Any!]"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment(fmt.Sprintf("structured details of the %s in JSON format", documentType)),
 		field.Bool("approval_required").
@@ -123,11 +126,17 @@ func getDocumentFields(documentType string) []ent.Field {
 		field.String("approver_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("ApproverGroupName").MatchOn("name"),
+			).
 			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)).
 			StructTag(`json:"approver_id,omitempty"`),
 		field.String("delegate_id").
 			Optional().
 			Unique().
+			Annotations(
+				entx.CSVRef().FromColumn("DocumentDelegateGroupName").MatchOn("name"),
+			).
 			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)),
 		field.String("summary").
 			Optional().

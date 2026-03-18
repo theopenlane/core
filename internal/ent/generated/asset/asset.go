@@ -82,6 +82,8 @@ const (
 	FieldAssetType = "asset_type"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldIdentifier holds the string denoting the identifier field in the database.
@@ -334,6 +336,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldAssetType,
 	FieldName,
+	FieldDisplayName,
 	FieldDescription,
 	FieldIdentifier,
 	FieldWebsite,
@@ -408,7 +411,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
+	Hooks        [19]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -425,6 +428,8 @@ var (
 	DefaultSystemOwned bool
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	DisplayNameValidator func(string) error
 	// DefaultContainsPii holds the default value on creation for the "contains_pii" field.
 	DefaultContainsPii bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -616,6 +621,11 @@ func ByAssetType(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.

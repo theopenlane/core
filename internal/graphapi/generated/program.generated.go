@@ -72,6 +72,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -132,6 +134,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":
@@ -164,6 +168,156 @@ func (ec *executionContext) _ProgramBulkDeletePayload_deletedIDs(ctx context.Con
 func (ec *executionContext) fieldContext_ProgramBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProgramBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProgramBulkUpdatePayload_programs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramBulkUpdatePayload_programs,
+		func(ctx context.Context) (any, error) {
+			return obj.Programs, nil
+		},
+		nil,
+		ec.marshalOProgram2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProgramBulkUpdatePayload_programs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProgramBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Program_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Program_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Program_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Program_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Program_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Program_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Program_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Program_ownerID(ctx, field)
+			case "programKindName":
+				return ec.fieldContext_Program_programKindName(ctx, field)
+			case "programKindID":
+				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
+			case "name":
+				return ec.fieldContext_Program_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Program_description(ctx, field)
+			case "status":
+				return ec.fieldContext_Program_status(ctx, field)
+			case "frameworkName":
+				return ec.fieldContext_Program_frameworkName(ctx, field)
+			case "startDate":
+				return ec.fieldContext_Program_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_Program_endDate(ctx, field)
+			case "auditorReady":
+				return ec.fieldContext_Program_auditorReady(ctx, field)
+			case "auditorWriteComments":
+				return ec.fieldContext_Program_auditorWriteComments(ctx, field)
+			case "auditorReadComments":
+				return ec.fieldContext_Program_auditorReadComments(ctx, field)
+			case "auditFirm":
+				return ec.fieldContext_Program_auditFirm(ctx, field)
+			case "auditor":
+				return ec.fieldContext_Program_auditor(ctx, field)
+			case "auditorEmail":
+				return ec.fieldContext_Program_auditorEmail(ctx, field)
+			case "programOwnerID":
+				return ec.fieldContext_Program_programOwnerID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Program_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Program_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Program_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Program_viewers(ctx, field)
+			case "programKind":
+				return ec.fieldContext_Program_programKind(ctx, field)
+			case "controls":
+				return ec.fieldContext_Program_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Program_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Program_controlObjectives(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Program_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Program_procedures(ctx, field)
+			case "risks":
+				return ec.fieldContext_Program_risks(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Program_tasks(ctx, field)
+			case "notes":
+				return ec.fieldContext_Program_notes(ctx, field)
+			case "files":
+				return ec.fieldContext_Program_files(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Program_evidence(ctx, field)
+			case "narratives":
+				return ec.fieldContext_Program_narratives(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
+			case "users":
+				return ec.fieldContext_Program_users(ctx, field)
+			case "programOwner":
+				return ec.fieldContext_Program_programOwner(ctx, field)
+			case "members":
+				return ec.fieldContext_Program_members(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Program", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ProgramBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ProgramBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ProgramBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ProgramBulkUpdatePayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -218,6 +372,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -278,6 +434,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":
@@ -364,6 +522,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -424,6 +584,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":
@@ -471,10 +633,10 @@ func (ec *executionContext) _ProgramBulkCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -510,10 +672,48 @@ func (ec *executionContext) _ProgramBulkDeletePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var programBulkUpdatePayloadImplementors = []string{"ProgramBulkUpdatePayload"}
+
+func (ec *executionContext) _ProgramBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ProgramBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, programBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ProgramBulkUpdatePayload")
+		case "programs":
+			out.Values[i] = ec._ProgramBulkUpdatePayload_programs(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._ProgramBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -549,10 +749,10 @@ func (ec *executionContext) _ProgramCreatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -588,10 +788,10 @@ func (ec *executionContext) _ProgramDeletePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -627,10 +827,10 @@ func (ec *executionContext) _ProgramUpdatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -671,6 +871,20 @@ func (ec *executionContext) marshalNProgramBulkDeletePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._ProgramBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNProgramBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramBulkUpdatePayload) graphql.Marshaler {
+	return ec._ProgramBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNProgramBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ProgramBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNProgramCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramCreatePayload) graphql.Marshaler {

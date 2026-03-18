@@ -10,13 +10,13 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -31,13 +31,27 @@ var errOneNDAOnly = errors.New("one NDA file is required")
 func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput) (*model.TrustCenterNDACreatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
 
-	trustCenter, err := txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+	var (
+		trustCenter *generated.TrustCenter
+		err         error
+	)
+
+	if input.TrustCenterID == "" {
+		// get the trust center
+		trustCenter, err = txnCtx.TrustCenter.Query().Only(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+		}
+	} else {
+		trustCenter, err = txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+		}
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -177,16 +191,33 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 // submitTrustCenterNDAResponse submits a trust center NDA response
 func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
-	anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
-	if !ok || anon.SubjectEmail == "" || anon.TrustCenterID == "" || anon.OrganizationID == "" {
+	tcID, hasTCID := auth.ActiveTrustCenterIDKey.Get(ctx)
+	caller, hasCaller := auth.CallerFromContext(ctx)
+	if !hasTCID || tcID == "" || !hasCaller || caller == nil || caller.SubjectEmail == "" || caller.OrganizationID == "" {
 		return nil, newPermissionDeniedError()
 	}
 
-	allowCtx := contextx.With(privacy.DecisionContext(ctx, privacy.Allow), auth.TrustCenterNDAContextKey{
-		OrgID: anon.OrganizationID,
-	})
+	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
 
-	res, err := withTransactionalMutation(allowCtx).DocumentData.Create().SetInput(
+	txnCtx := withTransactionalMutation(allowCtx)
+
+	ndaRequest, err := txnCtx.TrustCenterNDARequest.Query().
+		Where(
+			trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
+			trustcenterndarequest.TrustCenterID(tcID),
+		).First(allowCtx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
+	}
+
+	// we need to update the signatory info from the NDA request we collected previously
+	if signatoryInfo, ok := input.Response["signatory_info"].(map[string]any); ok {
+		signatoryInfo["first_name"] = ndaRequest.FirstName
+		signatoryInfo["last_name"] = ndaRequest.LastName
+		signatoryInfo["company_name"] = lo.FromPtr(ndaRequest.CompanyName)
+	}
+
+	res, err := txnCtx.DocumentData.Create().SetInput(
 		generated.CreateDocumentDataInput{
 			TemplateID: lo.ToPtr(input.TemplateID),
 			Data:       input.Response,

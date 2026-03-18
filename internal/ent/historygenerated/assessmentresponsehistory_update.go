@@ -449,6 +449,20 @@ func (_u *AssessmentResponseHistoryUpdate) ClearDocumentDataID() *AssessmentResp
 	return _u
 }
 
+// SetIsDraft sets the "is_draft" field.
+func (_u *AssessmentResponseHistoryUpdate) SetIsDraft(v bool) *AssessmentResponseHistoryUpdate {
+	_u.mutation.SetIsDraft(v)
+	return _u
+}
+
+// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdate) SetNillableIsDraft(v *bool) *AssessmentResponseHistoryUpdate {
+	if v != nil {
+		_u.SetIsDraft(*v)
+	}
+	return _u
+}
+
 // Mutation returns the AssessmentResponseHistoryMutation object of the builder.
 func (_u *AssessmentResponseHistoryUpdate) Mutation() *AssessmentResponseHistoryMutation {
 	return _u.mutation
@@ -661,6 +675,9 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsDraft(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIsDraft, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentResponseHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1101,6 +1118,20 @@ func (_u *AssessmentResponseHistoryUpdateOne) ClearDocumentDataID() *AssessmentR
 	return _u
 }
 
+// SetIsDraft sets the "is_draft" field.
+func (_u *AssessmentResponseHistoryUpdateOne) SetIsDraft(v bool) *AssessmentResponseHistoryUpdateOne {
+	_u.mutation.SetIsDraft(v)
+	return _u
+}
+
+// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdateOne) SetNillableIsDraft(v *bool) *AssessmentResponseHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsDraft(*v)
+	}
+	return _u
+}
+
 // Mutation returns the AssessmentResponseHistoryMutation object of the builder.
 func (_u *AssessmentResponseHistoryUpdateOne) Mutation() *AssessmentResponseHistoryMutation {
 	return _u.mutation
@@ -1343,6 +1374,9 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsDraft(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIsDraft, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentResponseHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

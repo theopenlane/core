@@ -29,11 +29,6 @@ var DefaultConfig = Config{
 	DefaultContentType: "application/data",
 }
 
-// New creates a new middleware function with the default config
-func New() echo.MiddlewareFunc {
-	return NewWithConfig(DefaultConfig)
-}
-
 // NewWithConfig creates a new middleware function with the provided config
 func NewWithConfig(config Config) echo.MiddlewareFunc {
 	if config.Skipper == nil {

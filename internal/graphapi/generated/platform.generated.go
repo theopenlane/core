@@ -126,6 +126,8 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_criticalityID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Platform_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Platform_name(ctx, field)
 			case "description":
@@ -222,6 +224,16 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_tasks(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Platform_identityHolders(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Platform_integrations(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Platform_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
 			case "sourceAssets":
@@ -238,6 +250,8 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_generatedScans(ctx, field)
 			case "platformOwner":
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Platform_systemDetail(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -351,6 +365,8 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_criticalityID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Platform_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Platform_name(ctx, field)
 			case "description":
@@ -447,6 +463,16 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_tasks(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Platform_identityHolders(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Platform_integrations(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Platform_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
 			case "sourceAssets":
@@ -463,6 +489,8 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_generatedScans(ctx, field)
 			case "platformOwner":
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Platform_systemDetail(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -605,6 +633,8 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_criticalityID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Platform_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Platform_name(ctx, field)
 			case "description":
@@ -701,6 +731,16 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_tasks(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Platform_identityHolders(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Platform_integrations(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Platform_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
 			case "sourceAssets":
@@ -717,6 +757,8 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_generatedScans(ctx, field)
 			case "platformOwner":
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Platform_systemDetail(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -766,10 +808,10 @@ func (ec *executionContext) _PlatformBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -805,10 +847,10 @@ func (ec *executionContext) _PlatformCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -844,10 +886,10 @@ func (ec *executionContext) _PlatformDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -883,10 +925,10 @@ func (ec *executionContext) _PlatformUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

@@ -10,6 +10,7 @@ mutation CreateTrustCenterPreviewSetting($input: CreateTrustCenterPreviewSetting
       faviconRemoteURL
       font
       foregroundColor
+      heroImageLocalFileID
       id
       logoLocalFileID
       logoRemoteURL

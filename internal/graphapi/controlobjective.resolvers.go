@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -20,7 +21,8 @@ import (
 // CreateControlObjective is the resolver for the createControlObjective field.
 func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -44,7 +46,8 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -55,7 +58,7 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 
 // CreateBulkCSVControlObjective is the resolver for the createBulkCSVControlObjective field.
 func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateControlObjectiveInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ControlObjectiveCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -68,13 +71,27 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateControlObjective(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "ControlObjective", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateControlObjectiveInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateControlObjective(ctx, inputs)
 }
 
 // UpdateControlObjective is the resolver for the updateControlObjective field.
@@ -85,7 +102,8 @@ func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -126,6 +144,35 @@ func (r *mutationResolver) DeleteBulkControlObjective(ctx context.Context, ids [
 	}
 
 	return r.bulkDeleteControlObjective(ctx, ids)
+}
+
+// UpdateBulkControlObjective is the resolver for the updateBulkControlObjective field.
+func (r *mutationResolver) UpdateBulkControlObjective(ctx context.Context, ids []string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateControlObjective(ctx, ids, input)
+}
+
+// UpdateBulkCSVControlObjective is the resolver for the updateBulkCSVControlObjective field.
+func (r *mutationResolver) UpdateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ControlObjectiveCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlobjective"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "ControlObjective", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVControlObjective(ctx, data)
 }
 
 // ControlObjective is the resolver for the controlObjective field.

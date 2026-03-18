@@ -95,6 +95,8 @@ func (ec *executionContext) fieldContext_WorkflowAssignmentApprovePayload_workfl
 				return ec.fieldContext_WorkflowAssignment_actorGroupID(ctx, field)
 			case "notes":
 				return ec.fieldContext_WorkflowAssignment_notes(ctx, field)
+			case "dueAt":
+				return ec.fieldContext_WorkflowAssignment_dueAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowAssignment_owner(ctx, field)
 			case "workflowInstance":
@@ -180,6 +182,8 @@ func (ec *executionContext) fieldContext_WorkflowAssignmentRejectPayload_workflo
 				return ec.fieldContext_WorkflowAssignment_actorGroupID(ctx, field)
 			case "notes":
 				return ec.fieldContext_WorkflowAssignment_notes(ctx, field)
+			case "dueAt":
+				return ec.fieldContext_WorkflowAssignment_dueAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowAssignment_owner(ctx, field)
 			case "workflowInstance":
@@ -234,10 +238,10 @@ func (ec *executionContext) _WorkflowAssignmentApprovePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -273,10 +277,10 @@ func (ec *executionContext) _WorkflowAssignmentRejectPayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

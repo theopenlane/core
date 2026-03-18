@@ -92,11 +92,13 @@ function send_pr_ready_notification() {
 
   local template_file="${BASH_SOURCE[0]%/*}/templates/slack/pr-ready-notification.json"
 
+  local formatted_summary=$(format_summary "$change_summary")
+
   send_slack_notification_from_template "$template_file" \
     "INFRA_PR_URL=$infra_pr_url" \
     "CORE_PR_URL=$core_pr_url" \
     "CORE_PR_NUMBER=$core_pr_number" \
-    "CHANGE_SUMMARY=$change_summary" \
+    "CHANGE_SUMMARY=$formatted_summary" \
     "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-unknown}" \
     "BUILD_URL=${BUILDKITE_BUILD_URL:-unknown}"
 }
@@ -109,10 +111,12 @@ function send_release_notification() {
 
   local template_file="${BASH_SOURCE[0]%/*}/templates/slack/release-notification.json"
 
+  local formatted_summary=$(format_summary "$change_summary")
+
   send_slack_notification_from_template "$template_file" \
     "PR_URL=$pr_url" \
     "RELEASE_TAG=$release_tag" \
-    "CHANGE_SUMMARY=$change_summary" \
+    "CHANGE_SUMMARY=$formatted_summary" \
     "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-unknown}" \
     "BUILD_URL=${BUILDKITE_BUILD_URL:-unknown}" \
     "RELEASE_URL=https://github.com/theopenlane/core/releases/tag/$release_tag"

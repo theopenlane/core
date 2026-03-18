@@ -34,6 +34,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -60,6 +62,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -76,10 +80,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -88,6 +94,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -102,6 +109,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -2027,6 +2035,20 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseOrderFieldIsDraft orders AssessmentResponse by is_draft.
+	AssessmentResponseOrderFieldIsDraft = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.IsDraft, nil
+		},
+		column: assessmentresponse.FieldIsDraft,
+		toTerm: assessmentresponse.ByIsDraft,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsDraft,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2063,6 +2085,8 @@ func (f AssessmentResponseOrderField) String() string {
 		str = "completed_at"
 	case AssessmentResponseOrderFieldDueDate.column:
 		str = "due_date"
+	case AssessmentResponseOrderFieldIsDraft.column:
+		str = "is_draft"
 	}
 	return str
 }
@@ -2109,6 +2133,8 @@ func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentResponseOrderFieldCompletedAt
 	case "due_date":
 		*f = *AssessmentResponseOrderFieldDueDate
+	case "is_draft":
+		*f = *AssessmentResponseOrderFieldIsDraft
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentResponseOrderField", str)
 	}
@@ -2476,6 +2502,20 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldDisplayName orders Asset by display_name.
+	AssetOrderFieldDisplayName = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: asset.FieldDisplayName,
+		toTerm: asset.ByDisplayName,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
 	// AssetOrderFieldPhysicalLocation orders Asset by physical_location.
 	AssetOrderFieldPhysicalLocation = &AssetOrderField{
 		Value: func(_m *Asset) (ent.Value, error) {
@@ -2617,6 +2657,8 @@ func (f AssetOrderField) String() string {
 		str = "ASSET_TYPE"
 	case AssetOrderFieldName.column:
 		str = "name"
+	case AssetOrderFieldDisplayName.column:
+		str = "display_name"
 	case AssetOrderFieldPhysicalLocation.column:
 		str = "physical_location"
 	case AssetOrderFieldRegion.column:
@@ -2659,6 +2701,8 @@ func (f *AssetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetOrderFieldAssetType
 	case "name":
 		*f = *AssetOrderFieldName
+	case "display_name":
+		*f = *AssetOrderFieldDisplayName
 	case "physical_location":
 		*f = *AssetOrderFieldPhysicalLocation
 	case "region":
@@ -7341,6 +7385,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
+	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryName == nil {
+				return nil, nil
+			}
+			return _m.DirectoryName, nil
+		},
+		column: directoryaccount.FieldDirectoryName,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByDirectoryName(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.DirectoryName == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryName,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldExternalID orders DirectoryAccount by external_id.
 	DirectoryAccountOrderFieldExternalID = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -7406,6 +7477,8 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountOrderFieldDirectoryName.column:
+		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryAccountOrderFieldCanonicalEmail.column:
@@ -7432,6 +7505,8 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "directory_name":
+		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
 		*f = *DirectoryAccountOrderFieldExternalID
 	case "canonical_email":
@@ -9340,6 +9415,878 @@ func (_m *DocumentData) ToEdge(order *DocumentDataOrder) *DocumentDataEdge {
 		order = DefaultDocumentDataOrder
 	}
 	return &DocumentDataEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// EmailBrandingEdge is the edge representation of EmailBranding.
+type EmailBrandingEdge struct {
+	Node   *EmailBranding `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// EmailBrandingConnection is the connection containing edges to EmailBranding.
+type EmailBrandingConnection struct {
+	Edges      []*EmailBrandingEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *EmailBrandingConnection) build(nodes []*EmailBranding, pager *emailbrandingPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *EmailBranding
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *EmailBranding {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *EmailBranding {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*EmailBrandingEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &EmailBrandingEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// EmailBrandingPaginateOption enables pagination customization.
+type EmailBrandingPaginateOption func(*emailbrandingPager) error
+
+// WithEmailBrandingOrder configures pagination ordering.
+func WithEmailBrandingOrder(order []*EmailBrandingOrder) EmailBrandingPaginateOption {
+	return func(pager *emailbrandingPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithEmailBrandingFilter configures pagination filter.
+func WithEmailBrandingFilter(filter func(*EmailBrandingQuery) (*EmailBrandingQuery, error)) EmailBrandingPaginateOption {
+	return func(pager *emailbrandingPager) error {
+		if filter == nil {
+			return errors.New("EmailBrandingQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type emailbrandingPager struct {
+	reverse bool
+	order   []*EmailBrandingOrder
+	filter  func(*EmailBrandingQuery) (*EmailBrandingQuery, error)
+}
+
+func newEmailBrandingPager(opts []EmailBrandingPaginateOption, reverse bool) (*emailbrandingPager, error) {
+	pager := &emailbrandingPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *emailbrandingPager) applyFilter(query *EmailBrandingQuery) (*EmailBrandingQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *emailbrandingPager) toCursor(_m *EmailBranding) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *emailbrandingPager) applyCursors(query *EmailBrandingQuery, after, before *Cursor) (*EmailBrandingQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultEmailBrandingOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *emailbrandingPager) applyOrder(query *EmailBrandingQuery) *EmailBrandingQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultEmailBrandingOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultEmailBrandingOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *emailbrandingPager) orderExpr(query *EmailBrandingQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultEmailBrandingOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to EmailBranding.
+func (_m *EmailBrandingQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...EmailBrandingPaginateOption,
+) (*EmailBrandingConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newEmailBrandingPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &EmailBrandingConnection{Edges: []*EmailBrandingEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// EmailBrandingOrderFieldCreatedAt orders EmailBranding by created_at.
+	EmailBrandingOrderFieldCreatedAt = &EmailBrandingOrderField{
+		Value: func(_m *EmailBranding) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: emailbranding.FieldCreatedAt,
+		toTerm: emailbranding.ByCreatedAt,
+		toCursor: func(_m *EmailBranding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// EmailBrandingOrderFieldUpdatedAt orders EmailBranding by updated_at.
+	EmailBrandingOrderFieldUpdatedAt = &EmailBrandingOrderField{
+		Value: func(_m *EmailBranding) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: emailbranding.FieldUpdatedAt,
+		toTerm: emailbranding.ByUpdatedAt,
+		toCursor: func(_m *EmailBranding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// EmailBrandingOrderFieldName orders EmailBranding by name.
+	EmailBrandingOrderFieldName = &EmailBrandingOrderField{
+		Value: func(_m *EmailBranding) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: emailbranding.FieldName,
+		toTerm: emailbranding.ByName,
+		toCursor: func(_m *EmailBranding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f EmailBrandingOrderField) String() string {
+	var str string
+	switch f.column {
+	case EmailBrandingOrderFieldCreatedAt.column:
+		str = "created_at"
+	case EmailBrandingOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case EmailBrandingOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f EmailBrandingOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *EmailBrandingOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("EmailBrandingOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *EmailBrandingOrderFieldCreatedAt
+	case "updated_at":
+		*f = *EmailBrandingOrderFieldUpdatedAt
+	case "name":
+		*f = *EmailBrandingOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid EmailBrandingOrderField", str)
+	}
+	return nil
+}
+
+// EmailBrandingOrderField defines the ordering field of EmailBranding.
+type EmailBrandingOrderField struct {
+	// Value extracts the ordering value from the given EmailBranding.
+	Value    func(*EmailBranding) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) emailbranding.OrderOption
+	toCursor func(*EmailBranding) Cursor
+}
+
+// EmailBrandingOrder defines the ordering of EmailBranding.
+type EmailBrandingOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *EmailBrandingOrderField `json:"field"`
+}
+
+// DefaultEmailBrandingOrder is the default ordering of EmailBranding.
+var DefaultEmailBrandingOrder = &EmailBrandingOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &EmailBrandingOrderField{
+		Value: func(_m *EmailBranding) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: emailbranding.FieldID,
+		toTerm: emailbranding.ByID,
+		toCursor: func(_m *EmailBranding) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts EmailBranding into EmailBrandingEdge.
+func (_m *EmailBranding) ToEdge(order *EmailBrandingOrder) *EmailBrandingEdge {
+	if order == nil {
+		order = DefaultEmailBrandingOrder
+	}
+	return &EmailBrandingEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// EmailTemplateEdge is the edge representation of EmailTemplate.
+type EmailTemplateEdge struct {
+	Node   *EmailTemplate `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// EmailTemplateConnection is the connection containing edges to EmailTemplate.
+type EmailTemplateConnection struct {
+	Edges      []*EmailTemplateEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *EmailTemplateConnection) build(nodes []*EmailTemplate, pager *emailtemplatePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *EmailTemplate
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *EmailTemplate {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *EmailTemplate {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*EmailTemplateEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &EmailTemplateEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// EmailTemplatePaginateOption enables pagination customization.
+type EmailTemplatePaginateOption func(*emailtemplatePager) error
+
+// WithEmailTemplateOrder configures pagination ordering.
+func WithEmailTemplateOrder(order []*EmailTemplateOrder) EmailTemplatePaginateOption {
+	return func(pager *emailtemplatePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithEmailTemplateFilter configures pagination filter.
+func WithEmailTemplateFilter(filter func(*EmailTemplateQuery) (*EmailTemplateQuery, error)) EmailTemplatePaginateOption {
+	return func(pager *emailtemplatePager) error {
+		if filter == nil {
+			return errors.New("EmailTemplateQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type emailtemplatePager struct {
+	reverse bool
+	order   []*EmailTemplateOrder
+	filter  func(*EmailTemplateQuery) (*EmailTemplateQuery, error)
+}
+
+func newEmailTemplatePager(opts []EmailTemplatePaginateOption, reverse bool) (*emailtemplatePager, error) {
+	pager := &emailtemplatePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *emailtemplatePager) applyFilter(query *EmailTemplateQuery) (*EmailTemplateQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *emailtemplatePager) toCursor(_m *EmailTemplate) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *emailtemplatePager) applyCursors(query *EmailTemplateQuery, after, before *Cursor) (*EmailTemplateQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultEmailTemplateOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *emailtemplatePager) applyOrder(query *EmailTemplateQuery) *EmailTemplateQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultEmailTemplateOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultEmailTemplateOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *emailtemplatePager) orderExpr(query *EmailTemplateQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultEmailTemplateOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to EmailTemplate.
+func (_m *EmailTemplateQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...EmailTemplatePaginateOption,
+) (*EmailTemplateConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newEmailTemplatePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &EmailTemplateConnection{Edges: []*EmailTemplateEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// EmailTemplateOrderFieldCreatedAt orders EmailTemplate by created_at.
+	EmailTemplateOrderFieldCreatedAt = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: emailtemplate.FieldCreatedAt,
+		toTerm: emailtemplate.ByCreatedAt,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldUpdatedAt orders EmailTemplate by updated_at.
+	EmailTemplateOrderFieldUpdatedAt = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: emailtemplate.FieldUpdatedAt,
+		toTerm: emailtemplate.ByUpdatedAt,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldRevision orders EmailTemplate by revision.
+	EmailTemplateOrderFieldRevision = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: emailtemplate.FieldRevision,
+		toTerm: emailtemplate.ByRevision,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldKey orders EmailTemplate by key.
+	EmailTemplateOrderFieldKey = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Key, nil
+		},
+		column: emailtemplate.FieldKey,
+		toTerm: emailtemplate.ByKey,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Key,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldName orders EmailTemplate by name.
+	EmailTemplateOrderFieldName = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: emailtemplate.FieldName,
+		toTerm: emailtemplate.ByName,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldFormat orders EmailTemplate by format.
+	EmailTemplateOrderFieldFormat = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Format, nil
+		},
+		column: emailtemplate.FieldFormat,
+		toTerm: emailtemplate.ByFormat,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Format,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldLocale orders EmailTemplate by locale.
+	EmailTemplateOrderFieldLocale = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Locale, nil
+		},
+		column: emailtemplate.FieldLocale,
+		toTerm: emailtemplate.ByLocale,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Locale,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldActive orders EmailTemplate by active.
+	EmailTemplateOrderFieldActive = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Active, nil
+		},
+		column: emailtemplate.FieldActive,
+		toTerm: emailtemplate.ByActive,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Active,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldVersion orders EmailTemplate by version.
+	EmailTemplateOrderFieldVersion = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Version, nil
+		},
+		column: emailtemplate.FieldVersion,
+		toTerm: emailtemplate.ByVersion,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Version,
+			}
+		},
+	}
+	// EmailTemplateOrderFieldTemplateContext orders EmailTemplate by template_context.
+	EmailTemplateOrderFieldTemplateContext = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: emailtemplate.FieldTemplateContext,
+		toTerm: emailtemplate.ByTemplateContext,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f EmailTemplateOrderField) String() string {
+	var str string
+	switch f.column {
+	case EmailTemplateOrderFieldCreatedAt.column:
+		str = "created_at"
+	case EmailTemplateOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case EmailTemplateOrderFieldRevision.column:
+		str = "revision"
+	case EmailTemplateOrderFieldKey.column:
+		str = "KEY"
+	case EmailTemplateOrderFieldName.column:
+		str = "NAME"
+	case EmailTemplateOrderFieldFormat.column:
+		str = "FORMAT"
+	case EmailTemplateOrderFieldLocale.column:
+		str = "LOCALE"
+	case EmailTemplateOrderFieldActive.column:
+		str = "ACTIVE"
+	case EmailTemplateOrderFieldVersion.column:
+		str = "VERSION"
+	case EmailTemplateOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f EmailTemplateOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *EmailTemplateOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("EmailTemplateOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *EmailTemplateOrderFieldCreatedAt
+	case "updated_at":
+		*f = *EmailTemplateOrderFieldUpdatedAt
+	case "revision":
+		*f = *EmailTemplateOrderFieldRevision
+	case "KEY":
+		*f = *EmailTemplateOrderFieldKey
+	case "NAME":
+		*f = *EmailTemplateOrderFieldName
+	case "FORMAT":
+		*f = *EmailTemplateOrderFieldFormat
+	case "LOCALE":
+		*f = *EmailTemplateOrderFieldLocale
+	case "ACTIVE":
+		*f = *EmailTemplateOrderFieldActive
+	case "VERSION":
+		*f = *EmailTemplateOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *EmailTemplateOrderFieldTemplateContext
+	default:
+		return fmt.Errorf("%s is not a valid EmailTemplateOrderField", str)
+	}
+	return nil
+}
+
+// EmailTemplateOrderField defines the ordering field of EmailTemplate.
+type EmailTemplateOrderField struct {
+	// Value extracts the ordering value from the given EmailTemplate.
+	Value    func(*EmailTemplate) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) emailtemplate.OrderOption
+	toCursor func(*EmailTemplate) Cursor
+}
+
+// EmailTemplateOrder defines the ordering of EmailTemplate.
+type EmailTemplateOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *EmailTemplateOrderField `json:"field"`
+}
+
+// DefaultEmailTemplateOrder is the default ordering of EmailTemplate.
+var DefaultEmailTemplateOrder = &EmailTemplateOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: emailtemplate.FieldID,
+		toTerm: emailtemplate.ByID,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts EmailTemplate into EmailTemplateEdge.
+func (_m *EmailTemplate) ToEdge(order *EmailTemplateOrder) *EmailTemplateEdge {
+	if order == nil {
+		order = DefaultEmailTemplateOrder
+	}
+	return &EmailTemplateEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -11739,6 +12686,20 @@ var (
 			}
 		},
 	}
+	// ExportOrderFieldMode orders Export by mode.
+	ExportOrderFieldMode = &ExportOrderField{
+		Value: func(_m *Export) (ent.Value, error) {
+			return _m.Mode, nil
+		},
+		column: export.FieldMode,
+		toTerm: export.ByMode,
+		toCursor: func(_m *Export) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Mode,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11755,6 +12716,8 @@ func (f ExportOrderField) String() string {
 		str = "format"
 	case ExportOrderFieldStatus.column:
 		str = "status"
+	case ExportOrderFieldMode.column:
+		str = "mode"
 	}
 	return str
 }
@@ -11781,6 +12744,8 @@ func (f *ExportOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ExportOrderFieldFormat
 	case "status":
 		*f = *ExportOrderFieldStatus
+	case "mode":
+		*f = *ExportOrderFieldMode
 	default:
 		return fmt.Errorf("%s is not a valid ExportOrderField", str)
 	}
@@ -12506,6 +13471,20 @@ var (
 			}
 		},
 	}
+	// FindingOrderFieldSecurityLevel orders Finding by security_level.
+	FindingOrderFieldSecurityLevel = &FindingOrderField{
+		Value: func(_m *Finding) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: finding.FieldSecurityLevel,
+		toTerm: finding.BySecurityLevel,
+		toCursor: func(_m *Finding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// FindingOrderFieldExternalOwnerID orders Finding by external_owner_id.
 	FindingOrderFieldExternalOwnerID = &FindingOrderField{
 		Value: func(_m *Finding) (ent.Value, error) {
@@ -12560,6 +13539,8 @@ func (f FindingOrderField) String() string {
 		str = "updated_at"
 	case FindingOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case FindingOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case FindingOrderFieldCategory.column:
@@ -12588,6 +13569,8 @@ func (f *FindingOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingOrderFieldUpdatedAt
 	case "external_id":
 		*f = *FindingOrderFieldExternalID
+	case "security_level":
+		*f = *FindingOrderFieldSecurityLevel
 	case "external_owner_id":
 		*f = *FindingOrderFieldExternalOwnerID
 	case "category":
@@ -15557,6 +16540,76 @@ var (
 			}
 		},
 	}
+	// IntegrationOrderFieldDefinitionID orders Integration by definition_id.
+	IntegrationOrderFieldDefinitionID = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.DefinitionID, nil
+		},
+		column: integration.FieldDefinitionID,
+		toTerm: integration.ByDefinitionID,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionID,
+			}
+		},
+	}
+	// IntegrationOrderFieldDefinitionVersion orders Integration by definition_version.
+	IntegrationOrderFieldDefinitionVersion = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.DefinitionVersion, nil
+		},
+		column: integration.FieldDefinitionVersion,
+		toTerm: integration.ByDefinitionVersion,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionVersion,
+			}
+		},
+	}
+	// IntegrationOrderFieldDefinitionSlug orders Integration by definition_slug.
+	IntegrationOrderFieldDefinitionSlug = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.DefinitionSlug, nil
+		},
+		column: integration.FieldDefinitionSlug,
+		toTerm: integration.ByDefinitionSlug,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionSlug,
+			}
+		},
+	}
+	// IntegrationOrderFieldFamily orders Integration by family.
+	IntegrationOrderFieldFamily = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.Family, nil
+		},
+		column: integration.FieldFamily,
+		toTerm: integration.ByFamily,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Family,
+			}
+		},
+	}
+	// IntegrationOrderFieldStatus orders Integration by status.
+	IntegrationOrderFieldStatus = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: integration.FieldStatus,
+		toTerm: integration.ByStatus,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -15573,6 +16626,16 @@ func (f IntegrationOrderField) String() string {
 		str = "kind"
 	case IntegrationOrderFieldIntegrationType.column:
 		str = "integration_type"
+	case IntegrationOrderFieldDefinitionID.column:
+		str = "definition_id"
+	case IntegrationOrderFieldDefinitionVersion.column:
+		str = "definition_version"
+	case IntegrationOrderFieldDefinitionSlug.column:
+		str = "definition_slug"
+	case IntegrationOrderFieldFamily.column:
+		str = "family"
+	case IntegrationOrderFieldStatus.column:
+		str = "status"
 	}
 	return str
 }
@@ -15599,6 +16662,16 @@ func (f *IntegrationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationOrderFieldKind
 	case "integration_type":
 		*f = *IntegrationOrderFieldIntegrationType
+	case "definition_id":
+		*f = *IntegrationOrderFieldDefinitionID
+	case "definition_version":
+		*f = *IntegrationOrderFieldDefinitionVersion
+	case "definition_slug":
+		*f = *IntegrationOrderFieldDefinitionSlug
+	case "family":
+		*f = *IntegrationOrderFieldFamily
+	case "status":
+		*f = *IntegrationOrderFieldStatus
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationOrderField", str)
 	}
@@ -20308,6 +21381,950 @@ func (_m *Notification) ToEdge(order *NotificationOrder) *NotificationEdge {
 		order = DefaultNotificationOrder
 	}
 	return &NotificationEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// NotificationPreferenceEdge is the edge representation of NotificationPreference.
+type NotificationPreferenceEdge struct {
+	Node   *NotificationPreference `json:"node"`
+	Cursor Cursor                  `json:"cursor"`
+}
+
+// NotificationPreferenceConnection is the connection containing edges to NotificationPreference.
+type NotificationPreferenceConnection struct {
+	Edges      []*NotificationPreferenceEdge `json:"edges"`
+	PageInfo   PageInfo                      `json:"pageInfo"`
+	TotalCount int                           `json:"totalCount"`
+}
+
+func (c *NotificationPreferenceConnection) build(nodes []*NotificationPreference, pager *notificationpreferencePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *NotificationPreference
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *NotificationPreference {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *NotificationPreference {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*NotificationPreferenceEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &NotificationPreferenceEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// NotificationPreferencePaginateOption enables pagination customization.
+type NotificationPreferencePaginateOption func(*notificationpreferencePager) error
+
+// WithNotificationPreferenceOrder configures pagination ordering.
+func WithNotificationPreferenceOrder(order []*NotificationPreferenceOrder) NotificationPreferencePaginateOption {
+	return func(pager *notificationpreferencePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithNotificationPreferenceFilter configures pagination filter.
+func WithNotificationPreferenceFilter(filter func(*NotificationPreferenceQuery) (*NotificationPreferenceQuery, error)) NotificationPreferencePaginateOption {
+	return func(pager *notificationpreferencePager) error {
+		if filter == nil {
+			return errors.New("NotificationPreferenceQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type notificationpreferencePager struct {
+	reverse bool
+	order   []*NotificationPreferenceOrder
+	filter  func(*NotificationPreferenceQuery) (*NotificationPreferenceQuery, error)
+}
+
+func newNotificationPreferencePager(opts []NotificationPreferencePaginateOption, reverse bool) (*notificationpreferencePager, error) {
+	pager := &notificationpreferencePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *notificationpreferencePager) applyFilter(query *NotificationPreferenceQuery) (*NotificationPreferenceQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *notificationpreferencePager) toCursor(_m *NotificationPreference) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *notificationpreferencePager) applyCursors(query *NotificationPreferenceQuery, after, before *Cursor) (*NotificationPreferenceQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultNotificationPreferenceOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *notificationpreferencePager) applyOrder(query *NotificationPreferenceQuery) *NotificationPreferenceQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultNotificationPreferenceOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultNotificationPreferenceOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *notificationpreferencePager) orderExpr(query *NotificationPreferenceQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultNotificationPreferenceOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to NotificationPreference.
+func (_m *NotificationPreferenceQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...NotificationPreferencePaginateOption,
+) (*NotificationPreferenceConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newNotificationPreferencePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &NotificationPreferenceConnection{Edges: []*NotificationPreferenceEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// NotificationPreferenceOrderFieldCreatedAt orders NotificationPreference by created_at.
+	NotificationPreferenceOrderFieldCreatedAt = &NotificationPreferenceOrderField{
+		Value: func(_m *NotificationPreference) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: notificationpreference.FieldCreatedAt,
+		toTerm: notificationpreference.ByCreatedAt,
+		toCursor: func(_m *NotificationPreference) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// NotificationPreferenceOrderFieldUpdatedAt orders NotificationPreference by updated_at.
+	NotificationPreferenceOrderFieldUpdatedAt = &NotificationPreferenceOrderField{
+		Value: func(_m *NotificationPreference) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: notificationpreference.FieldUpdatedAt,
+		toTerm: notificationpreference.ByUpdatedAt,
+		toCursor: func(_m *NotificationPreference) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// NotificationPreferenceOrderFieldChannel orders NotificationPreference by channel.
+	NotificationPreferenceOrderFieldChannel = &NotificationPreferenceOrderField{
+		Value: func(_m *NotificationPreference) (ent.Value, error) {
+			return _m.Channel, nil
+		},
+		column: notificationpreference.FieldChannel,
+		toTerm: notificationpreference.ByChannel,
+		toCursor: func(_m *NotificationPreference) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Channel,
+			}
+		},
+	}
+	// NotificationPreferenceOrderFieldStatus orders NotificationPreference by status.
+	NotificationPreferenceOrderFieldStatus = &NotificationPreferenceOrderField{
+		Value: func(_m *NotificationPreference) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: notificationpreference.FieldStatus,
+		toTerm: notificationpreference.ByStatus,
+		toCursor: func(_m *NotificationPreference) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// NotificationPreferenceOrderFieldEnabled orders NotificationPreference by enabled.
+	NotificationPreferenceOrderFieldEnabled = &NotificationPreferenceOrderField{
+		Value: func(_m *NotificationPreference) (ent.Value, error) {
+			return _m.Enabled, nil
+		},
+		column: notificationpreference.FieldEnabled,
+		toTerm: notificationpreference.ByEnabled,
+		toCursor: func(_m *NotificationPreference) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Enabled,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f NotificationPreferenceOrderField) String() string {
+	var str string
+	switch f.column {
+	case NotificationPreferenceOrderFieldCreatedAt.column:
+		str = "created_at"
+	case NotificationPreferenceOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case NotificationPreferenceOrderFieldChannel.column:
+		str = "CHANNEL"
+	case NotificationPreferenceOrderFieldStatus.column:
+		str = "STATUS"
+	case NotificationPreferenceOrderFieldEnabled.column:
+		str = "ENABLED"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f NotificationPreferenceOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *NotificationPreferenceOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("NotificationPreferenceOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *NotificationPreferenceOrderFieldCreatedAt
+	case "updated_at":
+		*f = *NotificationPreferenceOrderFieldUpdatedAt
+	case "CHANNEL":
+		*f = *NotificationPreferenceOrderFieldChannel
+	case "STATUS":
+		*f = *NotificationPreferenceOrderFieldStatus
+	case "ENABLED":
+		*f = *NotificationPreferenceOrderFieldEnabled
+	default:
+		return fmt.Errorf("%s is not a valid NotificationPreferenceOrderField", str)
+	}
+	return nil
+}
+
+// NotificationPreferenceOrderField defines the ordering field of NotificationPreference.
+type NotificationPreferenceOrderField struct {
+	// Value extracts the ordering value from the given NotificationPreference.
+	Value    func(*NotificationPreference) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) notificationpreference.OrderOption
+	toCursor func(*NotificationPreference) Cursor
+}
+
+// NotificationPreferenceOrder defines the ordering of NotificationPreference.
+type NotificationPreferenceOrder struct {
+	Direction OrderDirection                    `json:"direction"`
+	Field     *NotificationPreferenceOrderField `json:"field"`
+}
+
+// DefaultNotificationPreferenceOrder is the default ordering of NotificationPreference.
+var DefaultNotificationPreferenceOrder = &NotificationPreferenceOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &NotificationPreferenceOrderField{
+		Value: func(_m *NotificationPreference) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: notificationpreference.FieldID,
+		toTerm: notificationpreference.ByID,
+		toCursor: func(_m *NotificationPreference) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts NotificationPreference into NotificationPreferenceEdge.
+func (_m *NotificationPreference) ToEdge(order *NotificationPreferenceOrder) *NotificationPreferenceEdge {
+	if order == nil {
+		order = DefaultNotificationPreferenceOrder
+	}
+	return &NotificationPreferenceEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// NotificationTemplateEdge is the edge representation of NotificationTemplate.
+type NotificationTemplateEdge struct {
+	Node   *NotificationTemplate `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// NotificationTemplateConnection is the connection containing edges to NotificationTemplate.
+type NotificationTemplateConnection struct {
+	Edges      []*NotificationTemplateEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *NotificationTemplateConnection) build(nodes []*NotificationTemplate, pager *notificationtemplatePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *NotificationTemplate
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *NotificationTemplate {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *NotificationTemplate {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*NotificationTemplateEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &NotificationTemplateEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// NotificationTemplatePaginateOption enables pagination customization.
+type NotificationTemplatePaginateOption func(*notificationtemplatePager) error
+
+// WithNotificationTemplateOrder configures pagination ordering.
+func WithNotificationTemplateOrder(order []*NotificationTemplateOrder) NotificationTemplatePaginateOption {
+	return func(pager *notificationtemplatePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithNotificationTemplateFilter configures pagination filter.
+func WithNotificationTemplateFilter(filter func(*NotificationTemplateQuery) (*NotificationTemplateQuery, error)) NotificationTemplatePaginateOption {
+	return func(pager *notificationtemplatePager) error {
+		if filter == nil {
+			return errors.New("NotificationTemplateQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type notificationtemplatePager struct {
+	reverse bool
+	order   []*NotificationTemplateOrder
+	filter  func(*NotificationTemplateQuery) (*NotificationTemplateQuery, error)
+}
+
+func newNotificationTemplatePager(opts []NotificationTemplatePaginateOption, reverse bool) (*notificationtemplatePager, error) {
+	pager := &notificationtemplatePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *notificationtemplatePager) applyFilter(query *NotificationTemplateQuery) (*NotificationTemplateQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *notificationtemplatePager) toCursor(_m *NotificationTemplate) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *notificationtemplatePager) applyCursors(query *NotificationTemplateQuery, after, before *Cursor) (*NotificationTemplateQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultNotificationTemplateOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *notificationtemplatePager) applyOrder(query *NotificationTemplateQuery) *NotificationTemplateQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultNotificationTemplateOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultNotificationTemplateOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *notificationtemplatePager) orderExpr(query *NotificationTemplateQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultNotificationTemplateOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to NotificationTemplate.
+func (_m *NotificationTemplateQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...NotificationTemplatePaginateOption,
+) (*NotificationTemplateConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newNotificationTemplatePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &NotificationTemplateConnection{Edges: []*NotificationTemplateEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// NotificationTemplateOrderFieldCreatedAt orders NotificationTemplate by created_at.
+	NotificationTemplateOrderFieldCreatedAt = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: notificationtemplate.FieldCreatedAt,
+		toTerm: notificationtemplate.ByCreatedAt,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldUpdatedAt orders NotificationTemplate by updated_at.
+	NotificationTemplateOrderFieldUpdatedAt = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: notificationtemplate.FieldUpdatedAt,
+		toTerm: notificationtemplate.ByUpdatedAt,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldRevision orders NotificationTemplate by revision.
+	NotificationTemplateOrderFieldRevision = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: notificationtemplate.FieldRevision,
+		toTerm: notificationtemplate.ByRevision,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldKey orders NotificationTemplate by key.
+	NotificationTemplateOrderFieldKey = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Key, nil
+		},
+		column: notificationtemplate.FieldKey,
+		toTerm: notificationtemplate.ByKey,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Key,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldName orders NotificationTemplate by name.
+	NotificationTemplateOrderFieldName = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: notificationtemplate.FieldName,
+		toTerm: notificationtemplate.ByName,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldChannel orders NotificationTemplate by channel.
+	NotificationTemplateOrderFieldChannel = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Channel, nil
+		},
+		column: notificationtemplate.FieldChannel,
+		toTerm: notificationtemplate.ByChannel,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Channel,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldFormat orders NotificationTemplate by format.
+	NotificationTemplateOrderFieldFormat = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Format, nil
+		},
+		column: notificationtemplate.FieldFormat,
+		toTerm: notificationtemplate.ByFormat,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Format,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldLocale orders NotificationTemplate by locale.
+	NotificationTemplateOrderFieldLocale = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Locale, nil
+		},
+		column: notificationtemplate.FieldLocale,
+		toTerm: notificationtemplate.ByLocale,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Locale,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldTopicPattern orders NotificationTemplate by topic_pattern.
+	NotificationTemplateOrderFieldTopicPattern = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.TopicPattern, nil
+		},
+		column: notificationtemplate.FieldTopicPattern,
+		toTerm: notificationtemplate.ByTopicPattern,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TopicPattern,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldActive orders NotificationTemplate by active.
+	NotificationTemplateOrderFieldActive = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Active, nil
+		},
+		column: notificationtemplate.FieldActive,
+		toTerm: notificationtemplate.ByActive,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Active,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldVersion orders NotificationTemplate by version.
+	NotificationTemplateOrderFieldVersion = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Version, nil
+		},
+		column: notificationtemplate.FieldVersion,
+		toTerm: notificationtemplate.ByVersion,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Version,
+			}
+		},
+	}
+	// NotificationTemplateOrderFieldTemplateContext orders NotificationTemplate by template_context.
+	NotificationTemplateOrderFieldTemplateContext = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: notificationtemplate.FieldTemplateContext,
+		toTerm: notificationtemplate.ByTemplateContext,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f NotificationTemplateOrderField) String() string {
+	var str string
+	switch f.column {
+	case NotificationTemplateOrderFieldCreatedAt.column:
+		str = "created_at"
+	case NotificationTemplateOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case NotificationTemplateOrderFieldRevision.column:
+		str = "revision"
+	case NotificationTemplateOrderFieldKey.column:
+		str = "KEY"
+	case NotificationTemplateOrderFieldName.column:
+		str = "NAME"
+	case NotificationTemplateOrderFieldChannel.column:
+		str = "CHANNEL"
+	case NotificationTemplateOrderFieldFormat.column:
+		str = "FORMAT"
+	case NotificationTemplateOrderFieldLocale.column:
+		str = "LOCALE"
+	case NotificationTemplateOrderFieldTopicPattern.column:
+		str = "TOPIC_PATTERN"
+	case NotificationTemplateOrderFieldActive.column:
+		str = "ACTIVE"
+	case NotificationTemplateOrderFieldVersion.column:
+		str = "VERSION"
+	case NotificationTemplateOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f NotificationTemplateOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *NotificationTemplateOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("NotificationTemplateOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *NotificationTemplateOrderFieldCreatedAt
+	case "updated_at":
+		*f = *NotificationTemplateOrderFieldUpdatedAt
+	case "revision":
+		*f = *NotificationTemplateOrderFieldRevision
+	case "KEY":
+		*f = *NotificationTemplateOrderFieldKey
+	case "NAME":
+		*f = *NotificationTemplateOrderFieldName
+	case "CHANNEL":
+		*f = *NotificationTemplateOrderFieldChannel
+	case "FORMAT":
+		*f = *NotificationTemplateOrderFieldFormat
+	case "LOCALE":
+		*f = *NotificationTemplateOrderFieldLocale
+	case "TOPIC_PATTERN":
+		*f = *NotificationTemplateOrderFieldTopicPattern
+	case "ACTIVE":
+		*f = *NotificationTemplateOrderFieldActive
+	case "VERSION":
+		*f = *NotificationTemplateOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *NotificationTemplateOrderFieldTemplateContext
+	default:
+		return fmt.Errorf("%s is not a valid NotificationTemplateOrderField", str)
+	}
+	return nil
+}
+
+// NotificationTemplateOrderField defines the ordering field of NotificationTemplate.
+type NotificationTemplateOrderField struct {
+	// Value extracts the ordering value from the given NotificationTemplate.
+	Value    func(*NotificationTemplate) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) notificationtemplate.OrderOption
+	toCursor func(*NotificationTemplate) Cursor
+}
+
+// NotificationTemplateOrder defines the ordering of NotificationTemplate.
+type NotificationTemplateOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *NotificationTemplateOrderField `json:"field"`
+}
+
+// DefaultNotificationTemplateOrder is the default ordering of NotificationTemplate.
+var DefaultNotificationTemplateOrder = &NotificationTemplateOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: notificationtemplate.FieldID,
+		toTerm: notificationtemplate.ByID,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts NotificationTemplate into NotificationTemplateEdge.
+func (_m *NotificationTemplate) ToEdge(order *NotificationTemplateOrder) *NotificationTemplateEdge {
+	if order == nil {
+		order = DefaultNotificationTemplateOrder
+	}
+	return &NotificationTemplateEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -25813,6 +27830,397 @@ func (_m *Risk) ToEdge(order *RiskOrder) *RiskEdge {
 	}
 }
 
+// SLADefinitionEdge is the edge representation of SLADefinition.
+type SLADefinitionEdge struct {
+	Node   *SLADefinition `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// SLADefinitionConnection is the connection containing edges to SLADefinition.
+type SLADefinitionConnection struct {
+	Edges      []*SLADefinitionEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *SLADefinitionConnection) build(nodes []*SLADefinition, pager *sladefinitionPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SLADefinition
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SLADefinition {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SLADefinition {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SLADefinitionEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SLADefinitionEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SLADefinitionPaginateOption enables pagination customization.
+type SLADefinitionPaginateOption func(*sladefinitionPager) error
+
+// WithSLADefinitionOrder configures pagination ordering.
+func WithSLADefinitionOrder(order []*SLADefinitionOrder) SLADefinitionPaginateOption {
+	return func(pager *sladefinitionPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithSLADefinitionFilter configures pagination filter.
+func WithSLADefinitionFilter(filter func(*SLADefinitionQuery) (*SLADefinitionQuery, error)) SLADefinitionPaginateOption {
+	return func(pager *sladefinitionPager) error {
+		if filter == nil {
+			return errors.New("SLADefinitionQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type sladefinitionPager struct {
+	reverse bool
+	order   []*SLADefinitionOrder
+	filter  func(*SLADefinitionQuery) (*SLADefinitionQuery, error)
+}
+
+func newSLADefinitionPager(opts []SLADefinitionPaginateOption, reverse bool) (*sladefinitionPager, error) {
+	pager := &sladefinitionPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *sladefinitionPager) applyFilter(query *SLADefinitionQuery) (*SLADefinitionQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *sladefinitionPager) toCursor(_m *SLADefinition) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *sladefinitionPager) applyCursors(query *SLADefinitionQuery, after, before *Cursor) (*SLADefinitionQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultSLADefinitionOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *sladefinitionPager) applyOrder(query *SLADefinitionQuery) *SLADefinitionQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultSLADefinitionOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultSLADefinitionOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *sladefinitionPager) orderExpr(query *SLADefinitionQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultSLADefinitionOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SLADefinition.
+func (_m *SLADefinitionQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SLADefinitionPaginateOption,
+) (*SLADefinitionConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSLADefinitionPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &SLADefinitionConnection{Edges: []*SLADefinitionEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SLADefinitionOrderFieldCreatedAt orders SLADefinition by created_at.
+	SLADefinitionOrderFieldCreatedAt = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: sladefinition.FieldCreatedAt,
+		toTerm: sladefinition.ByCreatedAt,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// SLADefinitionOrderFieldUpdatedAt orders SLADefinition by updated_at.
+	SLADefinitionOrderFieldUpdatedAt = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: sladefinition.FieldUpdatedAt,
+		toTerm: sladefinition.ByUpdatedAt,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// SLADefinitionOrderFieldSLADays orders SLADefinition by sla_days.
+	SLADefinitionOrderFieldSLADays = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.SLADays, nil
+		},
+		column: sladefinition.FieldSLADays,
+		toTerm: sladefinition.BySLADays,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SLADays,
+			}
+		},
+	}
+	// SLADefinitionOrderFieldSecurityLevel orders SLADefinition by security_level.
+	SLADefinitionOrderFieldSecurityLevel = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: sladefinition.FieldSecurityLevel,
+		toTerm: sladefinition.BySecurityLevel,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SLADefinitionOrderField) String() string {
+	var str string
+	switch f.column {
+	case SLADefinitionOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SLADefinitionOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SLADefinitionOrderFieldSLADays.column:
+		str = "sla_days"
+	case SLADefinitionOrderFieldSecurityLevel.column:
+		str = "security_level"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SLADefinitionOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SLADefinitionOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SLADefinitionOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *SLADefinitionOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SLADefinitionOrderFieldUpdatedAt
+	case "sla_days":
+		*f = *SLADefinitionOrderFieldSLADays
+	case "security_level":
+		*f = *SLADefinitionOrderFieldSecurityLevel
+	default:
+		return fmt.Errorf("%s is not a valid SLADefinitionOrderField", str)
+	}
+	return nil
+}
+
+// SLADefinitionOrderField defines the ordering field of SLADefinition.
+type SLADefinitionOrderField struct {
+	// Value extracts the ordering value from the given SLADefinition.
+	Value    func(*SLADefinition) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) sladefinition.OrderOption
+	toCursor func(*SLADefinition) Cursor
+}
+
+// SLADefinitionOrder defines the ordering of SLADefinition.
+type SLADefinitionOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *SLADefinitionOrderField `json:"field"`
+}
+
+// DefaultSLADefinitionOrder is the default ordering of SLADefinition.
+var DefaultSLADefinitionOrder = &SLADefinitionOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: sladefinition.FieldID,
+		toTerm: sladefinition.ByID,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts SLADefinition into SLADefinitionEdge.
+func (_m *SLADefinition) ToEdge(order *SLADefinitionOrder) *SLADefinitionEdge {
+	if order == nil {
+		order = DefaultSLADefinitionOrder
+	}
+	return &SLADefinitionEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // ScanEdge is the edge representation of Scan.
 type ScanEdge struct {
 	Node   *Scan  `json:"node"`
@@ -28831,6 +31239,379 @@ func (_m *Subscriber) ToEdge(order *SubscriberOrder) *SubscriberEdge {
 		order = DefaultSubscriberOrder
 	}
 	return &SubscriberEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// SystemDetailEdge is the edge representation of SystemDetail.
+type SystemDetailEdge struct {
+	Node   *SystemDetail `json:"node"`
+	Cursor Cursor        `json:"cursor"`
+}
+
+// SystemDetailConnection is the connection containing edges to SystemDetail.
+type SystemDetailConnection struct {
+	Edges      []*SystemDetailEdge `json:"edges"`
+	PageInfo   PageInfo            `json:"pageInfo"`
+	TotalCount int                 `json:"totalCount"`
+}
+
+func (c *SystemDetailConnection) build(nodes []*SystemDetail, pager *systemdetailPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SystemDetail
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SystemDetail {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SystemDetail {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SystemDetailEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SystemDetailEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SystemDetailPaginateOption enables pagination customization.
+type SystemDetailPaginateOption func(*systemdetailPager) error
+
+// WithSystemDetailOrder configures pagination ordering.
+func WithSystemDetailOrder(order []*SystemDetailOrder) SystemDetailPaginateOption {
+	return func(pager *systemdetailPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithSystemDetailFilter configures pagination filter.
+func WithSystemDetailFilter(filter func(*SystemDetailQuery) (*SystemDetailQuery, error)) SystemDetailPaginateOption {
+	return func(pager *systemdetailPager) error {
+		if filter == nil {
+			return errors.New("SystemDetailQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type systemdetailPager struct {
+	reverse bool
+	order   []*SystemDetailOrder
+	filter  func(*SystemDetailQuery) (*SystemDetailQuery, error)
+}
+
+func newSystemDetailPager(opts []SystemDetailPaginateOption, reverse bool) (*systemdetailPager, error) {
+	pager := &systemdetailPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *systemdetailPager) applyFilter(query *SystemDetailQuery) (*SystemDetailQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *systemdetailPager) toCursor(_m *SystemDetail) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *systemdetailPager) applyCursors(query *SystemDetailQuery, after, before *Cursor) (*SystemDetailQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultSystemDetailOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *systemdetailPager) applyOrder(query *SystemDetailQuery) *SystemDetailQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultSystemDetailOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultSystemDetailOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *systemdetailPager) orderExpr(query *SystemDetailQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultSystemDetailOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SystemDetail.
+func (_m *SystemDetailQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SystemDetailPaginateOption,
+) (*SystemDetailConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSystemDetailPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &SystemDetailConnection{Edges: []*SystemDetailEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SystemDetailOrderFieldCreatedAt orders SystemDetail by created_at.
+	SystemDetailOrderFieldCreatedAt = &SystemDetailOrderField{
+		Value: func(_m *SystemDetail) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: systemdetail.FieldCreatedAt,
+		toTerm: systemdetail.ByCreatedAt,
+		toCursor: func(_m *SystemDetail) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// SystemDetailOrderFieldUpdatedAt orders SystemDetail by updated_at.
+	SystemDetailOrderFieldUpdatedAt = &SystemDetailOrderField{
+		Value: func(_m *SystemDetail) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: systemdetail.FieldUpdatedAt,
+		toTerm: systemdetail.ByUpdatedAt,
+		toCursor: func(_m *SystemDetail) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// SystemDetailOrderFieldSystemName orders SystemDetail by system_name.
+	SystemDetailOrderFieldSystemName = &SystemDetailOrderField{
+		Value: func(_m *SystemDetail) (ent.Value, error) {
+			return _m.SystemName, nil
+		},
+		column: systemdetail.FieldSystemName,
+		toTerm: systemdetail.BySystemName,
+		toCursor: func(_m *SystemDetail) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SystemName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SystemDetailOrderField) String() string {
+	var str string
+	switch f.column {
+	case SystemDetailOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SystemDetailOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SystemDetailOrderFieldSystemName.column:
+		str = "system_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SystemDetailOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SystemDetailOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SystemDetailOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *SystemDetailOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SystemDetailOrderFieldUpdatedAt
+	case "system_name":
+		*f = *SystemDetailOrderFieldSystemName
+	default:
+		return fmt.Errorf("%s is not a valid SystemDetailOrderField", str)
+	}
+	return nil
+}
+
+// SystemDetailOrderField defines the ordering field of SystemDetail.
+type SystemDetailOrderField struct {
+	// Value extracts the ordering value from the given SystemDetail.
+	Value    func(*SystemDetail) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) systemdetail.OrderOption
+	toCursor func(*SystemDetail) Cursor
+}
+
+// SystemDetailOrder defines the ordering of SystemDetail.
+type SystemDetailOrder struct {
+	Direction OrderDirection          `json:"direction"`
+	Field     *SystemDetailOrderField `json:"field"`
+}
+
+// DefaultSystemDetailOrder is the default ordering of SystemDetail.
+var DefaultSystemDetailOrder = &SystemDetailOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SystemDetailOrderField{
+		Value: func(_m *SystemDetail) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: systemdetail.FieldID,
+		toTerm: systemdetail.ByID,
+		toCursor: func(_m *SystemDetail) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts SystemDetail into SystemDetailEdge.
+func (_m *SystemDetail) ToEdge(order *SystemDetailOrder) *SystemDetailEdge {
+	if order == nil {
+		order = DefaultSystemDetailOrder
+	}
+	return &SystemDetailEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -31882,6 +34663,379 @@ func (_m *TrustCenterEntity) ToEdge(order *TrustCenterEntityOrder) *TrustCenterE
 	}
 }
 
+// TrustCenterFAQEdge is the edge representation of TrustCenterFAQ.
+type TrustCenterFAQEdge struct {
+	Node   *TrustCenterFAQ `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// TrustCenterFAQConnection is the connection containing edges to TrustCenterFAQ.
+type TrustCenterFAQConnection struct {
+	Edges      []*TrustCenterFAQEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *TrustCenterFAQConnection) build(nodes []*TrustCenterFAQ, pager *trustcenterfaqPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterFAQ
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterFAQ {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterFAQ {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterFAQEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterFAQEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterFAQPaginateOption enables pagination customization.
+type TrustCenterFAQPaginateOption func(*trustcenterfaqPager) error
+
+// WithTrustCenterFAQOrder configures pagination ordering.
+func WithTrustCenterFAQOrder(order []*TrustCenterFAQOrder) TrustCenterFAQPaginateOption {
+	return func(pager *trustcenterfaqPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTrustCenterFAQFilter configures pagination filter.
+func WithTrustCenterFAQFilter(filter func(*TrustCenterFAQQuery) (*TrustCenterFAQQuery, error)) TrustCenterFAQPaginateOption {
+	return func(pager *trustcenterfaqPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterFAQQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcenterfaqPager struct {
+	reverse bool
+	order   []*TrustCenterFAQOrder
+	filter  func(*TrustCenterFAQQuery) (*TrustCenterFAQQuery, error)
+}
+
+func newTrustCenterFAQPager(opts []TrustCenterFAQPaginateOption, reverse bool) (*trustcenterfaqPager, error) {
+	pager := &trustcenterfaqPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *trustcenterfaqPager) applyFilter(query *TrustCenterFAQQuery) (*TrustCenterFAQQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcenterfaqPager) toCursor(_m *TrustCenterFAQ) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *trustcenterfaqPager) applyCursors(query *TrustCenterFAQQuery, after, before *Cursor) (*TrustCenterFAQQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTrustCenterFAQOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *trustcenterfaqPager) applyOrder(query *TrustCenterFAQQuery) *TrustCenterFAQQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTrustCenterFAQOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTrustCenterFAQOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *trustcenterfaqPager) orderExpr(query *TrustCenterFAQQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTrustCenterFAQOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterFAQ.
+func (_m *TrustCenterFAQQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterFAQPaginateOption,
+) (*TrustCenterFAQConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterFAQPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterFAQConnection{Edges: []*TrustCenterFAQEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterFAQOrderFieldCreatedAt orders TrustCenterFAQ by created_at.
+	TrustCenterFAQOrderFieldCreatedAt = &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: trustcenterfaq.FieldCreatedAt,
+		toTerm: trustcenterfaq.ByCreatedAt,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterFAQOrderFieldUpdatedAt orders TrustCenterFAQ by updated_at.
+	TrustCenterFAQOrderFieldUpdatedAt = &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: trustcenterfaq.FieldUpdatedAt,
+		toTerm: trustcenterfaq.ByUpdatedAt,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// TrustCenterFAQOrderFieldDisplayOrder orders TrustCenterFAQ by display_order.
+	TrustCenterFAQOrderFieldDisplayOrder = &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.DisplayOrder, nil
+		},
+		column: trustcenterfaq.FieldDisplayOrder,
+		toTerm: trustcenterfaq.ByDisplayOrder,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayOrder,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterFAQOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterFAQOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterFAQOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case TrustCenterFAQOrderFieldDisplayOrder.column:
+		str = "DISPLAY_ORDER"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterFAQOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterFAQOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterFAQOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TrustCenterFAQOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterFAQOrderFieldUpdatedAt
+	case "DISPLAY_ORDER":
+		*f = *TrustCenterFAQOrderFieldDisplayOrder
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterFAQOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterFAQOrderField defines the ordering field of TrustCenterFAQ.
+type TrustCenterFAQOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterFAQ.
+	Value    func(*TrustCenterFAQ) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcenterfaq.OrderOption
+	toCursor func(*TrustCenterFAQ) Cursor
+}
+
+// TrustCenterFAQOrder defines the ordering of TrustCenterFAQ.
+type TrustCenterFAQOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *TrustCenterFAQOrderField `json:"field"`
+}
+
+// DefaultTrustCenterFAQOrder is the default ordering of TrustCenterFAQ.
+var DefaultTrustCenterFAQOrder = &TrustCenterFAQOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: trustcenterfaq.FieldID,
+		toTerm: trustcenterfaq.ByID,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterFAQ into TrustCenterFAQEdge.
+func (_m *TrustCenterFAQ) ToEdge(order *TrustCenterFAQOrder) *TrustCenterFAQEdge {
+	if order == nil {
+		order = DefaultTrustCenterFAQOrder
+	}
+	return &TrustCenterFAQEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // TrustCenterNDARequestEdge is the edge representation of TrustCenterNDARequest.
 type TrustCenterNDARequestEdge struct {
 	Node   *TrustCenterNDARequest `json:"node"`
@@ -34358,6 +37512,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityOrderFieldSecurityLevel orders Vulnerability by security_level.
+	VulnerabilityOrderFieldSecurityLevel = &VulnerabilityOrderField{
+		Value: func(_m *Vulnerability) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: vulnerability.FieldSecurityLevel,
+		toTerm: vulnerability.BySecurityLevel,
+		toCursor: func(_m *Vulnerability) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// VulnerabilityOrderFieldExternalID orders Vulnerability by external_id.
 	VulnerabilityOrderFieldExternalID = &VulnerabilityOrderField{
 		Value: func(_m *Vulnerability) (ent.Value, error) {
@@ -34426,6 +37594,8 @@ func (f VulnerabilityOrderField) String() string {
 		str = "updated_at"
 	case VulnerabilityOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
+	case VulnerabilityOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case VulnerabilityOrderFieldExternalID.column:
 		str = "external_id"
 	case VulnerabilityOrderFieldCveID.column:
@@ -34456,6 +37626,8 @@ func (f *VulnerabilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityOrderFieldUpdatedAt
 	case "external_owner_id":
 		*f = *VulnerabilityOrderFieldExternalOwnerID
+	case "security_level":
+		*f = *VulnerabilityOrderFieldSecurityLevel
 	case "external_id":
 		*f = *VulnerabilityOrderFieldExternalID
 	case "cve_id":
@@ -36950,6 +40122,320 @@ func (_m *WorkflowObjectRef) ToEdge(order *WorkflowObjectRefOrder) *WorkflowObje
 		order = DefaultWorkflowObjectRefOrder
 	}
 	return &WorkflowObjectRefEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowProposalEdge is the edge representation of WorkflowProposal.
+type WorkflowProposalEdge struct {
+	Node   *WorkflowProposal `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// WorkflowProposalConnection is the connection containing edges to WorkflowProposal.
+type WorkflowProposalConnection struct {
+	Edges      []*WorkflowProposalEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *WorkflowProposalConnection) build(nodes []*WorkflowProposal, pager *workflowproposalPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowProposal
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowProposal {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowProposal {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowProposalEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowProposalEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowProposalPaginateOption enables pagination customization.
+type WorkflowProposalPaginateOption func(*workflowproposalPager) error
+
+// WithWorkflowProposalOrder configures pagination ordering.
+func WithWorkflowProposalOrder(order *WorkflowProposalOrder) WorkflowProposalPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowProposalOrder
+	}
+	o := *order
+	return func(pager *workflowproposalPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowProposalOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowProposalFilter configures pagination filter.
+func WithWorkflowProposalFilter(filter func(*WorkflowProposalQuery) (*WorkflowProposalQuery, error)) WorkflowProposalPaginateOption {
+	return func(pager *workflowproposalPager) error {
+		if filter == nil {
+			return errors.New("WorkflowProposalQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowproposalPager struct {
+	reverse bool
+	order   *WorkflowProposalOrder
+	filter  func(*WorkflowProposalQuery) (*WorkflowProposalQuery, error)
+}
+
+func newWorkflowProposalPager(opts []WorkflowProposalPaginateOption, reverse bool) (*workflowproposalPager, error) {
+	pager := &workflowproposalPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowProposalOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowproposalPager) applyFilter(query *WorkflowProposalQuery) (*WorkflowProposalQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowproposalPager) toCursor(_m *WorkflowProposal) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowproposalPager) applyCursors(query *WorkflowProposalQuery, after, before *Cursor) (*WorkflowProposalQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowProposalOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowproposalPager) applyOrder(query *WorkflowProposalQuery) *WorkflowProposalQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowProposalOrder.Field {
+		query = query.Order(DefaultWorkflowProposalOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowproposalPager) orderExpr(query *WorkflowProposalQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowProposalOrder.Field {
+			b.Comma().Ident(DefaultWorkflowProposalOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowProposal.
+func (_m *WorkflowProposalQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowProposalPaginateOption,
+) (*WorkflowProposalConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowProposalPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowProposalConnection{Edges: []*WorkflowProposalEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowProposalOrderFieldCreatedAt orders WorkflowProposal by created_at.
+	WorkflowProposalOrderFieldCreatedAt = &WorkflowProposalOrderField{
+		Value: func(_m *WorkflowProposal) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowproposal.FieldCreatedAt,
+		toTerm: workflowproposal.ByCreatedAt,
+		toCursor: func(_m *WorkflowProposal) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowProposalOrderFieldUpdatedAt orders WorkflowProposal by updated_at.
+	WorkflowProposalOrderFieldUpdatedAt = &WorkflowProposalOrderField{
+		Value: func(_m *WorkflowProposal) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowproposal.FieldUpdatedAt,
+		toTerm: workflowproposal.ByUpdatedAt,
+		toCursor: func(_m *WorkflowProposal) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowProposalOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowProposalOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowProposalOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowProposalOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowProposalOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowProposalOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowProposalOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowProposalOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowProposalOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowProposalOrderField defines the ordering field of WorkflowProposal.
+type WorkflowProposalOrderField struct {
+	// Value extracts the ordering value from the given WorkflowProposal.
+	Value    func(*WorkflowProposal) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowproposal.OrderOption
+	toCursor func(*WorkflowProposal) Cursor
+}
+
+// WorkflowProposalOrder defines the ordering of WorkflowProposal.
+type WorkflowProposalOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *WorkflowProposalOrderField `json:"field"`
+}
+
+// DefaultWorkflowProposalOrder is the default ordering of WorkflowProposal.
+var DefaultWorkflowProposalOrder = &WorkflowProposalOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowProposalOrderField{
+		Value: func(_m *WorkflowProposal) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowproposal.FieldID,
+		toTerm: workflowproposal.ByID,
+		toCursor: func(_m *WorkflowProposal) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowProposal into WorkflowProposalEdge.
+func (_m *WorkflowProposal) ToEdge(order *WorkflowProposalOrder) *WorkflowProposalEdge {
+	if order == nil {
+		order = DefaultWorkflowProposalOrder
+	}
+	return &WorkflowProposalEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

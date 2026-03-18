@@ -56,6 +56,8 @@ const (
 	FieldFaviconRemoteURL = "favicon_remote_url"
 	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
 	FieldFaviconLocalFileID = "favicon_local_file_id"
+	// FieldHeroImageLocalFileID holds the string denoting the hero_image_local_file_id field in the database.
+	FieldHeroImageLocalFileID = "hero_image_local_file_id"
 	// FieldThemeMode holds the string denoting the theme_mode field in the database.
 	FieldThemeMode = "theme_mode"
 	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
@@ -82,6 +84,8 @@ const (
 	FieldSecurityContact = "security_contact"
 	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
 	FieldNdaApprovalRequired = "nda_approval_required"
+	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
+	FieldStatusPageURL = "status_page_url"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -107,6 +111,7 @@ var Columns = []string{
 	FieldLogoLocalFileID,
 	FieldFaviconRemoteURL,
 	FieldFaviconLocalFileID,
+	FieldHeroImageLocalFileID,
 	FieldThemeMode,
 	FieldPrimaryColor,
 	FieldFont,
@@ -120,6 +125,7 @@ var Columns = []string{
 	FieldCompanyDomain,
 	FieldSecurityContact,
 	FieldNdaApprovalRequired,
+	FieldStatusPageURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -289,6 +295,11 @@ func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
 }
 
+// ByHeroImageLocalFileID orders the results by the hero_image_local_file_id field.
+func ByHeroImageLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeroImageLocalFileID, opts...).ToFunc()
+}
+
 // ByThemeMode orders the results by the theme_mode field.
 func ByThemeMode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldThemeMode, opts...).ToFunc()
@@ -352,6 +363,11 @@ func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
 // ByNdaApprovalRequired orders the results by the nda_approval_required field.
 func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
+}
+
+// ByStatusPageURL orders the results by the status_page_url field.
+func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
 }
 
 var (

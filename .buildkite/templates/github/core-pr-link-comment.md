@@ -2,4 +2,5 @@
 
 Draft PR created: {{DRAFT_PR_URL}}
 
-Process: Review both PRs together, merge core PR first, then review/merge infrastructure PR.
+Process: Review this draft as a preview only.
+After this core PR merges, the draft is closed and the final infrastructure PR is generated from `main`.

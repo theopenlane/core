@@ -26,6 +26,8 @@ type SchemaConfig struct {
 	DirectoryMembershipHistory        string // DirectoryMembershipHistory table.
 	DiscussionHistory                 string // DiscussionHistory table.
 	DocumentDataHistory               string // DocumentDataHistory table.
+	EmailBrandingHistory              string // EmailBrandingHistory table.
+	EmailTemplateHistory              string // EmailTemplateHistory table.
 	EntityHistory                     string // EntityHistory table.
 	EntityTypeHistory                 string // EntityTypeHistory table.
 	EvidenceHistory                   string // EvidenceHistory table.
@@ -44,6 +46,8 @@ type SchemaConfig struct {
 	MappedControlHistory              string // MappedControlHistory table.
 	NarrativeHistory                  string // NarrativeHistory table.
 	NoteHistory                       string // NoteHistory table.
+	NotificationPreferenceHistory     string // NotificationPreferenceHistory table.
+	NotificationTemplateHistory       string // NotificationTemplateHistory table.
 	OrgMembershipHistory              string // OrgMembershipHistory table.
 	OrgSubscriptionHistory            string // OrgSubscriptionHistory table.
 	OrganizationHistory               string // OrganizationHistory table.
@@ -55,16 +59,19 @@ type SchemaConfig struct {
 	RemediationHistory                string // RemediationHistory table.
 	ReviewHistory                     string // ReviewHistory table.
 	RiskHistory                       string // RiskHistory table.
+	SLADefinitionHistory              string // SLADefinitionHistory table.
 	ScanHistory                       string // ScanHistory table.
 	ScheduledJobHistory               string // ScheduledJobHistory table.
 	StandardHistory                   string // StandardHistory table.
 	SubcontrolHistory                 string // SubcontrolHistory table.
 	SubprocessorHistory               string // SubprocessorHistory table.
+	SystemDetailHistory               string // SystemDetailHistory table.
 	TaskHistory                       string // TaskHistory table.
 	TemplateHistory                   string // TemplateHistory table.
 	TrustCenterComplianceHistory      string // TrustCenterComplianceHistory table.
 	TrustCenterDocHistory             string // TrustCenterDocHistory table.
 	TrustCenterEntityHistory          string // TrustCenterEntityHistory table.
+	TrustCenterFAQHistory             string // TrustCenterFAQHistory table.
 	TrustCenterHistory                string // TrustCenterHistory table.
 	TrustCenterNDARequestHistory      string // TrustCenterNDARequestHistory table.
 	TrustCenterSettingHistory         string // TrustCenterSettingHistory table.

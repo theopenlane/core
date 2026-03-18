@@ -12,6 +12,7 @@ import (
 	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/consts"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // Reconciler reconciles organization subscriptions with Stripe
@@ -108,7 +108,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 	where := []predicate.Organization{
 		organization.And(
 			organization.DeletedAtIsNil(),
-			organization.IDNEQ("01101101011010010111010001100010"),
+			organization.IDNEQ(consts.SystemAdminOrgID),
 			organization.PersonalOrg(false),
 		),
 	}
@@ -441,8 +441,8 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 			continue // skip if no monthly price
 		}
 
-		newCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
-		newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
+		const reconcilerCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+		newCtx := auth.WithCaller(ctx, &auth.Caller{OrganizationID: orgID, Capabilities: reconcilerCaps})
 
 		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module
 		orgMod, err := db.OrgModule.Create().

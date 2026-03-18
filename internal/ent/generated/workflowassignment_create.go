@@ -309,6 +309,20 @@ func (_c *WorkflowAssignmentCreate) SetNillableNotes(v *string) *WorkflowAssignm
 	return _c
 }
 
+// SetDueAt sets the "due_at" field.
+func (_c *WorkflowAssignmentCreate) SetDueAt(v time.Time) *WorkflowAssignmentCreate {
+	_c.mutation.SetDueAt(v)
+	return _c
+}
+
+// SetNillableDueAt sets the "due_at" field if the given value is not nil.
+func (_c *WorkflowAssignmentCreate) SetNillableDueAt(v *time.Time) *WorkflowAssignmentCreate {
+	if v != nil {
+		_c.SetDueAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowAssignmentCreate) SetID(v string) *WorkflowAssignmentCreate {
 	_c.mutation.SetID(v)
@@ -622,6 +636,10 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 	if value, ok := _c.mutation.Notes(); ok {
 		_spec.SetField(workflowassignment.FieldNotes, field.TypeString, value)
 		_node.Notes = value
+	}
+	if value, ok := _c.mutation.DueAt(); ok {
+		_spec.SetField(workflowassignment.FieldDueAt, field.TypeTime, value)
+		_node.DueAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

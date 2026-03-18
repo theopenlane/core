@@ -26,6 +26,8 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		assert.Assert(t, resp != nil)
 
 		assert.Check(t, is.Equal(domain, resp.CreateTrustCenterDomain.CustomDomain.CnameRecord))
+		assert.Check(t, resp.CreateTrustCenterDomain.CustomDomain.TrustCenterID != nil)
+		assert.Check(t, is.Equal(trustCenter.ID, *resp.CreateTrustCenterDomain.CustomDomain.TrustCenterID))
 		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(testUser.UserCtx, t)
 	})
 

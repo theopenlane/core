@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -106,6 +108,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_integration(ctx, field)
 			case "directorySyncRun":
 				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
 			case "directoryAccount":
 				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
 			case "directoryGroup":
@@ -169,6 +173,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -199,6 +205,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_integration(ctx, field)
 			case "directorySyncRun":
 				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
 			case "directoryAccount":
 				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
 			case "directoryGroup":
@@ -291,6 +299,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_scopeID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -321,6 +331,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_integration(ctx, field)
 			case "directorySyncRun":
 				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
 			case "directoryAccount":
 				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
 			case "directoryGroup":
@@ -370,10 +382,10 @@ func (ec *executionContext) _DirectoryMembershipBulkCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -409,10 +421,10 @@ func (ec *executionContext) _DirectoryMembershipCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -448,10 +460,10 @@ func (ec *executionContext) _DirectoryMembershipDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -487,10 +499,10 @@ func (ec *executionContext) _DirectoryMembershipUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

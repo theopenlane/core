@@ -11,7 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
-	"github.com/theopenlane/utils/contextx"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -28,7 +27,7 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
-	ctx = contextx.With(ctx, auth.TrustCenterContextKey{})
+	ctx = auth.WithCaller(ctx, auth.NewTrustCenterBootstrapCaller(""))
 	mappableDomain, err := suite.db.MappableDomain.Create().
 		SetName("trust.openlane.io").
 		SetZoneID("1234").

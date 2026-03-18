@@ -16,16 +16,22 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -550,6 +556,20 @@ func (_c *PlatformCreate) SetWorkflowEligibleMarker(v bool) *PlatformCreate {
 func (_c *PlatformCreate) SetNillableWorkflowEligibleMarker(v *bool) *PlatformCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *PlatformCreate) SetExternalUUID(v string) *PlatformCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableExternalUUID(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
 	}
 	return _c
 }
@@ -1084,6 +1104,81 @@ func (_c *PlatformCreate) AddIdentityHolders(v ...*IdentityHolder) *PlatformCrea
 	return _c.AddIdentityHolderIDs(ids...)
 }
 
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_c *PlatformCreate) AddIntegrationIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_c *PlatformCreate) AddIntegrations(v ...*Integration) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationIDs(ids...)
+}
+
+// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
+func (_c *PlatformCreate) AddDirectorySyncRunIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddDirectorySyncRunIDs(ids...)
+	return _c
+}
+
+// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_c *PlatformCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectorySyncRunIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_c *PlatformCreate) AddDirectoryAccountIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddDirectoryAccountIDs(ids...)
+	return _c
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_c *PlatformCreate) AddDirectoryAccounts(v ...*DirectoryAccount) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_c *PlatformCreate) AddDirectoryGroupIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddDirectoryGroupIDs(ids...)
+	return _c
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_c *PlatformCreate) AddDirectoryGroups(v ...*DirectoryGroup) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_c *PlatformCreate) AddDirectoryMembershipIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddDirectoryMembershipIDs(ids...)
+	return _c
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_c *PlatformCreate) AddDirectoryMemberships(v ...*DirectoryMembership) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryMembershipIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_c *PlatformCreate) AddWorkflowObjectRefIDs(ids ...string) *PlatformCreate {
 	_c.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -1192,6 +1287,25 @@ func (_c *PlatformCreate) AddGeneratedScans(v ...*Scan) *PlatformCreate {
 // SetPlatformOwner sets the "platform_owner" edge to the User entity.
 func (_c *PlatformCreate) SetPlatformOwner(v *User) *PlatformCreate {
 	return _c.SetPlatformOwnerID(v.ID)
+}
+
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_c *PlatformCreate) SetSystemDetailID(id string) *PlatformCreate {
+	_c.mutation.SetSystemDetailID(id)
+	return _c
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_c *PlatformCreate) SetNillableSystemDetailID(id *string) *PlatformCreate {
+	if id != nil {
+		_c = _c.SetSystemDetailID(*id)
+	}
+	return _c
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_c *PlatformCreate) SetSystemDetail(v *SystemDetail) *PlatformCreate {
+	return _c.SetSystemDetailID(v.ID)
 }
 
 // Mutation returns the PlatformMutation object of the builder.
@@ -1433,6 +1547,10 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(platform.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(platform.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(platform.FieldName, field.TypeString, value)
@@ -2029,6 +2147,91 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2164,6 +2367,23 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.PlatformOwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

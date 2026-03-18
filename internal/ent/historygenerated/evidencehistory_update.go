@@ -225,6 +225,26 @@ func (_u *EvidenceHistoryUpdate) ClearWorkflowEligibleMarker() *EvidenceHistoryU
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *EvidenceHistoryUpdate) SetExternalUUID(v string) *EvidenceHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableExternalUUID(v *string) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *EvidenceHistoryUpdate) ClearExternalUUID() *EvidenceHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *EvidenceHistoryUpdate) SetName(v string) *EvidenceHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -545,6 +565,12 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(evidencehistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(evidencehistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
 	}
@@ -804,6 +830,26 @@ func (_u *EvidenceHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *EvidenceHistoryUpdateOne) ClearWorkflowEligibleMarker() *EvidenceHistoryUpdateOne {
 	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *EvidenceHistoryUpdateOne) SetExternalUUID(v string) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableExternalUUID(v *string) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *EvidenceHistoryUpdateOne) ClearExternalUUID() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -1156,6 +1202,12 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(evidencehistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(evidencehistory.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)

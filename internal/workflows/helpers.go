@@ -4,29 +4,40 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Avoid reflect-based nil checks on hot paths; treat marshaled "null" as a typed-nil sentinel
 var jsonNull = []byte("null")
 
-// StringField extracts a string field by name from a struct or pointer to struct
-// It returns an error when decoding fails
-func StringField(node any, field string) (string, error) {
+func nodeFieldMap(node any) (map[string]any, error) {
 	if node == nil {
-		return "", ErrStringFieldNil
+		return nil, ErrStringFieldNil
 	}
 
 	data, err := json.Marshal(node)
 	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrStringFieldMarshal, err)
+		return nil, fmt.Errorf("%w: %w", ErrStringFieldMarshal, err)
 	}
 	if bytes.Equal(bytes.TrimSpace(data), jsonNull) {
-		return "", ErrStringFieldNil
+		return nil, ErrStringFieldNil
 	}
 
 	var m map[string]any
-	if err := json.Unmarshal(data, &m); err != nil {
-		return "", fmt.Errorf("%w: %w", ErrStringFieldUnmarshal, err)
+	if err := jsonx.RoundTrip(data, &m); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrStringFieldUnmarshal, err)
+	}
+
+	return m, nil
+}
+
+// StringField extracts a string field by name from a struct or pointer to struct
+// It returns an error when decoding fails
+func StringField(node any, field string) (string, error) {
+	m, err := nodeFieldMap(node)
+	if err != nil {
+		return "", err
 	}
 
 	raw, ok := m[field]
@@ -52,21 +63,9 @@ func StringField(node any, field string) (string, error) {
 // StringSliceField extracts a string slice field by name from a struct or pointer to struct
 // It returns an error when decoding fails
 func StringSliceField(node any, field string) ([]string, error) {
-	if node == nil {
-		return nil, ErrStringFieldNil
-	}
-
-	data, err := json.Marshal(node)
+	m, err := nodeFieldMap(node)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrStringFieldMarshal, err)
-	}
-	if bytes.Equal(bytes.TrimSpace(data), jsonNull) {
-		return nil, ErrStringFieldNil
-	}
-
-	var m map[string]any
-	if err := json.Unmarshal(data, &m); err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrStringFieldUnmarshal, err)
+		return nil, err
 	}
 
 	raw, ok := m[field]

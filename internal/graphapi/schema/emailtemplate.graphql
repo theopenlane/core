@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up emailTemplate by ID
+    """
+     emailTemplate(
+        """
+        ID of the emailTemplate
+        """
+        id: ID!
+    ):  EmailTemplate!
+}
+
+extend type Mutation{
+    """
+    Create a new emailTemplate
+    """
+    createEmailTemplate(
+        """
+        values of the emailTemplate
+        """
+        input: CreateEmailTemplateInput!
+    ): EmailTemplateCreatePayload!
+    """
+    Create multiple new emailTemplates
+    """
+    createBulkEmailTemplate(
+        """
+        values of the emailTemplate
+        """
+        input: [CreateEmailTemplateInput!]
+    ): EmailTemplateBulkCreatePayload!
+    """
+    Create multiple new emailTemplates via file upload
+    """
+    createBulkCSVEmailTemplate(
+        """
+        csv file containing values of the emailTemplate
+        """
+        input: Upload!
+    ): EmailTemplateBulkCreatePayload!
+    """
+    Update multiple existing emailTemplates
+    """
+    updateBulkEmailTemplate(
+        """
+        IDs of the emailTemplates to update
+        """
+        ids: [ID!]!
+        """
+        values to update the emailTemplates with
+        """
+        input: UpdateEmailTemplateInput!
+    ): EmailTemplateBulkUpdatePayload!
+    """
+    Update multiple existing emailTemplates via file upload
+    """
+    updateBulkCSVEmailTemplate(
+        """
+        csv file containing values of the emailTemplate, must include ID column
+        """
+        input: Upload!
+    ): EmailTemplateBulkUpdatePayload!
+    """
+    Update an existing emailTemplate
+    """
+    updateEmailTemplate(
+        """
+        ID of the emailTemplate
+        """
+        id: ID!
+        """
+        New values for the emailTemplate
+        """
+        input: UpdateEmailTemplateInput!
+    ): EmailTemplateUpdatePayload!
+    """
+    Delete an existing emailTemplate
+    """
+    deleteEmailTemplate(
+        """
+        ID of the emailTemplate
+        """
+        id: ID!
+    ): EmailTemplateDeletePayload!
+    """
+    Delete multiple emailTemplates
+    """
+    deleteBulkEmailTemplate(
+        """
+        IDs of the emailTemplates to delete
+        """
+        ids: [ID!]!
+    ): EmailTemplateBulkDeletePayload!
+}
+
+"""
+Return response for createEmailTemplate mutation
+"""
+type EmailTemplateCreatePayload {
+    """
+    Created emailTemplate
+    """
+    emailTemplate: EmailTemplate!
+}
+
+"""
+Return response for updateEmailTemplate mutation
+"""
+type EmailTemplateUpdatePayload {
+    """
+    Updated emailTemplate
+    """
+    emailTemplate: EmailTemplate!
+}
+
+"""
+Return response for deleteEmailTemplate mutation
+"""
+type EmailTemplateDeletePayload {
+    """
+    Deleted emailTemplate ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEmailTemplate mutation
+"""
+type EmailTemplateBulkCreatePayload {
+    """
+    Created emailTemplates
+    """
+    emailTemplates: [EmailTemplate!]
+}
+
+"""
+Return response for updateBulkEmailTemplate mutation
+"""
+type EmailTemplateBulkUpdatePayload {
+    """
+    Updated emailTemplates
+    """
+    emailTemplates: [EmailTemplate!]
+    """
+    IDs of the updated emailTemplates
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkEmailTemplate mutation
+"""
+type EmailTemplateBulkDeletePayload {
+    """
+    Deleted emailTemplate IDs
+    """
+    deletedIDs: [ID!]!
+}

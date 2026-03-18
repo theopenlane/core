@@ -29,8 +29,8 @@ source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_metadata"
 echo "Core PR: #${BUILDKITE_PULL_REQUEST}"
 echo "Draft Infra PR: ${DRAFT_PR_URL}"
 
-# Note: We don't send Slack notifications for draft PRs to avoid being too chatty
-# Notifications are only sent when PRs are ready for actual review/merge
+# Note: We don't send Slack notifications for draft PRs to avoid being too chatty.
+# Notifications are sent for the final post-merge infrastructure PR workflow.
 
 # Add comment to core PR linking to draft infra PR
 echo "💬 Adding comment to core PR #${BUILDKITE_PULL_REQUEST}..."
@@ -68,7 +68,7 @@ else
   echo "⚠️  Could not extract PR number from draft PR URL: $DRAFT_PR_URL"
 fi
 
-# Note: No Slack notification sent for draft PR creation to reduce noise
-# Notifications will be sent when the PR is ready for actual review
+# Note: No Slack notification sent for draft PR creation to reduce noise.
+# Notifications are sent as part of the final post-merge workflow.
 
 echo "🎉 PR linking completed successfully"

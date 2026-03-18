@@ -2,7 +2,6 @@ package interceptors
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"entgo.io/ent"
@@ -17,7 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // FilterListQuery filters any list query to only include the objects that the user has access to
@@ -77,8 +78,8 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 // GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
 // has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax.Relation) ([]string, error) {
-	user, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
 		return []string{}, nil
 	}
 
@@ -86,12 +87,12 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	objectType := strings.Replace(queryType, "History", "", 1)
 
 	req := fgax.ListRequest{
-		SubjectID:   user.SubjectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
 		ObjectType:  strcase.SnakeCase(objectType),
 		Relation:    relation.String(),
 		// add email domain to satisfy any list requests with organization conditions
-		ConditionContext: utils.NewOrganizationContextKey(user.SubjectEmail),
+		ConditionContext: utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	if strings.Contains(queryType, "History") {
@@ -211,7 +212,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 
 func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -292,7 +293,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 	// filter the results based on the allowed ids
 	// this must be done in the same order as the original list
 	// to maintain the order of the results
-	allowed := utils.SliceToMap(allowedIDs)
+	allowed := mapx.MapSetFromSlice(allowedIDs)
 
 	filteredResults := make([]*T, 0, len(allowedIDs))
 
@@ -355,13 +356,8 @@ func getObjectIDsFromEntValues(m ent.Value) ([]string, error) {
 		ID string `json:"id"`
 	}
 
-	tmp, err := json.Marshal(m)
-	if err != nil {
-		return nil, err
-	}
-
 	var results []objectIDer
-	if err := json.Unmarshal(tmp, &results); err != nil {
+	if err := jsonx.RoundTrip(m, &results); err != nil {
 		return nil, err
 	}
 
@@ -380,13 +376,8 @@ func getObjectIDFromEntValue(m ent.Value) (string, error) {
 		ID string `json:"id"`
 	}
 
-	tmp, err := json.Marshal(m)
-	if err != nil {
-		return "", err
-	}
-
 	var res objectIDer
-	if err := json.Unmarshal(tmp, &res); err != nil {
+	if err := jsonx.RoundTrip(m, &res); err != nil {
 		return "", err
 	}
 
@@ -400,20 +391,23 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	logObjectIDs(ctx, objectType, objectIDs, "filtering authorized object ids")
 
 	var (
-		context   *map[string]any
-		subjectID string
+		context     *map[string]any
+		subjectID   string
+		subjectType string
 	)
 
-	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		subjectID = anon.SubjectID
-	} else {
-		user, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			return []string{}, nil
-		}
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
 
-		subjectID = user.SubjectID
-		context = utils.NewOrganizationContextKey(user.SubjectEmail)
+	subjectID = caller.SubjectID
+
+	if caller.IsAnonymous() {
+		subjectType = auth.UserSubjectType
+	} else {
+		subjectType = caller.SubjectType()
+		context = utils.NewOrganizationContextKey(caller.SubjectEmail)
 	}
 
 	checks := []fgax.AccessCheck{}
@@ -421,7 +415,7 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 	for _, id := range objectIDs {
 		ac := fgax.AccessCheck{
 			SubjectID:   subjectID,
-			SubjectType: auth.GetAuthzSubjectType(ctx),
+			SubjectType: subjectType,
 			ObjectID:    id,
 			ObjectType:  fgax.Kind(strcase.SnakeCase(objectType)), // convert to snake case e.g. InternalPolicy -> internal_policy
 			Relation:    fgax.CanView,

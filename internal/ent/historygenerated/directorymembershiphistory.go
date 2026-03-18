@@ -50,6 +50,8 @@ type DirectoryMembershipHistory struct {
 	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory membership
 	IntegrationID string `json:"integration_id,omitempty"`
+	// optional platform associated with this directory membership
+	PlatformID string `json:"platform_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// directory account participating in this membership
@@ -82,7 +84,7 @@ func (*DirectoryMembershipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorymembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
+		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembershiphistory.FieldHistoryTime, directorymembershiphistory.FieldCreatedAt, directorymembershiphistory.FieldUpdatedAt, directorymembershiphistory.FieldFirstSeenAt, directorymembershiphistory.FieldLastSeenAt, directorymembershiphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -190,6 +192,12 @@ func (_m *DirectoryMembershipHistory) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationID = value.String
+			}
+		case directorymembershiphistory.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
 			}
 		case directorymembershiphistory.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -334,6 +342,9 @@ func (_m *DirectoryMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)

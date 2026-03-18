@@ -17,17 +17,23 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -73,6 +79,11 @@ type PlatformQuery struct {
 	withScans                      *ScanQuery
 	withTasks                      *TaskQuery
 	withIdentityHolders            *IdentityHolderQuery
+	withIntegrations               *IntegrationQuery
+	withDirectorySyncRuns          *DirectorySyncRunQuery
+	withDirectoryAccounts          *DirectoryAccountQuery
+	withDirectoryGroups            *DirectoryGroupQuery
+	withDirectoryMemberships       *DirectoryMembershipQuery
 	withWorkflowObjectRefs         *WorkflowObjectRefQuery
 	withSourceAssets               *AssetQuery
 	withSourceEntities             *EntityQuery
@@ -81,6 +92,7 @@ type PlatformQuery struct {
 	withApplicableFrameworks       *StandardQuery
 	withGeneratedScans             *ScanQuery
 	withPlatformOwner              *UserQuery
+	withSystemDetail               *SystemDetailQuery
 	withFKs                        bool
 	loadTotal                      []func(context.Context, []*Platform) error
 	modifiers                      []func(*sql.Selector)
@@ -97,6 +109,11 @@ type PlatformQuery struct {
 	withNamedScans                 map[string]*ScanQuery
 	withNamedTasks                 map[string]*TaskQuery
 	withNamedIdentityHolders       map[string]*IdentityHolderQuery
+	withNamedIntegrations          map[string]*IntegrationQuery
+	withNamedDirectorySyncRuns     map[string]*DirectorySyncRunQuery
+	withNamedDirectoryAccounts     map[string]*DirectoryAccountQuery
+	withNamedDirectoryGroups       map[string]*DirectoryGroupQuery
+	withNamedDirectoryMemberships  map[string]*DirectoryMembershipQuery
 	withNamedWorkflowObjectRefs    map[string]*WorkflowObjectRefQuery
 	withNamedSourceAssets          map[string]*AssetQuery
 	withNamedSourceEntities        map[string]*EntityQuery
@@ -890,6 +907,131 @@ func (_q *PlatformQuery) QueryIdentityHolders() *IdentityHolderQuery {
 	return query
 }
 
+// QueryIntegrations chains the current query on the "integrations" edge.
+func (_q *PlatformQuery) QueryIntegrations() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.IntegrationsTable, platform.IntegrationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRuns chains the current query on the "directory_sync_runs" edge.
+func (_q *PlatformQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectorySyncRunsTable, platform.DirectorySyncRunsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
+func (_q *PlatformQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectoryAccountsTable, platform.DirectoryAccountsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups chains the current query on the "directory_groups" edge.
+func (_q *PlatformQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectoryGroupsTable, platform.DirectoryGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships chains the current query on the "directory_memberships" edge.
+func (_q *PlatformQuery) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectoryMembershipsTable, platform.DirectoryMembershipsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
 func (_q *PlatformQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
@@ -1084,6 +1226,31 @@ func (_q *PlatformQuery) QueryPlatformOwner() *UserQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Platform
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySystemDetail chains the current query on the "system_detail" edge.
+func (_q *PlatformQuery) QuerySystemDetail() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, platform.SystemDetailTable, platform.SystemDetailColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1312,6 +1479,11 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withScans:                      _q.withScans.Clone(),
 		withTasks:                      _q.withTasks.Clone(),
 		withIdentityHolders:            _q.withIdentityHolders.Clone(),
+		withIntegrations:               _q.withIntegrations.Clone(),
+		withDirectorySyncRuns:          _q.withDirectorySyncRuns.Clone(),
+		withDirectoryAccounts:          _q.withDirectoryAccounts.Clone(),
+		withDirectoryGroups:            _q.withDirectoryGroups.Clone(),
+		withDirectoryMemberships:       _q.withDirectoryMemberships.Clone(),
 		withWorkflowObjectRefs:         _q.withWorkflowObjectRefs.Clone(),
 		withSourceAssets:               _q.withSourceAssets.Clone(),
 		withSourceEntities:             _q.withSourceEntities.Clone(),
@@ -1320,6 +1492,7 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withApplicableFrameworks:       _q.withApplicableFrameworks.Clone(),
 		withGeneratedScans:             _q.withGeneratedScans.Clone(),
 		withPlatformOwner:              _q.withPlatformOwner.Clone(),
+		withSystemDetail:               _q.withSystemDetail.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1657,6 +1830,61 @@ func (_q *PlatformQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery))
 	return _q
 }
 
+// WithIntegrations tells the query-builder to eager-load the nodes that are connected to
+// the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *PlatformQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrations = query
+	return _q
+}
+
+// WithDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to
+// the "directory_sync_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRunQuery)) *PlatformQuery {
+	query := (&DirectorySyncRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectorySyncRuns = query
+	return _q
+}
+
+// WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
+// the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *PlatformQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryAccounts = query
+	return _q
+}
+
+// WithDirectoryGroups tells the query-builder to eager-load the nodes that are connected to
+// the "directory_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithDirectoryGroups(opts ...func(*DirectoryGroupQuery)) *PlatformQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryGroups = query
+	return _q
+}
+
+// WithDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to
+// the "directory_memberships" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithDirectoryMemberships(opts ...func(*DirectoryMembershipQuery)) *PlatformQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryMemberships = query
+	return _q
+}
+
 // WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
 // the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *PlatformQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *PlatformQuery {
@@ -1745,6 +1973,17 @@ func (_q *PlatformQuery) WithPlatformOwner(opts ...func(*UserQuery)) *PlatformQu
 	return _q
 }
 
+// WithSystemDetail tells the query-builder to eager-load the nodes that are connected to
+// the "system_detail" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithSystemDetail(opts ...func(*SystemDetailQuery)) *PlatformQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetail = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1830,7 +2069,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		nodes       = []*Platform{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [38]bool{
+		loadedTypes = [44]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1861,6 +2100,11 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withScans != nil,
 			_q.withTasks != nil,
 			_q.withIdentityHolders != nil,
+			_q.withIntegrations != nil,
+			_q.withDirectorySyncRuns != nil,
+			_q.withDirectoryAccounts != nil,
+			_q.withDirectoryGroups != nil,
+			_q.withDirectoryMemberships != nil,
 			_q.withWorkflowObjectRefs != nil,
 			_q.withSourceAssets != nil,
 			_q.withSourceEntities != nil,
@@ -1869,6 +2113,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withApplicableFrameworks != nil,
 			_q.withGeneratedScans != nil,
 			_q.withPlatformOwner != nil,
+			_q.withSystemDetail != nil,
 		}
 	)
 	if withFKs {
@@ -2090,6 +2335,47 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
+	if query := _q.withIntegrations; query != nil {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *Platform) { n.Edges.Integrations = []*Integration{} },
+			func(n *Platform, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectorySyncRuns; query != nil {
+		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
+			func(n *Platform) { n.Edges.DirectorySyncRuns = []*DirectorySyncRun{} },
+			func(n *Platform, e *DirectorySyncRun) {
+				n.Edges.DirectorySyncRuns = append(n.Edges.DirectorySyncRuns, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryAccounts; query != nil {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *Platform) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
+			func(n *Platform, e *DirectoryAccount) {
+				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryGroups; query != nil {
+		if err := _q.loadDirectoryGroups(ctx, query, nodes,
+			func(n *Platform) { n.Edges.DirectoryGroups = []*DirectoryGroup{} },
+			func(n *Platform, e *DirectoryGroup) { n.Edges.DirectoryGroups = append(n.Edges.DirectoryGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryMemberships; query != nil {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *Platform) { n.Edges.DirectoryMemberships = []*DirectoryMembership{} },
+			func(n *Platform, e *DirectoryMembership) {
+				n.Edges.DirectoryMemberships = append(n.Edges.DirectoryMemberships, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withWorkflowObjectRefs; query != nil {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Platform) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
@@ -2144,6 +2430,12 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 	if query := _q.withPlatformOwner; query != nil {
 		if err := _q.loadPlatformOwner(ctx, query, nodes, nil,
 			func(n *Platform, e *User) { n.Edges.PlatformOwner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetail; query != nil {
+		if err := _q.loadSystemDetail(ctx, query, nodes, nil,
+			func(n *Platform, e *SystemDetail) { n.Edges.SystemDetail = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2235,6 +2527,41 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		if err := _q.loadIdentityHolders(ctx, query, nodes,
 			func(n *Platform) { n.appendNamedIdentityHolders(name) },
 			func(n *Platform, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrations {
+		if err := _q.loadIntegrations(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedIntegrations(name) },
+			func(n *Platform, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectorySyncRuns {
+		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedDirectorySyncRuns(name) },
+			func(n *Platform, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryAccounts {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedDirectoryAccounts(name) },
+			func(n *Platform, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryGroups {
+		if err := _q.loadDirectoryGroups(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedDirectoryGroups(name) },
+			func(n *Platform, e *DirectoryGroup) { n.appendNamedDirectoryGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryMemberships {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedDirectoryMemberships(name) },
+			func(n *Platform, e *DirectoryMembership) { n.appendNamedDirectoryMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3594,6 +3921,157 @@ func (_q *PlatformQuery) loadIdentityHolders(ctx context.Context, query *Identit
 	}
 	return nil
 }
+func (_q *PlatformQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *Integration)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integration.FieldPlatformID)
+	}
+	query.Where(predicate.Integration(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.IntegrationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadDirectorySyncRuns(ctx context.Context, query *DirectorySyncRunQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *DirectorySyncRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorysyncrun.FieldPlatformID)
+	}
+	query.Where(predicate.DirectorySyncRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.DirectorySyncRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *DirectoryAccount)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directoryaccount.FieldPlatformID)
+	}
+	query.Where(predicate.DirectoryAccount(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.DirectoryAccountsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadDirectoryGroups(ctx context.Context, query *DirectoryGroupQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *DirectoryGroup)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorygroup.FieldPlatformID)
+	}
+	query.Where(predicate.DirectoryGroup(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.DirectoryGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadDirectoryMemberships(ctx context.Context, query *DirectoryMembershipQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *DirectoryMembership)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorymembership.FieldPlatformID)
+	}
+	query.Where(predicate.DirectoryMembership(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.DirectoryMembershipsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *PlatformQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *WorkflowObjectRef)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Platform)
@@ -3964,6 +4442,36 @@ func (_q *PlatformQuery) loadPlatformOwner(ctx context.Context, query *UserQuery
 	}
 	return nil
 }
+func (_q *PlatformQuery) loadSystemDetail(ctx context.Context, query *SystemDetailQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *SystemDetail)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(systemdetail.FieldPlatformID)
+	}
+	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.SystemDetailColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "platform_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *PlatformQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -4296,6 +4804,76 @@ func (_q *PlatformQuery) WithNamedIdentityHolders(name string, opts ...func(*Ide
 		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
 	}
 	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
+// WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *PlatformQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrations == nil {
+		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
+	}
+	_q.withNamedIntegrations[name] = query
+	return _q
+}
+
+// WithNamedDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to the "directory_sync_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedDirectorySyncRuns(name string, opts ...func(*DirectorySyncRunQuery)) *PlatformQuery {
+	query := (&DirectorySyncRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectorySyncRuns == nil {
+		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
+	}
+	_q.withNamedDirectorySyncRuns[name] = query
+	return _q
+}
+
+// WithNamedDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to the "directory_accounts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedDirectoryAccounts(name string, opts ...func(*DirectoryAccountQuery)) *PlatformQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryAccounts == nil {
+		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
+	}
+	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedDirectoryGroups tells the query-builder to eager-load the nodes that are connected to the "directory_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedDirectoryGroups(name string, opts ...func(*DirectoryGroupQuery)) *PlatformQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryGroups == nil {
+		_q.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery)
+	}
+	_q.withNamedDirectoryGroups[name] = query
+	return _q
+}
+
+// WithNamedDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to the "directory_memberships"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedDirectoryMemberships(name string, opts ...func(*DirectoryMembershipQuery)) *PlatformQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryMemberships == nil {
+		_q.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery)
+	}
+	_q.withNamedDirectoryMemberships[name] = query
 	return _q
 }
 

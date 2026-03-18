@@ -2,6 +2,7 @@ package graphapi
 
 import (
 	"context"
+	"strings"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -46,7 +47,10 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 		return nil, rout.ErrPermissionDenied
 	}
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx) // error already validated by assertAssignmentActor
+	var userID string
+	if assignCaller, ok := auth.CallerFromContext(ctx); ok && assignCaller != nil {
+		userID = assignCaller.SubjectID
+	}
 
 	return &AssignmentDecisionContext{
 		Assignment: assignment,
@@ -57,10 +61,11 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 
 // assertAssignmentActor checks that the user in the context is a valid actor for the given assignment
 func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment *generated.WorkflowAssignment) error {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	actorCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || actorCaller == nil || actorCaller.SubjectID == "" {
 		return rout.ErrPermissionDenied
 	}
+	userID := actorCaller.SubjectID
 
 	directTarget, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().
 		Where(
@@ -97,4 +102,41 @@ func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment
 	}
 
 	return nil
+}
+
+// resolveAssignmentActionKey derives the action key for an assignment
+func resolveAssignmentActionKey(assignment *generated.WorkflowAssignment) string {
+	if assignment == nil {
+		return ""
+	}
+
+	if assignment.ApprovalMetadata.ActionKey != "" {
+		return assignment.ApprovalMetadata.ActionKey
+	}
+
+	key := assignment.AssignmentKey
+	if key == "" {
+		return ""
+	}
+
+	prefixes := []string{"approval_", "review_"}
+	for _, prefix := range prefixes {
+		if !strings.HasPrefix(key, prefix) {
+			continue
+		}
+
+		trimmed := strings.TrimPrefix(key, prefix)
+		if trimmed == "" {
+			return ""
+		}
+
+		parts := strings.Split(trimmed, "_")
+		if len(parts) <= 1 {
+			return trimmed
+		}
+
+		return strings.Join(parts[:len(parts)-1], "_")
+	}
+
+	return ""
 }

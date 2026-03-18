@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -100,6 +101,8 @@ type Platform struct {
 	CriticalityID string `json:"criticality_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the name of the platform
 	Name string `json:"name,omitempty"`
 	// the description of the platform boundary
@@ -206,6 +209,16 @@ type PlatformEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
+	// Integrations holds the value of the integrations edge.
+	Integrations []*Integration `json:"integrations,omitempty"`
+	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
+	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
+	// DirectoryAccounts holds the value of the directory_accounts edge.
+	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
+	// DirectoryGroups holds the value of the directory_groups edge.
+	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
+	// DirectoryMemberships holds the value of the directory_memberships edge.
+	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// SourceAssets holds the value of the source_assets edge.
@@ -222,11 +235,13 @@ type PlatformEdges struct {
 	GeneratedScans []*Scan `json:"generated_scans,omitempty"`
 	// PlatformOwner holds the value of the platform_owner edge.
 	PlatformOwner *User `json:"platform_owner,omitempty"`
+	// SystemDetail holds the value of the system_detail edge.
+	SystemDetail *SystemDetail `json:"system_detail,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [38]bool
+	loadedTypes [44]bool
 	// totalCount holds the count of the edges above.
-	totalCount [38]map[string]int
+	totalCount [44]map[string]int
 
 	namedBlockedGroups        map[string][]*Group
 	namedEditors              map[string][]*Group
@@ -241,6 +256,11 @@ type PlatformEdges struct {
 	namedScans                map[string][]*Scan
 	namedTasks                map[string][]*Task
 	namedIdentityHolders      map[string][]*IdentityHolder
+	namedIntegrations         map[string][]*Integration
+	namedDirectorySyncRuns    map[string][]*DirectorySyncRun
+	namedDirectoryAccounts    map[string][]*DirectoryAccount
+	namedDirectoryGroups      map[string][]*DirectoryGroup
+	namedDirectoryMemberships map[string][]*DirectoryMembership
 	namedWorkflowObjectRefs   map[string][]*WorkflowObjectRef
 	namedSourceAssets         map[string][]*Asset
 	namedSourceEntities       map[string][]*Entity
@@ -554,10 +574,55 @@ func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
+// IntegrationsOrErr returns the Integrations value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) IntegrationsOrErr() ([]*Integration, error) {
+	if e.loadedTypes[30] {
+		return e.Integrations, nil
+	}
+	return nil, &NotLoadedError{edge: "integrations"}
+}
+
+// DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
+	if e.loadedTypes[31] {
+		return e.DirectorySyncRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_sync_runs"}
+}
+
+// DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
+	if e.loadedTypes[32] {
+		return e.DirectoryAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_accounts"}
+}
+
+// DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
+	if e.loadedTypes[33] {
+		return e.DirectoryGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_groups"}
+}
+
+// DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
+	if e.loadedTypes[34] {
+		return e.DirectoryMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_memberships"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[35] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -566,7 +631,7 @@ func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // SourceAssetsOrErr returns the SourceAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[36] {
 		return e.SourceAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "source_assets"}
@@ -575,7 +640,7 @@ func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
 // SourceEntitiesOrErr returns the SourceEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[37] {
 		return e.SourceEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "source_entities"}
@@ -584,7 +649,7 @@ func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
 // OutOfScopeAssetsOrErr returns the OutOfScopeAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[38] {
 		return e.OutOfScopeAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_assets"}
@@ -593,7 +658,7 @@ func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
 // OutOfScopeVendorsOrErr returns the OutOfScopeVendors value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[39] {
 		return e.OutOfScopeVendors, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_vendors"}
@@ -602,7 +667,7 @@ func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
 // ApplicableFrameworksOrErr returns the ApplicableFrameworks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[40] {
 		return e.ApplicableFrameworks, nil
 	}
 	return nil, &NotLoadedError{edge: "applicable_frameworks"}
@@ -611,7 +676,7 @@ func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
 // GeneratedScansOrErr returns the GeneratedScans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[41] {
 		return e.GeneratedScans, nil
 	}
 	return nil, &NotLoadedError{edge: "generated_scans"}
@@ -622,10 +687,21 @@ func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
 func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	if e.PlatformOwner != nil {
 		return e.PlatformOwner, nil
-	} else if e.loadedTypes[37] {
+	} else if e.loadedTypes[42] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_owner"}
+}
+
+// SystemDetailOrErr returns the SystemDetail value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PlatformEdges) SystemDetailOrErr() (*SystemDetail, error) {
+	if e.SystemDetail != nil {
+		return e.SystemDetail, nil
+	} else if e.loadedTypes[43] {
+		return nil, &NotFoundError{label: systemdetail.Label}
+	}
+	return nil, &NotLoadedError{edge: "system_detail"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -641,7 +717,7 @@ func (*Platform) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case platform.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case platform.FieldID, platform.FieldCreatedBy, platform.FieldUpdatedBy, platform.FieldDeletedBy, platform.FieldDisplayID, platform.FieldOwnerID, platform.FieldInternalOwner, platform.FieldInternalOwnerUserID, platform.FieldInternalOwnerGroupID, platform.FieldBusinessOwner, platform.FieldBusinessOwnerUserID, platform.FieldBusinessOwnerGroupID, platform.FieldTechnicalOwner, platform.FieldTechnicalOwnerUserID, platform.FieldTechnicalOwnerGroupID, platform.FieldSecurityOwner, platform.FieldSecurityOwnerUserID, platform.FieldSecurityOwnerGroupID, platform.FieldPlatformKindName, platform.FieldPlatformKindID, platform.FieldPlatformDataClassificationName, platform.FieldPlatformDataClassificationID, platform.FieldEnvironmentName, platform.FieldEnvironmentID, platform.FieldScopeName, platform.FieldScopeID, platform.FieldAccessModelName, platform.FieldAccessModelID, platform.FieldEncryptionStatusName, platform.FieldEncryptionStatusID, platform.FieldSecurityTierName, platform.FieldSecurityTierID, platform.FieldCriticalityName, platform.FieldCriticalityID, platform.FieldName, platform.FieldDescription, platform.FieldBusinessPurpose, platform.FieldScopeStatement, platform.FieldTrustBoundaryDescription, platform.FieldDataFlowSummary, platform.FieldStatus, platform.FieldPhysicalLocation, platform.FieldRegion, platform.FieldSourceType, platform.FieldSourceIdentifier, platform.FieldCostCenter, platform.FieldPlatformOwnerID, platform.FieldExternalReferenceID:
+		case platform.FieldID, platform.FieldCreatedBy, platform.FieldUpdatedBy, platform.FieldDeletedBy, platform.FieldDisplayID, platform.FieldOwnerID, platform.FieldInternalOwner, platform.FieldInternalOwnerUserID, platform.FieldInternalOwnerGroupID, platform.FieldBusinessOwner, platform.FieldBusinessOwnerUserID, platform.FieldBusinessOwnerGroupID, platform.FieldTechnicalOwner, platform.FieldTechnicalOwnerUserID, platform.FieldTechnicalOwnerGroupID, platform.FieldSecurityOwner, platform.FieldSecurityOwnerUserID, platform.FieldSecurityOwnerGroupID, platform.FieldPlatformKindName, platform.FieldPlatformKindID, platform.FieldPlatformDataClassificationName, platform.FieldPlatformDataClassificationID, platform.FieldEnvironmentName, platform.FieldEnvironmentID, platform.FieldScopeName, platform.FieldScopeID, platform.FieldAccessModelName, platform.FieldAccessModelID, platform.FieldEncryptionStatusName, platform.FieldEncryptionStatusID, platform.FieldSecurityTierName, platform.FieldSecurityTierID, platform.FieldCriticalityName, platform.FieldCriticalityID, platform.FieldExternalUUID, platform.FieldName, platform.FieldDescription, platform.FieldBusinessPurpose, platform.FieldScopeStatement, platform.FieldTrustBoundaryDescription, platform.FieldDataFlowSummary, platform.FieldStatus, platform.FieldPhysicalLocation, platform.FieldRegion, platform.FieldSourceType, platform.FieldSourceIdentifier, platform.FieldCostCenter, platform.FieldPlatformOwnerID, platform.FieldExternalReferenceID:
 			values[i] = new(sql.NullString)
 		case platform.FieldCreatedAt, platform.FieldUpdatedAt, platform.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -899,6 +975,13 @@ func (_m *Platform) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
+			}
+		case platform.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
 			}
 		case platform.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1188,6 +1271,31 @@ func (_m *Platform) QueryIdentityHolders() *IdentityHolderQuery {
 	return NewPlatformClient(_m.config).QueryIdentityHolders(_m)
 }
 
+// QueryIntegrations queries the "integrations" edge of the Platform entity.
+func (_m *Platform) QueryIntegrations() *IntegrationQuery {
+	return NewPlatformClient(_m.config).QueryIntegrations(_m)
+}
+
+// QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Platform entity.
+func (_m *Platform) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
+	return NewPlatformClient(_m.config).QueryDirectorySyncRuns(_m)
+}
+
+// QueryDirectoryAccounts queries the "directory_accounts" edge of the Platform entity.
+func (_m *Platform) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	return NewPlatformClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
+// QueryDirectoryGroups queries the "directory_groups" edge of the Platform entity.
+func (_m *Platform) QueryDirectoryGroups() *DirectoryGroupQuery {
+	return NewPlatformClient(_m.config).QueryDirectoryGroups(_m)
+}
+
+// QueryDirectoryMemberships queries the "directory_memberships" edge of the Platform entity.
+func (_m *Platform) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	return NewPlatformClient(_m.config).QueryDirectoryMemberships(_m)
+}
+
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Platform entity.
 func (_m *Platform) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewPlatformClient(_m.config).QueryWorkflowObjectRefs(_m)
@@ -1226,6 +1334,11 @@ func (_m *Platform) QueryGeneratedScans() *ScanQuery {
 // QueryPlatformOwner queries the "platform_owner" edge of the Platform entity.
 func (_m *Platform) QueryPlatformOwner() *UserQuery {
 	return NewPlatformClient(_m.config).QueryPlatformOwner(_m)
+}
+
+// QuerySystemDetail queries the "system_detail" edge of the Platform entity.
+func (_m *Platform) QuerySystemDetail() *SystemDetailQuery {
+	return NewPlatformClient(_m.config).QuerySystemDetail(_m)
 }
 
 // Update returns a builder for updating this Platform.
@@ -1364,6 +1477,11 @@ func (_m *Platform) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
@@ -1733,6 +1851,126 @@ func (_m *Platform) appendNamedIdentityHolders(name string, edges ...*IdentityHo
 		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
 	} else {
 		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
+// NamedIntegrations returns the Integrations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedIntegrations(name string) ([]*Integration, error) {
+	if _m.Edges.namedIntegrations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedIntegrations(name string, edges ...*Integration) {
+	if _m.Edges.namedIntegrations == nil {
+		_m.Edges.namedIntegrations = make(map[string][]*Integration)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrations[name] = []*Integration{}
+	} else {
+		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
+	}
+}
+
+// NamedDirectorySyncRuns returns the DirectorySyncRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedDirectorySyncRuns(name string) ([]*DirectorySyncRun, error) {
+	if _m.Edges.namedDirectorySyncRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectorySyncRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedDirectorySyncRuns(name string, edges ...*DirectorySyncRun) {
+	if _m.Edges.namedDirectorySyncRuns == nil {
+		_m.Edges.namedDirectorySyncRuns = make(map[string][]*DirectorySyncRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
+	} else {
+		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
+	}
+}
+
+// NamedDirectoryAccounts returns the DirectoryAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedDirectoryAccounts(name string) ([]*DirectoryAccount, error) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedDirectoryAccounts(name string, edges ...*DirectoryAccount) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		_m.Edges.namedDirectoryAccounts = make(map[string][]*DirectoryAccount)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
+	} else {
+		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
+// NamedDirectoryGroups returns the DirectoryGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedDirectoryGroups(name string) ([]*DirectoryGroup, error) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedDirectoryGroups(name string, edges ...*DirectoryGroup) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		_m.Edges.namedDirectoryGroups = make(map[string][]*DirectoryGroup)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryGroups[name] = []*DirectoryGroup{}
+	} else {
+		_m.Edges.namedDirectoryGroups[name] = append(_m.Edges.namedDirectoryGroups[name], edges...)
+	}
+}
+
+// NamedDirectoryMemberships returns the DirectoryMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedDirectoryMemberships(name string) ([]*DirectoryMembership, error) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedDirectoryMemberships(name string, edges ...*DirectoryMembership) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		_m.Edges.namedDirectoryMemberships = make(map[string][]*DirectoryMembership)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryMemberships[name] = []*DirectoryMembership{}
+	} else {
+		_m.Edges.namedDirectoryMemberships[name] = append(_m.Edges.namedDirectoryMemberships[name], edges...)
 	}
 }
 

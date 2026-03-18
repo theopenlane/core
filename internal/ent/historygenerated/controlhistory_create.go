@@ -155,6 +155,20 @@ func (_c *ControlHistoryCreate) SetTags(v []string) *ControlHistoryCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *ControlHistoryCreate) SetExternalUUID(v string) *ControlHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableExternalUUID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ControlHistoryCreate) SetTitle(v string) *ControlHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -251,6 +265,48 @@ func (_c *ControlHistoryCreate) SetNillableStatus(v *enums.ControlStatus) *Contr
 	return _c
 }
 
+// SetImplementationStatus sets the "implementation_status" field.
+func (_c *ControlHistoryCreate) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlHistoryCreate {
+	_c.mutation.SetImplementationStatus(v)
+	return _c
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetImplementationStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_c *ControlHistoryCreate) SetImplementationDescription(v string) *ControlHistoryCreate {
+	_c.mutation.SetImplementationDescription(v)
+	return _c
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableImplementationDescription(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetImplementationDescription(*v)
+	}
+	return _c
+}
+
+// SetPublicRepresentation sets the "public_representation" field.
+func (_c *ControlHistoryCreate) SetPublicRepresentation(v string) *ControlHistoryCreate {
+	_c.mutation.SetPublicRepresentation(v)
+	return _c
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillablePublicRepresentation(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetPublicRepresentation(*v)
+	}
+	return _c
+}
+
 // SetSource sets the "source" field.
 func (_c *ControlHistoryCreate) SetSource(v enums.ControlSource) *ControlHistoryCreate {
 	_c.mutation.SetSource(v)
@@ -261,6 +317,20 @@ func (_c *ControlHistoryCreate) SetSource(v enums.ControlSource) *ControlHistory
 func (_c *ControlHistoryCreate) SetNillableSource(v *enums.ControlSource) *ControlHistoryCreate {
 	if v != nil {
 		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceName sets the "source_name" field.
+func (_c *ControlHistoryCreate) SetSourceName(v string) *ControlHistoryCreate {
+	_c.mutation.SetSourceName(v)
+	return _c
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableSourceName(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetSourceName(*v)
 	}
 	return _c
 }
@@ -591,6 +661,34 @@ func (_c *ControlHistoryCreate) SetNillableStandardID(v *string) *ControlHistory
 	return _c
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_c *ControlHistoryCreate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryCreate {
+	_c.mutation.SetTrustCenterVisibility(v)
+	return _c
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterVisibility(*v)
+	}
+	return _c
+}
+
+// SetIsTrustCenterControl sets the "is_trust_center_control" field.
+func (_c *ControlHistoryCreate) SetIsTrustCenterControl(v bool) *ControlHistoryCreate {
+	_c.mutation.SetIsTrustCenterControl(v)
+	return _c
+}
+
+// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableIsTrustCenterControl(v *bool) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetIsTrustCenterControl(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ControlHistoryCreate) SetID(v string) *ControlHistoryCreate {
 	_c.mutation.SetID(v)
@@ -671,6 +769,10 @@ func (_c *ControlHistoryCreate) defaults() error {
 		v := controlhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ImplementationStatus(); !ok {
+		v := controlhistory.DefaultImplementationStatus
+		_c.mutation.SetImplementationStatus(v)
+	}
 	if _, ok := _c.mutation.Source(); !ok {
 		v := controlhistory.DefaultSource
 		_c.mutation.SetSource(v)
@@ -682,6 +784,14 @@ func (_c *ControlHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
 		v := controlhistory.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
+	if _, ok := _c.mutation.TrustCenterVisibility(); !ok {
+		v := controlhistory.DefaultTrustCenterVisibility
+		_c.mutation.SetTrustCenterVisibility(v)
+	}
+	if _, ok := _c.mutation.IsTrustCenterControl(); !ok {
+		v := controlhistory.DefaultIsTrustCenterControl
+		_c.mutation.SetIsTrustCenterControl(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if controlhistory.DefaultID == nil {
@@ -714,6 +824,11 @@ func (_c *ControlHistoryCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.ImplementationStatus(); ok {
+		if err := controlhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
@@ -721,6 +836,11 @@ func (_c *ControlHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.RefCode(); !ok {
 		return &ValidationError{Name: "ref_code", err: errors.New(`historygenerated: missing required field "ControlHistory.ref_code"`)}
+	}
+	if v, ok := _c.mutation.TrustCenterVisibility(); ok {
+		if err := controlhistory.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.trust_center_visibility": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -802,6 +922,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(controlhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -834,9 +958,25 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
+	if value, ok := _c.mutation.ImplementationStatus(); ok {
+		_spec.SetField(controlhistory.FieldImplementationStatus, field.TypeEnum, value)
+		_node.ImplementationStatus = value
+	}
+	if value, ok := _c.mutation.ImplementationDescription(); ok {
+		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
+		_node.ImplementationDescription = value
+	}
+	if value, ok := _c.mutation.PublicRepresentation(); ok {
+		_spec.SetField(controlhistory.FieldPublicRepresentation, field.TypeString, value)
+		_node.PublicRepresentation = value
+	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceName(); ok {
+		_spec.SetField(controlhistory.FieldSourceName, field.TypeString, value)
+		_node.SourceName = &value
 	}
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
@@ -953,6 +1093,14 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.StandardID(); ok {
 		_spec.SetField(controlhistory.FieldStandardID, field.TypeString, value)
 		_node.StandardID = value
+	}
+	if value, ok := _c.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum, value)
+		_node.TrustCenterVisibility = value
+	}
+	if value, ok := _c.mutation.IsTrustCenterControl(); ok {
+		_spec.SetField(controlhistory.FieldIsTrustCenterControl, field.TypeBool, value)
+		_node.IsTrustCenterControl = value
 	}
 	return _node, _spec
 }

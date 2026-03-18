@@ -14,12 +14,14 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/utils/rout"
 )
 
 // IdentityHolder holds the schema definition for the IdentityHolder entity
@@ -105,7 +107,10 @@ func (IdentityHolder) Fields() []ent.Field {
 			),
 		field.String("user_id").
 			Comment("the user id associated with the identity holder record").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("IdentityHolderUserEmail").MatchOn("email"),
+			),
 		field.Enum("identity_holder_type").
 			Comment("the classification of identity holders, such as employee or contractor").
 			GoType(enums.IdentityHolderType("")).
@@ -172,7 +177,10 @@ func (IdentityHolder) Fields() []ent.Field {
 			),
 		field.String("employer_entity_id").
 			Comment("the external entity this identity holder is affiliated with").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("EmployerEntityName").MatchOn("name"),
+			),
 		field.String("external_user_id").
 			Comment("external user identifier for the identity holder").
 			Optional().
@@ -226,9 +234,13 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Template{}),
 		defaultEdgeToWithPagination(p, Asset{}),
 		defaultEdgeToWithPagination(p, Entity{}),
+		defaultEdgeToWithPagination(p, DirectoryAccount{}),
+		defaultEdgeFromWithPagination(p, Control{}),
 		defaultEdgeFromWithPagination(p, Platform{}),
 		defaultEdgeFromWithPagination(p, Campaign{}),
 		defaultEdgeToWithPagination(p, Task{}),
+		defaultEdgeToWithPagination(p, File{}),
+		defaultEdgeFromWithPagination(p, Finding{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: p,
 			edgeSchema: WorkflowObjectRef{},
@@ -275,6 +287,14 @@ func (IdentityHolder) Modules() []models.OrgModule {
 func (IdentityHolder) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
+	}
+}
+
+// Hooks of the IdentityHolder
+func (IdentityHolder) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookIdentityHolderFiles(),
 	}
 }
 
@@ -282,10 +302,10 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 func (IdentityHolder) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				Platform{}.PluralName(),
 			}),
+			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.IdentityHolderMutation](),
 		),
 	)

@@ -11,6 +11,7 @@ import (
 	"golang.org/x/mod/semver"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/rout"
 
@@ -199,6 +200,18 @@ func (ControlMixin) Annotations() []schema.Annotation {
 
 // controlFields are fields use by both Control and Subcontrol schemas
 var controlFields = []ent.Field{
+	field.String("external_uuid").
+		Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+		Optional().
+		Nillable().
+		Unique().
+		Annotations(
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleUUID,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				oscalgen.WithOSCALIdentityAnchor(),
+			),
+		),
 	field.String("title").
 		Optional().
 		Annotations(
@@ -207,6 +220,10 @@ var controlFields = []ent.Field{
 			entx.FieldWebhookPayloadField(),
 			directives.ExternalSourceDirectiveAnnotation,
 			entx.FieldWorkflowEligible(),
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleTitle,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
 		).
 		Comment("human readable title of the control for quick identification"),
 	field.Text("description").
@@ -214,6 +231,10 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 			directives.ExternalSourceDirectiveAnnotation,
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleDescription,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
 		).
 		Comment("description of what the control is supposed to accomplish"),
 	field.JSON("description_json", []any{}).
@@ -236,7 +257,10 @@ var controlFields = []ent.Field{
 		Optional().
 		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	field.String("responsible_party_id").
-		Annotations(entx.FieldWorkflowEligible()).
+		Annotations(
+			entx.FieldWorkflowEligible(),
+			entx.CSVRef().FromColumn("ResponsiblePartyEntityName").MatchOn("name"),
+		).
 		Optional().
 		Comment("the id of the party responsible for the control, usually used when the control is implemented by a third party"),
 	field.Enum("status").
@@ -249,6 +273,32 @@ var controlFields = []ent.Field{
 			entx.FieldWorkflowEligible(),
 		).
 		Comment("status of the control"),
+	field.Enum("implementation_status").
+		Comment("OSCAL-aligned implementation status of the control").
+		GoType(enums.ControlImplementationStatus("")).
+		Optional().
+		Default(enums.ControlImplementationStatusPlanned.String()).
+		Annotations(
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleImplementationStatus,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
+		),
+	field.Text("implementation_description").
+		Comment("narrative describing current implementation state for OSCAL export").
+		Optional().
+		Annotations(
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleImplementationDetails,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
+		),
+	field.Text("public_representation").
+		Optional().
+		Annotations(
+			entx.FieldSearchable(),
+		).
+		Comment("a public representation of the control that can be shared with external parties without revealing sensitive information"),
 	field.Enum("source").
 		GoType(enums.ControlSource("")).
 		Optional().
@@ -258,6 +308,10 @@ var controlFields = []ent.Field{
 		).
 		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
+	field.String("source_name").
+		Optional().
+		Nillable().
+		Comment("name of the source of the controls if not directly from a standard"),
 	field.String("reference_framework").
 		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").
 		Nillable().
@@ -345,10 +399,14 @@ var controlFields = []ent.Field{
 		Unique().
 		Annotations(
 			entx.FieldWorkflowEligible(),
+			entx.CSVRef().FromColumn("ControlOwnerGroupName").MatchOn("name"),
 		).
 		Comment("the id of the group that owns the control"),
 	field.String("delegate_id").
 		Optional().
 		Unique().
+		Annotations(
+			entx.CSVRef().FromColumn("ControlDelegateGroupName").MatchOn("name"),
+		).
 		Comment("the id of the group that is temporarily delegated to own the control"),
 }

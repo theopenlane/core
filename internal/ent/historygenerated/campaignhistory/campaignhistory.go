@@ -100,6 +100,10 @@ const (
 	FieldAssessmentID = "assessment_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
+	FieldEmailBrandingID = "email_branding_id"
+	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
+	FieldEmailTemplateID = "email_template_id"
 	// Table holds the table name of the campaignhistory in the database.
 	Table = "campaign_history"
 )
@@ -147,6 +151,8 @@ var Columns = []string{
 	FieldEntityID,
 	FieldAssessmentID,
 	FieldMetadata,
+	FieldEmailBrandingID,
+	FieldEmailTemplateID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -434,6 +440,16 @@ func ByEntityID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssessmentID orders the results by the assessment_id field.
 func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
+}
+
+// ByEmailBrandingID orders the results by the email_branding_id field.
+func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
+}
+
+// ByEmailTemplateID orders the results by the email_template_id field.
+func ByEmailTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailTemplateID, opts...).ToFunc()
 }
 
 var (

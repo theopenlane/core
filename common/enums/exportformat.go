@@ -1,56 +1,41 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // ExportFormat is a custom type representing the various states of ExportFormat.
 type ExportFormat string
 
 var (
+	// ExportFormatMarkDown indicates the md.
+	ExportFormatMarkDown ExportFormat = "MARKDOWN"
+
+	// ExportFormatPdf indicates the pdf.
+	ExportFormatPdf ExportFormat = "PDF"
+
+	// ExportFormatDocx indicates the docx.
+	ExportFormatDocx ExportFormat = "DOCX"
+
 	// ExportFormatCsv indicates the csv.
 	ExportFormatCsv ExportFormat = "CSV"
 	// ExportFormatInvalid is used when an unknown or unsupported value is provided.
 	ExportFormatInvalid ExportFormat = "EXPORTFORMAT_INVALID"
 )
 
+var exportFormatValues = []ExportFormat{ExportFormatCsv, ExportFormatMarkDown, ExportFormatDocx, ExportFormatPdf}
+
 // Values returns a slice of strings representing all valid ExportFormat values.
-func (ExportFormat) Values() []string {
-	return []string{
-		string(ExportFormatCsv),
-	}
-}
+func (ExportFormat) Values() []string { return stringValues(exportFormatValues) }
 
 // String returns the string representation of the ExportFormat value.
-func (r ExportFormat) String() string {
-	return string(r)
-}
+func (r ExportFormat) String() string { return string(r) }
 
 // ToExportFormat converts a string to its corresponding ExportFormat enum value.
 func ToExportFormat(r string) *ExportFormat {
-	switch strings.ToUpper(r) {
-	case ExportFormatCsv.String():
-		return &ExportFormatCsv
-	default:
-		return &ExportFormatInvalid
-	}
+	return parse(r, exportFormatValues, &ExportFormatInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r ExportFormat) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ExportFormat) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *ExportFormat) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ExportFormat, got: %T", v) //nolint:err113
-	}
-
-	*r = ExportFormat(str)
-
-	return nil
-}
+func (r *ExportFormat) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

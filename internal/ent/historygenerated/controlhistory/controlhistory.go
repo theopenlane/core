@@ -42,6 +42,8 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -58,8 +60,16 @@ const (
 	FieldResponsiblePartyID = "responsible_party_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldImplementationStatus holds the string denoting the implementation_status field in the database.
+	FieldImplementationStatus = "implementation_status"
+	// FieldImplementationDescription holds the string denoting the implementation_description field in the database.
+	FieldImplementationDescription = "implementation_description"
+	// FieldPublicRepresentation holds the string denoting the public_representation field in the database.
+	FieldPublicRepresentation = "public_representation"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldSourceName holds the string denoting the source_name field in the database.
+	FieldSourceName = "source_name"
 	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
 	FieldReferenceFramework = "reference_framework"
 	// FieldReferenceFrameworkRevision holds the string denoting the reference_framework_revision field in the database.
@@ -118,6 +128,10 @@ const (
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
 	FieldStandardID = "standard_id"
+	// FieldTrustCenterVisibility holds the string denoting the trust_center_visibility field in the database.
+	FieldTrustCenterVisibility = "trust_center_visibility"
+	// FieldIsTrustCenterControl holds the string denoting the is_trust_center_control field in the database.
+	FieldIsTrustCenterControl = "is_trust_center_control"
 	// Table holds the table name of the controlhistory in the database.
 	Table = "control_history"
 )
@@ -136,6 +150,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldExternalUUID,
 	FieldTitle,
 	FieldDescription,
 	FieldDescriptionJSON,
@@ -144,7 +159,11 @@ var Columns = []string{
 	FieldAuditorReferenceID,
 	FieldResponsiblePartyID,
 	FieldStatus,
+	FieldImplementationStatus,
+	FieldImplementationDescription,
+	FieldPublicRepresentation,
 	FieldSource,
+	FieldSourceName,
 	FieldReferenceFramework,
 	FieldReferenceFrameworkRevision,
 	FieldCategory,
@@ -174,6 +193,8 @@ var Columns = []string{
 	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldStandardID,
+	FieldTrustCenterVisibility,
+	FieldIsTrustCenterControl,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -209,6 +230,8 @@ var (
 	DefaultSystemOwned bool
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
+	// DefaultIsTrustCenterControl holds the default value on creation for the "is_trust_center_control" field.
+	DefaultIsTrustCenterControl bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -235,6 +258,18 @@ func StatusValidator(s enums.ControlStatus) error {
 	}
 }
 
+const DefaultImplementationStatus enums.ControlImplementationStatus = "PLANNED"
+
+// ImplementationStatusValidator is a validator for the "implementation_status" field enum values. It is called by the builders before save.
+func ImplementationStatusValidator(is enums.ControlImplementationStatus) error {
+	switch is.String() {
+	case "PLANNED", "IMPLEMENTED", "PARTIALLY_IMPLEMENTED", "INHERITED", "NOT_APPLICABLE":
+		return nil
+	default:
+		return fmt.Errorf("controlhistory: invalid enum value for implementation_status field: %q", is)
+	}
+}
+
 const DefaultSource enums.ControlSource = "USER_DEFINED"
 
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
@@ -244,6 +279,18 @@ func SourceValidator(s enums.ControlSource) error {
 		return nil
 	default:
 		return fmt.Errorf("controlhistory: invalid enum value for source field: %q", s)
+	}
+}
+
+const DefaultTrustCenterVisibility enums.TrustCenterControlVisibility = "NOT_VISIBLE"
+
+// TrustCenterVisibilityValidator is a validator for the "trust_center_visibility" field enum values. It is called by the builders before save.
+func TrustCenterVisibilityValidator(tcv enums.TrustCenterControlVisibility) error {
+	switch tcv.String() {
+	case "PUBLICLY_VISIBLE", "NOT_VISIBLE":
+		return nil
+	default:
+		return fmt.Errorf("controlhistory: invalid enum value for trust_center_visibility field: %q", tcv)
 	}
 }
 
@@ -305,6 +352,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
+}
+
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
@@ -335,9 +387,29 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByImplementationStatus orders the results by the implementation_status field.
+func ByImplementationStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImplementationStatus, opts...).ToFunc()
+}
+
+// ByImplementationDescription orders the results by the implementation_description field.
+func ByImplementationDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImplementationDescription, opts...).ToFunc()
+}
+
+// ByPublicRepresentation orders the results by the public_representation field.
+func ByPublicRepresentation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPublicRepresentation, opts...).ToFunc()
+}
+
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// BySourceName orders the results by the source_name field.
+func BySourceName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceName, opts...).ToFunc()
 }
 
 // ByReferenceFramework orders the results by the reference_framework field.
@@ -440,6 +512,16 @@ func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
 }
 
+// ByTrustCenterVisibility orders the results by the trust_center_visibility field.
+func ByTrustCenterVisibility(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterVisibility, opts...).ToFunc()
+}
+
+// ByIsTrustCenterControl orders the results by the is_trust_center_control field.
+func ByIsTrustCenterControl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsTrustCenterControl, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -455,8 +537,22 @@ var (
 )
 
 var (
+	// enums.ControlImplementationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlImplementationStatus)(nil)
+	// enums.ControlImplementationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlImplementationStatus)(nil)
+)
+
+var (
 	// enums.ControlSource must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*enums.ControlSource)(nil)
 	// enums.ControlSource must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
+)
+
+var (
+	// enums.TrustCenterControlVisibility must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterControlVisibility)(nil)
+	// enums.TrustCenterControlVisibility must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterControlVisibility)(nil)
 )

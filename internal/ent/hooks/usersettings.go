@@ -72,9 +72,9 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		return false
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get authenticated user context")
+	usCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || usCaller == nil {
+		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context")
 
 		return false
 	}
@@ -83,7 +83,7 @@ func allowDefaultOrgUpdate(ctx context.Context, m *generated.UserSettingMutation
 		SubjectID:   owner.ID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
-		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+		Context:     utils.NewOrganizationContextKey(usCaller.SubjectEmail),
 	}
 
 	allow, err := m.Authz.CheckOrgReadAccess(ctx, req)
@@ -222,7 +222,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		}
 
 		// add organization to the context for accepted invite hook
-		ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+		ctx = auth.WithCaller(ctx, &auth.Caller{
 			SubjectID:       user.ID,
 			SubjectEmail:    user.Email,
 			OrganizationID:  org.ID,

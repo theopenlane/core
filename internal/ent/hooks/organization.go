@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -23,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/entitlements/reconciler"
@@ -40,11 +40,20 @@ func HookOrganization() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// existingCaller is captured here so it can be mutated after org creation
+			// to propagate the new org ID back to the original caller pointer
+			var existingCaller *auth.Caller
+
 			if m.Op().Is(ent.OpCreate) {
-				// set the context value to indicate this is an organization creation
-				// this is useful for skipping the hooks on the owner field if its part of the
-				// initial creation of the organization
-				ctx = contextx.With(ctx, auth.OrganizationCreationContextKey{})
+				// add bypass capabilities to the caller for the duration of org creation
+				// so that downstream hooks skip owner-field and managed-group guards
+				const orgCreationCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+				if caller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
+					existingCaller = caller
+					ctx = auth.WithCaller(ctx, caller.WithCapabilities(orgCreationCaps))
+				} else {
+					ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: orgCreationCaps})
+				}
 
 				// generate a default org setting schema if not provided
 				if err := createOrgSettings(ctx, m); err != nil {
@@ -121,11 +130,24 @@ func HookOrganization() ent.Hook {
 				// and sessions are already set
 				if !orgCreated.PersonalOrg {
 					am := authmanager.New(m.Client())
-					if err := updateUserAuthSession(ctx, am, orgCreated.ID); err != nil {
+					ctx, err = updateUserAuthSession(ctx, am, orgCreated.ID)
+					if err != nil {
 						return v, err
 					}
 
-					if err := postOrganizationCreation(ctx, orgCreated, m); err != nil {
+					// propagate the new org ID back through the original caller pointer
+					// so that callers holding the same *Caller see the updated org
+					if existingCaller != nil {
+						existingCaller.OrganizationID = orgCreated.ID
+						if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
+							existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
+						}
+					}
+
+					ctx, err = postOrganizationCreation(ctx, orgCreated, m)
+					if err != nil {
+						logx.FromContext(ctx).Error().Err(err).Msg("error in post organization creation steps")
+
 						return v, err
 					}
 				}
@@ -185,7 +207,8 @@ func HookOrganizationDelete() ent.Hook {
 			// if the deleted org was the current org, update the session cookie
 			am := authmanager.New(m.Client())
 
-			if err := updateUserAuthSession(ctx, am, newOrgID); err != nil {
+			ctx, err = updateUserAuthSession(ctx, am, newOrgID)
+			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to update user auth session on organization delete")
 
 				return v, nil
@@ -232,7 +255,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 // createOrgSubscription creates the default organization subscription for a new org
 func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgCreated.ID))
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
@@ -303,33 +326,33 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 }
 
 // postOrganizationCreation runs after an organization is created to perform additional setup
-func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) (context.Context, error) {
 	// capture the original org id, ignore error as this will not be set in all cases
 	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) //nolint:errcheck
 
 	// set the new org id in the auth context to process the rest of the post creation steps
-	err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID)
+	ctx, err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
 	// create default entity types, if configured
 	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
-		return err
+		return ctx, err
 	}
 
 	// create generated groups
 	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating generated groups")
 
-		return err
+		return ctx, err
 	}
 
 	// create subscriptions if the entitlement manager is enabled
 	if m.EntitlementManager.Config.IsEnabled() {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
-			return err
+			return ctx, err
 		}
 
 		opts := []reconciler.OrgModuleOption{reconciler.WithTrial()}
@@ -339,19 +362,65 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 		_, err = reconciler.CreateDefaultOrgModulesProductsPrices(ctx, m.Client(), orgSubs, orgCreated.ID, opts...)
 		if err != nil {
-			return err
+			return ctx, err
 		}
+	}
+
+	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating default SLA definitions")
+		return ctx, err
 	}
 
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
-		err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
+		ctx, err = auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
 		if err != nil {
-			return err
+			return ctx, err
 		}
 	}
 
-	return nil
+	return ctx, nil
+}
+
+const (
+	defaultSLADaysLow      = 60
+	defaultSLADaysMedium   = 30
+	defaultSLADaysHigh     = 14
+	defaultSLADaysCritical = 7
+)
+
+// defaultSLADefinitions maps severity levels to their default SLA days
+var defaultSLADefinitions = map[enums.SecurityLevel]int{
+	enums.SecurityLevelLow:      defaultSLADaysLow,
+	enums.SecurityLevelMedium:   defaultSLADaysMedium,
+	enums.SecurityLevelHigh:     defaultSLADaysHigh,
+	enums.SecurityLevelCritical: defaultSLADaysCritical,
+}
+
+// createDefaultSLADefinitions creates the default SLA definitions for a new org
+func createDefaultSLADefinitions(ctx context.Context, orgID string, client *generated.Client) error {
+	existing, err := client.SLADefinition.Query().
+		Where(sladefinition.OwnerID(orgID)).
+		Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	if existing {
+		return nil
+	}
+
+	builders := make([]*generated.SLADefinitionCreate, 0, len(defaultSLADefinitions))
+
+	for level, days := range defaultSLADefinitions {
+		builders = append(builders, client.SLADefinition.Create().
+			SetOwnerID(orgID).
+			SetSecurityLevel(level).
+			SetSLADays(days),
+		)
+	}
+
+	return client.SLADefinition.CreateBulk(builders...).Exec(ctx)
 }
 
 // validateOrgDeletion ensures the organization can be deleted
@@ -529,7 +598,7 @@ func createParentOrgTuple(ctx context.Context, m *generated.OrganizationMutation
 	}, nil); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-		return err
+		return ErrInternalServerError
 	}
 
 	return nil

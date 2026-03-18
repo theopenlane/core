@@ -2,112 +2,132 @@ package hooks
 
 import (
 	"bytes"
-	"html/template"
-	"os"
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/internal/ent/eventqueue"
+	entgen "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/onboarding"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/slacktemplates"
-	"github.com/theopenlane/utils/slack"
 )
 
-// SlackConfig defines the runtime configuration for Slack notifications emitted by listeners
-type SlackConfig struct {
-	// WebhookURL is the endpoint to send messages to
-	WebhookURL string
-	// NewSubscriberMessageFile is an optional path to a bespoke Slack template for new subscriber notifications (cat memes)
-	NewSubscriberMessageFile string
-	// NewUserMessageFile is an optional path to a bespoke Slack template for new user notifications (welcome messages)
-	NewUserMessageFile string
+// RegisterGalaSlackListeners registers Gala mutation listeners that emit Slack notifications.
+func RegisterGalaSlackListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
+	return gala.RegisterListeners(registry,
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
+				Name: gala.TopicName(entgen.TypeSubscriber),
+			},
+			Name:       "slack.subscriber",
+			Operations: []string{ent.OpCreate.String()},
+			Handle:     handleSubscriberMutationGala,
+		},
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
+				Name: gala.TopicName(entgen.TypeUser),
+			},
+			Name:       "slack.user",
+			Operations: []string{ent.OpCreate.String()},
+			Handle:     handleUserMutationGala,
+		},
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
+				Name: gala.TopicName(entgen.TypeOnboarding),
+			},
+			Name:       "slack.onboarding",
+			Operations: []string{ent.OpCreate.String()},
+			Handle:     handleDemoRequestMutationGala,
+		},
+	)
 }
 
-var slackCfg SlackConfig
-
-// SetSlackConfig replaces the active Slack notification configuration
-func SetSlackConfig(cfg SlackConfig) {
-	slackCfg = cfg
-}
-
-// handleSubscriberMutation processes subscriber mutations and publishes Slack notifications when a record is created
-func handleSubscriberMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
-	return sendSlackNotification(
-		ctx,
-		slackCfg.NewSubscriberMessageFile,
+// handleSubscriberMutationGala sends a Slack notification for subscriber create mutations.
+func handleSubscriberMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	return sendSlackNotificationWithEmail(
+		ctx.Context,
+		eventqueue.MutationStringValuePreferPayload(payload, ctx.Envelope.Headers.Properties, subscriber.FieldEmail),
+		subscriberTemplateOverride(),
 		slacktemplates.SubscriberTemplateName,
 	)
 }
 
-// handleUserMutation processes user mutations and publishes Slack notifications when a record is created
-func handleUserMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
-	return sendSlackNotification(
-		ctx,
-		slackCfg.NewUserMessageFile,
+// handleUserMutationGala sends a Slack notification for user create mutations.
+func handleUserMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	return sendSlackNotificationWithEmail(
+		ctx.Context,
+		eventqueue.MutationStringValuePreferPayload(payload, ctx.Envelope.Headers.Properties, user.FieldEmail),
+		userTemplateOverride(),
 		slacktemplates.UserTemplateName,
 	)
 }
 
-// sendSlackNotification renders the desired Slack template and posts the resulting message to the configured webhook
-func sendSlackNotification(ctx *soiree.EventContext, overrideFile, embeddedTemplate string) error {
-	if slackCfg.WebhookURL == "" {
+// handleDemoRequestMutationGala sends a Slack notification when an onboarding is created.
+func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	if !SlackNotificationsEnabled() {
 		return nil
 	}
 
-	email, _ := ctx.PropertyString("email")
+	companyName := eventqueue.MutationStringValuePreferPayload(payload, ctx.Envelope.Headers.Properties, onboarding.FieldCompanyName)
+	domains := eventqueue.MutationStringSliceValue(payload, onboarding.FieldDomains)
 
-	tmpl, err := loadSlackTemplate(ctx, overrideFile, embeddedTemplate)
+	companyDetails, _ := mutationMapValue(payload, onboarding.FieldCompanyDetails)
+	userDetails, _ := mutationMapValue(payload, onboarding.FieldUserDetails)
+	compliance, _ := mutationMapValue(payload, onboarding.FieldCompliance)
+
+	demoRequested, _ := eventqueue.MutationValue(payload, onboarding.FieldDemoRequested)
+
+	var email string
+
+	caller, ok := auth.CallerFromContext(ctx.Context)
+	if ok && caller != nil {
+		email = caller.SubjectEmail
+	}
+
+	tmpl, err := loadSlackTemplate(ctx.Context, "", slacktemplates.DemoRequestName)
 	if err != nil {
 		return err
 	}
 
 	var buf bytes.Buffer
 
-	if err := tmpl.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-		logx.FromContext(ctx.Context()).Debug().Msg("failed to execute slack template")
+	if err := tmpl.Execute(&buf, struct {
+		CompanyName    string
+		Email          string
+		Domains        []string
+		CompanyDetails map[string]any
+		UserDetails    map[string]any
+		Compliance     map[string]any
+		DemoRequested  bool
+	}{
+		CompanyName:    companyName,
+		Email:          email,
+		Domains:        domains,
+		CompanyDetails: companyDetails,
+		UserDetails:    userDetails,
+		Compliance:     compliance,
+		DemoRequested:  demoRequested == true,
+	}); err != nil {
 		return err
 	}
 
-	return slack.New(slackCfg.WebhookURL).Post(ctx.Context(), &slack.Payload{Text: buf.String()})
+	return SendSlackNotification(ctx.Context, buf.String())
 }
 
-// loadSlackTemplate resolves either an override template from disk or a bundled template for Slack notifications
-func loadSlackTemplate(ctx *soiree.EventContext, fileOverride, embeddedTemplate string) (*template.Template, error) {
-	if fileOverride != "" {
-		// Allow operators to provide a bespoke template from disk; fall back to the embedded
-		// version when it is absent so environments without customisation still behave.
-		b, err := os.ReadFile(fileOverride)
-		if err != nil {
-			logx.FromContext(ctx.Context()).Debug().Msg("failed to read slack template")
-
-			return nil, err
-		}
-
-		t, err := template.New("slack").Parse(string(b))
-		if err != nil {
-			logx.FromContext(ctx.Context()).Debug().Msg("failed to parse slack template")
-
-			return nil, err
-		}
-
-		return t, nil
+func mutationMapValue(payload eventqueue.MutationGalaPayload, field string) (map[string]any, bool) {
+	raw, ok := eventqueue.MutationValue(payload, field)
+	if !ok || raw == nil {
+		return nil, false
 	}
 
-	t, err := template.ParseFS(slacktemplates.Templates, embeddedTemplate)
-	if err != nil {
-		logx.FromContext(ctx.Context()).Debug().Msg("failed to parse embedded slack template")
-
-		return nil, err
+	m, ok := raw.(map[string]any)
+	if !ok {
+		return nil, false
 	}
 
-	return t, nil
+	return m, true
 }

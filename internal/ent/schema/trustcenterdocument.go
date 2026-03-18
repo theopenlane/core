@@ -85,7 +85,6 @@ func (TrustCenterDoc) Fields() []ent.Field {
 			Comment("visibility of the document"),
 		field.String("standard_id").
 			Comment("ID of the standard").
-			NotEmpty().
 			Optional(),
 	}
 }

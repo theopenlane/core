@@ -19,6 +19,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -677,6 +680,46 @@ func (_u *CampaignUpdate) ClearMetadata() *CampaignUpdate {
 	return _u
 }
 
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_u *CampaignUpdate) SetEmailBrandingID(v string) *CampaignUpdate {
+	_u.mutation.SetEmailBrandingID(v)
+	return _u
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_u *CampaignUpdate) SetNillableEmailBrandingID(v *string) *CampaignUpdate {
+	if v != nil {
+		_u.SetEmailBrandingID(*v)
+	}
+	return _u
+}
+
+// ClearEmailBrandingID clears the value of the "email_branding_id" field.
+func (_u *CampaignUpdate) ClearEmailBrandingID() *CampaignUpdate {
+	_u.mutation.ClearEmailBrandingID()
+	return _u
+}
+
+// SetEmailTemplateID sets the "email_template_id" field.
+func (_u *CampaignUpdate) SetEmailTemplateID(v string) *CampaignUpdate {
+	_u.mutation.SetEmailTemplateID(v)
+	return _u
+}
+
+// SetNillableEmailTemplateID sets the "email_template_id" field if the given value is not nil.
+func (_u *CampaignUpdate) SetNillableEmailTemplateID(v *string) *CampaignUpdate {
+	if v != nil {
+		_u.SetEmailTemplateID(*v)
+	}
+	return _u
+}
+
+// ClearEmailTemplateID clears the value of the "email_template_id" field.
+func (_u *CampaignUpdate) ClearEmailTemplateID() *CampaignUpdate {
+	_u.mutation.ClearEmailTemplateID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CampaignUpdate) AddBlockedGroupIDs(ids ...string) *CampaignUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -740,6 +783,16 @@ func (_u *CampaignUpdate) SetAssessment(v *Assessment) *CampaignUpdate {
 // SetTemplate sets the "template" edge to the Template entity.
 func (_u *CampaignUpdate) SetTemplate(v *Template) *CampaignUpdate {
 	return _u.SetTemplateID(v.ID)
+}
+
+// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
+func (_u *CampaignUpdate) SetEmailBranding(v *EmailBranding) *CampaignUpdate {
+	return _u.SetEmailBrandingID(v.ID)
+}
+
+// SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
+func (_u *CampaignUpdate) SetEmailTemplate(v *EmailTemplate) *CampaignUpdate {
+	return _u.SetEmailTemplateID(v.ID)
 }
 
 // SetEntity sets the "entity" edge to the Entity entity.
@@ -835,6 +888,21 @@ func (_u *CampaignUpdate) AddIdentityHolders(v ...*IdentityHolder) *CampaignUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddIdentityHolderIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *CampaignUpdate) AddControlIDs(ids ...string) *CampaignUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *CampaignUpdate) AddControls(v ...*Control) *CampaignUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -941,6 +1009,18 @@ func (_u *CampaignUpdate) ClearAssessment() *CampaignUpdate {
 // ClearTemplate clears the "template" edge to the Template entity.
 func (_u *CampaignUpdate) ClearTemplate() *CampaignUpdate {
 	_u.mutation.ClearTemplate()
+	return _u
+}
+
+// ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
+func (_u *CampaignUpdate) ClearEmailBranding() *CampaignUpdate {
+	_u.mutation.ClearEmailBranding()
+	return _u
+}
+
+// ClearEmailTemplate clears the "email_template" edge to the EmailTemplate entity.
+func (_u *CampaignUpdate) ClearEmailTemplate() *CampaignUpdate {
+	_u.mutation.ClearEmailTemplate()
 	return _u
 }
 
@@ -1074,6 +1154,27 @@ func (_u *CampaignUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *CampaignU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *CampaignUpdate) ClearControls() *CampaignUpdate {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *CampaignUpdate) RemoveControlIDs(ids ...string) *CampaignUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *CampaignUpdate) RemoveControls(v ...*Control) *CampaignUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -1633,6 +1734,68 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EmailBrandingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailBrandingTable,
+			Columns: []string{campaign.EmailBrandingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailBrandingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailBrandingTable,
+			Columns: []string{campaign.EmailBrandingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailTemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailTemplateTable,
+			Columns: []string{campaign.EmailTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailTemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailTemplateTable,
+			Columns: []string{campaign.EmailTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.EntityCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1947,6 +2110,54 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2657,6 +2868,46 @@ func (_u *CampaignUpdateOne) ClearMetadata() *CampaignUpdateOne {
 	return _u
 }
 
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_u *CampaignUpdateOne) SetEmailBrandingID(v string) *CampaignUpdateOne {
+	_u.mutation.SetEmailBrandingID(v)
+	return _u
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_u *CampaignUpdateOne) SetNillableEmailBrandingID(v *string) *CampaignUpdateOne {
+	if v != nil {
+		_u.SetEmailBrandingID(*v)
+	}
+	return _u
+}
+
+// ClearEmailBrandingID clears the value of the "email_branding_id" field.
+func (_u *CampaignUpdateOne) ClearEmailBrandingID() *CampaignUpdateOne {
+	_u.mutation.ClearEmailBrandingID()
+	return _u
+}
+
+// SetEmailTemplateID sets the "email_template_id" field.
+func (_u *CampaignUpdateOne) SetEmailTemplateID(v string) *CampaignUpdateOne {
+	_u.mutation.SetEmailTemplateID(v)
+	return _u
+}
+
+// SetNillableEmailTemplateID sets the "email_template_id" field if the given value is not nil.
+func (_u *CampaignUpdateOne) SetNillableEmailTemplateID(v *string) *CampaignUpdateOne {
+	if v != nil {
+		_u.SetEmailTemplateID(*v)
+	}
+	return _u
+}
+
+// ClearEmailTemplateID clears the value of the "email_template_id" field.
+func (_u *CampaignUpdateOne) ClearEmailTemplateID() *CampaignUpdateOne {
+	_u.mutation.ClearEmailTemplateID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CampaignUpdateOne) AddBlockedGroupIDs(ids ...string) *CampaignUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -2720,6 +2971,16 @@ func (_u *CampaignUpdateOne) SetAssessment(v *Assessment) *CampaignUpdateOne {
 // SetTemplate sets the "template" edge to the Template entity.
 func (_u *CampaignUpdateOne) SetTemplate(v *Template) *CampaignUpdateOne {
 	return _u.SetTemplateID(v.ID)
+}
+
+// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
+func (_u *CampaignUpdateOne) SetEmailBranding(v *EmailBranding) *CampaignUpdateOne {
+	return _u.SetEmailBrandingID(v.ID)
+}
+
+// SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
+func (_u *CampaignUpdateOne) SetEmailTemplate(v *EmailTemplate) *CampaignUpdateOne {
+	return _u.SetEmailTemplateID(v.ID)
 }
 
 // SetEntity sets the "entity" edge to the Entity entity.
@@ -2815,6 +3076,21 @@ func (_u *CampaignUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *CampaignU
 		ids[i] = v[i].ID
 	}
 	return _u.AddIdentityHolderIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *CampaignUpdateOne) AddControlIDs(ids ...string) *CampaignUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *CampaignUpdateOne) AddControls(v ...*Control) *CampaignUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -2921,6 +3197,18 @@ func (_u *CampaignUpdateOne) ClearAssessment() *CampaignUpdateOne {
 // ClearTemplate clears the "template" edge to the Template entity.
 func (_u *CampaignUpdateOne) ClearTemplate() *CampaignUpdateOne {
 	_u.mutation.ClearTemplate()
+	return _u
+}
+
+// ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
+func (_u *CampaignUpdateOne) ClearEmailBranding() *CampaignUpdateOne {
+	_u.mutation.ClearEmailBranding()
+	return _u
+}
+
+// ClearEmailTemplate clears the "email_template" edge to the EmailTemplate entity.
+func (_u *CampaignUpdateOne) ClearEmailTemplate() *CampaignUpdateOne {
+	_u.mutation.ClearEmailTemplate()
 	return _u
 }
 
@@ -3054,6 +3342,27 @@ func (_u *CampaignUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *Campai
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *CampaignUpdateOne) ClearControls() *CampaignUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *CampaignUpdateOne) RemoveControlIDs(ids ...string) *CampaignUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *CampaignUpdateOne) RemoveControls(v ...*Control) *CampaignUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -3643,6 +3952,68 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EmailBrandingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailBrandingTable,
+			Columns: []string{campaign.EmailBrandingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailBrandingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailBrandingTable,
+			Columns: []string{campaign.EmailBrandingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EmailTemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailTemplateTable,
+			Columns: []string{campaign.EmailTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EmailTemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailTemplateTable,
+			Columns: []string{campaign.EmailTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.EntityCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3957,6 +4328,54 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

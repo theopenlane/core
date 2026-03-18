@@ -48,6 +48,10 @@ type Tx struct {
 	DiscussionHistory *DiscussionHistoryClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
 	DocumentDataHistory *DocumentDataHistoryClient
+	// EmailBrandingHistory is the client for interacting with the EmailBrandingHistory builders.
+	EmailBrandingHistory *EmailBrandingHistoryClient
+	// EmailTemplateHistory is the client for interacting with the EmailTemplateHistory builders.
+	EmailTemplateHistory *EmailTemplateHistoryClient
 	// EntityHistory is the client for interacting with the EntityHistory builders.
 	EntityHistory *EntityHistoryClient
 	// EntityTypeHistory is the client for interacting with the EntityTypeHistory builders.
@@ -84,6 +88,10 @@ type Tx struct {
 	NarrativeHistory *NarrativeHistoryClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
+	// NotificationPreferenceHistory is the client for interacting with the NotificationPreferenceHistory builders.
+	NotificationPreferenceHistory *NotificationPreferenceHistoryClient
+	// NotificationTemplateHistory is the client for interacting with the NotificationTemplateHistory builders.
+	NotificationTemplateHistory *NotificationTemplateHistoryClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
 	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
@@ -106,6 +114,8 @@ type Tx struct {
 	ReviewHistory *ReviewHistoryClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
+	SLADefinitionHistory *SLADefinitionHistoryClient
 	// ScanHistory is the client for interacting with the ScanHistory builders.
 	ScanHistory *ScanHistoryClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
@@ -116,6 +126,8 @@ type Tx struct {
 	SubcontrolHistory *SubcontrolHistoryClient
 	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
 	SubprocessorHistory *SubprocessorHistoryClient
+	// SystemDetailHistory is the client for interacting with the SystemDetailHistory builders.
+	SystemDetailHistory *SystemDetailHistoryClient
 	// TaskHistory is the client for interacting with the TaskHistory builders.
 	TaskHistory *TaskHistoryClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
@@ -126,6 +138,8 @@ type Tx struct {
 	TrustCenterDocHistory *TrustCenterDocHistoryClient
 	// TrustCenterEntityHistory is the client for interacting with the TrustCenterEntityHistory builders.
 	TrustCenterEntityHistory *TrustCenterEntityHistoryClient
+	// TrustCenterFAQHistory is the client for interacting with the TrustCenterFAQHistory builders.
+	TrustCenterFAQHistory *TrustCenterFAQHistoryClient
 	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
 	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterNDARequestHistory is the client for interacting with the TrustCenterNDARequestHistory builders.
@@ -302,6 +316,8 @@ func (tx *Tx) init() {
 	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
 	tx.DiscussionHistory = NewDiscussionHistoryClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
+	tx.EmailBrandingHistory = NewEmailBrandingHistoryClient(tx.config)
+	tx.EmailTemplateHistory = NewEmailTemplateHistoryClient(tx.config)
 	tx.EntityHistory = NewEntityHistoryClient(tx.config)
 	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)
 	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
@@ -320,6 +336,8 @@ func (tx *Tx) init() {
 	tx.MappedControlHistory = NewMappedControlHistoryClient(tx.config)
 	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
 	tx.NoteHistory = NewNoteHistoryClient(tx.config)
+	tx.NotificationPreferenceHistory = NewNotificationPreferenceHistoryClient(tx.config)
+	tx.NotificationTemplateHistory = NewNotificationTemplateHistoryClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
 	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
@@ -331,16 +349,19 @@ func (tx *Tx) init() {
 	tx.RemediationHistory = NewRemediationHistoryClient(tx.config)
 	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.SLADefinitionHistory = NewSLADefinitionHistoryClient(tx.config)
 	tx.ScanHistory = NewScanHistoryClient(tx.config)
 	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
 	tx.SubprocessorHistory = NewSubprocessorHistoryClient(tx.config)
+	tx.SystemDetailHistory = NewSystemDetailHistoryClient(tx.config)
 	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
 	tx.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(tx.config)
 	tx.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(tx.config)
 	tx.TrustCenterEntityHistory = NewTrustCenterEntityHistoryClient(tx.config)
+	tx.TrustCenterFAQHistory = NewTrustCenterFAQHistoryClient(tx.config)
 	tx.TrustCenterHistory = NewTrustCenterHistoryClient(tx.config)
 	tx.TrustCenterNDARequestHistory = NewTrustCenterNDARequestHistoryClient(tx.config)
 	tx.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(tx.config)

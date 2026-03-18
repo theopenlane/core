@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
 				return ec.fieldContext_TrustCenter_pirschIdentificationCode(ctx, field)
+			case "pirschAccessLink":
+				return ec.fieldContext_TrustCenter_pirschAccessLink(ctx, field)
 			case "previewStatus":
 				return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 			case "subprocessorURL":
@@ -110,6 +112,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_trustCenterEntities(ctx, field)
 			case "trustCenterNdaRequests":
 				return ec.fieldContext_TrustCenter_trustCenterNdaRequests(ctx, field)
+			case "trustCenterFaqs":
+				return ec.fieldContext_TrustCenter_trustCenterFaqs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},
@@ -194,6 +198,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
 				return ec.fieldContext_TrustCenter_pirschIdentificationCode(ctx, field)
+			case "pirschAccessLink":
+				return ec.fieldContext_TrustCenter_pirschAccessLink(ctx, field)
 			case "previewStatus":
 				return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 			case "subprocessorURL":
@@ -228,6 +234,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_trustCenterEntities(ctx, field)
 			case "trustCenterNdaRequests":
 				return ec.fieldContext_TrustCenter_trustCenterNdaRequests(ctx, field)
+			case "trustCenterFaqs":
+				return ec.fieldContext_TrustCenter_trustCenterFaqs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},
@@ -272,10 +280,10 @@ func (ec *executionContext) _TrustCenterCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -311,10 +319,10 @@ func (ec *executionContext) _TrustCenterDeletePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -350,10 +358,10 @@ func (ec *executionContext) _TrustCenterUpdatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

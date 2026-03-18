@@ -9,10 +9,13 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterEntity is the resolver for the createTrustCenterEntity field.
@@ -43,12 +46,36 @@ func (r *mutationResolver) CreateTrustCenterEntity(ctx context.Context, input ge
 
 // CreateBulkTrustCenterEntity is the resolver for the createBulkTrustCenterEntity field.
 func (r *mutationResolver) CreateBulkTrustCenterEntity(ctx context.Context, input []*generated.CreateTrustCenterEntityInput) (*model.TrustCenterEntityBulkCreatePayload, error) {
-	return nil, nil
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	return r.bulkCreateTrustCenterEntity(ctx, input)
 }
 
 // CreateBulkCSVTrustCenterEntity is the resolver for the createBulkCSVTrustCenterEntity field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustCenterEntityBulkCreatePayload, error) {
-	return nil, nil
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterEntityCSVInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterEntity", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTrustCenterEntityInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTrustCenterEntity(ctx, inputs)
 }
 
 // UpdateTrustCenterEntity is the resolver for the updateTrustCenterEntity field.

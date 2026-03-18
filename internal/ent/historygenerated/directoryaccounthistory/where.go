@@ -138,6 +138,21 @@ func DirectorySyncRunID(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldDirectorySyncRunID, v))
 }
 
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// IdentityHolderID applies equality check predicate on the "identity_holder_id" field. It's identical to IdentityHolderIDEQ.
+func IdentityHolderID(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// DirectoryName applies equality check predicate on the "directory_name" field. It's identical to DirectoryNameEQ.
+func DirectoryName(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldDirectoryName, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldExternalID, v))
@@ -156,6 +171,21 @@ func CanonicalEmail(v string) predicate.DirectoryAccountHistory {
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// AvatarRemoteURL applies equality check predicate on the "avatar_remote_url" field. It's identical to AvatarRemoteURLEQ.
+func AvatarRemoteURL(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarLocalFileID applies equality check predicate on the "avatar_local_file_id" field. It's identical to AvatarLocalFileIDEQ.
+func AvatarLocalFileID(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAt applies equality check predicate on the "avatar_updated_at" field. It's identical to AvatarUpdatedAtEQ.
+func AvatarUpdatedAt(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldAvatarUpdatedAt, v))
 }
 
 // GivenName applies equality check predicate on the "given_name" field. It's identical to GivenNameEQ.
@@ -1103,6 +1133,16 @@ func IntegrationIDHasSuffix(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldIntegrationID, v))
 }
 
+// IntegrationIDIsNil applies the IsNil predicate on the "integration_id" field.
+func IntegrationIDIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldIntegrationID))
+}
+
+// IntegrationIDNotNil applies the NotNil predicate on the "integration_id" field.
+func IntegrationIDNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldIntegrationID))
+}
+
 // IntegrationIDEqualFold applies the EqualFold predicate on the "integration_id" field.
 func IntegrationIDEqualFold(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldIntegrationID, v))
@@ -1168,6 +1208,16 @@ func DirectorySyncRunIDHasSuffix(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldDirectorySyncRunID, v))
 }
 
+// DirectorySyncRunIDIsNil applies the IsNil predicate on the "directory_sync_run_id" field.
+func DirectorySyncRunIDIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldDirectorySyncRunID))
+}
+
+// DirectorySyncRunIDNotNil applies the NotNil predicate on the "directory_sync_run_id" field.
+func DirectorySyncRunIDNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldDirectorySyncRunID))
+}
+
 // DirectorySyncRunIDEqualFold applies the EqualFold predicate on the "directory_sync_run_id" field.
 func DirectorySyncRunIDEqualFold(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldDirectorySyncRunID, v))
@@ -1176,6 +1226,231 @@ func DirectorySyncRunIDEqualFold(v string) predicate.DirectoryAccountHistory {
 // DirectorySyncRunIDContainsFold applies the ContainsFold predicate on the "directory_sync_run_id" field.
 func DirectorySyncRunIDContainsFold(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldDirectorySyncRunID, v))
+}
+
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
+// IdentityHolderIDEQ applies the EQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDNEQ applies the NEQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDNEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIn applies the In predicate on the "identity_holder_id" field.
+func IdentityHolderIDIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDNotIn applies the NotIn predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDGT applies the GT predicate on the "identity_holder_id" field.
+func IdentityHolderIDGT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDGTE applies the GTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDGTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLT applies the LT predicate on the "identity_holder_id" field.
+func IdentityHolderIDLT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLTE applies the LTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDLTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContains applies the Contains predicate on the "identity_holder_id" field.
+func IdentityHolderIDContains(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContains(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasPrefix applies the HasPrefix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasPrefix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasPrefix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasSuffix applies the HasSuffix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasSuffix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIsNil applies the IsNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDNotNil applies the NotNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDEqualFold applies the EqualFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDEqualFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContainsFold applies the ContainsFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDContainsFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldIdentityHolderID, v))
+}
+
+// DirectoryNameEQ applies the EQ predicate on the "directory_name" field.
+func DirectoryNameEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameNEQ applies the NEQ predicate on the "directory_name" field.
+func DirectoryNameNEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameIn applies the In predicate on the "directory_name" field.
+func DirectoryNameIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameNotIn applies the NotIn predicate on the "directory_name" field.
+func DirectoryNameNotIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameGT applies the GT predicate on the "directory_name" field.
+func DirectoryNameGT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldDirectoryName, v))
+}
+
+// DirectoryNameGTE applies the GTE predicate on the "directory_name" field.
+func DirectoryNameGTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameLT applies the LT predicate on the "directory_name" field.
+func DirectoryNameLT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldDirectoryName, v))
+}
+
+// DirectoryNameLTE applies the LTE predicate on the "directory_name" field.
+func DirectoryNameLTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameContains applies the Contains predicate on the "directory_name" field.
+func DirectoryNameContains(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContains(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasPrefix applies the HasPrefix predicate on the "directory_name" field.
+func DirectoryNameHasPrefix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasPrefix(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasSuffix applies the HasSuffix predicate on the "directory_name" field.
+func DirectoryNameHasSuffix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldDirectoryName, v))
+}
+
+// DirectoryNameIsNil applies the IsNil predicate on the "directory_name" field.
+func DirectoryNameIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldDirectoryName))
+}
+
+// DirectoryNameNotNil applies the NotNil predicate on the "directory_name" field.
+func DirectoryNameNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldDirectoryName))
+}
+
+// DirectoryNameEqualFold applies the EqualFold predicate on the "directory_name" field.
+func DirectoryNameEqualFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldDirectoryName, v))
+}
+
+// DirectoryNameContainsFold applies the ContainsFold predicate on the "directory_name" field.
+func DirectoryNameContainsFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldDirectoryName, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
@@ -1466,6 +1741,206 @@ func DisplayNameEqualFold(v string) predicate.DirectoryAccountHistory {
 // DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
 func DisplayNameContainsFold(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// AvatarRemoteURLEQ applies the EQ predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLNEQ applies the NEQ predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLIn applies the In predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldAvatarRemoteURL, vs...))
+}
+
+// AvatarRemoteURLNotIn applies the NotIn predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNotIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldAvatarRemoteURL, vs...))
+}
+
+// AvatarRemoteURLGT applies the GT predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLGT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLGTE applies the GTE predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLGTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLLT applies the LT predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLLT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLLTE applies the LTE predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLLTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLContains applies the Contains predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLContains(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContains(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLHasPrefix applies the HasPrefix predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLHasPrefix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasPrefix(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLHasSuffix applies the HasSuffix predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLHasSuffix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLIsNil applies the IsNil predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldAvatarRemoteURL))
+}
+
+// AvatarRemoteURLNotNil applies the NotNil predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldAvatarRemoteURL))
+}
+
+// AvatarRemoteURLEqualFold applies the EqualFold predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLEqualFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLContainsFold applies the ContainsFold predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLContainsFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldAvatarRemoteURL, v))
+}
+
+// AvatarLocalFileIDEQ applies the EQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDNEQ applies the NEQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIn applies the In predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDNotIn applies the NotIn predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDGT applies the GT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDGTE applies the GTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLT applies the LT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLTE applies the LTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContains applies the Contains predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContains(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContains(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasPrefix applies the HasPrefix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasPrefix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasPrefix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasSuffix applies the HasSuffix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasSuffix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIsNil applies the IsNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDNotNil applies the NotNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDEqualFold applies the EqualFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEqualFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContainsFold applies the ContainsFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContainsFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAtEQ applies the EQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtEQ(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtNEQ applies the NEQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNEQ(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIn applies the In predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIn(vs ...time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtNotIn applies the NotIn predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotIn(vs ...time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtGT applies the GT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGT(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtGTE applies the GTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGTE(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLT applies the LT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLT(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLTE applies the LTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLTE(v time.Time) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIsNil applies the IsNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldAvatarUpdatedAt))
+}
+
+// AvatarUpdatedAtNotNil applies the NotNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldAvatarUpdatedAt))
 }
 
 // GivenNameEQ applies the EQ predicate on the "given_name" field.

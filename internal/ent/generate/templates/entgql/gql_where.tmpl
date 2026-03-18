@@ -22,11 +22,21 @@ import (
 		{{- template "import/types" $n }}
 		"{{ $.Config.Package }}/{{ $n.Package }}"
 	{{- end }}
+	"entgo.io/ent/dialect/sql"
+ 	"entgo.io/ent/dialect/sql/sqljson"
+	"github.com/theopenlane/core/internal/ent/schemautil"
 )
 {{ template "import" $ }}
 
 {{ range $n := $gqlNodes }}
 	{{ $comparableFields := list $n.ID }}
+	{{ $stringSliceFields := list }}
+		{{ range $f := filterFields $n.Fields (skipMode "where_input") }}
+		{{- /* field.Strings() becomes []string */ -}}
+		{{- if eq $f.Type.Ident "[]string" }}
+			{{- $stringSliceFields = append $stringSliceFields $f }}
+		{{- end }}
+	{{ end }}
 	{{ $names := nodePaginationNames $n }}
 	{{ with $annotation := $n.ID.Annotations.EntGQL }}
 		{{ if isSkipMode $annotation.Skip "where_input" }}
@@ -37,6 +47,12 @@ import (
 		{{ if $f.Type.Comparable }}
 			{{ $comparableFields = append $comparableFields $f }}
 		{{ end }}
+	{{ end }}
+	{{ $stringSliceFields := list }}
+	{{ range $f := filterFields $n.Fields (skipMode "where_input") }}
+		{{- if eq $f.Type.Ident "[]string" }}
+			{{- $stringSliceFields = append $stringSliceFields $f }}
+		{{- end }}
 	{{ end }}
 	{{ $name := $names.Node }}
 	{{ $input := $names.WhereInput }}
@@ -67,6 +83,12 @@ import (
 				{{- end }}
 				{{ $field }} {{ $type }} `json:"{{ camel $jsonTag }},omitempty"`
 			{{- end }}
+		{{- end }}
+
+		{{- range $f := $stringSliceFields }}
+
+		// "{{ $f.Name }}" JSON-string-array predicates.
+		{{ $f.StructField }}Has    *string   `json:"{{ camel (print $f.Name "_has") }},omitempty"`
 		{{- end }}
 
 		{{ range $e := filterEdges $n.Edges (skipMode "where_input") }}
@@ -181,13 +203,42 @@ import (
 				{{- end }}
 			{{- end }}
 		{{- end }}
+		{{- range $f := $stringSliceFields }}
+		{{- $col := print $n.Package ".Field" $f.StructField }}
+
+		if i.{{ $f.StructField }}Has != nil {
+			v := *i.{{ $f.StructField }}Has
+			predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains({{ $col }}, v))
+			})
+		}
+		{{- end }}
 		{{ range $e := filterEdges $n.Edges (skipMode "where_input") }}
 			{{- $func := print "Has" $e.StructField }}
+			{{- /* Check if edge type is a trust center child (name would usually start with "TrustCenter") with trust_center_id field.
+			       This excludes other entities that may have an optional trust_center_id. */}}
+			{{- $isTrustCenterScoped := false }}
+			{{- if eq (printf "%.11s" $e.Type.Name) "TrustCenter" }}
+				{{- range $f := $e.Type.Fields }}
+					{{- if eq $f.Name "trust_center_id" }}
+						{{- $isTrustCenterScoped = true }}
+					{{- end }}
+				{{- end }}
+			{{- end }}
 			if i.{{ $func }} != nil {
+				{{- if $isTrustCenterScoped }}
+				p := {{ $n.Package }}.{{ $func }}With(
+					predicate.{{ $e.Type.Name }}(schemautil.TrustCenterScopePredicate()),
+				)
+				if !*i.{{ $func }} {
+					p = {{ $n.Package }}.Not(p)
+				}
+				{{- else }}
 				p := {{ $n.Package }}.{{ $func }}()
 				if !*i.{{ $func }} {
 					p = {{ $n.Package }}.Not(p)
 				}
+				{{- end }}
 				predicates = append(predicates, p)
 			}
 			{{- $func = print $func "With" }}
@@ -202,6 +253,9 @@ import (
 				with := make([]predicate.{{ $e.Type.Name }}, 0, len(i.{{ $func }}))
 				{{- if $hasSoftDelete }}
 				with = append(with, {{ $e.Type.Package }}.DeletedAtIsNil())
+				{{- end }}
+				{{- if $isTrustCenterScoped }}
+				with = append(with, predicate.{{ $e.Type.Name }}(schemautil.TrustCenterScopePredicate()))
 				{{- end }}
 				for _, w := range i.{{ $func }} {
 					p, err := w.P()

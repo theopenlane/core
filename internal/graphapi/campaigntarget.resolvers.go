@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -41,7 +42,8 @@ func (r *campaignTargetResolver) WorkflowTimeline(ctx context.Context, obj *gene
 // CreateCampaignTarget is the resolver for the createCampaignTarget field.
 func (r *mutationResolver) CreateCampaignTarget(ctx context.Context, input generated.CreateCampaignTargetInput) (*model.CampaignTargetCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -65,8 +67,9 @@ func (r *mutationResolver) CreateBulkCampaignTarget(ctx context.Context, input [
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -76,7 +79,7 @@ func (r *mutationResolver) CreateBulkCampaignTarget(ctx context.Context, input [
 
 // CreateBulkCSVCampaignTarget is the resolver for the createBulkCSVCampaignTarget field.
 func (r *mutationResolver) CreateBulkCSVCampaignTarget(ctx context.Context, input graphql.Upload) (*model.CampaignTargetBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateCampaignTargetInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.CampaignTargetCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -89,13 +92,27 @@ func (r *mutationResolver) CreateBulkCSVCampaignTarget(ctx context.Context, inpu
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateCampaignTarget(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "CampaignTarget", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateCampaignTargetInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateCampaignTarget(ctx, inputs)
 }
 
 // UpdateCampaignTarget is the resolver for the updateCampaignTarget field.
@@ -106,7 +123,8 @@ func (r *mutationResolver) UpdateCampaignTarget(ctx context.Context, id string, 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

@@ -17,6 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -519,6 +522,34 @@ func (_c *CampaignCreate) SetMetadata(v map[string]interface{}) *CampaignCreate 
 	return _c
 }
 
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_c *CampaignCreate) SetEmailBrandingID(v string) *CampaignCreate {
+	_c.mutation.SetEmailBrandingID(v)
+	return _c
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableEmailBrandingID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetEmailBrandingID(*v)
+	}
+	return _c
+}
+
+// SetEmailTemplateID sets the "email_template_id" field.
+func (_c *CampaignCreate) SetEmailTemplateID(v string) *CampaignCreate {
+	_c.mutation.SetEmailTemplateID(v)
+	return _c
+}
+
+// SetNillableEmailTemplateID sets the "email_template_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableEmailTemplateID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetEmailTemplateID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CampaignCreate) SetID(v string) *CampaignCreate {
 	_c.mutation.SetID(v)
@@ -601,6 +632,16 @@ func (_c *CampaignCreate) SetAssessment(v *Assessment) *CampaignCreate {
 // SetTemplate sets the "template" edge to the Template entity.
 func (_c *CampaignCreate) SetTemplate(v *Template) *CampaignCreate {
 	return _c.SetTemplateID(v.ID)
+}
+
+// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
+func (_c *CampaignCreate) SetEmailBranding(v *EmailBranding) *CampaignCreate {
+	return _c.SetEmailBrandingID(v.ID)
+}
+
+// SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
+func (_c *CampaignCreate) SetEmailTemplate(v *EmailTemplate) *CampaignCreate {
+	return _c.SetEmailTemplateID(v.ID)
 }
 
 // SetEntity sets the "entity" edge to the Entity entity.
@@ -696,6 +737,21 @@ func (_c *CampaignCreate) AddIdentityHolders(v ...*IdentityHolder) *CampaignCrea
 		ids[i] = v[i].ID
 	}
 	return _c.AddIdentityHolderIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_c *CampaignCreate) AddControlIDs(ids ...string) *CampaignCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_c *CampaignCreate) AddControls(v ...*Control) *CampaignCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -1171,6 +1227,42 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 		_node.TemplateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.EmailBrandingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailBrandingTable,
+			Columns: []string{campaign.EmailBrandingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EmailBrandingID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EmailTemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.EmailTemplateTable,
+			Columns: []string{campaign.EmailTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EmailTemplateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.EntityIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1286,6 +1378,23 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.CampaignIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlCampaigns
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -545,6 +545,34 @@ func (_c *CampaignHistoryCreate) SetMetadata(v map[string]interface{}) *Campaign
 	return _c
 }
 
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_c *CampaignHistoryCreate) SetEmailBrandingID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetEmailBrandingID(v)
+	return _c
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableEmailBrandingID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetEmailBrandingID(*v)
+	}
+	return _c
+}
+
+// SetEmailTemplateID sets the "email_template_id" field.
+func (_c *CampaignHistoryCreate) SetEmailTemplateID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetEmailTemplateID(v)
+	return _c
+}
+
+// SetNillableEmailTemplateID sets the "email_template_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableEmailTemplateID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetEmailTemplateID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CampaignHistoryCreate) SetID(v string) *CampaignHistoryCreate {
 	_c.mutation.SetID(v)
@@ -909,6 +937,14 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(campaignhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailBrandingID, field.TypeString, value)
+		_node.EmailBrandingID = value
+	}
+	if value, ok := _c.mutation.EmailTemplateID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailTemplateID, field.TypeString, value)
+		_node.EmailTemplateID = value
 	}
 	return _node, _spec
 }

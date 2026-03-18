@@ -61,6 +61,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}
+	for _, hook := range history.Hooks[*EmailBrandingMutation]() {
+		c.EmailBranding.Use(hook)
+	}
+	for _, hook := range history.Hooks[*EmailTemplateMutation]() {
+		c.EmailTemplate.Use(hook)
+	}
 	for _, hook := range history.Hooks[*EntityMutation]() {
 		c.Entity.Use(hook)
 	}
@@ -115,6 +121,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*NoteMutation]() {
 		c.Note.Use(hook)
 	}
+	for _, hook := range history.Hooks[*NotificationPreferenceMutation]() {
+		c.NotificationPreference.Use(hook)
+	}
+	for _, hook := range history.Hooks[*NotificationTemplateMutation]() {
+		c.NotificationTemplate.Use(hook)
+	}
 	for _, hook := range history.Hooks[*OrgMembershipMutation]() {
 		c.OrgMembership.Use(hook)
 	}
@@ -148,6 +160,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*RiskMutation]() {
 		c.Risk.Use(hook)
 	}
+	for _, hook := range history.Hooks[*SLADefinitionMutation]() {
+		c.SLADefinition.Use(hook)
+	}
 	for _, hook := range history.Hooks[*ScanMutation]() {
 		c.Scan.Use(hook)
 	}
@@ -162,6 +177,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*SubprocessorMutation]() {
 		c.Subprocessor.Use(hook)
+	}
+	for _, hook := range history.Hooks[*SystemDetailMutation]() {
+		c.SystemDetail.Use(hook)
 	}
 	for _, hook := range history.Hooks[*TaskMutation]() {
 		c.Task.Use(hook)
@@ -180,6 +198,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*TrustCenterEntityMutation]() {
 		c.TrustCenterEntity.Use(hook)
+	}
+	for _, hook := range history.Hooks[*TrustCenterFAQMutation]() {
+		c.TrustCenterFAQ.Use(hook)
 	}
 	for _, hook := range history.Hooks[*TrustCenterNDARequestMutation]() {
 		c.TrustCenterNDARequest.Use(hook)

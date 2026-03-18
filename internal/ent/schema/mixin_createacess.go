@@ -33,6 +33,7 @@ var createObjectTypes = []string{
 	"procedure",
 	"program",
 	"risk",
+	"identity_holder",
 	"scheduled_job",
 	"standard",
 	"template",

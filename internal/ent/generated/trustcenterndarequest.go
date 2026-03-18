@@ -11,6 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 )
@@ -50,6 +53,16 @@ type TrustCenterNDARequest struct {
 	AccessLevel enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
 	// status of the NDA request
 	Status enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	// timestamp when the request was approved
+	ApprovedAt *models.DateTime `json:"approved_at,omitempty"`
+	// ID of the user who approved the request
+	ApprovedByUserID *string `json:"approved_by_user_id,omitempty"`
+	// timestamp when the NDA was signed
+	SignedAt *models.DateTime `json:"signed_at,omitempty"`
+	// ID of the signed NDA document data
+	DocumentDataID *string `json:"document_data_id,omitempty"`
+	// ID of the template file at the time the NDA was signed
+	FileID *string `json:"file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterNDARequestQuery when eager-loading is set.
 	Edges        TrustCenterNDARequestEdges `json:"edges"`
@@ -66,11 +79,15 @@ type TrustCenterNDARequestEdges struct {
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// TrustCenterDocs holds the value of the trust_center_docs edge.
 	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
+	// the signed NDA document data
+	Document *DocumentData `json:"document,omitempty"`
+	// the template file at the time the NDA was signed
+	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [6]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -115,14 +132,38 @@ func (e TrustCenterNDARequestEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, e
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
 }
 
+// DocumentOrErr returns the Document value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterNDARequestEdges) DocumentOrErr() (*DocumentData, error) {
+	if e.Document != nil {
+		return e.Document, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: documentdata.Label}
+	}
+	return nil, &NotLoadedError{edge: "document"}
+}
+
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterNDARequestEdges) FileOrErr() (*File, error) {
+	if e.File != nil {
+		return e.File, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenterNDARequest) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case trustcenterndarequest.FieldApprovedAt, trustcenterndarequest.FieldSignedAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case trustcenterndarequest.FieldTags:
 			values[i] = new([]byte)
-		case trustcenterndarequest.FieldID, trustcenterndarequest.FieldCreatedBy, trustcenterndarequest.FieldUpdatedBy, trustcenterndarequest.FieldDeletedBy, trustcenterndarequest.FieldTrustCenterID, trustcenterndarequest.FieldFirstName, trustcenterndarequest.FieldLastName, trustcenterndarequest.FieldEmail, trustcenterndarequest.FieldCompanyName, trustcenterndarequest.FieldReason, trustcenterndarequest.FieldAccessLevel, trustcenterndarequest.FieldStatus:
+		case trustcenterndarequest.FieldID, trustcenterndarequest.FieldCreatedBy, trustcenterndarequest.FieldUpdatedBy, trustcenterndarequest.FieldDeletedBy, trustcenterndarequest.FieldTrustCenterID, trustcenterndarequest.FieldFirstName, trustcenterndarequest.FieldLastName, trustcenterndarequest.FieldEmail, trustcenterndarequest.FieldCompanyName, trustcenterndarequest.FieldReason, trustcenterndarequest.FieldAccessLevel, trustcenterndarequest.FieldStatus, trustcenterndarequest.FieldApprovedByUserID, trustcenterndarequest.FieldDocumentDataID, trustcenterndarequest.FieldFileID:
 			values[i] = new(sql.NullString)
 		case trustcenterndarequest.FieldCreatedAt, trustcenterndarequest.FieldUpdatedAt, trustcenterndarequest.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -241,6 +282,41 @@ func (_m *TrustCenterNDARequest) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.Status = enums.TrustCenterNDARequestStatus(value.String)
 			}
+		case trustcenterndarequest.FieldApprovedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field approved_at", values[i])
+			} else if value.Valid {
+				_m.ApprovedAt = new(models.DateTime)
+				*_m.ApprovedAt = *value.S.(*models.DateTime)
+			}
+		case trustcenterndarequest.FieldApprovedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approved_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ApprovedByUserID = new(string)
+				*_m.ApprovedByUserID = value.String
+			}
+		case trustcenterndarequest.FieldSignedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field signed_at", values[i])
+			} else if value.Valid {
+				_m.SignedAt = new(models.DateTime)
+				*_m.SignedAt = *value.S.(*models.DateTime)
+			}
+		case trustcenterndarequest.FieldDocumentDataID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field document_data_id", values[i])
+			} else if value.Valid {
+				_m.DocumentDataID = new(string)
+				*_m.DocumentDataID = value.String
+			}
+		case trustcenterndarequest.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				_m.FileID = new(string)
+				*_m.FileID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -272,6 +348,16 @@ func (_m *TrustCenterNDARequest) QueryTrustCenter() *TrustCenterQuery {
 // QueryTrustCenterDocs queries the "trust_center_docs" edge of the TrustCenterNDARequest entity.
 func (_m *TrustCenterNDARequest) QueryTrustCenterDocs() *TrustCenterDocQuery {
 	return NewTrustCenterNDARequestClient(_m.config).QueryTrustCenterDocs(_m)
+}
+
+// QueryDocument queries the "document" edge of the TrustCenterNDARequest entity.
+func (_m *TrustCenterNDARequest) QueryDocument() *DocumentDataQuery {
+	return NewTrustCenterNDARequestClient(_m.config).QueryDocument(_m)
+}
+
+// QueryFile queries the "file" edge of the TrustCenterNDARequest entity.
+func (_m *TrustCenterNDARequest) QueryFile() *FileQuery {
+	return NewTrustCenterNDARequestClient(_m.config).QueryFile(_m)
 }
 
 // Update returns a builder for updating this TrustCenterNDARequest.
@@ -345,6 +431,31 @@ func (_m *TrustCenterNDARequest) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.ApprovedAt; v != nil {
+		builder.WriteString("approved_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.ApprovedByUserID; v != nil {
+		builder.WriteString("approved_by_user_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SignedAt; v != nil {
+		builder.WriteString("signed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.DocumentDataID; v != nil {
+		builder.WriteString("document_data_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.FileID; v != nil {
+		builder.WriteString("file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

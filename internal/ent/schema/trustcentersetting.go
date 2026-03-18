@@ -64,7 +64,6 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Optional(),
 		field.Text("overview").
 			Comment("overview of the trust center").
-			MaxLen(trustCenterDescriptionMaxLen).
 			Optional(),
 		field.String("logo_remote_url").
 			Comment("URL of the logo").
@@ -91,6 +90,13 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+		field.String("hero_image_local_file_id").
+			Comment("Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)").
+			Optional().
+			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
@@ -160,6 +166,12 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("whether NDA requests require approval before being processed").
 			Default(false).
 			Optional(),
+		field.String("status_page_url").
+			Comment("URL to the company's status page").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -193,6 +205,15 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 			name:       "favicon_file",
 			t:          File.Type,
 			field:      "favicon_local_file_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(File{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "hero_image_file",
+			t:          File.Type,
+			field:      "hero_image_local_file_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(File{}.Name()),
 			},

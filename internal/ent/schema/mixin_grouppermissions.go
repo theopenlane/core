@@ -188,19 +188,24 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	// this can be used to prevent extra queries to fga for objects that are view by default
 	// except for blocked groups (e.g. controls)
 	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		// add a filter to exclude results that have a blocked group that the user is a member of
-		au, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			return err
+		// anonymous trust center users don't belong to groups, skip group filtering
+		if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+			return nil
 		}
 
-		if skip := groupPermissionInterceptorSkipper(ctx, au); skip {
+		// add a filter to exclude results that have a blocked group that the user is a member of
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
+		}
+
+		if skip := groupPermissionInterceptorSkipper(ctx, caller); skip {
 			return nil
 		}
 
 		groupIDs, err := generated.FromContext(ctx).Group.Query().Where(
 			group.HasMembersWith(
-				groupmembership.UserID(au.SubjectID),
+				groupmembership.UserID(caller.SubjectID),
 			),
 		).IDs(ctx)
 		if err != nil {
@@ -219,14 +224,14 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	})}
 }
 
-func groupPermissionInterceptorSkipper(ctx context.Context, au *auth.AuthenticatedUser) bool {
+func groupPermissionInterceptorSkipper(ctx context.Context, caller *auth.Caller) bool {
 	// bypass if request is set to allowed
 	if _, allow := privacy.DecisionFromContext(ctx); allow {
 		return true
 	}
 
 	// if its a service account, we don't need to filter by groups
-	if au.AuthenticationType == auth.APITokenAuthentication {
+	if caller.AuthenticationType == auth.APITokenAuthentication {
 		return true
 	}
 

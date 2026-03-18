@@ -98,7 +98,13 @@ func (ActionPlan) Fields() []ent.Field {
 func (a ActionPlan) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(a, Risk{}),
-		defaultEdgeFromWithPagination(a, Control{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: a,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeFromWithPagination(a, Program{}),
 		defaultEdgeFromWithPagination(a, Finding{}),
 		defaultEdgeFromWithPagination(a, Vulnerability{}),

@@ -127,6 +127,48 @@ func (_c *UserSettingCreate) SetNillableUserID(v *string) *UserSettingCreate {
 	return _c
 }
 
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *UserSettingCreate) SetDelegateUserID(v string) *UserSettingCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *UserSettingCreate) SetNillableDelegateUserID(v *string) *UserSettingCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateStartAt sets the "delegate_start_at" field.
+func (_c *UserSettingCreate) SetDelegateStartAt(v time.Time) *UserSettingCreate {
+	_c.mutation.SetDelegateStartAt(v)
+	return _c
+}
+
+// SetNillableDelegateStartAt sets the "delegate_start_at" field if the given value is not nil.
+func (_c *UserSettingCreate) SetNillableDelegateStartAt(v *time.Time) *UserSettingCreate {
+	if v != nil {
+		_c.SetDelegateStartAt(*v)
+	}
+	return _c
+}
+
+// SetDelegateEndAt sets the "delegate_end_at" field.
+func (_c *UserSettingCreate) SetDelegateEndAt(v time.Time) *UserSettingCreate {
+	_c.mutation.SetDelegateEndAt(v)
+	return _c
+}
+
+// SetNillableDelegateEndAt sets the "delegate_end_at" field if the given value is not nil.
+func (_c *UserSettingCreate) SetNillableDelegateEndAt(v *time.Time) *UserSettingCreate {
+	if v != nil {
+		_c.SetDelegateEndAt(*v)
+	}
+	return _c
+}
+
 // SetLocked sets the "locked" field.
 func (_c *UserSettingCreate) SetLocked(v bool) *UserSettingCreate {
 	_c.mutation.SetLocked(v)
@@ -441,6 +483,18 @@ func (_c *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(usersetting.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.DelegateUserID(); ok {
+		_spec.SetField(usersetting.FieldDelegateUserID, field.TypeString, value)
+		_node.DelegateUserID = &value
+	}
+	if value, ok := _c.mutation.DelegateStartAt(); ok {
+		_spec.SetField(usersetting.FieldDelegateStartAt, field.TypeTime, value)
+		_node.DelegateStartAt = &value
+	}
+	if value, ok := _c.mutation.DelegateEndAt(); ok {
+		_spec.SetField(usersetting.FieldDelegateEndAt, field.TypeTime, value)
+		_node.DelegateEndAt = &value
 	}
 	if value, ok := _c.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)

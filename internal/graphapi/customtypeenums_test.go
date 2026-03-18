@@ -614,12 +614,15 @@ func TestGlobalEnumLookup(t *testing.T) {
 		(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskResp.CreateTask.Task.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
-	t.Run("invalid enum name fails", func(t *testing.T) {
-		_, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
-			Title:           "Task With Invalid Env",
+	t.Run("auto-creates enum for unknown name", func(t *testing.T) {
+		resp, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+			Title:           "Task With Auto Created Env",
 			EnvironmentName: lo.ToPtr("NonExistentEnvironment"),
 		})
-		assert.ErrorContains(t, err, "does not exist")
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: resp.CreateTask.Task.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
 	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: globalEnvEnum.ID}).MustDelete(testUser1.UserCtx, t)

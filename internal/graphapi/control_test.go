@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryControl(t *testing.T) {
@@ -1023,14 +1022,9 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
-	validFile, err := storage.NewUploadFile("testdata/uploads/clone.csv")
-	assert.NilError(t, err)
-
-	missingControlsFile, err := storage.NewUploadFile("testdata/uploads/all_missing_clone.csv")
-	assert.NilError(t, err)
-
-	updateControlsFile, err := storage.NewUploadFile("testdata/uploads/update.csv")
-	assert.NilError(t, err)
+	validFile := uploadFile(t, "testdata/uploads/clone.csv")
+	missingControlsFile := uploadFile(t, "testdata/uploads/all_missing_clone.csv")
+	updateControlsFile := uploadFile(t, "testdata/uploads/update.csv")
 
 	// create the standard and controls to be cloned
 	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(systemAdminUser.UserCtx, t)
@@ -1048,37 +1042,22 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 		expectedErr           string
 	}{
 		{
-			name: "happy path, clone controls from csv",
-			fileInput: graphql.Upload{
-				File:        validFile.RawFile,
-				Filename:    validFile.OriginalName,
-				Size:        validFile.Size,
-				ContentType: validFile.ContentType,
-			},
+			name:                  "happy path, clone controls from csv",
+			fileInput:             *validFile,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 			expectedCountControls: 2,
 		},
 		{
-			name: "update existing controls, no new controls cloned",
-			fileInput: graphql.Upload{
-				File:        updateControlsFile.RawFile,
-				Filename:    updateControlsFile.OriginalName,
-				Size:        updateControlsFile.Size,
-				ContentType: updateControlsFile.ContentType,
-			},
+			name:                  "update existing controls, no new controls cloned",
+			fileInput:             *updateControlsFile,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 			expectedCountControls: 2,
 		},
 		{
-			name: "controls missing from system, no controls cloned",
-			fileInput: graphql.Upload{
-				File:        missingControlsFile.RawFile,
-				Filename:    missingControlsFile.OriginalName,
-				Size:        missingControlsFile.Size,
-				ContentType: missingControlsFile.ContentType,
-			},
+			name:                  "controls missing from system, no controls cloned",
+			fileInput:             *missingControlsFile,
 			client:                suite.client.api,
 			ctx:                   testUser1.UserCtx,
 			expectedCountControls: 0,
@@ -1106,7 +1085,7 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 
 				switch control.RefCode {
 				case "AA-1":
-					if tc.fileInput.Filename == updateControlsFile.OriginalName {
+					if tc.fileInput.Filename == updateControlsFile.Filename {
 						assert.Check(t, is.Equal(enums.ControlStatusApproved, *control.Status))
 					} else {
 						assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
@@ -1121,9 +1100,9 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 				assert.Check(t, control.ImplementationGuidance != nil)
 
 				switch tc.fileInput.Filename {
-				case updateControlsFile.OriginalName:
+				case updateControlsFile.Filename:
 					assert.Check(t, len(control.ControlImplementations.Edges) == 2)
-				case validFile.OriginalName:
+				case validFile.Filename:
 					assert.Check(t, len(control.ControlImplementations.Edges) == 1)
 				}
 
@@ -1381,6 +1360,168 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
+func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	originalRevision := publicStandard.Revision
+
+	sourceControl := (&ControlBuilder{
+		client:     suite.client,
+		StandardID: publicStandard.ID,
+		AllFields:  true,
+		Title:      "Original Title",
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	sourceSubcontrol := (&SubcontrolBuilder{
+		client:    suite.client,
+		ControlID: sourceControl.ID,
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	// clone the controls first
+	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+
+	clonedControl := resp.CreateControlsByClone.Controls[0]
+	assert.Equal(t, *clonedControl.Title, "Original Title")
+	assert.Equal(t, *clonedControl.ReferenceFrameworkRevision, originalRevision)
+	assert.Assert(t, is.Len(clonedControl.Subcontrols.Edges, 1))
+	assert.Equal(t, clonedControl.Subcontrols.Edges[0].Node.RefCode, sourceSubcontrol.RefCode)
+
+	// then bump up the standard revision to create the drift
+	newRevision := "v0.1.0"
+	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
+		Revision: &newRevision,
+	}, nil)
+	assert.NilError(t, err)
+
+	newSourceSubcontrol := (&SubcontrolBuilder{
+		client:    suite.client,
+		ControlID: sourceControl.ID,
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	resp2, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp2.CreateControlsByClone.Controls, 1))
+
+	updatedControl := resp2.CreateControlsByClone.Controls[0]
+
+	assert.Equal(t, updatedControl.ID, clonedControl.ID)
+
+	assert.Equal(t, *updatedControl.Title, "Original Title")
+
+	assert.Equal(t, *updatedControl.ReferenceFrameworkRevision, newRevision)
+
+	assert.Equal(t, *updatedControl.Status, enums.ControlStatusNotImplemented)
+
+	assert.Assert(t, is.Len(updatedControl.Subcontrols.Edges, 2))
+
+	subcontrolRefCodes := []string{
+		updatedControl.Subcontrols.Edges[0].Node.RefCode,
+		updatedControl.Subcontrols.Edges[1].Node.RefCode,
+	}
+	slices.Sort(subcontrolRefCodes)
+
+	expectedRefCodes := []string{sourceSubcontrol.RefCode, newSourceSubcontrol.RefCode}
+	slices.Sort(expectedRefCodes)
+
+	assert.DeepEqual(t, subcontrolRefCodes, expectedRefCodes)
+
+	// cloning with the same revision should not do anything
+	noopResponse, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(noopResponse.CreateControlsByClone.Controls, 1))
+	assert.Equal(t, noopResponse.CreateControlsByClone.Controls[0].ID, clonedControl.ID)
+	assert.Equal(t, *noopResponse.CreateControlsByClone.Controls[0].ReferenceFrameworkRevision, newRevision)
+
+	// cleanup
+	clonedSubcontrolIDs := []string{}
+	for _, edge := range updatedControl.Subcontrols.Edges {
+		clonedSubcontrolIDs = append(clonedSubcontrolIDs, edge.Node.ID)
+	}
+
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: clonedSubcontrolIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{sourceSubcontrol.ID, newSourceSubcontrol.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	(&ControlBuilder{
+		client:     suite.client,
+		StandardID: publicStandard.ID,
+		AllFields:  true,
+		Title:      "Control With Comments",
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	// clone the controls
+	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+
+	clonedControl := resp.CreateControlsByClone.Controls[0]
+
+	// add comment
+	comment := []interface{}{
+		map[string]interface{}{
+			"children": []interface{}{
+				map[string]interface{}{
+					"text": "my first text",
+				},
+				map[string]interface{}{
+					"comment":           true,
+					"comment_random_id": true,
+					"text":              "another sub comment",
+				},
+			},
+			"id":   "b_bwtnb9l8",
+			"type": "p",
+		},
+	}
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+
+	err = suite.client.db.Control.UpdateOneID(clonedControl.ID).
+		SetDescriptionJSON(comment).
+		Exec(dbCtx)
+	assert.NilError(t, err)
+
+	// bump the standard revision to trigger a revision update on the next clone
+	newRevision := "v0.2.0"
+	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
+		Revision: &newRevision,
+	}, nil)
+	assert.NilError(t, err)
+
+	// clone again — this should succeed even though the existing control has comments on description_json
+	resp2, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp2.CreateControlsByClone.Controls, 1))
+
+	newControl := resp2.CreateControlsByClone.Controls[0]
+	assert.Equal(t, newControl.ID, clonedControl.ID)
+	assert.Equal(t, *newControl.ReferenceFrameworkRevision, newRevision)
+
+	queryResp, err := suite.client.api.GetControlByID(testUser1.UserCtx, clonedControl.ID)
+	assert.NilError(t, err)
+	assert.Check(t, queryResp.Control.DescriptionJSON == nil)
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
 func TestMutationUpdateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
@@ -1502,14 +1643,13 @@ func TestMutationUpdateControl(t *testing.T) {
 			ctx:       context.Background(),
 		},
 		{
-			name: "invalid custom control enum for control kind",
+			name: "auto-create custom control enum for control kind",
 			request: testclient.UpdateControlInput{
 				ControlKindName: lo.ToPtr("InvalidKind"),
 			},
-			controlID:   control.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "value does not exist:",
+			controlID: control.ID,
+			client:    suite.client.apiWithPAT,
+			ctx:       context.Background(),
 		},
 		{
 			name: "update ref code to empty",
@@ -1532,14 +1672,13 @@ func TestMutationUpdateControl(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update not allowed, cannot access another org's custom control kind",
+			name: "update allowed, auto-creates custom control kind in own org",
 			request: testclient.UpdateControlInput{
 				ControlKindName: &kindCustom.Name,
 			},
-			controlID:   controlAnotherOrg.ID,
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: "value does not exist:",
+			controlID: controlAnotherOrg.ID,
+			client:    suite.client.api,
+			ctx:       testUser2.UserCtx,
 		},
 		{
 			name: "update allowed, user added to one of the programs",
@@ -2806,4 +2945,112 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlTrustCenterVisibility(t *testing.T) {
+	// create a trust center for the anonymous context
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+
+	// create a trust center control with default (not visible) visibility
+	publicControl, err := suite.client.db.Control.Create().
+		SetRefCode("OTS-TEST-" + ulids.New().String()).
+		SetTitle("Trust Center Public Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// use the API client to set visibility to publicly visible, which triggers the hook
+	// to create wildcard viewer tuples for anonymous access
+	_, err = suite.client.api.UpdateControl(testUser1.UserCtx, publicControl.ID, testclient.UpdateControlInput{
+		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
+	})
+	assert.NilError(t, err)
+
+	// create a trust center control that is not visible
+	hiddenControl, err := suite.client.db.Control.Create().
+		SetRefCode("OTS-TEST-" + ulids.New().String()).
+		SetTitle("Trust Center Hidden Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// create a regular control (not a trust center control)
+	regularControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+
+	testCases := []struct {
+		name     string
+		client   *testclient.TestClient
+		ctx      context.Context
+		queryID  string
+		errorMsg string
+	}{
+		{
+			name:    "anonymous user can view publicly visible trust center control",
+			client:  suite.client.api,
+			ctx:     anonCtx,
+			queryID: publicControl.ID,
+		},
+		{
+			name:     "anonymous user cannot view hidden trust center control",
+			client:   suite.client.api,
+			ctx:      anonCtx,
+			queryID:  hiddenControl.ID,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "anonymous user cannot view regular control",
+			client:   suite.client.api,
+			ctx:      anonCtx,
+			queryID:  regularControl.ID,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:    "authenticated user can view all their controls",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			queryID: publicControl.ID,
+		},
+		{
+			name:    "authenticated user can view hidden trust center control",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			queryID: hiddenControl.ID,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlByID(tc.ctx, tc.queryID)
+
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+			assert.Check(t, is.Equal(tc.queryID, resp.Control.ID))
+		})
+	}
+
+	// test list query: anonymous user should only see the publicly visible trust center control
+	t.Run("anonymous user list query returns only public trust center controls", func(t *testing.T) {
+		resp, err := suite.client.api.GetAllControls(anonCtx)
+		assert.NilError(t, err)
+		assert.Check(t, resp != nil)
+		assert.Check(t, is.Equal(1, len(resp.Controls.Edges)))
+		assert.Check(t, is.Equal(publicControl.ID, resp.Controls.Edges[0].Node.ID))
+	})
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

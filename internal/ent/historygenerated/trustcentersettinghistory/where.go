@@ -153,6 +153,11 @@ func FaviconLocalFileID(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldFaviconLocalFileID, v))
 }
 
+// HeroImageLocalFileID applies equality check predicate on the "hero_image_local_file_id" field. It's identical to HeroImageLocalFileIDEQ.
+func HeroImageLocalFileID(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldHeroImageLocalFileID, v))
+}
+
 // PrimaryColor applies equality check predicate on the "primary_color" field. It's identical to PrimaryColorEQ.
 func PrimaryColor(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldPrimaryColor, v))
@@ -206,6 +211,11 @@ func SecurityContact(v string) predicate.TrustCenterSettingHistory {
 // NdaApprovalRequired applies equality check predicate on the "nda_approval_required" field. It's identical to NdaApprovalRequiredEQ.
 func NdaApprovalRequired(v bool) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNdaApprovalRequired, v))
+}
+
+// StatusPageURL applies equality check predicate on the "status_page_url" field. It's identical to StatusPageURLEQ.
+func StatusPageURL(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldStatusPageURL, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1393,6 +1403,81 @@ func FaviconLocalFileIDContainsFold(v string) predicate.TrustCenterSettingHistor
 	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldFaviconLocalFileID, v))
 }
 
+// HeroImageLocalFileIDEQ applies the EQ predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDNEQ applies the NEQ predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDNEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDIn applies the In predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldHeroImageLocalFileID, vs...))
+}
+
+// HeroImageLocalFileIDNotIn applies the NotIn predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDNotIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldHeroImageLocalFileID, vs...))
+}
+
+// HeroImageLocalFileIDGT applies the GT predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDGT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDGTE applies the GTE predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDGTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDLT applies the LT predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDLT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDLTE applies the LTE predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDLTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDContains applies the Contains predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDContains(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContains(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDHasPrefix applies the HasPrefix predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDHasPrefix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasPrefix(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDHasSuffix applies the HasSuffix predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDHasSuffix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasSuffix(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDIsNil applies the IsNil predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldHeroImageLocalFileID))
+}
+
+// HeroImageLocalFileIDNotNil applies the NotNil predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldHeroImageLocalFileID))
+}
+
+// HeroImageLocalFileIDEqualFold applies the EqualFold predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDEqualFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEqualFold(FieldHeroImageLocalFileID, v))
+}
+
+// HeroImageLocalFileIDContainsFold applies the ContainsFold predicate on the "hero_image_local_file_id" field.
+func HeroImageLocalFileIDContainsFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldHeroImageLocalFileID, v))
+}
+
 // ThemeModeEQ applies the EQ predicate on the "theme_mode" field.
 func ThemeModeEQ(v enums.TrustCenterThemeMode) predicate.TrustCenterSettingHistory {
 	vc := v
@@ -2186,6 +2271,81 @@ func NdaApprovalRequiredIsNil() predicate.TrustCenterSettingHistory {
 // NdaApprovalRequiredNotNil applies the NotNil predicate on the "nda_approval_required" field.
 func NdaApprovalRequiredNotNil() predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldNdaApprovalRequired))
+}
+
+// StatusPageURLEQ applies the EQ predicate on the "status_page_url" field.
+func StatusPageURLEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldStatusPageURL, v))
+}
+
+// StatusPageURLNEQ applies the NEQ predicate on the "status_page_url" field.
+func StatusPageURLNEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldStatusPageURL, v))
+}
+
+// StatusPageURLIn applies the In predicate on the "status_page_url" field.
+func StatusPageURLIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldStatusPageURL, vs...))
+}
+
+// StatusPageURLNotIn applies the NotIn predicate on the "status_page_url" field.
+func StatusPageURLNotIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldStatusPageURL, vs...))
+}
+
+// StatusPageURLGT applies the GT predicate on the "status_page_url" field.
+func StatusPageURLGT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldStatusPageURL, v))
+}
+
+// StatusPageURLGTE applies the GTE predicate on the "status_page_url" field.
+func StatusPageURLGTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldStatusPageURL, v))
+}
+
+// StatusPageURLLT applies the LT predicate on the "status_page_url" field.
+func StatusPageURLLT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldStatusPageURL, v))
+}
+
+// StatusPageURLLTE applies the LTE predicate on the "status_page_url" field.
+func StatusPageURLLTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldStatusPageURL, v))
+}
+
+// StatusPageURLContains applies the Contains predicate on the "status_page_url" field.
+func StatusPageURLContains(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContains(FieldStatusPageURL, v))
+}
+
+// StatusPageURLHasPrefix applies the HasPrefix predicate on the "status_page_url" field.
+func StatusPageURLHasPrefix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasPrefix(FieldStatusPageURL, v))
+}
+
+// StatusPageURLHasSuffix applies the HasSuffix predicate on the "status_page_url" field.
+func StatusPageURLHasSuffix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasSuffix(FieldStatusPageURL, v))
+}
+
+// StatusPageURLIsNil applies the IsNil predicate on the "status_page_url" field.
+func StatusPageURLIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldStatusPageURL))
+}
+
+// StatusPageURLNotNil applies the NotNil predicate on the "status_page_url" field.
+func StatusPageURLNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldStatusPageURL))
+}
+
+// StatusPageURLEqualFold applies the EqualFold predicate on the "status_page_url" field.
+func StatusPageURLEqualFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEqualFold(FieldStatusPageURL, v))
+}
+
+// StatusPageURLContainsFold applies the ContainsFold predicate on the "status_page_url" field.
+func StatusPageURLContainsFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldStatusPageURL, v))
 }
 
 // And groups predicates with the AND operator between them.

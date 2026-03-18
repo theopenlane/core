@@ -286,6 +286,26 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearFaviconLocalFileID() *TrustCente
 	return _u
 }
 
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetHeroImageLocalFileID(v)
+	return _u
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetHeroImageLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearHeroImageLocalFileID() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearHeroImageLocalFileID()
+	return _u
+}
+
 // SetThemeMode sets the "theme_mode" field.
 func (_u *TrustCenterSettingHistoryUpdate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdate {
 	_u.mutation.SetThemeMode(v)
@@ -526,6 +546,26 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearNdaApprovalRequired() *TrustCent
 	return _u
 }
 
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetStatusPageURL(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableStatusPageURL(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearStatusPageURL() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (_u *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistoryMutation {
 	return _u.mutation
@@ -688,6 +728,12 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.FaviconLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
 	}
+	if value, ok := _u.mutation.HeroImageLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.HeroImageLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
 	}
@@ -762,6 +808,12 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1039,6 +1091,26 @@ func (_u *TrustCenterSettingHistoryUpdateOne) ClearFaviconLocalFileID() *TrustCe
 	return _u
 }
 
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetHeroImageLocalFileID(v)
+	return _u
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetHeroImageLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearHeroImageLocalFileID() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearHeroImageLocalFileID()
+	return _u
+}
+
 // SetThemeMode sets the "theme_mode" field.
 func (_u *TrustCenterSettingHistoryUpdateOne) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdateOne {
 	_u.mutation.SetThemeMode(v)
@@ -1279,6 +1351,26 @@ func (_u *TrustCenterSettingHistoryUpdateOne) ClearNdaApprovalRequired() *TrustC
 	return _u
 }
 
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetStatusPageURL(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableStatusPageURL(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearStatusPageURL() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (_u *TrustCenterSettingHistoryUpdateOne) Mutation() *TrustCenterSettingHistoryMutation {
 	return _u.mutation
@@ -1471,6 +1563,12 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.FaviconLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
 	}
+	if value, ok := _u.mutation.HeroImageLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.HeroImageLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
 	}
@@ -1545,6 +1643,12 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

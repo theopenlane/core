@@ -656,9 +656,99 @@
             "additionalProperties": {},
             "type": "object"
           },
+          "saved_data": {
+            "additionalProperties": {},
+            "type": "object"
+          },
           "uischema": {
             "additionalProperties": {},
             "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "GitHubAppInstallCallbackResponse": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "message": {
+            "description": "Success or error message",
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "GitHubAppInstallRequest": {},
+      "GitHubAppInstallResponse": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "installUrl": {
+            "description": "URL to initiate the GitHub App installation",
+            "example": "https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...",
+            "type": "string"
+          },
+          "message": {
+            "description": "Optional message",
+            "type": "string"
+          },
+          "state": {
+            "description": "State parameter used to validate the installation callback",
+            "example": "eyJvcmdJRCI6IjAxSE...",
+            "type": "string"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "GitHubAppWebhookResponse": {
+        "properties": {
+          "error": {
+            "description": "The error message if the request was unsuccessful",
+            "type": "string"
+          },
+          "error_code": {
+            "description": "The error code if the request was unsuccessful",
+            "type": "string"
+          },
+          "persisted": {
+            "additionalProperties": {
+              "description": "Summary of persisted alerts"
+            },
+            "description": "Summary of persisted alerts",
+            "type": "object"
+          },
+          "success": {
+            "description": "Whether or not the request was successful or not",
+            "type": "boolean"
+          },
+          "unverified": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -733,7 +823,7 @@
         "properties": {
           "Provider": {
             "description": "Integration provider identifier",
-            "example": "gcp_scc",
+            "example": "gcpscc",
             "type": "string"
           },
           "payload": {
@@ -789,7 +879,7 @@
         "properties": {
           "Provider": {
             "description": "Integration provider identifier",
-            "example": "gcp_scc",
+            "example": "gcpscc",
             "type": "string"
           },
           "payload": {
@@ -1612,6 +1702,19 @@
           },
           "unverified": {
             "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "ResendQuestionnaireRequest": {
+        "properties": {
+          "assessment_id": {
+            "description": "The ID of the assessment",
+            "type": "string"
+          },
+          "email": {
+            "description": "The email address associated with the assessment response",
+            "type": "string"
           }
         },
         "type": "object"
@@ -3538,6 +3641,45 @@
         ]
       }
     },
+    "/github/app/webhook": {
+      "post": {
+        "description": "Handle GitHub App security alert webhooks",
+        "operationId": "GitHubAppWebhook",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "persisted": {
+                        "created": 0,
+                        "skipped": 0,
+                        "updated": 0
+                      },
+                      "success": true
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GitHubAppWebhookResponse"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "GitHubAppWebhook",
+        "tags": [
+          "webhooks",
+          "integrations"
+        ]
+      }
+    },
     "/history/query": {
       "post": {
         "description": "Handles all GraphQL queries for historical data",
@@ -3866,7 +4008,6 @@
                 "examples": {
                   "success": {
                     "value": {
-                      "completed_at": "",
                       "document_data_id": "",
                       "status": ""
                     }
@@ -3898,6 +4039,62 @@
           }
         ],
         "summary": "SubmitQuestionnaire",
+        "tags": [
+          "questionnaire"
+        ]
+      }
+    },
+    "/questionnaire/resend": {
+      "post": {
+        "description": "Resend questionnaire authentication email with new JWT token",
+        "operationId": "ResendQuestionnaireEmail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "success": {
+                  "value": {
+                    "assessment_id": "01JCQR8Z9X1A2B3C4D5E6F7G8H",
+                    "email": "vendor@example.com"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/ResendQuestionnaireRequest"
+              }
+            }
+          },
+          "description": "Request body"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "message": "Verification email resent successfully",
+                      "success": true
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ResendReply"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basic": []
+          }
+        ],
+        "summary": "ResendQuestionnaireEmail",
         "tags": [
           "questionnaire"
         ]
@@ -4051,6 +4248,33 @@
         "tags": [
           "webauthn",
           "authentication"
+        ]
+      }
+    },
+    "/resend/webhook": {
+      "post": {
+        "description": "Handle incoming webhook events from Resend for email delivery tracking",
+        "operationId": "ResendWebhook",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Webhook acknowledgment"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "ResendWebhook",
+        "tags": [
+          "webhooks",
+          "email"
         ]
       }
     },
@@ -5683,6 +5907,150 @@
         ]
       }
     },
+    "/v1/integrations/github/app/callback": {
+      "get": {
+        "description": "Handle GitHub App installation callback",
+        "operationId": "GitHubAppInstallCallback",
+        "parameters": [
+          {
+            "description": "GitHub App installation ID",
+            "example": "12345678",
+            "in": "query",
+            "name": "installation_id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "GitHub setup action",
+            "example": "install",
+            "in": "query",
+            "name": "setup_action",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "State parameter used to validate the installation callback",
+            "example": "eyJvcmdJRCI6IjAxSE...",
+            "in": "query",
+            "name": "state",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "message": "GitHub App integration connected",
+                      "success": true
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GitHubAppInstallCallbackResponse"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "GitHubAppInstallCallback",
+        "tags": [
+          "integrations"
+        ]
+      }
+    },
+    "/v1/integrations/github/app/install": {
+      "post": {
+        "description": "Start GitHub App installation flow",
+        "operationId": "GitHubAppInstall",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "success": {
+                  "value": {}
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/GitHubAppInstallRequest"
+              }
+            }
+          },
+          "description": "Request body"
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "installUrl": "https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...",
+                      "state": "eyJvcmdJRCI6IjAxSE...",
+                      "success": true
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GitHubAppInstallResponse"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "oauth2": []
+          },
+          {
+            "basic": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "summary": "GitHubAppInstall",
+        "tags": [
+          "integrations"
+        ]
+      }
+    },
     "/v1/integrations/oauth/callback": {
       "get": {
         "description": "Handle OAuth callback for integration",
@@ -5869,7 +6237,7 @@
               "examples": {
                 "success": {
                   "value": {
-                    "Provider": "gcp_scc",
+                    "Provider": "gcpscc",
                     "payload": {
                       "audience": "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
                       "organizationId": "1234567890",
@@ -5894,7 +6262,7 @@
                 "examples": {
                   "success": {
                     "value": {
-                      "provider": "gcp_scc",
+                      "provider": "gcpscc",
                       "success": true
                     }
                   }
@@ -5960,7 +6328,7 @@
               "examples": {
                 "success": {
                   "value": {
-                    "Provider": "gcp_scc",
+                    "Provider": "gcpscc",
                     "payload": {
                       "config": {
                         "filter": "severity=\"HIGH\"",
@@ -5990,7 +6358,7 @@
                         "totalFindings": 5
                       },
                       "operation": "findings.collect",
-                      "provider": "gcp_scc",
+                      "provider": "gcpscc",
                       "status": "ok",
                       "success": true,
                       "summary": "Collected 5 findings from organizations/123/sources/456"
@@ -7210,7 +7578,7 @@
       "name": "documentation"
     },
     {
-      "description": "VerifyEmail",
+      "description": "ResendWebhook",
       "name": "email"
     },
     {
@@ -7316,6 +7684,10 @@
     {
       "description": "Webfinger",
       "name": "webfinger"
+    },
+    {
+      "description": "GitHubAppWebhook",
+      "name": "webhooks"
     },
     {
       "description": "JWKS",

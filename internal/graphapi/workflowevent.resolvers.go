@@ -17,6 +17,10 @@ import (
 
 // WorkflowEvent is the resolver for the workflowEvent field.
 func (r *queryResolver) WorkflowEvent(ctx context.Context, id string) (*generated.WorkflowEvent, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	query, err := withTransactionalMutation(ctx).WorkflowEvent.Query().Where(workflowevent.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowevent"})
@@ -32,6 +36,10 @@ func (r *queryResolver) WorkflowEvent(ctx context.Context, id string) (*generate
 
 // WorkflowEventTimeline is the resolver for the workflowEventTimeline field.
 func (r *queryResolver) WorkflowEventTimeline(ctx context.Context, workflowInstanceID string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) (*generated.WorkflowEventConnection, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 

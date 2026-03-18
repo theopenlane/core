@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // Font is a custom type for font names
 type Font string
@@ -40,23 +36,20 @@ var (
 	FontInvalid Font = "FONT_INVALID"
 )
 
-// Values returns a slice of strings that represents all the possible values of the Font enum.
-func (Font) Values() (kinds []string) {
-	for _, s := range []Font{
-		FontCourier, FontCourierBold, FontCourierBoldOblique, FontCourierOblique,
-		FontHelvetica, FontHelveticaBold, FontHelveticaBoldOblique, FontHelveticaOblique,
-		FontSymbol, FontTimesBold, FontTimesBoldItalic, FontTimesItalic, FontTimesRoman,
-	} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
+var fontValues = []Font{
+	FontCourier, FontCourierBold, FontCourierBoldOblique, FontCourierOblique,
+	FontHelvetica, FontHelveticaBold, FontHelveticaBoldOblique, FontHelveticaOblique,
+	FontSymbol, FontTimesBold, FontTimesBoldItalic, FontTimesItalic, FontTimesRoman,
 }
+
+// Values returns a slice of strings that represents all the possible values of the Font enum.
+func (Font) Values() []string { return stringValues(fontValues) }
 
 // String returns the font as a string
-func (r Font) String() string {
-	return string(r)
-}
+func (r Font) String() string { return string(r) }
+
+// ToFont returns the font enum based on string input
+func ToFont(r string) *Font { return parse(r, fontValues, nil) }
 
 // ToFontStr converts the enum to the supported font string format
 func (r Font) ToFontStr() string {
@@ -92,53 +85,8 @@ func (r Font) ToFontStr() string {
 	}
 }
 
-// ToFont returns the font enum based on string input
-func ToFont(r string) *Font {
-	switch r := strings.ToUpper(r); r {
-	case FontCourier.String():
-		return &FontCourier
-	case FontCourierBold.String():
-		return &FontCourierBold
-	case FontCourierBoldOblique.String():
-		return &FontCourierBoldOblique
-	case FontCourierOblique.String():
-		return &FontCourierOblique
-	case FontHelvetica.String():
-		return &FontHelvetica
-	case FontHelveticaBold.String():
-		return &FontHelveticaBold
-	case FontHelveticaBoldOblique.String():
-		return &FontHelveticaBoldOblique
-	case FontHelveticaOblique.String():
-		return &FontHelveticaOblique
-	case FontSymbol.String():
-		return &FontSymbol
-	case FontTimesBold.String():
-		return &FontTimesBold
-	case FontTimesBoldItalic.String():
-		return &FontTimesBoldItalic
-	case FontTimesItalic.String():
-		return &FontTimesItalic
-	case FontTimesRoman.String():
-		return &FontTimesRoman
-	default:
-		return nil
-	}
-}
-
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r Font) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r Font) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *Font) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for Font, got: %T", v) //nolint:err113
-	}
-
-	*r = Font(str)
-
-	return nil
-}
+func (r *Font) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

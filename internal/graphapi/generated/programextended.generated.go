@@ -29,6 +29,10 @@ import (
 
 func (ec *executionContext) unmarshalInputAddProgramMembershipInput(ctx context.Context, obj any) (model.AddProgramMembershipInput, error) {
 	var it model.AddProgramMembershipInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -57,12 +61,15 @@ func (ec *executionContext) unmarshalInputAddProgramMembershipInput(ctx context.
 			it.UserID = data
 		}
 	}
-
 	return it, nil
 }
 
 func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx context.Context, obj any) (model.CreateControlWithSubcontrolsInput, error) {
 	var it model.CreateControlWithSubcontrolsInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -91,12 +98,15 @@ func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx 
 			it.Subcontrols = data
 		}
 	}
-
 	return it, nil
 }
 
 func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Context, obj any) (model.CreateFullProgramInput, error) {
 	var it model.CreateFullProgramInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -160,12 +170,15 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 			it.StandardID = data
 		}
 	}
-
 	return it, nil
 }
 
 func (ec *executionContext) unmarshalInputCreateMemberWithProgramInput(ctx context.Context, obj any) (model.CreateMemberWithProgramInput, error) {
 	var it model.CreateMemberWithProgramInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -194,12 +207,15 @@ func (ec *executionContext) unmarshalInputCreateMemberWithProgramInput(ctx conte
 			it.UserID = data
 		}
 	}
-
 	return it, nil
 }
 
 func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx context.Context, obj any) (model.CreateProgramWithMembersInput, error) {
 	var it model.CreateProgramWithMembersInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -256,7 +272,6 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 			it.Categories = data
 		}
 	}
-
 	return it, nil
 }
 

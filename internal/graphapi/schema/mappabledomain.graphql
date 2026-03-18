@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): MappableDomainBulkDeletePayload!
+    """
+    Update multiple existing mappableDomains
+    """
+    updateBulkMappableDomain(
+        """
+        IDs of the mappableDomains to update
+        """
+        ids: [ID!]!
+        """
+        values to update the mappableDomains with
+        """
+        input: UpdateMappableDomainInput!
+    ): MappableDomainBulkUpdatePayload!
+    """
+    Update multiple existing mappableDomains via file upload
+    """
+    updateBulkCSVMappableDomain(
+        """
+        csv file containing values of the mappableDomain, must include ID column
+        """
+        input: Upload!
+    ): MappableDomainBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type MappableDomainBulkDeletePayload {
     Deleted mappableDomain IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkMappableDomain mutation
+"""
+type MappableDomainBulkUpdatePayload {
+    """
+    Updated mappableDomains
+    """
+    mappableDomains: [MappableDomain!]
+    """
+    IDs of the updated mappableDomains
+    """
+    updatedIDs: [ID!]
 }

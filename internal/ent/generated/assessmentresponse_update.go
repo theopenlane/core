@@ -452,6 +452,20 @@ func (_u *AssessmentResponseUpdate) ClearDocumentDataID() *AssessmentResponseUpd
 	return _u
 }
 
+// SetIsDraft sets the "is_draft" field.
+func (_u *AssessmentResponseUpdate) SetIsDraft(v bool) *AssessmentResponseUpdate {
+	_u.mutation.SetIsDraft(v)
+	return _u
+}
+
+// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableIsDraft(v *bool) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetIsDraft(*v)
+	}
+	return _u
+}
+
 // SetAssessment sets the "assessment" edge to the Assessment entity.
 func (_u *AssessmentResponseUpdate) SetAssessment(v *Assessment) *AssessmentResponseUpdate {
 	return _u.SetAssessmentID(v.ID)
@@ -708,6 +722,9 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponse.FieldDueDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IsDraft(); ok {
+		_spec.SetField(assessmentresponse.FieldIsDraft, field.TypeBool, value)
 	}
 	if _u.mutation.AssessmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1303,6 +1320,20 @@ func (_u *AssessmentResponseUpdateOne) ClearDocumentDataID() *AssessmentResponse
 	return _u
 }
 
+// SetIsDraft sets the "is_draft" field.
+func (_u *AssessmentResponseUpdateOne) SetIsDraft(v bool) *AssessmentResponseUpdateOne {
+	_u.mutation.SetIsDraft(v)
+	return _u
+}
+
+// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableIsDraft(v *bool) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetIsDraft(*v)
+	}
+	return _u
+}
+
 // SetAssessment sets the "assessment" edge to the Assessment entity.
 func (_u *AssessmentResponseUpdateOne) SetAssessment(v *Assessment) *AssessmentResponseUpdateOne {
 	return _u.SetAssessmentID(v.ID)
@@ -1589,6 +1620,9 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponse.FieldDueDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IsDraft(); ok {
+		_spec.SetField(assessmentresponse.FieldIsDraft, field.TypeBool, value)
 	}
 	if _u.mutation.AssessmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

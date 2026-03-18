@@ -1,6 +1,7 @@
 ## 🚧 DRAFT: Config from Core PR #{{CORE_PR_NUMBER}}
 
-Draft PR - converts to ready when [core PR #{{CORE_PR_NUMBER}}](https://github.com/theopenlane/core/pull/{{CORE_PR_NUMBER}}) merges.
+Draft preview PR for [core PR #{{CORE_PR_NUMBER}}](https://github.com/theopenlane/core/pull/{{CORE_PR_NUMBER}}).
+This draft will be closed automatically after the core PR merges.
 
 ### Changes:
 {{CHANGE_SUMMARY}}

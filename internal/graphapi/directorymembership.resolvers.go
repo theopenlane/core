@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -20,7 +21,8 @@ import (
 // CreateDirectoryMembership is the resolver for the createDirectoryMembership field.
 func (r *mutationResolver) CreateDirectoryMembership(ctx context.Context, input generated.CreateDirectoryMembershipInput) (*model.DirectoryMembershipCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -44,8 +46,9 @@ func (r *mutationResolver) CreateBulkDirectoryMembership(ctx context.Context, in
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,7 +58,7 @@ func (r *mutationResolver) CreateBulkDirectoryMembership(ctx context.Context, in
 
 // CreateBulkCSVDirectoryMembership is the resolver for the createBulkCSVDirectoryMembership field.
 func (r *mutationResolver) CreateBulkCSVDirectoryMembership(ctx context.Context, input graphql.Upload) (*model.DirectoryMembershipBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateDirectoryMembershipInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.DirectoryMembershipCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -68,13 +71,27 @@ func (r *mutationResolver) CreateBulkCSVDirectoryMembership(ctx context.Context,
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateDirectoryMembership(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "DirectoryMembership", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateDirectoryMembershipInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateDirectoryMembership(ctx, inputs)
 }
 
 // UpdateDirectoryMembership is the resolver for the updateDirectoryMembership field.
@@ -85,7 +102,8 @@ func (r *mutationResolver) UpdateDirectoryMembership(ctx context.Context, id str
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

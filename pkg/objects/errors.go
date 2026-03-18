@@ -9,8 +9,6 @@ var (
 	ErrInsufficientProviderInfo = errors.New("insufficient information to resolve storage client: need integration_id+hush_id or organization_id")
 	// ErrProviderHintsRequired is returned when provider hints are required for file upload
 	ErrProviderHintsRequired = errors.New("provider hints required for file upload")
-	// ErrMutationIDNotFound is returned when mutation ID is not found
-	ErrMutationIDNotFound = errors.New("mutation ID not found")
 	// ErrReaderCannotBeNil is returned when a nil reader is provided to BufferedReader
 	ErrReaderCannotBeNil = errors.New("reader cannot be nil")
 	// ErrFailedToReadData is returned when reading data from a reader fails

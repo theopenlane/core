@@ -16,7 +16,6 @@ Config contains the configuration for the core server
 |[**db**](#db)|`object`||yes|
 |[**jobqueue**](#jobqueue)|`object`|||
 |[**redis**](#redis)|`object`|||
-|[**tracer**](#tracer)|`object`|||
 |[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
@@ -26,8 +25,12 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
+|[**integrationproviders**](#integrationproviders)|`object`|||
+|[**integrationgithubapp**](#integrationgithubapp)|`object`|IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.<br/>||
 |[**workflows**](#workflows)|`object`|||
-|[**emailwebhook**](#emailwebhook)|`object`|EmailWebhook contains webhook configuration for email providers (e.g., Resend).<br/>||
+|[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
+|[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
+|[**shortlinks**](#shortlinks)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -40,9 +43,6 @@ Config contains the configuration for the core server
             "prefixes": {}
         },
         "secure": {},
-        "redirects": {
-            "redirects": {}
-        },
         "cachecontrol": {
             "nocacheheaders": {}
         },
@@ -98,10 +98,6 @@ Config contains the configuration for the core server
         "metrics": {}
     },
     "redis": {},
-    "tracer": {
-        "stdout": {},
-        "otlp": {}
-    },
     "email": {
         "urls": {}
     },
@@ -134,10 +130,15 @@ Config contains the configuration for the core server
     "keywatcher": {},
     "slack": {},
     "integrationoauthprovider": {},
+    "integrationproviders": {},
+    "integrationgithubapp": {},
     "workflows": {
-        "cel": {}
+        "cel": {},
+        "gala": {}
     },
-    "emailwebhook": {}
+    "campaignwebhook": {},
+    "cloudflare": {},
+    "shortlinks": {}
 }
 ```
 
@@ -162,7 +163,6 @@ Server settings for the echo server
 |[**tls**](#servertls)|`object`|TLS settings for the server for secure connections<br/>|no|
 |[**cors**](#servercors)|`object`|Config holds the cors configuration settings<br/>|no|
 |[**secure**](#serversecure)|`object`|Config contains the types used in the mw middleware<br/>|no|
-|[**redirects**](#serverredirects)|`object`|Config contains the types used in executing redirects via the redirect middleware<br/>|no|
 |[**cachecontrol**](#servercachecontrol)|`object`|Config is the config values for the cache-control middleware<br/>|no|
 |[**mime**](#servermime)|`object`|Config defines the config for Mime middleware<br/>|no|
 |[**graphpool**](#servergraphpool)|`object`|PoolConfig contains the settings for the goroutine pool<br/>|no|
@@ -175,6 +175,7 @@ Server settings for the echo server
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
 |**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain<br/>|no|
+|**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -186,9 +187,6 @@ Server settings for the echo server
         "prefixes": {}
     },
     "secure": {},
-    "redirects": {
-        "redirects": {}
-    },
     "cachecontrol": {
         "nocacheheaders": {}
     },
@@ -280,38 +278,6 @@ Config contains the types used in the mw middleware
 |**cspreportonly**|`boolean`|CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false<br/>||
 
 **Additional Properties:** not allowed  
-<a name="serverredirects"></a>
-### server\.redirects: object
-
-Config contains the types used in executing redirects via the redirect middleware
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if the redirect middleware should be enabled<br/>||
-|[**redirects**](#serverredirectsredirects)|`object`|||
-|**code**|`integer`|Code is the HTTP status code to use for the redirect<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "redirects": {}
-}
-```
-
-<a name="serverredirectsredirects"></a>
-#### server\.redirects\.redirects: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**Additional Properties**|`string`|||
-
 <a name="servercachecontrol"></a>
 ### server\.cachecontrol: object
 
@@ -692,6 +658,7 @@ Auth settings including oauth2 providers and token configuration
 |[**redis**](#authtokenredis)|`object`||no|
 |[**apitokens**](#authtokenapitokens)|`object`||no|
 |**assessmentaccessduration**|`integer`||no|
+|**trustcenterndarequestaccessduration**|`integer`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1152,61 +1119,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**maxactiveconns**|`integer`|||
 
 **Additional Properties:** not allowed  
-<a name="tracer"></a>
-## tracer: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|**provider**|`string`|||
-|**environment**|`string`|||
-|[**stdout**](#tracerstdout)|`object`|||
-|[**otlp**](#tracerotlp)|`object`|||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "stdout": {},
-    "otlp": {}
-}
-```
-
-<a name="tracerstdout"></a>
-### tracer\.stdout: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**pretty**|`boolean`|||
-|**disabletimestamp**|`boolean`|||
-
-**Additional Properties:** not allowed  
-<a name="tracerotlp"></a>
-### tracer\.otlp: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**endpoint**|`string`|||
-|**insecure**|`boolean`|||
-|**certificate**|`string`|||
-|[**headers**](#tracerotlpheaders)|`string[]`|||
-|**compression**|`string`|||
-|**timeout**|`integer`|||
-
-**Additional Properties:** not allowed  
-<a name="tracerotlpheaders"></a>
-#### tracer\.otlp\.headers: array
-
-**Items**
-
-**Item Type:** `string`  
 <a name="email"></a>
 ## email: object
 
@@ -1647,8 +1559,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates whether the key watcher is enabled<br/>||
 |**keydir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
-|**externalsecretsintegration**|`boolean`|ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)<br/>||
-|**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>||
 
 **Additional Properties:** not allowed  
 <a name="slack"></a>
@@ -1680,6 +1590,261 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
 
 **Additional Properties:** not allowed  
+<a name="integrationproviders"></a>
+## integrationproviders: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|[**Additional Properties**](#integrationprovidersadditionalproperties)|`object`|||
+
+<a name="integrationprovidersadditionalproperties"></a>
+### integrationproviders\.additionalProperties: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Name**|`string`|||
+|**DisplayName**|`string`|||
+|**Category**|`string`|||
+|**Description**|`string`|||
+|**AuthType**|`string`|||
+|**AuthStartPath**|`string`|||
+|**AuthCallbackPath**|`string`|||
+|**Active**|`boolean`|||
+|**Visible**|`boolean`|||
+|[**Tags**](#integrationprovidersadditionalpropertiestags)|`string[]`|||
+|**LogoURL**|`string`|||
+|**DocsURL**|`string`|||
+|**SchemaVersion**|`string`|||
+|[**oauth**](#integrationprovidersadditionalpropertiesoauth)|`object`|||
+|[**APIKey**](#integrationprovidersadditionalpropertiesapikey)|`object`|||
+|[**UserInfo**](#integrationprovidersadditionalpropertiesuserinfo)|`object`|||
+|[**GoogleWorkloadIdentity**](#integrationprovidersadditionalpropertiesgoogleworkloadidentity)|`object`|||
+|[**GitHubApp**](#integrationprovidersadditionalpropertiesgithubapp)|`object`|||
+|[**AWSSTS**](#integrationprovidersadditionalpropertiesawssts)|`object`|||
+|[**CredentialsSchema**](#integrationprovidersadditionalpropertiescredentialsschema)|`object`|||
+|[**Persistence**](#integrationprovidersadditionalpropertiespersistence)|`object`|||
+|[**Labels**](#integrationprovidersadditionalpropertieslabels)|`object`|||
+|[**Metadata**](#integrationprovidersadditionalpropertiesmetadata)|`object`|||
+|[**Defaults**](#integrationprovidersadditionalpropertiesdefaults)|`object`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "oauth": {
+        "AuthParams": {},
+        "TokenParams": {}
+    },
+    "APIKey": {},
+    "UserInfo": {},
+    "GoogleWorkloadIdentity": {},
+    "GitHubApp": {},
+    "AWSSTS": {},
+    "CredentialsSchema": {},
+    "Persistence": {},
+    "Labels": {},
+    "Metadata": {},
+    "Defaults": {}
+}
+```
+
+<a name="integrationprovidersadditionalpropertiestags"></a>
+#### integrationproviders\.additionalProperties\.Tags: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationprovidersadditionalpropertiesoauth"></a>
+#### integrationproviders\.additionalProperties\.oauth: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**AuthURL**|`string`|||
+|**TokenURL**|`string`|||
+|[**Scopes**](#integrationprovidersadditionalpropertiesoauthscopes)|`string[]`|||
+|**OIDCDiscovery**|`string`|||
+|**RedirectURI**|`string`|||
+|**UsePKCE**|`boolean`|||
+|[**AuthParams**](#integrationprovidersadditionalpropertiesoauthauthparams)|`object`|||
+|[**TokenParams**](#integrationprovidersadditionalpropertiesoauthtokenparams)|`object`|||
+|[**AdditionalHosts**](#integrationprovidersadditionalpropertiesoauthadditionalhosts)|`string[]`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "AuthParams": {},
+    "TokenParams": {}
+}
+```
+
+<a name="integrationprovidersadditionalpropertiesoauthscopes"></a>
+##### integrationproviders\.additionalProperties\.oauth\.Scopes: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationprovidersadditionalpropertiesoauthauthparams"></a>
+##### integrationproviders\.additionalProperties\.oauth\.AuthParams: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`string`|||
+
+<a name="integrationprovidersadditionalpropertiesoauthtokenparams"></a>
+##### integrationproviders\.additionalProperties\.oauth\.TokenParams: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`string`|||
+
+<a name="integrationprovidersadditionalpropertiesoauthadditionalhosts"></a>
+##### integrationproviders\.additionalProperties\.oauth\.AdditionalHosts: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationprovidersadditionalpropertiesapikey"></a>
+#### integrationproviders\.additionalProperties\.APIKey: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**KeyLabel**|`string`|||
+|**HeaderName**|`string`|||
+|**QueryParam**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationprovidersadditionalpropertiesuserinfo"></a>
+#### integrationproviders\.additionalProperties\.UserInfo: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**URL**|`string`|||
+|**Method**|`string`|||
+|**AuthStyle**|`string`|||
+|**AuthHeader**|`string`|||
+|**IDPath**|`string`|||
+|**EmailPath**|`string`|||
+|**LoginPath**|`string`|||
+|**SecondaryEmailURL**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationprovidersadditionalpropertiesgoogleworkloadidentity"></a>
+#### integrationproviders\.additionalProperties\.GoogleWorkloadIdentity: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Audience**|`string`|||
+|**TargetServiceAccount**|`string`|||
+|[**Scopes**](#integrationprovidersadditionalpropertiesgoogleworkloadidentityscopes)|`string[]`|||
+|**TokenLifetime**|`integer`|||
+|**SubjectTokenType**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationprovidersadditionalpropertiesgoogleworkloadidentityscopes"></a>
+##### integrationproviders\.additionalProperties\.GoogleWorkloadIdentity\.Scopes: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationprovidersadditionalpropertiesgithubapp"></a>
+#### integrationproviders\.additionalProperties\.GitHubApp: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**BaseURL**|`string`|||
+|**TokenTTL**|`integer`|||
+|**AppSlug**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationprovidersadditionalpropertiesawssts"></a>
+#### integrationproviders\.additionalProperties\.AWSSTS: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**RoleARN**|`string`|||
+|**SessionName**|`string`|||
+|**Duration**|`integer`|||
+|**Region**|`string`|||
+|**ExternalID**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationprovidersadditionalpropertiescredentialsschema"></a>
+#### integrationproviders\.additionalProperties\.CredentialsSchema: object
+
+**No properties.**
+
+<a name="integrationprovidersadditionalpropertiespersistence"></a>
+#### integrationproviders\.additionalProperties\.Persistence: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**StoreRefreshToken**|`boolean`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationprovidersadditionalpropertieslabels"></a>
+#### integrationproviders\.additionalProperties\.Labels: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`string`|||
+
+<a name="integrationprovidersadditionalpropertiesmetadata"></a>
+#### integrationproviders\.additionalProperties\.Metadata: object
+
+**No properties.**
+
+<a name="integrationprovidersadditionalpropertiesdefaults"></a>
+#### integrationproviders\.additionalProperties\.Defaults: object
+
+**No properties.**
+
+<a name="integrationgithubapp"></a>
+## integrationgithubapp: object
+
+IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the GitHub App integration handlers.<br/>||
+|**appid**|`string`|AppID is the GitHub App ID used for JWT signing.<br/>||
+|**appslug**|`string`|AppSlug is the GitHub App slug used for the install URL.<br/>||
+|**privatekey**|`string`|PrivateKey is the PEM-encoded GitHub App private key.<br/>||
+|**webhooksecret**|`string`|WebhookSecret is the shared secret used to validate GitHub webhooks.<br/>||
+|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful installation.<br/>||
+
+**Additional Properties:** not allowed  
 <a name="workflows"></a>
 ## workflows: object
 
@@ -1689,13 +1854,15 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |[**cel**](#workflowscel)|`object`|||
+|[**gala**](#workflowsgala)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "cel": {}
+    "cel": {},
+    "gala": {}
 }
 ```
 
@@ -1721,18 +1888,63 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**trackstate**|`boolean`|||
 
 **Additional Properties:** not allowed  
-<a name="emailwebhook"></a>
-## emailwebhook: object
+<a name="workflowsgala"></a>
+### workflows\.gala: object
 
-EmailWebhook contains webhook configuration for email providers (e.g., Resend).
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**workercount**|`integer`|||
+|**maxretries**|`integer`|||
+|**failonenqueueerror**|`boolean`|||
+|**queuename**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="campaignwebhook"></a>
+## campaignwebhook: object
+
+CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
 
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled is a flag to enable or disable email webhooks<br/>||
+|**enabled**|`boolean`|Enabled toggles the campaign webhook handler<br/>||
+|**resendapikey**|`string`|ResendAPIKey is the API key used for Resend client initialization<br/>||
 |**resendsecret**|`string`|ResendSecret is the signing secret used to verify Resend webhook payloads<br/>||
+
+**Additional Properties:** not allowed  
+<a name="cloudflare"></a>
+## cloudflare: object
+
+CloudflareConfig contains configuration for Cloudflare integration.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the Cloudflare snapshot handler<br/>||
+|**apitoken**|`string`|APIToken is the API token used for Cloudflare client initialization<br/>||
+|**accountid**|`string`|AccountID is the Cloudflare account ID to use for snapshot operations<br/>||
+|**clientid**|`string`|ClientID is the Cloudflare Access client ID for shortlink API requests<br/>||
+|**clientsecret**|`string`|ClientSecret is the Cloudflare Access client secret for shortlink API requests<br/>||
+
+**Additional Properties:** not allowed  
+<a name="shortlinks"></a>
+## shortlinks: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**endpointurl**|`string`|||
 
 **Additional Properties:** not allowed  
 

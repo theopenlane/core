@@ -44,6 +44,12 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
+	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
+	FieldIdentityHolderID = "identity_holder_id"
+	// FieldDirectoryName holds the string denoting the directory_name field in the database.
+	FieldDirectoryName = "directory_name"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldSecondaryKey holds the string denoting the secondary_key field in the database.
@@ -52,6 +58,12 @@ const (
 	FieldCanonicalEmail = "canonical_email"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
+	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
+	FieldAvatarRemoteURL = "avatar_remote_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
+	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
+	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldGivenName holds the string denoting the given_name field in the database.
 	FieldGivenName = "given_name"
 	// FieldFamilyName holds the string denoting the family_name field in the database.
@@ -92,8 +104,16 @@ const (
 	EdgeIntegration = "integration"
 	// EdgeDirectorySyncRun holds the string denoting the directory_sync_run edge name in mutations.
 	EdgeDirectorySyncRun = "directory_sync_run"
+	// EdgePlatform holds the string denoting the platform edge name in mutations.
+	EdgePlatform = "platform"
+	// EdgeIdentityHolder holds the string denoting the identity_holder edge name in mutations.
+	EdgeIdentityHolder = "identity_holder"
+	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
+	EdgeAvatarFile = "avatar_file"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
 	EdgeGroups = "groups"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// EdgeMemberships holds the string denoting the memberships edge name in mutations.
@@ -135,11 +155,37 @@ const (
 	DirectorySyncRunInverseTable = "directory_sync_runs"
 	// DirectorySyncRunColumn is the table column denoting the directory_sync_run relation/edge.
 	DirectorySyncRunColumn = "directory_sync_run_id"
+	// PlatformTable is the table that holds the platform relation/edge.
+	PlatformTable = "directory_accounts"
+	// PlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformInverseTable = "platforms"
+	// PlatformColumn is the table column denoting the platform relation/edge.
+	PlatformColumn = "platform_id"
+	// IdentityHolderTable is the table that holds the identity_holder relation/edge.
+	IdentityHolderTable = "directory_accounts"
+	// IdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHolderInverseTable = "identity_holders"
+	// IdentityHolderColumn is the table column denoting the identity_holder relation/edge.
+	IdentityHolderColumn = "identity_holder_id"
+	// AvatarFileTable is the table that holds the avatar_file relation/edge.
+	AvatarFileTable = "directory_accounts"
+	// AvatarFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	AvatarFileInverseTable = "files"
+	// AvatarFileColumn is the table column denoting the avatar_file relation/edge.
+	AvatarFileColumn = "avatar_local_file_id"
 	// GroupsTable is the table that holds the groups relation/edge. The primary key declared below.
 	GroupsTable = "directory_memberships"
 	// GroupsInverseTable is the table name for the DirectoryGroup entity.
 	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
 	GroupsInverseTable = "directory_groups"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_directory_accounts"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -172,10 +218,16 @@ var Columns = []string{
 	FieldScopeID,
 	FieldIntegrationID,
 	FieldDirectorySyncRunID,
+	FieldPlatformID,
+	FieldIdentityHolderID,
+	FieldDirectoryName,
 	FieldExternalID,
 	FieldSecondaryKey,
 	FieldCanonicalEmail,
 	FieldDisplayName,
+	FieldAvatarRemoteURL,
+	FieldAvatarLocalFileID,
+	FieldAvatarUpdatedAt,
 	FieldGivenName,
 	FieldFamilyName,
 	FieldJobTitle,
@@ -193,28 +245,19 @@ var Columns = []string{
 	FieldSourceVersion,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "directory_accounts"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"directory_sync_run_directory_accounts",
-	"integration_directory_accounts",
-}
-
 var (
 	// GroupsPrimaryKey and GroupsColumn2 are the table columns denoting the
 	// primary key for the groups relation (M2M).
 	GroupsPrimaryKey = []string{"directory_account_id", "directory_group_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "directory_account_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -227,7 +270,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [8]ent.Hook
 	Interceptors [1]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -246,8 +289,16 @@ var (
 	IntegrationIDValidator func(string) error
 	// DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
 	DirectorySyncRunIDValidator func(string) error
+	// PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
+	PlatformIDValidator func(string) error
 	// ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	ExternalIDValidator func(string) error
+	// AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
+	AvatarRemoteURLValidator func(string) error
+	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
+	DefaultAvatarUpdatedAt func() time.Time
+	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
+	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultProfileHash holds the default value on creation for the "profile_hash" field.
@@ -360,6 +411,21 @@ func ByDirectorySyncRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectorySyncRunID, opts...).ToFunc()
 }
 
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
+// ByIdentityHolderID orders the results by the identity_holder_id field.
+func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDirectoryName orders the results by the directory_name field.
+func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
+}
+
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
@@ -378,6 +444,21 @@ func ByCanonicalEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByAvatarRemoteURL orders the results by the avatar_remote_url field.
+func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
+}
+
+// ByAvatarUpdatedAt orders the results by the avatar_updated_at field.
+func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarUpdatedAt, opts...).ToFunc()
 }
 
 // ByGivenName orders the results by the given_name field.
@@ -485,6 +566,27 @@ func ByDirectorySyncRunField(field string, opts ...sql.OrderTermOption) OrderOpt
 	}
 }
 
+// ByPlatformField orders the results by platform field.
+func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByIdentityHolderField orders the results by identity_holder field.
+func ByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAvatarFileField orders the results by avatar_file field.
+func ByAvatarFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAvatarFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByGroupsCount orders the results by groups count.
 func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -496,6 +598,20 @@ func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -551,14 +667,35 @@ func newIntegrationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, IntegrationTable, IntegrationColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 	)
 }
 func newDirectorySyncRunStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectorySyncRunInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, DirectorySyncRunTable, DirectorySyncRunColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
+	)
+}
+func newPlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
+	)
+}
+func newIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, IdentityHolderTable, IdentityHolderColumn),
+	)
+}
+func newAvatarFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AvatarFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
 	)
 }
 func newGroupsStep() *sqlgraph.Step {
@@ -566,6 +703,13 @@ func newGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(GroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, GroupsTable, GroupsPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

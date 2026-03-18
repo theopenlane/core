@@ -127,7 +127,7 @@ find_draft_prs() {
     local output_format="${3:-number:headRefName:title}"
 
     gh pr list --repo "$repo" --state open --draft --json number,title,headRefName \
-        | jq -r ".[] | select(.title | test(\"$pattern\")) | \"\\(.number):\\(.headRefName):\\(.title)\""
+        | jq -r ".[] | select((.title | test(\"$pattern\"; \"i\")) or (.headRefName | test(\"$pattern\"; \"i\"))) | \"\\(.number):\\(.headRefName):\\(.title)\""
 }
 
 # Function to check if PR exists and get its info
@@ -143,8 +143,18 @@ get_pr_info() {
 find_existing_draft_pr() {
     local repo="$1"
     local core_pr_number="$2"
+    local draft_branch="${3:-draft-core-pr-${core_pr_number}}"
 
-    local existing_pr=$(gh pr list --repo "$repo" --state open --draft --json title,number --jq ".[] | select(.title | contains(\"core PR #${core_pr_number}\")) | .number" | head -1)
+    # Prefer matching by branch so we can reuse PRs even if the title changes.
+    local existing_pr
+    existing_pr=$(gh pr list --repo "$repo" --state open --json number,headRefName,title --jq ".[] | select(.headRefName == \"${draft_branch}\") | .number" | head -1)
+
+    if [[ -n "$existing_pr" ]]; then
+        echo "$existing_pr"
+        return 0
+    fi
+
+    existing_pr=$(gh pr list --repo "$repo" --state open --json title,number --jq ".[] | select(.title | test(\"core PR #${core_pr_number}\"; \"i\")) | .number" | head -1)
     echo "$existing_pr"
 }
 

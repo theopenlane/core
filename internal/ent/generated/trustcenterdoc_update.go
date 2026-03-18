@@ -481,11 +481,6 @@ func (_u *TrustCenterDocUpdate) check() error {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.visibility": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.StandardID(); ok {
-		if err := trustcenterdoc.StandardIDValidator(v); err != nil {
-			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.standard_id": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -1274,11 +1269,6 @@ func (_u *TrustCenterDocUpdateOne) check() error {
 	if v, ok := _u.mutation.Visibility(); ok {
 		if err := trustcenterdoc.VisibilityValidator(v); err != nil {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.visibility": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.StandardID(); ok {
-		if err := trustcenterdoc.StandardIDValidator(v); err != nil {
-			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.standard_id": %w`, err)}
 		}
 	}
 	return nil

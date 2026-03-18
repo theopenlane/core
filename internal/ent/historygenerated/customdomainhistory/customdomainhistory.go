@@ -53,6 +53,8 @@ const (
 	FieldMappableDomainID = "mappable_domain_id"
 	// FieldDNSVerificationID holds the string denoting the dns_verification_id field in the database.
 	FieldDNSVerificationID = "dns_verification_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the customdomainhistory in the database.
 	Table = "custom_domain_history"
 )
@@ -77,6 +79,7 @@ var Columns = []string{
 	FieldCnameRecord,
 	FieldMappableDomainID,
 	FieldDNSVerificationID,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -210,6 +213,11 @@ func ByMappableDomainID(opts ...sql.OrderTermOption) OrderOption {
 // ByDNSVerificationID orders the results by the dns_verification_id field.
 func ByDNSVerificationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDNSVerificationID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -100,6 +102,10 @@ type Campaign struct {
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the email branding associated with the campaign
+	EmailBrandingID string `json:"email_branding_id,omitempty"`
+	// the email template associated with the campaign
+	EmailTemplateID string `json:"email_template_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CampaignQuery when eager-loading is set.
 	Edges        CampaignEdges `json:"edges"`
@@ -124,6 +130,10 @@ type CampaignEdges struct {
 	Assessment *Assessment `json:"assessment,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
+	// EmailBranding holds the value of the email_branding edge.
+	EmailBranding *EmailBranding `json:"email_branding,omitempty"`
+	// EmailTemplate holds the value of the email_template edge.
+	EmailTemplate *EmailTemplate `json:"email_template,omitempty"`
 	// Entity holds the value of the entity edge.
 	Entity *Entity `json:"entity,omitempty"`
 	// CampaignTargets holds the value of the campaign_targets edge.
@@ -138,13 +148,15 @@ type CampaignEdges struct {
 	Groups []*Group `json:"groups,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -155,6 +167,7 @@ type CampaignEdges struct {
 	namedUsers               map[string][]*User
 	namedGroups              map[string][]*Group
 	namedIdentityHolders     map[string][]*IdentityHolder
+	namedControls            map[string][]*Control
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 }
 
@@ -240,12 +253,34 @@ func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
+// EmailBrandingOrErr returns the EmailBranding value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CampaignEdges) EmailBrandingOrErr() (*EmailBranding, error) {
+	if e.EmailBranding != nil {
+		return e.EmailBranding, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: emailbranding.Label}
+	}
+	return nil, &NotLoadedError{edge: "email_branding"}
+}
+
+// EmailTemplateOrErr returns the EmailTemplate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
+	if e.EmailTemplate != nil {
+		return e.EmailTemplate, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: emailtemplate.Label}
+	}
+	return nil, &NotLoadedError{edge: "email_template"}
+}
+
 // EntityOrErr returns the Entity value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -254,7 +289,7 @@ func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -263,7 +298,7 @@ func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -272,7 +307,7 @@ func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error)
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -281,7 +316,7 @@ func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -290,7 +325,7 @@ func (e CampaignEdges) UsersOrErr() ([]*User, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -299,16 +334,25 @@ func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[17] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[18] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -329,7 +373,7 @@ func (*Campaign) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaign.FieldRecurrenceInterval, campaign.FieldRecipientCount, campaign.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldTemplateID, campaign.FieldEntityID, campaign.FieldAssessmentID:
+		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldTemplateID, campaign.FieldEntityID, campaign.FieldAssessmentID, campaign.FieldEmailBrandingID, campaign.FieldEmailTemplateID:
 			values[i] = new(sql.NullString)
 		case campaign.FieldCreatedAt, campaign.FieldUpdatedAt, campaign.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -589,6 +633,18 @@ func (_m *Campaign) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case campaign.FieldEmailBrandingID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
+			} else if value.Valid {
+				_m.EmailBrandingID = value.String
+			}
+		case campaign.FieldEmailTemplateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_template_id", values[i])
+			} else if value.Valid {
+				_m.EmailTemplateID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -642,6 +698,16 @@ func (_m *Campaign) QueryTemplate() *TemplateQuery {
 	return NewCampaignClient(_m.config).QueryTemplate(_m)
 }
 
+// QueryEmailBranding queries the "email_branding" edge of the Campaign entity.
+func (_m *Campaign) QueryEmailBranding() *EmailBrandingQuery {
+	return NewCampaignClient(_m.config).QueryEmailBranding(_m)
+}
+
+// QueryEmailTemplate queries the "email_template" edge of the Campaign entity.
+func (_m *Campaign) QueryEmailTemplate() *EmailTemplateQuery {
+	return NewCampaignClient(_m.config).QueryEmailTemplate(_m)
+}
+
 // QueryEntity queries the "entity" edge of the Campaign entity.
 func (_m *Campaign) QueryEntity() *EntityQuery {
 	return NewCampaignClient(_m.config).QueryEntity(_m)
@@ -675,6 +741,11 @@ func (_m *Campaign) QueryGroups() *GroupQuery {
 // QueryIdentityHolders queries the "identity_holders" edge of the Campaign entity.
 func (_m *Campaign) QueryIdentityHolders() *IdentityHolderQuery {
 	return NewCampaignClient(_m.config).QueryIdentityHolders(_m)
+}
+
+// QueryControls queries the "controls" edge of the Campaign entity.
+func (_m *Campaign) QueryControls() *ControlQuery {
+	return NewCampaignClient(_m.config).QueryControls(_m)
 }
 
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Campaign entity.
@@ -833,6 +904,12 @@ func (_m *Campaign) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("email_branding_id=")
+	builder.WriteString(_m.EmailBrandingID)
+	builder.WriteString(", ")
+	builder.WriteString("email_template_id=")
+	builder.WriteString(_m.EmailTemplateID)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1050,6 +1127,30 @@ func (_m *Campaign) appendNamedIdentityHolders(name string, edges ...*IdentityHo
 		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
 	} else {
 		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControls[name] = []*Control{}
+	} else {
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 

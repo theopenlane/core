@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): ProgramMembershipBulkDeletePayload!
+    """
+    Update multiple existing programMemberships
+    """
+    updateBulkProgramMembership(
+        """
+        IDs of the programMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the programMemberships with
+        """
+        input: UpdateProgramMembershipInput!
+    ): ProgramMembershipBulkUpdatePayload!
+    """
+    Update multiple existing programMemberships via file upload
+    """
+    updateBulkCSVProgramMembership(
+        """
+        csv file containing values of the programMembership, must include ID column
+        """
+        input: Upload!
+    ): ProgramMembershipBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type ProgramMembershipBulkDeletePayload {
     Deleted programMembership IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkProgramMembership mutation
+"""
+type ProgramMembershipBulkUpdatePayload {
+    """
+    Updated programMemberships
+    """
+    programMemberships: [ProgramMembership!]
+    """
+    IDs of the updated programMemberships
+    """
+    updatedIDs: [ID!]
 }

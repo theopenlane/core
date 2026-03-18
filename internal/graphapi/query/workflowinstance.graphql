@@ -22,6 +22,40 @@ query GetAllWorkflowInstances {
         updatedAt
         updatedBy
         workflowDefinitionID
+        workflowProposalID
+        controlID
+        internalPolicyID
+        evidenceID
+        subcontrolID
+        actionPlanID
+        procedureID
+        campaignID
+        campaignTargetID
+        identityHolderID
+        platformID
+        workflowAssignments {
+          edges {
+            node {
+              id
+              displayID
+              status
+              role
+              label
+              required
+              workflowAssignmentTargets {
+                edges {
+                  node {
+                    id
+                    targetType
+                    targetUserID
+                    targetGroupID
+                    resolverKey
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -42,6 +76,40 @@ query GetWorkflowInstanceByID($workflowInstanceId: ID!) {
     updatedAt
     updatedBy
     workflowDefinitionID
+    workflowProposalID
+    controlID
+    internalPolicyID
+    evidenceID
+    subcontrolID
+    actionPlanID
+    procedureID
+    campaignID
+    campaignTargetID
+    identityHolderID
+    platformID
+    workflowAssignments {
+      edges {
+        node {
+          id
+          displayID
+          status
+          role
+          label
+          required
+          workflowAssignmentTargets {
+            edges {
+              node {
+                id
+                targetType
+                targetUserID
+                targetGroupID
+                resolverKey
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -69,6 +137,40 @@ query GetWorkflowInstances($first: Int, $last: Int, $where: WorkflowInstanceWher
         updatedAt
         updatedBy
         workflowDefinitionID
+        workflowProposalID
+        controlID
+        internalPolicyID
+        evidenceID
+        subcontrolID
+        actionPlanID
+        procedureID
+        campaignID
+        campaignTargetID
+        identityHolderID
+        platformID
+        workflowAssignments {
+          edges {
+            node {
+              id
+              displayID
+              status
+              role
+              label
+              required
+              workflowAssignmentTargets {
+                edges {
+                  node {
+                    id
+                    targetType
+                    targetUserID
+                    targetGroupID
+                    resolverKey
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

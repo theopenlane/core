@@ -717,6 +717,74 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// EmailBrandings is the resolver for the emailBrandings field.
+func (r *queryResolver) EmailBrandings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) (*generated.EmailBrandingConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EmailBrandingOrder{
+			{
+				Field:     generated.EmailBrandingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).EmailBranding.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbranding"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEmailBrandingOrder(orderBy),
+		generated.WithEmailBrandingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbranding"})
+	}
+
+	return res, err
+}
+
+// EmailTemplates is the resolver for the emailTemplates field.
+func (r *queryResolver) EmailTemplates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) (*generated.EmailTemplateConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EmailTemplateOrder{
+			{
+				Field:     generated.EmailTemplateOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).EmailTemplate.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplate"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEmailTemplateOrder(orderBy),
+		generated.WithEmailTemplateFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplate"})
+	}
+
+	return res, err
+}
+
 // Entities is the resolver for the entities field.
 func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
 	// set page limit if nothing was set
@@ -1567,6 +1635,74 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 	return res, err
 }
 
+// NotificationPreferences is the resolver for the notificationPreferences field.
+func (r *queryResolver) NotificationPreferences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationPreferenceOrder, where *generated.NotificationPreferenceWhereInput) (*generated.NotificationPreferenceConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.NotificationPreferenceOrder{
+			{
+				Field:     generated.NotificationPreferenceOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).NotificationPreference.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationpreference"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithNotificationPreferenceOrder(orderBy),
+		generated.WithNotificationPreferenceFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationpreference"})
+	}
+
+	return res, err
+}
+
+// NotificationTemplates is the resolver for the notificationTemplates field.
+func (r *queryResolver) NotificationTemplates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) (*generated.NotificationTemplateConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.NotificationTemplateOrder{
+			{
+				Field:     generated.NotificationTemplateOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).NotificationTemplate.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationtemplate"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithNotificationTemplateOrder(orderBy),
+		generated.WithNotificationTemplateFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationtemplate"})
+	}
+
+	return res, err
+}
+
 // OrgMemberships is the resolver for the orgMemberships field.
 func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
 	// set page limit if nothing was set
@@ -1982,6 +2118,40 @@ func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string],
 	return res, err
 }
 
+// SLADefinitions is the resolver for the slaDefinitions field.
+func (r *queryResolver) SLADefinitions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) (*generated.SLADefinitionConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SLADefinitionOrder{
+			{
+				Field:     generated.SLADefinitionOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SLADefinition.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sladefinition"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSLADefinitionOrder(orderBy),
+		generated.WithSLADefinitionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sladefinition"})
+	}
+
+	return res, err
+}
+
 // Scans is the resolver for the scans field.
 func (r *queryResolver) Scans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) (*generated.ScanConnection, error) {
 	// set page limit if nothing was set
@@ -2215,6 +2385,40 @@ func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[st
 		generated.WithSubscriberFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subscriber"})
+	}
+
+	return res, err
+}
+
+// SystemDetails is the resolver for the systemDetails field.
+func (r *queryResolver) SystemDetails(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) (*generated.SystemDetailConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SystemDetailOrder{
+			{
+				Field:     generated.SystemDetailOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SystemDetail.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "systemdetail"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSystemDetailOrder(orderBy),
+		generated.WithSystemDetailFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "systemdetail"})
 	}
 
 	return res, err
@@ -2487,6 +2691,40 @@ func (r *queryResolver) TrustCenterEntities(ctx context.Context, after *entgql.C
 		generated.WithTrustCenterEntityFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
+	}
+
+	return res, err
+}
+
+// TrustCenterFAQs is the resolver for the trustCenterFAQs field.
+func (r *queryResolver) TrustCenterFAQs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) (*generated.TrustCenterFAQConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterFAQOrder{
+			{
+				Field:     generated.TrustCenterFAQOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterFAQ.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterfaq"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterFAQOrder(orderBy),
+		generated.WithTrustCenterFAQFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterfaq"})
 	}
 
 	return res, err
@@ -3038,6 +3276,16 @@ func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r}
 // Subcontrol returns gqlgenerated.SubcontrolResolver implementation.
 func (r *Resolver) Subcontrol() gqlgenerated.SubcontrolResolver { return &subcontrolResolver{r} }
 
+// WorkflowInstance returns gqlgenerated.WorkflowInstanceResolver implementation.
+func (r *Resolver) WorkflowInstance() gqlgenerated.WorkflowInstanceResolver {
+	return &workflowInstanceResolver{r}
+}
+
+// WorkflowProposal returns gqlgenerated.WorkflowProposalResolver implementation.
+func (r *Resolver) WorkflowProposal() gqlgenerated.WorkflowProposalResolver {
+	return &workflowProposalResolver{r}
+}
+
 // CreateDiscussionInput returns gqlgenerated.CreateDiscussionInputResolver implementation.
 func (r *Resolver) CreateDiscussionInput() gqlgenerated.CreateDiscussionInputResolver {
 	return &createDiscussionInputResolver{r}
@@ -3071,6 +3319,11 @@ func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInpu
 // CreateScanInput returns gqlgenerated.CreateScanInputResolver implementation.
 func (r *Resolver) CreateScanInput() gqlgenerated.CreateScanInputResolver {
 	return &createScanInputResolver{r}
+}
+
+// CreateTrustCenterFAQInput returns gqlgenerated.CreateTrustCenterFAQInputResolver implementation.
+func (r *Resolver) CreateTrustCenterFAQInput() gqlgenerated.CreateTrustCenterFAQInputResolver {
+	return &createTrustCenterFAQInputResolver{r}
 }
 
 // CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
@@ -3158,6 +3411,11 @@ func (r *Resolver) UpdateTaskInput() gqlgenerated.UpdateTaskInputResolver {
 	return &updateTaskInputResolver{r}
 }
 
+// UpdateTrustCenterFAQInput returns gqlgenerated.UpdateTrustCenterFAQInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterFAQInput() gqlgenerated.UpdateTrustCenterFAQInputResolver {
+	return &updateTrustCenterFAQInputResolver{r}
+}
+
 // UpdateTrustCenterInput returns gqlgenerated.UpdateTrustCenterInputResolver implementation.
 func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputResolver {
 	return &updateTrustCenterInputResolver{r}
@@ -3176,6 +3434,8 @@ type platformResolver struct{ *Resolver }
 type procedureResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subcontrolResolver struct{ *Resolver }
+type workflowInstanceResolver struct{ *Resolver }
+type workflowProposalResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
@@ -3183,6 +3443,7 @@ type createMappedControlInputResolver struct{ *Resolver }
 type createNotificationInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
 type createScanInputResolver struct{ *Resolver }
+type createTrustCenterFAQInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
@@ -3200,4 +3461,5 @@ type updateStandardInputResolver struct{ *Resolver }
 type updateSubcontrolInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
+type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }

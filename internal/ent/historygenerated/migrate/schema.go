@@ -136,12 +136,13 @@ var (
 		{Name: "email_click_count", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "last_email_event_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "is_draft", Type: field.TypeBool, Default: false},
 	}
 	// AssessmentResponseHistoryTable holds the schema information for the "assessment_response_history" table.
 	AssessmentResponseHistoryTable = &schema.Table{
@@ -194,6 +195,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"}, Default: "TECHNOLOGY"},
 		{Name: "name", Type: field.TypeString},
+		{Name: "display_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "identifier", Type: field.TypeString, Nullable: true},
 		{Name: "website", Type: field.TypeString, Nullable: true},
@@ -265,6 +267,8 @@ var (
 		{Name: "entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "assessment_id", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
+		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
 	}
 	// CampaignHistoryTable holds the schema information for the "campaign_history" table.
 	CampaignHistoryTable = &schema.Table{
@@ -299,7 +303,7 @@ var (
 		{Name: "group_id", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "full_name", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "NOT_STARTED"},
 		{Name: "sent_at", Type: field.TypeTime, Nullable: true},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
@@ -366,6 +370,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description_json", Type: field.TypeJSON, Nullable: true},
@@ -374,7 +379,11 @@ var (
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
+		{Name: "implementation_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PLANNED", "IMPLEMENTED", "PARTIALLY_IMPLEMENTED", "INHERITED", "NOT_APPLICABLE"}, Default: "PLANNED"},
+		{Name: "implementation_description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "public_representation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
+		{Name: "source_name", Type: field.TypeString, Nullable: true},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "reference_framework_revision", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
@@ -404,6 +413,8 @@ var (
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
+		{Name: "is_trust_center_control", Type: field.TypeBool, Nullable: true, Default: false},
 	}
 	// ControlHistoryTable holds the schema information for the "control_history" table.
 	ControlHistoryTable = &schema.Table{
@@ -516,6 +527,7 @@ var (
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{
@@ -584,12 +596,18 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString},
-		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_sync_run_id", Type: field.TypeString, Nullable: true},
+		{Name: "platform_id", Type: field.TypeString, Nullable: true},
+		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_name", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "secondary_key", Type: field.TypeString, Nullable: true},
 		{Name: "canonical_email", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "given_name", Type: field.TypeString, Nullable: true},
 		{Name: "family_name", Type: field.TypeString, Nullable: true},
 		{Name: "job_title", Type: field.TypeString, Nullable: true},
@@ -637,6 +655,7 @@ var (
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString},
+		{Name: "platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString, Nullable: true},
@@ -682,6 +701,7 @@ var (
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString},
+		{Name: "platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
 		{Name: "directory_account_id", Type: field.TypeString},
 		{Name: "directory_group_id", Type: field.TypeString},
@@ -769,6 +789,97 @@ var (
 			},
 		},
 	}
+	// EmailBrandingHistoryColumns holds the columns for the "email_branding_history" table.
+	EmailBrandingHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString, Size: 64},
+		{Name: "brand_name", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_color", Type: field.TypeString, Nullable: true},
+		{Name: "background_color", Type: field.TypeString, Nullable: true},
+		{Name: "text_color", Type: field.TypeString, Nullable: true},
+		{Name: "button_color", Type: field.TypeString, Nullable: true},
+		{Name: "button_text_color", Type: field.TypeString, Nullable: true},
+		{Name: "link_color", Type: field.TypeString, Nullable: true},
+		{Name: "font_family", Type: field.TypeEnum, Nullable: true, Enums: []string{"COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN"}, Default: "HELVETICA"},
+		{Name: "is_default", Type: field.TypeBool, Nullable: true, Default: false},
+	}
+	// EmailBrandingHistoryTable holds the schema information for the "email_branding_history" table.
+	EmailBrandingHistoryTable = &schema.Table{
+		Name:       "email_branding_history",
+		Columns:    EmailBrandingHistoryColumns,
+		PrimaryKey: []*schema.Column{EmailBrandingHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "emailbrandinghistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{EmailBrandingHistoryColumns[1]},
+			},
+		},
+	}
+	// EmailTemplateHistoryColumns holds the columns for the "email_template_history" table.
+	EmailTemplateHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "key", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "format", Type: field.TypeEnum, Enums: []string{"TEXT", "MARKDOWN", "HTML", "JSON"}, Default: "HTML"},
+		{Name: "locale", Type: field.TypeString, Default: "en-US"},
+		{Name: "subject_template", Type: field.TypeString, Nullable: true},
+		{Name: "preheader_template", Type: field.TypeString, Nullable: true},
+		{Name: "body_template", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "text_template", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
+		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "version", Type: field.TypeInt, Default: 1},
+		{Name: "template_context", Type: field.TypeEnum, Nullable: true, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
+		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
+		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString, Nullable: true},
+	}
+	// EmailTemplateHistoryTable holds the schema information for the "email_template_history" table.
+	EmailTemplateHistoryTable = &schema.Table{
+		Name:       "email_template_history",
+		Columns:    EmailTemplateHistoryColumns,
+		PrimaryKey: []*schema.Column{EmailTemplateHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "emailtemplatehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{EmailTemplateHistoryColumns[1]},
+			},
+		},
+	}
 	// EntityHistoryColumns holds the columns for the "entity_history" table.
 	EntityHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -808,7 +919,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true, Default: "active"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"DRAFT", "UNDER_REVIEW", "APPROVED", "RESTRICTED", "REJECTED", "ACTIVE", "SUSPENDED", "OFFBOARDING", "TERMINATED"}, Default: "ACTIVE"},
 		{Name: "approved_for_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "linked_asset_ids", Type: field.TypeJSON, Nullable: true},
 		{Name: "has_soc2", Type: field.TypeBool, Nullable: true, Default: false},
@@ -900,6 +1011,7 @@ var (
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -908,7 +1020,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -1030,7 +1142,11 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "finding_status_name", Type: field.TypeString, Nullable: true},
+		{Name: "finding_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "security_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "NONE"},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "resource_name", Type: field.TypeString, Nullable: true},
@@ -1060,7 +1176,6 @@ var (
 		{Name: "target_details", Type: field.TypeJSON, Nullable: true},
 		{Name: "vector", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_sla", Type: field.TypeInt, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "event_time", Type: field.TypeTime, Nullable: true},
 		{Name: "reported_at", Type: field.TypeTime, Nullable: true},
 		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
@@ -1101,7 +1216,11 @@ var (
 		{Name: "is_managed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
+		{Name: "oscal_role", Type: field.TypeString, Nullable: true},
+		{Name: "oscal_party_uuid", Type: field.TypeString, Nullable: true},
+		{Name: "oscal_contact_uuids", Type: field.TypeJSON, Nullable: true},
 		{Name: "scim_external_id", Type: field.TypeString, Nullable: true},
 		{Name: "scim_display_name", Type: field.TypeString, Nullable: true},
 		{Name: "scim_active", Type: field.TypeBool, Nullable: true, Default: true},
@@ -1298,7 +1417,17 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
 		{Name: "integration_type", Type: field.TypeString, Nullable: true},
+		{Name: "platform_id", Type: field.TypeString, Nullable: true},
+		{Name: "provider_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "config", Type: field.TypeJSON, Nullable: true},
+		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "definition_id", Type: field.TypeString, Nullable: true},
+		{Name: "definition_version", Type: field.TypeString, Nullable: true},
+		{Name: "definition_slug", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED"}, Default: "PENDING"},
+		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
 	}
 	// IntegrationHistoryTable holds the schema information for the "integration_history" table.
 	IntegrationHistoryTable = &schema.Table{
@@ -1357,6 +1486,7 @@ var (
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -1541,6 +1671,106 @@ var (
 				Name:    "notehistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{NoteHistoryColumns[1]},
+			},
+		},
+	}
+	// NotificationPreferenceHistoryColumns holds the columns for the "notification_preference_history" table.
+	NotificationPreferenceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "channel", Type: field.TypeEnum, Enums: []string{"IN_APP", "SLACK", "TEAMS", "EMAIL"}},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ENABLED", "DISABLED", "PENDING", "VERIFIED", "ERROR"}, Default: "ENABLED"},
+		{Name: "provider", Type: field.TypeString, Nullable: true},
+		{Name: "destination", Type: field.TypeString, Nullable: true},
+		{Name: "config", Type: field.TypeJSON, Nullable: true},
+		{Name: "enabled", Type: field.TypeBool, Default: true},
+		{Name: "cadence", Type: field.TypeEnum, Enums: []string{"IMMEDIATE", "DAILY_DIGEST", "WEEKLY_DIGEST", "MONTHLY_DIGEST", "MUTE"}, Default: "IMMEDIATE"},
+		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
+		{Name: "topic_patterns", Type: field.TypeJSON, Nullable: true},
+		{Name: "topic_overrides", Type: field.TypeJSON, Nullable: true},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
+		{Name: "mute_until", Type: field.TypeTime, Nullable: true},
+		{Name: "quiet_hours_start", Type: field.TypeString, Nullable: true},
+		{Name: "quiet_hours_end", Type: field.TypeString, Nullable: true},
+		{Name: "timezone", Type: field.TypeString, Nullable: true},
+		{Name: "is_default", Type: field.TypeBool, Default: false},
+		{Name: "verified_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_error", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+	}
+	// NotificationPreferenceHistoryTable holds the schema information for the "notification_preference_history" table.
+	NotificationPreferenceHistoryTable = &schema.Table{
+		Name:       "notification_preference_history",
+		Columns:    NotificationPreferenceHistoryColumns,
+		PrimaryKey: []*schema.Column{NotificationPreferenceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "notificationpreferencehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationPreferenceHistoryColumns[1]},
+			},
+		},
+	}
+	// NotificationTemplateHistoryColumns holds the columns for the "notification_template_history" table.
+	NotificationTemplateHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "key", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "channel", Type: field.TypeEnum, Enums: []string{"IN_APP", "SLACK", "TEAMS", "EMAIL"}},
+		{Name: "format", Type: field.TypeEnum, Enums: []string{"TEXT", "MARKDOWN", "HTML", "JSON"}, Default: "MARKDOWN"},
+		{Name: "locale", Type: field.TypeString, Default: "en-US"},
+		{Name: "topic_pattern", Type: field.TypeString},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
+		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
+		{Name: "title_template", Type: field.TypeString, Nullable: true},
+		{Name: "subject_template", Type: field.TypeString, Nullable: true},
+		{Name: "body_template", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "blocks", Type: field.TypeJSON, Nullable: true},
+		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
+		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "version", Type: field.TypeInt, Default: 1},
+		{Name: "template_context", Type: field.TypeEnum, Nullable: true, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
+		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
+	}
+	// NotificationTemplateHistoryTable holds the schema information for the "notification_template_history" table.
+	NotificationTemplateHistoryTable = &schema.Table{
+		Name:       "notification_template_history",
+		Columns:    NotificationTemplateHistoryColumns,
+		PrimaryKey: []*schema.Column{NotificationTemplateHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "notificationtemplatehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationTemplateHistoryColumns[1]},
 			},
 		},
 	}
@@ -1738,6 +1968,7 @@ var (
 		{Name: "criticality_name", Type: field.TypeString, Nullable: true},
 		{Name: "criticality_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "business_purpose", Type: field.TypeString, Nullable: true},
@@ -1845,6 +2076,7 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "program_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "ACTION_REQUIRED", "READY_FOR_AUDITOR", "COMPLETED", "ARCHIVED"}, Default: "NOT_STARTED"},
@@ -2030,6 +2262,7 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
 		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
@@ -2054,6 +2287,39 @@ var (
 				Name:    "riskhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{RiskHistoryColumns[1]},
+			},
+		},
+	}
+	// SLADefinitionHistoryColumns holds the columns for the "sla_definition_history" table.
+	SLADefinitionHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "sla_definition_severity_level_name", Type: field.TypeString, Nullable: true},
+		{Name: "sla_definition_severity_level_id", Type: field.TypeString, Nullable: true},
+		{Name: "sla_days", Type: field.TypeInt},
+		{Name: "security_level", Type: field.TypeEnum, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "NONE"},
+	}
+	// SLADefinitionHistoryTable holds the schema information for the "sla_definition_history" table.
+	SLADefinitionHistoryTable = &schema.Table{
+		Name:       "sla_definition_history",
+		Columns:    SLADefinitionHistoryColumns,
+		PrimaryKey: []*schema.Column{SLADefinitionHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "sladefinitionhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SLADefinitionHistoryColumns[1]},
 			},
 		},
 	}
@@ -2200,6 +2466,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description_json", Type: field.TypeJSON, Nullable: true},
@@ -2208,7 +2475,11 @@ var (
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE"}, Default: "NOT_IMPLEMENTED"},
+		{Name: "implementation_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PLANNED", "IMPLEMENTED", "PARTIALLY_IMPLEMENTED", "INHERITED", "NOT_APPLICABLE"}, Default: "PLANNED"},
+		{Name: "implementation_description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "public_representation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
+		{Name: "source_name", Type: field.TypeString, Nullable: true},
 		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "reference_framework_revision", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
@@ -2283,6 +2554,45 @@ var (
 			},
 		},
 	}
+	// SystemDetailHistoryColumns holds the columns for the "system_detail_history" table.
+	SystemDetailHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "program_id", Type: field.TypeString, Nullable: true},
+		{Name: "platform_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_name", Type: field.TypeString},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "authorization_boundary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "sensitivity_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "UNKNOWN"}, Default: "UNKNOWN"},
+		{Name: "last_reviewed", Type: field.TypeTime, Nullable: true},
+		{Name: "revision_history", Type: field.TypeJSON, Nullable: true},
+		{Name: "oscal_metadata_json", Type: field.TypeJSON, Nullable: true},
+	}
+	// SystemDetailHistoryTable holds the schema information for the "system_detail_history" table.
+	SystemDetailHistoryTable = &schema.Table{
+		Name:       "system_detail_history",
+		Columns:    SystemDetailHistoryColumns,
+		PrimaryKey: []*schema.Column{SystemDetailHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "systemdetailhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SystemDetailHistoryColumns[1]},
+			},
+		},
+	}
 	// TaskHistoryColumns holds the columns for the "task_history" table.
 	TaskHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2304,6 +2614,7 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
@@ -2469,6 +2780,38 @@ var (
 			},
 		},
 	}
+	// TrustCenterFaqsHistoryColumns holds the columns for the "trust_center_faqs_history" table.
+	TrustCenterFaqsHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "note_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "reference_link", Type: field.TypeString, Nullable: true},
+		{Name: "display_order", Type: field.TypeInt, Nullable: true, Default: 0},
+	}
+	// TrustCenterFaqsHistoryTable holds the schema information for the "trust_center_faqs_history" table.
+	TrustCenterFaqsHistoryTable = &schema.Table{
+		Name:       "trust_center_faqs_history",
+		Columns:    TrustCenterFaqsHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterFaqsHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterfaqhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterFaqsHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterHistoryColumns holds the columns for the "trust_center_history" table.
 	TrustCenterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2488,6 +2831,7 @@ var (
 		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
+		{Name: "pirsch_access_link", Type: field.TypeString, Nullable: true},
 		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 		{Name: "subprocessor_url", Type: field.TypeString, Nullable: true},
 	}
@@ -2524,7 +2868,12 @@ var (
 		{Name: "company_name", Type: field.TypeString, Nullable: true},
 		{Name: "reason", Type: field.TypeString, Nullable: true},
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED"}, Default: "REQUESTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
+		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterNdaRequestHistoryTable holds the schema information for the "trust_center_nda_request_history" table.
 	TrustCenterNdaRequestHistoryTable = &schema.Table{
@@ -2555,11 +2904,12 @@ var (
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_name", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "company_description", Type: field.TypeString, Nullable: true, Size: 1024},
-		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
+		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "theme_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"EASY", "ADVANCED"}, Default: "EASY"},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
 		{Name: "font", Type: field.TypeString, Nullable: true},
@@ -2573,6 +2923,7 @@ var (
 		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "security_contact", Type: field.TypeString, Nullable: true},
 		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -2599,10 +2950,11 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_subprocessor_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_subprocessor_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "subprocessor_id", Type: field.TypeString},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "countries", Type: field.TypeJSON, Nullable: true},
-		{Name: "category", Type: field.TypeString, Size: 255},
 	}
 	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
 	TrustCenterSubprocessorHistoryTable = &schema.Table{
@@ -2713,6 +3065,9 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "delegate_start_at", Type: field.TypeTime, Nullable: true},
+		{Name: "delegate_end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "locked", Type: field.TypeBool, Default: false},
 		{Name: "silenced_at", Type: field.TypeTime, Nullable: true},
 		{Name: "suspended_at", Type: field.TypeTime, Nullable: true},
@@ -2757,7 +3112,11 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_status_name", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "security_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "NONE"},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "cve_id", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
@@ -2768,7 +3127,6 @@ var (
 		{Name: "impact", Type: field.TypeFloat64, Nullable: true},
 		{Name: "exploitability", Type: field.TypeFloat64, Nullable: true},
 		{Name: "priority", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "vector", Type: field.TypeString, Nullable: true},
@@ -2820,7 +3178,7 @@ var (
 		{Name: "role", Type: field.TypeString, Default: "APPROVER"},
 		{Name: "label", Type: field.TypeString, Nullable: true},
 		{Name: "required", Type: field.TypeBool, Default: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "APPROVED", "REJECTED"}, Default: "PENDING"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "APPROVED", "REJECTED", "CHANGES_REQUESTED"}, Default: "PENDING"},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "rejection_metadata", Type: field.TypeJSON, Nullable: true},
@@ -2829,6 +3187,7 @@ var (
 		{Name: "actor_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "actor_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "due_at", Type: field.TypeTime, Nullable: true},
 	}
 	// WorkflowAssignmentHistoryTable holds the schema information for the "workflow_assignment_history" table.
 	WorkflowAssignmentHistoryTable = &schema.Table{
@@ -2909,7 +3268,7 @@ var (
 		{Name: "trigger_fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_edges", Type: field.TypeJSON, Nullable: true},
-		{Name: "approval_submission_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL_SUBMIT", "AUTO_SUBMIT"}, Default: "MANUAL_SUBMIT"},
+		{Name: "approval_submission_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL_SUBMIT", "AUTO_SUBMIT"}, Default: "AUTO_SUBMIT"},
 		{Name: "definition_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "tracked_fields", Type: field.TypeJSON, Nullable: true},
 	}
@@ -3065,6 +3424,8 @@ var (
 		DirectoryMembershipHistoryTable,
 		DiscussionHistoryTable,
 		DocumentDataHistoryTable,
+		EmailBrandingHistoryTable,
+		EmailTemplateHistoryTable,
 		EntityHistoryTable,
 		EntityTypeHistoryTable,
 		EvidenceHistoryTable,
@@ -3083,6 +3444,8 @@ var (
 		MappedControlHistoryTable,
 		NarrativeHistoryTable,
 		NoteHistoryTable,
+		NotificationPreferenceHistoryTable,
+		NotificationTemplateHistoryTable,
 		OrgMembershipHistoryTable,
 		OrgSubscriptionHistoryTable,
 		OrganizationHistoryTable,
@@ -3094,16 +3457,19 @@ var (
 		RemediationHistoryTable,
 		ReviewHistoryTable,
 		RiskHistoryTable,
+		SLADefinitionHistoryTable,
 		ScanHistoryTable,
 		ScheduledJobHistoryTable,
 		StandardHistoryTable,
 		SubcontrolHistoryTable,
 		SubprocessorHistoryTable,
+		SystemDetailHistoryTable,
 		TaskHistoryTable,
 		TemplateHistoryTable,
 		TrustCenterComplianceHistoryTable,
 		TrustCenterDocHistoryTable,
 		TrustCenterEntityHistoryTable,
+		TrustCenterFaqsHistoryTable,
 		TrustCenterHistoryTable,
 		TrustCenterNdaRequestHistoryTable,
 		TrustCenterSettingHistoryTable,
@@ -3173,6 +3539,12 @@ func init() {
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
 		Table: "document_data_history",
 	}
+	EmailBrandingHistoryTable.Annotation = &entsql.Annotation{
+		Table: "email_branding_history",
+	}
+	EmailTemplateHistoryTable.Annotation = &entsql.Annotation{
+		Table: "email_template_history",
+	}
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
@@ -3227,6 +3599,12 @@ func init() {
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
+	NotificationPreferenceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "notification_preference_history",
+	}
+	NotificationTemplateHistoryTable.Annotation = &entsql.Annotation{
+		Table: "notification_template_history",
+	}
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
@@ -3260,6 +3638,9 @@ func init() {
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
+	SLADefinitionHistoryTable.Annotation = &entsql.Annotation{
+		Table: "sla_definition_history",
+	}
 	ScanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scan_history",
 	}
@@ -3275,6 +3656,9 @@ func init() {
 	SubprocessorHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subprocessor_history",
 	}
+	SystemDetailHistoryTable.Annotation = &entsql.Annotation{
+		Table: "system_detail_history",
+	}
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
@@ -3289,6 +3673,9 @@ func init() {
 	}
 	TrustCenterEntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_entity_history",
+	}
+	TrustCenterFaqsHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_faqs_history",
 	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",

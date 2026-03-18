@@ -82,8 +82,16 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -142,8 +150,6 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -168,6 +174,8 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -190,6 +198,10 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_scans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
 			case "remediations":
 				return ec.fieldContext_Finding_remediations(ctx, field)
 			case "reviews":
@@ -204,6 +216,257 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_controlMappings(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Finding", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FindingBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.FindingBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_FindingBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_FindingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FindingBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FindingBulkUpdatePayload_findings(ctx context.Context, field graphql.CollectedField, obj *model.FindingBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_FindingBulkUpdatePayload_findings,
+		func(ctx context.Context) (any, error) {
+			return obj.Findings, nil
+		},
+		nil,
+		ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FindingBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Finding_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Finding_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Finding_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Finding_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Finding_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Finding_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Finding_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Finding_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Finding_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Finding_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Finding_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Finding_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Finding_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Finding_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
+			case "externalOwnerID":
+				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
+			case "source":
+				return ec.fieldContext_Finding_source(ctx, field)
+			case "resourceName":
+				return ec.fieldContext_Finding_resourceName(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Finding_displayName(ctx, field)
+			case "state":
+				return ec.fieldContext_Finding_state(ctx, field)
+			case "category":
+				return ec.fieldContext_Finding_category(ctx, field)
+			case "categories":
+				return ec.fieldContext_Finding_categories(ctx, field)
+			case "findingClass":
+				return ec.fieldContext_Finding_findingClass(ctx, field)
+			case "severity":
+				return ec.fieldContext_Finding_severity(ctx, field)
+			case "numericSeverity":
+				return ec.fieldContext_Finding_numericSeverity(ctx, field)
+			case "score":
+				return ec.fieldContext_Finding_score(ctx, field)
+			case "impact":
+				return ec.fieldContext_Finding_impact(ctx, field)
+			case "exploitability":
+				return ec.fieldContext_Finding_exploitability(ctx, field)
+			case "priority":
+				return ec.fieldContext_Finding_priority(ctx, field)
+			case "open":
+				return ec.fieldContext_Finding_open(ctx, field)
+			case "blocksProduction":
+				return ec.fieldContext_Finding_blocksProduction(ctx, field)
+			case "production":
+				return ec.fieldContext_Finding_production(ctx, field)
+			case "public":
+				return ec.fieldContext_Finding_public(ctx, field)
+			case "validated":
+				return ec.fieldContext_Finding_validated(ctx, field)
+			case "assessmentID":
+				return ec.fieldContext_Finding_assessmentID(ctx, field)
+			case "description":
+				return ec.fieldContext_Finding_description(ctx, field)
+			case "recommendation":
+				return ec.fieldContext_Finding_recommendation(ctx, field)
+			case "recommendedActions":
+				return ec.fieldContext_Finding_recommendedActions(ctx, field)
+			case "references":
+				return ec.fieldContext_Finding_references(ctx, field)
+			case "stepsToReproduce":
+				return ec.fieldContext_Finding_stepsToReproduce(ctx, field)
+			case "targets":
+				return ec.fieldContext_Finding_targets(ctx, field)
+			case "targetDetails":
+				return ec.fieldContext_Finding_targetDetails(ctx, field)
+			case "vector":
+				return ec.fieldContext_Finding_vector(ctx, field)
+			case "remediationSLA":
+				return ec.fieldContext_Finding_remediationSLA(ctx, field)
+			case "eventTime":
+				return ec.fieldContext_Finding_eventTime(ctx, field)
+			case "reportedAt":
+				return ec.fieldContext_Finding_reportedAt(ctx, field)
+			case "sourceUpdatedAt":
+				return ec.fieldContext_Finding_sourceUpdatedAt(ctx, field)
+			case "externalURI":
+				return ec.fieldContext_Finding_externalURI(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Finding_metadata(ctx, field)
+			case "rawPayload":
+				return ec.fieldContext_Finding_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Finding_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Finding_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Finding_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Finding_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Finding_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Finding_integrations(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Finding_vulnerabilities(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Finding_actionPlans(ctx, field)
+			case "controls":
+				return ec.fieldContext_Finding_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Finding_subcontrols(ctx, field)
+			case "risks":
+				return ec.fieldContext_Finding_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_Finding_programs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Finding_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Finding_entities(ctx, field)
+			case "scans":
+				return ec.fieldContext_Finding_scans(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Finding_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Finding_reviews(ctx, field)
+			case "comments":
+				return ec.fieldContext_Finding_comments(ctx, field)
+			case "files":
+				return ec.fieldContext_Finding_files(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Finding_workflowObjectRefs(ctx, field)
+			case "controlMappings":
+				return ec.fieldContext_Finding_controlMappings(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Finding", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FindingBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.FindingBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_FindingBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FindingBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -263,8 +526,16 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -323,8 +594,6 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -349,6 +618,8 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -371,6 +642,10 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
 			case "remediations":
 				return ec.fieldContext_Finding_remediations(ctx, field)
 			case "reviews":
@@ -473,8 +748,16 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -533,8 +816,6 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -559,6 +840,8 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -581,6 +864,10 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
 			case "remediations":
 				return ec.fieldContext_Finding_remediations(ctx, field)
 			case "reviews":
@@ -634,10 +921,87 @@ func (ec *executionContext) _FindingBulkCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var findingBulkDeletePayloadImplementors = []string{"FindingBulkDeletePayload"}
+
+func (ec *executionContext) _FindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.FindingBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, findingBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FindingBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._FindingBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var findingBulkUpdatePayloadImplementors = []string{"FindingBulkUpdatePayload"}
+
+func (ec *executionContext) _FindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.FindingBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, findingBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FindingBulkUpdatePayload")
+		case "findings":
+			out.Values[i] = ec._FindingBulkUpdatePayload_findings(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._FindingBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -673,10 +1037,10 @@ func (ec *executionContext) _FindingCreatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -712,10 +1076,10 @@ func (ec *executionContext) _FindingDeletePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -751,10 +1115,10 @@ func (ec *executionContext) _FindingUpdatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -781,6 +1145,34 @@ func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._FindingBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNFindingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkDeletePayload) graphql.Marshaler {
+	return ec._FindingBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNFindingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._FindingBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNFindingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkUpdatePayload) graphql.Marshaler {
+	return ec._FindingBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNFindingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._FindingBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNFindingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingCreatePayload) graphql.Marshaler {

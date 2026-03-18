@@ -24,15 +24,16 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/store"
 	"github.com/theopenlane/core/internal/objects/upload"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
+// CSV and GraphQL defaults used across helper functions.
 const (
 	// DefaultMaxMemoryMB is the default max memory for multipart forms (32MB)
 	DefaultMaxMemoryMB = 32
@@ -42,6 +43,10 @@ const (
 	DefaultComplexityLimit = 100
 	// IntrospectionComplexity is the complexity limit for introspection queries
 	IntrospectionComplexity = 200
+	// csvInputWrapperFieldName is the wrapper field used for bulk CSV input structs.
+	csvInputWrapperFieldName = "Input"
+	// csvFieldSplitLimit is the maximum number of parts when splitting CSV field names.
+	csvFieldSplitLimit = 2
 )
 
 // injectFileUploader adds the file uploader as middleware to the graphql operation
@@ -109,7 +114,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
-		if err := setOrganizationForUploads(ctx, op.Variables, inputKey); err != nil {
+		ctx, err = setOrganizationForUploads(ctx, op.Variables, inputKey)
+		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context for uploads")
 
 			return nil, err
@@ -183,8 +189,11 @@ func UnmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 		return r
 	})
 
-	if err := gocsv.UnmarshalBytes(stream, &data); err != nil {
-		return nil, wrapCSVUnmarshalError(err, stream)
+	gocsv.SetHeaderNormalizer(strings.ToLower)
+
+	processed := preprocessCSVListCells[T](stream)
+	if err := gocsv.UnmarshalBytes(processed, &data); err != nil {
+		return nil, wrapCSVUnmarshalError(err, processed)
 	}
 	normalizeCSVEnumInputs(data)
 
@@ -198,7 +207,7 @@ func wrapCSVUnmarshalError(err error, data []byte) error {
 		return err
 	}
 
-	headerName := csvHeaderForColumn(data, parseErr.Column)
+	headerName := stripCSVInputPrefix(csvHeaderForColumn(data, parseErr.Column))
 	message := fmt.Sprintf("csv parse error on line %d, column %d", parseErr.Line, parseErr.Column)
 	if headerName != "" {
 		message = fmt.Sprintf("%s (header %q)", message, headerName)
@@ -250,13 +259,18 @@ func jsonColumnHint(err error) string {
 
 	var syntaxErr *json.SyntaxError
 	var typeErr *json.UnmarshalTypeError
-	if !errors.As(err, &syntaxErr) && !errors.As(err, &typeErr) {
+
+	isJSONError := errors.As(err, &syntaxErr) || errors.As(err, &typeErr)
+	isTypeUnmarshalError := strings.Contains(err.Error(), "TypeUnmarshaller")
+
+	if !isJSONError && !isTypeUnmarshalError {
 		return ""
 	}
 
 	return "list or object values must be valid JSON and the cell should be quoted, e.g. \"[\\\"security\\\",\\\"compliance\\\"]\""
 }
 
+// enumInfo caches enum metadata for CSV normalization.
 type enumInfo struct {
 	defaultValue string
 	normalized   map[string]string
@@ -279,6 +293,433 @@ func normalizeCSVEnumInputs(data any) {
 		// Normalize each row independently while sharing enum metadata cache
 		normalizeCSVEnumValue(v.Index(i), cache)
 	}
+}
+
+// csvInputWrapper identifies wrapper types needing CSV header prefixing.
+type csvInputWrapper interface {
+	CSVInputWrapper()
+}
+
+// preprocessCSVListCells converts list-like CSV cell values into JSON arrays for slice fields.
+// Valid JSON arrays are preserved, and scalar JSON values are wrapped into arrays.
+func preprocessCSVListCells[T any](data []byte) []byte {
+	records, err := parseCSVRecords(data)
+	if err != nil || len(records) == 0 {
+		return data
+	}
+
+	headers := records[0]
+	changed := prefixCSVInputHeaders[T](headers)
+
+	fieldKinds := csvListFieldKinds[T]()
+	if len(fieldKinds) > 0 {
+		normalizedHeaders := normalizeHeaders(headers)
+		changed = processCSVDataRows(records, normalizedHeaders, fieldKinds) || changed
+	}
+
+	if !changed {
+		return data
+	}
+
+	return writeCSVRecords(records, data)
+}
+
+// parseCSVRecords reads CSV data into records.
+func parseCSVRecords(data []byte) ([][]string, error) {
+	reader := csv.NewReader(bytes.NewReader(data))
+	reader.LazyQuotes = true
+	reader.FieldsPerRecord = -1
+	reader.TrimLeadingSpace = true
+
+	return reader.ReadAll()
+}
+
+// normalizeHeaders creates normalized header keys for lookup.
+func normalizeHeaders(headers []string) []string {
+	normalized := make([]string, len(headers))
+	for i, header := range headers {
+		normalized[i] = normalizeCSVHeader(header)
+	}
+
+	return normalized
+}
+
+// processCSVDataRows processes all data rows and normalizes list cells.
+func processCSVDataRows(records [][]string, normalizedHeaders []string, fieldKinds map[string]reflect.Kind) bool {
+	changed := false
+
+	for rowIdx := 1; rowIdx < len(records); rowIdx++ {
+		if processCSVRow(records[rowIdx], normalizedHeaders, fieldKinds) {
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+// processCSVRow processes a single row and normalizes list cells.
+func processCSVRow(row []string, normalizedHeaders []string, fieldKinds map[string]reflect.Kind) bool {
+	changed := false
+
+	for colIdx, headerKey := range normalizedHeaders {
+		if colIdx >= len(row) {
+			continue
+		}
+
+		kind, ok := fieldKinds[headerKey]
+		if !ok || kind != reflect.Slice {
+			continue
+		}
+
+		cell := strings.TrimSpace(row[colIdx])
+		if cell == "" {
+			continue
+		}
+
+		normalized, updated := normalizeCSVListCell(cell)
+		if updated {
+			row[colIdx] = normalized
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+// writeCSVRecords writes records back to CSV bytes, returning original data on error.
+func writeCSVRecords(records [][]string, originalData []byte) []byte {
+	var buf bytes.Buffer
+
+	writer := csv.NewWriter(&buf)
+	if err := writer.WriteAll(records); err != nil {
+		return originalData
+	}
+
+	writer.Flush()
+
+	if err := writer.Error(); err != nil {
+		return originalData
+	}
+
+	return buf.Bytes()
+}
+
+// csvListFieldKinds collects CSV list-capable field kinds for a generic input type.
+func csvListFieldKinds[T any]() map[string]reflect.Kind {
+	t := reflect.TypeFor[T]()
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return nil
+	}
+
+	fieldKinds := map[string]reflect.Kind{}
+	collectCSVListFieldKinds(t, fieldKinds, []string{""})
+	if len(fieldKinds) == 0 {
+		return nil
+	}
+
+	return fieldKinds
+}
+
+// csvFieldVisitor is called for each non-struct field found during CSV struct traversal.
+type csvFieldVisitor func(combined []string, kind reflect.Kind)
+
+// walkCSVStructFields traverses struct fields for CSV processing and calls the visitor for each leaf field.
+func walkCSVStructFields(t reflect.Type, prefixes []string, visitor csvFieldVisitor) {
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return
+	}
+	if len(prefixes) == 0 {
+		prefixes = []string{""}
+	}
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if field.PkgPath != "" {
+			continue
+		}
+
+		fieldType := field.Type
+		if field.Anonymous {
+			walkCSVStructFields(fieldType, prefixes, visitor)
+			continue
+		}
+
+		names := csvFieldNames(field)
+		if len(names) == 0 {
+			continue
+		}
+
+		combined := combineCSVPrefixes(prefixes, names)
+
+		kind := fieldType.Kind()
+		if kind == reflect.Pointer {
+			kind = fieldType.Elem().Kind()
+		}
+
+		if kind == reflect.Struct {
+			walkCSVStructFields(fieldType, combined, visitor)
+			continue
+		}
+
+		visitor(combined, kind)
+	}
+}
+
+// collectCSVListFieldKinds walks struct fields to capture slice/map CSV columns.
+func collectCSVListFieldKinds(t reflect.Type, fieldKinds map[string]reflect.Kind, prefixes []string) {
+	walkCSVStructFields(t, prefixes, func(combined []string, kind reflect.Kind) {
+		if kind != reflect.Slice && kind != reflect.Map {
+			return
+		}
+		for _, name := range combined {
+			fieldKinds[normalizeCSVHeader(name)] = kind
+		}
+	})
+}
+
+// prefixCSVInputHeaders adds Input:: prefixes when a csvInput wrapper is used.
+func prefixCSVInputHeaders[T any](headers []string) bool {
+	if !isCSVInputWrapper[T]() {
+		return false
+	}
+
+	t := reflect.TypeFor[T]()
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return false
+	}
+	if _, ok := t.FieldByName(csvInputWrapperFieldName); !ok {
+		return false
+	}
+
+	embeddedHeaders := csvEmbeddedHeaderSet(t)
+	changed := false
+	for i, header := range headers {
+		trimmed := strings.TrimSpace(header)
+		if trimmed == "" {
+			continue
+		}
+		if hasCSVInputPrefix(trimmed) {
+			continue
+		}
+		if _, ok := embeddedHeaders[normalizeCSVHeader(trimmed)]; ok {
+			continue
+		}
+		headers[i] = csvInputWrapperFieldName + gocsv.FieldsCombiner + trimmed
+		changed = true
+	}
+
+	return changed
+}
+
+// isCSVInputWrapper reports whether the type implements csvInputWrapper.
+func isCSVInputWrapper[T any]() bool {
+	var value T
+	if _, ok := any(value).(csvInputWrapper); ok {
+		return true
+	}
+	if _, ok := any(&value).(csvInputWrapper); ok {
+		return true
+	}
+	return false
+}
+
+// csvEmbeddedHeaderSet returns header names for fields that should NOT be prefixed with Input::.
+// This includes anonymous embedded fields AND direct CSV-tagged fields on the wrapper struct itself.
+func csvEmbeddedHeaderSet(t reflect.Type) map[string]struct{} {
+	set := map[string]struct{}{}
+	if t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t.Kind() != reflect.Struct {
+		return set
+	}
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if field.Anonymous {
+			collectCSVHeaderNames(field.Type, set, []string{""})
+			continue
+		}
+		// Include direct CSV-tagged fields on the wrapper struct (e.g., AssigneeEmail)
+		// These should not be prefixed since they're not inside the Input struct
+		if field.Name == csvInputWrapperFieldName {
+			continue
+		}
+		names := csvFieldNames(field)
+		for _, name := range names {
+			set[normalizeCSVHeader(name)] = struct{}{}
+		}
+	}
+
+	return set
+}
+
+// collectCSVHeaderNames walks fields to gather CSV header names for embedded structs.
+func collectCSVHeaderNames(t reflect.Type, headers map[string]struct{}, prefixes []string) {
+	walkCSVStructFields(t, prefixes, func(combined []string, _ reflect.Kind) {
+		for _, name := range combined {
+			headers[normalizeCSVHeader(name)] = struct{}{}
+		}
+	})
+}
+
+// csvFieldNames extracts CSV header names from struct tags or field names.
+func csvFieldNames(field reflect.StructField) []string {
+	tag := strings.TrimSpace(field.Tag.Get("csv"))
+	if tag == "" {
+		return []string{field.Name}
+	}
+
+	parts := strings.Split(tag, ",")
+	names := make([]string, 0, len(parts))
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" || part == "omitempty" {
+			continue
+		}
+		names = append(names, part)
+	}
+
+	if len(names) == 1 && names[0] == "-" {
+		return nil
+	}
+
+	if len(names) > 0 {
+		return names
+	}
+
+	return []string{field.Name}
+}
+
+// combineCSVPrefixes prefixes field names for nested CSV headers.
+func combineCSVPrefixes(prefixes, names []string) []string {
+	if len(prefixes) == 0 {
+		prefixes = []string{""}
+	}
+	out := make([]string, 0, len(prefixes)*len(names))
+	for _, prefix := range prefixes {
+		for _, name := range names {
+			if prefix == "" {
+				out = append(out, name)
+			} else {
+				out = append(out, prefix+gocsv.FieldsCombiner+name)
+			}
+		}
+	}
+	return out
+}
+
+// hasCSVInputPrefix reports whether a header already has the Input:: prefix.
+func hasCSVInputPrefix(value string) bool {
+	parts := strings.SplitN(value, gocsv.FieldsCombiner, csvFieldSplitLimit)
+	if len(parts) < csvFieldSplitLimit {
+		return false
+	}
+
+	return strings.EqualFold(strings.TrimSpace(parts[0]), csvInputWrapperFieldName)
+}
+
+// stripCSVInputPrefix removes the Input:: prefix when present.
+func stripCSVInputPrefix(header string) string {
+	parts := strings.SplitN(header, gocsv.FieldsCombiner, csvFieldSplitLimit)
+	if len(parts) < csvFieldSplitLimit {
+		return header
+	}
+
+	if strings.EqualFold(strings.TrimSpace(parts[0]), csvInputWrapperFieldName) {
+		return parts[1]
+	}
+
+	return header
+}
+
+// normalizeCSVHeader lowercases and strips separators for header matching.
+func normalizeCSVHeader(value string) string {
+	value = strings.TrimSpace(value)
+	value = strings.ToLower(value)
+	replacer := strings.NewReplacer(" ", "", "_", "", "-", "", ".", "")
+	return replacer.Replace(value)
+}
+
+// normalizeCSVListCell ensures list-like values are encoded as JSON arrays.
+func normalizeCSVListCell(cell string) (string, bool) {
+	if json.Valid([]byte(cell)) {
+		var decoded any
+		if err := json.Unmarshal([]byte(cell), &decoded); err == nil {
+			switch decoded.(type) {
+			case []any:
+				return cell, false
+			case map[string]any:
+				return cell, false
+			case nil:
+				return cell, false
+			default:
+				items := []string{fmt.Sprint(decoded)}
+				payload, err := json.Marshal(items)
+				if err != nil {
+					return cell, false
+				}
+				return string(payload), true
+			}
+		}
+		return cell, false
+	}
+
+	items := splitCSVList(cell)
+	if len(items) == 0 {
+		return cell, false
+	}
+
+	payload, err := json.Marshal(items)
+	if err != nil {
+		return cell, false
+	}
+
+	return string(payload), true
+}
+
+// splitCSVList splits list-like CSV values on common delimiters.
+func splitCSVList(value string) []string {
+	var delimiter string
+	switch {
+	case strings.Contains(value, ";"):
+		delimiter = ";"
+	case strings.Contains(value, "|"):
+		delimiter = "|"
+	case strings.Contains(value, ","):
+		delimiter = ","
+	default:
+		item := strings.TrimSpace(value)
+		if item == "" {
+			return nil
+		}
+		return []string{item}
+	}
+
+	parts := strings.Split(value, delimiter)
+	items := make([]string, 0, len(parts))
+	for _, part := range parts {
+		item := strings.TrimSpace(part)
+		if item == "" {
+			continue
+		}
+		items = append(items, item)
+	}
+
+	if len(items) == 0 {
+		return nil
+	}
+
+	return items
 }
 
 // normalizeCSVEnumValue recursively normalizes enum fields on a struct value
@@ -547,17 +988,35 @@ func GetOrgOwnerFromInput[T any](input *T) (*string, error) {
 		return nil, nil
 	}
 
+	var ownerInput inputWithOwnerID
 	inputBytes, err := json.Marshal(input)
 	if err != nil {
 		return nil, err
 	}
 
-	var ownerInput inputWithOwnerID
-	if err := json.Unmarshal(inputBytes, &ownerInput); err != nil {
+	if err := jsonx.RoundTrip(inputBytes, &ownerInput); err != nil {
 		return nil, err
 	}
 
-	return ownerInput.OwnerID, nil
+	if ownerInput.OwnerID != nil {
+		return ownerInput.OwnerID, nil
+	}
+
+	var wrappedOwner struct {
+		Input inputWithOwnerID `json:"Input"`
+	}
+	if err := jsonx.RoundTrip(inputBytes, &wrappedOwner); err == nil && wrappedOwner.Input.OwnerID != nil {
+		return wrappedOwner.Input.OwnerID, nil
+	}
+
+	var wrappedOwnerLower struct {
+		Input inputWithOwnerID `json:"input"`
+	}
+	if err := jsonx.RoundTrip(inputBytes, &wrappedOwnerLower); err == nil && wrappedOwnerLower.Input.OwnerID != nil {
+		return wrappedOwnerLower.Input.OwnerID, nil
+	}
+
+	return nil, nil
 }
 
 // templateKindFromVariables extracts the TemplateKind from the input variables
@@ -577,7 +1036,7 @@ func templateKindFromVariables(variables map[string]any, inputKey string) *enums
 	}
 
 	var input inputWithTemplateKind
-	if err := json.Unmarshal(inputBytes, &input); err != nil {
+	if err := jsonx.RoundTrip(inputBytes, &input); err != nil {
 		return nil
 	}
 
@@ -627,100 +1086,56 @@ func GetBulkUploadOwnerInput[T any](input []*T) (*string, error) {
 	return ownerID, nil
 }
 
-// SetOrganizationInAuthContext sets the organization in the auth context based on the input if it is not already set
-// in most cases this is a no-op because the organization id is set in the auth middleware
-// only when multiple organizations are authorized (e.g. with a PAT) is this necessary
-func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error {
-	// if org is in context or the user is a system admin, return
-	if ok, err := checkOrgInContext(ctx); ok && err == nil {
-		return nil
+// SetOrganizationInAuthContext sets the organization in the auth context based on the input if it is not already set.
+// In most cases this is a no-op because the organization id is set in the auth middleware.
+// Only when multiple organizations are authorized (e.g. with a PAT) is this necessary.
+// System admins bypass the check entirely.
+func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) (context.Context, error) {
+	if auth.IsSystemAdminFromContext(ctx) {
+		log.Debug().Bool("isAdmin", true).Msg("user is system admin, bypassing setting organization in auth context")
+
+		return ctx, nil
 	}
 
-	// If no input provided, fallback to a single authorized org (e.g., API token with one org)
-	if inputOrgID == nil {
-		if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil {
-			if len(au.OrganizationIDs) == 1 && au.OrganizationIDs[0] != "" {
-				return auth.SetOrganizationIDInAuthContext(ctx, au.OrganizationIDs[0])
-			}
-		}
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+		return ctx, nil
 	}
 
-	return setOrgFromInputInContext(ctx, inputOrgID)
+	return auth.ResolveOrganizationForContext(ctx, inputOrgID)
 }
 
-// SetOrganizationInAuthContextBulkRequest sets the organization in the auth context based on the input if it is not already set
-// in most cases this is a no-op because the organization id is set in the auth middleware
-// in the case of personal access tokens, this is necessary to ensure the organization id is set
-// the organization must be the same across all inputs in the bulk request
-func SetOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input []*T) error {
-	// if org is in context or the user is a system admin, return
-	if ok, err := checkOrgInContext(ctx); ok && err == nil {
-		return nil
+// SetOrganizationInAuthContextBulkRequest sets the organization in the auth context based on the input if it is not already set.
+// In most cases this is a no-op because the organization id is set in the auth middleware.
+// In the case of personal access tokens, this is necessary to ensure the organization id is set.
+// The organization must be the same across all inputs in the bulk request.
+func SetOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input []*T) (context.Context, error) {
+	if auth.IsSystemAdminFromContext(ctx) {
+		log.Debug().Bool("isAdmin", true).Msg("user is system admin, bypassing setting organization in auth context")
+
+		return ctx, nil
+	}
+
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+		return ctx, nil
 	}
 
 	ownerID, err := GetBulkUploadOwnerInput(input)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
-	return setOrgFromInputInContext(ctx, ownerID)
-}
-
-// checkOrgInContext checks if the organization is already set in the context
-// if the organization is set, it returns true
-// if the user is a system admin, it also returns true
-func checkOrgInContext(ctx context.Context) (bool, error) {
-	// allow system admins to bypass the organization check
-	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-	if err == nil && isAdmin {
-		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
-
-		return true, nil
-	}
-
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err == nil && orgID != "" {
-		return true, nil
-	}
-
-	return false, nil
-}
-
-// setOrgFromInputInContext sets the organization in the auth context based on the input org ID, ensuring
-// the org is authenticated and exists in the context
-func setOrgFromInputInContext(ctx context.Context, inputOrgID *string) error {
-	if inputOrgID == nil {
-		// this would happen on a PAT authenticated request because the org id is not set
-		return ErrNoOrganizationID
-	}
-
-	// ensure this org is authenticated
-	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	if !lo.Contains(orgIDs, *inputOrgID) {
-		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, *inputOrgID)
-	}
-
-	err = auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return auth.ResolveOrganizationForContext(ctx, ownerID)
 }
 
 // CheckAllowedAuthType checks how the user is authenticated and returns an error
 // if the user is authenticated with an API token for a user owned setting
 func CheckAllowedAuthType(ctx context.Context) error {
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return auth.ErrNoAuthUser
 	}
 
-	if ac.AuthenticationType == auth.APITokenAuthentication {
+	if caller.AuthenticationType == auth.APITokenAuthentication {
 		return fmt.Errorf("%w: unable to use API token to update user settings", rout.ErrBadRequest)
 	}
 
@@ -846,14 +1261,8 @@ func isEmptySlice(x any) bool {
 
 // ConvertToObject converts an object to a specific type
 func ConvertToObject[J any](obj any) (*J, error) {
-	jsonBytes, err := json.Marshal(obj)
-	if err != nil {
-		return nil, err
-	}
-
 	var result J
-	err = json.Unmarshal(jsonBytes, &result)
-	if err != nil {
+	if err := jsonx.RoundTrip(obj, &result); err != nil {
 		return nil, err
 	}
 
@@ -862,17 +1271,22 @@ func ConvertToObject[J any](obj any) (*J, error) {
 
 // setOrganizationForUploads ensures an organization is present in the auth context
 // we want this for token-authenticated requests where the active org is not pre-selected (e.g., PATs)
-func setOrganizationForUploads(ctx context.Context, variables map[string]any, inputKey string) error {
-	if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil && orgID != "" {
-		return nil
+func setOrganizationForUploads(ctx context.Context, variables map[string]any, inputKey string) (context.Context, error) {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+		return ctx, nil
 	}
 
 	ownerID, err := getOwnerIDFromVariables(variables, inputKey)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
-	return SetOrganizationInAuthContext(ctx, ownerID)
+	ctx, err = SetOrganizationInAuthContext(ctx, ownerID)
+	if err != nil {
+		return ctx, fmt.Errorf("%w: %w", ErrNoOrganizationID, err)
+	}
+
+	return ctx, nil
 }
 
 // getOwnerIDFromVariables attempts to extract an owner/organization ID from the GraphQL variables map
@@ -886,7 +1300,7 @@ func getOwnerIDFromVariables(variables map[string]any, inputKey string) (*string
 			}
 
 			var owner inputWithOwnerID
-			if err := json.Unmarshal(inputBytes, &owner); err != nil {
+			if err := jsonx.RoundTrip(inputBytes, &owner); err != nil {
 				return nil, err
 			}
 

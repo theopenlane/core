@@ -179,7 +179,9 @@ func HookUserPermissions() ent.Hook {
 			}
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for user self permissions")
+
+				return nil, ErrInternalServerError
 			}
 
 			return v, err
@@ -359,18 +361,30 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 
 func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutation, user *generated.User) error {
 	displayName, ok := m.DisplayName()
-	if !ok {
+
+	avatarRemoteURL, isAvatarRemoteURLChanged := m.AvatarRemoteURL()
+	avatarLocalFileID, isAvatarLocalFiledIDChanged := m.AvatarLocalFileID()
+
+	if !ok && !isAvatarRemoteURLChanged && !isAvatarLocalFiledIDChanged {
 		return nil
 	}
 
-	oldDisplayName, err := m.OldDisplayName(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting old display name")
-		return err
+	oldDisplayName := displayName
+	if ok {
+		var err error
+
+		oldDisplayName, err = m.OldDisplayName(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error getting old display name")
+			return err
+		}
+
+		if oldDisplayName == displayName {
+			ok = false
+		}
 	}
 
-	// if the display name is still the same, nothing to do really
-	if oldDisplayName == displayName {
+	if !ok && !isAvatarRemoteURLChanged && !isAvatarLocalFiledIDChanged {
 		return nil
 	}
 
@@ -384,8 +398,10 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		return err
 	}
 
+	groupName := getUserGroupName(oldDisplayName, user.ID)
+
 	for _, membership := range memberships {
-		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+		newCtx := auth.WithCaller(ctx, &auth.Caller{
 			SubjectID:       user.ID,
 			OrganizationID:  membership.OrganizationID,
 			OrganizationIDs: []string{membership.OrganizationID},
@@ -396,7 +412,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 				group.OwnerID(membership.OrganizationID),
 				group.CreatedBy(user.ID),
 				group.IsManaged(true),
-				group.Name(getUserGroupName(oldDisplayName, user.ID)),
+				group.Name(groupName),
 			).
 			All(privacy.DecisionContext(newCtx, privacy.Allow))
 		if err != nil {
@@ -413,16 +429,27 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 			groupIDs = append(groupIDs, g.ID)
 		}
 
-		err = m.Client().Group.Update().
-			Where(group.IDIn(groupIDs...)).
-			SetName(getUserGroupName(displayName, user.ID)).
-			SetDisplayName(displayName).
-			SetDescription(getUserGroupName(displayName, user.ID)).
-			Exec(privacy.DecisionContext(newCtx, privacy.Allow))
+		update := m.Client().Group.Update().
+			Where(group.IDIn(groupIDs...))
+
+		if ok {
+			update.SetName(getUserGroupName(displayName, user.ID)).
+				SetDisplayName(displayName).
+				SetDescription(getUserGroupName(displayName, user.ID))
+		}
+
+		if isAvatarRemoteURLChanged {
+			update.SetGravatarLogoURL(avatarRemoteURL)
+		}
+
+		if isAvatarLocalFiledIDChanged {
+			update.SetAvatarLocalFileID(avatarLocalFileID)
+		}
+
+		err = update.Exec(privacy.DecisionContext(newCtx, privacy.Allow))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).
-				Str("old_display_name", oldDisplayName).Str("new_display_name", displayName).
-				Msg("error updating system managed group names in bulk")
+				Msg("error updating system managed group for user")
 
 			return err
 		}

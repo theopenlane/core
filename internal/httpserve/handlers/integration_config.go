@@ -2,20 +2,19 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
-	"strings"
+	"maps"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/iam/auth"
 
+	intauth "github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
-	credentialmodels "github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -34,9 +33,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("provider"), openapiCtx)
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(requestCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(requestCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
+	}
+
+	orgID := caller.OrganizationID
+	if orgID == "" {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	if h.IntegrationRegistry == nil {
@@ -52,7 +56,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
-	if !spec.Active {
+	if spec.Active == nil || !*spec.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
@@ -65,8 +69,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
 	}
 
-	if key, ok := attrs["serviceAccountKey"].(string); ok && strings.TrimSpace(key) != "" {
-		attrs["serviceAccountKey"] = normalizeServiceAccountKey(key)
+	if key, ok := attrs["serviceAccountKey"].(string); ok {
+		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
 	}
 
 	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
@@ -83,19 +87,22 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerType, attrs); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error persisting credential configuration")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		switch {
+		case errors.Is(err, activation.ErrHealthCheckFailed):
+			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+		case errors.Is(err, activation.ErrOperationsRequired):
+			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
+		default:
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
 	}
 
-	if err := h.runIntegrationHealthCheck(requestCtx, orgID, providerType); err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Msg("error running integration health check")
-
-		switch {
-		case errors.Is(err, errIntegrationOperationsNotConfigured),
-			errors.Is(err, errIntegrationRegistryNotConfigured):
-			return h.InternalServerError(ctx, err, openapiCtx)
-		default:
-			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+	if record, err := h.IntegrationStore.EnsureIntegration(requestCtx, orgID, providerType); err == nil {
+		if err := h.updateIntegrationProviderMetadata(requestCtx, record.ID, providerType); err != nil {
+			logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
 		}
+	} else {
+		logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to ensure integration record for metadata update")
 	}
 
 	out := openapi.IntegrationConfigResponse{
@@ -108,138 +115,16 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 // persistCredentialConfiguration saves the provider credential configuration for the organization
 func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID string, provider types.ProviderType, data map[string]any) error {
-	if h.IntegrationStore == nil {
-		return errIntegrationStoreNotConfigured
+	if h.IntegrationActivation == nil {
+		return errActivationNotConfigured
 	}
 
-	payload, err := types.NewCredentialBuilder(provider).
-		With(
-			types.WithCredentialKind(types.CredentialKindMetadata),
-			types.WithCredentialSet(credentialmodels.CredentialSet{
-				ProviderData: cloneProviderData(data),
-			}),
-		).
-		Build()
-	if err != nil {
-		return err
-	}
-
-	_, err = h.IntegrationStore.SaveCredential(ctx, orgID, payload)
+	_, err := h.IntegrationActivation.Configure(ctx, activation.ConfigureRequest{
+		OrgID:        orgID,
+		Provider:     provider,
+		ProviderData: maps.Clone(data),
+		Validate:     true,
+	})
 
 	return err
-}
-
-func cloneProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
-		return nil
-	}
-
-	cloned := make(map[string]any, len(data))
-	for key, value := range data {
-		if key == "serviceAccountKey" {
-			cloned[key] = normalizeServiceAccountKey(stringifyValue(value))
-			continue
-		}
-		cloned[key] = cloneProviderValue(value)
-	}
-
-	return cloned
-}
-
-func cloneProviderValue(value any) any {
-	switch v := value.(type) {
-	case string:
-		return strings.TrimSpace(v)
-	case fmt.Stringer:
-		return strings.TrimSpace(v.String())
-	case []string:
-		out := make([]string, len(v))
-		for i, item := range v {
-			out[i] = strings.TrimSpace(item)
-		}
-		return out
-	case []any:
-		out := make([]any, len(v))
-		for i, item := range v {
-			out[i] = cloneProviderValue(item)
-		}
-		return out
-	case map[string]any:
-		out := make(map[string]any, len(v))
-		for key, item := range v {
-			out[key] = cloneProviderValue(item)
-		}
-		return out
-	default:
-		return v
-	}
-}
-
-func stringifyValue(value any) string {
-	switch v := value.(type) {
-	case string:
-		return strings.TrimSpace(v)
-	case fmt.Stringer:
-		return strings.TrimSpace(v.String())
-	default:
-		b, err := json.Marshal(v)
-		if err != nil {
-			return ""
-		}
-		return string(b)
-	}
-}
-
-func normalizeServiceAccountKey(input string) string {
-	trimmed := strings.TrimSpace(input)
-	if trimmed == "" {
-		return ""
-	}
-
-	var decoded string
-	if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
-		return strings.TrimSpace(decoded)
-	}
-
-	return trimmed
-}
-
-const defaultHealthOperation types.OperationName = "health.default"
-
-// runIntegrationHealthCheck performs a health check operation for the given provider if supported
-func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, provider types.ProviderType) error {
-	if !h.providerHasHealthOperation(provider) {
-		return nil
-	}
-
-	result, err := h.IntegrationOperations.Run(ctx, types.OperationRequest{
-		OrgID:    orgID,
-		Provider: provider,
-		Name:     defaultHealthOperation,
-		Force:    true,
-	})
-	if err != nil {
-		return err
-	}
-
-	if result.Status != types.OperationStatusOK {
-		summary := strings.TrimSpace(result.Summary)
-		if summary == "" {
-			return ErrProviderHealthCheckFailed
-		}
-		return fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, summary)
-	}
-
-	return nil
-}
-
-// providerHasHealthOperation checks if the provider has a health check operation defined
-func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
-	for _, descriptor := range h.IntegrationRegistry.OperationDescriptors(provider) {
-		if descriptor.Name == defaultHealthOperation {
-			return true
-		}
-	}
-
-	return false
 }

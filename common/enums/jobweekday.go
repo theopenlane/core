@@ -1,7 +1,6 @@
 package enums
 
 import (
-	"fmt"
 	"io"
 	"strings"
 	"time"
@@ -29,23 +28,16 @@ var (
 	JobWeekdayInvalid JobWeekday = "JOBWEEKDAY_INVALID"
 )
 
-// Values returns a slice of strings representing all valid JobWeekday values.
-func (JobWeekday) Values() []string {
-	return []string{
-		string(JobWeekdaySunday),
-		string(JobWeekdayMonday),
-		string(JobWeekdayTuesday),
-		string(JobWeekdayWednesday),
-		string(JobWeekdayThursday),
-		string(JobWeekdayFriday),
-		string(JobWeekdaySaturday),
-	}
+var jobWeekdayValues = []JobWeekday{
+	JobWeekdaySunday, JobWeekdayMonday, JobWeekdayTuesday, JobWeekdayWednesday,
+	JobWeekdayThursday, JobWeekdayFriday, JobWeekdaySaturday,
 }
 
+// Values returns a slice of strings representing all valid JobWeekday values.
+func (JobWeekday) Values() []string { return stringValues(jobWeekdayValues) }
+
 // String returns the string representation of the JobWeekday value.
-func (r JobWeekday) String() string {
-	return strings.ToUpper(string(r))
-}
+func (r JobWeekday) String() string { return strings.ToUpper(string(r)) }
 
 // ToTimeWeekday maps the human readable enums to Go's weekday type
 func ToTimeWeekday(r JobWeekday) time.Weekday {
@@ -71,40 +63,10 @@ func ToTimeWeekday(r JobWeekday) time.Weekday {
 }
 
 // ToJobWeekday converts a string to its corresponding JobWeekday enum value.
-func ToJobWeekday(r string) *JobWeekday {
-	switch strings.ToUpper(r) {
-	case JobWeekdaySunday.String():
-		return &JobWeekdaySunday
-	case JobWeekdayMonday.String():
-		return &JobWeekdayMonday
-	case JobWeekdayTuesday.String():
-		return &JobWeekdayTuesday
-	case JobWeekdayWednesday.String():
-		return &JobWeekdayWednesday
-	case JobWeekdayThursday.String():
-		return &JobWeekdayThursday
-	case JobWeekdayFriday.String():
-		return &JobWeekdayFriday
-	case JobWeekdaySaturday.String():
-		return &JobWeekdaySaturday
-	default:
-		return &JobWeekdayInvalid
-	}
-}
+func ToJobWeekday(r string) *JobWeekday { return parse(r, jobWeekdayValues, &JobWeekdayInvalid) }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r JobWeekday) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r JobWeekday) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *JobWeekday) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for JobWeekday, got: %T", v) //nolint:err113
-	}
-
-	*r = JobWeekday(str)
-
-	return nil
-}
+func (r *JobWeekday) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

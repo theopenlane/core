@@ -164,3 +164,6 @@ models:
   WorkflowAssignmentRejection:
     model:
       - github.com/theopenlane/core/common/models.WorkflowAssignmentRejection
+  ExportMetadata:
+    model:
+      - github.com/theopenlane/core/common/models.ExportMetadata

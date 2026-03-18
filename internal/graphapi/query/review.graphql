@@ -205,8 +205,72 @@ query GetReviews($first: Int, $last: Int, $where: ReviewWhereInput) {
     }
   }
 }
-mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!) {
-  updateReview(id: $updateReviewId, input: $input) {
+mutation UpdateBulkReview($ids: [ID!]!, $input: UpdateReviewInput!) {
+  updateBulkReview(ids: $ids, input: $input) {
+    reviews {
+      approved
+      approvedAt
+      category
+      classification
+      createdAt
+      createdBy
+      details
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      metadata
+      rawPayload
+      reportedAt
+      reporter
+      reviewedAt
+      reviewerID
+      source
+      state
+      summary
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkCSVReview($input: Upload!) {
+  updateBulkCSVReview(input: $input) {
+    reviews {
+      approved
+      approvedAt
+      category
+      classification
+      createdAt
+      createdBy
+      details
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      metadata
+      rawPayload
+      reportedAt
+      reporter
+      reviewedAt
+      reviewerID
+      source
+      state
+      summary
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!, $reviewFiles: [Upload!]) {
+  updateReview(id: $updateReviewId, input: $input, reviewFiles: $reviewFiles) {
     review {
       approved
       approvedAt
@@ -233,5 +297,11 @@ mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!) {
       updatedAt
       updatedBy
     }
+  }
+}
+
+mutation DeleteBulkReviewReview($ids: [ID!]!) {
+  deleteBulkReview(ids: $ids) {
+    deletedIDs
   }
 }

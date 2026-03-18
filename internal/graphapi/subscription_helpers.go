@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -23,9 +23,13 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 		return nil, common.ErrInternalServerError
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user ID from context: %w", err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
+	}
+	userID := caller.SubjectID
+	if userID == "" {
+		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
 
 	// Create a channel with the interface type for the subscription manager
@@ -36,8 +40,34 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 	notifChan := make(chan *generated.Notification, graphsubscriptions.NotificationChannelBufferSize)
 
 	// Fetch existing notifications for the user so they see their old notifications
-	existingNotifications, err := r.db.Notification.Query().
-		All(ctx)
+	// Query filters:
+	// 1. All unread notifications (read_at IS NULL)
+	// 2. All read notifications created within the lookback period
+	query := r.db.Notification.Query()
+
+	// Apply filtering based on read status and lookback period
+	// Use Or to combine: (unread) OR (read AND created within lookback)
+	if r.notificationLookbackDays > 0 {
+		// Calculate the lookback cutoff date
+		lookbackCutoff := time.Now().AddDate(0, 0, -r.notificationLookbackDays)
+
+		query = query.Where(
+			notification.Or(
+				// All unread notifications
+				notification.ReadAtIsNil(),
+				// Read notifications within the lookback period
+				notification.And(
+					notification.ReadAtNotNil(),
+					notification.CreatedAtGTE(lookbackCutoff),
+				),
+			),
+		)
+	} else {
+		// If lookback is 0 or negative, only fetch unread notifications
+		query = query.Where(notification.ReadAtIsNil())
+	}
+
+	existingNotifications, err := query.All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch existing notifications")
 		// Continue without existing notifications - don't fail the subscription
@@ -45,14 +75,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 
 	// Forward notifications from internal channel to GraphQL channel
 	go func() {
-		startTime := time.Now()
-		defer func() {
-			close(notifChan)
-
-			// Record subscription closed metric
-			connectionTime := time.Since(startTime).Seconds()
-			metrics.RecordSubscriptionClosed(connectionTime)
-		}()
+		defer close(notifChan)
 
 		// First, send all existing notifications
 		for _, existingNotif := range existingNotifications {

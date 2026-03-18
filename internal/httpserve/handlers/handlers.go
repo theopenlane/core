@@ -26,15 +26,16 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -56,26 +57,16 @@ func isRegistrationContext(ctx echo.Context) bool {
 	if ctx == nil || ctx.Request() == nil {
 		return false
 	}
-	// Check if the request context has the registration marker
-	_, ok := contextx.From[common.RegistrationMarker](ctx.Request().Context())
 
-	return ok
-}
-
-// CheckRegistrationModeWithResponse checks if we're in registration mode and returns early with nil
-// This should be called at the beginning of handlers to skip execution during OpenAPI generation
-func CheckRegistrationModeWithResponse(ctx echo.Context) error {
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
-	return nil
+	return common.IsRegistrationContext(ctx.Request().Context())
 }
 
 // OpenAPIContext holds the OpenAPI operation and schema registry for automatic registration
 type OpenAPIContext struct {
+	// Operation is the OpenAPI operation metadata for the handler.
 	Operation *openapi3.Operation
-	Registry  SchemaRegistry
+	// Registry provides schema registration and lookup for OpenAPI models.
+	Registry SchemaRegistry
 }
 
 // Handler contains configuration options for handlers
@@ -102,6 +93,8 @@ type Handler struct {
 	OauthProvider OauthProviderConfig
 	// IntegrationOauthProvider contains the configuration settings for integration Oauth2 providers
 	IntegrationOauthProvider IntegrationOauthProviderConfig
+	// IntegrationGitHubApp contains the configuration settings for GitHub App integrations
+	IntegrationGitHubApp IntegrationGitHubAppConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints
@@ -131,16 +124,48 @@ type Handler struct {
 	IntegrationClients *keystore.ClientPoolManager
 	// IntegrationOperations standardizes executing provider operations
 	IntegrationOperations *keystore.OperationManager
-	// KeymakerService orchestrates integration activation flows
-	KeymakerService *keymaker.Service
+	// Gala is the shared event runtime for asynchronous dispatch.
+	Gala *gala.Gala
+	// IntegrationActivation orchestrates integration activation flows
+	IntegrationActivation *activation.Service
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
+	// CampaignWebhook contains the configuration for campaign-related email webhooks
+	CampaignWebhook CampaignWebhookConfig
+	// CloudflareConfig contains the configuration for Cloudflare integration
+	CloudflareConfig CloudflareConfig
+	// ShortlinksClient provides URL shortening functionality
+	ShortlinksClient *shortlinks.Client
+}
+
+// CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
+type CampaignWebhookConfig struct {
+	// Enabled toggles the campaign webhook handler
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// ResendAPIKey is the API key used for Resend client initialization
+	ResendAPIKey string `json:"resendapikey" koanf:"resendapikey" default:"" sensitive:"true"`
+	// ResendSecret is the signing secret used to verify Resend webhook payloads
+	ResendSecret string `json:"resendsecret" koanf:"resendsecret" default:"" sensitive:"true"`
+}
+
+// CloudflareConfig contains configuration for Cloudflare integration.
+type CloudflareConfig struct {
+	// Enabled toggles the Cloudflare snapshot handler
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// APIToken is the API token used for Cloudflare client initialization
+	APIToken string `json:"apitoken" koanf:"apitoken" default:"" sensitive:"true"`
+	// AccountID is the Cloudflare account ID to use for snapshot operations
+	AccountID string `json:"accountid" koanf:"accountid" default:"" sensitive:"true"`
+	// ClientID is the Cloudflare Access client ID for shortlink API requests
+	ClientID string `json:"clientid" koanf:"clientid" default:"" sensitive:"true"`
+	// ClientSecret is the Cloudflare Access client secret for shortlink API requests
+	ClientSecret string `json:"clientsecret" koanf:"clientsecret" default:"" sensitive:"true"`
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
 // during a login or verification process
 func setAuthenticatedContext(ctx context.Context, user *ent.User) context.Context {
-	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+	ctx = auth.WithCaller(ctx, &auth.Caller{
 		SubjectID:    user.ID,
 		SubjectEmail: user.Email,
 	})
@@ -300,12 +325,6 @@ func AddRequest[T any](h *Handler, example T, op *openapi3.Operation) {
 	h.AddRequestBody(reflect.TypeOf(t).Name(), example, op)
 }
 
-// AddResponseFor adds a response definition to the OpenAPI schema using the type name of T
-func AddResponseFor[T any](h *Handler, description string, example T, op *openapi3.Operation, status int) {
-	var t T
-	h.AddResponse(reflect.TypeOf(t).Name(), description, example, op, status)
-}
-
 // ProcessRequest provides a generic pattern for handling requests with automatic binding, validation, and response handling
 func ProcessRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq) (*TResp, error)) error {
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, requestExample, responseExample, openapi.Registry)
@@ -323,8 +342,8 @@ func ProcessRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *Open
 	return h.Success(ctx, resp, openapi)
 }
 
-// ProcessAuthenticatedRequest provides a generic pattern for authenticated requests with automatic user context injection
-func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq, *auth.AuthenticatedUser) (*TResp, error)) error {
+// ProcessAuthenticatedRequest provides a generic pattern for authenticated requests with automatic caller context injection
+func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq, *auth.Caller) (*TResp, error)) error {
 	// Bind and validate the request
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, requestExample, responseExample, openapi.Registry)
 	if err != nil {
@@ -335,17 +354,17 @@ func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, 
 		return nil
 	}
 
-	// Get authenticated user from context
+	// Get caller from context
 	reqCtx := ctx.Request().Context()
 
-	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
-		return h.InternalServerError(ctx, err, openapi)
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
+		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
+		return h.InternalServerError(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
-	// Process the request with authenticated user context
-	resp, err := processor(reqCtx, req, au)
+	// Process the request with caller context
+	resp, err := processor(reqCtx, req, caller)
 	if err != nil {
 		return h.InternalServerError(ctx, err, openapi)
 	}

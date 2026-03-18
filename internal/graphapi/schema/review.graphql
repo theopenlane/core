@@ -18,7 +18,11 @@ extend type Mutation{
         """
         values of the review
         """
-        input: CreateReviewInput!
+        input: CreateReviewInput!,
+        """
+        Files to attach to the review
+        """
+        reviewFiles: [Upload!]
     ): ReviewCreatePayload!
     """
     Create multiple new reviews
@@ -29,6 +33,15 @@ extend type Mutation{
         """
         input: [CreateReviewInput!]
     ): ReviewBulkCreatePayload!
+    """
+    Delete multiple existing reviews (soft-deletes them and removes FGA tuples)
+    """
+    deleteBulkReview(
+        """
+        IDs of the reviews to delete
+        """
+        ids: [ID!]!
+    ): ReviewBulkDeletePayload!
     """
     Create multiple new reviews via file upload
     """
@@ -50,6 +63,10 @@ extend type Mutation{
         New values for the review
         """
         input: UpdateReviewInput!
+        """
+        Files to attach to the review
+        """
+        reviewFiles: [Upload!]
     ): ReviewUpdatePayload!
     """
     Delete an existing review
@@ -60,6 +77,28 @@ extend type Mutation{
         """
         id: ID!
     ): ReviewDeletePayload!
+    """
+    Update multiple existing reviews
+    """
+    updateBulkReview(
+        """
+        IDs of the reviews to update
+        """
+        ids: [ID!]!
+        """
+        values to update the reviews with
+        """
+        input: UpdateReviewInput!
+    ): ReviewBulkUpdatePayload!
+    """
+    Update multiple existing reviews via file upload
+    """
+    updateBulkCSVReview(
+        """
+        csv file containing values of the review, must include ID column
+        """
+        input: Upload!
+    ): ReviewBulkUpdatePayload!
 }
 
 """
@@ -100,4 +139,28 @@ type ReviewBulkCreatePayload {
     Created reviews
     """
     reviews: [Review!]
+}
+
+"""
+Return response for updateBulkReview mutation
+"""
+type ReviewBulkUpdatePayload {
+    """
+    Updated reviews
+    """
+    reviews: [Review!]
+    """
+    IDs of the updated reviews
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkReview mutation
+"""
+type ReviewBulkDeletePayload {
+    """
+    Deleted trustCenterNDARequest IDs
+    """
+    deletedIDs: [ID!]!
 }

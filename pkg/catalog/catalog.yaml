@@ -79,8 +79,9 @@ modules:
         nickname: price_trustcenter_annually
         lookup_key: price_trustcenter_annually
         price_id: price_1RizUoBvxky1R7SvQX80T6Y6
-    audience: beta
+    audience: public
     product_id: prod_SeI4Uhido7Rizc
+    include_with_trial: true
   vulnerability_management_module:
     display_name: Vulnerability Tracking and Management
     lookup_key: vulnerability_management_module

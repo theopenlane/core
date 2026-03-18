@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -383,6 +384,21 @@ func (_u *NoteUpdate) SetDiscussion(v *Discussion) *NoteUpdate {
 	return _u.SetDiscussionID(v.ID)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_u *NoteUpdate) AddTrustCenterFaqIDs(ids ...string) *NoteUpdate {
+	_u.mutation.AddTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *NoteUpdate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *NoteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterFaqIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -455,6 +471,27 @@ func (_u *NoteUpdate) ClearTrustCenter() *NoteUpdate {
 func (_u *NoteUpdate) ClearDiscussion() *NoteUpdate {
 	_u.mutation.ClearDiscussion()
 	return _u
+}
+
+// ClearTrustCenterFaqs clears all "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *NoteUpdate) ClearTrustCenterFaqs() *NoteUpdate {
+	_u.mutation.ClearTrustCenterFaqs()
+	return _u
+}
+
+// RemoveTrustCenterFaqIDs removes the "trust_center_faqs" edge to TrustCenterFAQ entities by IDs.
+func (_u *NoteUpdate) RemoveTrustCenterFaqIDs(ids ...string) *NoteUpdate {
+	_u.mutation.RemoveTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterFaqs removes "trust_center_faqs" edges to TrustCenterFAQ entities.
+func (_u *NoteUpdate) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *NoteUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterFaqIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -886,6 +923,54 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterFaqsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1299,6 +1384,21 @@ func (_u *NoteUpdateOne) SetDiscussion(v *Discussion) *NoteUpdateOne {
 	return _u.SetDiscussionID(v.ID)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_u *NoteUpdateOne) AddTrustCenterFaqIDs(ids ...string) *NoteUpdateOne {
+	_u.mutation.AddTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *NoteUpdateOne) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *NoteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterFaqIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -1371,6 +1471,27 @@ func (_u *NoteUpdateOne) ClearTrustCenter() *NoteUpdateOne {
 func (_u *NoteUpdateOne) ClearDiscussion() *NoteUpdateOne {
 	_u.mutation.ClearDiscussion()
 	return _u
+}
+
+// ClearTrustCenterFaqs clears all "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *NoteUpdateOne) ClearTrustCenterFaqs() *NoteUpdateOne {
+	_u.mutation.ClearTrustCenterFaqs()
+	return _u
+}
+
+// RemoveTrustCenterFaqIDs removes the "trust_center_faqs" edge to TrustCenterFAQ entities by IDs.
+func (_u *NoteUpdateOne) RemoveTrustCenterFaqIDs(ids ...string) *NoteUpdateOne {
+	_u.mutation.RemoveTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterFaqs removes "trust_center_faqs" edges to TrustCenterFAQ entities.
+func (_u *NoteUpdateOne) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *NoteUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterFaqIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1827,6 +1948,54 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterFaqsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

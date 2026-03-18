@@ -90,6 +90,8 @@ const (
 	FieldAssetType = "asset_type"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldIdentifier holds the string denoting the identifier field in the database.
@@ -160,6 +162,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldAssetType,
 	FieldName,
+	FieldDisplayName,
 	FieldDescription,
 	FieldIdentifier,
 	FieldWebsite,
@@ -423,6 +426,11 @@ func ByAssetType(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.

@@ -28,6 +28,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -45,6 +47,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -57,6 +61,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -78,10 +84,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -90,6 +98,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -703,6 +712,60 @@ func (f TraverseDocumentData) Traverse(ctx context.Context, q generated.Query) e
 	return fmt.Errorf("unexpected query type %T. expect *generated.DocumentDataQuery", q)
 }
 
+// The EmailBrandingFunc type is an adapter to allow the use of ordinary function as a Querier.
+type EmailBrandingFunc func(context.Context, *generated.EmailBrandingQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f EmailBrandingFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.EmailBrandingQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EmailBrandingQuery", q)
+}
+
+// The TraverseEmailBranding type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseEmailBranding func(context.Context, *generated.EmailBrandingQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseEmailBranding) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseEmailBranding) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EmailBrandingQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.EmailBrandingQuery", q)
+}
+
+// The EmailTemplateFunc type is an adapter to allow the use of ordinary function as a Querier.
+type EmailTemplateFunc func(context.Context, *generated.EmailTemplateQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f EmailTemplateFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.EmailTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EmailTemplateQuery", q)
+}
+
+// The TraverseEmailTemplate type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseEmailTemplate func(context.Context, *generated.EmailTemplateQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseEmailTemplate) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseEmailTemplate) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.EmailTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.EmailTemplateQuery", q)
+}
+
 // The EmailVerificationTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
 type EmailVerificationTokenFunc func(context.Context, *generated.EmailVerificationTokenQuery) (generated.Value, error)
 
@@ -1162,6 +1225,60 @@ func (f TraverseIntegration) Traverse(ctx context.Context, q generated.Query) er
 	return fmt.Errorf("unexpected query type %T. expect *generated.IntegrationQuery", q)
 }
 
+// The IntegrationRunFunc type is an adapter to allow the use of ordinary function as a Querier.
+type IntegrationRunFunc func(context.Context, *generated.IntegrationRunQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f IntegrationRunFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.IntegrationRunQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.IntegrationRunQuery", q)
+}
+
+// The TraverseIntegrationRun type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseIntegrationRun func(context.Context, *generated.IntegrationRunQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseIntegrationRun) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseIntegrationRun) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IntegrationRunQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.IntegrationRunQuery", q)
+}
+
+// The IntegrationWebhookFunc type is an adapter to allow the use of ordinary function as a Querier.
+type IntegrationWebhookFunc func(context.Context, *generated.IntegrationWebhookQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f IntegrationWebhookFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.IntegrationWebhookQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.IntegrationWebhookQuery", q)
+}
+
+// The TraverseIntegrationWebhook type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseIntegrationWebhook func(context.Context, *generated.IntegrationWebhookQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseIntegrationWebhook) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseIntegrationWebhook) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IntegrationWebhookQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.IntegrationWebhookQuery", q)
+}
+
 // The InternalPolicyFunc type is an adapter to allow the use of ordinary function as a Querier.
 type InternalPolicyFunc func(context.Context, *generated.InternalPolicyQuery) (generated.Value, error)
 
@@ -1484,6 +1601,60 @@ func (f TraverseNotification) Traverse(ctx context.Context, q generated.Query) e
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.NotificationQuery", q)
+}
+
+// The NotificationPreferenceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NotificationPreferenceFunc func(context.Context, *generated.NotificationPreferenceQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NotificationPreferenceFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.NotificationPreferenceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.NotificationPreferenceQuery", q)
+}
+
+// The TraverseNotificationPreference type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNotificationPreference func(context.Context, *generated.NotificationPreferenceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNotificationPreference) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNotificationPreference) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NotificationPreferenceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.NotificationPreferenceQuery", q)
+}
+
+// The NotificationTemplateFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NotificationTemplateFunc func(context.Context, *generated.NotificationTemplateQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NotificationTemplateFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.NotificationTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.NotificationTemplateQuery", q)
+}
+
+// The TraverseNotificationTemplate type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNotificationTemplate func(context.Context, *generated.NotificationTemplateQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNotificationTemplate) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNotificationTemplate) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NotificationTemplateQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.NotificationTemplateQuery", q)
 }
 
 // The OnboardingFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1945,6 +2116,33 @@ func (f TraverseRisk) Traverse(ctx context.Context, q generated.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *generated.RiskQuery", q)
 }
 
+// The SLADefinitionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SLADefinitionFunc func(context.Context, *generated.SLADefinitionQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SLADefinitionFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SLADefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SLADefinitionQuery", q)
+}
+
+// The TraverseSLADefinition type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSLADefinition func(context.Context, *generated.SLADefinitionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSLADefinition) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSLADefinition) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SLADefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SLADefinitionQuery", q)
+}
+
 // The ScanFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ScanFunc func(context.Context, *generated.ScanQuery) (generated.Value, error)
 
@@ -2132,6 +2330,33 @@ func (f TraverseSubscriber) Traverse(ctx context.Context, q generated.Query) err
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.SubscriberQuery", q)
+}
+
+// The SystemDetailFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SystemDetailFunc func(context.Context, *generated.SystemDetailQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SystemDetailFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SystemDetailQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SystemDetailQuery", q)
+}
+
+// The TraverseSystemDetail type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSystemDetail func(context.Context, *generated.SystemDetailQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSystemDetail) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSystemDetail) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SystemDetailQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SystemDetailQuery", q)
 }
 
 // The TFASettingFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2348,6 +2573,33 @@ func (f TraverseTrustCenterEntity) Traverse(ctx context.Context, q generated.Que
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterEntityQuery", q)
+}
+
+// The TrustCenterFAQFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterFAQFunc func(context.Context, *generated.TrustCenterFAQQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterFAQFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterFAQQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterFAQQuery", q)
+}
+
+// The TraverseTrustCenterFAQ type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterFAQ func(context.Context, *generated.TrustCenterFAQQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterFAQ) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterFAQ) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterFAQQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterFAQQuery", q)
 }
 
 // The TrustCenterNDARequestFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2798,6 +3050,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.DiscussionQuery, predicate.Discussion, discussion.OrderOption]{typ: generated.TypeDiscussion, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
+	case *generated.EmailBrandingQuery:
+		return &query[*generated.EmailBrandingQuery, predicate.EmailBranding, emailbranding.OrderOption]{typ: generated.TypeEmailBranding, tq: q}, nil
+	case *generated.EmailTemplateQuery:
+		return &query[*generated.EmailTemplateQuery, predicate.EmailTemplate, emailtemplate.OrderOption]{typ: generated.TypeEmailTemplate, tq: q}, nil
 	case *generated.EmailVerificationTokenQuery:
 		return &query[*generated.EmailVerificationTokenQuery, predicate.EmailVerificationToken, emailverificationtoken.OrderOption]{typ: generated.TypeEmailVerificationToken, tq: q}, nil
 	case *generated.EntityQuery:
@@ -2832,6 +3088,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ImpersonationEventQuery, predicate.ImpersonationEvent, impersonationevent.OrderOption]{typ: generated.TypeImpersonationEvent, tq: q}, nil
 	case *generated.IntegrationQuery:
 		return &query[*generated.IntegrationQuery, predicate.Integration, integration.OrderOption]{typ: generated.TypeIntegration, tq: q}, nil
+	case *generated.IntegrationRunQuery:
+		return &query[*generated.IntegrationRunQuery, predicate.IntegrationRun, integrationrun.OrderOption]{typ: generated.TypeIntegrationRun, tq: q}, nil
+	case *generated.IntegrationWebhookQuery:
+		return &query[*generated.IntegrationWebhookQuery, predicate.IntegrationWebhook, integrationwebhook.OrderOption]{typ: generated.TypeIntegrationWebhook, tq: q}, nil
 	case *generated.InternalPolicyQuery:
 		return &query[*generated.InternalPolicyQuery, predicate.InternalPolicy, internalpolicy.OrderOption]{typ: generated.TypeInternalPolicy, tq: q}, nil
 	case *generated.InviteQuery:
@@ -2856,6 +3116,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.NoteQuery, predicate.Note, note.OrderOption]{typ: generated.TypeNote, tq: q}, nil
 	case *generated.NotificationQuery:
 		return &query[*generated.NotificationQuery, predicate.Notification, notification.OrderOption]{typ: generated.TypeNotification, tq: q}, nil
+	case *generated.NotificationPreferenceQuery:
+		return &query[*generated.NotificationPreferenceQuery, predicate.NotificationPreference, notificationpreference.OrderOption]{typ: generated.TypeNotificationPreference, tq: q}, nil
+	case *generated.NotificationTemplateQuery:
+		return &query[*generated.NotificationTemplateQuery, predicate.NotificationTemplate, notificationtemplate.OrderOption]{typ: generated.TypeNotificationTemplate, tq: q}, nil
 	case *generated.OnboardingQuery:
 		return &query[*generated.OnboardingQuery, predicate.Onboarding, onboarding.OrderOption]{typ: generated.TypeOnboarding, tq: q}, nil
 	case *generated.OrgMembershipQuery:
@@ -2890,6 +3154,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ReviewQuery, predicate.Review, review.OrderOption]{typ: generated.TypeReview, tq: q}, nil
 	case *generated.RiskQuery:
 		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
+	case *generated.SLADefinitionQuery:
+		return &query[*generated.SLADefinitionQuery, predicate.SLADefinition, sladefinition.OrderOption]{typ: generated.TypeSLADefinition, tq: q}, nil
 	case *generated.ScanQuery:
 		return &query[*generated.ScanQuery, predicate.Scan, scan.OrderOption]{typ: generated.TypeScan, tq: q}, nil
 	case *generated.ScheduledJobQuery:
@@ -2904,6 +3170,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SubprocessorQuery, predicate.Subprocessor, subprocessor.OrderOption]{typ: generated.TypeSubprocessor, tq: q}, nil
 	case *generated.SubscriberQuery:
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
+	case *generated.SystemDetailQuery:
+		return &query[*generated.SystemDetailQuery, predicate.SystemDetail, systemdetail.OrderOption]{typ: generated.TypeSystemDetail, tq: q}, nil
 	case *generated.TFASettingQuery:
 		return &query[*generated.TFASettingQuery, predicate.TFASetting, tfasetting.OrderOption]{typ: generated.TypeTFASetting, tq: q}, nil
 	case *generated.TagDefinitionQuery:
@@ -2920,6 +3188,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TrustCenterDocQuery, predicate.TrustCenterDoc, trustcenterdoc.OrderOption]{typ: generated.TypeTrustCenterDoc, tq: q}, nil
 	case *generated.TrustCenterEntityQuery:
 		return &query[*generated.TrustCenterEntityQuery, predicate.TrustCenterEntity, trustcenterentity.OrderOption]{typ: generated.TypeTrustCenterEntity, tq: q}, nil
+	case *generated.TrustCenterFAQQuery:
+		return &query[*generated.TrustCenterFAQQuery, predicate.TrustCenterFAQ, trustcenterfaq.OrderOption]{typ: generated.TypeTrustCenterFAQ, tq: q}, nil
 	case *generated.TrustCenterNDARequestQuery:
 		return &query[*generated.TrustCenterNDARequestQuery, predicate.TrustCenterNDARequest, trustcenterndarequest.OrderOption]{typ: generated.TypeTrustCenterNDARequest, tq: q}, nil
 	case *generated.TrustCenterSettingQuery:

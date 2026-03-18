@@ -29,19 +29,30 @@ var sharedMimeTypes = []string{
 	"application/json", "application/json; charset=utf-8",
 }
 
+var evidenceMimeTypes = []string{
+	"video/quicktime",
+	"video/mp4",
+	"video/webm",
+}
+
 var validMimeTypes = map[string][]string{
-	"avatarFile":         {"image/jpeg", "image/png"},
-	"logoFile":           {"image/jpeg", "image/png", "image/svg+xml"},
-	"faviconFile":        {"image/jpeg", "image/png", "image/x-icon"},
-	"evidenceFiles":      sharedMimeTypes,
-	"noteFiles":          sharedMimeTypes,
-	"exportFiles":        {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8"},
-	"procedureFile":      importSchemaMimeTypes,
-	"internalPolicyFile": importSchemaMimeTypes,
-	"actionPlanFile":     importSchemaMimeTypes,
-	"trustCenterDocFile": {"application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
-	"templateFiles":      sharedMimeTypes,
-	"watermarkFile":      {"image/jpeg", "image/png"},
+	"avatarFile":          {"image/jpeg", "image/png", "image/webp"},
+	"logoFile":            {"image/jpeg", "image/png", "image/svg+xml", "image/webp"},
+	"faviconFile":         {"image/jpeg", "image/png", "image/x-icon"},
+	"evidenceFiles":       append(sharedMimeTypes, evidenceMimeTypes...),
+	"noteFiles":           sharedMimeTypes,
+	"exportFiles":         {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8", "application/zip", "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/markdown", "text/x-markdown"},
+	"procedureFile":       importSchemaMimeTypes,
+	"internalPolicyFile":  importSchemaMimeTypes,
+	"actionPlanFile":      importSchemaMimeTypes,
+	"trustCenterDocFile":  {"application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+	"documentDataFile":    {"application/pdf"},
+	"templateFiles":       sharedMimeTypes,
+	"heroImageFile":       {"image/jpeg", "image/png", "image/webp"},
+	"watermarkFile":       {"image/jpeg", "image/png"},
+	"identityHolderFiles": sharedMimeTypes,
+	"entityFiles":         sharedMimeTypes,
+	"reviewFiles":         sharedMimeTypes,
 }
 
 // MimeTypeValidator returns a storage.ValidationFunc enforcing the configured mime-type set per form field.

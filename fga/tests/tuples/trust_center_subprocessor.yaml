@@ -1,0 +1,22 @@
+- user: organization:tc-org-1
+  relation: parent
+  object: trust_center:tc-1
+- user: user:tc-owner-1
+  relation: owner
+  object: organization:tc-org-1
+- user: user:tc-viewer-1
+  relation: member
+  object: organization:tc-org-1
+
+- user: trust_center:tc-1
+  relation: parent
+  object: trust_center_subprocessor:tcsubproc-1
+- user: trust_center_subprocessor:tcsubproc-1
+  relation: parent
+  object: subprocessor:sp-1
+- user: subprocessor:sp-1
+  relation: parent
+  object: file:logo-file-1
+- user: user:*
+  relation: can_view
+  object: trust_center:tc-1

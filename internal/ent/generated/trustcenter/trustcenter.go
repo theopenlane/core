@@ -44,6 +44,8 @@ const (
 	FieldPirschDomainID = "pirsch_domain_id"
 	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
 	FieldPirschIdentificationCode = "pirsch_identification_code"
+	// FieldPirschAccessLink holds the string denoting the pirsch_access_link field in the database.
+	FieldPirschAccessLink = "pirsch_access_link"
 	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
 	FieldPreviewStatus = "preview_status"
 	// FieldSubprocessorURL holds the string denoting the subprocessor_url field in the database.
@@ -78,6 +80,8 @@ const (
 	EdgeTrustCenterEntities = "trust_center_entities"
 	// EdgeTrustCenterNdaRequests holds the string denoting the trust_center_nda_requests edge name in mutations.
 	EdgeTrustCenterNdaRequests = "trust_center_nda_requests"
+	// EdgeTrustCenterFaqs holds the string denoting the trust_center_faqs edge name in mutations.
+	EdgeTrustCenterFaqs = "trust_center_faqs"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -185,6 +189,13 @@ const (
 	TrustCenterNdaRequestsInverseTable = "trust_center_nda_requests"
 	// TrustCenterNdaRequestsColumn is the table column denoting the trust_center_nda_requests relation/edge.
 	TrustCenterNdaRequestsColumn = "trust_center_id"
+	// TrustCenterFaqsTable is the table that holds the trust_center_faqs relation/edge.
+	TrustCenterFaqsTable = "trust_center_faqs"
+	// TrustCenterFaqsInverseTable is the table name for the TrustCenterFAQ entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterfaq" package.
+	TrustCenterFaqsInverseTable = "trust_center_faqs"
+	// TrustCenterFaqsColumn is the table column denoting the trust_center_faqs relation/edge.
+	TrustCenterFaqsColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -203,6 +214,7 @@ var Columns = []string{
 	FieldPreviewDomainID,
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
+	FieldPirschAccessLink,
 	FieldPreviewStatus,
 	FieldSubprocessorURL,
 }
@@ -249,6 +261,8 @@ var (
 	DefaultTags []string
 	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	SlugValidator func(string) error
+	// PirschAccessLinkValidator is a validator for the "pirsch_access_link" field. It is called by the builders before save.
+	PirschAccessLinkValidator func(string) error
 	// SubprocessorURLValidator is a validator for the "subprocessor_url" field. It is called by the builders before save.
 	SubprocessorURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -333,6 +347,11 @@ func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
 // ByPirschIdentificationCode orders the results by the pirsch_identification_code field.
 func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschIdentificationCode, opts...).ToFunc()
+}
+
+// ByPirschAccessLink orders the results by the pirsch_access_link field.
+func ByPirschAccessLink(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPirschAccessLink, opts...).ToFunc()
 }
 
 // ByPreviewStatus orders the results by the preview_status field.
@@ -512,6 +531,20 @@ func ByTrustCenterNdaRequests(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterNdaRequestsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterFaqsCount orders the results by trust_center_faqs count.
+func ByTrustCenterFaqsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterFaqsStep(), opts...)
+	}
+}
+
+// ByTrustCenterFaqs orders the results by trust_center_faqs terms.
+func ByTrustCenterFaqs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterFaqsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -615,6 +648,13 @@ func newTrustCenterNdaRequestsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterNdaRequestsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterNdaRequestsTable, TrustCenterNdaRequestsColumn),
+	)
+}
+func newTrustCenterFaqsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterFaqsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterFaqsTable, TrustCenterFaqsColumn),
 	)
 }
 

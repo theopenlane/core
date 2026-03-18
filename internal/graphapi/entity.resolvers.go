@@ -9,8 +9,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -18,12 +20,27 @@ import (
 )
 
 // CreateEntity is the resolver for the createEntity field.
-func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error) {
+func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload) (*model.EntityCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	if entityTypeName != nil {
+		// get the entity id from the entity type name
+		etID, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.NameEqualFold(*entityTypeName)).OnlyID(ctx)
+		if err != nil || etID == "" {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_type_name", *entityTypeName).Msg("failed to get entity type by name")
+
+			return nil, rout.InvalidField("entity_type_name")
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
+
+		input.EntityTypeID = &etID
 	}
 
 	res, err := withTransactionalMutation(ctx).Entity.Create().SetInput(input).Save(ctx)
@@ -37,25 +54,42 @@ func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.Cre
 }
 
 // CreateBulkEntity is the resolver for the createBulkEntity field.
-func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput, entityTypeName *string) (*model.EntityBulkCreatePayload, error) {
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	if entityTypeName != nil {
+		// get the entity id from the entity type name
+		etID, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.NameEqualFold(*entityTypeName)).OnlyID(ctx)
+		if err != nil || etID == "" {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_type_name", *entityTypeName).Msg("failed to get entity type by name")
+
+			return nil, rout.InvalidField("entity_type_name")
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
+
+		for i := range input {
+			input[i].EntityTypeID = &etID
+		}
 	}
 
 	return r.bulkCreateEntity(ctx, input)
 }
 
 // CreateBulkCSVEntity is the resolver for the createBulkCSVEntity field.
-func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateEntityInput](input)
+func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string) (*model.EntityBulkCreatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.EntityCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -68,24 +102,58 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateEntity(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Entity", data); err != nil {
+		return nil, err
+	}
+
+	var entityTypeID string
+	if entityTypeName != nil {
+		// get the entity id from the entity type name
+		etID, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.NameEqualFold(*entityTypeName)).OnlyID(ctx)
+		if err != nil || etID == "" {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_type_name", *entityTypeName).Msg("failed to get entity type by name")
+
+			return nil, rout.InvalidField("entity_type_name")
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
+
+		entityTypeID = etID
+	}
+
+	inputs := make([]*generated.CreateEntityInput, 0, len(data))
+	for i := range data {
+		if entityTypeID != "" {
+			data[i].Input.EntityTypeID = &entityTypeID
+		}
+
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateEntity(ctx, inputs)
 }
 
 // UpdateEntity is the resolver for the updateEntity field.
-func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error) {
+func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload) (*model.EntityUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -126,6 +194,35 @@ func (r *mutationResolver) DeleteBulkEntity(ctx context.Context, ids []string) (
 	}
 
 	return r.bulkDeleteEntity(ctx, ids)
+}
+
+// UpdateBulkEntity is the resolver for the updateBulkEntity field.
+func (r *mutationResolver) UpdateBulkEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateEntity(ctx, ids, input)
+}
+
+// UpdateBulkCSVEntity is the resolver for the updateBulkCSVEntity field.
+func (r *mutationResolver) UpdateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.EntityCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Entity", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVEntity(ctx, data)
 }
 
 // Entity is the resolver for the entity field.

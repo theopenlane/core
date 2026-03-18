@@ -1,9 +1,15 @@
 package config
 
 import (
+	"context"
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // ProviderSpec mirrors the declarative provider definition files rendered in the UI
@@ -14,10 +20,20 @@ type ProviderSpec struct {
 	DisplayName string `json:"displayName"`
 	// Category groups providers (code, collab, etc)
 	Category string `json:"category"`
+	// Description optionally describes the provider in the UI
+	Description string `json:"description,omitempty"`
 	// AuthType describes the authentication kind
 	AuthType types.AuthKind `json:"authType"`
+	// AuthStartPath is the integration API path to initiate provider authentication
+	AuthStartPath string `json:"authStartPath,omitempty"`
+	// AuthCallbackPath is the integration API callback path used to complete provider authentication
+	AuthCallbackPath string `json:"authCallbackPath,omitempty"`
 	// Active toggles provider availability
-	Active bool `json:"active"`
+	Active *bool `json:"active,omitempty"`
+	// Visible toggles provider visibility in the UI
+	Visible *bool `json:"visible,omitempty"`
+	// Tags define UI labels/pills rendered for the provider card
+	Tags []string `json:"tags,omitempty"`
 	// LogoURL references the logo asset
 	LogoURL string `json:"logoUrl"`
 	// DocsURL links to provider documentation
@@ -25,7 +41,7 @@ type ProviderSpec struct {
 	// SchemaVersion identifies the spec schema version
 	SchemaVersion string `json:"schemaVersion,omitempty"`
 	// OAuth contains OAuth configuration when applicable
-	OAuth *OAuthSpec `json:"oauth,omitempty"`
+	OAuth *OAuthSpec `json:"oauth,omitempty" koanf:"oauth"`
 	// APIKey contains API key configuration when applicable
 	APIKey *APIKeySpec `json:"apiKey,omitempty"`
 	// UserInfo describes optional user info lookups
@@ -45,7 +61,7 @@ type ProviderSpec struct {
 	// Metadata stores additional provider metadata
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// Defaults stores provider-specific defaults
-	Defaults map[string]interface{} `json:"defaults,omitempty"`
+	Defaults map[string]any `json:"defaults,omitempty"`
 }
 
 // ProviderType returns the normalized provider identifier
@@ -59,7 +75,7 @@ func (s ProviderSpec) ToProviderConfig() types.ProviderConfig {
 		Type:        s.ProviderType(),
 		Auth:        s.AuthType,
 		DisplayName: s.DisplayName,
-		Description: "",
+		Description: s.Description,
 		Category:    s.Category,
 		DocsURL:     s.DocsURL,
 		LogoURL:     s.LogoURL,
@@ -74,12 +90,45 @@ func ToProviderConfigs(specs map[types.ProviderType]ProviderSpec) map[types.Prov
 		return nil
 	}
 
-	out := make(map[types.ProviderType]types.ProviderConfig, len(specs))
-	for provider, spec := range specs {
-		out[provider] = spec.ToProviderConfig()
+	return lo.MapEntries(specs, func(provider types.ProviderType, spec ProviderSpec) (types.ProviderType, types.ProviderConfig) {
+		return provider, spec.ToProviderConfig()
+	})
+}
+
+// MergeProviderSpecs overlays provider-specific overrides onto base specs using provider keys
+func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]ProviderSpec, overrides map[string]ProviderSpec) map[types.ProviderType]ProviderSpec {
+	merged := lo.Assign(map[types.ProviderType]ProviderSpec{}, base)
+
+	for key, override := range overrides {
+		provider := types.ProviderTypeFromString(key)
+		current, ok := merged[provider]
+		if !ok {
+			continue
+		}
+
+		currentMap, err := jsonx.ToMap(current)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize base provider spec for merge")
+			continue
+		}
+
+		overrideMap, err := jsonx.ToMap(override)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize override provider spec for merge")
+			continue
+		}
+
+		nextMap := mapx.DeepMergeMapAny(currentMap, mapx.PruneMapZeroAny(overrideMap))
+		var next ProviderSpec
+		if err := jsonx.RoundTrip(nextMap, &next); err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to apply provider spec override")
+			continue
+		}
+
+		merged[provider] = next
 	}
 
-	return out
+	return merged
 }
 
 // PersistenceSpec controls how secrets are stored
@@ -91,9 +140,9 @@ type PersistenceSpec struct {
 // OAuthSpec captures OAuth2/OIDC metadata from the JSON files
 type OAuthSpec struct {
 	// ClientID is the OAuth client identifier
-	ClientID string `json:"clientId"`
+	ClientID string `json:"clientId" koanf:"clientid"`
 	// ClientSecret is the OAuth client secret
-	ClientSecret string `json:"clientSecret"`
+	ClientSecret string `json:"clientSecret" koanf:"clientsecret" sensitive:"true"`
 	// AuthURL is the authorization endpoint
 	AuthURL string `json:"authUrl"`
 	// TokenURL is the token endpoint
@@ -164,6 +213,8 @@ type GitHubAppSpec struct {
 	BaseURL string `json:"baseUrl,omitempty"`
 	// TokenTTL optionally indicates desired installation token lifetime
 	TokenTTL time.Duration `json:"tokenTtl,omitempty"`
+	// AppSlug optionally exposes the configured app slug for UI metadata
+	AppSlug string `json:"appSlug,omitempty"`
 }
 
 // AWSFederationSpec captures AssumeRoleWithWebIdentity defaults

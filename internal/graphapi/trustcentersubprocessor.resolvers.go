@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -70,7 +71,7 @@ func (r *mutationResolver) CreateBulkTrustCenterSubprocessor(ctx context.Context
 
 // CreateBulkCSVTrustCenterSubprocessor is the resolver for the createBulkCSVTrustCenterSubprocessor field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterSubprocessorInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterSubprocessorCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -81,7 +82,16 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Cont
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateTrustCenterSubprocessor(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterSubprocessor", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTrustCenterSubprocessorInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTrustCenterSubprocessor(ctx, inputs)
 }
 
 // UpdateTrustCenterSubprocessor is the resolver for the updateTrustCenterSubprocessor field.
@@ -127,6 +137,26 @@ func (r *mutationResolver) DeleteBulkTrustCenterSubprocessor(ctx context.Context
 	}
 
 	return r.bulkDeleteTrustCenterSubprocessor(ctx, ids)
+}
+
+// UpdateBulkCSVTrustCenterSubprocessor is the resolver for the updateBulkCSVTrustCenterSubprocessor field.
+func (r *mutationResolver) UpdateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload) (*model.TrustCenterSubprocessorBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterSubprocessorCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersubprocessor"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterSubprocessor", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVTrustCenterSubprocessor(ctx, data)
 }
 
 // TrustCenterSubprocessor is the resolver for the trustCenterSubprocessor field.

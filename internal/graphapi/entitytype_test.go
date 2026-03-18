@@ -76,34 +76,34 @@ func TestQueryEntityTypes(t *testing.T) {
 	e2 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name            string
-		client          *testclient.TestClient
-		ctx             context.Context
-		expectedResults int
+		name         string
+		client       *testclient.TestClient
+		ctx          context.Context
+		shouldSeeNew bool
 	}{
 		{
-			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			expectedResults: 3, // 1 is created in the setup
+			name:         "happy path",
+			client:       suite.client.api,
+			ctx:          testUser1.UserCtx,
+			shouldSeeNew: true,
 		},
 		{
-			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
-			ctx:             context.Background(),
-			expectedResults: 3, // 1 is created in the setup
+			name:         "happy path, using api token",
+			client:       suite.client.apiWithToken,
+			ctx:          context.Background(),
+			shouldSeeNew: true,
 		},
 		{
-			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
-			ctx:             context.Background(),
-			expectedResults: 3, // 1 is created in the setup
+			name:         "happy path, using pat",
+			client:       suite.client.apiWithPAT,
+			ctx:          context.Background(),
+			shouldSeeNew: true,
 		},
 		{
-			name:            "another user, no new entities should be returned",
-			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
-			expectedResults: 1, // 1 is created in the setup
+			name:         "another user, no new entities should be returned",
+			client:       suite.client.api,
+			ctx:          testUser2.UserCtx,
+			shouldSeeNew: false,
 		},
 	}
 
@@ -113,7 +113,27 @@ func TestQueryEntityTypes(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.EntityTypes.Edges, tc.expectedResults), "expected %d entity types, got %d", tc.expectedResults, len(resp.EntityTypes.Edges))
+			ids := map[string]struct{}{}
+			for _, edge := range resp.EntityTypes.Edges {
+				if edge == nil || edge.Node == nil {
+					continue
+				}
+
+				ids[edge.Node.ID] = struct{}{}
+			}
+
+			_, e1Visible := ids[e1.ID]
+			_, e2Visible := ids[e2.ID]
+
+			if tc.shouldSeeNew {
+				assert.Check(t, e1Visible, "expected entity type %s to be visible", e1.ID)
+				assert.Check(t, e2Visible, "expected entity type %s to be visible", e2.ID)
+
+				return
+			}
+
+			assert.Check(t, !e1Visible, "did not expect entity type %s to be visible", e1.ID)
+			assert.Check(t, !e2Visible, "did not expect entity type %s to be visible", e2.ID)
 		})
 	}
 

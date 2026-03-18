@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -20,7 +21,8 @@ import (
 // CreateControlImplementation is the resolver for the createControlImplementation field.
 func (r *mutationResolver) CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -44,7 +46,8 @@ func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -55,7 +58,7 @@ func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, 
 
 // CreateBulkCSVControlImplementation is the resolver for the createBulkCSVControlImplementation field.
 func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateControlImplementationInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ControlImplementationCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -68,13 +71,27 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateControlImplementation(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "ControlImplementation", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateControlImplementationInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateControlImplementation(ctx, inputs)
 }
 
 // UpdateControlImplementation is the resolver for the updateControlImplementation field.
@@ -85,7 +102,8 @@ func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id s
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -126,6 +144,35 @@ func (r *mutationResolver) DeleteBulkControlImplementation(ctx context.Context, 
 	}
 
 	return r.bulkDeleteControlImplementation(ctx, ids)
+}
+
+// UpdateBulkControlImplementation is the resolver for the updateBulkControlImplementation field.
+func (r *mutationResolver) UpdateBulkControlImplementation(ctx context.Context, ids []string, input generated.UpdateControlImplementationInput) (*model.ControlImplementationBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateControlImplementation(ctx, ids, input)
+}
+
+// UpdateBulkCSVControlImplementation is the resolver for the updateBulkCSVControlImplementation field.
+func (r *mutationResolver) UpdateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ControlImplementationCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "ControlImplementation", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVControlImplementation(ctx, data)
 }
 
 // ControlImplementation is the resolver for the controlImplementation field.

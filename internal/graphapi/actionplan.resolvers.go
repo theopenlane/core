@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -42,7 +43,8 @@ func (r *actionPlanResolver) WorkflowTimeline(ctx context.Context, obj *generate
 // CreateActionPlan is the resolver for the createActionPlan field.
 func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated.CreateActionPlanInput) (*model.ActionPlanCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -66,7 +68,8 @@ func (r *mutationResolver) CreateBulkActionPlan(ctx context.Context, input []*ge
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -77,7 +80,7 @@ func (r *mutationResolver) CreateBulkActionPlan(ctx context.Context, input []*ge
 
 // CreateBulkCSVActionPlan is the resolver for the createBulkCSVActionPlan field.
 func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateActionPlanInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.ActionPlanCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -90,13 +93,27 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateActionPlan(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "ActionPlan", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateActionPlanInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateActionPlan(ctx, inputs)
 }
 
 // UpdateBulkActionPlan is the resolver for the updateBulkActionPlan field.
@@ -116,7 +133,8 @@ func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, inpu
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -157,6 +175,26 @@ func (r *mutationResolver) DeleteBulkActionPlan(ctx context.Context, ids []strin
 	}
 
 	return r.bulkDeleteActionPlan(ctx, ids)
+}
+
+// UpdateBulkCSVActionPlan is the resolver for the updateBulkCSVActionPlan field.
+func (r *mutationResolver) UpdateBulkCSVActionPlan(ctx context.Context, input graphql.Upload) (*model.ActionPlanBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ActionPlanCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "actionplan"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "ActionPlan", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVActionPlan(ctx, data)
 }
 
 // ActionPlan is the resolver for the actionPlan field.

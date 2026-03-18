@@ -9,6 +9,8 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
@@ -16,31 +18,39 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
 func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error) {
-	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		if input.TrustCenterID == nil || *input.TrustCenterID != anon.TrustCenterID {
+	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+		if input.TrustCenterID == nil || *input.TrustCenterID != tcID {
 			return nil, rout.ErrPermissionDenied
 		}
 
-		ctx = contextx.With(
-			privacy.DecisionContext(
-				auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
-					SubjectID:          anon.SubjectID,
-					SubjectName:        anon.SubjectName,
-					SubjectEmail:       anon.SubjectEmail,
-					OrganizationID:     anon.OrganizationID,
-					OrganizationIDs:    []string{anon.OrganizationID},
-					AuthenticationType: anon.AuthenticationType,
-				}),
-				privacy.Allow,
-			),
-			auth.TrustCenterNDAContextKey{OrgID: anon.OrganizationID},
+		caller, callerOk := auth.CallerFromContext(ctx)
+		if !callerOk || caller == nil {
+			return nil, rout.ErrPermissionDenied
+		}
+
+		ctx = auth.WithCaller(
+			privacy.DecisionContext(ctx, privacy.Allow),
+			caller,
 		)
+	}
+
+	if input.TrustCenterID == nil {
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterndarequest")
+		if err != nil {
+			return nil, err
+		}
+
+		// set the input in the graphql context
+		// this isn't a required field, but its required by the access checks
+		// so we need to set it early
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
 	}
 
 	res, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Create().SetInput(input).Save(ctx)
@@ -64,7 +74,7 @@ func (r *mutationResolver) CreateBulkTrustCenterNDARequest(ctx context.Context, 
 
 // CreateBulkCSVTrustCenterNDARequest is the resolver for the createBulkCSVTrustCenterNDARequest field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterNDARequest(ctx context.Context, input graphql.Upload) (*model.TrustCenterNDARequestBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterNDARequestInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.TrustCenterNDARequestCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -75,7 +85,16 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterNDARequest(ctx context.Contex
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateTrustCenterNDARequest(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "TrustCenterNDARequest", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateTrustCenterNDARequestInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateTrustCenterNDARequest(ctx, inputs)
 }
 
 // UpdateTrustCenterNDARequest is the resolver for the updateTrustCenterNDARequest field.
@@ -110,6 +129,79 @@ func (r *mutationResolver) DeleteTrustCenterNDARequest(ctx context.Context, id s
 
 	return &model.TrustCenterNDARequestDeletePayload{
 		DeletedID: id,
+	}, nil
+}
+
+// ApproveNDARequests is the resolver for the approveNDARequests field.
+func (r *mutationResolver) ApproveNDARequests(ctx context.Context, ids []string) (*model.BulkUpdateStatusPayload, error) {
+	count, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Update().Where(
+		trustcenterndarequest.IDIn(ids...),
+	).SetStatus(enums.TrustCenterNDARequestStatusApproved).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequest"})
+	}
+
+	return &model.BulkUpdateStatusPayload{
+		TotalUpdated: count,
+	}, nil
+}
+
+// DenyNDARequests is the resolver for the denyNDARequests field.
+func (r *mutationResolver) DenyNDARequests(ctx context.Context, ids []string) (*model.BulkUpdateStatusPayload, error) {
+	count, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Update().Where(
+		trustcenterndarequest.IDIn(ids...),
+	).SetStatus(enums.TrustCenterNDARequestStatusDeclined).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequest"})
+	}
+
+	return &model.BulkUpdateStatusPayload{
+		TotalUpdated: count,
+	}, nil
+}
+
+// DeleteBulkTrustCenterNDARequest is the resolver for the deleteBulkTrustCenterNDARequest field.
+func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteTrustCenterNDARequest(ctx, ids)
+}
+
+// RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
+func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error) {
+	// check if the nda for the user and trust center combination is signed
+	tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx)
+	if !ok || tcID == "" {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	existing, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(
+		trustcenterndarequest.And(
+			trustcenterndarequest.Email(email),
+			trustcenterndarequest.TrustCenterIDEQ(tcID),
+		),
+	).Only(allowCtx)
+	if err == nil {
+		// do an create to the request to re-trigger any notifications or resend emails, this will follow-the same logic as creating a new request, but will be idempotent for users that have already signed the nda
+		if _, err = r.CreateTrustCenterNDARequest(ctx, generated.CreateTrustCenterNDARequestInput{
+			Email:         email,
+			FirstName:     existing.FirstName,
+			LastName:      existing.LastName,
+			TrustCenterID: &tcID,
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create trust center nda request for existing nda, this may cause the user to not receive a notification email with their new token")
+
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndarequest"})
+
+		}
+	}
+
+	// return success even if there isn't a request found, this prevents information disclosure about who has signed the nda and who hasn't
+	return &model.TrustCenterAccessTokenPayload{
+		Success: true,
 	}, nil
 }
 

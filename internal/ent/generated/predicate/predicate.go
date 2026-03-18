@@ -66,6 +66,12 @@ type Discussion func(*sql.Selector)
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 
+// EmailBranding is the predicate function for emailbranding builders.
+type EmailBranding func(*sql.Selector)
+
+// EmailTemplate is the predicate function for emailtemplate builders.
+type EmailTemplate func(*sql.Selector)
+
 // EmailVerificationToken is the predicate function for emailverificationtoken builders.
 type EmailVerificationToken func(*sql.Selector)
 
@@ -117,6 +123,12 @@ type ImpersonationEvent func(*sql.Selector)
 // Integration is the predicate function for integration builders.
 type Integration func(*sql.Selector)
 
+// IntegrationRun is the predicate function for integrationrun builders.
+type IntegrationRun func(*sql.Selector)
+
+// IntegrationWebhook is the predicate function for integrationwebhook builders.
+type IntegrationWebhook func(*sql.Selector)
+
 // InternalPolicy is the predicate function for internalpolicy builders.
 type InternalPolicy func(*sql.Selector)
 
@@ -152,6 +164,12 @@ type Note func(*sql.Selector)
 
 // Notification is the predicate function for notification builders.
 type Notification func(*sql.Selector)
+
+// NotificationPreference is the predicate function for notificationpreference builders.
+type NotificationPreference func(*sql.Selector)
+
+// NotificationTemplate is the predicate function for notificationtemplate builders.
+type NotificationTemplate func(*sql.Selector)
 
 // Onboarding is the predicate function for onboarding builders.
 type Onboarding func(*sql.Selector)
@@ -204,6 +222,9 @@ type Review func(*sql.Selector)
 // Risk is the predicate function for risk builders.
 type Risk func(*sql.Selector)
 
+// SLADefinition is the predicate function for sladefinition builders.
+type SLADefinition func(*sql.Selector)
+
 // Scan is the predicate function for scan builders.
 type Scan func(*sql.Selector)
 
@@ -224,6 +245,9 @@ type Subprocessor func(*sql.Selector)
 
 // Subscriber is the predicate function for subscriber builders.
 type Subscriber func(*sql.Selector)
+
+// SystemDetail is the predicate function for systemdetail builders.
+type SystemDetail func(*sql.Selector)
 
 // TFASetting is the predicate function for tfasetting builders.
 type TFASetting func(*sql.Selector)
@@ -248,6 +272,9 @@ type TrustCenterDoc func(*sql.Selector)
 
 // TrustCenterEntity is the predicate function for trustcenterentity builders.
 type TrustCenterEntity func(*sql.Selector)
+
+// TrustCenterFAQ is the predicate function for trustcenterfaq builders.
+type TrustCenterFAQ func(*sql.Selector)
 
 // TrustCenterNDARequest is the predicate function for trustcenterndarequest builders.
 type TrustCenterNDARequest func(*sql.Selector)

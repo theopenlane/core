@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 var (
@@ -55,11 +56,7 @@ func (c *JobCadence) UnmarshalGQL(v interface{}) error {
 
 // simple cache
 var validWeekdaysSet = func() map[string]struct{} {
-	m := make(map[string]struct{})
-	for _, v := range enums.JobWeekdayFriday.Values() {
-		m[v] = struct{}{}
-	}
-	return m
+	return mapx.MapSetFromSlice(enums.JobWeekdayFriday.Values())
 }()
 
 // Validate makes sure we have a usable job cadence setting
@@ -90,11 +87,7 @@ func (c *JobCadence) Validate() error {
 		}
 
 		valid := enums.JobWeekdaySaturday.Values()
-		validSet := make(map[string]struct{}, len(valid))
-
-		for _, v := range valid {
-			validSet[v] = struct{}{}
-		}
+		validSet := mapx.MapSetFromSlice(valid)
 
 		seen := make(map[string]struct{}, len(c.Days))
 

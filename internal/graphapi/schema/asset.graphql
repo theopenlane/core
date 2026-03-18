@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): AssetBulkDeletePayload!
+    """
+    Update multiple existing assets
+    """
+    updateBulkAsset(
+        """
+        IDs of the assets to update
+        """
+        ids: [ID!]!
+        """
+        values to update the assets with
+        """
+        input: UpdateAssetInput!
+    ): AssetBulkUpdatePayload!
+    """
+    Update multiple existing assets via file upload
+    """
+    updateBulkCSVAsset(
+        """
+        csv file containing values of the asset, must include ID column
+        """
+        input: Upload!
+    ): AssetBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type AssetBulkDeletePayload {
     Deleted asset IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkAsset mutation
+"""
+type AssetBulkUpdatePayload {
+    """
+    Updated assets
+    """
+    assets: [Asset!]
+    """
+    IDs of the updated assets
+    """
+    updatedIDs: [ID!]
 }

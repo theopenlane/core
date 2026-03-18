@@ -37,7 +37,7 @@ func (h *Handler) RegisterJobRunner(ctx echo.Context, openapi *OpenAPIContext) e
 		return h.Unauthorized(ctx, ErrJobRunnerRegistrationTokenExpired)
 	}
 
-	ctxWithToken = auth.WithAuthenticatedUser(ctxWithToken, &auth.AuthenticatedUser{
+	ctxWithToken = auth.WithCaller(ctxWithToken, &auth.Caller{
 		SubjectID:       registrationToken.ID,
 		OrganizationID:  registrationToken.OwnerID,
 		OrganizationIDs: []string{registrationToken.OwnerID},

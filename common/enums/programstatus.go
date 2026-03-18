@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // ProgramStatus is a custom type representing the various states of ProgramStatus.
 type ProgramStatus string
@@ -26,56 +22,24 @@ var (
 	ProgramStatusInvalid ProgramStatus = "INVALID"
 )
 
-// Values returns a slice of strings representing all valid ProgramStatus values.
-func (ProgramStatus) Values() []string {
-	return []string{
-		string(ProgramStatusNotStarted),
-		string(ProgramStatusInProgress),
-		string(ProgramStatusActionRequired),
-		string(ProgramStatusReadyForAuditor),
-		string(ProgramStatusCompleted),
-		string(ProgramStatusArchived),
-	}
+var programStatusValues = []ProgramStatus{
+	ProgramStatusNotStarted, ProgramStatusInProgress, ProgramStatusActionRequired,
+	ProgramStatusReadyForAuditor, ProgramStatusCompleted, ProgramStatusArchived,
 }
 
+// Values returns a slice of strings representing all valid ProgramStatus values.
+func (ProgramStatus) Values() []string { return stringValues(programStatusValues) }
+
 // String returns the string representation of the ProgramStatus value.
-func (r ProgramStatus) String() string {
-	return string(r)
-}
+func (r ProgramStatus) String() string { return string(r) }
 
 // ToProgramStatus converts a string to its corresponding ProgramStatus enum value.
 func ToProgramStatus(r string) *ProgramStatus {
-	switch strings.ToUpper(r) {
-	case ProgramStatusNotStarted.String():
-		return &ProgramStatusNotStarted
-	case ProgramStatusInProgress.String():
-		return &ProgramStatusInProgress
-	case ProgramStatusActionRequired.String():
-		return &ProgramStatusActionRequired
-	case ProgramStatusReadyForAuditor.String():
-		return &ProgramStatusReadyForAuditor
-	case ProgramStatusCompleted.String():
-		return &ProgramStatusCompleted
-	case ProgramStatusArchived.String():
-		return &ProgramStatusArchived
-	default:
-		return &ProgramStatusInvalid
-	}
+	return parse(r, programStatusValues, &ProgramStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r ProgramStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ProgramStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *ProgramStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ProgramStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = ProgramStatus(str)
-
-	return nil
-}
+func (r *ProgramStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

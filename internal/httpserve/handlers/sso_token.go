@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
@@ -57,9 +56,11 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 	// set token-specific cookies for the token SSO flow
 	cfg := *h.SessionConfig.CookieConfig
 
-	sessions.SetCookie(ctx.Response().Writer, in.TokenID, "token_id", cfg)
-	sessions.SetCookie(ctx.Response().Writer, in.TokenType, "token_type", cfg)
-	sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, cfg)
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
+		"token_id":                     in.TokenID,
+		"token_type":                   in.TokenType,
+		authenticatedUserSSOCookieName: authenticatedUserSSOCookieValue,
+	})
 
 	out := apimodels.SSOLoginReply{
 		Reply:       rout.Reply{Success: true},
@@ -112,7 +113,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
+	nonceCtx := ssoNonceContextKey.Set(reqCtx, nonce(nonceCookie.Value))
 	if _, err = rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg); err != nil {
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -162,9 +163,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 	}
 
 	// cleanup cookies
-	for _, name := range []string{"token_id", "token_type", "organization_id", "state", "nonce"} {
-		sessions.RemoveCookie(ctx.Response().Writer, name, sessions.CookieConfig{Path: "/"})
-	}
+	sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "token_id", "token_type", "organization_id", "state", "nonce")
 
 	out := apimodels.SSOTokenAuthorizeReply{
 		Reply:          rout.Reply{Success: true},

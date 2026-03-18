@@ -315,7 +315,7 @@ query GetTrustCenterFrontendQuery {
             node {
               id
               countries
-              category
+              trustCenterSubprocessorKindName
               subprocessor {
                 name
                 logoFile {
@@ -364,6 +364,26 @@ query GetTrustCenterFrontendQuery {
             }
           }
         }
+        trustCenterFaqs {
+          edges {
+            node {
+              referenceLink
+              id
+              noteID
+              note {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  controls {
+    edges {
+      node {
+        id
+        refCode
       }
     }
   }

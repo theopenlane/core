@@ -4,19 +4,20 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -32,7 +33,9 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 		return hook.TrustCenterNDARequestFunc(func(ctx context.Context, m *generated.TrustCenterNDARequestMutation) (generated.Value, error) {
 			trustCenterID, ok := m.TrustCenterID()
 			if !ok || trustCenterID == "" {
-				return next.Mutate(ctx, m)
+				logx.FromContext(ctx).Error().Msg("trust center ID is required for NDA request")
+
+				return nil, ErrTrustCenterIDRequired
 			}
 
 			n, err := m.Client().Template.Query().
@@ -50,7 +53,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			email, _ := m.Email()
 
 			queryCtx := ctx
-			if _, isAnon := auth.AnonymousTrustCenterUserFromContext(ctx); isAnon {
+			if _, isAnon := auth.ActiveTrustCenterIDKey.Get(ctx); isAnon {
 				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
 			}
 
@@ -65,7 +68,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			if existingRequest != nil {
-				return handleExistingNDARequest(ctx, queryCtx, m, existingRequest)
+				return handleExistingNDARequest(ctx, queryCtx, existingRequest)
 			}
 
 			tc, err := m.Client().TrustCenter.Query().
@@ -92,51 +95,142 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			if requiresApproval {
-				if err := createNDARequestNotification(ctx, m, request, tc.OwnerID); err != nil {
+				if err := createNDARequestNotification(ctx, request, tc.OwnerID); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 				}
 				return v, nil
 			}
 
-			sendTrustCenterNDARequestEmail(ctx, m, request)
+			if err := sendTrustCenterNDARequestEmail(ctx, ndaAuthEmailData{
+				requestID:     request.ID,
+				email:         request.Email,
+				trustCenterID: request.TrustCenterID,
+			}); err != nil {
+				return nil, err
+			}
 
 			return v, nil
 		})
 	}, ent.OpCreate)
 }
 
-func handleExistingNDARequest(ctx, queryCtx context.Context, m *generated.TrustCenterNDARequestMutation, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
-	if existing.Status == enums.TrustCenterNDARequestStatusApproved {
-		sendTrustCenterAuthEmail(ctx, m, existing)
-		return existing, nil
-	}
+func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
+	switch existing.Status {
+	case enums.TrustCenterNDARequestStatusSigned:
+		// if already signed, resend auth email
+		if err := sendTrustCenterAuthEmail(ctx, ndaAuthEmailData{
+			requestID:     existing.ID,
+			email:         existing.Email,
+			trustCenterID: existing.TrustCenterID,
+		}); err != nil {
+			return nil, err
+		}
 
-	if existing.Status == enums.TrustCenterNDARequestStatusNeedsApproval {
-		tc, err := m.Client().TrustCenter.Query().
-			Where(trustcenter.IDEQ(existing.TrustCenterID)).
-			Only(queryCtx)
+		return existing, nil
+	case enums.TrustCenterNDARequestStatusApproved, enums.TrustCenterNDARequestStatusRequested:
+		// if its approved, or requested (no authorization required), resend NDA email
+		if err := sendTrustCenterNDARequestEmail(ctx, ndaAuthEmailData{
+			requestID:     existing.ID,
+			email:         existing.Email,
+			trustCenterID: existing.TrustCenterID,
+		}); err != nil {
+			return nil, err
+		}
+
+		return existing, nil
+	case enums.TrustCenterNDARequestStatusNeedsApproval:
+		// if needs approval, recreate notification
+		tc, err := getTrustCenter(ctx, existing.TrustCenterID)
 		if err != nil {
 			return nil, err
 		}
 
-		if err := createNDARequestNotification(ctx, m, existing, tc.OwnerID); err != nil {
+		if err := createNDARequestNotification(ctx, existing, tc.OwnerID); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
 		}
+
 		return existing, nil
+	case enums.TrustCenterNDARequestStatusDeclined:
+		// if previously declined, set to needs approval again to restart the process
+		if err := transactionFromContext(ctx).TrustCenterNDARequest.UpdateOne(existing).SetStatus(enums.TrustCenterNDARequestStatusNeedsApproval).
+			Exec(queryCtx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("email", existing.Email).Msg("failed to update NDA request status to needs approval")
+			return nil, err
+		}
+
+		tc, err := getTrustCenter(ctx, existing.TrustCenterID)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := createNDARequestNotification(ctx, existing, tc.OwnerID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA request notification")
+		}
 	}
 
-	sendTrustCenterNDARequestEmail(ctx, m, existing)
+	// otherwise do nothing invalid
 	return existing, nil
+}
+
+// getTrustCenter is a helper to get the trust center for an NDA request by ID
+func getTrustCenter(ctx context.Context, trustCenterID string) (*generated.TrustCenter, error) {
+	tc, err := transactionFromContext(ctx).TrustCenter.Query().
+		Where(trustcenter.IDEQ(trustCenterID)).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to get trust center for existing NDA request")
+		return nil, err
+	}
+
+	return tc, nil
 }
 
 // HookTrustCenterNDARequestUpdate handles NDA request status updates - sends email when approved
 func HookTrustCenterNDARequestUpdate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterNDARequestFunc(func(ctx context.Context, m *generated.TrustCenterNDARequestMutation) (generated.Value, error) {
-			status, ok := m.Status()
-			if !ok || status != enums.TrustCenterNDARequestStatusApproved {
+			if isDeleteOp(ctx, m) {
+				if err := handleNDARequestDelete(ctx, m); err != nil {
+					return nil, err
+				}
+
 				return next.Mutate(ctx, m)
 			}
+
+			status, ok := m.Status()
+
+			// on update one, check if status is set, if not get old status
+			if m.Op().Is(ent.OpUpdateOne) && (!ok || status == "") {
+				oldStatus, err := m.OldStatus(ctx)
+
+				// if status isn't set on mutation, set to the old status
+				if err == nil && status == "" {
+					status = oldStatus
+				}
+			}
+
+			if !ok || (status != enums.TrustCenterNDARequestStatusApproved && status != enums.TrustCenterNDARequestStatusSigned) {
+				return next.Mutate(ctx, m)
+			}
+
+			// if approved or signed, set the timestamp in the ISO8601 format
+			now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
+			if err != nil {
+				return nil, err
+			}
+
+			if status == enums.TrustCenterNDARequestStatusSigned {
+				m.SetSignedAt(*now)
+
+				retVal, err := next.Mutate(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				return retVal, nil
+			}
+
+			m.SetApprovedAt(*now)
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -148,14 +242,59 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return v, nil
 			}
 
-			sendTrustCenterNDARequestEmail(ctx, m, request)
+			if err := sendTrustCenterNDARequestEmail(ctx, ndaAuthEmailData{
+				requestID:     request.ID,
+				email:         request.Email,
+				trustCenterID: request.TrustCenterID,
+			}); err != nil {
+				return nil, err
+			}
 
 			return v, nil
 		})
-	}, ent.OpUpdateOne)
+	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne)
 }
 
-func createNDARequestNotification(ctx context.Context, m *generated.TrustCenterNDARequestMutation, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
+func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
+	id, ok := m.ID()
+	if !ok {
+		logx.FromContext(ctx).Error().Msg("missing ID for deleted NDA request, unable to cleanup tuples")
+
+		return nil
+	}
+
+	tcID, ok := m.TrustCenterID()
+	if !ok && m.Op().Is(ent.OpUpdateOne) {
+
+		oldTrustcenterID, err := m.OldTrustCenterID(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("missing trust center ID for deleted NDA request, unable to cleanup tuples")
+
+			return err
+		}
+
+		tcID = oldTrustcenterID
+	}
+
+	// delete any tuples associated with the nda request
+	deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
+		SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id),
+		SubjectType: "user",
+		ObjectID:    tcID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	})
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuple for deleted NDA request")
+
+		return ErrInternalServerError
+	}
+
+	return nil
+}
+
+func createNDARequestNotification(ctx context.Context, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
 	name := fmt.Sprintf("%s %s", ndaRequest.FirstName, ndaRequest.LastName)
 	if name == " " {
 		name = ndaRequest.Email
@@ -174,75 +313,189 @@ func createNDARequestNotification(ctx context.Context, m *generated.TrustCenterN
 			"nda_request_id":  ndaRequest.ID,
 			"trust_center_id": ndaRequest.TrustCenterID,
 			"email":           ndaRequest.Email,
+			"url":             "trust-center/NDAs",
 		},
 	}
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	_, err := m.Client().Notification.Create().SetInput(input).Save(allowCtx)
+	_, err := transactionFromContext(ctx).Notification.Create().SetInput(input).Save(allowCtx)
+
 	return err
 }
 
-func sendTrustCenterNDARequestEmail(ctx context.Context, m *generated.TrustCenterNDARequestMutation, ndaRequest *generated.TrustCenterNDARequest) {
-	if ndaRequest.TrustCenterID == "" || ndaRequest.Email == "" {
-		return
+type ndaAuthEmailData struct {
+	requestID     string
+	email         string
+	trustCenterID string
+}
+
+func sendTrustCenterNDARequestEmail(ctx context.Context, ndaRequest ndaAuthEmailData) error {
+	if ndaRequest.trustCenterID == "" || ndaRequest.email == "" {
+		logx.FromContext(ctx).Info().Msg("missing trust center ID or email for auth email")
+		return nil
 	}
 
-	tc, err := m.Client().TrustCenter.Query().
-		Where(trustcenter.IDEQ(ndaRequest.TrustCenterID)).
+	if ndaRequest.requestID == "" {
+		logx.FromContext(ctx).Error().Msg("created NDA request has empty ID, unable to set sub for JWT and send email")
+		return ErrMissingIDForTrustCenterNDARequest
+	}
+
+	tc, err := transactionFromContext(ctx).TrustCenter.Query().
+		Where(trustcenter.IDEQ(ndaRequest.trustCenterID)).
 		WithCustomDomain().
+		WithSetting().
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get trust center for NDA email")
-		return
+
+		return err
 	}
 
-	org, err := m.Client().Organization.Query().
-		Where(organization.ID(tc.OwnerID)).
-		Select(organization.FieldDisplayName).
+	accessToken, err := generateTrustCenterJWT(ctx, tc, ndaRequest)
+	if err != nil {
+		return err
+	}
+
+	fullURL, err := addTokenToURLAndShorten(ctx, buildNDATrustCenterURL(tc), accessToken)
+	if err != nil {
+		return err
+	}
+
+	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
+		Email: ndaRequest.email,
+	}, "", emailtemplates.TrustCenterNDARequestData{
+		OrganizationName:      tc.Edges.Setting.CompanyName,
+		TrustCenterNDAFullURL: fullURL,
+	})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA email")
+
+		return err
+	}
+
+	if _, err = transactionFromContext(ctx).Job.Insert(ctx, jobs.EmailArgs{Message: *emailMsg}, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to queue NDA email")
+
+		return err
+	}
+
+	return nil
+}
+
+func buildTrustCenterAuthURL(ctx context.Context, ndaRequest ndaAuthEmailData) (string, *generated.TrustCenter, error) {
+	if ndaRequest.trustCenterID == "" || ndaRequest.email == "" {
+		return "", nil, fmt.Errorf("missing trust center ID or email for auth URL") //nolint:err113
+	}
+
+	if ndaRequest.requestID == "" {
+		return "", nil, ErrMissingIDForTrustCenterNDARequest
+	}
+
+	tc, err := transactionFromContext(ctx).TrustCenter.Query().
+		Where(trustcenter.IDEQ(ndaRequest.trustCenterID)).
+		WithCustomDomain().
+		WithSetting().
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization for NDA email")
-		return
+		return "", nil, err
 	}
 
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, uuid.New().String())
+	accessToken, err := generateTrustCenterJWT(ctx, tc, ndaRequest)
+	if err != nil {
+		return "", nil, err
+	}
 
-	accessToken, _, err := m.TokenManager.CreateTokenPair(&tokens.Claims{
+	fullURL, err := addTokenToURLAndShorten(ctx, getTrustCenterBaseURL(tc), accessToken)
+	if err != nil {
+		return "", nil, err
+	}
+
+	return fullURL, tc, nil
+}
+
+func sendTrustCenterAuthEmail(ctx context.Context, ndaRequest ndaAuthEmailData) error {
+	fullURL, tc, err := buildTrustCenterAuthURL(ctx, ndaRequest)
+	if err != nil {
+		return err
+	}
+
+	emailMsg, err := transactionFromContext(ctx).Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
+		Email: ndaRequest.email,
+	}, "", emailtemplates.TrustCenterAuthData{
+		OrganizationName:       tc.Edges.Setting.CompanyName,
+		TrustCenterAuthFullURL: fullURL,
+	})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create auth email")
+		return err
+	}
+
+	if _, err = transactionFromContext(ctx).Job.Insert(ctx, jobs.EmailArgs{Message: *emailMsg}, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to queue auth email")
+		return err
+	}
+
+	return nil
+}
+
+// addTokenToURLAndShorten adds a token to the URL as a query parameter and returns a shortened version of the URL if the shortlinks client is available, otherwise returns the original URL with the token added
+func addTokenToURLAndShorten(ctx context.Context, baseURL url.URL, token string) (string, error) {
+	url := baseURL.ResolveReference(&url.URL{RawQuery: url.Values{"token": []string{token}}.Encode()})
+
+	regularLink := url.String()
+
+	// if no shortlinks client, return the regular link with the token
+	tx := transactionFromContext(ctx)
+	if tx == nil || tx.Shortlinks == nil {
+		return regularLink, nil
+	}
+
+	shortenedURL, err := tx.Shortlinks.Create(ctx, regularLink, "")
+	if err != nil {
+		// don't log the full link as it contains a confidential token, just log the base URL
+		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).Err(err).Msg("failed to shorten URL, using original")
+
+		return regularLink, nil
+	}
+
+	return shortenedURL, nil
+}
+
+func generateTrustCenterJWT(ctx context.Context, tc *generated.TrustCenter, ndaRequest ndaAuthEmailData) (string, error) {
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ndaRequest.requestID)
+
+	duration := tc.TokenManager.Config().TrustCenterNDARequestAccessDuration
+
+	accessToken, _, err := transactionFromContext(ctx).TokenManager.CreateTokenPair(&tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
 		},
 		UserID:        anonUserID,
 		OrgID:         tc.OwnerID,
-		TrustCenterID: ndaRequest.TrustCenterID,
-		Email:         ndaRequest.Email,
-	})
+		TrustCenterID: tc.ID,
+		Email:         ndaRequest.email,
+	}, tokens.WithAccessDuration(duration))
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create token for NDA email")
-		return
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create token for auth email")
+
+		return "", err
 	}
 
-	trustCenterURL := buildNDATrustCenterURL(tc)
-
-	emailMsg, err := m.Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
-		Email: ndaRequest.Email,
-	}, accessToken, emailtemplates.TrustCenterNDARequestData{
-		OrganizationName: org.DisplayName,
-		TrustCenterURL:   trustCenterURL,
-	})
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create NDA email")
-		return
-	}
-
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{Message: *emailMsg}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to queue NDA email")
-	}
+	return accessToken, nil
 }
 
-func buildNDATrustCenterURL(tc *generated.TrustCenter) string {
+func buildNDATrustCenterURL(tc *generated.TrustCenter) url.URL {
 	const ndaPath = "/access/sign-nda"
 
+	trustCenterURL := getTrustCenterBaseURL(tc)
+	trustCenterURL.Path = "/" + tc.Slug + ndaPath
+
+	return trustCenterURL
+}
+
+// getTrustCenterBaseURL builds the base URL for a trust center
+func getTrustCenterBaseURL(tc *generated.TrustCenter) url.URL {
 	trustCenterURL := url.URL{Scheme: "https"}
 
 	if tc.Edges.CustomDomain != nil {
@@ -251,8 +504,8 @@ func buildNDATrustCenterURL(tc *generated.TrustCenter) string {
 			customHost = normalized
 		}
 		trustCenterURL.Host = customHost
-		trustCenterURL.Path = ndaPath
-		return trustCenterURL.String()
+
+		return trustCenterURL
 	}
 
 	defaultHost := trustCenterConfig.DefaultTrustCenterDomain
@@ -260,64 +513,6 @@ func buildNDATrustCenterURL(tc *generated.TrustCenter) string {
 		defaultHost = normalized
 	}
 	trustCenterURL.Host = defaultHost
-	trustCenterURL.Path = "/" + tc.Slug + ndaPath
 
-	return trustCenterURL.String()
-}
-
-func sendTrustCenterAuthEmail(ctx context.Context, m *generated.TrustCenterNDARequestMutation, ndaRequest *generated.TrustCenterNDARequest) {
-	if ndaRequest.TrustCenterID == "" || ndaRequest.Email == "" {
-		return
-	}
-
-	tc, err := m.Client().TrustCenter.Query().
-		Where(trustcenter.IDEQ(ndaRequest.TrustCenterID)).
-		WithCustomDomain().
-		Only(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to get trust center for auth email")
-		return
-	}
-
-	org, err := m.Client().Organization.Query().
-		Where(organization.ID(tc.OwnerID)).
-		Select(organization.FieldDisplayName).
-		Only(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization for auth email")
-		return
-	}
-
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, uuid.New().String())
-
-	accessToken, _, err := m.TokenManager.CreateTokenPair(&tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
-		UserID:        anonUserID,
-		OrgID:         tc.OwnerID,
-		TrustCenterID: ndaRequest.TrustCenterID,
-		Email:         ndaRequest.Email,
-	})
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create token for auth email")
-		return
-	}
-
-	trustCenterURL := buildNDATrustCenterURL(tc)
-
-	emailMsg, err := m.Emailer.NewTrustCenterAuthEmail(emailtemplates.Recipient{
-		Email: ndaRequest.Email,
-	}, accessToken, emailtemplates.TrustCenterAuthData{
-		OrganizationName: org.DisplayName,
-		TrustCenterURL:   trustCenterURL,
-	})
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create auth email")
-		return
-	}
-
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{Message: *emailMsg}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to queue auth email")
-	}
+	return trustCenterURL
 }

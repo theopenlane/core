@@ -27,6 +27,8 @@ type FileContextKey struct {
 	Files Files
 }
 
+var fileContextKey = contextx.NewKey[FileContextKey]()
+
 // FileSource represents any source that can provide file uploads.
 // The tilde (~) allows for types that are identical or aliases to the specified types.
 type FileSource interface {
@@ -68,9 +70,8 @@ func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]F
 
 		uploads := extractUploads(value)
 		if len(uploads) > 0 {
-			var files []File
-			for _, upload := range uploads {
-				files = append(files, File{
+			files := lo.Map(uploads, func(upload graphql.Upload, _ int) File {
+				return File{
 					RawFile:      upload.File,
 					OriginalName: upload.Filename,
 					FieldName:    key,
@@ -79,8 +80,8 @@ func parseVariablesMap(variables map[string]any, keys ...string) (map[string][]F
 						ContentType: upload.ContentType,
 						Key:         key,
 					},
-				})
-			}
+				}
+			})
 			result[key] = files
 		}
 	}
@@ -96,13 +97,10 @@ func extractUploads(v any) []graphql.Upload {
 	case graphql.Upload:
 		return []graphql.Upload{val}
 	case []any:
-		var uploads []graphql.Upload
-		for _, item := range val {
-			if upload, ok := item.(graphql.Upload); ok {
-				uploads = append(uploads, upload)
-			}
-		}
-		return uploads
+		return lo.FilterMap(val, func(item any, _ int) (graphql.Upload, bool) {
+			upload, ok := item.(graphql.Upload)
+			return upload, ok
+		})
 	case map[string]any:
 		var uploads []graphql.Upload
 		for _, value := range val {
@@ -216,7 +214,7 @@ func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]File
 // WriteFilesToContext retrieves any existing files from the context, appends the new files to the existing files map
 // based on the form field name, then returns a new context with the updated files map stored in it
 func WriteFilesToContext(ctx context.Context, f Files) context.Context {
-	fileCtx, ok := contextx.From[FileContextKey](ctx)
+	fileCtx, ok := fileContextKey.Get(ctx)
 	if !ok {
 		fileCtx = FileContextKey{Files: Files{}}
 	}
@@ -227,12 +225,12 @@ func WriteFilesToContext(ctx context.Context, f Files) context.Context {
 		}
 	}
 
-	return contextx.With(ctx, fileCtx)
+	return fileContextKey.Set(ctx, fileCtx)
 }
 
 // UpdateFileInContextByKey updates the file in the context based on the key and the file ID
 func UpdateFileInContextByKey(ctx context.Context, key string, f File) context.Context {
-	fileCtx, ok := contextx.From[FileContextKey](ctx)
+	fileCtx, ok := fileContextKey.Get(ctx)
 	if !ok {
 		fileCtx = FileContextKey{Files: Files{}}
 	}
@@ -243,12 +241,12 @@ func UpdateFileInContextByKey(ctx context.Context, key string, f File) context.C
 		}
 	}
 
-	return contextx.With(ctx, fileCtx)
+	return fileContextKey.Set(ctx, fileCtx)
 }
 
 // RemoveFileFromContext removes the file from the context based on the file ID
 func RemoveFileFromContext(ctx context.Context, f File) context.Context {
-	fileCtx, ok := contextx.From[FileContextKey](ctx)
+	fileCtx, ok := fileContextKey.Get(ctx)
 	if !ok {
 		fileCtx = FileContextKey{Files: Files{}}
 	}
@@ -265,12 +263,12 @@ func RemoveFileFromContext(ctx context.Context, f File) context.Context {
 		}
 	}
 
-	return contextx.With(ctx, fileCtx)
+	return fileContextKey.Set(ctx, fileCtx)
 }
 
 // FilesFromContext returns all files that have been uploaded during the request
 func FilesFromContext(ctx context.Context) (Files, error) {
-	fileCtx, ok := contextx.From[FileContextKey](ctx)
+	fileCtx, ok := fileContextKey.Get(ctx)
 	if !ok || fileCtx.Files == nil {
 		return nil, storage.ErrNoFilesUploaded
 	}
@@ -281,7 +279,7 @@ func FilesFromContext(ctx context.Context) (Files, error) {
 // FilesFromContextWithKey returns all files that have been uploaded during the request
 // and sorts by the provided form field
 func FilesFromContextWithKey(ctx context.Context, key string) ([]File, error) {
-	fileCtx, ok := contextx.From[FileContextKey](ctx)
+	fileCtx, ok := fileContextKey.Get(ctx)
 	if !ok || fileCtx.Files == nil {
 		return nil, storage.ErrNoFilesUploaded
 	}

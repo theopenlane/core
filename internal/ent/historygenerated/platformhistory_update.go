@@ -706,6 +706,26 @@ func (_u *PlatformHistoryUpdate) ClearWorkflowEligibleMarker() *PlatformHistoryU
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *PlatformHistoryUpdate) SetExternalUUID(v string) *PlatformHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *PlatformHistoryUpdate) SetNillableExternalUUID(v *string) *PlatformHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *PlatformHistoryUpdate) ClearExternalUUID() *PlatformHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *PlatformHistoryUpdate) SetName(v string) *PlatformHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -1347,6 +1367,12 @@ func (_u *PlatformHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(platformhistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(platformhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(platformhistory.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(platformhistory.FieldName, field.TypeString, value)
@@ -2144,6 +2170,26 @@ func (_u *PlatformHistoryUpdateOne) ClearWorkflowEligibleMarker() *PlatformHisto
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *PlatformHistoryUpdateOne) SetExternalUUID(v string) *PlatformHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *PlatformHistoryUpdateOne) SetNillableExternalUUID(v *string) *PlatformHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *PlatformHistoryUpdateOne) ClearExternalUUID() *PlatformHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *PlatformHistoryUpdateOne) SetName(v string) *PlatformHistoryUpdateOne {
 	_u.mutation.SetName(v)
@@ -2815,6 +2861,12 @@ func (_u *PlatformHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Platfor
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(platformhistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(platformhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(platformhistory.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(platformhistory.FieldName, field.TypeString, value)

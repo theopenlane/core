@@ -1,11 +1,8 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
+// ControlType is a custom type representing the type of a control.
 type ControlType string
 
 var (
@@ -21,50 +18,27 @@ var (
 	ControlTypeInvalid ControlType = "INVALID"
 )
 
+var controlTypeValues = []ControlType{
+	ControlTypePreventative,
+	ControlTypeDetective,
+	ControlTypeCorrective,
+	ControlTypeDeterrent,
+}
+
 // Values returns a slice of strings that represents all the possible values of the ControlType enum.
 // Possible default values are "PREVENTATIVE", "DETECTIVE", "CORRECTIVE", and "DETERRENT".
-func (ControlType) Values() (kinds []string) {
-	for _, s := range []ControlType{ControlTypePreventative, ControlTypeDetective, ControlTypeCorrective, ControlTypeDeterrent} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (ControlType) Values() []string { return stringValues(controlTypeValues) }
 
 // String returns the ControlType as a string
-func (r ControlType) String() string {
-	return string(r)
-}
+func (r ControlType) String() string { return string(r) }
 
 // ToControlType returns the control type enum based on string input
 func ToControlType(r string) *ControlType {
-	switch r := strings.ToUpper(r); r {
-	case ControlTypePreventative.String():
-		return &ControlTypePreventative
-	case ControlTypeDetective.String():
-		return &ControlTypeDetective
-	case ControlTypeCorrective.String():
-		return &ControlTypeCorrective
-	case ControlTypeDeterrent.String():
-		return &ControlTypeDeterrent
-	default:
-		return &ControlTypeInvalid
-	}
+	return parse(r, controlTypeValues, &ControlTypeInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r ControlType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ControlType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *ControlType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ControlType, got: %T", v) //nolint:err113
-	}
-
-	*r = ControlType(str)
-
-	return nil
-}
+func (r *ControlType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

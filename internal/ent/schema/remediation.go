@@ -140,7 +140,13 @@ func (r Remediation) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(r, Vulnerability{}),
 		defaultEdgeToWithPagination(r, ActionPlan{}),
 		defaultEdgeToWithPagination(r, Task{}),
-		defaultEdgeToWithPagination(r, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Subcontrol{}),
 		defaultEdgeToWithPagination(r, Risk{}),
 		defaultEdgeToWithPagination(r, Program{}),
@@ -171,6 +177,7 @@ func (r Remediation) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Remediation](r,
 				withParents(
+					Organization{},
 					ActionPlan{},
 					Program{},
 					Control{},

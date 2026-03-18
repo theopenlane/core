@@ -162,6 +162,48 @@ func (_c *UserSettingHistoryCreate) SetNillableUserID(v *string) *UserSettingHis
 	return _c
 }
 
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *UserSettingHistoryCreate) SetDelegateUserID(v string) *UserSettingHistoryCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *UserSettingHistoryCreate) SetNillableDelegateUserID(v *string) *UserSettingHistoryCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateStartAt sets the "delegate_start_at" field.
+func (_c *UserSettingHistoryCreate) SetDelegateStartAt(v time.Time) *UserSettingHistoryCreate {
+	_c.mutation.SetDelegateStartAt(v)
+	return _c
+}
+
+// SetNillableDelegateStartAt sets the "delegate_start_at" field if the given value is not nil.
+func (_c *UserSettingHistoryCreate) SetNillableDelegateStartAt(v *time.Time) *UserSettingHistoryCreate {
+	if v != nil {
+		_c.SetDelegateStartAt(*v)
+	}
+	return _c
+}
+
+// SetDelegateEndAt sets the "delegate_end_at" field.
+func (_c *UserSettingHistoryCreate) SetDelegateEndAt(v time.Time) *UserSettingHistoryCreate {
+	_c.mutation.SetDelegateEndAt(v)
+	return _c
+}
+
+// SetNillableDelegateEndAt sets the "delegate_end_at" field if the given value is not nil.
+func (_c *UserSettingHistoryCreate) SetNillableDelegateEndAt(v *time.Time) *UserSettingHistoryCreate {
+	if v != nil {
+		_c.SetDelegateEndAt(*v)
+	}
+	return _c
+}
+
 // SetLocked sets the "locked" field.
 func (_c *UserSettingHistoryCreate) SetLocked(v bool) *UserSettingHistoryCreate {
 	_c.mutation.SetLocked(v)
@@ -486,6 +528,18 @@ func (_c *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgraph
 	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(usersettinghistory.FieldUserID, field.TypeString, value)
 		_node.UserID = value
+	}
+	if value, ok := _c.mutation.DelegateUserID(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateUserID, field.TypeString, value)
+		_node.DelegateUserID = &value
+	}
+	if value, ok := _c.mutation.DelegateStartAt(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateStartAt, field.TypeTime, value)
+		_node.DelegateStartAt = &value
+	}
+	if value, ok := _c.mutation.DelegateEndAt(); ok {
+		_spec.SetField(usersettinghistory.FieldDelegateEndAt, field.TypeTime, value)
+		_node.DelegateEndAt = &value
 	}
 	if value, ok := _c.mutation.Locked(); ok {
 		_spec.SetField(usersettinghistory.FieldLocked, field.TypeBool, value)

@@ -653,7 +653,7 @@ func TestProcessFilesForMutation(t *testing.T) {
 
 		mockMutation := mocks.NewMockMutation(t)
 		mockMutation.EXPECT().Type().Return("TestType")
-		mockMutation.EXPECT().ID().Return("mutation-id-123", nil)
+		mockMutation.EXPECT().ID().Return("mutation-id-123", true)
 
 		newCtx, err := ProcessFilesForMutation(ctx, mockMutation, "file1")
 		require.NoError(t, err)
@@ -676,7 +676,7 @@ func TestProcessFilesForMutation(t *testing.T) {
 
 		mockMutation := mocks.NewMockMutation(t)
 		mockMutation.EXPECT().Type().Return("TestType")
-		mockMutation.EXPECT().ID().Return("mutation-id-456", nil)
+		mockMutation.EXPECT().ID().Return("mutation-id-456", true)
 
 		newCtx, err := ProcessFilesForMutation(ctx, mockMutation, "file1", "OverrideType")
 		require.NoError(t, err)

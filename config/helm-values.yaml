@@ -71,14 +71,6 @@ coreConfiguration:
       referrerpolicy: "same-origin"  # @schema type:string; default:same-origin
       # -- CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false
       cspreportonly: false  # @schema type:boolean; default:false
-    # -- Redirect contains settings for the redirect middleware
-    redirects:
-      # -- Enabled indicates if the redirect middleware should be enabled
-      enabled: true  # @schema type:boolean; default:true
-      # -- Redirects is a map of paths to redirect to
-      redirects: {}
-      # -- Code is the HTTP status code to use for the redirect
-      code: 0  # @schema type:integer
     # -- CacheControl contains settings for the cache control middleware
     cachecontrol:
       enabled: true  # @schema type:boolean; default:true
@@ -132,6 +124,9 @@ coreConfiguration:
     trustcentercnametarget: ""  # @schema type:string
     # -- TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
     trustcenterpreviewzoneid: ""  # @schema type:string
+    # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
+    # Unread notifications are always pulled regardless of this setting
+    notificationlookbackdays: 30  # @schema type:integer; default:30
   # -- EntConfig contains the ent configuration used by the ent middleware
   entconfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
@@ -167,7 +162,7 @@ coreConfiguration:
       # -- MaximumSentences specifies the maximum number of sentences in the summary
       maximumsentences: 10  # @schema type:integer; default:10
     # -- MaxPoolSize is the max worker pool size that can be used by the ent client
-    maxpoolsize: 100  # @schema type:integer; default:100
+    maxpoolsize: 200  # @schema type:integer; default:200
     # -- Modules contains the configuration for the module system
     modules:
       # -- Enabled indicates whether to check and verify module access
@@ -250,6 +245,7 @@ coreConfiguration:
         delimiter: "."  # @schema type:string; default:.
         prefix: ""  # @schema type:string
       assessmentaccessduration: "1h0m0s"  # @schema type:integer; default:1h
+      trustcenterndarequestaccessduration: "1h0m0s"  # @schema type:integer; default:1h
     # -- SupportedProviders are the supported oauth providers that have been configured
     supportedproviders: []
     # -- Providers contains supported oauth2 providers configuration
@@ -351,21 +347,6 @@ coreConfiguration:
     minidleconns: 0  # @schema type:integer; default:0
     maxidleconns: 0  # @schema type:integer; default:0
     maxactiveconns: 0  # @schema type:integer; default:0
-  # -- Tracer contains the tracing config for opentelemetry
-  tracer:
-    enabled: false  # @schema type:boolean; default:false
-    provider: "stdout"  # @schema type:string; default:stdout
-    environment: "development"  # @schema type:string; default:development
-    stdout:
-      pretty: true  # @schema type:boolean; default:true
-      disabletimestamp: false  # @schema type:boolean; default:false
-    otlp:
-      endpoint: "localhost:4317"  # @schema type:string; default:localhost:4317
-      insecure: true  # @schema type:boolean; default:true
-      certificate: ""  # @schema type:string
-      headers: []
-      compression: ""  # @schema type:string
-      timeout: "10s"  # @schema type:integer; default:10s
   # -- Email contains email sending configuration for the server
   email:
     companyname: ""  # @schema type:string
@@ -532,17 +513,15 @@ coreConfiguration:
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripewebhookevents: []
     # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-    stripewebhookapiversion: "2025_12_15_CLOVER"  # @schema type:string; default:2025_12_15_CLOVER
+    stripewebhookapiversion: "2026_02_25_CLOVER"  # @schema type:string; default:2026_02_25_CLOVER
     # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-    stripewebhookdiscardapiversion: "2025_11_17_CLOVER"  # @schema type:string; default:2025_11_17_CLOVER
+    stripewebhookdiscardapiversion: "2025_12_15_CLOVER"  # @schema type:string; default:2025_12_15_CLOVER
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
     # -- Enabled indicates whether the key watcher is enabled
     enabled: false  # @schema type:boolean; default:false
     # -- KeyDir is the path to the directory containing PEM keys for JWT signing
     keydir: "./keys"  # @schema type:string; default:./keys
-    # -- ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
-    externalsecretsintegration: false  # @schema type:boolean; default:false
   # -- Slack contains settings for Slack notifications
   slack:
     # -- NewSubscriberMessageFile is the path to the template used for new subscriber notifications
@@ -554,6 +533,16 @@ coreConfiguration:
     # -- Enabled toggles initialization of the integration provider registry.
     enabled: false  # @schema type:boolean; default:false
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
+    successredirecturl: ""  # @schema type:string
+  # -- IntegrationProviders contains provider spec overrides keyed by provider name.
+  integrationproviders: {}
+  # -- IntegrationGitHubApp contains configuration for GitHub App integrations
+  integrationgithubapp:
+    # -- Enabled toggles the GitHub App integration handlers.
+    enabled: false  # @schema type:boolean; default:false
+    # -- AppSlug is the GitHub App slug used for the install URL.
+    appslug: ""  # @schema type:string
+    # -- SuccessRedirectURL is the URL to redirect to after successful installation.
     successredirecturl: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
@@ -572,10 +561,25 @@ coreConfiguration:
       macrocalltracking: false  # @schema type:boolean; default:false
       evaloptimize: true  # @schema type:boolean; default:true
       trackstate: false  # @schema type:boolean; default:false
-  # -- EmailWebhook contains webhook configuration for email providers
-  emailwebhook:
-    # -- Enabled is a flag to enable or disable email webhooks
+    gala:
+      enabled: false  # @schema type:boolean; default:false
+      workercount: 10  # @schema type:integer; default:10
+      maxretries: 5  # @schema type:integer; default:5
+      failonenqueueerror: false  # @schema type:boolean; default:false
+      queuename: "events"  # @schema type:string; default:events
+  # -- CampaignWebhook contains webhook configuration for campaign-related email providers
+  campaignwebhook:
+    # -- Enabled toggles the campaign webhook handler
     enabled: false  # @schema type:boolean; default:false
+  # -- Cloudflare contains configuration for Cloudflare integration
+  cloudflare:
+    # -- Enabled toggles the Cloudflare snapshot handler
+    enabled: false  # @schema type:boolean; default:false
+  # -- Shortlinks contains configuration for the URL shortening service
+  shortlinks:
+    enabled: false  # @schema type:boolean; default:false
+    clientid: "d5d5babbdd4ba64d59ae543ac3b6a74d.access"  # @schema type:string; default:d5d5babbdd4ba64d59ae543ac3b6a74d.access
+    endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
 
 # -- External Secrets configuration
 externalSecrets:
@@ -855,14 +859,6 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-2025_11_17_clover secret configuration
-    core-subscription-stripewebhooksecrets-2025_11_17_clover:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripewebhooksecrets.2025_11_17_CLOVER
-      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_11_17_CLOVER"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-2025_11_17_clover"  # @schema type:string
     # -- core-subscription-stripewebhooksecrets-2025_12_15_clover secret configuration
     core-subscription-stripewebhooksecrets-2025_12_15_clover:
       # -- Enable this external secret
@@ -871,14 +867,14 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_12_15_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2025_12_15_clover"  # @schema type:string
-    # -- core-keywatcher-secretmanager secret configuration
-    core-keywatcher-secretmanager:
+    # -- core-subscription-stripewebhooksecrets-2026_02_25_clover secret configuration
+    core-subscription-stripewebhooksecrets-2026_02_25_clover:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for keywatcher.secretmanager
-      secretKey: "CORE_KEYWATCHER_SECRETMANAGER"  # @schema type:string
+      # -- Environment variable key for subscription.stripewebhooksecrets.2026_02_25_CLOVER
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2026_02_25_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-keywatcher-secretmanager"  # @schema type:string
+      remoteKey: "core-subscription-stripewebhooksecrets-2026_02_25_clover"  # @schema type:string
     # -- core-slack-webhookurl secret configuration
     core-slack-webhookurl:
       # -- Enable this external secret
@@ -887,11 +883,83 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
-    # -- core-emailwebhook-resendsecret secret configuration
-    core-emailwebhook-resendsecret:
+    # -- core-integrationgithubapp-appid secret configuration
+    core-integrationgithubapp-appid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for emailwebhook.resendsecret
-      secretKey: "CORE_EMAILWEBHOOK_RESENDSECRET"  # @schema type:string
+      # -- Environment variable key for integrationgithubapp.appid
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_APPID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-emailwebhook-resendsecret"  # @schema type:string
+      remoteKey: "core-integrationgithubapp-appid"  # @schema type:string
+    # -- core-integrationgithubapp-privatekey secret configuration
+    core-integrationgithubapp-privatekey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationgithubapp.privatekey
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_PRIVATEKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-privatekey"  # @schema type:string
+    # -- core-integrationgithubapp-webhooksecret secret configuration
+    core-integrationgithubapp-webhooksecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationgithubapp.webhooksecret
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_WEBHOOKSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-webhooksecret"  # @schema type:string
+    # -- core-campaignwebhook-resendapikey secret configuration
+    core-campaignwebhook-resendapikey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for campaignwebhook.resendapikey
+      secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDAPIKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-campaignwebhook-resendapikey"  # @schema type:string
+    # -- core-campaignwebhook-resendsecret secret configuration
+    core-campaignwebhook-resendsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for campaignwebhook.resendsecret
+      secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-campaignwebhook-resendsecret"  # @schema type:string
+    # -- core-cloudflare-apitoken secret configuration
+    core-cloudflare-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.apitoken
+      secretKey: "CORE_CLOUDFLARE_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-apitoken"  # @schema type:string
+    # -- core-cloudflare-accountid secret configuration
+    core-cloudflare-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.accountid
+      secretKey: "CORE_CLOUDFLARE_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-accountid"  # @schema type:string
+    # -- core-cloudflare-clientid secret configuration
+    core-cloudflare-clientid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.clientid
+      secretKey: "CORE_CLOUDFLARE_CLIENTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-clientid"  # @schema type:string
+    # -- core-cloudflare-clientsecret secret configuration
+    core-cloudflare-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for cloudflare.clientsecret
+      secretKey: "CORE_CLOUDFLARE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-cloudflare-clientsecret"  # @schema type:string
+    # -- core-shortlinks-clientsecret secret configuration
+    core-shortlinks-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for shortlinks.clientsecret
+      secretKey: "CORE_SHORTLINKS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-shortlinks-clientsecret"  # @schema type:string

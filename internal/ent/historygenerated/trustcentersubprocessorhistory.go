@@ -39,14 +39,16 @@ type TrustCenterSubprocessorHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the kind of the trust_center_subprocessor
+	TrustCenterSubprocessorKindName string `json:"trust_center_subprocessor_kind_name,omitempty"`
+	// the kind of the trust_center_subprocessor
+	TrustCenterSubprocessorKindID string `json:"trust_center_subprocessor_kind_id,omitempty"`
 	// ID of the subprocessor
 	SubprocessorID string `json:"subprocessor_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// country codes or country where the subprocessor is located
-	Countries []string `json:"countries,omitempty"`
-	// Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'
-	Category     string `json:"category,omitempty"`
+	Countries    []string `json:"countries,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -59,7 +61,7 @@ func (*TrustCenterSubprocessorHistory) scanValues(columns []string) ([]any, erro
 			values[i] = new([]byte)
 		case trustcentersubprocessorhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersubprocessorhistory.FieldID, trustcentersubprocessorhistory.FieldRef, trustcentersubprocessorhistory.FieldCreatedBy, trustcentersubprocessorhistory.FieldUpdatedBy, trustcentersubprocessorhistory.FieldDeletedBy, trustcentersubprocessorhistory.FieldSubprocessorID, trustcentersubprocessorhistory.FieldTrustCenterID, trustcentersubprocessorhistory.FieldCategory:
+		case trustcentersubprocessorhistory.FieldID, trustcentersubprocessorhistory.FieldRef, trustcentersubprocessorhistory.FieldCreatedBy, trustcentersubprocessorhistory.FieldUpdatedBy, trustcentersubprocessorhistory.FieldDeletedBy, trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, trustcentersubprocessorhistory.FieldSubprocessorID, trustcentersubprocessorhistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case trustcentersubprocessorhistory.FieldHistoryTime, trustcentersubprocessorhistory.FieldCreatedAt, trustcentersubprocessorhistory.FieldUpdatedAt, trustcentersubprocessorhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -138,6 +140,18 @@ func (_m *TrustCenterSubprocessorHistory) assignValues(columns []string, values 
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_subprocessor_kind_name", values[i])
+			} else if value.Valid {
+				_m.TrustCenterSubprocessorKindName = value.String
+			}
+		case trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_subprocessor_kind_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterSubprocessorKindID = value.String
+			}
 		case trustcentersubprocessorhistory.FieldSubprocessorID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subprocessor_id", values[i])
@@ -157,12 +171,6 @@ func (_m *TrustCenterSubprocessorHistory) assignValues(columns []string, values 
 				if err := json.Unmarshal(*value, &_m.Countries); err != nil {
 					return fmt.Errorf("unmarshal field countries: %w", err)
 				}
-			}
-		case trustcentersubprocessorhistory.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -227,6 +235,12 @@ func (_m *TrustCenterSubprocessorHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("trust_center_subprocessor_kind_name=")
+	builder.WriteString(_m.TrustCenterSubprocessorKindName)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_subprocessor_kind_id=")
+	builder.WriteString(_m.TrustCenterSubprocessorKindID)
+	builder.WriteString(", ")
 	builder.WriteString("subprocessor_id=")
 	builder.WriteString(_m.SubprocessorID)
 	builder.WriteString(", ")
@@ -235,9 +249,6 @@ func (_m *TrustCenterSubprocessorHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("countries=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Countries))
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // MappingType is a custom type representing the various states of MappingType.
 type MappingType string
@@ -24,53 +20,19 @@ var (
 	MappingTypeInvalid MappingType = "MAPPINGTYPE_INVALID"
 )
 
+var mappingTypeValues = []MappingType{MappingTypeEqual, MappingTypeSuperset, MappingTypeSubset, MappingTypeIntersect, MappingTypePartial}
+
 // Values returns a slice of strings representing all valid MappingType values.
-func (MappingType) Values() []string {
-	return []string{
-		string(MappingTypeEqual),
-		string(MappingTypeSuperset),
-		string(MappingTypeSubset),
-		string(MappingTypeIntersect),
-		string(MappingTypePartial),
-	}
-}
+func (MappingType) Values() []string { return stringValues(mappingTypeValues) }
 
 // String returns the string representation of the MappingType value.
-func (r MappingType) String() string {
-	return string(r)
-}
+func (r MappingType) String() string { return string(r) }
 
 // ToMappingType converts a string to its corresponding MappingType enum value.
-func ToMappingType(r string) *MappingType {
-	switch strings.ToUpper(r) {
-	case MappingTypeEqual.String():
-		return &MappingTypeEqual
-	case MappingTypeSuperset.String():
-		return &MappingTypeSuperset
-	case MappingTypeSubset.String():
-		return &MappingTypeSubset
-	case MappingTypeIntersect.String():
-		return &MappingTypeIntersect
-	case MappingTypePartial.String():
-		return &MappingTypePartial
-	default:
-		return &MappingTypeInvalid
-	}
-}
+func ToMappingType(r string) *MappingType { return parse(r, mappingTypeValues, &MappingTypeInvalid) }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r MappingType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r MappingType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *MappingType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for MappingType, got: %T", v) //nolint:err113
-	}
-
-	*r = MappingType(str)
-
-	return nil
-}
+func (r *MappingType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

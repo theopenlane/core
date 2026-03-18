@@ -1,20 +1,24 @@
 {
-  "name": "microsoft_teams",
+  "name": "microsoftteams",
   "displayName": "Microsoft Teams",
   "category": "collab",
   "authType": "oauth2",
-  "active": true,
+  "authStartPath": "/v1/integrations/oauth/start",
+  "authCallbackPath": "/v1/integrations/oauth/callback",
+  "active": false,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/authentication",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/overview",
   "oauth": {
-    "clientId": "${MICROSOFT_TEAMS_CLIENT_ID}",
-    "clientSecret": "${MICROSOFT_TEAMS_CLIENT_SECRET}",
+    "clientId": "",
+    "clientSecret": "",
     "authUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
     "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
     "scopes": [
       "https://graph.microsoft.com/User.Read",
       "https://graph.microsoft.com/Team.ReadBasic.All",
       "https://graph.microsoft.com/Channel.ReadBasic.All",
+      "https://graph.microsoft.com/ChannelMessage.Send",
       "offline_access"
     ],
     "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
@@ -52,5 +56,6 @@
         "description": "Azure AD tenant hosting the Teams instance."
       }
     }
-  }
+  },
+  "description": "Integrate with Microsoft Teams to collect collaboration metadata and send notification messages through Microsoft Graph."
 }

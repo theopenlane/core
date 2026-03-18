@@ -232,6 +232,20 @@ func (_c *TrustCenterHistoryCreate) SetNillablePirschIdentificationCode(v *strin
 	return _c
 }
 
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_c *TrustCenterHistoryCreate) SetPirschAccessLink(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetPirschAccessLink(v)
+	return _c
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillablePirschAccessLink(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetPirschAccessLink(*v)
+	}
+	return _c
+}
+
 // SetPreviewStatus sets the "preview_status" field.
 func (_c *TrustCenterHistoryCreate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterHistoryCreate {
 	_c.mutation.SetPreviewStatus(v)
@@ -467,6 +481,10 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	if value, ok := _c.mutation.PirschIdentificationCode(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString, value)
 		_node.PirschIdentificationCode = value
+	}
+	if value, ok := _c.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschAccessLink, field.TypeString, value)
+		_node.PirschAccessLink = value
 	}
 	if value, ok := _c.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)

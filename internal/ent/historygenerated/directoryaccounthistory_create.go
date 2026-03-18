@@ -202,9 +202,67 @@ func (_c *DirectoryAccountHistoryCreate) SetIntegrationID(v string) *DirectoryAc
 	return _c
 }
 
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableIntegrationID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
 // SetDirectorySyncRunID sets the "directory_sync_run_id" field.
 func (_c *DirectoryAccountHistoryCreate) SetDirectorySyncRunID(v string) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetDirectorySyncRunID(v)
+	return _c
+}
+
+// SetNillableDirectorySyncRunID sets the "directory_sync_run_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableDirectorySyncRunID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetDirectorySyncRunID(*v)
+	}
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *DirectoryAccountHistoryCreate) SetPlatformID(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillablePlatformID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
+	return _c
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *DirectoryAccountHistoryCreate) SetIdentityHolderID(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableIdentityHolderID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_c *DirectoryAccountHistoryCreate) SetDirectoryName(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetDirectoryName(v)
+	return _c
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableDirectoryName(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetDirectoryName(*v)
+	}
 	return _c
 }
 
@@ -252,6 +310,48 @@ func (_c *DirectoryAccountHistoryCreate) SetDisplayName(v string) *DirectoryAcco
 func (_c *DirectoryAccountHistoryCreate) SetNillableDisplayName(v *string) *DirectoryAccountHistoryCreate {
 	if v != nil {
 		_c.SetDisplayName(*v)
+	}
+	return _c
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_c *DirectoryAccountHistoryCreate) SetAvatarRemoteURL(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableAvatarRemoteURL(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
+	}
+	return _c
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_c *DirectoryAccountHistoryCreate) SetAvatarLocalFileID(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableAvatarLocalFileID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
+	}
+	return _c
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (_c *DirectoryAccountHistoryCreate) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetAvatarUpdatedAt(v)
+	return _c
+}
+
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableAvatarUpdatedAt(v *time.Time) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetAvatarUpdatedAt(*v)
 	}
 	return _c
 }
@@ -534,6 +634,13 @@ func (_c *DirectoryAccountHistoryCreate) defaults() error {
 		v := directoryaccounthistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
+		if directoryaccounthistory.DefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized directoryaccounthistory.DefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
+		v := directoryaccounthistory.DefaultAvatarUpdatedAt()
+		_c.mutation.SetAvatarUpdatedAt(v)
+	}
 	if _, ok := _c.mutation.AccountType(); !ok {
 		v := directoryaccounthistory.DefaultAccountType
 		_c.mutation.SetAccountType(v)
@@ -582,12 +689,6 @@ func (_c *DirectoryAccountHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`historygenerated: missing required field "DirectoryAccountHistory.display_id"`)}
-	}
-	if _, ok := _c.mutation.IntegrationID(); !ok {
-		return &ValidationError{Name: "integration_id", err: errors.New(`historygenerated: missing required field "DirectoryAccountHistory.integration_id"`)}
-	}
-	if _, ok := _c.mutation.DirectorySyncRunID(); !ok {
-		return &ValidationError{Name: "directory_sync_run_id", err: errors.New(`historygenerated: missing required field "DirectoryAccountHistory.directory_sync_run_id"`)}
 	}
 	if _, ok := _c.mutation.ExternalID(); !ok {
 		return &ValidationError{Name: "external_id", err: errors.New(`historygenerated: missing required field "DirectoryAccountHistory.external_id"`)}
@@ -719,6 +820,18 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 		_spec.SetField(directoryaccounthistory.FieldDirectorySyncRunID, field.TypeString, value)
 		_node.DirectorySyncRunID = value
 	}
+	if value, ok := _c.mutation.PlatformID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldPlatformID, field.TypeString, value)
+		_node.PlatformID = value
+	}
+	if value, ok := _c.mutation.IdentityHolderID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldIdentityHolderID, field.TypeString, value)
+		_node.IdentityHolderID = &value
+	}
+	if value, ok := _c.mutation.DirectoryName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldDirectoryName, field.TypeString, value)
+		_node.DirectoryName = &value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(directoryaccounthistory.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
@@ -734,6 +847,18 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(directoryaccounthistory.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarRemoteURL, field.TypeString, value)
+		_node.AvatarRemoteURL = &value
+	}
+	if value, ok := _c.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarLocalFileID, field.TypeString, value)
+		_node.AvatarLocalFileID = &value
+	}
+	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarUpdatedAt, field.TypeTime, value)
+		_node.AvatarUpdatedAt = &value
 	}
 	if value, ok := _c.mutation.GivenName(); ok {
 		_spec.SetField(directoryaccounthistory.FieldGivenName, field.TypeString, value)

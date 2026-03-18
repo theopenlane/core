@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -40,11 +41,11 @@ type DirectoryMembershipQuery struct {
 	withScope                   *CustomTypeEnumQuery
 	withIntegration             *IntegrationQuery
 	withDirectorySyncRun        *DirectorySyncRunQuery
+	withPlatform                *PlatformQuery
 	withDirectoryAccount        *DirectoryAccountQuery
 	withDirectoryGroup          *DirectoryGroupQuery
 	withEvents                  *EventQuery
 	withWorkflowObjectRefs      *WorkflowObjectRefQuery
-	withFKs                     bool
 	loadTotal                   []func(context.Context, []*DirectoryMembership) error
 	modifiers                   []func(*sql.Selector)
 	withNamedEvents             map[string]*EventQuery
@@ -174,7 +175,7 @@ func (_q *DirectoryMembershipQuery) QueryIntegration() *IntegrationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, selector),
 			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.IntegrationTable, directorymembership.IntegrationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.IntegrationTable, directorymembership.IntegrationColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
@@ -199,10 +200,35 @@ func (_q *DirectoryMembershipQuery) QueryDirectorySyncRun() *DirectorySyncRunQue
 		step := sqlgraph.NewStep(
 			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, selector),
 			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.DirectorySyncRunTable, directorymembership.DirectorySyncRunColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.DirectorySyncRunTable, directorymembership.DirectorySyncRunColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatform chains the current query on the "platform" edge.
+func (_q *DirectoryMembershipQuery) QueryPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.PlatformTable, directorymembership.PlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
 		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -507,6 +533,7 @@ func (_q *DirectoryMembershipQuery) Clone() *DirectoryMembershipQuery {
 		withScope:              _q.withScope.Clone(),
 		withIntegration:        _q.withIntegration.Clone(),
 		withDirectorySyncRun:   _q.withDirectorySyncRun.Clone(),
+		withPlatform:           _q.withPlatform.Clone(),
 		withDirectoryAccount:   _q.withDirectoryAccount.Clone(),
 		withDirectoryGroup:     _q.withDirectoryGroup.Clone(),
 		withEvents:             _q.withEvents.Clone(),
@@ -570,6 +597,17 @@ func (_q *DirectoryMembershipQuery) WithDirectorySyncRun(opts ...func(*Directory
 		opt(query)
 	}
 	_q.withDirectorySyncRun = query
+	return _q
+}
+
+// WithPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryMembershipQuery) WithPlatform(opts ...func(*PlatformQuery)) *DirectoryMembershipQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatform = query
 	return _q
 }
 
@@ -700,23 +738,20 @@ func (_q *DirectoryMembershipQuery) prepareQuery(ctx context.Context) error {
 func (_q *DirectoryMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DirectoryMembership, error) {
 	var (
 		nodes       = []*DirectoryMembership{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withIntegration != nil,
 			_q.withDirectorySyncRun != nil,
+			_q.withPlatform != nil,
 			_q.withDirectoryAccount != nil,
 			_q.withDirectoryGroup != nil,
 			_q.withEvents != nil,
 			_q.withWorkflowObjectRefs != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, directorymembership.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DirectoryMembership).scanValues(nil, columns)
 	}
@@ -767,6 +802,12 @@ func (_q *DirectoryMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	if query := _q.withDirectorySyncRun; query != nil {
 		if err := _q.loadDirectorySyncRun(ctx, query, nodes, nil,
 			func(n *DirectoryMembership, e *DirectorySyncRun) { n.Edges.DirectorySyncRun = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatform; query != nil {
+		if err := _q.loadPlatform(ctx, query, nodes, nil,
+			func(n *DirectoryMembership, e *Platform) { n.Edges.Platform = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -965,6 +1006,35 @@ func (_q *DirectoryMembershipQuery) loadDirectorySyncRun(ctx context.Context, qu
 	}
 	return nil
 }
+func (_q *DirectoryMembershipQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*DirectoryMembership, init func(*DirectoryMembership), assign func(*DirectoryMembership, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectoryMembership)
+	for i := range nodes {
+		fk := nodes[i].PlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *DirectoryMembershipQuery) loadDirectoryAccount(ctx context.Context, query *DirectoryAccountQuery, nodes []*DirectoryMembership, init func(*DirectoryMembership), assign func(*DirectoryMembership, *DirectoryAccount)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*DirectoryMembership)
@@ -1130,6 +1200,9 @@ func (_q *DirectoryMembershipQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withDirectorySyncRun != nil {
 			_spec.Node.AddColumnOnce(directorymembership.FieldDirectorySyncRunID)
+		}
+		if _q.withPlatform != nil {
+			_spec.Node.AddColumnOnce(directorymembership.FieldPlatformID)
 		}
 		if _q.withDirectoryAccount != nil {
 			_spec.Node.AddColumnOnce(directorymembership.FieldDirectoryAccountID)

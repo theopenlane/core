@@ -63,48 +63,63 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 		SetLastSeen(time.Now()).
 		SaveX(ctx)
 
+	// Helper to keep request/response handling consistent across subtests.
+	send := func(t *testing.T, email string) (*httptest.ResponseRecorder, *models.ResendReply) {
+		resendJSON := models.ResendRequest{
+			Email: email,
+		}
+
+		body, err := json.Marshal(resendJSON)
+		if err != nil {
+			require.NoError(t, err)
+		}
+
+		req := httptest.NewRequest(http.MethodPost, "/resend", strings.NewReader(string(body)))
+		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+		// Set writer for tests that write on the response
+		recorder := httptest.NewRecorder()
+
+		// Using the ServerHTTP on echo will trigger the router and middleware
+		suite.e.ServeHTTP(recorder, req)
+
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		var out *models.ResendReply
+		if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
+			t.Error("error parsing response", err)
+		}
+
+		return recorder, out
+	}
+
+	// Exercise the sequential rate-limit behavior in one subtest to avoid
+	// order-dependence across table entries.
+	t.Run("rate limiting after max attempts", func(t *testing.T) {
+		email := "bsanderson@theopenlane.io"
+
+		for i := 1; i <= 6; i++ {
+			recorder, out := send(t, email)
+
+			if i <= 5 {
+				require.Equal(t, http.StatusOK, recorder.Code)
+				require.NotNil(t, out)
+				assert.NotEmpty(t, out.Message)
+			} else {
+				require.Equal(t, http.StatusTooManyRequests, recorder.Code)
+				require.NotNil(t, out)
+				assert.Contains(t, out.Error, "max attempts")
+			}
+		}
+	})
+
 	testCases := []struct {
 		name            string
 		email           string
 		expectedMessage string
 		expectedStatus  int
 	}{
-		{
-			name:            "happy path",
-			email:           "bsanderson@theopenlane.io",
-			expectedStatus:  http.StatusOK,
-			expectedMessage: "received your request to be resend",
-		},
-		{
-			name:            "happy path, attempt 2",
-			email:           "bsanderson@theopenlane.io",
-			expectedStatus:  http.StatusOK,
-			expectedMessage: "received your request to be resend",
-		},
-		{
-			name:            "happy path, attempt 3",
-			email:           "bsanderson@theopenlane.io",
-			expectedStatus:  http.StatusOK,
-			expectedMessage: "received your request to be resend",
-		},
-		{
-			name:            "happy path, attempt 4",
-			email:           "bsanderson@theopenlane.io",
-			expectedStatus:  http.StatusOK,
-			expectedMessage: "received your request to be resend",
-		},
-		{
-			name:            "happy path, attempt 5",
-			email:           "bsanderson@theopenlane.io",
-			expectedStatus:  http.StatusOK,
-			expectedMessage: "received your request to be resend",
-		},
-		{
-			name:            "happy path, attempt 6 should fail",
-			email:           "bsanderson@theopenlane.io",
-			expectedStatus:  http.StatusTooManyRequests,
-			expectedMessage: "max attempts",
-		},
 		{
 			name:            "email does not exist, should still return 204",
 			email:           "bsanderson1@theopenlane.io",
@@ -125,33 +140,7 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			resendJSON := models.ResendRequest{
-				Email: tc.email,
-			}
-
-			body, err := json.Marshal(resendJSON)
-			if err != nil {
-				require.NoError(t, err)
-			}
-
-			req := httptest.NewRequest(http.MethodPost, "/resend", strings.NewReader(string(body)))
-			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-
-			// Set writer for tests that write on the response
-			recorder := httptest.NewRecorder()
-
-			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req)
-
-			res := recorder.Result()
-			defer res.Body.Close()
-
-			var out *models.ResendReply
-
-			// parse request body
-			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
-				t.Error("error parsing response", err)
-			}
+			recorder, out := send(t, tc.email)
 
 			require.Equal(t, tc.expectedStatus, recorder.Code)
 

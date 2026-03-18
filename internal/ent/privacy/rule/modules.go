@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 
 	features "github.com/theopenlane/core/internal/entitlements/features"
 
@@ -19,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
@@ -103,21 +103,23 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 
 // GetOrgFeatures returns the enabled features for the authenticated organization
 func GetOrgFeatures(ctx context.Context) ([]string, error) {
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
 		// this intentionally returns nil for the error
 		// this is so requests that aren't yet authenticated, but only require the base module
 		// e.g. sso login, will continue
 		return nil, nil
 	}
 
+	orgID := caller.OrganizationID
+
 	// if there is only one authorized org on the pat, set it as the authorized organization
-	// more organization require using the X-Organization-ID header
-	if au.OrganizationID == "" && len(au.OrganizationIDs) == 1 {
-		au.OrganizationID = au.OrganizationIDs[0]
+	// more organizations require using the X-Organization-ID header
+	if orgID == "" && len(caller.OrgIDs()) == 1 {
+		orgID = caller.OrgIDs()[0]
 	}
 
-	return GetFeaturesForSpecificOrganization(ctx, au.OrganizationID)
+	return GetFeaturesForSpecificOrganization(ctx, orgID)
 }
 
 // AllowIfHasFeature is a privacy rule allowing the operation if the feature is enabled
@@ -157,7 +159,7 @@ func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgMo
 		return false, nil, err
 	}
 
-	enabledSet := utils.SliceToMap(enabled)
+	enabledSet := mapx.MapSetFromSlice(enabled)
 
 	if requireAll {
 		// all features must be enabled
@@ -224,19 +226,17 @@ func AllowIfHasAllFeatures(features ...models.OrgModule) privacy.QueryMutationRu
 // ShouldSkipFeatureCheck determines if module access checks should be bypassed based
 // on the available context
 func ShouldSkipFeatureCheck(ctx context.Context) bool {
-	if auth.IsSystemAdminFromContext(ctx) {
-		return true
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+		if caller.Has(auth.CapSystemAdmin) {
+			return true
+		}
+
+		if caller.Has(auth.CapInternalOperation) || caller.Has(auth.CapBypassFeatureCheck) || caller.OrganizationRole == auth.AnonymousRole {
+			return true
+		}
 	}
 
 	if _, allowCtx := privacy.DecisionFromContext(ctx); allowCtx {
-		return true
-	}
-
-	if _, ok := contextx.From[auth.OrgSubscriptionContextKey](ctx); ok {
-		return true
-	}
-
-	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
 		return true
 	}
 
@@ -244,12 +244,8 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		return true
 	}
 
-	// bypass module checks on trust center users
-	if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		return true
-	}
-
-	if _, ok := auth.AnonymousQuestionnaireUserFromContext(ctx); ok {
+	// bypass module checks on anonymous trust center and questionnaire users
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsAnonymous() {
 		return true
 	}
 
@@ -268,7 +264,7 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present
 func DenyIfMissingAllModules() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		if mut, ok := m.(interface{ Client() *generated.Client }); ok {
+		if mut, ok := m.(utils.MutationClient); ok {
 			if !utils.ModulesEnabled(mut.Client()) {
 				return privacy.Skip
 			}

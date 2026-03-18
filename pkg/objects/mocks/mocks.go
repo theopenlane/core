@@ -36,7 +36,7 @@ func (_m *MockMutation) EXPECT() *MockMutation_Expecter {
 }
 
 // ID provides a mock function for the type MockMutation
-func (_mock *MockMutation) ID() (string, error) {
+func (_mock *MockMutation) ID() (string, bool) {
 	ret := _mock.Called()
 
 	if len(ret) == 0 {
@@ -44,8 +44,8 @@ func (_mock *MockMutation) ID() (string, error) {
 	}
 
 	var r0 string
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func() (string, error)); ok {
+	var r1 bool
+	if returnFunc, ok := ret.Get(0).(func() (string, bool)); ok {
 		return returnFunc()
 	}
 	if returnFunc, ok := ret.Get(0).(func() string); ok {
@@ -53,10 +53,10 @@ func (_mock *MockMutation) ID() (string, error) {
 	} else {
 		r0 = ret.Get(0).(string)
 	}
-	if returnFunc, ok := ret.Get(1).(func() error); ok {
+	if returnFunc, ok := ret.Get(1).(func() bool); ok {
 		r1 = returnFunc()
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(bool)
 	}
 	return r0, r1
 }
@@ -78,12 +78,12 @@ func (_c *MockMutation_ID_Call) Run(run func()) *MockMutation_ID_Call {
 	return _c
 }
 
-func (_c *MockMutation_ID_Call) Return(s string, err error) *MockMutation_ID_Call {
-	_c.Call.Return(s, err)
+func (_c *MockMutation_ID_Call) Return(s string, exists bool) *MockMutation_ID_Call {
+	_c.Call.Return(s, exists)
 	return _c
 }
 
-func (_c *MockMutation_ID_Call) RunAndReturn(run func() (string, error)) *MockMutation_ID_Call {
+func (_c *MockMutation_ID_Call) RunAndReturn(run func() (string, bool)) *MockMutation_ID_Call {
 	_c.Call.Return(run)
 	return _c
 }

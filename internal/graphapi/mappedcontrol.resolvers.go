@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -21,7 +22,8 @@ import (
 // CreateMappedControl is the resolver for the createMappedControl field.
 func (r *mutationResolver) CreateMappedControl(ctx context.Context, input generated.CreateMappedControlInput) (*model.MappedControlCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -45,7 +47,8 @@ func (r *mutationResolver) CreateBulkMappedControl(ctx context.Context, input []
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -69,10 +72,15 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	var inputData []*generated.CreateMappedControlInput
@@ -107,7 +115,6 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 		obj.ToSubcontrolIDs = ids
 
 		inputData = append(inputData, &obj.CreateMappedControlInput)
-
 	}
 
 	return r.bulkCreateMappedControl(ctx, inputData)
@@ -121,7 +128,8 @@ func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, i
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -162,6 +170,35 @@ func (r *mutationResolver) DeleteBulkMappedControl(ctx context.Context, ids []st
 	}
 
 	return r.bulkDeleteMappedControl(ctx, ids)
+}
+
+// UpdateBulkMappedControl is the resolver for the updateBulkMappedControl field.
+func (r *mutationResolver) UpdateBulkMappedControl(ctx context.Context, ids []string, input generated.UpdateMappedControlInput) (*model.MappedControlBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateMappedControl(ctx, ids, input)
+}
+
+// UpdateBulkCSVMappedControl is the resolver for the updateBulkCSVMappedControl field.
+func (r *mutationResolver) UpdateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.MappedControlCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "MappedControl", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVMappedControl(ctx, data)
 }
 
 // MappedControl is the resolver for the mappedControl field.

@@ -21,6 +21,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
@@ -32,129 +34,120 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	operation := suite.createImpersonationOperation("OauthRegister", "OAuth register")
 	suite.registerTestHandler("POST", "oauth/register", operation, suite.h.OauthRegister)
 
-	type args struct {
-		name     string
-		email    string
-		provider enums.AuthProvider
-		username string
-		userID   string
-		token    string
+	ensureUserAbsent := func(t *testing.T, email string) {
+		t.Helper()
+
+		ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+		_, _ = suite.db.User.Delete().Where(user.Email(email)).Exec(ctx)
 	}
 
-	tests := []struct {
-		name            string
-		args            args
-		expectedStatus  int
-		expectedErr     string
-		expectedErrCode rout.ErrorCode
-		wantErr         bool
-		wantEmailJob    bool
-	}{
-		{
-			name: "happy path, github",
-			args: args{
-				name:     "Ant Man",
-				email:    "antman@theopenlane.io",
-				provider: enums.AuthProviderGitHub,
-				username: "scarletwitch",
-				userID:   "123456",
-				token:    "gh_thistokenisvalid",
-			},
-			expectedStatus: http.StatusOK,
-			wantEmailJob:   true,
-		},
-		{
-			name: "happy path, github, same user",
-			args: args{
-				name:     "Ant Man",
-				email:    "antman@theopenlane.io",
-				provider: enums.AuthProviderGitHub,
-				username: "scarletwitch",
-				userID:   "123456",
-				token:    "gh_thistokenisvalid",
-			},
-			expectedStatus: http.StatusOK,
-			wantEmailJob:   false, // should not send welcome email again
-		},
-		{
-			name: "mismatch email",
-			args: args{
-				name:     "Ant Man",
-				email:    "antman@marvel.com",
-				provider: enums.AuthProviderGitHub,
-				username: "scarletwitch",
-				userID:   "123456",
-				token:    "gh_thistokenisvalid",
-			},
-			expectedStatus:  http.StatusBadRequest,
-			expectedErrCode: handlers.InvalidInputErrCode,
-			wantEmailJob:    false,
-		},
+	// Helper keeps the handler call consistent across subtests.
+	send := func(t *testing.T, registerJSON models.OauthTokenRequest) (*httptest.ResponseRecorder, *models.LoginReply) {
+		body, err := json.Marshal(registerJSON)
+		if err != nil {
+			require.NoError(t, err)
+		}
+
+		req := httptest.NewRequest(http.MethodPost, "/oauth/register", strings.NewReader(string(body)))
+		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		res := recorder.Result()
+		defer res.Body.Close()
+
+		var out *models.LoginReply
+		if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
+			t.Error("error parsing response", err)
+		}
+
+		return recorder, out
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			suite.ClearTestData()
 
-			registerJSON := models.OauthTokenRequest{
-				Name:             tt.args.name,
-				Email:            tt.args.email,
-				AuthProvider:     tt.args.provider.String(),
-				ExternalUserID:   tt.args.userID,
-				ExternalUserName: tt.args.username,
-				ClientToken:      tt.args.token,
-			}
+	t.Run("happy path, github", func(t *testing.T) {
+		suite.ClearTestData()
 
-			body, err := json.Marshal(registerJSON)
-			if err != nil {
-				require.NoError(t, err)
-			}
+		email := "antman@theopenlane.io"
+		ensureUserAbsent(t, email)
 
-			req := httptest.NewRequest(http.MethodPost, "/oauth/register", strings.NewReader(string(body)))
-			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+		registerJSON := models.OauthTokenRequest{
+			Name:             "Ant Man",
+			Email:            email,
+			AuthProvider:     enums.AuthProviderGitHub.String(),
+			ExternalUserID:   "123456",
+			ExternalUserName: "scarletwitch",
+			ClientToken:      "gh_thistokenisvalid",
+		}
 
-			// Set writer for tests that write on the response
-			recorder := httptest.NewRecorder()
+		recorder, out := send(t, registerJSON)
 
-			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req)
+		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.Equal(t, rout.ErrorCode(""), out.ErrorCode)
+		assert.NotNil(t, out.AccessToken)
+		assert.NotNil(t, out.RefreshToken)
+		assert.True(t, out.Success)
+		assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
+		assert.Equal(t, "Bearer", out.TokenType)
 
-			res := recorder.Result()
-			defer res.Body.Close()
+		job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+			[]rivertest.ExpectedJob{
+				{
+					Args: jobs.EmailArgs{
+						Message: *newman.NewEmailMessageWithOptions(
+							newman.WithSubject("Welcome to Meow Inc.!"),
+							newman.WithTo([]string{email}),
+						),
+					},
+				},
+			})
+		require.NotNil(t, job)
+	})
 
-			var out *models.LoginReply
+	// Keep "same user" within a single subtest so job-queue assertions don't
+	// depend on subtest ordering or prior DB state.
+	t.Run("happy path, github, same user", func(t *testing.T) {
+		suite.ClearTestData()
 
-			// parse request body
-			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
-				t.Error("error parsing response", err)
-			}
+		email := "antman@theopenlane.io"
+		ensureUserAbsent(t, email)
 
-			assert.Equal(t, tt.expectedStatus, recorder.Code)
-			assert.Equal(t, tt.expectedErrCode, out.ErrorCode)
+		registerJSON := models.OauthTokenRequest{
+			Name:             "Ant Man",
+			Email:            email,
+			AuthProvider:     enums.AuthProviderGitHub.String(),
+			ExternalUserID:   "123456",
+			ExternalUserName: "scarletwitch",
+			ClientToken:      "gh_thistokenisvalid",
+		}
 
-			if tt.expectedStatus == http.StatusOK {
-				assert.NotNil(t, out.AccessToken)
-				assert.NotNil(t, out.RefreshToken)
-				assert.True(t, out.Success)
-				assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
-				assert.Equal(t, "Bearer", out.TokenType)
+		recorder, out := send(t, registerJSON)
+		assert.Equal(t, http.StatusOK, recorder.Code)
 
-				if tt.wantEmailJob {
-					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{
-									Message: *newman.NewEmailMessageWithOptions(
-										newman.WithSubject("Welcome to Meow Inc.!"),
-										newman.WithTo([]string{tt.args.email}),
-									),
-								},
-							},
-						})
-					require.NotNil(t, job)
-				} else {
-					rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
-				}
-			}
-		})
-	}
+		// clear the job table so we can assert no new welcome email is sent
+		suite.ClearTestData()
+
+		recorder, out = send(t, registerJSON)
+		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.True(t, out.Success)
+
+		rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+	})
+
+	t.Run("mismatch email", func(t *testing.T) {
+		suite.ClearTestData()
+
+		registerJSON := models.OauthTokenRequest{
+			Name:             "Ant Man",
+			Email:            "antman@marvel.com",
+			AuthProvider:     enums.AuthProviderGitHub.String(),
+			ExternalUserID:   "123456",
+			ExternalUserName: "scarletwitch",
+			ClientToken:      "gh_thistokenisvalid",
+		}
+
+		recorder, out := send(t, registerJSON)
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Equal(t, handlers.InvalidInputErrCode, out.ErrorCode)
+	})
 }

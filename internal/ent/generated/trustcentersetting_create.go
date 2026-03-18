@@ -232,6 +232,20 @@ func (_c *TrustCenterSettingCreate) SetNillableFaviconLocalFileID(v *string) *Tr
 	return _c
 }
 
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_c *TrustCenterSettingCreate) SetHeroImageLocalFileID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetHeroImageLocalFileID(v)
+	return _c
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetHeroImageLocalFileID(*v)
+	}
+	return _c
+}
+
 // SetThemeMode sets the "theme_mode" field.
 func (_c *TrustCenterSettingCreate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
 	_c.mutation.SetThemeMode(v)
@@ -414,6 +428,20 @@ func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *Tru
 	return _c
 }
 
+// SetStatusPageURL sets the "status_page_url" field.
+func (_c *TrustCenterSettingCreate) SetStatusPageURL(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetStatusPageURL(v)
+	return _c
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableStatusPageURL(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetStatusPageURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -494,6 +522,25 @@ func (_c *TrustCenterSettingCreate) SetNillableFaviconFileID(id *string) *TrustC
 // SetFaviconFile sets the "favicon_file" edge to the File entity.
 func (_c *TrustCenterSettingCreate) SetFaviconFile(v *File) *TrustCenterSettingCreate {
 	return _c.SetFaviconFileID(v.ID)
+}
+
+// SetHeroImageFileID sets the "hero_image_file" edge to the File entity by ID.
+func (_c *TrustCenterSettingCreate) SetHeroImageFileID(id string) *TrustCenterSettingCreate {
+	_c.mutation.SetHeroImageFileID(id)
+	return _c
+}
+
+// SetNillableHeroImageFileID sets the "hero_image_file" edge to the File entity by ID if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableHeroImageFileID(id *string) *TrustCenterSettingCreate {
+	if id != nil {
+		_c = _c.SetHeroImageFileID(*id)
+	}
+	return _c
+}
+
+// SetHeroImageFile sets the "hero_image_file" edge to the File entity.
+func (_c *TrustCenterSettingCreate) SetHeroImageFile(v *File) *TrustCenterSettingCreate {
+	return _c.SetHeroImageFileID(v.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -595,11 +642,6 @@ func (_c *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "company_description", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_description": %w`, err)}
 		}
 	}
-	if v, ok := _c.mutation.Overview(); ok {
-		if err := trustcentersetting.OverviewValidator(v); err != nil {
-			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.LogoRemoteURL(); ok {
 		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
@@ -658,6 +700,11 @@ func (_c *TrustCenterSettingCreate) check() error {
 	if v, ok := _c.mutation.SecurityContact(); ok {
 		if err := trustcentersetting.SecurityContactValidator(v); err != nil {
 			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.StatusPageURL(); ok {
+		if err := trustcentersetting.StatusPageURLValidator(v); err != nil {
+			return &ValidationError{Name: "status_page_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.status_page_url": %w`, err)}
 		}
 	}
 	return nil
@@ -800,6 +847,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
 		_node.NdaApprovalRequired = value
 	}
+	if value, ok := _c.mutation.StatusPageURL(); ok {
+		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)
+		_node.StatusPageURL = &value
+	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -868,6 +919,24 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.FaviconLocalFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.HeroImageFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.HeroImageFileTable,
+			Columns: []string{trustcentersetting.HeroImageFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.HeroImageLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

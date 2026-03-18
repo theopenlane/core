@@ -127,6 +127,7 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Workflow proposals targeting this object reference",
 			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
+				entx.CascadeAnnotationField("WorkflowObjectRefID"),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -281,8 +282,23 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
-				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
-				withOrganizationOwner(true),
+				withParents(
+					WorkflowInstance{},
+					Control{},
+					InternalPolicy{},
+					Evidence{},
+					Subcontrol{},
+					ActionPlan{},
+					Procedure{},
+					Campaign{},
+					CampaignTarget{},
+					DirectoryAccount{},
+					DirectoryGroup{},
+					DirectoryMembership{},
+					IdentityHolder{},
+					Platform{},
+				),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(w)

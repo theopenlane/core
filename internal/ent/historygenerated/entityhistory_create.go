@@ -506,13 +506,13 @@ func (_c *EntityHistoryCreate) SetNillableEntityTypeID(v *string) *EntityHistory
 }
 
 // SetStatus sets the "status" field.
-func (_c *EntityHistoryCreate) SetStatus(v string) *EntityHistoryCreate {
+func (_c *EntityHistoryCreate) SetStatus(v enums.EntityStatus) *EntityHistoryCreate {
 	_c.mutation.SetStatus(v)
 	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *EntityHistoryCreate) SetNillableStatus(v *string) *EntityHistoryCreate {
+func (_c *EntityHistoryCreate) SetNillableStatus(v *enums.EntityStatus) *EntityHistoryCreate {
 	if v != nil {
 		_c.SetStatus(*v)
 	}
@@ -988,6 +988,11 @@ func (_c *EntityHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.operation": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := entityhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
 		if err := entityhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.review_frequency": %w`, err)}
@@ -1174,7 +1179,7 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_node.EntityTypeID = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(entityhistory.FieldStatus, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
 	}
 	if value, ok := _c.mutation.ApprovedForUse(); ok {

@@ -246,8 +246,6 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
-	// DefaultStatus holds the default value on creation for the "status" field.
-	DefaultStatus string
 	// DefaultApprovedForUse holds the default value on creation for the "approved_for_use" field.
 	DefaultApprovedForUse bool
 	// DefaultLinkedAssetIds holds the default value on creation for the "linked_asset_ids" field.
@@ -279,6 +277,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("entityhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultStatus enums.EntityStatus = "ACTIVE"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.EntityStatus) error {
+	switch s.String() {
+	case "DRAFT", "UNDER_REVIEW", "APPROVED", "RESTRICTED", "REJECTED", "ACTIVE", "SUSPENDED", "OFFBOARDING", "TERMINATED":
+		return nil
+	default:
+		return fmt.Errorf("entityhistory: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -587,6 +597,13 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.EntityStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.EntityStatus)(nil)
+	// enums.EntityStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.EntityStatus)(nil)
 )
 
 var (

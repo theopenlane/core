@@ -105,6 +105,8 @@ type PlatformHistory struct {
 	CriticalityID string `json:"criticality_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the name of the platform
 	Name string `json:"name,omitempty"`
 	// the description of the platform boundary
@@ -159,7 +161,7 @@ func (*PlatformHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case platformhistory.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case platformhistory.FieldID, platformhistory.FieldRef, platformhistory.FieldCreatedBy, platformhistory.FieldUpdatedBy, platformhistory.FieldDeletedBy, platformhistory.FieldDisplayID, platformhistory.FieldOwnerID, platformhistory.FieldInternalOwner, platformhistory.FieldInternalOwnerUserID, platformhistory.FieldInternalOwnerGroupID, platformhistory.FieldBusinessOwner, platformhistory.FieldBusinessOwnerUserID, platformhistory.FieldBusinessOwnerGroupID, platformhistory.FieldTechnicalOwner, platformhistory.FieldTechnicalOwnerUserID, platformhistory.FieldTechnicalOwnerGroupID, platformhistory.FieldSecurityOwner, platformhistory.FieldSecurityOwnerUserID, platformhistory.FieldSecurityOwnerGroupID, platformhistory.FieldPlatformKindName, platformhistory.FieldPlatformKindID, platformhistory.FieldPlatformDataClassificationName, platformhistory.FieldPlatformDataClassificationID, platformhistory.FieldEnvironmentName, platformhistory.FieldEnvironmentID, platformhistory.FieldScopeName, platformhistory.FieldScopeID, platformhistory.FieldAccessModelName, platformhistory.FieldAccessModelID, platformhistory.FieldEncryptionStatusName, platformhistory.FieldEncryptionStatusID, platformhistory.FieldSecurityTierName, platformhistory.FieldSecurityTierID, platformhistory.FieldCriticalityName, platformhistory.FieldCriticalityID, platformhistory.FieldName, platformhistory.FieldDescription, platformhistory.FieldBusinessPurpose, platformhistory.FieldScopeStatement, platformhistory.FieldTrustBoundaryDescription, platformhistory.FieldDataFlowSummary, platformhistory.FieldStatus, platformhistory.FieldPhysicalLocation, platformhistory.FieldRegion, platformhistory.FieldSourceType, platformhistory.FieldSourceIdentifier, platformhistory.FieldCostCenter, platformhistory.FieldPlatformOwnerID, platformhistory.FieldExternalReferenceID:
+		case platformhistory.FieldID, platformhistory.FieldRef, platformhistory.FieldCreatedBy, platformhistory.FieldUpdatedBy, platformhistory.FieldDeletedBy, platformhistory.FieldDisplayID, platformhistory.FieldOwnerID, platformhistory.FieldInternalOwner, platformhistory.FieldInternalOwnerUserID, platformhistory.FieldInternalOwnerGroupID, platformhistory.FieldBusinessOwner, platformhistory.FieldBusinessOwnerUserID, platformhistory.FieldBusinessOwnerGroupID, platformhistory.FieldTechnicalOwner, platformhistory.FieldTechnicalOwnerUserID, platformhistory.FieldTechnicalOwnerGroupID, platformhistory.FieldSecurityOwner, platformhistory.FieldSecurityOwnerUserID, platformhistory.FieldSecurityOwnerGroupID, platformhistory.FieldPlatformKindName, platformhistory.FieldPlatformKindID, platformhistory.FieldPlatformDataClassificationName, platformhistory.FieldPlatformDataClassificationID, platformhistory.FieldEnvironmentName, platformhistory.FieldEnvironmentID, platformhistory.FieldScopeName, platformhistory.FieldScopeID, platformhistory.FieldAccessModelName, platformhistory.FieldAccessModelID, platformhistory.FieldEncryptionStatusName, platformhistory.FieldEncryptionStatusID, platformhistory.FieldSecurityTierName, platformhistory.FieldSecurityTierID, platformhistory.FieldCriticalityName, platformhistory.FieldCriticalityID, platformhistory.FieldExternalUUID, platformhistory.FieldName, platformhistory.FieldDescription, platformhistory.FieldBusinessPurpose, platformhistory.FieldScopeStatement, platformhistory.FieldTrustBoundaryDescription, platformhistory.FieldDataFlowSummary, platformhistory.FieldStatus, platformhistory.FieldPhysicalLocation, platformhistory.FieldRegion, platformhistory.FieldSourceType, platformhistory.FieldSourceIdentifier, platformhistory.FieldCostCenter, platformhistory.FieldPlatformOwnerID, platformhistory.FieldExternalReferenceID:
 			values[i] = new(sql.NullString)
 		case platformhistory.FieldHistoryTime, platformhistory.FieldCreatedAt, platformhistory.FieldUpdatedAt, platformhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -432,6 +434,13 @@ func (_m *PlatformHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
 			}
+		case platformhistory.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
+			}
 		case platformhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -701,6 +710,11 @@ func (_m *PlatformHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

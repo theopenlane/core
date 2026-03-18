@@ -48,6 +48,8 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDetails holds the string denoting the details field in the database.
@@ -276,6 +278,7 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldExternalUUID,
 	FieldTitle,
 	FieldDetails,
 	FieldDetailsJSON,
@@ -480,6 +483,11 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.

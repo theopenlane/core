@@ -84,6 +84,8 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -248,6 +250,8 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -412,6 +416,8 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -576,6 +582,8 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -689,10 +697,10 @@ func (ec *executionContext) _RiskBulkCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -728,10 +736,10 @@ func (ec *executionContext) _RiskBulkDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -766,10 +774,10 @@ func (ec *executionContext) _RiskBulkUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -805,10 +813,10 @@ func (ec *executionContext) _RiskCreatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -844,10 +852,10 @@ func (ec *executionContext) _RiskDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -883,10 +891,10 @@ func (ec *executionContext) _RiskUpdatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

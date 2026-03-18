@@ -240,6 +240,26 @@ func (_u *GroupUpdate) ClearLogoURL() *GroupUpdate {
 	return _u
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupUpdate) SetAvatarLocalFileID(v string) *GroupUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableAvatarLocalFileID(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupUpdate) ClearAvatarLocalFileID() *GroupUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *GroupUpdate) SetDisplayName(v string) *GroupUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -251,6 +271,64 @@ func (_u *GroupUpdate) SetNillableDisplayName(v *string) *GroupUpdate {
 	if v != nil {
 		_u.SetDisplayName(*v)
 	}
+	return _u
+}
+
+// SetOscalRole sets the "oscal_role" field.
+func (_u *GroupUpdate) SetOscalRole(v string) *GroupUpdate {
+	_u.mutation.SetOscalRole(v)
+	return _u
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableOscalRole(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetOscalRole(*v)
+	}
+	return _u
+}
+
+// ClearOscalRole clears the value of the "oscal_role" field.
+func (_u *GroupUpdate) ClearOscalRole() *GroupUpdate {
+	_u.mutation.ClearOscalRole()
+	return _u
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_u *GroupUpdate) SetOscalPartyUUID(v string) *GroupUpdate {
+	_u.mutation.SetOscalPartyUUID(v)
+	return _u
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableOscalPartyUUID(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetOscalPartyUUID(*v)
+	}
+	return _u
+}
+
+// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
+func (_u *GroupUpdate) ClearOscalPartyUUID() *GroupUpdate {
+	_u.mutation.ClearOscalPartyUUID()
+	return _u
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_u *GroupUpdate) SetOscalContactUuids(v []string) *GroupUpdate {
+	_u.mutation.SetOscalContactUuids(v)
+	return _u
+}
+
+// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
+func (_u *GroupUpdate) AppendOscalContactUuids(v []string) *GroupUpdate {
+	_u.mutation.AppendOscalContactUuids(v)
+	return _u
+}
+
+// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
+func (_u *GroupUpdate) ClearOscalContactUuids() *GroupUpdate {
+	_u.mutation.ClearOscalContactUuids()
 	return _u
 }
 
@@ -971,6 +1049,25 @@ func (_u *GroupUpdate) AddIntegrations(v ...*Integration) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_u *GroupUpdate) SetAvatarFileID(id string) *GroupUpdate {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_u *GroupUpdate) SetNillableAvatarFileID(id *string) *GroupUpdate {
+	if id != nil {
+		_u = _u.SetAvatarFileID(*id)
+	}
+	return _u
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_u *GroupUpdate) SetAvatarFile(v *File) *GroupUpdate {
+	return _u.SetAvatarFileID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -1941,6 +2038,12 @@ func (_u *GroupUpdate) RemoveIntegrations(v ...*Integration) *GroupUpdate {
 	return _u.RemoveIntegrationIDs(ids...)
 }
 
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (_u *GroupUpdate) ClearAvatarFile() *GroupUpdate {
+	_u.mutation.ClearAvatarFile()
+	return _u
+}
+
 // ClearFiles clears all "files" edges to the File entity.
 func (_u *GroupUpdate) ClearFiles() *GroupUpdate {
 	_u.mutation.ClearFiles()
@@ -2224,6 +2327,29 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OscalRole(); ok {
+		_spec.SetField(group.FieldOscalRole, field.TypeString, value)
+	}
+	if _u.mutation.OscalRoleCleared() {
+		_spec.ClearField(group.FieldOscalRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(group.FieldOscalPartyUUID, field.TypeString, value)
+	}
+	if _u.mutation.OscalPartyUUIDCleared() {
+		_spec.ClearField(group.FieldOscalPartyUUID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalContactUuids(); ok {
+		_spec.SetField(group.FieldOscalContactUuids, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, group.FieldOscalContactUuids, value)
+		})
+	}
+	if _u.mutation.OscalContactUuidsCleared() {
+		_spec.ClearField(group.FieldOscalContactUuids, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ScimExternalID(); ok {
 		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)
@@ -4300,6 +4426,37 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4796,6 +4953,26 @@ func (_u *GroupUpdateOne) ClearLogoURL() *GroupUpdateOne {
 	return _u
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupUpdateOne) SetAvatarLocalFileID(v string) *GroupUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableAvatarLocalFileID(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupUpdateOne) ClearAvatarLocalFileID() *GroupUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *GroupUpdateOne) SetDisplayName(v string) *GroupUpdateOne {
 	_u.mutation.SetDisplayName(v)
@@ -4807,6 +4984,64 @@ func (_u *GroupUpdateOne) SetNillableDisplayName(v *string) *GroupUpdateOne {
 	if v != nil {
 		_u.SetDisplayName(*v)
 	}
+	return _u
+}
+
+// SetOscalRole sets the "oscal_role" field.
+func (_u *GroupUpdateOne) SetOscalRole(v string) *GroupUpdateOne {
+	_u.mutation.SetOscalRole(v)
+	return _u
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableOscalRole(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetOscalRole(*v)
+	}
+	return _u
+}
+
+// ClearOscalRole clears the value of the "oscal_role" field.
+func (_u *GroupUpdateOne) ClearOscalRole() *GroupUpdateOne {
+	_u.mutation.ClearOscalRole()
+	return _u
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_u *GroupUpdateOne) SetOscalPartyUUID(v string) *GroupUpdateOne {
+	_u.mutation.SetOscalPartyUUID(v)
+	return _u
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableOscalPartyUUID(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetOscalPartyUUID(*v)
+	}
+	return _u
+}
+
+// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
+func (_u *GroupUpdateOne) ClearOscalPartyUUID() *GroupUpdateOne {
+	_u.mutation.ClearOscalPartyUUID()
+	return _u
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_u *GroupUpdateOne) SetOscalContactUuids(v []string) *GroupUpdateOne {
+	_u.mutation.SetOscalContactUuids(v)
+	return _u
+}
+
+// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
+func (_u *GroupUpdateOne) AppendOscalContactUuids(v []string) *GroupUpdateOne {
+	_u.mutation.AppendOscalContactUuids(v)
+	return _u
+}
+
+// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
+func (_u *GroupUpdateOne) ClearOscalContactUuids() *GroupUpdateOne {
+	_u.mutation.ClearOscalContactUuids()
 	return _u
 }
 
@@ -5527,6 +5762,25 @@ func (_u *GroupUpdateOne) AddIntegrations(v ...*Integration) *GroupUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_u *GroupUpdateOne) SetAvatarFileID(id string) *GroupUpdateOne {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableAvatarFileID(id *string) *GroupUpdateOne {
+	if id != nil {
+		_u = _u.SetAvatarFileID(*id)
+	}
+	return _u
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_u *GroupUpdateOne) SetAvatarFile(v *File) *GroupUpdateOne {
+	return _u.SetAvatarFileID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -6497,6 +6751,12 @@ func (_u *GroupUpdateOne) RemoveIntegrations(v ...*Integration) *GroupUpdateOne 
 	return _u.RemoveIntegrationIDs(ids...)
 }
 
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (_u *GroupUpdateOne) ClearAvatarFile() *GroupUpdateOne {
+	_u.mutation.ClearAvatarFile()
+	return _u
+}
+
 // ClearFiles clears all "files" edges to the File entity.
 func (_u *GroupUpdateOne) ClearFiles() *GroupUpdateOne {
 	_u.mutation.ClearFiles()
@@ -6810,6 +7070,29 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OscalRole(); ok {
+		_spec.SetField(group.FieldOscalRole, field.TypeString, value)
+	}
+	if _u.mutation.OscalRoleCleared() {
+		_spec.ClearField(group.FieldOscalRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(group.FieldOscalPartyUUID, field.TypeString, value)
+	}
+	if _u.mutation.OscalPartyUUIDCleared() {
+		_spec.ClearField(group.FieldOscalPartyUUID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalContactUuids(); ok {
+		_spec.SetField(group.FieldOscalContactUuids, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, group.FieldOscalContactUuids, value)
+		})
+	}
+	if _u.mutation.OscalContactUuidsCleared() {
+		_spec.ClearField(group.FieldOscalContactUuids, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ScimExternalID(); ok {
 		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)
@@ -8881,6 +9164,37 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

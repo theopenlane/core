@@ -89,7 +89,7 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.ScheduledJob](c,
-				withParents(Control{}, Subcontrol{}),
+				withParents(Organization{}, Control{}, Subcontrol{}),
 				withOrganizationOwner(true),
 				withSkipForSystemAdmin(true),
 			),
@@ -110,7 +110,13 @@ func (c ScheduledJob) Edges() []ent.Edge {
 			},
 		}),
 
-		defaultEdgeToWithPagination(c, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeToWithPagination(c, Subcontrol{}),
 
 		uniqueEdgeTo(&edgeDefinition{

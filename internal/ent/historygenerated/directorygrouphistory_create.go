@@ -202,6 +202,20 @@ func (_c *DirectoryGroupHistoryCreate) SetIntegrationID(v string) *DirectoryGrou
 	return _c
 }
 
+// SetPlatformID sets the "platform_id" field.
+func (_c *DirectoryGroupHistoryCreate) SetPlatformID(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillablePlatformID(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
+	return _c
+}
+
 // SetDirectorySyncRunID sets the "directory_sync_run_id" field.
 func (_c *DirectoryGroupHistoryCreate) SetDirectorySyncRunID(v string) *DirectoryGroupHistoryCreate {
 	_c.mutation.SetDirectorySyncRunID(v)
@@ -625,6 +639,10 @@ func (_c *DirectoryGroupHistoryCreate) createSpec() (*DirectoryGroupHistory, *sq
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(directorygrouphistory.FieldIntegrationID, field.TypeString, value)
 		_node.IntegrationID = value
+	}
+	if value, ok := _c.mutation.PlatformID(); ok {
+		_spec.SetField(directorygrouphistory.FieldPlatformID, field.TypeString, value)
+		_node.PlatformID = value
 	}
 	if value, ok := _c.mutation.DirectorySyncRunID(); ok {
 		_spec.SetField(directorygrouphistory.FieldDirectorySyncRunID, field.TypeString, value)

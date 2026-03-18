@@ -27,24 +27,18 @@ func InterceptorFile() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		logx.FromContext(ctx).Debug().Msg("InterceptorFile")
 
-		var orgs []string
-		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-			// q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
-			orgs = []string{anon.OrganizationID}
-		} else {
-			au, err := auth.GetAuthenticatedUserFromContext(ctx)
-			if err != nil {
-				return err
-			}
-
-			if au.IsSystemAdmin {
-				logx.FromContext(ctx).Debug().Msg("user is system admin, skipping organization filter")
-
-				return nil
-			}
-
-			orgs = au.OrganizationIDs
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		if caller.Has(auth.CapSystemAdmin) {
+			logx.FromContext(ctx).Debug().Msg("user is system admin, skipping organization filter")
+
+			return nil
+		}
+
+		orgs := caller.OrgIDs()
 
 		if len(orgs) == 0 {
 			return nil
@@ -52,10 +46,12 @@ func InterceptorFile() ent.Interceptor {
 
 		// filter on the organization id or empty organization id
 		// which would happen on something like a user file
+		// also include system owned files in the results
 		q.WhereP(
 			file.Or(
 				file.HasOrganizationWith(organization.IDIn(orgs...)),
 				file.Not(file.HasOrganization()),
+				file.SystemOwned(true),
 			),
 		)
 

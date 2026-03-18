@@ -24,15 +24,16 @@ install_dependencies
 log_execution_context "Draft PR Cleanup"
 
 # Validate build context
-if ! validate_build_context "main" true; then
+if ! validate_build_context "main" false; then
     exit 0
 fi
 
 # Find draft PRs that match our pattern and are still open
 echo "🔍 Looking for draft PRs that need cleanup..."
 
-# Get list of open draft PRs with our naming pattern
-draft_prs=$(find_draft_prs "$repo" "^🚧 DRAFT: Config changes from core PR #[0-9]+")
+# Match drafts by title (old and current formats) and deterministic branch naming.
+draft_pr_pattern='(^🚧 DRAFT: Config (changes from core|from Core) PR #[0-9]+)|(^draft-core-pr-[0-9]+$)'
+draft_prs=$(find_draft_prs "$repo" "$draft_pr_pattern")
 
 if [[ -z "$draft_prs" ]]; then
   echo "ℹ️  No draft PRs found that need cleanup"
@@ -47,11 +48,14 @@ while IFS=':' read -r pr_number branch_name title; do
   echo ""
   echo "🔍 Evaluating draft PR #$pr_number (branch: $branch_name)"
 
-  # Extract core PR number from title
+  # Extract core PR number from title, then fall back to branch naming.
   core_pr_number=$(extract_core_pr_number "$title")
+  if [[ -z "$core_pr_number" ]]; then
+    core_pr_number=$(extract_core_pr_number "$branch_name")
+  fi
 
   if [[ -z "$core_pr_number" ]]; then
-    echo "⚠️  Could not extract core PR number from title, skipping"
+    echo "⚠️  Could not extract core PR number from title or branch, skipping"
     continue
   fi
 
@@ -65,7 +69,7 @@ while IFS=':' read -r pr_number branch_name title; do
 
     closing_comment=$(generate_closure_comment "$core_pr_number" "closed")
     if close_pr "$pr_number" "$repo" "$closing_comment"; then
-      safe_delete_branch "$branch_name"
+      safe_delete_branch "$branch_name" "$repo"
     fi
     continue
   fi
@@ -93,7 +97,7 @@ while IFS=':' read -r pr_number branch_name title; do
   fi
 
   if close_pr "$pr_number" "$repo" "$closing_comment"; then
-    safe_delete_branch "$branch_name"
+    safe_delete_branch "$branch_name" "$repo"
   fi
 
 done <<< "$draft_prs"

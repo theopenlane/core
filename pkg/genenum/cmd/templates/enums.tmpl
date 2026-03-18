@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // {{ .Name }} is a custom type representing the various states of {{ .Name | ToCamel }}.
 type {{ .Name }} string
@@ -18,45 +14,23 @@ var (
 	{{ $.Name }}Invalid {{ $.Name }} = "{{ .Name | ToUpper }}_INVALID"
 )
 
-// Values returns a slice of strings representing all valid {{ .Name }} values.
-func ({{ .Name }}) Values() []string {
-	return []string{
-	{{- range .Values }}
-		string({{ $.Name }}{{ . | ToCamel }}),
-	{{- end }}
-	}
+var {{ .Name | untitle }}Values = []{{ .Name }}{
+{{- range .Values }}
+	{{ $.Name }}{{ . | ToCamel }},
+{{- end }}
 }
+
+// Values returns a slice of strings representing all valid {{ .Name }} values.
+func ({{ .Name }}) Values() []string { return stringValues({{ .Name | untitle }}Values) }
 
 // String returns the string representation of the {{ .Name }} value.
-func (r {{ .Name }}) String() string {
-	return string(r)
-}
+func (r {{ .Name }}) String() string { return string(r) }
 
 // To{{ .Name }} converts a string to its corresponding {{ .Name }} enum value.
-func To{{ .Name }}(r string) *{{ .Name }} {
-	switch strings.ToUpper(r) {
-	{{- range .Values }}
-	case {{ $.Name }}{{ . | ToCamel }}.String():
-		return &{{ $.Name }}{{ . | ToCamel }}
-	{{- end }}
-	default:
-		return &{{ $.Name }}Invalid
-	}
-}
+func To{{ .Name }}(r string) *{{ .Name }} { return parse(r, {{ .Name | untitle }}Values, &{{ .Name }}Invalid) }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r {{ .Name }}) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r {{ .Name }}) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *{{ .Name }}) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for {{ .Name }}, got: %T", v)  //nolint:err113
-	}
-
-	*r = {{ .Name }}(str)
-
-	return nil
-}
+func (r *{{ .Name }}) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

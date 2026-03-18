@@ -27,17 +27,19 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 
 	reqCtx := ctx.Request().Context()
 
-	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
+		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	in.ID, err = h.getOrganizationID(in.ID, au)
-	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+	orgID, orgIDErr := h.getOrganizationID(in.ID, caller)
+	if orgIDErr != nil {
+		return h.BadRequest(ctx, orgIDErr, openapi)
 	}
+
+	in.ID = orgID
 
 	// validate the input
 	if err := in.Validate(); err != nil {
@@ -45,11 +47,11 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 	}
 
 	req := fgax.ListAccess{
-		SubjectType: auth.GetAuthzSubjectType(reqCtx),
-		SubjectID:   au.SubjectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
 		ObjectID:    in.ID,
 		ObjectType:  fgax.Kind(generated.TypeOrganization),
-		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)

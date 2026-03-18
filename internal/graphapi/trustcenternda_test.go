@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -18,22 +19,17 @@ import (
 )
 
 func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
-	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-	up := graphql.Upload{
-		File:        uploadFile.RawFile,
-		Filename:    uploadFile.OriginalName,
-		Size:        uploadFile.Size,
-		ContentType: uploadFile.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
+	up := uploadFile(t, pdfFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
-	}, []*graphql.Upload{&up})
+	}, []*graphql.Upload{up})
 
 	assert.NilError(t, err)
 	assert.Assert(t, trustCenterNDA != nil)
@@ -41,20 +37,30 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	// Create anonymous trust center context helper
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
-	anonUser := &auth.AnonymousTrustCenterUser{
-		SubjectID:          anonUserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     trustCenter.OwnerID,
-		AuthenticationType: auth.JWTAuthentication,
-		TrustCenterID:      trustCenter.ID,
-		SubjectEmail:       "test@example.com",
-	}
+	email := "test@example.com"
+
+	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", email)
+
+	anonCtxForRequest := auth.WithCaller(context.Background(), anonUser)
+	anonCtxForRequest = auth.ActiveTrustCenterIDKey.Set(anonCtxForRequest, trustCenter.ID)
+	ndaCreateResp, err := suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     "Test",
+		LastName:      "User",
+		CompanyName:   lo.ToPtr("Test Company"),
+		Email:         email,
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+
+	assert.Assert(t, ndaCreateResp != nil)
+	// make sure the nda request is in requested status, the approval is off by default
+	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusRequested)
 
 	input := testclient.SubmitTrustCenterNDAResponseInput{
 		TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
 		Response: map[string]any{
 			"signatory_info": map[string]any{
-				"email": "test@example.com",
+				"email": email,
 			},
 			"acknowledgment": true,
 			"signature_metadata": map[string]any{
@@ -69,17 +75,31 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
+	anonCtx := auth.WithCaller(ctx, anonUser)
+	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
 
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile == nil)
 
+	// Clear any existing jobs
+	err = suite.client.db.Job.TruncateRiverTables(testUser1.UserCtx)
+	assert.NilError(t, err)
+
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
 
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
+
+	// make sure the nda request is marked as signed
+	ndaRequest, err := suite.client.api.GetTrustCenterNDARequests(testUser1.UserCtx, nil, nil, nil, nil, []*testclient.TrustCenterNDARequestOrder{}, &testclient.TrustCenterNDARequestWhereInput{
+		Email: &email,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, len(ndaRequest.TrustCenterNdaRequests.Edges) == 1)
+	assert.Equal(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.Status.String(), enums.TrustCenterNDARequestStatusSigned.String())
+	assert.Check(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.SignedAt != nil)
 
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
@@ -92,6 +112,8 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 }
 
 func TestCreateTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	testCases := []struct {
 		name     string
@@ -102,11 +124,11 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 	}{
 		{
 			name: "happy path",
-			ctx:  testUser1.UserCtx,
+			ctx:  adminUser.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
-			uploads: []string{"testdata/uploads/hello.pdf"},
+			uploads: []string{pdfFilePath},
 		},
 		{
 			name: "missing upload",
@@ -117,21 +139,12 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 			errorMsg: "one NDA file is required",
 		},
 		{
-			name: "missing trust center",
-			ctx:  testUser1.UserCtx,
-			input: testclient.CreateTrustCenterNDAInput{
-				TrustCenterID: "",
-			},
-			uploads:  []string{"testdata/uploads/hello.pdf"},
-			errorMsg: notFoundErrorMsg,
-		},
-		{
 			name: "Other user cannot create NDA",
 			ctx:  testUser2.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
-			uploads:  []string{"testdata/uploads/hello.pdf"},
+			uploads:  []string{pdfFilePath},
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -179,30 +192,26 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 }
 
 func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	input := testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}
-	uploadFiles := []string{"testdata/uploads/hello.pdf"}
+	uploadFiles := []string{pdfFilePath}
 	uploads := []*graphql.Upload{}
 	expectUploads := []graphql.Upload{}
 	for _, file := range uploadFiles {
-		uploadFile, err := storage.NewUploadFile(file)
-		assert.NilError(t, err)
-		up := graphql.Upload{
-			File:        uploadFile.RawFile,
-			Filename:    uploadFile.OriginalName,
-			Size:        uploadFile.Size,
-			ContentType: uploadFile.ContentType,
-		}
-
-		expectUploads = append(expectUploads, up)
-		uploads = append(uploads, &up)
+		up := uploadFile(t, file)
+		expectUploads = append(expectUploads, *up)
+		uploads = append(uploads, up)
 	}
+
 	if len(uploads) > 0 {
 		expectUpload(t, suite.client.mockProvider, expectUploads)
 	}
+
 	resp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, input, uploads)
 
 	assert.NilError(t, err)
@@ -235,21 +244,16 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 }
 
 func TestSubmitTrustCenterNDAResponse(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-	up := graphql.Upload{
-		File:        uploadFile.RawFile,
-		Filename:    uploadFile.OriginalName,
-		Size:        uploadFile.Size,
-		ContentType: uploadFile.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up})
+	up := uploadFile(t, pdfFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
-	}, []*graphql.Upload{&up})
+	}, []*graphql.Upload{up})
 
 	assert.NilError(t, err)
 	assert.Assert(t, trustCenterNDA != nil)
@@ -257,26 +261,23 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
-	anonUser := &auth.AnonymousTrustCenterUser{
-		SubjectID:          anonUserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     trustCenter.OwnerID,
-		AuthenticationType: auth.JWTAuthentication,
-		TrustCenterID:      trustCenter.ID,
-		SubjectEmail:       "test@example.com",
-	}
-	anonUser2 := &auth.AnonymousTrustCenterUser{
-		SubjectID:          anonUserID2,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     trustCenter2.OwnerID,
-		AuthenticationType: auth.JWTAuthentication,
-		TrustCenterID:      trustCenter2.ID,
-		SubjectEmail:       "testother@example.com",
-	}
+	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", "test@example.com")
+	anonUser2 := auth.NewTrustCenterCaller(trustCenter2.OwnerID, anonUserID2, "Anonymous User", "testother@example.com")
 
 	ctx := context.Background()
-	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
-	anonCtx2 := auth.WithAnonymousTrustCenterUser(ctx, anonUser2)
+	anonCtx := auth.WithCaller(ctx, anonUser)
+	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
+	anonCtx2 := auth.WithCaller(ctx, anonUser2)
+	anonCtx2 = auth.ActiveTrustCenterIDKey.Set(anonCtx2, trustCenter2.ID)
+
+	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     "Test",
+		LastName:      "User",
+		CompanyName:   lo.ToPtr("Test Company"),
+		Email:         "test@example.com",
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name     string
@@ -284,27 +285,6 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 		input    testclient.SubmitTrustCenterNDAResponseInput
 		errorMsg string
 	}{
-		{
-			name: "happy path",
-			ctx:  anonCtx,
-			input: testclient.SubmitTrustCenterNDAResponseInput{
-				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
-				Response: map[string]any{
-					"signatory_info": map[string]any{
-						"email": "test@example.com",
-					},
-					"acknowledgment": true,
-					"signature_metadata": map[string]any{
-						"ip_address": "192.168.1.100",
-						"timestamp":  "2025-09-22T19:37:59.988Z",
-						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
-						"user_id":    anonUserID,
-					},
-					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
-					"trust_center_id": trustCenter.ID,
-				},
-			},
-		},
 		{
 			name: "Does not conform to format",
 			ctx:  anonCtx,
@@ -338,7 +318,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"trust_center_id": trustCenter.ID,
 				},
 			},
-			errorMsg: "NDA submission does not match authenticated user",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name: "wrong trust center ID",
@@ -406,6 +386,27 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 			},
 			errorMsg: "NDA submission does not match authenticated user",
 		},
+		{
+			name: "happy path",
+			ctx:  anonCtx,
+			input: testclient.SubmitTrustCenterNDAResponseInput{
+				TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
+				Response: map[string]any{
+					"signatory_info": map[string]any{
+						"email": "test@example.com",
+					},
+					"acknowledgment": true,
+					"signature_metadata": map[string]any{
+						"ip_address": "192.168.1.100",
+						"timestamp":  "2025-09-22T19:37:59.988Z",
+						"pdf_hash":   "a1b2c3d4e5f6789012345678901234567890abcd",
+						"user_id":    anonUserID,
+					},
+					"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
+					"trust_center_id": trustCenter.ID,
+				},
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -430,21 +431,16 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 }
 
 func TestUpdateTrustCenterNDA(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	uploadFile1, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
-	up1 := graphql.Upload{
-		File:        uploadFile1.RawFile,
-		Filename:    uploadFile1.OriginalName,
-		Size:        uploadFile1.Size,
-		ContentType: uploadFile1.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{up1})
+	up1 := uploadFile(t, pdfFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up1})
 
 	createResp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
-	}, []*graphql.Upload{&up1})
+	}, []*graphql.Upload{up1})
 
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -452,18 +448,10 @@ func TestUpdateTrustCenterNDA(t *testing.T) {
 
 	fileID := createResp.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID
 
-	uploadFile2, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
+	secondUpload := uploadFile(t, logoFilePath)
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*secondUpload})
 
-	secondUpload := graphql.Upload{
-		File:        uploadFile2.RawFile,
-		Filename:    uploadFile2.OriginalName,
-		Size:        uploadFile2.Size,
-		ContentType: uploadFile2.ContentType,
-	}
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{secondUpload})
-
-	updateResp, err := suite.client.api.UpdateTrustCenterNda(testUser1.UserCtx, trustCenter.ID, []*graphql.Upload{&secondUpload})
+	updateResp, err := suite.client.api.UpdateTrustCenterNda(testUser1.UserCtx, trustCenter.ID, []*graphql.Upload{secondUpload})
 
 	assert.NilError(t, err)
 	assert.Assert(t, updateResp != nil)

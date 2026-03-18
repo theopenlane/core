@@ -6,7 +6,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -28,30 +27,35 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 
 	reqCtx := ctx.Request().Context()
 
-	anonUser, ok := auth.AnonymousQuestionnaireUserFromContext(reqCtx)
+	assessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx)
 	if !ok {
 		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
 	}
 
-	assessmentID := anonUser.AssessmentID
 	if assessmentID == "" {
 		return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
 	}
 
-	email := anonUser.SubjectEmail
+	caller, callerOk := auth.CallerFromContext(reqCtx)
+	if !callerOk || caller == nil {
+		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
+	}
+
+	email := caller.SubjectEmail
 	if email == "" {
 		return h.BadRequest(ctx, ErrMissingEmail, openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
-	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+	allowCtx = auth.WithCaller(allowCtx, caller)
+	allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 
 	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
 		Where(
 			assessmentresponse.AssessmentIDEQ(assessmentID),
 			assessmentresponse.EmailEQ(email),
 		).
+		WithDocument().
 		Only(allowCtx)
 	if err != nil && !generated.IsNotFound(err) {
 		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
@@ -99,6 +103,10 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 		response.UISchema = assessment.Edges.Template.Uischema
 	}
 
+	if assessmentResponse != nil && assessmentResponse.Edges.Document != nil {
+		response.SavedData = assessmentResponse.Edges.Document.Data
+	}
+
 	return h.Success(ctx, response, openapi)
 }
 
@@ -116,13 +124,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	reqCtx := ctx.Request().Context()
 
-	// check if the user is authenticated
-	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
 	var (
 		assessmentID string
 		email        string
@@ -130,15 +131,23 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	)
 
 	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
 
-	if anonUser, ok := auth.AnonymousQuestionnaireUserFromContext(reqCtx); ok {
-		assessmentID = anonUser.AssessmentID
-		email = anonUser.SubjectEmail
+	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
+		assessmentID = anonAssessmentID
 
-		allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
+		if callerOk && anonCaller != nil {
+			email = anonCaller.SubjectEmail
+			allowCtx = auth.WithCaller(allowCtx, anonCaller)
+		}
 
+		allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 	} else {
+		qCaller, qOk := auth.CallerFromContext(reqCtx)
+		if !qOk || qCaller == nil {
+			logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
 
 		// for regular/normal authenticated users, we expect the assessment id to be passed
 		// in the request by the client.
@@ -149,7 +158,15 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		}
 
 		assessmentID = req.AssessmentID
-		email = au.SubjectEmail
+		email = qCaller.SubjectEmail
+
+		// bypass org filter and FGA tuple creation for questionnaire submissions;
+		// DocumentData ownership is tracked via AssessmentResponse, not FGA tuples
+		allowCtx = auth.WithCaller(allowCtx, &auth.Caller{
+			OrganizationID: qCaller.OrganizationID,
+			SubjectID:      qCaller.SubjectID,
+			Capabilities:   auth.CapBypassFGA | auth.CapBypassOrgFilter,
+		})
 	}
 
 	if assessmentID == "" {
@@ -195,35 +212,62 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
 	}
 
-	documentDataQuery := h.DBClient.DocumentData.Create().
-		SetOwnerID(assessment.OwnerID)
+	var documentDataID string
 
-	if assessment.TemplateID != "" {
-		documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
+	if assessmentResponse.DocumentDataID != "" {
+		err = h.DBClient.DocumentData.UpdateOneID(assessmentResponse.DocumentDataID).
+			SetData(req.Data).
+			Exec(allowCtx)
+		if err != nil {
+			logx.FromContext(reqCtx).Err(err).Msg("could not update document data")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
+
+		documentDataID = assessmentResponse.DocumentDataID
+	} else {
+		documentDataQuery := h.DBClient.DocumentData.Create().
+			SetOwnerID(assessment.OwnerID)
+
+		if assessment.TemplateID != "" {
+			documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
+		}
+
+		documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
+		if err != nil {
+			logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
+
+		documentDataID = documentData.ID
 	}
 
-	documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	responseUpdate := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
+		SetDocumentDataID(documentDataID)
+
+	if req.IsDraft {
+		responseUpdate = responseUpdate.
+			SetStatus(enums.AssessmentResponseStatusDraft).
+			SetIsDraft(true)
+	} else {
+		responseUpdate = responseUpdate.
+			SetStatus(enums.AssessmentResponseStatusCompleted).
+			SetCompletedAt(time.Now()).
+			SetIsDraft(false)
 	}
 
-	completedAt := time.Now()
-
-	freshResponse, err := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
-		SetDocumentDataID(documentData.ID).
-		SetStatus(enums.AssessmentResponseStatusCompleted).
-		SetCompletedAt(completedAt).
-		Save(allowCtx)
+	freshResponse, err := responseUpdate.Save(allowCtx)
 	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment")
+		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	response := models.SubmitQuestionnaireResponse{
-		DocumentDataID: documentData.ID,
+		DocumentDataID: documentDataID,
 		Status:         freshResponse.Status.String(),
-		CompletedAt:    completedAt.Format(time.RFC3339),
+	}
+
+	if !freshResponse.CompletedAt.IsZero() {
+		response.CompletedAt = freshResponse.CompletedAt.Format(time.RFC3339)
 	}
 
 	return h.Success(ctx, response, openapi)

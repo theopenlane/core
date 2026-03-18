@@ -1,6 +1,7 @@
 package ratelimit
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -27,7 +28,7 @@ func TestNewMapLimitStore(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		mapLimitStore := NewMapLimitStore(tt.args.expirationTime, tt.args.flushInterval)
+		mapLimitStore := NewMapLimitStore(context.Background(), tt.args.expirationTime, tt.args.flushInterval)
 		assert.Equal(t, tt.args.expirationTime, mapLimitStore.expirationTime)
 	}
 }
@@ -47,7 +48,7 @@ func TestMapLimitStoreIncrement(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		m := NewMapLimitStore(1*time.Minute, 10*time.Second)
+		m := NewMapLimitStore(context.Background(), 1*time.Minute, 10*time.Second)
 		err := m.Inc(tt.key, tt.window)
 		assert.NoError(t, err)
 		prevVal, currVal, err := m.Get(tt.key, tt.window, tt.window)
@@ -85,7 +86,7 @@ func TestMapLimitStoreGet(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		m := NewMapLimitStore(1*time.Minute, 10*time.Second)
+		m := NewMapLimitStore(context.Background(), 1*time.Minute, 10*time.Second)
 		m.data[mapKey(tt.args.key, tt.args.previousWindow)] = limitValue{val: tt.wantPrevValue}
 		m.data[mapKey(tt.args.key, tt.args.currentWindow)] = limitValue{val: tt.wantCurrValue}
 
@@ -118,7 +119,7 @@ func TestMapLimitStoreSize(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		m := NewMapLimitStore(1*time.Minute, 10*time.Second)
+		m := NewMapLimitStore(context.Background(), 1*time.Minute, 10*time.Second)
 
 		if !tt.window.IsZero() {
 			err := m.Inc(tt.key, tt.window)

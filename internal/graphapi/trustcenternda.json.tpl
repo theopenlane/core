@@ -18,13 +18,25 @@
       "signatory_info": {
         "type": "object",
         "properties": {
+          "first_name": {
+            "type": "string",
+            "title": "First Name"
+          },
+          "last_name": {
+            "type": "string",
+            "title": "Last Name"
+          },
+          "company_name": {
+            "type": "string",
+            "title": "Company Name"
+          },
           "email": {
             "type": "string",
             "title": "Email Address",
             "format": "email"
           }
         },
-        "required": ["email"]
+        "required": ["first_name", "last_name", "company_name", "email"]
       },
       "acknowledgment": {
         "type": "boolean",

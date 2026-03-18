@@ -11,6 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/consts"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
@@ -18,10 +19,6 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
-)
-
-const (
-	systemAdminOrgID = "01101101011010010111010001100010"
 )
 
 // CreateFileRecord creates a file record in the database and returns the resulting ent.File entity.
@@ -129,18 +126,19 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 
 	// If the actor is a system admin, prefer deriving the organization from the
 	// correlated object rather than using the admin's org from context
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return "", err
+	persistCaller, persistOk := auth.CallerFromContext(ctx)
+	if !persistOk || persistCaller == nil {
+		return "", auth.ErrNoAuthUser
 	}
 
-	if !au.IsSystemAdmin {
-		if au.OrganizationID != "" {
-			return au.OrganizationID, nil
+	if !persistCaller.Has(auth.CapSystemAdmin) {
+		if persistCaller.OrganizationID != "" {
+			return persistCaller.OrganizationID, nil
 		}
 
-		if len(au.OrganizationIDs) == 1 {
-			return au.OrganizationIDs[0], nil
+		orgIDs := persistCaller.OrgIDs()
+		if len(orgIDs) == 1 {
+			return orgIDs[0], nil
 		}
 	}
 
@@ -183,8 +181,8 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	// use system admin org if the user is a system admin and we got to here
-	if au.IsSystemAdmin {
-		return systemAdminOrgID, nil
+	if persistCaller.Has(auth.CapSystemAdmin) {
+		return consts.SystemAdminOrgID, nil
 	}
 
 	return "", ErrMissingOrganizationID

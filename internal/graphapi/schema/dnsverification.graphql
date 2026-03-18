@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): DNSVerificationBulkDeletePayload!
+    """
+    Update multiple existing dnsVerifications
+    """
+    updateBulkDNSVerification(
+        """
+        IDs of the dnsVerifications to update
+        """
+        ids: [ID!]!
+        """
+        values to update the dnsVerifications with
+        """
+        input: UpdateDNSVerificationInput!
+    ): DNSVerificationBulkUpdatePayload!
+    """
+    Update multiple existing dnsVerifications via file upload
+    """
+    updateBulkCSVDNSVerification(
+        """
+        csv file containing values of the dnsVerification, must include ID column
+        """
+        input: Upload!
+    ): DNSVerificationBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type DNSVerificationBulkDeletePayload {
     Deleted dnsVerification IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkDNSVerification mutation
+"""
+type DNSVerificationBulkUpdatePayload {
+    """
+    Updated dnsVerifications
+    """
+    dnsVerifications: [DNSVerification!]
+    """
+    IDs of the updated dnsVerifications
+    """
+    updatedIDs: [ID!]
 }

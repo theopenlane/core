@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -140,7 +141,13 @@ func (r Review) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(r, Vulnerability{}),
 		defaultEdgeToWithPagination(r, ActionPlan{}),
 		defaultEdgeToWithPagination(r, Remediation{}),
-		defaultEdgeToWithPagination(r, Control{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Subcontrol{}),
 		defaultEdgeToWithPagination(r, Risk{}),
 		defaultEdgeToWithPagination(r, Program{}),
@@ -178,6 +185,7 @@ func (r Review) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Review](r,
 				withParents(
+					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},
@@ -207,6 +215,12 @@ func (Review) Indexes() []ent.Index {
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),
 			),
+	}
+}
+
+func (Review) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookReviewFiles(),
 	}
 }
 

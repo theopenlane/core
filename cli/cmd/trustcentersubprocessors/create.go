@@ -26,7 +26,8 @@ func init() {
 	// command line flags for the create command
 	createCmd.Flags().StringP("subprocessor-id", "s", "", "ID of the subprocessor")
 	createCmd.Flags().StringP("trust-center-id", "t", "", "ID of the trust center")
-	createCmd.Flags().StringP("category", "c", "", "category of the subprocessor (e.g. 'Data Warehouse' or 'Infrastructure Hosting')")
+	createCmd.Flags().StringP("kind-id", "k", "", "ID of the trust center subprocessor kind")
+	createCmd.Flags().StringP("kind-name", "", "", "name of the trust center subprocessor kind (e.g. 'Data Warehouse' or 'Infrastructure Hosting')")
 	createCmd.Flags().StringSliceP("countries", "", []string{}, "country codes or countries where the subprocessor is located")
 }
 
@@ -39,9 +40,14 @@ func createValidation() (input graphclient.CreateTrustCenterSubprocessorInput, e
 		return input, cmd.NewRequiredFieldMissingError("subprocessor-id")
 	}
 
-	input.Category = cmd.Config.String("category")
-	if input.Category == "" {
-		return input, cmd.NewRequiredFieldMissingError("category")
+	kindID := cmd.Config.String("kind-id")
+	if kindID != "" {
+		input.TrustCenterSubprocessorKindID = &kindID
+	}
+
+	kindName := cmd.Config.String("kind-name")
+	if kindName != "" {
+		input.TrustCenterSubprocessorKindName = &kindName
 	}
 
 	trustCenterID := cmd.Config.String("trust-center-id")

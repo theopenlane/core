@@ -43,8 +43,16 @@ const (
 	FieldGravatarLogoURL = "gravatar_logo_url"
 	// FieldLogoURL holds the string denoting the logo_url field in the database.
 	FieldLogoURL = "logo_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
+	// FieldOscalRole holds the string denoting the oscal_role field in the database.
+	FieldOscalRole = "oscal_role"
+	// FieldOscalPartyUUID holds the string denoting the oscal_party_uuid field in the database.
+	FieldOscalPartyUUID = "oscal_party_uuid"
+	// FieldOscalContactUuids holds the string denoting the oscal_contact_uuids field in the database.
+	FieldOscalContactUuids = "oscal_contact_uuids"
 	// FieldScimExternalID holds the string denoting the scim_external_id field in the database.
 	FieldScimExternalID = "scim_external_id"
 	// FieldScimDisplayName holds the string denoting the scim_display_name field in the database.
@@ -139,6 +147,8 @@ const (
 	EdgeEvents = "events"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
+	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
+	EdgeAvatarFile = "avatar_file"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
@@ -374,6 +384,13 @@ const (
 	IntegrationsInverseTable = "integrations"
 	// IntegrationsColumn is the table column denoting the integrations relation/edge.
 	IntegrationsColumn = "group_integrations"
+	// AvatarFileTable is the table that holds the avatar_file relation/edge.
+	AvatarFileTable = "groups"
+	// AvatarFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	AvatarFileInverseTable = "files"
+	// AvatarFileColumn is the table column denoting the avatar_file relation/edge.
+	AvatarFileColumn = "avatar_local_file_id"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "group_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -427,7 +444,11 @@ var Columns = []string{
 	FieldIsManaged,
 	FieldGravatarLogoURL,
 	FieldLogoURL,
+	FieldAvatarLocalFileID,
 	FieldDisplayName,
+	FieldOscalRole,
+	FieldOscalPartyUUID,
+	FieldOscalContactUuids,
 	FieldScimExternalID,
 	FieldScimDisplayName,
 	FieldScimActive,
@@ -443,6 +464,9 @@ var ForeignKeys = []string{
 	"asset_blocked_groups",
 	"asset_editors",
 	"asset_viewers",
+	"email_branding_blocked_groups",
+	"email_branding_editors",
+	"email_branding_viewers",
 	"finding_blocked_groups",
 	"finding_editors",
 	"finding_viewers",
@@ -463,6 +487,7 @@ var ForeignKeys = []string{
 	"organization_procedure_creators",
 	"organization_program_creators",
 	"organization_risk_creators",
+	"organization_identity_holder_creators",
 	"organization_scheduled_job_creators",
 	"organization_standard_creators",
 	"organization_template_creators",
@@ -476,6 +501,9 @@ var ForeignKeys = []string{
 	"review_blocked_groups",
 	"review_editors",
 	"review_viewers",
+	"sla_definition_blocked_groups",
+	"sla_definition_editors",
+	"sla_definition_viewers",
 	"trust_center_blocked_groups",
 	"trust_center_editors",
 	"trust_center_compliance_blocked_groups",
@@ -484,6 +512,8 @@ var ForeignKeys = []string{
 	"trust_center_doc_editors",
 	"trust_center_entity_blocked_groups",
 	"trust_center_entity_editors",
+	"trust_center_faq_blocked_groups",
+	"trust_center_faq_editors",
 	"trust_center_nda_request_blocked_groups",
 	"trust_center_nda_request_editors",
 	"trust_center_setting_blocked_groups",
@@ -495,6 +525,9 @@ var ForeignKeys = []string{
 	"vulnerability_blocked_groups",
 	"vulnerability_editors",
 	"vulnerability_viewers",
+	"workflow_definition_blocked_groups",
+	"workflow_definition_editors",
+	"workflow_definition_viewers",
 	"workflow_definition_groups",
 }
 
@@ -760,9 +793,24 @@ func ByLogoURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoURL, opts...).ToFunc()
 }
 
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
+}
+
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByOscalRole orders the results by the oscal_role field.
+func ByOscalRole(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOscalRole, opts...).ToFunc()
+}
+
+// ByOscalPartyUUID orders the results by the oscal_party_uuid field.
+func ByOscalPartyUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOscalPartyUUID, opts...).ToFunc()
 }
 
 // ByScimExternalID orders the results by the scim_external_id field.
@@ -1373,6 +1421,13 @@ func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAvatarFileField orders the results by avatar_file field.
+func ByAvatarFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAvatarFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1755,6 +1810,13 @@ func newIntegrationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+	)
+}
+func newAvatarFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AvatarFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -41,10 +42,15 @@ func (r *campaignResolver) WorkflowTimeline(ctx context.Context, obj *generated.
 // CreateCampaign is the resolver for the createCampaign field.
 func (r *mutationResolver) CreateCampaign(ctx context.Context, input generated.CreateCampaignInput) (*model.CampaignCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if input.OwnerID == nil || *input.OwnerID == "" {
+			return nil, rout.NewMissingRequiredFieldError("owner_id")
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
 	res, err := withTransactionalMutation(ctx).Campaign.Create().SetInput(input).Save(ctx)
@@ -65,8 +71,9 @@ func (r *mutationResolver) CreateBulkCampaign(ctx context.Context, input []*gene
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -76,7 +83,7 @@ func (r *mutationResolver) CreateBulkCampaign(ctx context.Context, input []*gene
 
 // CreateBulkCSVCampaign is the resolver for the createBulkCSVCampaign field.
 func (r *mutationResolver) CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload) (*model.CampaignBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateCampaignInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.CampaignCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -89,13 +96,27 @@ func (r *mutationResolver) CreateBulkCSVCampaign(ctx context.Context, input grap
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateCampaign(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "Campaign", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateCampaignInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateCampaign(ctx, inputs)
 }
 
 // UpdateCampaign is the resolver for the updateCampaign field.
@@ -106,7 +127,8 @@ func (r *mutationResolver) UpdateCampaign(ctx context.Context, id string, input 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

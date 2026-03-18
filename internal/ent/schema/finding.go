@@ -13,8 +13,11 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -54,6 +57,23 @@ func (Finding) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
 			),
+		field.String("status").
+			Comment("lifecycle status of the finding").
+			Annotations(
+				entgql.Directives(
+					entgql.Deprecated("Use `finding_status_name` instead."),
+				),
+			).
+			Optional(),
+		field.Enum("security_level").
+			Comment("incoming source severity").
+			GoType(enums.SecurityLevel("")).
+			Default(enums.SecurityLevelNone.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("security_level"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+			),
 		field.String("external_owner_id").
 			Comment("the owner of the finding").
 			Optional().
@@ -62,7 +82,7 @@ func (Finding) Fields() []ent.Field {
 				entgql.OrderField("external_owner_id"),
 			),
 		field.String("source").
-			Comment("system that produced the finding, e.g. gcp_scc").
+			Comment("system that produced the finding, e.g. gcpscc").
 			Optional(),
 		field.String("resource_name").
 			Comment("resource identifier provided by the source system").
@@ -157,9 +177,6 @@ func (Finding) Fields() []ent.Field {
 		field.Int("remediation_sla").
 			Comment("remediation service level agreement in days").
 			Optional(),
-		field.String("status").
-			Comment("lifecycle status of the finding").
-			Optional(),
 		field.Time("event_time").
 			Comment("timestamp when the finding was last observed by the source").
 			GoType(models.DateTime{}).
@@ -211,6 +228,8 @@ func (f Finding) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(f, Entity{}),
 		defaultEdgeToWithPagination(f, Scan{}),
 		defaultEdgeToWithPagination(f, Task{}),
+		defaultEdgeToWithPagination(f, DirectoryAccount{}),
+		defaultEdgeToWithPagination(f, IdentityHolder{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: f,
 			edgeSchema: Remediation{},
@@ -251,6 +270,7 @@ func (f Finding) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
+					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},
@@ -258,6 +278,8 @@ func (f Finding) Mixin() []ent.Mixin {
 					Asset{},
 					Entity{},
 					Scan{},
+					DirectoryAccount{},
+					IdentityHolder{},
 				),
 				withOrganizationOwner(true),
 			),
@@ -265,6 +287,7 @@ func (f Finding) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
+			newCustomEnumMixin(f, withEnumFieldName("status")),
 		},
 	}.getMixins(f)
 }
@@ -277,6 +300,13 @@ func (Finding) Indexes() []ent.Index {
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),
 			),
+	}
+}
+
+// Hooks of the Finding
+func (Finding) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookSeverityLevel(),
 	}
 }
 

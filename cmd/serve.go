@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"context"
+	"errors"
+	"net/http"
+	"sync"
 	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/theopenlane/beacon/otelx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/iam/fgax"
@@ -22,9 +24,12 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
+
+// galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
+const galaShutdownTimeout = 10 * time.Second
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
@@ -35,12 +40,14 @@ var serveCmd = &cobra.Command{
 	},
 }
 
+// init registers the serve command and its flags on the root command.
 func init() {
 	rootCmd.AddCommand(serveCmd)
 
 	serveCmd.PersistentFlags().String("config", "./config/.config.yaml", "config file location")
 }
 
+// serve initializes dependencies and starts the core API server.
 func serve(ctx context.Context) error {
 	// setup db connection for server
 	var (
@@ -65,7 +72,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
 		serveropts.WithKeyDirOption(),
-		serveropts.WithSecretManagerKeysOption(),
+		serveropts.WithShortlinks(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -86,11 +93,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithTokenManager(),
 	)
 
-	err = otelx.NewTracer(so.Config.Settings.Tracer, appName)
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to initialize tracer")
-	}
-
 	// setup Authz connection
 	// this must come before the database setup because the FGA Client
 	// is used as an ent dependency
@@ -102,22 +104,30 @@ func serve(ctx context.Context) error {
 	// Setup Redis connection
 	redisClient := cache.New(so.Config.Settings.Redis)
 
+	// closeRedis ensures the redis client is closed exactly once; both the shutdown
+	// goroutine and the defer call this, and sync.Once guarantees only one executes
+	var closeRedisOnce sync.Once
+	closeRedis := func() {
+		closeRedisOnce.Do(func() {
+			if err := redisClient.Close(); err != nil {
+				log.Error().Err(err).Msg("error closing redis")
+			}
+		})
+	}
+
 	go func() {
 		<-ctx.Done()
-
-		if err := redisClient.Close(); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error closing redis")
-		}
+		closeRedis()
 	}()
 
-	defer redisClient.Close()
+	defer closeRedis()
 
 	// Setup pool if max workers is greater than 0
-	var pool *soiree.Pool
+	var pool *gala.Pool
 	if so.Config.Settings.EntConfig.MaxPoolSize > 0 {
-		pool = soiree.NewPool(
-			soiree.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
-			soiree.WithPoolName("ent_client_pool"),
+		pool = gala.NewPool(
+			gala.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
+			gala.WithPoolName("ent_client_pool"),
 		)
 	}
 
@@ -164,6 +174,7 @@ func serve(ctx context.Context) error {
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
+		ent.Shortlinks(so.Config.Handler.ShortlinksClient),
 		ent.Pool(pool),
 		ent.EmailVerifier(verifier),
 		ent.HistoryClient(historyClient),
@@ -172,35 +183,52 @@ func serve(ctx context.Context) error {
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
+	galaApp, notifGala, err := serveropts.NewGalaRuntimes(ctx, so)
+	if err != nil {
+		return err
+	}
+
 	jobOpts := []riverqueue.Option{
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	eventer := hooks.NewEventer()
-
-	clientOpts := []entdb.Option{}
-	clientOpts = append(clientOpts,
-		entdb.WithEventer(eventer),
+	clientOpts := []entdb.Option{
+		entdb.WithWorkflows(&so.Config.Settings.Workflows, galaApp),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
-	)
+	}
 
 	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, clientOpts, entOpts...)
 	if err != nil {
 		return err
 	}
 
+	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
+		return err
+	}
+
 	if so.Config.Settings.Workflows.Enabled {
-		wfEngine, err := engine.NewWorkflowEngineWithConfig(dbClient, eventer.Emitter, &so.Config.Settings.Workflows)
-		if err != nil {
-			log.Error().Err(err).Msg("failed to initialize workflow engine")
-
-			return err
+		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
+			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
+			log.Info().Msg("workflow engine initialized")
 		}
+	}
 
-		so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
+	if so.Config.Settings.CampaignWebhook.Enabled {
+		so.AddServerOptions(serveropts.WithCampaignWebhookConfig())
+	}
 
-		log.Info().Msg("workflow engine initialized")
+	so.AddServerOptions(serveropts.WithCloudflareConfig())
+
+	// closeDB ensures the database client is closed exactly once; both the shutdown
+	// goroutine and the defer call this, and sync.Once guarantees only one executes
+	var closeDBOnce sync.Once
+	closeDB := func() {
+		closeDBOnce.Do(func() {
+			if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
+				log.Error().Err(err).Msg("error closing database")
+			}
+		})
 	}
 
 	go func() {
@@ -210,16 +238,23 @@ func serve(ctx context.Context) error {
 		pkgobjects.WaitForUploads()
 		log.Ctx(ctx).Info().Msg("all uploads completed")
 
-		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error closing database")
+		if galaApp != nil {
+			stopCtx, cancel := context.WithTimeout(context.Background(), galaShutdownTimeout)
+			defer cancel()
+
+			if stopErr := galaApp.StopWorkers(stopCtx); stopErr != nil {
+				log.Error().Err(stopErr).Msg("error stopping gala worker client")
+			}
+
+			if closeErr := galaApp.Close(); closeErr != nil {
+				log.Error().Err(closeErr).Msg("error closing gala runtime")
+			}
 		}
 
-		if err := soiree.ShutdownAll(); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error shutting down event pools")
-		}
+		closeDB()
 	}()
 
-	defer entdb.GracefulClose(context.Background(), dbClient, time.Second)
+	defer closeDB()
 
 	// add auth session manager
 	so.Config.Handler.AuthManager = authmanager.New(dbClient)
@@ -247,13 +282,15 @@ func serve(ctx context.Context) error {
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),
 	)
 
-	// add auth options
-	so.AddServerOptions(serveropts.WithAuth())
-	so.AddServerOptions(serveropts.WithIntegrationStore(dbClient))
-	so.AddServerOptions(serveropts.WithIntegrationBroker())
-	so.AddServerOptions(serveropts.WithIntegrationClients())
-	so.AddServerOptions(serveropts.WithIntegrationOperations())
-	so.AddServerOptions(serveropts.WithKeymaker())
+	// add auth and integration options
+	so.AddServerOptions(
+		serveropts.WithAuth(),
+		serveropts.WithIntegrationStore(dbClient),
+		serveropts.WithIntegrationBroker(),
+		serveropts.WithIntegrationClients(),
+		serveropts.WithIntegrationOperations(),
+		serveropts.WithIntegrationActivation(),
+	)
 
 	// add session manager
 	so.AddServerOptions(
@@ -271,10 +308,12 @@ func serve(ctx context.Context) error {
 	}
 
 	// Setup Graph API Handlers
-	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient))
-	so.AddServerOptions(serveropts.WithHistoryGraphRoute(srv, historyClient))
+	so.AddServerOptions(
+		serveropts.WithGraphRoute(srv, dbClient),
+		serveropts.WithHistoryGraphRoute(srv, historyClient),
+	)
 
-	if err := srv.StartEchoServer(ctx); err != nil {
+	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")
 	}
 

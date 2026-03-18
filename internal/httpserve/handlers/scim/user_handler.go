@@ -1,7 +1,6 @@
 package scim
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/mail"
@@ -90,7 +89,7 @@ func (h *UserHandler) Create(r *http.Request, attributes scim.ResourceAttributes
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+		return scim.Resource{}, ErrOrgNotFound
 	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
@@ -173,7 +172,7 @@ func (h *UserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+		return scim.Resource{}, ErrOrgNotFound
 	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
@@ -199,7 +198,7 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		return scim.Page{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+		return scim.Page{}, ErrOrgNotFound
 	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
@@ -252,7 +251,7 @@ func (h *UserHandler) Replace(r *http.Request, id string, attributes scim.Resour
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+		return scim.Resource{}, ErrOrgNotFound
 	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
@@ -334,7 +333,7 @@ func (h *UserHandler) Delete(r *http.Request, id string) error {
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+		return ErrOrgNotFound
 	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
@@ -360,12 +359,12 @@ func (h *UserHandler) Delete(r *http.Request, id string) error {
 // Patch updates one or more attributes of a SCIM resource using a sequence of operations.
 func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
 	ctx := r.Context()
-	ctx = context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
+	ctx = entx.SkipSoftDelete(ctx)
 	client := transaction.FromContext(ctx)
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+		return scim.Resource{}, ErrOrgNotFound
 	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {

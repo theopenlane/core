@@ -196,6 +196,20 @@ func (_c *ProgramHistoryCreate) SetNillableProgramKindID(v *string) *ProgramHist
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *ProgramHistoryCreate) SetExternalUUID(v string) *ProgramHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableExternalUUID(v *string) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ProgramHistoryCreate) SetName(v string) *ProgramHistoryCreate {
 	_c.mutation.SetName(v)
@@ -599,6 +613,10 @@ func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ProgramKindID(); ok {
 		_spec.SetField(programhistory.FieldProgramKindID, field.TypeString, value)
 		_node.ProgramKindID = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(programhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)

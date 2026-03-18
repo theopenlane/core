@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // MappingSource is a custom type representing the various states of MappingSource.
 type MappingSource string
@@ -20,47 +16,19 @@ var (
 	MappingSourceInvalid MappingSource = "MAPPINGSOURCE_INVALID"
 )
 
+var mappingSourceValues = []MappingSource{MappingSourceManual, MappingSourceSuggested, MappingSourceImported}
+
 // Values returns a slice of strings representing all valid MappingSource values.
-func (MappingSource) Values() []string {
-	return []string{
-		string(MappingSourceManual),
-		string(MappingSourceSuggested),
-		string(MappingSourceImported),
-	}
-}
+func (MappingSource) Values() []string { return stringValues(mappingSourceValues) }
 
 // String returns the string representation of the MappingSource value.
-func (r MappingSource) String() string {
-	return string(r)
-}
+func (r MappingSource) String() string { return string(r) }
 
 // ToMappingSource converts a string to its corresponding MappingSource enum value.
-func ToMappingSource(r string) *MappingSource {
-	switch strings.ToUpper(r) {
-	case MappingSourceManual.String():
-		return &MappingSourceManual
-	case MappingSourceSuggested.String():
-		return &MappingSourceSuggested
-	case MappingSourceImported.String():
-		return &MappingSourceImported
-	default:
-		return &MappingSourceInvalid
-	}
-}
+func ToMappingSource(r string) *MappingSource { return parse(r, mappingSourceValues, &MappingSourceInvalid) }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r MappingSource) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r MappingSource) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *MappingSource) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for MappingSource, got: %T", v) //nolint:err113
-	}
-
-	*r = MappingSource(str)
-
-	return nil
-}
+func (r *MappingSource) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

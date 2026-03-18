@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -24,10 +25,12 @@ func (r *mutationResolver) CreateCustomDomain(ctx context.Context, input generat
 	if err != nil {
 		return nil, rout.InvalidField("cname_record")
 	}
+
 	input.CnameRecord = normalizedCname
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -60,7 +63,8 @@ func (r *mutationResolver) CreateBulkCustomDomain(ctx context.Context, input []*
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -71,7 +75,7 @@ func (r *mutationResolver) CreateBulkCustomDomain(ctx context.Context, input []*
 
 // CreateBulkCSVCustomDomain is the resolver for the createBulkCSVCustomDomain field.
 func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input graphql.Upload) (*model.CustomDomainBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateCustomDomainInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.CustomDomainCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -82,24 +86,37 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	for _, item := range data {
-		normalizedCname, err := domain.NormalizeHostname(item.CnameRecord)
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "CustomDomain", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateCustomDomainInput, 0, len(data))
+
+	for i := range data {
+		normalizedCname, err := domain.NormalizeHostname(data[i].Input.CnameRecord)
 		if err != nil {
 			return nil, rout.InvalidField("cname_record")
 		}
 
-		item.CnameRecord = normalizedCname
+		data[i].Input.CnameRecord = normalizedCname
+
+		inputs = append(inputs, &data[i].Input)
 	}
 
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateCustomDomain(ctx, data)
+	return r.bulkCreateCustomDomain(ctx, inputs)
 }
 
 // UpdateCustomDomain is the resolver for the updateCustomDomain field.
@@ -110,7 +127,8 @@ func (r *mutationResolver) UpdateCustomDomain(ctx context.Context, id string, in
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -156,6 +174,35 @@ func (r *mutationResolver) DeleteBulkCustomDomain(ctx context.Context, ids []str
 // ValidateCustomDomain is the resolver for the validateCustomDomain field.
 func (r *mutationResolver) ValidateCustomDomain(ctx context.Context, id string) (*model.CustomDomainValidatePayload, error) {
 	return validateCustomDomain(ctx, id, r)
+}
+
+// UpdateBulkCustomDomain is the resolver for the updateBulkCustomDomain field.
+func (r *mutationResolver) UpdateBulkCustomDomain(ctx context.Context, ids []string, input generated.UpdateCustomDomainInput) (*model.CustomDomainBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateCustomDomain(ctx, ids, input)
+}
+
+// UpdateBulkCSVCustomDomain is the resolver for the updateBulkCSVCustomDomain field.
+func (r *mutationResolver) UpdateBulkCSVCustomDomain(ctx context.Context, input graphql.Upload) (*model.CustomDomainBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.CustomDomainCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customdomain"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "CustomDomain", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVCustomDomain(ctx, data)
 }
 
 // CustomDomain is the resolver for the customDomain field.

@@ -13,6 +13,95 @@ import (
 	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
 )
 
+func TestR2Provider_UploadAndDownload_EmptyFile(t *testing.T) {
+	ctx := context.Background()
+	orgID := "01HYQZ5YTVJ0P2R2HF7N3W3MQZ"
+	fileID := "01J1FILEEMPTY"
+	fileName := "empty.txt"
+	folder := path.Join(orgID, fileID)
+
+	endpoint, terminate := startMinio(t, ctx)
+	t.Cleanup(func() { _ = terminate(context.Background()) })
+	createBucket(t, ctx, endpoint, minioBucket)
+
+	builder := r2provider.NewR2Builder().WithOptions(r2provider.WithUsePathStyle(true))
+	options := storage.NewProviderOptions(
+		storage.WithBucket(minioBucket),
+		storage.WithEndpoint(endpoint),
+		storage.WithCredentials(storage.ProviderCredentials{
+			AccountID:       "test-account",
+			AccessKeyID:     minioUser,
+			SecretAccessKey: minioSecret,
+		}),
+	)
+	providerInterface, err := builder.Build(ctx, storage.ProviderCredentials{
+		AccountID:       "test-account",
+		AccessKeyID:     minioUser,
+		SecretAccessKey: minioSecret,
+	}, options)
+	require.NoError(t, err)
+	provider := providerInterface
+	t.Cleanup(func() { _ = provider.Close() })
+
+	fileContent := []byte{}
+	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
+		FileName:          fileName,
+		FolderDestination: folder,
+		ContentType:       "text/plain",
+	})
+	require.NoError(t, err)
+	require.NotNil(t, uploadedFile)
+
+	// Download and verify empty content
+	downloadedFile, err := provider.Download(ctx, &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key:    path.Join(folder, fileName),
+			Bucket: minioBucket,
+		},
+	}, &storagetypes.DownloadFileOptions{
+		FileName: fileName,
+	})
+	require.NoError(t, err)
+	require.Equal(t, fileContent, downloadedFile.File)
+}
+
+func TestR2Provider_Download_NonExistentFile(t *testing.T) {
+	ctx := context.Background()
+	endpoint, terminate := startMinio(t, ctx)
+	t.Cleanup(func() { _ = terminate(context.Background()) })
+	createBucket(t, ctx, endpoint, minioBucket)
+
+	builder := r2provider.NewR2Builder().WithOptions(r2provider.WithUsePathStyle(true))
+	options := storage.NewProviderOptions(
+		storage.WithBucket(minioBucket),
+		storage.WithEndpoint(endpoint),
+		storage.WithCredentials(storage.ProviderCredentials{
+			AccountID:       "test-account",
+			AccessKeyID:     minioUser,
+			SecretAccessKey: minioSecret,
+		}),
+	)
+	providerInterface, err := builder.Build(ctx, storage.ProviderCredentials{
+		AccountID:       "test-account",
+		AccessKeyID:     minioUser,
+		SecretAccessKey: minioSecret,
+	}, options)
+	require.NoError(t, err)
+	provider := providerInterface
+	t.Cleanup(func() { _ = provider.Close() })
+
+	// Attempt to download a non-existent file
+	_, err = provider.Download(ctx, &storagetypes.File{
+		FileMetadata: storagetypes.FileMetadata{
+			Key:    "does/not/exist.txt",
+			Bucket: minioBucket,
+		},
+	}, &storagetypes.DownloadFileOptions{
+		FileName: "does-not-exist.txt",
+	})
+	require.Error(t, err, "expected error when downloading non-existent file")
+}
+
 // TestR2Provider_OrganizationFolderStructure verifies that files are stored under organization-specific directories
 func TestR2Provider_OrganizationFolderStructure(t *testing.T) {
 	ctx := context.Background()
@@ -76,6 +165,7 @@ func TestR2Provider_OrganizationFolderStructure(t *testing.T) {
 		},
 	}, &storagetypes.DownloadFileOptions{})
 	require.NoError(t, err)
+	require.NotNil(t, downloadedFile)
 	require.Equal(t, fileContent, downloadedFile.File)
 }
 

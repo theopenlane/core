@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // ProgramType is a custom type representing the various states of ProgramType.
 type ProgramType string
@@ -22,50 +18,19 @@ var (
 	ProgramTypeInvalid ProgramType = "PROGRAMTYPE_INVALID"
 )
 
+var programTypeValues = []ProgramType{ProgramTypeFramework, ProgramTypeGapAnalysis, ProgramTypeRiskAssessment, ProgramTypeOther}
+
 // Values returns a slice of strings representing all valid ProgramType values.
-func (ProgramType) Values() []string {
-	return []string{
-		string(ProgramTypeFramework),
-		string(ProgramTypeGapAnalysis),
-		string(ProgramTypeRiskAssessment),
-		string(ProgramTypeOther),
-	}
-}
+func (ProgramType) Values() []string { return stringValues(programTypeValues) }
 
 // String returns the string representation of the ProgramType value.
-func (r ProgramType) String() string {
-	return string(r)
-}
+func (r ProgramType) String() string { return string(r) }
 
 // ToProgramType converts a string to its corresponding ProgramType enum value.
-func ToProgramType(r string) *ProgramType {
-	switch strings.ToUpper(r) {
-	case ProgramTypeFramework.String():
-		return &ProgramTypeFramework
-	case ProgramTypeGapAnalysis.String():
-		return &ProgramTypeGapAnalysis
-	case ProgramTypeRiskAssessment.String():
-		return &ProgramTypeRiskAssessment
-	case ProgramTypeOther.String():
-		return &ProgramTypeOther
-	default:
-		return &ProgramTypeInvalid
-	}
-}
+func ToProgramType(r string) *ProgramType { return parse(r, programTypeValues, &ProgramTypeInvalid) }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r ProgramType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ProgramType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *ProgramType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ProgramType, got: %T", v) //nolint:err113
-	}
-
-	*r = ProgramType(str)
-
-	return nil
-}
+func (r *ProgramType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

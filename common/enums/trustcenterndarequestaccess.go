@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // TrustCenterNDARequestAccessLevel is a custom type for NDA request access level
 type TrustCenterNDARequestAccessLevel string
@@ -18,48 +14,26 @@ var (
 	TrustCenterNDARequestAccessLevelInvalid TrustCenterNDARequestAccessLevel = "INVALID"
 )
 
-// Values returns a slice of strings that represents all the possible values of the TrustCenterNDARequestAccessLevel enum
-func (TrustCenterNDARequestAccessLevel) Values() (kinds []string) {
-	for _, s := range []TrustCenterNDARequestAccessLevel{
-		TrustCenterNDARequestAccessLevelFull,
-		TrustCenterNDARequestAccessLevelLimited,
-	} {
-		kinds = append(kinds, string(s))
-	}
+var trustCenterNDARequestAccessLevelValues = []TrustCenterNDARequestAccessLevel{
+	TrustCenterNDARequestAccessLevelFull,
+	TrustCenterNDARequestAccessLevelLimited,
+}
 
-	return
+// Values returns a slice of strings that represents all the possible values of the TrustCenterNDARequestAccessLevel enum
+func (TrustCenterNDARequestAccessLevel) Values() []string {
+	return stringValues(trustCenterNDARequestAccessLevelValues)
 }
 
 // String returns the access level as a string
-func (r TrustCenterNDARequestAccessLevel) String() string {
-	return string(r)
-}
+func (r TrustCenterNDARequestAccessLevel) String() string { return string(r) }
 
 // ToTrustCenterNDARequestAccessLevel returns the access level enum based on string input
 func ToTrustCenterNDARequestAccessLevel(r string) *TrustCenterNDARequestAccessLevel {
-	switch r := strings.ToUpper(r); r {
-	case TrustCenterNDARequestAccessLevelFull.String():
-		return &TrustCenterNDARequestAccessLevelFull
-	case TrustCenterNDARequestAccessLevelLimited.String():
-		return &TrustCenterNDARequestAccessLevelLimited
-	default:
-		return nil
-	}
+	return parse(r, trustCenterNDARequestAccessLevelValues, nil)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r TrustCenterNDARequestAccessLevel) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r TrustCenterNDARequestAccessLevel) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *TrustCenterNDARequestAccessLevel) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for TrustCenterNDARequestAccessLevel, got: %T", v) //nolint:err113
-	}
-
-	*r = TrustCenterNDARequestAccessLevel(str)
-
-	return nil
-}
+func (r *TrustCenterNDARequestAccessLevel) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

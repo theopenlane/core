@@ -79,6 +79,8 @@ type AssessmentResponse struct {
 	DueDate time.Time `json:"due_date,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID string `json:"document_data_id,omitempty"`
+	// is this a draft response? can the user resume from where they left?
+	IsDraft bool `json:"is_draft,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AssessmentResponseQuery when eager-loading is set.
 	Edges        AssessmentResponseEdges `json:"edges"`
@@ -179,7 +181,7 @@ func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessmentresponse.FieldEmailMetadata:
 			values[i] = new([]byte)
-		case assessmentresponse.FieldIsTest:
+		case assessmentresponse.FieldIsTest, assessmentresponse.FieldIsDraft:
 			values[i] = new(sql.NullBool)
 		case assessmentresponse.FieldSendAttempts, assessmentresponse.FieldEmailOpenCount, assessmentresponse.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
@@ -372,6 +374,12 @@ func (_m *AssessmentResponse) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.DocumentDataID = value.String
 			}
+		case assessmentresponse.FieldIsDraft:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_draft", values[i])
+			} else if value.Valid {
+				_m.IsDraft = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -518,6 +526,9 @@ func (_m *AssessmentResponse) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("document_data_id=")
 	builder.WriteString(_m.DocumentDataID)
+	builder.WriteString(", ")
+	builder.WriteString("is_draft=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDraft))
 	builder.WriteByte(')')
 	return builder.String()
 }

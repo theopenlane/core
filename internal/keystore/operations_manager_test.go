@@ -238,3 +238,106 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 		t.Fatalf("expected status ok, got %s", result.Status)
 	}
 }
+
+func TestOperationManagerRunWithPayloadUsesProvidedCredential(t *testing.T) {
+	t.Parallel()
+
+	provider := types.ProviderType("acme")
+	stored := types.CredentialPayload{
+		Provider: provider,
+		Kind:     types.CredentialKindAPIKey,
+		Data:     models.CredentialSet{APIToken: "stored"},
+	}
+	provided := types.CredentialPayload{
+		Provider: provider,
+		Kind:     types.CredentialKindAPIKey,
+		Data:     models.CredentialSet{APIToken: "provided"},
+	}
+
+	source := &credentialSourceStub{getPayload: stored, mintPayload: stored}
+
+	var captured types.OperationInput
+	descriptor := types.OperationDescriptor{
+		Provider: provider,
+		Name:     types.OperationName("health"),
+		Run: func(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
+			captured = input
+			return types.OperationResult{Status: types.OperationStatusOK}, nil
+		},
+	}
+
+	manager, err := NewOperationManager(source, []types.OperationDescriptor{descriptor})
+	if err != nil {
+		t.Fatalf("NewOperationManager() error = %v", err)
+	}
+
+	result, err := manager.RunWithPayload(context.Background(), types.OperationRequest{
+		OrgID:    "org-1",
+		Provider: provider,
+		Name:     descriptor.Name,
+	}, provided)
+	if err != nil {
+		t.Fatalf("RunWithPayload() error = %v", err)
+	}
+
+	if result.Status != types.OperationStatusOK {
+		t.Fatalf("expected status ok, got %s", result.Status)
+	}
+	if captured.Credential.Data.APIToken != provided.Data.APIToken {
+		t.Fatalf("expected provided credential, got %s", captured.Credential.Data.APIToken)
+	}
+	if source.getCount != 0 || source.mintCount != 0 {
+		t.Fatalf("expected no credential store calls; got get=%d mint=%d", source.getCount, source.mintCount)
+	}
+}
+
+func TestOperationManagerRunWithPayloadValidatesRequest(t *testing.T) {
+	t.Parallel()
+
+	provider := types.ProviderType("acme")
+	source := &credentialSourceStub{}
+	payload := types.CredentialPayload{Provider: provider}
+
+	manager, err := NewOperationManager(source, nil)
+	if err != nil {
+		t.Fatalf("NewOperationManager() error = %v", err)
+	}
+
+	tests := []struct {
+		name    string
+		req     types.OperationRequest
+		wantErr error
+	}{
+		{
+			name:    "missing org id",
+			req:     types.OperationRequest{Provider: provider, Name: "health"},
+			wantErr: ErrOrgIDRequired,
+		},
+		{
+			name:    "missing provider",
+			req:     types.OperationRequest{OrgID: "org-1", Name: "health"},
+			wantErr: ErrProviderRequired,
+		},
+		{
+			name:    "missing operation name",
+			req:     types.OperationRequest{OrgID: "org-1", Provider: provider},
+			wantErr: ErrOperationNameRequired,
+		},
+		{
+			name:    "operation not registered",
+			req:     types.OperationRequest{OrgID: "org-1", Provider: provider, Name: "unknown"},
+			wantErr: ErrOperationNotRegistered,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			_, err := manager.RunWithPayload(context.Background(), tc.req, payload)
+			if !errors.Is(err, tc.wantErr) {
+				t.Fatalf("expected %v, got %v", tc.wantErr, err)
+			}
+		})
+	}
+}

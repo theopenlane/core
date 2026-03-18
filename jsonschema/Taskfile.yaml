@@ -10,17 +10,29 @@ tasks:
     desc: generate the jsonschema and documentation
     cmds:
       - task: schema
+      - task: workflow-schema
       - task: docs
+      - task: workflow-docs
 
   schema:
     desc: generate a new jsonschema and corresponding config/config.example.yaml
     cmds:
       - go run jsonschema/schema_generator.go
 
+  workflow-schema:
+    desc: generate the workflow definition jsonschema
+    cmds:
+      - go run jsonschema/workflow_schema_generator.go
+
   docs:
     desc: generate documentation from the jsonschema
     cmds:
       - npx jsonschema2mk --schema jsonschema/core.config.json > jsonschema/api-docs.md
+
+  workflow-docs:
+    desc: generate documentation from the workflow jsonschema
+    cmds:
+      - npx jsonschema2mk --schema jsonschema/workflow.definition.json > jsonschema/workflow-docs.md
 
   ci:
     desc: a task that runs during CI to confirm there are no changes after running generate

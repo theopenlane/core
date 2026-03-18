@@ -57,6 +57,8 @@ type TrustCenterSettingHistory struct {
 	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
 	// The local favicon file id, takes precedence over the favicon remote URL
 	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
+	// Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+	HeroImageLocalFileID *string `json:"hero_image_local_file_id,omitempty"`
 	// Theme mode for the trust center
 	ThemeMode enums.TrustCenterThemeMode `json:"theme_mode,omitempty"`
 	// primary color for the trust center
@@ -83,7 +85,9 @@ type TrustCenterSettingHistory struct {
 	SecurityContact *string `json:"security_contact,omitempty"`
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
-	selectValues        sql.SelectValues
+	// URL to the company's status page
+	StatusPageURL *string `json:"status_page_url,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -95,7 +99,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -232,6 +236,13 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				_m.FaviconLocalFileID = new(string)
 				*_m.FaviconLocalFileID = value.String
 			}
+		case trustcentersettinghistory.FieldHeroImageLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field hero_image_local_file_id", values[i])
+			} else if value.Valid {
+				_m.HeroImageLocalFileID = new(string)
+				*_m.HeroImageLocalFileID = value.String
+			}
 		case trustcentersettinghistory.FieldThemeMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field theme_mode", values[i])
@@ -311,6 +322,13 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field nda_approval_required", values[i])
 			} else if value.Valid {
 				_m.NdaApprovalRequired = value.Bool
+			}
+		case trustcentersettinghistory.FieldStatusPageURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status_page_url", values[i])
+			} else if value.Valid {
+				_m.StatusPageURL = new(string)
+				*_m.StatusPageURL = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -410,6 +428,11 @@ func (_m *TrustCenterSettingHistory) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
+	if v := _m.HeroImageLocalFileID; v != nil {
+		builder.WriteString("hero_image_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("theme_mode=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ThemeMode))
 	builder.WriteString(", ")
@@ -452,6 +475,11 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("nda_approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
+	builder.WriteString(", ")
+	if v := _m.StatusPageURL; v != nil {
+		builder.WriteString("status_page_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

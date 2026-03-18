@@ -2,10 +2,22 @@ package logx
 
 import (
 	"context"
+	"maps"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/utils/contextx"
 )
+
+// LogFields holds structured log fields that can be captured and restored.
+type LogFields map[string]any
+
+var logFieldsContextKey = contextx.NewKey[LogFields]()
+
+// FieldsKey returns the context key used to store durable structured log fields.
+func FieldsKey() contextx.Key[LogFields] {
+	return logFieldsContextKey
+}
 
 // WithContext returns a new context with the provided logger
 func (l Logger) WithContext(ctx context.Context) context.Context {
@@ -45,4 +57,56 @@ func SeedContext(ctx context.Context) context.Context {
 	}
 
 	return FromContext(ctx).WithContext(ctx)
+}
+
+// WithField adds a single field to both the logger and the durable field store on the context.
+// A new LogFields map is allocated on each call so that sibling contexts do not share mutable state.
+func WithField(ctx context.Context, key string, value any) context.Context {
+	existing := FieldsFromContext(ctx)
+	fields := make(LogFields, len(existing)+1)
+
+	maps.Copy(fields, existing)
+
+	fields[key] = value
+
+	logger := FromContext(ctx).With().Interface(key, value).Logger()
+
+	ctx = logFieldsContextKey.Set(ctx, fields)
+
+	return logger.WithContext(ctx)
+}
+
+// WithFields adds multiple fields to both the logger and the durable field store on the context.
+// A new LogFields map is allocated on each call so that sibling contexts do not share mutable state.
+func WithFields(ctx context.Context, fields map[string]any) context.Context {
+	if len(fields) == 0 {
+		return ctx
+	}
+
+	existing := FieldsFromContext(ctx)
+	merged := make(LogFields, len(existing)+len(fields))
+
+	maps.Copy(merged, existing)
+
+	logCtx := FromContext(ctx).With()
+
+	for k, v := range fields {
+		merged[k] = v
+		logCtx = logCtx.Interface(k, v)
+	}
+
+	ctx = logFieldsContextKey.Set(ctx, merged)
+
+	return logCtx.Logger().WithContext(ctx)
+}
+
+// FieldsFromContext returns the durable log fields stored on the context.
+func FieldsFromContext(ctx context.Context) LogFields {
+	if ctx == nil {
+		return nil
+	}
+
+	fields, _ := logFieldsContextKey.Get(ctx)
+
+	return fields
 }

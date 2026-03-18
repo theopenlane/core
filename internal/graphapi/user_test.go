@@ -15,7 +15,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryUser(t *testing.T) {
@@ -178,11 +177,9 @@ func TestMutationUpdateUser(t *testing.T) {
 
 	weakPassword := "notsecure"
 
-	avatarFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
+	avatarFile := uploadFile(t, logoFilePath)
 
-	invalidAvatarFile, err := storage.NewUploadFile("testdata/uploads/hello.txt")
-	assert.NilError(t, err)
+	invalidAvatarFile := uploadFile(t, txtFilePath)
 
 	testCases := []struct {
 		name        string
@@ -205,13 +202,8 @@ func TestMutationUpdateUser(t *testing.T) {
 			},
 		},
 		{
-			name: "update avatar",
-			avatarFile: &graphql.Upload{
-				File:        avatarFile.RawFile,
-				Filename:    avatarFile.OriginalName,
-				Size:        avatarFile.Size,
-				ContentType: avatarFile.ContentType,
-			},
+			name:       "update avatar",
+			avatarFile: avatarFile,
 			expectedRes: testclient.UpdateUser_UpdateUser_User{
 				ID:          user.ID,
 				FirstName:   &firstNameUpdate,
@@ -221,14 +213,9 @@ func TestMutationUpdateUser(t *testing.T) {
 			},
 		},
 		{
-			name: "update avatar with invalid file",
-			avatarFile: &graphql.Upload{
-				File:        invalidAvatarFile.RawFile,
-				Filename:    invalidAvatarFile.OriginalName,
-				Size:        invalidAvatarFile.Size,
-				ContentType: invalidAvatarFile.ContentType,
-			},
-			errorMsg: "unsupported mime type uploaded: text/plain",
+			name:       "update avatar with invalid file",
+			avatarFile: invalidAvatarFile,
+			errorMsg:   "unsupported mime type uploaded: text/plain",
 		},
 		{
 			name: "update last name, happy path",

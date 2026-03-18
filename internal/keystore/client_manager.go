@@ -2,13 +2,12 @@ package keystore
 
 import (
 	"context"
-	"strings"
 	"sync"
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // ClientPoolManager manages client pools constructed from provider-published descriptors
@@ -54,7 +53,7 @@ func (m *ClientPoolManager) RegisterDescriptor(descriptor types.ClientDescriptor
 	builder := descriptorClientBuilder{descriptor: descriptor}
 
 	pool, err := NewClientPool(m.source, builder,
-		WithClientConfigClone[any](cloneConfigMap))
+		WithClientConfigClone[any](mapx.DeepCloneMapAny))
 	if err != nil {
 		return err
 	}
@@ -110,7 +109,7 @@ func descriptorKey(descriptor types.ClientDescriptor) (clientDescriptorKey, erro
 	if descriptor.Provider == types.ProviderUnknown {
 		return clientDescriptorKey{}, ErrProviderRequired
 	}
-	if strings.TrimSpace(string(descriptor.Name)) == "" {
+	if descriptor.Name == "" {
 		return clientDescriptorKey{}, ErrClientDescriptorInvalid
 	}
 	if descriptor.Build == nil {
@@ -131,7 +130,7 @@ type descriptorClientBuilder struct {
 
 // Build constructs a client using the descriptor's build function
 func (b descriptorClientBuilder) Build(ctx context.Context, payload types.CredentialPayload, config map[string]any) (any, error) {
-	cloned := cloneConfigMap(config)
+	cloned := mapx.DeepCloneMapAny(config)
 	return b.descriptor.Build(ctx, payload, cloned)
 }
 
@@ -140,17 +139,25 @@ func (b descriptorClientBuilder) ProviderType() types.ProviderType {
 	return b.descriptor.Provider
 }
 
-// cloneConfigMap creates a deep copy of the configuration map
-func cloneConfigMap(input map[string]any) map[string]any {
-	return helpers.DeepCloneMap(input)
-}
-
 // clientDescriptorKey uniquely identifies a client descriptor by provider and name
 type clientDescriptorKey struct {
 	// Provider identifies which provider publishes the client
 	Provider types.ProviderType
 	// Name identifies the specific client type within the provider
 	Name types.ClientName
+}
+
+// BuildFromPayload constructs a client directly from the provided payload without using the credential store or pool
+func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types.ProviderType, client types.ClientName, payload types.CredentialPayload, config map[string]any) (any, error) {
+	m.mu.RLock()
+	descriptor, ok := m.descriptors[clientDescriptorKey{Provider: provider, Name: client}]
+	m.mu.RUnlock()
+
+	if !ok {
+		return nil, ErrClientNotRegistered
+	}
+
+	return descriptor.Build(ctx, payload, mapx.DeepCloneMapAny(config))
 }
 
 // FlattenDescriptors converts a map of provider descriptors into a single slice for manager construction

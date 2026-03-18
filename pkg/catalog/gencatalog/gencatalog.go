@@ -2,22 +2,19 @@
 
 package gencatalog
 
-import (
-	models "github.com/theopenlane/core/common/models"
-	catalog "github.com/theopenlane/core/pkg/catalog"
-)
+import models "github.com/theopenlane/core/common/models"
 
 var DefaultCatalog = models.Catalog{
-	Addons: map[string]catalog.Feature{
-		string(models.CatalogDomainScanningAddon): catalog.Feature{
+	Addons: map[string]models.Feature{
+		string(models.CatalogDomainScanningAddon): models.Feature{
 			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "domain_scan_monthly",
 				Nickname:   "domain_scan_monthly",
 				PriceID:    "price_1RizUyBvxky1R7SvfaG5BAVk",
 				UnitAmount: int64(10000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "domain_scan_annually",
 				Nickname:   "domain_scan_annually",
@@ -30,9 +27,9 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Proactive security scanning for domains and infrastructure. Detect vulnerabilities before they become threats.",
 			ProductID:            "prod_SeI5ZawfJy5AkJ",
 		},
-		string(models.CatalogExtraEvidenceStorageAddon): catalog.Feature{
+		string(models.CatalogExtraEvidenceStorageAddon): models.Feature{
 			Audience: "public",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "extra_evidence_storage_100gb",
 				Metadata:   map[string]string{"increment_gb": "100"},
@@ -46,15 +43,15 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Expand your secure storage capacity for compliance evidence. Keep your documentation organized and accessible.",
 			ProductID:            "prod_SeI5CFhlkNjcwx",
 		},
-		string(models.CatalogPolicyManagementAddon): catalog.Feature{
+		string(models.CatalogPolicyManagementAddon): models.Feature{
 			Audience: "beta",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_policy_mgmt_monthly",
 				Nickname:   "price_policy_mgmt_monthly",
 				PriceID:    "price_1RizV2Bvxky1R7SvDNU2ISMK",
 				UnitAmount: int64(1000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_policy_mgmt_annually",
 				Nickname:   "price_policy_mgmt_annually",
@@ -67,15 +64,15 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Create and maintain your security policies with version control. Keep your documentation audit-ready",
 			ProductID:            "prod_SeI5yMS7iUwqQr",
 		},
-		string(models.CatalogRiskManagementAddon): catalog.Feature{
+		string(models.CatalogRiskManagementAddon): models.Feature{
 			Audience: "beta",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_risk_mgmt_monthly",
 				Nickname:   "price_risk_mgmt_monthly",
 				PriceID:    "price_1RizV4Bvxky1R7Sv2NOECTy1",
 				UnitAmount: int64(1000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "price_risk_mgmt_annually",
 				Nickname:   "price_risk_mgmt_annually",
@@ -89,16 +86,16 @@ var DefaultCatalog = models.Catalog{
 			ProductID:            "prod_SeI54PHvjUiTKZ",
 		},
 	},
-	Modules: map[string]catalog.Feature{
-		string(models.CatalogBaseModule): catalog.Feature{
+	Modules: map[string]models.Feature{
+		string(models.CatalogBaseModule): models.Feature{
 			Audience: "public",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "base_module_monthly",
 				Nickname:   "base_module_monthly",
 				PriceID:    "price_1RjV2qBvxky1R7SvCt1I2sCY",
 				UnitAmount: int64(0),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "base_module_free",
 				Nickname:   "base_module_free",
@@ -113,15 +110,15 @@ var DefaultCatalog = models.Catalog{
 			PersonalOrg:          true,
 			ProductID:            "base",
 		},
-		string(models.CatalogComplianceModule): catalog.Feature{
+		string(models.CatalogComplianceModule): models.Feature{
 			Audience: "public",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_compliance_monthly",
 				Nickname:   "price_compliance_monthly",
 				PriceID:    "price_1RizUuBvxky1R7SvelsIjdkf",
 				UnitAmount: int64(45000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "price_compliance_annually",
 				Nickname:   "price_compliance_annually",
@@ -134,17 +131,17 @@ var DefaultCatalog = models.Catalog{
 			LookupKey:            "compliance_module",
 			MarketingDescription: "Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows",
 			ProductID:            "prod_SeI5Umu5pAUVMP",
-			Usage:                &catalog.Usage{EvidenceStorageGB: int64(25000)},
+			Usage:                &models.Usage{EvidenceStorageGB: int64(25000)},
 		},
-		string(models.CatalogEntityManagementModule): catalog.Feature{
+		string(models.CatalogEntityManagementModule): models.Feature{
 			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_entity_monthly",
 				Nickname:   "price_entity_monthly",
 				PriceID:    "price_1RizUwBvxky1R7SvwJSiuTgB",
 				UnitAmount: int64(20000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "price_vendor_annually",
 				Nickname:   "price_vendor_annually",
@@ -157,15 +154,15 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Confidently assess vendor risk and enforce security standards across your third-party ecosystem",
 			ProductID:            "prod_SeI59AdH137li3",
 		},
-		string(models.CatalogTrustCenterModule): catalog.Feature{
-			Audience: "beta",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+		string(models.CatalogTrustCenterModule): models.Feature{
+			Audience: "public",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_trustcenter_monthly",
 				Nickname:   "price_trustcenter_monthly",
 				PriceID:    "price_1RizUoBvxky1R7SvkQFdzk31",
 				UnitAmount: int64(30000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "price_trustcenter_annually",
 				Nickname:   "price_trustcenter_annually",
@@ -174,19 +171,20 @@ var DefaultCatalog = models.Catalog{
 			}}},
 			Description:          "Public Security Portal",
 			DisplayName:          "Trust Center",
+			IncludeWithTrial:     true,
 			LookupKey:            "trust_center_module",
 			MarketingDescription: "Build customer trust with a professional security portal. Share compliance documentation securely with stakeholders",
 			ProductID:            "prod_SeI4Uhido7Rizc",
 		},
-		string(models.CatalogVulnerabilityManagementModule): catalog.Feature{
+		string(models.CatalogVulnerabilityManagementModule): models.Feature{
 			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_vulnerability_mgmt_monthly",
 				Nickname:   "price_vulnerability_mgmt_monthly",
 				PriceID:    "price_1RizUqBvxky1R7SvEt5og6Ha",
 				UnitAmount: int64(10000),
-			}, catalog.Price{
+			}, models.ItemPrice{
 				Interval:   "year",
 				LookupKey:  "price_vulnerability_mgmt_annually",
 				Nickname:   "price_vulnerability_mgmt_annually",

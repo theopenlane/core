@@ -34,6 +34,10 @@ type NotificationActionParams struct {
 	TargetedActionParams
 	// Channels selects notification delivery channels
 	Channels []enums.Channel `json:"channels"`
+	// TemplateID references a notification template by ID
+	TemplateID string `json:"template_id,omitempty"`
+	// TemplateKey references a notification template by key
+	TemplateKey string `json:"template_key,omitempty"`
 	// Topic sets an optional notification topic
 	Topic string `json:"topic"`
 	// Title is the notification title
@@ -52,8 +56,9 @@ type WebhookActionParams struct {
 	Method string `json:"method"`
 	// Headers are additional HTTP headers for the webhook request
 	Headers map[string]string `json:"headers"`
-	// Payload is merged into the base webhook payload
-	Payload map[string]any `json:"payload"`
+	// PayloadExpr is a CEL expression that evaluates to a JSON object merged into the base payload.
+	// When empty, only the base payload is sent.
+	PayloadExpr string `json:"payload_expr"`
 	// TimeoutMS overrides the webhook timeout in milliseconds
 	TimeoutMS int `json:"timeout_ms"`
 	// Secret signs the webhook payload if provided
@@ -75,7 +80,6 @@ type IntegrationActionParams struct {
 	Operation string `json:"operation"`
 	// Config holds the integration-specific configuration payload
 	Config map[string]any `json:"config"`
-
 	// TimeoutMS overrides the operation timeout in milliseconds
 	TimeoutMS int `json:"timeout_ms"`
 	// Retries overrides the retry count when non-zero
@@ -84,4 +88,26 @@ type IntegrationActionParams struct {
 	Force bool `json:"force_refresh"`
 	// ClientForce requests a client-side refresh for the provider
 	ClientForce bool `json:"client_force"`
+}
+
+// CreateObjectActionParams defines params for CREATE_OBJECT actions
+type CreateObjectActionParams struct {
+	// ObjectType identifies the schema type to create (e.g., Task, Review, Finding)
+	ObjectType string `json:"object_type"`
+	// Fields are applied to the new object after creation
+	Fields map[string]any `json:"fields,omitempty"`
+	// LinkToTrigger attaches the created object to the triggering object when supported
+	LinkToTrigger *bool `json:"link_to_trigger,omitempty"`
+}
+
+// ReviewActionParams defines params for REVIEW actions
+type ReviewActionParams struct {
+	// TargetedActionParams identifies the review recipients
+	TargetedActionParams
+	// Required defaults to true when omitted
+	Required *bool `json:"required"`
+	// Label is an optional display label for the review action
+	Label string `json:"label"`
+	// RequiredCount sets a quorum threshold (number of reviews needed) for this action
+	RequiredCount int `json:"required_count"`
 }

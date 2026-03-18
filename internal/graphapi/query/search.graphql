@@ -60,6 +60,7 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          displayName
           id
           internalOwner
           name
@@ -133,6 +134,7 @@ query GlobalSearch($query: String!) {
           displayID
           id
           mappedCategories
+          publicRepresentation
           refCode
           subcategory
           tags
@@ -172,6 +174,38 @@ query GlobalSearch($query: String!) {
           id
           name
           objectType
+        }
+      }
+    }
+    emailBrandings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          tags
+        }
+      }
+    }
+    emailTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          key
+          name
         }
       }
     }
@@ -267,6 +301,25 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    integrations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          definitionID
+          definitionSlug
+          id
+          kind
+          name
+          tags
+        }
+      }
+    }
     internalPolicies {
       totalCount
       pageInfo {
@@ -350,6 +403,22 @@ query GlobalSearch($query: String!) {
           id
           name
           tags
+        }
+      }
+    }
+    notificationTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          key
+          name
         }
       }
     }
@@ -530,6 +599,7 @@ query GlobalSearch($query: String!) {
           displayID
           id
           mappedCategories
+          publicRepresentation
           refCode
           subcategory
           tags
@@ -565,6 +635,23 @@ query GlobalSearch($query: String!) {
         node {
           email
           id
+          tags
+        }
+      }
+    }
+    systemDetails {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          systemName
           tags
         }
       }

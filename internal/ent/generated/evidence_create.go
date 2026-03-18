@@ -214,6 +214,20 @@ func (_c *EvidenceCreate) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceCr
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *EvidenceCreate) SetExternalUUID(v string) *EvidenceCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableExternalUUID(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *EvidenceCreate) SetName(v string) *EvidenceCreate {
 	_c.mutation.SetName(v)
@@ -725,6 +739,10 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(evidence.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(evidence.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)

@@ -2,6 +2,8 @@ package mixin
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -126,7 +128,6 @@ func (d SystemOwnedMixin) Policy() ent.Policy {
 type SystemOwnedMutation interface {
 	utils.GenericMutation
 
-	Field(name string) (ent.Value, bool)
 	FieldCleared(name string) bool
 	SystemOwned() (bool, bool)
 	SetSystemOwned(bool)
@@ -137,8 +138,6 @@ type SystemOwnedMutation interface {
 	InternalNotes() (string, bool)
 	ClearInternalNotes()
 	SetInternalNotes(string)
-	OwnerID() (string, bool)
-	SetOwnerID(string)
 }
 
 // OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
@@ -154,12 +153,7 @@ type OrgOwnedMutation interface {
 func HookSystemOwnedCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			admin, err := rule.CheckIsSystemAdminWithContext(ctx)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("unable to check if user is system admin, skipping setting system owned")
-
-				return next.Mutate(ctx, m)
-			}
+			admin := auth.IsSystemAdminFromContext(ctx)
 
 			mut, ok := m.(SystemOwnedMutation)
 			if !ok && mut == nil {
@@ -185,14 +179,14 @@ func HookSystemOwnedCreate() ent.Hook {
 			if !ok || ownerID == "" {
 				logx.FromContext(ctx).Debug().Msg("non system admin creating object without owner ID, attempting to set")
 
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
-				if err != nil || orgID == "" {
-					logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization ID from context for non system admin creating object")
+				caller, callerOk := auth.CallerFromContext(ctx)
+				if !callerOk || caller == nil || caller.OrganizationID == "" {
+					logx.FromContext(ctx).Error().Msg("unable to get organization ID from context for non system admin creating object")
 
 					return nil, generated.ErrPermissionDenied
 				}
 
-				mut.SetOwnerID(orgID)
+				orgMut.SetOwnerID(caller.OrganizationID)
 			}
 
 			return next.Mutate(ctx, m)
@@ -207,6 +201,12 @@ func HookSystemOwnedCreate() ent.Hook {
 // and denys if it is and the user is not a system admin
 func SystemOwnedSchema() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
+		// skip for internal requests - IDs() triggers a SELECT that goes through
+		// FilterQueryResults, which requires a valid SubjectID for FGA checks
+		if rule.IsInternalRequest(ctx) {
+			return privacy.Skip
+		}
+
 		// on create check continue, the field is automatically set based on user role
 		if m.Op() == ent.OpCreate {
 			return privacy.Skip
@@ -217,12 +217,7 @@ func SystemOwnedSchema() privacy.MutationRuleFunc {
 			return privacy.Skipf("not a system owned mutation")
 		}
 
-		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return err
-		}
-
-		if admin {
+		if auth.IsSystemAdminFromContext(ctx) {
 			return privacy.Allow
 		}
 
@@ -265,7 +260,14 @@ func queryForSystemOwned(ctx context.Context, m SystemOwnedMutation, ids []strin
 	}
 
 	table := strcase.SnakeCase(pluralize.NewClient().Plural(m.Type()))
-	query := "SELECT system_owned FROM " + table + " WHERE id in ($1)"
+
+	// Build placeholders for IN clause: $1, $2, $3, ...
+	placeholders := make([]string, len(ids))
+	for i := range ids {
+		placeholders[i] = fmt.Sprintf("$%d", i+1)
+	}
+
+	query := "SELECT system_owned FROM " + table + " WHERE id IN (" + strings.Join(placeholders, ", ") + ")"
 
 	var rows sql.Rows
 	if err := m.Client().Driver().Query(ctx, query, lo.ToAnySlice(ids), &rows); err != nil {

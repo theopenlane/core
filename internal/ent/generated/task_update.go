@@ -262,6 +262,26 @@ func (_u *TaskUpdate) ClearScopeID() *TaskUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *TaskUpdate) SetExternalUUID(v string) *TaskUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableExternalUUID(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *TaskUpdate) ClearExternalUUID() *TaskUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *TaskUpdate) SetTitle(v string) *TaskUpdate {
 	_u.mutation.SetTitle(v)
@@ -1315,6 +1335,12 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(task.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(task.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(task.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)
@@ -2607,6 +2633,26 @@ func (_u *TaskUpdateOne) ClearScopeID() *TaskUpdateOne {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *TaskUpdateOne) SetExternalUUID(v string) *TaskUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableExternalUUID(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *TaskUpdateOne) ClearExternalUUID() *TaskUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *TaskUpdateOne) SetTitle(v string) *TaskUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -3690,6 +3736,12 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(task.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(task.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(task.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(task.FieldTitle, field.TypeString, value)

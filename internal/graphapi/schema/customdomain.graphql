@@ -78,6 +78,28 @@ extend type Mutation{
         """
         id: ID!
     ): CustomDomainValidatePayload!
+    """
+    Update multiple existing customDomains
+    """
+    updateBulkCustomDomain(
+        """
+        IDs of the customDomains to update
+        """
+        ids: [ID!]!
+        """
+        values to update the customDomains with
+        """
+        input: UpdateCustomDomainInput!
+    ): CustomDomainBulkUpdatePayload!
+    """
+    Update multiple existing customDomains via file upload
+    """
+    updateBulkCSVCustomDomain(
+        """
+        csv file containing values of the customDomain, must include ID column
+        """
+        input: Upload!
+    ): CustomDomainBulkUpdatePayload!
 }
 
 """
@@ -138,4 +160,18 @@ type CustomDomainValidatePayload {
     CustomDomain that validation was triggered for
     """
     customDomain: CustomDomain!
+}
+
+"""
+Return response for updateBulkCustomDomain mutation
+"""
+type CustomDomainBulkUpdatePayload {
+    """
+    Updated customDomains
+    """
+    customDomains: [CustomDomain!]
+    """
+    IDs of the updated customDomains
+    """
+    updatedIDs: [ID!]
 }

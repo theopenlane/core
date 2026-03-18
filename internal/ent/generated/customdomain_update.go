@@ -204,6 +204,26 @@ func (_u *CustomDomainUpdate) ClearDNSVerificationID() *CustomDomainUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CustomDomainUpdate) SetTrustCenterID(v string) *CustomDomainUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CustomDomainUpdate) SetNillableTrustCenterID(v *string) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CustomDomainUpdate) ClearTrustCenterID() *CustomDomainUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *CustomDomainUpdate) SetOwner(v *Organization) *CustomDomainUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -354,6 +374,12 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomain.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(customdomain.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(customdomain.FieldTrustCenterID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -611,6 +637,26 @@ func (_u *CustomDomainUpdateOne) ClearDNSVerificationID() *CustomDomainUpdateOne
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CustomDomainUpdateOne) SetTrustCenterID(v string) *CustomDomainUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CustomDomainUpdateOne) SetNillableTrustCenterID(v *string) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CustomDomainUpdateOne) ClearTrustCenterID() *CustomDomainUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *CustomDomainUpdateOne) SetOwner(v *Organization) *CustomDomainUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -791,6 +837,12 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomain.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(customdomain.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(customdomain.FieldTrustCenterID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

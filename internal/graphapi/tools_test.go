@@ -13,7 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/Yamashou/gqlgenc/clientv2"
+	"github.com/gqlgo/gqlgenc/clientv2"
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -51,7 +51,7 @@ import (
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -75,6 +75,10 @@ const (
 	invalidInputErrorMsg     = "invalid input"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
+
+	previewZoneTestID = "test-zone-id"
+	cnameTargetTest   = "cname-target.test.com"
+	defaultDomainTest = "test.default.domain"
 )
 
 // GraphTestSuite handles the setup and teardown between tests
@@ -216,9 +220,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
 	requireNoError(t, err)
 
-	pool := soiree.NewPool(
-		soiree.WithWorkers(100), //nolint:mnd
-		soiree.WithPoolName("ent_client_pool"),
+	pool := gala.NewPool(
+		gala.WithWorkers(200), //nolint:mnd
+		gala.WithPoolName("ent_client_pool"),
 	)
 
 	// setup history client
@@ -248,10 +252,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	eventer := hooks.NewEventer()
-	clientOpts := []entdb.Option{entdb.WithEventer(eventer)}
-
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
 	requireNoError(t, err)
 
 	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
@@ -261,6 +262,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	requireNoError(t, err)
+
+	// Set trust center config for hooks
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewZoneID:            previewZoneTestID,
+		CnameTarget:              cnameTargetTest,
+		DefaultTrustCenterDomain: defaultDomainTest,
+	})
 
 	suite.client = c
 }
@@ -448,26 +456,6 @@ func requireNoError(t *testing.T, err error) {
 	}
 }
 
-func waitForCondition(t *testing.T, condition func() bool, msg string) {
-	t.Helper()
-
-	timeout := 5 * time.Second
-	interval := 50 * time.Millisecond
-
-	deadline := time.Now().Add(timeout)
-	for time.Now().Before(deadline) {
-		if condition() {
-			return
-		}
-
-		time.Sleep(interval)
-	}
-
-	if !condition() {
-		t.Fatalf("timed out waiting for condition: %s", msg)
-	}
-}
-
 // mockStripeClient creates a new stripe client with mock backend
 func (suite *GraphTestSuite) mockStripeClient() (*entitlements.StripeClient, error) {
 	suite.stripeMockBackend = new(mocks.MockStripeBackend)
@@ -650,13 +638,6 @@ func newTestGraphServer(t *testing.T) http.Handler {
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
-
-	// register events for subscriptions
-	eventer := hooks.NewEventerPool(suite.client.db)
-	hooks.RegisterGlobalHooks(suite.client.db, eventer)
-
-	err = hooks.RegisterListeners(eventer)
-	require.NoError(t, err)
 
 	r := graphapi.NewResolver(suite.client.db, nil).
 		WithExtensions(true).

@@ -10,16 +10,19 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -249,6 +252,34 @@ func (_c *FindingCreate) SetNillableScopeID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_c *FindingCreate) SetFindingStatusName(v string) *FindingCreate {
+	_c.mutation.SetFindingStatusName(v)
+	return _c
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableFindingStatusName(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetFindingStatusName(*v)
+	}
+	return _c
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_c *FindingCreate) SetFindingStatusID(v string) *FindingCreate {
+	_c.mutation.SetFindingStatusID(v)
+	return _c
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableFindingStatusID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetFindingStatusID(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
 	_c.mutation.SetExternalID(v)
@@ -259,6 +290,34 @@ func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
 func (_c *FindingCreate) SetNillableExternalID(v *string) *FindingCreate {
 	if v != nil {
 		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *FindingCreate) SetStatus(v string) *FindingCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableStatus(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_c *FindingCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
 	}
 	return _c
 }
@@ -629,20 +688,6 @@ func (_c *FindingCreate) SetNillableRemediationSLA(v *int) *FindingCreate {
 	return _c
 }
 
-// SetStatus sets the "status" field.
-func (_c *FindingCreate) SetStatus(v string) *FindingCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *FindingCreate) SetNillableStatus(v *string) *FindingCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
 // SetEventTime sets the "event_time" field.
 func (_c *FindingCreate) SetEventTime(v models.DateTime) *FindingCreate {
 	_c.mutation.SetEventTime(v)
@@ -783,6 +828,11 @@ func (_c *FindingCreate) SetEnvironment(v *CustomTypeEnum) *FindingCreate {
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_c *FindingCreate) SetScope(v *CustomTypeEnum) *FindingCreate {
 	return _c.SetScopeID(v.ID)
+}
+
+// SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
+func (_c *FindingCreate) SetFindingStatus(v *CustomTypeEnum) *FindingCreate {
+	return _c.SetFindingStatusID(v.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -950,6 +1000,36 @@ func (_c *FindingCreate) AddTasks(v ...*Task) *FindingCreate {
 	return _c.AddTaskIDs(ids...)
 }
 
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_c *FindingCreate) AddDirectoryAccountIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddDirectoryAccountIDs(ids...)
+	return _c
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_c *FindingCreate) AddDirectoryAccounts(v ...*DirectoryAccount) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryAccountIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *FindingCreate) AddIdentityHolderIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *FindingCreate) AddIdentityHolders(v ...*IdentityHolder) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
+}
+
 // AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
 func (_c *FindingCreate) AddRemediationIDs(ids ...string) *FindingCreate {
 	_c.mutation.AddRemediationIDs(ids...)
@@ -1099,6 +1179,10 @@ func (_c *FindingCreate) defaults() error {
 		v := finding.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.SecurityLevel(); !ok {
+		v := finding.DefaultSecurityLevel
+		_c.mutation.SetSecurityLevel(v)
+	}
 	if _, ok := _c.mutation.Categories(); !ok {
 		v := finding.DefaultCategories
 		_c.mutation.SetCategories(v)
@@ -1142,6 +1226,11 @@ func (_c *FindingCreate) check() error {
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := finding.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Finding.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
 		}
 	}
 	return nil
@@ -1232,9 +1321,21 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
+	if value, ok := _c.mutation.FindingStatusName(); ok {
+		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
+		_node.FindingStatusName = value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+		_node.Status = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+		_node.SecurityLevel = value
 	}
 	if value, ok := _c.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -1351,10 +1452,6 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RemediationSLA(); ok {
 		_spec.SetField(finding.FieldRemediationSLA, field.TypeInt, value)
 		_node.RemediationSLA = value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-		_node.Status = value
 	}
 	if value, ok := _c.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)
@@ -1483,6 +1580,24 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FindingStatusID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
@@ -1674,6 +1789,40 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

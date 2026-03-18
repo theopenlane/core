@@ -7,13 +7,14 @@ import (
 	"strings"
 	"sync"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
 
-	"entgo.io/ent"
 	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -42,13 +43,9 @@ type tableInfo struct {
 
 // tableHasColumn checks if a table has a column with the given name
 func tableHasColumn(table *schema.Table, columnName string) bool {
-	for _, col := range table.Columns {
-		if col.Name == columnName {
-			return true
-		}
-	}
-
-	return false
+	return lo.ContainsBy(table.Columns, func(col *schema.Column) bool {
+		return col.Name == columnName
+	})
 }
 
 // tableHasSoftDelete checks if a table has soft delete by looking for deleted_at column
@@ -58,32 +55,30 @@ func tableHasSoftDelete(table *schema.Table) bool {
 
 // findTablesWithColumn returns all tables that have a column with the given name
 func findTablesWithColumn(columnName string) []tableInfo {
-	var tables []tableInfo
-
-	for _, table := range migrate.Tables {
-		if tableHasColumn(table, columnName) {
-			tables = append(tables, tableInfo{
-				name:          table.Name,
-				hasSoftDelete: tableHasSoftDelete(table),
-			})
+	return lo.FilterMap(migrate.Tables, func(table *schema.Table, _ int) (tableInfo, bool) {
+		if !tableHasColumn(table, columnName) {
+			return tableInfo{}, false
 		}
-	}
-
-	return tables
+		return tableInfo{
+			name:          table.Name,
+			hasSoftDelete: tableHasSoftDelete(table),
+		}, true
+	})
 }
 
 // findTableWithColumn returns the first table that has a column with the given name
 func findTableWithColumn(columnName string) *tableInfo {
-	for _, table := range migrate.Tables {
-		if tableHasColumn(table, columnName) {
-			return &tableInfo{
-				name:          table.Name,
-				hasSoftDelete: tableHasSoftDelete(table),
-			}
-		}
+	table, ok := lo.Find(migrate.Tables, func(table *schema.Table) bool {
+		return tableHasColumn(table, columnName)
+	})
+	if !ok {
+		return nil
 	}
 
-	return nil
+	return &tableInfo{
+		name:          table.Name,
+		hasSoftDelete: tableHasSoftDelete(table),
+	}
 }
 
 // IsValidEnumField returns true if any table has a column matching the object type and field pattern
@@ -141,6 +136,8 @@ type CustomEnumFilter struct {
 	SchemaFieldName string
 	// AllowGlobal indicates the enum lookup should use global enums with an empty object type
 	AllowGlobal bool
+	// DisableAutoCreate disables auto-creation of the enum if it doesn't exist
+	DisableAutoCreate bool
 }
 
 // HookCustomEnums ensures that a custom enum value exists for the given object type and field
@@ -190,13 +187,22 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			} else {
 				enum, err = lookupEnum(in.ObjectType)
 			}
-			if err != nil {
-				// if the enum does not exist, return a custom error
-				if generated.IsNotFound(err) {
-					return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
-				}
 
-				return nil, err
+			if err != nil {
+				switch generated.IsNotFound(err) {
+				case true:
+					if in.DisableAutoCreate {
+						return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+					}
+
+					enum, err = createCustomEnum(ctx, client, in, enumValue)
+					if err != nil {
+						return nil, err
+					}
+
+				default:
+					return nil, err
+				}
 			}
 
 			// set the edge field on the mutation to the enum ID
@@ -207,6 +213,26 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
+}
+
+// createCustomEnum creates a new CustomTypeEnum when one doesn't exist and autocreate is enabled
+func createCustomEnum(ctx context.Context, client *generated.Client, in CustomEnumFilter, enumValue string) (*generated.CustomTypeEnum, error) {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+	}
+
+	objectType := in.ObjectType
+	if in.AllowGlobal {
+		objectType = ""
+	}
+
+	return client.CustomTypeEnum.Create().
+		SetName(enumValue).
+		SetObjectType(objectType).
+		SetField(in.Field).
+		SetOwnerID(orgID).
+		Save(ctx)
 }
 
 // HookCustomTypeEnumDelete checks if the enum(s) being deleted is in use by any other object.

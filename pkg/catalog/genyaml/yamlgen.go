@@ -63,7 +63,7 @@ func genyamlApp() *cli.Command {
 			},
 			&cli.StringFlag{
 				Name:    "modules-out",
-				Value:   "../models/orgmodule_gen.go",
+				Value:   "../../common/models/orgmodule_gen.go",
 				Usage:   "Output Go file for module constants",
 				Sources: cli.EnvVars("OPENLANE_MODULE_OUTPUT"),
 			},

@@ -28,7 +28,7 @@ func TestBuildUploadOptionsInitialisesHints(t *testing.T) {
 		},
 	}
 
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
 		OrganizationID: "01HYQZ5YTVJ0P2R2HF7N3W3MQZ",
 	})
 

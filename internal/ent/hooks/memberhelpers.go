@@ -22,12 +22,10 @@ import (
 
 // MutationMember is an interface that can be implemented by a member mutation to get IDs
 type MutationMember interface {
+	utils.GenericMutation
+
 	UserIDs() []string
 	UserID() (string, bool)
-	ID() (string, bool)
-	IDs(ctx context.Context) ([]string, error)
-	Op() ent.Op
-	Client() *generated.Client
 }
 
 // HookMembershipSelf is a hook that runs on membership mutations
@@ -46,17 +44,29 @@ func HookMembershipSelf(table string) ent.Hook {
 			}
 
 			// check if group member is the authenticated user
-			au, err := auth.GetAuthenticatedUserFromContext(ctx)
-			if err != nil {
-				return nil, err
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil {
+				return nil, auth.ErrNoAuthUser
 			}
 
 			// if the user is an org owner, skip the check
-			if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+			if caller.OrganizationRole == auth.OwnerRole {
 				// ensure this is not an org membership mutation, owners cannot update their own membership
 				// in the organization, it must be done via a transfer
 				if m.Type() != generated.TypeOrgMembership {
 					return next.Mutate(ctx, m)
+				}
+			}
+
+			// fallback to fgax check for owner relation access if org role is not available
+			// in the context
+			if caller.OrganizationRole == "" {
+				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+					// ensure this is not an org membership mutation, owners cannot update their own membership
+					// in the organization, it must be done via a transfer
+					if m.Type() != generated.TypeOrgMembership {
+						return next.Mutate(ctx, m)
+					}
 				}
 			}
 
@@ -66,14 +76,14 @@ func HookMembershipSelf(table string) ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				if err := createMembershipCheck(mutationMember, au.SubjectID); err != nil {
+				if err := createMembershipCheck(mutationMember, caller.SubjectID); err != nil {
 					logx.FromContext(ctx).Error().Msg("cannot create membership")
 
 					return nil, err
 				}
 			}
 
-			if err := updateMembershipCheck(ctx, mutationMember, table, au.SubjectID); err != nil {
+			if err := updateMembershipCheck(ctx, mutationMember, table, caller.SubjectID); err != nil {
 				return nil, err
 			}
 
@@ -105,8 +115,7 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 
 // updateMembershipCheck is a helper function to check if a user is trying to update themselves in a membership
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
-	mut := m.(utils.GenericMutation)
-	memberIDs := getMutationIDs(ctx, mut)
+	memberIDs := getMutationIDs(ctx, m)
 	if len(memberIDs) == 0 {
 		return nil
 	}

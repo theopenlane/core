@@ -126,6 +126,26 @@ func (_u *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ControlHistoryUpdate) SetExternalUUID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableExternalUUID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ControlHistoryUpdate) ClearExternalUUID() *ControlHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ControlHistoryUpdate) SetTitle(v string) *ControlHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -282,6 +302,66 @@ func (_u *ControlHistoryUpdate) ClearStatus() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetImplementationStatus sets the "implementation_status" field.
+func (_u *ControlHistoryUpdate) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlHistoryUpdate {
+	_u.mutation.SetImplementationStatus(v)
+	return _u
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetImplementationStatus(*v)
+	}
+	return _u
+}
+
+// ClearImplementationStatus clears the value of the "implementation_status" field.
+func (_u *ControlHistoryUpdate) ClearImplementationStatus() *ControlHistoryUpdate {
+	_u.mutation.ClearImplementationStatus()
+	return _u
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_u *ControlHistoryUpdate) SetImplementationDescription(v string) *ControlHistoryUpdate {
+	_u.mutation.SetImplementationDescription(v)
+	return _u
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableImplementationDescription(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetImplementationDescription(*v)
+	}
+	return _u
+}
+
+// ClearImplementationDescription clears the value of the "implementation_description" field.
+func (_u *ControlHistoryUpdate) ClearImplementationDescription() *ControlHistoryUpdate {
+	_u.mutation.ClearImplementationDescription()
+	return _u
+}
+
+// SetPublicRepresentation sets the "public_representation" field.
+func (_u *ControlHistoryUpdate) SetPublicRepresentation(v string) *ControlHistoryUpdate {
+	_u.mutation.SetPublicRepresentation(v)
+	return _u
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillablePublicRepresentation(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetPublicRepresentation(*v)
+	}
+	return _u
+}
+
+// ClearPublicRepresentation clears the value of the "public_representation" field.
+func (_u *ControlHistoryUpdate) ClearPublicRepresentation() *ControlHistoryUpdate {
+	_u.mutation.ClearPublicRepresentation()
+	return _u
+}
+
 // SetSource sets the "source" field.
 func (_u *ControlHistoryUpdate) SetSource(v enums.ControlSource) *ControlHistoryUpdate {
 	_u.mutation.SetSource(v)
@@ -299,6 +379,26 @@ func (_u *ControlHistoryUpdate) SetNillableSource(v *enums.ControlSource) *Contr
 // ClearSource clears the value of the "source" field.
 func (_u *ControlHistoryUpdate) ClearSource() *ControlHistoryUpdate {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceName sets the "source_name" field.
+func (_u *ControlHistoryUpdate) SetSourceName(v string) *ControlHistoryUpdate {
+	_u.mutation.SetSourceName(v)
+	return _u
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableSourceName(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetSourceName(*v)
+	}
+	return _u
+}
+
+// ClearSourceName clears the value of the "source_name" field.
+func (_u *ControlHistoryUpdate) ClearSourceName() *ControlHistoryUpdate {
+	_u.mutation.ClearSourceName()
 	return _u
 }
 
@@ -818,6 +918,26 @@ func (_u *ControlHistoryUpdate) ClearStandardID() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryUpdate {
+	_u.mutation.SetTrustCenterVisibility(v)
+	return _u
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterVisibility(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterVisibility clears the value of the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdate) ClearTrustCenterVisibility() *ControlHistoryUpdate {
+	_u.mutation.ClearTrustCenterVisibility()
+	return _u
+}
+
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (_u *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 	return _u.mutation
@@ -872,9 +992,19 @@ func (_u *ControlHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImplementationStatus(); ok {
+		if err := controlhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TrustCenterVisibility(); ok {
+		if err := controlhistory.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.trust_center_visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -942,6 +1072,12 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(controlhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(controlhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
 	}
@@ -1000,11 +1136,35 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.ImplementationStatus(); ok {
+		_spec.SetField(controlhistory.FieldImplementationStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.ImplementationStatusCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationDescription(); ok {
+		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
+	}
+	if _u.mutation.ImplementationDescriptionCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.PublicRepresentation(); ok {
+		_spec.SetField(controlhistory.FieldPublicRepresentation, field.TypeString, value)
+	}
+	if _u.mutation.PublicRepresentationCleared() {
+		_spec.ClearField(controlhistory.FieldPublicRepresentation, field.TypeString)
+	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(controlhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SourceName(); ok {
+		_spec.SetField(controlhistory.FieldSourceName, field.TypeString, value)
+	}
+	if _u.mutation.SourceNameCleared() {
+		_spec.ClearField(controlhistory.FieldSourceName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
@@ -1216,6 +1376,15 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(controlhistory.FieldStandardID, field.TypeString)
 	}
+	if value, ok := _u.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.TrustCenterVisibilityCleared() {
+		_spec.ClearField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum)
+	}
+	if _u.mutation.IsTrustCenterControlCleared() {
+		_spec.ClearField(controlhistory.FieldIsTrustCenterControl, field.TypeBool)
+	}
 	_spec.Node.Schema = _u.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1327,6 +1496,26 @@ func (_u *ControlHistoryUpdateOne) AppendTags(v []string) *ControlHistoryUpdateO
 // ClearTags clears the value of the "tags" field.
 func (_u *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ControlHistoryUpdateOne) SetExternalUUID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableExternalUUID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ControlHistoryUpdateOne) ClearExternalUUID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -1486,6 +1675,66 @@ func (_u *ControlHistoryUpdateOne) ClearStatus() *ControlHistoryUpdateOne {
 	return _u
 }
 
+// SetImplementationStatus sets the "implementation_status" field.
+func (_u *ControlHistoryUpdateOne) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlHistoryUpdateOne {
+	_u.mutation.SetImplementationStatus(v)
+	return _u
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetImplementationStatus(*v)
+	}
+	return _u
+}
+
+// ClearImplementationStatus clears the value of the "implementation_status" field.
+func (_u *ControlHistoryUpdateOne) ClearImplementationStatus() *ControlHistoryUpdateOne {
+	_u.mutation.ClearImplementationStatus()
+	return _u
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_u *ControlHistoryUpdateOne) SetImplementationDescription(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetImplementationDescription(v)
+	return _u
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableImplementationDescription(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetImplementationDescription(*v)
+	}
+	return _u
+}
+
+// ClearImplementationDescription clears the value of the "implementation_description" field.
+func (_u *ControlHistoryUpdateOne) ClearImplementationDescription() *ControlHistoryUpdateOne {
+	_u.mutation.ClearImplementationDescription()
+	return _u
+}
+
+// SetPublicRepresentation sets the "public_representation" field.
+func (_u *ControlHistoryUpdateOne) SetPublicRepresentation(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetPublicRepresentation(v)
+	return _u
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillablePublicRepresentation(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetPublicRepresentation(*v)
+	}
+	return _u
+}
+
+// ClearPublicRepresentation clears the value of the "public_representation" field.
+func (_u *ControlHistoryUpdateOne) ClearPublicRepresentation() *ControlHistoryUpdateOne {
+	_u.mutation.ClearPublicRepresentation()
+	return _u
+}
+
 // SetSource sets the "source" field.
 func (_u *ControlHistoryUpdateOne) SetSource(v enums.ControlSource) *ControlHistoryUpdateOne {
 	_u.mutation.SetSource(v)
@@ -1503,6 +1752,26 @@ func (_u *ControlHistoryUpdateOne) SetNillableSource(v *enums.ControlSource) *Co
 // ClearSource clears the value of the "source" field.
 func (_u *ControlHistoryUpdateOne) ClearSource() *ControlHistoryUpdateOne {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceName sets the "source_name" field.
+func (_u *ControlHistoryUpdateOne) SetSourceName(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetSourceName(v)
+	return _u
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableSourceName(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetSourceName(*v)
+	}
+	return _u
+}
+
+// ClearSourceName clears the value of the "source_name" field.
+func (_u *ControlHistoryUpdateOne) ClearSourceName() *ControlHistoryUpdateOne {
+	_u.mutation.ClearSourceName()
 	return _u
 }
 
@@ -2022,6 +2291,26 @@ func (_u *ControlHistoryUpdateOne) ClearStandardID() *ControlHistoryUpdateOne {
 	return _u
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdateOne) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryUpdateOne {
+	_u.mutation.SetTrustCenterVisibility(v)
+	return _u
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterVisibility(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterVisibility clears the value of the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdateOne) ClearTrustCenterVisibility() *ControlHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterVisibility()
+	return _u
+}
+
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (_u *ControlHistoryUpdateOne) Mutation() *ControlHistoryMutation {
 	return _u.mutation
@@ -2089,9 +2378,19 @@ func (_u *ControlHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImplementationStatus(); ok {
+		if err := controlhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TrustCenterVisibility(); ok {
+		if err := controlhistory.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.trust_center_visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -2176,6 +2475,12 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(controlhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(controlhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
 	}
@@ -2234,11 +2539,35 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.ImplementationStatus(); ok {
+		_spec.SetField(controlhistory.FieldImplementationStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.ImplementationStatusCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationDescription(); ok {
+		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
+	}
+	if _u.mutation.ImplementationDescriptionCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.PublicRepresentation(); ok {
+		_spec.SetField(controlhistory.FieldPublicRepresentation, field.TypeString, value)
+	}
+	if _u.mutation.PublicRepresentationCleared() {
+		_spec.ClearField(controlhistory.FieldPublicRepresentation, field.TypeString)
+	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(controlhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SourceName(); ok {
+		_spec.SetField(controlhistory.FieldSourceName, field.TypeString, value)
+	}
+	if _u.mutation.SourceNameCleared() {
+		_spec.ClearField(controlhistory.FieldSourceName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
@@ -2449,6 +2778,15 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(controlhistory.FieldStandardID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.TrustCenterVisibilityCleared() {
+		_spec.ClearField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum)
+	}
+	if _u.mutation.IsTrustCenterControlCleared() {
+		_spec.ClearField(controlhistory.FieldIsTrustCenterControl, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

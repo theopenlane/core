@@ -32,6 +32,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -49,6 +51,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -61,6 +65,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -81,10 +87,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -93,6 +101,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -188,6 +197,8 @@ func checkColumn(t, c string) error {
 			directorysyncrun.Table:           directorysyncrun.ValidColumn,
 			discussion.Table:                 discussion.ValidColumn,
 			documentdata.Table:               documentdata.ValidColumn,
+			emailbranding.Table:              emailbranding.ValidColumn,
+			emailtemplate.Table:              emailtemplate.ValidColumn,
 			emailverificationtoken.Table:     emailverificationtoken.ValidColumn,
 			entity.Table:                     entity.ValidColumn,
 			entitytype.Table:                 entitytype.ValidColumn,
@@ -205,6 +216,8 @@ func checkColumn(t, c string) error {
 			identityholder.Table:             identityholder.ValidColumn,
 			impersonationevent.Table:         impersonationevent.ValidColumn,
 			integration.Table:                integration.ValidColumn,
+			integrationrun.Table:             integrationrun.ValidColumn,
+			integrationwebhook.Table:         integrationwebhook.ValidColumn,
 			internalpolicy.Table:             internalpolicy.ValidColumn,
 			invite.Table:                     invite.ValidColumn,
 			jobresult.Table:                  jobresult.ValidColumn,
@@ -217,6 +230,8 @@ func checkColumn(t, c string) error {
 			narrative.Table:                  narrative.ValidColumn,
 			note.Table:                       note.ValidColumn,
 			notification.Table:               notification.ValidColumn,
+			notificationpreference.Table:     notificationpreference.ValidColumn,
+			notificationtemplate.Table:       notificationtemplate.ValidColumn,
 			onboarding.Table:                 onboarding.ValidColumn,
 			orgmembership.Table:              orgmembership.ValidColumn,
 			orgmodule.Table:                  orgmodule.ValidColumn,
@@ -234,6 +249,7 @@ func checkColumn(t, c string) error {
 			remediation.Table:                remediation.ValidColumn,
 			review.Table:                     review.ValidColumn,
 			risk.Table:                       risk.ValidColumn,
+			sladefinition.Table:              sladefinition.ValidColumn,
 			scan.Table:                       scan.ValidColumn,
 			scheduledjob.Table:               scheduledjob.ValidColumn,
 			scheduledjobrun.Table:            scheduledjobrun.ValidColumn,
@@ -241,6 +257,7 @@ func checkColumn(t, c string) error {
 			subcontrol.Table:                 subcontrol.ValidColumn,
 			subprocessor.Table:               subprocessor.ValidColumn,
 			subscriber.Table:                 subscriber.ValidColumn,
+			systemdetail.Table:               systemdetail.ValidColumn,
 			tfasetting.Table:                 tfasetting.ValidColumn,
 			tagdefinition.Table:              tagdefinition.ValidColumn,
 			task.Table:                       task.ValidColumn,
@@ -249,6 +266,7 @@ func checkColumn(t, c string) error {
 			trustcentercompliance.Table:      trustcentercompliance.ValidColumn,
 			trustcenterdoc.Table:             trustcenterdoc.ValidColumn,
 			trustcenterentity.Table:          trustcenterentity.ValidColumn,
+			trustcenterfaq.Table:             trustcenterfaq.ValidColumn,
 			trustcenterndarequest.Table:      trustcenterndarequest.ValidColumn,
 			trustcentersetting.Table:         trustcentersetting.ValidColumn,
 			trustcentersubprocessor.Table:    trustcentersubprocessor.ValidColumn,

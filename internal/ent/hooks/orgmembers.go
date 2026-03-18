@@ -26,11 +26,11 @@ func HookOrgMembers() ent.Hook {
 
 			orgID, exists := m.OrganizationID()
 			if !exists || orgID == "" {
-				var err error
 				// get the organization based on authorized context if its not set
-				orgID, err = auth.GetOrganizationIDFromContext(ctx)
-				if err != nil {
-					return nil, fmt.Errorf("failed to get organization id from context: %w", err)
+				var ctxErr error
+				orgID, ctxErr = auth.GetOrganizationIDFromContext(ctx)
+				if ctxErr != nil {
+					return nil, fmt.Errorf("failed to get organization id from context: %w", ctxErr)
 				}
 
 				// set organization id in mutation
@@ -51,10 +51,10 @@ func HookOrgMembers() ent.Hook {
 				}
 
 				ctxWithAuth := ctx
-				if _, err := auth.GetAuthenticatedUserFromContext(ctx); err != nil {
+				if _, hasCaller := auth.CallerFromContext(ctx); !hasCaller {
 					// set up authenticated user context for internal calls if not already present
 					// this is needed for clis and other test contexts that may not have proper auth context
-					ctxWithAuth = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+					ctxWithAuth = auth.WithCaller(ctx, &auth.Caller{
 						SubjectID:       userID,
 						OrganizationID:  orgID,
 						OrganizationIDs: []string{orgID},
@@ -199,7 +199,7 @@ func HookOrgMembersDelete() ent.Hook {
 
 				if _, err := m.Client().Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
-					return nil, err
+					return nil, ErrInternalServerError
 				}
 			}
 
@@ -235,7 +235,6 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 
 	_, err = m.Client().Group.Delete().
 		Where(
-			group.CreatedBy(userID),
 			group.IsManaged(true),
 			group.OwnerID(orgID),
 			group.Name(getUserGroupName(user.DisplayName, user.ID)),
@@ -283,11 +282,20 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 		Tags:        tags,
 	}
 
-	group, err := m.Client().Group.Create().
+	groupCreate := m.Client().Group.Create().
 		SetInput(groupInput).
 		SetIsManaged(true).
-		SetOwnerID(member.OrgID).
-		Save(allowCtx)
+		SetOwnerID(member.OrgID)
+
+	if dbUser.AvatarRemoteURL != nil && *dbUser.AvatarRemoteURL != "" {
+		groupCreate.SetGravatarLogoURL(*dbUser.AvatarRemoteURL)
+	}
+
+	if dbUser.AvatarLocalFileID != nil && *dbUser.AvatarLocalFileID != "" {
+		groupCreate.SetAvatarLocalFileID(*dbUser.AvatarLocalFileID)
+	}
+
+	group, err := groupCreate.Save(allowCtx)
 	if err != nil {
 		logx.FromContext(allowCtx).Error().Err(err).Msg("error creating user managed group")
 		return err

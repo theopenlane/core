@@ -5,9 +5,12 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// TestFSLoader_LoadSupportsYAML verifies YAML provider specs are loaded correctly
 func TestFSLoader_LoadSupportsYAML(t *testing.T) {
 	fsys := fstest.MapFS{
 		"providers/github.yaml": {
@@ -37,6 +40,7 @@ oauth:
 	}
 }
 
+// TestFSLoader_LoadUnsupportedSchemaVersion verifies unsupported schema versions fail
 func TestFSLoader_LoadUnsupportedSchemaVersion(t *testing.T) {
 	fsys := fstest.MapFS{
 		"providers/github.json": {
@@ -61,13 +65,42 @@ func TestFSLoader_LoadUnsupportedSchemaVersion(t *testing.T) {
 	}
 }
 
+func TestFSLoader_LoadIncludesInactiveSpecs(t *testing.T) {
+	fsys := fstest.MapFS{
+		"providers/vercel.json": {
+			Data: []byte(`{
+				"name": "vercel",
+				"displayName": "Vercel",
+				"category": "devops",
+				"authType": "apikey",
+				"active": false
+			}`),
+		},
+	}
+
+	loader := NewFSLoader(fsys, "providers")
+	specs, err := loader.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+
+	spec, ok := specs[types.ProviderType("vercel")]
+	if !ok {
+		t.Fatalf("expected inactive provider spec to be loaded")
+	}
+	if spec.Active != nil && *spec.Active {
+		t.Fatalf("expected inactive provider, got active=true")
+	}
+}
+
+// TestToProviderConfigs verifies provider specs are converted into provider configs
 func TestToProviderConfigs(t *testing.T) {
 	specs := map[types.ProviderType]ProviderSpec{
 		types.ProviderType("github"): {
 			Name:        "github",
 			DisplayName: "GitHub",
 			AuthType:    types.AuthKindOAuth2,
-			Active:      true,
+			Active:      lo.ToPtr(true),
 		},
 	}
 

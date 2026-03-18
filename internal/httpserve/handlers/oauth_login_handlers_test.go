@@ -1,6 +1,8 @@
 package handlers_test
 
 import (
+	"context"
+	"strings"
 	"testing"
 	"time"
 
@@ -14,6 +16,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
@@ -28,7 +31,40 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	baseCtx := privacy.DecisionContext(ec, privacy.Allow)
+	baseCtx = ent.NewContext(baseCtx, suite.db)
+
+	// Seed an existing user for tests that require update paths.
+	createExistingUser := func(ctx context.Context, name, email string, provider enums.AuthProvider, image string) {
+		t.Helper()
+
+		parts := strings.SplitN(name, " ", 2)
+		firstName := parts[0]
+		lastName := ""
+		if len(parts) > 1 {
+			lastName = parts[1]
+		}
+
+		userSetting := suite.db.UserSetting.Create().
+			SetEmailConfirmed(true).
+			SaveX(ctx)
+
+		builder := suite.db.User.Create().
+			SetFirstName(firstName).
+			SetLastName(lastName).
+			SetEmail(email).
+			SetSetting(userSetting).
+			SetAuthProvider(provider).
+			SetLastLoginProvider(provider).
+			SetLastSeen(time.Now())
+
+		if image != "" {
+			builder.SetAvatarRemoteURL(image)
+		}
+
+		_, err := builder.Save(ctx)
+		require.NoError(t, err)
+	}
 
 	type args struct {
 		name     string
@@ -40,6 +76,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 	tests := []struct {
 		name    string
 		args    args
+		seed    func(ctx context.Context, email string)
 		want    *ent.User
 		writes  bool
 		wantErr bool
@@ -70,6 +107,9 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				provider: enums.AuthProviderGoogle,
 				image:    "https://example.com/images/photo.jpg",
 			},
+			seed: func(ctx context.Context, email string) {
+				createExistingUser(ctx, "Wanda Maximoff", email, enums.AuthProviderGitHub, "https://example.com/images/photo.jpg")
+			},
 			want: &ent.User{
 				FirstName:         "Wanda",
 				LastName:          "Maximoff",
@@ -88,6 +128,9 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				email:    "wmaximoff@marvel.com",
 				provider: enums.AuthProviderGitHub,
 				image:    "https://example.com/images/photo.jpg",
+			},
+			seed: func(ctx context.Context, email string) {
+				createExistingUser(ctx, "Wanda Maximoff", email, enums.AuthProviderGitHub, "https://example.com/images/photo.jpg")
 			},
 			want: &ent.User{
 				FirstName:         "Wanda",
@@ -124,6 +167,9 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				provider: enums.AuthProviderGitHub,
 				image:    "",
 			},
+			seed: func(ctx context.Context, email string) {
+				createExistingUser(ctx, "Wand Maxim", email, enums.AuthProviderGitHub, "https://example.com/images/photo.jpg")
+			},
 			want: &ent.User{
 				FirstName:         "Wand",
 				LastName:          "Maxim",
@@ -136,6 +182,20 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			ctx := baseCtx
+
+			// Ensure unique emails per subtest to avoid cross-test contamination.
+			args := tt.args
+			want := *tt.want
+
+			// ensure unique email per subtest to avoid cross-test contamination
+			args.email = strings.ToLower(ulids.New().String()) + "@marvel.com"
+			want.Email = args.email
+
+			if tt.seed != nil {
+				tt.seed(ctx, args.email)
+			}
+
 			now := time.Now()
 
 			// start transaction because the query expects a transaction in the context
@@ -148,7 +208,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 			// set transaction in the context
 			ctx = transaction.NewContext(ctx, tx)
 
-			got, err := suite.h.CheckAndCreateUser(ctx, tt.args.name, tt.args.email, tt.args.provider, tt.args.image)
+			got, err := suite.h.CheckAndCreateUser(ctx, args.name, args.email, args.provider, args.image)
 			if tt.wantErr {
 				require.Error(t, err)
 				assert.Nil(t, got)
@@ -161,17 +221,17 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 			require.NotNil(t, got)
 
 			// verify fields
-			assert.Equal(t, tt.want.FirstName, got.FirstName)
-			assert.Equal(t, tt.want.LastName, got.LastName)
-			assert.Equal(t, tt.want.Email, got.Email)
-			assert.Equal(t, tt.want.AuthProvider, got.AuthProvider)
-			assert.Equal(t, tt.want.LastLoginProvider, got.LastLoginProvider)
+			assert.Equal(t, want.FirstName, got.FirstName)
+			assert.Equal(t, want.LastName, got.LastName)
+			assert.Equal(t, want.Email, got.Email)
+			assert.Equal(t, want.AuthProvider, got.AuthProvider)
+			assert.Equal(t, want.LastLoginProvider, got.LastLoginProvider)
 			assert.WithinDuration(t, now, *got.LastSeen, time.Second*5)
 
-			if tt.args.image == "" {
+			if args.image == "" {
 				assert.NotEmpty(t, got.AvatarRemoteURL)
 			} else {
-				assert.Equal(t, *tt.want.AvatarRemoteURL, *got.AvatarRemoteURL)
+				assert.Equal(t, *want.AvatarRemoteURL, *got.AvatarRemoteURL)
 			}
 		})
 	}

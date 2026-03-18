@@ -1,8 +1,9 @@
 package handlers
 
 import (
+	"context"
 	"errors"
-	"maps"
+	"fmt"
 	"strings"
 
 	echo "github.com/theopenlane/echox"
@@ -10,29 +11,25 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// RunIntegrationOperation executes a provider-published operation using stored credentials
+// RunIntegrationOperation queues provider operations for async execution.
+// Health checks are executed inline to return immediate validation status to callers.
 func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationOperationPayload, openapi.IntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
 
-	if h.IntegrationRegistry == nil {
-		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
-	}
-	if h.IntegrationOperations == nil {
-		return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
-	}
-
 	requestCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(requestCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(requestCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	providerType := types.ProviderTypeFromString(req.Provider)
@@ -45,42 +42,87 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, rout.MissingField("operation"), openapiCtx)
 	}
 
-	result, runErr := h.IntegrationOperations.Run(requestCtx, types.OperationRequest{
-		OrgID:    user.OrganizationID,
-		Provider: providerType,
-		Name:     operationName,
-		Config:   cloneOperationConfig(req.Body.Config),
-		Force:    req.Body.Force,
-	})
-	if runErr != nil {
-		switch {
-		case errors.Is(runErr, keystore.ErrCredentialNotFound):
-			return h.NotFound(ctx, wrapIntegrationError("find", runErr), openapiCtx)
-		case errors.Is(runErr, keystore.ErrOperationNotRegistered),
-			errors.Is(runErr, keystore.ErrProviderNotRegistered),
-			errors.Is(runErr, keystore.ErrProviderRequired),
-			errors.Is(runErr, keystore.ErrOperationNameRequired):
-			return h.BadRequest(ctx, runErr, openapiCtx)
-		default:
-			return h.InternalServerError(ctx, wrapIntegrationError("run operation", runErr), openapiCtx)
+	if h.WorkflowEngine == nil {
+		if operationName != defaultHealthOperation {
+			return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
 		}
 	}
 
+	queueCtx := context.WithoutCancel(requestCtx)
+
+	if operationName == defaultHealthOperation {
+		if h.IntegrationOperations == nil {
+			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
+		}
+
+		result, err := h.IntegrationOperations.Run(queueCtx, types.OperationRequest{
+			OrgID:    caller.OrganizationID,
+			Provider: providerType,
+			Name:     operationName,
+			Config:   req.Body.Config,
+			Force:    req.Body.Force,
+		})
+		if err != nil {
+			if errors.Is(err, keystore.ErrOperationNotRegistered) {
+				return h.BadRequest(ctx, err, openapiCtx)
+			}
+			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+		}
+
+		out := openapi.IntegrationOperationResponse{
+			Reply:     rout.Reply{Success: result.Status == types.OperationStatusOK},
+			Provider:  string(providerType),
+			Operation: string(operationName),
+			Status:    string(result.Status),
+			Summary:   result.Summary,
+			Details:   result.Details,
+		}
+
+		if out.Status == "" {
+			out.Status = string(types.OperationStatusUnknown)
+		}
+		if strings.TrimSpace(out.Summary) == "" {
+			out.Summary = "Health check completed"
+		}
+
+		if result.Status != types.OperationStatusOK {
+			healthErr := ErrProviderHealthCheckFailed
+			if strings.TrimSpace(result.Summary) != "" {
+				healthErr = fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, result.Summary)
+			}
+			return h.BadRequest(ctx, wrapIntegrationError("validate", healthErr), openapiCtx)
+		}
+
+		return h.Success(ctx, out)
+	}
+
+	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
+		OrgID:     caller.OrganizationID,
+		Provider:  providerType,
+		Operation: operationName,
+		Config:    req.Body.Config,
+		Force:     req.Body.Force,
+		RunType:   enums.IntegrationRunTypeManual,
+	})
+	if err != nil {
+		if errors.Is(err, keystore.ErrOperationNotRegistered) {
+			return h.BadRequest(ctx, err, openapiCtx)
+		}
+		return h.InternalServerError(ctx, err, openapiCtx)
+	}
+
 	out := openapi.IntegrationOperationResponse{
-		Reply:     rout.Reply{Success: result.Status == types.OperationStatusOK},
+		Reply:     rout.Reply{Success: true},
 		Provider:  string(providerType),
 		Operation: string(operationName),
-		Status:    string(result.Status),
-		Summary:   result.Summary,
-		Details:   result.Details,
+		Status:    "queued",
+		Summary:   "Integration operation queued",
+		Details: map[string]any{
+			"run_id":   result.RunID,
+			"event_id": result.EventID,
+			"status":   result.Status.String(),
+		},
 	}
 
 	return h.Success(ctx, out)
-}
-
-func cloneOperationConfig(input map[string]any) map[string]any {
-	if len(input) == 0 {
-		return nil
-	}
-	return maps.Clone(input)
 }

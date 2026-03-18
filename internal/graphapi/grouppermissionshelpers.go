@@ -2,13 +2,13 @@ package graphapi
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // EntObject is a struct that contains the id, displayID, and name of an object
@@ -49,15 +49,8 @@ func getGroupPermissions[T any](obj []T, objectType string, permission enums.Per
 // convertToEntObject converts an object to an EntObject to be used in the GroupPermissions
 // to get the id, displayID, and name of the object
 func convertToEntObject(obj any) (*EntObject, error) {
-	jsonBytes, err := json.Marshal(obj)
-	if err != nil {
-		return nil, err
-	}
-
 	var entObject EntObject
-
-	err = json.Unmarshal(jsonBytes, &entObject)
-	if err != nil {
+	if err := jsonx.RoundTrip(obj, &entObject); err != nil {
 		return nil, err
 	}
 

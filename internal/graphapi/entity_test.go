@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -135,12 +136,16 @@ func TestMutationCreateEntity(t *testing.T) {
 	entitiesToDelete := []string{}
 	entityTypesToDelete := []string{}
 
+	entityType := (&EntityTypeBuilder{client: suite.client, Name: "superheros"}).MustNew(testUser1.UserCtx, t)
+	entityTypeAnotherOrg := (&EntityTypeBuilder{client: suite.client, Name: "villains"}).MustNew(testUser2.UserCtx, t)
+
 	testCases := []struct {
-		name        string
-		request     testclient.CreateEntityInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name           string
+		entityTypeName *string
+		request        testclient.CreateEntityInput
+		client         *testclient.TestClient
+		ctx            context.Context
+		expectedErr    string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -151,20 +156,31 @@ func TestMutationCreateEntity(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, all input",
+			name: "happy path, all input with entity type",
 			request: testclient.CreateEntityInput{
 				Name:        lo.ToPtr("mitb"),
 				DisplayName: lo.ToPtr("fraser fir"),
 				Description: lo.ToPtr("the pine trees of appalachia"),
 				Domains:     []string{"https://appalachiatrees.com"},
-				Status:      lo.ToPtr("Onboarding"),
+				Status:      &enums.EntityStatusUnderReview,
 				Note: &testclient.CreateNoteInput{
 					Text:    "matt is the best",
-					OwnerID: &testUser1.OrganizationID,
+					OwnerID: &adminUser.OrganizationID,
 				},
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			entityTypeName: &entityType.Name,
+			client:         suite.client.api,
+			ctx:            adminUser.UserCtx,
+		},
+		{
+			name: "not allowed to use another org's entity type",
+			request: testclient.CreateEntityInput{
+				Name: lo.ToPtr("peter pan"),
+			},
+			entityTypeName: &entityTypeAnotherOrg.Name,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedErr:    "invalid or unparsable field: entity_type_name",
 		},
 		{
 			name: "happy path, using api token",
@@ -223,7 +239,7 @@ func TestMutationCreateEntity(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateEntity(tc.ctx, tc.request)
+			resp, err := tc.client.CreateEntity(tc.ctx, tc.request, tc.entityTypeName)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -261,12 +277,19 @@ func TestMutationCreateEntity(t *testing.T) {
 				assert.Check(t, is.DeepEqual(tc.request.Status, resp.CreateEntity.Entity.Status))
 			} else {
 				// default status is active
-				assert.Check(t, is.Equal("active", *resp.CreateEntity.Entity.Status))
+				assert.Check(t, is.Equal(enums.EntityStatusActive, *resp.CreateEntity.Entity.Status))
 			}
 
 			if tc.request.Note != nil {
 				assert.Check(t, is.Len(resp.CreateEntity.Entity.Notes.Edges, 1))
 				assert.Check(t, is.Equal(tc.request.Note.Text, resp.CreateEntity.Entity.Notes.Edges[0].Node.Text))
+			}
+
+			if tc.entityTypeName != nil {
+				assert.Check(t, resp.CreateEntity.Entity.EntityType != nil)
+				assert.Check(t, is.Equal(*tc.entityTypeName, resp.CreateEntity.Entity.EntityType.Name))
+			} else {
+				assert.Check(t, resp.CreateEntity.Entity.EntityType == nil)
 			}
 
 			entitiesToDelete = append(entitiesToDelete, resp.CreateEntity.Entity.ID)
@@ -326,7 +349,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "update status and domain",
 			request: testclient.UpdateEntityInput{
-				Status:        lo.ToPtr("Onboarding"),
+				Status:        &enums.EntityStatusSuspended,
 				AppendDomains: []string{"example.com"},
 			},
 			client: suite.client.api,

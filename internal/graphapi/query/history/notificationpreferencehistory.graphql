@@ -1,0 +1,104 @@
+query GetAllNotificationPreferenceHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationPreferenceHistoryOrder!]) {
+  notificationPreferenceHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cadence
+        channel
+        config
+        createdAt
+        createdBy
+        destination
+        enabled
+        historyTime
+        id
+        isDefault
+        lastError
+        lastUsedAt
+        metadata
+        muteUntil
+        operation
+        ownerID
+        priority
+        provider
+        quietHoursEnd
+        quietHoursStart
+        ref
+        status
+        templateID
+        timezone
+        topicOverrides
+        topicPatterns
+        updatedAt
+        updatedBy
+        userID
+        verifiedAt
+      }
+    }
+  }
+}
+
+query GetNotificationPreferenceHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationPreferenceHistoryOrder!], $where: NotificationPreferenceHistoryWhereInput) {
+  notificationPreferenceHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cadence
+        channel
+        config
+        createdAt
+        createdBy
+        destination
+        enabled
+        historyTime
+        id
+        isDefault
+        lastError
+        lastUsedAt
+        metadata
+        muteUntil
+        operation
+        ownerID
+        priority
+        provider
+        quietHoursEnd
+        quietHoursStart
+        ref
+        status
+        templateID
+        timezone
+        topicOverrides
+        topicPatterns
+        updatedAt
+        updatedBy
+        userID
+        verifiedAt
+      }
+    }
+  }
+}

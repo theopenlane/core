@@ -59,6 +59,8 @@ type TaskHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the task
 	ScopeID string `json:"scope_id,omitempty"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
 	// the details of the task
@@ -99,7 +101,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case taskhistory.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldExternalUUID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -233,6 +235,13 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case taskhistory.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
 			}
 		case taskhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -402,6 +411,11 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)

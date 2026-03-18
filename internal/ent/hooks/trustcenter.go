@@ -196,7 +196,9 @@ func HookTrustCenter() ent.Hook {
 			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuples, nil); err != nil {
-				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create file access permissions")
+
+				return nil, ErrInternalServerError
 			}
 
 			if trustCenter.CustomDomainID != nil {
@@ -348,16 +350,6 @@ func HookTrustCenterUpdate() ent.Hook {
 					}
 				}
 
-				if previousCustomDomainID != nil {
-					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
-						if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
-							if err := triggerCacheRefresh(ctx, targetURL); err != nil {
-								return nil, err
-							}
-						}
-					}
-				}
-
 				return v, nil
 			}
 
@@ -372,14 +364,6 @@ func HookTrustCenterUpdate() ent.Hook {
 					TrustCenterID: tcID,
 				}, nil); err != nil {
 					return nil, err
-				}
-
-				if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
-					if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
-						if err := triggerCacheRefresh(ctx, targetURL); err != nil {
-							return nil, err
-						}
-					}
 				}
 			}
 

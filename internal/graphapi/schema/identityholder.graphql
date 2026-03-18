@@ -25,12 +25,6 @@ extend type IdentityHolder {
     ): WorkflowEventConnection!
 }
 
-
-
-
-
-
-
 extend type Query {
     """
     Look up identityHolder by ID
@@ -52,6 +46,7 @@ extend type Mutation{
         values of the identityHolder
         """
         input: CreateIdentityHolderInput!
+        identityHolderFiles: [Upload!]
     ): IdentityHolderCreatePayload!
     """
     Create multiple new identityHolders
@@ -83,6 +78,7 @@ extend type Mutation{
         New values for the identityHolder
         """
         input: UpdateIdentityHolderInput!
+        identityHolderFiles: [Upload!]
     ): IdentityHolderUpdatePayload!
     """
     Delete an existing identityHolder
@@ -93,6 +89,37 @@ extend type Mutation{
         """
         id: ID!
     ): IdentityHolderDeletePayload!
+    """
+    Delete multiple identityHolders
+    """
+    deleteBulkIdentityHolder(
+        """
+        IDs of the identityHolders to delete
+        """
+        ids: [ID!]!
+    ): IdentityHolderBulkDeletePayload!
+    """
+    Update multiple existing identityHolders
+    """
+    updateBulkIdentityHolder(
+        """
+        IDs of the identityHolders to update
+        """
+        ids: [ID!]!
+        """
+        values to update the identityHolders with
+        """
+        input: UpdateIdentityHolderInput!
+    ): IdentityHolderBulkUpdatePayload!
+    """
+    Update multiple existing identityHolders via file upload
+    """
+    updateBulkCSVIdentityHolder(
+        """
+        csv file containing values of the identityHolder, must include ID column
+        """
+        input: Upload!
+    ): IdentityHolderBulkUpdatePayload!
 }
 
 """
@@ -133,4 +160,28 @@ type IdentityHolderBulkCreatePayload {
     Created identityHolders
     """
     identityHolders: [IdentityHolder!]
+}
+
+"""
+Return response for deleteBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkDeletePayload {
+    """
+    Deleted identityHolder IDs
+    """
+    deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkIdentityHolder mutation
+"""
+type IdentityHolderBulkUpdatePayload {
+    """
+    Updated identityHolders
+    """
+    identityHolders: [IdentityHolder!]
+    """
+    IDs of the updated identityHolders
+    """
+    updatedIDs: [ID!]
 }

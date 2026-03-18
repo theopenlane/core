@@ -50,6 +50,10 @@ extend type Mutation{
         New values for the documentData
         """
         input: UpdateDocumentDataInput!
+        """
+        File to upload for the documentData
+        """
+        documentDataFile: Upload
     ): DocumentDataUpdatePayload!
     """
     Delete an existing documentData
@@ -69,6 +73,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): DocumentDataBulkDeletePayload!
+    """
+    Update multiple existing documentDatas
+    """
+    updateBulkDocumentData(
+        """
+        IDs of the documentDatas to update
+        """
+        ids: [ID!]!
+        """
+        values to update the documentDatas with
+        """
+        input: UpdateDocumentDataInput!
+    ): DocumentDataBulkUpdatePayload!
+    """
+    Update multiple existing documentDatas via file upload
+    """
+    updateBulkCSVDocumentData(
+        """
+        csv file containing values of the documentData, must include ID column
+        """
+        input: Upload!
+    ): DocumentDataBulkUpdatePayload!
 }
 
 """
@@ -119,4 +145,18 @@ type DocumentDataBulkDeletePayload {
     Deleted documentData IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkDocumentData mutation
+"""
+type DocumentDataBulkUpdatePayload {
+    """
+    Updated documentDatas
+    """
+    documentData: [DocumentData!]
+    """
+    IDs of the updated documentDatas
+    """
+    updatedIDs: [ID!]
 }

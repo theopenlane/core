@@ -48,6 +48,8 @@ const (
 	FieldProgramKindName = "program_kind_name"
 	// FieldProgramKindID holds the string denoting the program_kind_id field in the database.
 	FieldProgramKindID = "program_kind_id"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -95,6 +97,7 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldProgramKindName,
 	FieldProgramKindID,
+	FieldExternalUUID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -242,6 +245,11 @@ func ByProgramKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByProgramKindID orders the results by the program_kind_id field.
 func ByProgramKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProgramKindID, opts...).ToFunc()
+}
+
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

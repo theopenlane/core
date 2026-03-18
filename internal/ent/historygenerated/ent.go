@@ -31,6 +31,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -49,6 +51,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -62,14 +66,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -161,6 +168,8 @@ func checkColumn(t, c string) error {
 			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
 			discussionhistory.Table:                 discussionhistory.ValidColumn,
 			documentdatahistory.Table:               documentdatahistory.ValidColumn,
+			emailbrandinghistory.Table:              emailbrandinghistory.ValidColumn,
+			emailtemplatehistory.Table:              emailtemplatehistory.ValidColumn,
 			entityhistory.Table:                     entityhistory.ValidColumn,
 			entitytypehistory.Table:                 entitytypehistory.ValidColumn,
 			evidencehistory.Table:                   evidencehistory.ValidColumn,
@@ -179,6 +188,8 @@ func checkColumn(t, c string) error {
 			mappedcontrolhistory.Table:              mappedcontrolhistory.ValidColumn,
 			narrativehistory.Table:                  narrativehistory.ValidColumn,
 			notehistory.Table:                       notehistory.ValidColumn,
+			notificationpreferencehistory.Table:     notificationpreferencehistory.ValidColumn,
+			notificationtemplatehistory.Table:       notificationtemplatehistory.ValidColumn,
 			orgmembershiphistory.Table:              orgmembershiphistory.ValidColumn,
 			orgsubscriptionhistory.Table:            orgsubscriptionhistory.ValidColumn,
 			organizationhistory.Table:               organizationhistory.ValidColumn,
@@ -190,16 +201,19 @@ func checkColumn(t, c string) error {
 			remediationhistory.Table:                remediationhistory.ValidColumn,
 			reviewhistory.Table:                     reviewhistory.ValidColumn,
 			riskhistory.Table:                       riskhistory.ValidColumn,
+			sladefinitionhistory.Table:              sladefinitionhistory.ValidColumn,
 			scanhistory.Table:                       scanhistory.ValidColumn,
 			scheduledjobhistory.Table:               scheduledjobhistory.ValidColumn,
 			standardhistory.Table:                   standardhistory.ValidColumn,
 			subcontrolhistory.Table:                 subcontrolhistory.ValidColumn,
 			subprocessorhistory.Table:               subprocessorhistory.ValidColumn,
+			systemdetailhistory.Table:               systemdetailhistory.ValidColumn,
 			taskhistory.Table:                       taskhistory.ValidColumn,
 			templatehistory.Table:                   templatehistory.ValidColumn,
 			trustcentercompliancehistory.Table:      trustcentercompliancehistory.ValidColumn,
 			trustcenterdochistory.Table:             trustcenterdochistory.ValidColumn,
 			trustcenterentityhistory.Table:          trustcenterentityhistory.ValidColumn,
+			trustcenterfaqhistory.Table:             trustcenterfaqhistory.ValidColumn,
 			trustcenterhistory.Table:                trustcenterhistory.ValidColumn,
 			trustcenterndarequesthistory.Table:      trustcenterndarequesthistory.ValidColumn,
 			trustcentersettinghistory.Table:         trustcentersettinghistory.ValidColumn,

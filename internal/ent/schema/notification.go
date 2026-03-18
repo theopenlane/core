@@ -74,6 +74,11 @@ func (Notification) Fields() []ent.Field {
 			Optional().
 			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
+		field.String("template_id").
+			Comment("optional template used for external channel rendering").
+			Optional().
+			Immutable().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Time("read_at").
 			Comment("the time the notification was read").
 			GoType(models.DateTime{}).
@@ -132,6 +137,15 @@ func (n Notification) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: NotificationTemplate{},
+			field:      "template_id",
+			immutable:  true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+			},
+		}),
 	}
 }
 
@@ -157,8 +171,9 @@ func (Notification) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entgql.RelayConnection(),
 		// skip schema gen, this is used for subscriptions only
-		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
+		entgql.Skip(entgql.SkipWhereInput),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()), // generate input types, but we'll skip the create resolver
 	}
 }

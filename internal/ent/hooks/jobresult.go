@@ -45,10 +45,5 @@ func checkJobResultFiles[T utils.GenericMutation](ctx context.Context, m T) (con
 		return ctx, nil
 	}
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut T) (string, bool) { return mut.ID() },
-		func(mut T) string { return mut.Type() },
-	)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)
+	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }

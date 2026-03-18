@@ -77,6 +77,8 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
 			case "dnsVerificationID":
 				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -96,6 +98,10 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 
 func (ec *executionContext) unmarshalInputCreateTrustCenterDomainInput(ctx context.Context, obj any) (model.CreateTrustCenterDomainInput, error) {
 	var it model.CreateTrustCenterDomainInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -124,7 +130,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterDomainInput(ctx conte
 			it.TrustCenterID = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -161,10 +166,10 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

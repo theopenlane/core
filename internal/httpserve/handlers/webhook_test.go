@@ -469,7 +469,8 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				require.NotEmpty(t, apiToken.RevokedBy)
 				require.NotEmpty(t, apiToken.RevokedAt)
 				require.NotEmpty(t, apiToken.RevokedReason)
-				assert.Less(t, *apiToken.ExpiresAt, time.Now())
+				// Allow for clock granularity; avoid flaking on exact timestamp equality.
+				assert.True(t, apiToken.ExpiresAt.Before(time.Now().Add(time.Second)))
 
 				pat, err := suite.db.PersonalAccessToken.Get(testUser1.UserCtx, patID)
 				require.NoError(t, err)

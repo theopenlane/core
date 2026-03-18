@@ -79,7 +79,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}),
 				withOrganizationOwner(false),
 				withOwnerRelation(fgax.OwnerRelation),
 				withAllowAnonymousTrustCenterAccess(true),
@@ -95,36 +95,57 @@ func (n Note) Edges() []ent.Edge {
 			fromSchema: n,
 			edgeSchema: Task{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Task{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Control{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Control{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Subcontrol{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Procedure{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Procedure{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Risk{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: InternalPolicy{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Evidence{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Evidence{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
@@ -141,6 +162,11 @@ func (n Note) Edges() []ent.Edge {
 				// you should only need to be able to view a discussion to add a comment to it
 				accessmap.EdgeViewCheck(Discussion{}.Name()),
 			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    n,
+			edgeSchema:    TrustCenterFAQ{},
+			cascadeDelete: "Note",
 		}),
 		defaultEdgeToWithPagination(n, File{}),
 	}
@@ -177,5 +203,6 @@ func (Note) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNoteFiles(),
 		hooks.HookSlateJSON(),
+		hooks.HookDeleteDiscussion(),
 	}
 }

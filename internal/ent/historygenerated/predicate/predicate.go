@@ -59,6 +59,12 @@ type DiscussionHistory func(*sql.Selector)
 // DocumentDataHistory is the predicate function for documentdatahistory builders.
 type DocumentDataHistory func(*sql.Selector)
 
+// EmailBrandingHistory is the predicate function for emailbrandinghistory builders.
+type EmailBrandingHistory func(*sql.Selector)
+
+// EmailTemplateHistory is the predicate function for emailtemplatehistory builders.
+type EmailTemplateHistory func(*sql.Selector)
+
 // EntityHistory is the predicate function for entityhistory builders.
 type EntityHistory func(*sql.Selector)
 
@@ -113,6 +119,12 @@ type NarrativeHistory func(*sql.Selector)
 // NoteHistory is the predicate function for notehistory builders.
 type NoteHistory func(*sql.Selector)
 
+// NotificationPreferenceHistory is the predicate function for notificationpreferencehistory builders.
+type NotificationPreferenceHistory func(*sql.Selector)
+
+// NotificationTemplateHistory is the predicate function for notificationtemplatehistory builders.
+type NotificationTemplateHistory func(*sql.Selector)
+
 // OrgMembershipHistory is the predicate function for orgmembershiphistory builders.
 type OrgMembershipHistory func(*sql.Selector)
 
@@ -146,6 +158,9 @@ type ReviewHistory func(*sql.Selector)
 // RiskHistory is the predicate function for riskhistory builders.
 type RiskHistory func(*sql.Selector)
 
+// SLADefinitionHistory is the predicate function for sladefinitionhistory builders.
+type SLADefinitionHistory func(*sql.Selector)
+
 // ScanHistory is the predicate function for scanhistory builders.
 type ScanHistory func(*sql.Selector)
 
@@ -161,6 +176,9 @@ type SubcontrolHistory func(*sql.Selector)
 // SubprocessorHistory is the predicate function for subprocessorhistory builders.
 type SubprocessorHistory func(*sql.Selector)
 
+// SystemDetailHistory is the predicate function for systemdetailhistory builders.
+type SystemDetailHistory func(*sql.Selector)
+
 // TaskHistory is the predicate function for taskhistory builders.
 type TaskHistory func(*sql.Selector)
 
@@ -175,6 +193,9 @@ type TrustCenterDocHistory func(*sql.Selector)
 
 // TrustCenterEntityHistory is the predicate function for trustcenterentityhistory builders.
 type TrustCenterEntityHistory func(*sql.Selector)
+
+// TrustCenterFAQHistory is the predicate function for trustcenterfaqhistory builders.
+type TrustCenterFAQHistory func(*sql.Selector)
 
 // TrustCenterHistory is the predicate function for trustcenterhistory builders.
 type TrustCenterHistory func(*sql.Selector)

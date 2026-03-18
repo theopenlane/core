@@ -49,6 +49,8 @@ type TrustCenter struct {
 	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
+	// Pirsch access link
+	PirschAccessLink string `json:"pirsch_access_link,omitempty"`
 	// preview status of the trust center
 	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	// External URL for the trust center subprocessors
@@ -94,11 +96,13 @@ type TrustCenterEdges struct {
 	TrustCenterEntities []*TrustCenterEntity `json:"trust_center_entities,omitempty"`
 	// TrustCenterNdaRequests holds the value of the trust_center_nda_requests edge.
 	TrustCenterNdaRequests []*TrustCenterNDARequest `json:"trust_center_nda_requests,omitempty"`
+	// TrustCenterFaqs holds the value of the trust_center_faqs edge.
+	TrustCenterFaqs []*TrustCenterFAQ `json:"trust_center_faqs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedBlockedGroups            map[string][]*Group
 	namedEditors                  map[string][]*Group
@@ -109,6 +113,7 @@ type TrustCenterEdges struct {
 	namedPosts                    map[string][]*Note
 	namedTrustCenterEntities      map[string][]*TrustCenterEntity
 	namedTrustCenterNdaRequests   map[string][]*TrustCenterNDARequest
+	namedTrustCenterFaqs          map[string][]*TrustCenterFAQ
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -258,6 +263,15 @@ func (e TrustCenterEdges) TrustCenterNdaRequestsOrErr() ([]*TrustCenterNDAReques
 	return nil, &NotLoadedError{edge: "trust_center_nda_requests"}
 }
 
+// TrustCenterFaqsOrErr returns the TrustCenterFaqs value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
+	if e.loadedTypes[15] {
+		return e.TrustCenterFaqs, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_faqs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -265,7 +279,7 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenter.FieldTags:
 			values[i] = new([]byte)
-		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPreviewDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode, trustcenter.FieldPreviewStatus, trustcenter.FieldSubprocessorURL:
+		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPreviewDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode, trustcenter.FieldPirschAccessLink, trustcenter.FieldPreviewStatus, trustcenter.FieldSubprocessorURL:
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -376,6 +390,12 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field pirsch_identification_code", values[i])
 			} else if value.Valid {
 				_m.PirschIdentificationCode = value.String
+			}
+		case trustcenter.FieldPirschAccessLink:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field pirsch_access_link", values[i])
+			} else if value.Valid {
+				_m.PirschAccessLink = value.String
 			}
 		case trustcenter.FieldPreviewStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -498,6 +518,11 @@ func (_m *TrustCenter) QueryTrustCenterNdaRequests() *TrustCenterNDARequestQuery
 	return NewTrustCenterClient(_m.config).QueryTrustCenterNdaRequests(_m)
 }
 
+// QueryTrustCenterFaqs queries the "trust_center_faqs" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryTrustCenterFaqs() *TrustCenterFAQQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterFaqs(_m)
+}
+
 // Update returns a builder for updating this TrustCenter.
 // Note that you need to call TrustCenter.Unwrap() before calling this method if this TrustCenter
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -561,6 +586,9 @@ func (_m *TrustCenter) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pirsch_identification_code=")
 	builder.WriteString(_m.PirschIdentificationCode)
+	builder.WriteString(", ")
+	builder.WriteString("pirsch_access_link=")
+	builder.WriteString(_m.PirschAccessLink)
 	builder.WriteString(", ")
 	builder.WriteString("preview_status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PreviewStatus))
@@ -784,6 +812,30 @@ func (_m *TrustCenter) appendNamedTrustCenterNdaRequests(name string, edges ...*
 		_m.Edges.namedTrustCenterNdaRequests[name] = []*TrustCenterNDARequest{}
 	} else {
 		_m.Edges.namedTrustCenterNdaRequests[name] = append(_m.Edges.namedTrustCenterNdaRequests[name], edges...)
+	}
+}
+
+// NamedTrustCenterFaqs returns the TrustCenterFaqs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedTrustCenterFaqs(name string) ([]*TrustCenterFAQ, error) {
+	if _m.Edges.namedTrustCenterFaqs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterFaqs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedTrustCenterFaqs(name string, edges ...*TrustCenterFAQ) {
+	if _m.Edges.namedTrustCenterFaqs == nil {
+		_m.Edges.namedTrustCenterFaqs = make(map[string][]*TrustCenterFAQ)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterFaqs[name] = []*TrustCenterFAQ{}
+	} else {
+		_m.Edges.namedTrustCenterFaqs[name] = append(_m.Edges.namedTrustCenterFaqs[name], edges...)
 	}
 }
 

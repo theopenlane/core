@@ -51,6 +51,18 @@ func (UserSetting) Mixin() []ent.Mixin {
 func (UserSetting) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("user_id").Optional(),
+		field.String("delegate_user_id").
+			Comment("user id to delegate workflow approvals to").
+			Optional().
+			Nillable(),
+		field.Time("delegate_start_at").
+			Comment("when delegation becomes active").
+			Optional().
+			Nillable(),
+		field.Time("delegate_end_at").
+			Comment("when delegation ends").
+			Optional().
+			Nillable(),
 		field.Bool("locked").
 			Comment("user account is locked if unconfirmed or explicitly locked").
 			Default(false),

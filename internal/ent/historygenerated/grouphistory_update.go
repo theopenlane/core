@@ -218,6 +218,26 @@ func (_u *GroupHistoryUpdate) ClearLogoURL() *GroupHistoryUpdate {
 	return _u
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdate) SetAvatarLocalFileID(v string) *GroupHistoryUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableAvatarLocalFileID(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdate) ClearAvatarLocalFileID() *GroupHistoryUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *GroupHistoryUpdate) SetDisplayName(v string) *GroupHistoryUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -229,6 +249,64 @@ func (_u *GroupHistoryUpdate) SetNillableDisplayName(v *string) *GroupHistoryUpd
 	if v != nil {
 		_u.SetDisplayName(*v)
 	}
+	return _u
+}
+
+// SetOscalRole sets the "oscal_role" field.
+func (_u *GroupHistoryUpdate) SetOscalRole(v string) *GroupHistoryUpdate {
+	_u.mutation.SetOscalRole(v)
+	return _u
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableOscalRole(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetOscalRole(*v)
+	}
+	return _u
+}
+
+// ClearOscalRole clears the value of the "oscal_role" field.
+func (_u *GroupHistoryUpdate) ClearOscalRole() *GroupHistoryUpdate {
+	_u.mutation.ClearOscalRole()
+	return _u
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_u *GroupHistoryUpdate) SetOscalPartyUUID(v string) *GroupHistoryUpdate {
+	_u.mutation.SetOscalPartyUUID(v)
+	return _u
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableOscalPartyUUID(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetOscalPartyUUID(*v)
+	}
+	return _u
+}
+
+// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
+func (_u *GroupHistoryUpdate) ClearOscalPartyUUID() *GroupHistoryUpdate {
+	_u.mutation.ClearOscalPartyUUID()
+	return _u
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_u *GroupHistoryUpdate) SetOscalContactUuids(v []string) *GroupHistoryUpdate {
+	_u.mutation.SetOscalContactUuids(v)
+	return _u
+}
+
+// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
+func (_u *GroupHistoryUpdate) AppendOscalContactUuids(v []string) *GroupHistoryUpdate {
+	_u.mutation.AppendOscalContactUuids(v)
+	return _u
+}
+
+// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
+func (_u *GroupHistoryUpdate) ClearOscalContactUuids() *GroupHistoryUpdate {
+	_u.mutation.ClearOscalContactUuids()
 	return _u
 }
 
@@ -448,8 +526,37 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(grouphistory.FieldAvatarLocalFileID, field.TypeString)
+	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OscalRole(); ok {
+		_spec.SetField(grouphistory.FieldOscalRole, field.TypeString, value)
+	}
+	if _u.mutation.OscalRoleCleared() {
+		_spec.ClearField(grouphistory.FieldOscalRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(grouphistory.FieldOscalPartyUUID, field.TypeString, value)
+	}
+	if _u.mutation.OscalPartyUUIDCleared() {
+		_spec.ClearField(grouphistory.FieldOscalPartyUUID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalContactUuids(); ok {
+		_spec.SetField(grouphistory.FieldOscalContactUuids, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, grouphistory.FieldOscalContactUuids, value)
+		})
+	}
+	if _u.mutation.OscalContactUuidsCleared() {
+		_spec.ClearField(grouphistory.FieldOscalContactUuids, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ScimExternalID(); ok {
 		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
@@ -683,6 +790,26 @@ func (_u *GroupHistoryUpdateOne) ClearLogoURL() *GroupHistoryUpdateOne {
 	return _u
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdateOne) SetAvatarLocalFileID(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableAvatarLocalFileID(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdateOne) ClearAvatarLocalFileID() *GroupHistoryUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *GroupHistoryUpdateOne) SetDisplayName(v string) *GroupHistoryUpdateOne {
 	_u.mutation.SetDisplayName(v)
@@ -694,6 +821,64 @@ func (_u *GroupHistoryUpdateOne) SetNillableDisplayName(v *string) *GroupHistory
 	if v != nil {
 		_u.SetDisplayName(*v)
 	}
+	return _u
+}
+
+// SetOscalRole sets the "oscal_role" field.
+func (_u *GroupHistoryUpdateOne) SetOscalRole(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetOscalRole(v)
+	return _u
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableOscalRole(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetOscalRole(*v)
+	}
+	return _u
+}
+
+// ClearOscalRole clears the value of the "oscal_role" field.
+func (_u *GroupHistoryUpdateOne) ClearOscalRole() *GroupHistoryUpdateOne {
+	_u.mutation.ClearOscalRole()
+	return _u
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_u *GroupHistoryUpdateOne) SetOscalPartyUUID(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetOscalPartyUUID(v)
+	return _u
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableOscalPartyUUID(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetOscalPartyUUID(*v)
+	}
+	return _u
+}
+
+// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
+func (_u *GroupHistoryUpdateOne) ClearOscalPartyUUID() *GroupHistoryUpdateOne {
+	_u.mutation.ClearOscalPartyUUID()
+	return _u
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_u *GroupHistoryUpdateOne) SetOscalContactUuids(v []string) *GroupHistoryUpdateOne {
+	_u.mutation.SetOscalContactUuids(v)
+	return _u
+}
+
+// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
+func (_u *GroupHistoryUpdateOne) AppendOscalContactUuids(v []string) *GroupHistoryUpdateOne {
+	_u.mutation.AppendOscalContactUuids(v)
+	return _u
+}
+
+// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
+func (_u *GroupHistoryUpdateOne) ClearOscalContactUuids() *GroupHistoryUpdateOne {
+	_u.mutation.ClearOscalContactUuids()
 	return _u
 }
 
@@ -943,8 +1128,37 @@ func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHisto
 	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(grouphistory.FieldAvatarLocalFileID, field.TypeString)
+	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OscalRole(); ok {
+		_spec.SetField(grouphistory.FieldOscalRole, field.TypeString, value)
+	}
+	if _u.mutation.OscalRoleCleared() {
+		_spec.ClearField(grouphistory.FieldOscalRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(grouphistory.FieldOscalPartyUUID, field.TypeString, value)
+	}
+	if _u.mutation.OscalPartyUUIDCleared() {
+		_spec.ClearField(grouphistory.FieldOscalPartyUUID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalContactUuids(); ok {
+		_spec.SetField(grouphistory.FieldOscalContactUuids, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, grouphistory.FieldOscalContactUuids, value)
+		})
+	}
+	if _u.mutation.OscalContactUuidsCleared() {
+		_spec.ClearField(grouphistory.FieldOscalContactUuids, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ScimExternalID(); ok {
 		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)

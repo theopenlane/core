@@ -381,6 +381,20 @@ func (_c *AssessmentResponseCreate) SetNillableDocumentDataID(v *string) *Assess
 	return _c
 }
 
+// SetIsDraft sets the "is_draft" field.
+func (_c *AssessmentResponseCreate) SetIsDraft(v bool) *AssessmentResponseCreate {
+	_c.mutation.SetIsDraft(v)
+	return _c
+}
+
+// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableIsDraft(v *bool) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetIsDraft(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *AssessmentResponseCreate) SetID(v string) *AssessmentResponseCreate {
 	_c.mutation.SetID(v)
@@ -521,6 +535,10 @@ func (_c *AssessmentResponseCreate) defaults() error {
 		v := assessmentresponse.DefaultStartedAt
 		_c.mutation.SetStartedAt(v)
 	}
+	if _, ok := _c.mutation.IsDraft(); !ok {
+		v := assessmentresponse.DefaultIsDraft
+		_c.mutation.SetIsDraft(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if assessmentresponse.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized assessmentresponse.DefaultID (forgotten import generated/runtime?)")
@@ -573,6 +591,9 @@ func (_c *AssessmentResponseCreate) check() error {
 	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
 		return &ValidationError{Name: "started_at", err: errors.New(`generated: missing required field "AssessmentResponse.started_at"`)}
+	}
+	if _, ok := _c.mutation.IsDraft(); !ok {
+		return &ValidationError{Name: "is_draft", err: errors.New(`generated: missing required field "AssessmentResponse.is_draft"`)}
 	}
 	if len(_c.mutation.AssessmentIDs()) == 0 {
 		return &ValidationError{Name: "assessment", err: errors.New(`generated: missing required edge "AssessmentResponse.assessment"`)}
@@ -696,6 +717,10 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(assessmentresponse.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
+	}
+	if value, ok := _c.mutation.IsDraft(); ok {
+		_spec.SetField(assessmentresponse.FieldIsDraft, field.TypeBool, value)
+		_node.IsDraft = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -229,6 +229,20 @@ func (_c *CustomDomainHistoryCreate) SetNillableDNSVerificationID(v *string) *Cu
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *CustomDomainHistoryCreate) SetTrustCenterID(v string) *CustomDomainHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillableTrustCenterID(v *string) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomDomainHistoryCreate) SetID(v string) *CustomDomainHistoryCreate {
 	_c.mutation.SetID(v)
@@ -441,6 +455,10 @@ func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgra
 	if value, ok := _c.mutation.DNSVerificationID(); ok {
 		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
 		_node.DNSVerificationID = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(customdomainhistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

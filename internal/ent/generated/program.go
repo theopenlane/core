@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -44,6 +45,8 @@ type Program struct {
 	ProgramKindName string `json:"program_kind_name,omitempty"`
 	// the kind of the program
 	ProgramKindID string `json:"program_kind_id,omitempty"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the name of the program
 	Name string `json:"name,omitempty"`
 	// the description of the program
@@ -117,6 +120,8 @@ type ProgramEdges struct {
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// SystemDetail holds the value of the system_detail edge.
+	SystemDetail *SystemDetail `json:"system_detail,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
 	// ProgramOwner holds the value of the program_owner edge.
@@ -125,9 +130,9 @@ type ProgramEdges struct {
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -305,10 +310,21 @@ func (e ProgramEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
+// SystemDetailOrErr returns the SystemDetail value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProgramEdges) SystemDetailOrErr() (*SystemDetail, error) {
+	if e.SystemDetail != nil {
+		return e.SystemDetail, nil
+	} else if e.loadedTypes[17] {
+		return nil, &NotFoundError{label: systemdetail.Label}
+	}
+	return nil, &NotLoadedError{edge: "system_detail"}
+}
+
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -319,7 +335,7 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 func (e ProgramEdges) ProgramOwnerOrErr() (*User, error) {
 	if e.ProgramOwner != nil {
 		return e.ProgramOwner, nil
-	} else if e.loadedTypes[18] {
+	} else if e.loadedTypes[19] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "program_owner"}
@@ -328,7 +344,7 @@ func (e ProgramEdges) ProgramOwnerOrErr() (*User, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -343,7 +359,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldExternalUUID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -445,6 +461,13 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field program_kind_id", values[i])
 			} else if value.Valid {
 				_m.ProgramKindID = value.String
+			}
+		case program.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
 			}
 		case program.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -657,6 +680,11 @@ func (_m *Program) QueryActionPlans() *ActionPlanQuery {
 	return NewProgramClient(_m.config).QueryActionPlans(_m)
 }
 
+// QuerySystemDetail queries the "system_detail" edge of the Program entity.
+func (_m *Program) QuerySystemDetail() *SystemDetailQuery {
+	return NewProgramClient(_m.config).QuerySystemDetail(_m)
+}
+
 // QueryUsers queries the "users" edge of the Program entity.
 func (_m *Program) QueryUsers() *UserQuery {
 	return NewProgramClient(_m.config).QueryUsers(_m)
@@ -727,6 +755,11 @@ func (_m *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("program_kind_id=")
 	builder.WriteString(_m.ProgramKindID)
+	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

@@ -1,6 +1,7 @@
 package ratelimit
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -14,6 +15,12 @@ type MapLimitStore struct {
 	mutex sync.RWMutex
 	// expirationTime is the time after which the data is considered expired
 	expirationTime time.Duration
+	// ticker is the ticker for periodic cleanup
+	ticker *time.Ticker
+	// ctx is the context for graceful shutdown
+	ctx context.Context
+	// cancel is the cancel function for the context
+	cancel context.CancelFunc
 }
 
 // limitValue represents value of the limit counter
@@ -23,25 +30,35 @@ type limitValue struct {
 }
 
 // NewMapLimitStore creates new in-memory data store for internal limiter data
-func NewMapLimitStore(expirationTime time.Duration, flushInterval time.Duration) (m *MapLimitStore) {
+func NewMapLimitStore(c context.Context, expirationTime time.Duration, flushInterval time.Duration) (m *MapLimitStore) {
+	ctx, cancel := context.WithCancel(c)
+	ticker := time.NewTicker(flushInterval)
+
 	m = &MapLimitStore{
 		data:           make(map[string]limitValue),
 		expirationTime: expirationTime,
+		ticker:         ticker,
+		ctx:            ctx,
+		cancel:         cancel,
 	}
 
 	go func() {
-		ticker := time.NewTicker(flushInterval)
+		for {
+			select {
+			case <-ticker.C:
+				m.mutex.Lock()
 
-		for range ticker.C {
-			m.mutex.Lock()
-
-			for key, val := range m.data {
-				if val.lastUpdate.Before(time.Now().UTC().Add(-m.expirationTime)) {
-					delete(m.data, key)
+				for key, val := range m.data {
+					if val.lastUpdate.Before(time.Now().UTC().Add(-m.expirationTime)) {
+						delete(m.data, key)
+					}
 				}
-			}
 
-			m.mutex.Unlock()
+				m.mutex.Unlock()
+			case <-ctx.Done():
+				// Context cancelled, exit goroutine
+				return
+			}
 		}
 	}()
 
@@ -85,4 +102,14 @@ func (m *MapLimitStore) Size() int {
 // mapKey creates a key for the map
 func mapKey(key string, window time.Time) string {
 	return fmt.Sprintf("%s_%s", key, window.Format(time.RFC3339))
+}
+
+// Close stops the background cleanup goroutine and releases resources
+func (m *MapLimitStore) Close() {
+	if m.cancel != nil {
+		m.cancel()
+	}
+	if m.ticker != nil {
+		m.ticker.Stop()
+	}
 }

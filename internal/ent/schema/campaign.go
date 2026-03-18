@@ -219,15 +219,27 @@ func (Campaign) Fields() []ent.Field {
 			),
 		field.String("template_id").
 			Comment("the template associated with the campaign").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignTemplateRef").MatchOn("name"),
+			),
 		field.String("entity_id").
 			Comment("the entity associated with the campaign").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignEntityName").MatchOn("name"),
+			),
 		field.String("assessment_id").
 			Comment("the assessment associated with the campaign").
 			Optional(),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the campaign").
+			Optional(),
+		field.String("email_branding_id").
+			Comment("the email branding associated with the campaign").
+			Optional(),
+		field.String("email_template_id").
+			Comment("the email template associated with the campaign").
 			Optional(),
 	}
 }
@@ -256,7 +268,7 @@ func (c Campaign) Edges() []ent.Edge {
 			edgeSchema: Assessment{},
 			field:      "assessment_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Assessment{}.Name()),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -265,6 +277,22 @@ func (c Campaign) Edges() []ent.Edge {
 			field:      "template_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Template{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: EmailBranding{},
+			field:      "email_branding_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(EmailBranding{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: EmailTemplate{},
+			field:      "email_template_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(EmailTemplate{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -281,6 +309,7 @@ func (c Campaign) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(c, User{}),
 		defaultEdgeToWithPagination(c, Group{}),
 		defaultEdgeToWithPagination(c, IdentityHolder{}),
+		defaultEdgeFromWithPagination(c, Control{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: WorkflowObjectRef{},

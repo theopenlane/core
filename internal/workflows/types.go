@@ -5,7 +5,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/workflows/observability"
 )
 
@@ -60,7 +59,7 @@ type TargetConfig struct {
 // CELContextBuilder can override how CEL activation variables are built per object type.
 // Codegen can register specialized builders (e.g., to expose typed fields) by calling
 // RegisterCELContextBuilder in an init() function.
-type CELContextBuilder func(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any
+type CELContextBuilder func(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any
 
 var celContextBuilders []CELContextBuilder
 
@@ -71,9 +70,9 @@ func RegisterCELContextBuilder(builder CELContextBuilder) {
 
 // BuildCELVars constructs the activation map for CEL evaluation, allowing generated builders
 // to provide typed contexts instead of ad-hoc maps
-func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string) map[string]any {
+func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
 	for i := len(celContextBuilders) - 1; i >= 0; i-- {
-		if vars := celContextBuilders[i](obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID); vars != nil {
+		if vars := celContextBuilders[i](obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges); vars != nil {
 			return vars
 		}
 	}
@@ -84,13 +83,14 @@ func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, ad
 	}
 
 	return map[string]any{
-		"object":         objectValue,
-		"changed_fields": changedFields,
-		"changed_edges":  changedEdges,
-		"added_ids":      addedIDs,
-		"removed_ids":    removedIDs,
-		"event_type":     eventType,
-		"user_id":        userID,
+		"object":           objectValue,
+		"changed_fields":   changedFields,
+		"changed_edges":    changedEdges,
+		"added_ids":        addedIDs,
+		"removed_ids":      removedIDs,
+		"event_type":       eventType,
+		"user_id":          userID,
+		"proposed_changes": proposedChanges,
 	}
 }
 
@@ -135,31 +135,29 @@ func BuildAssignmentContext(ctx context.Context, client *generated.Client, insta
 	return assignmentContextBuilder(ctx, client, instanceID)
 }
 
-// ObservabilityFields returns standard log fields for the object
-// TODO MKA: move to code generated / dynamic construction to avoid manual updates when adding new schemas
+// ObservabilityFieldsBuilder builds observability log fields for a workflow object.
+// Generated code registers this to provide complete field coverage for all workflow-eligible types.
+type ObservabilityFieldsBuilder func(obj *Object) map[string]any
+
+var observabilityFieldsBuilder ObservabilityFieldsBuilder
+
+// RegisterObservabilityFieldsBuilder sets the observability fields builder.
+func RegisterObservabilityFieldsBuilder(builder ObservabilityFieldsBuilder) {
+	observabilityFieldsBuilder = builder
+}
+
+// ObservabilityFields returns standard log fields for the object.
+// Uses the registered builder if available, otherwise falls back to basic fields.
 func (o *Object) ObservabilityFields() map[string]any {
 	if o == nil {
 		return nil
 	}
 
-	fields := map[string]any{
+	if observabilityFieldsBuilder != nil {
+		return observabilityFieldsBuilder(o)
+	}
+
+	return map[string]any{
 		observability.FieldObjectType: o.Type.String(),
 	}
-
-	switch o.Type {
-	case enums.WorkflowObjectTypeActionPlan:
-		fields[workflowobjectref.FieldActionPlanID] = o.ID
-	case enums.WorkflowObjectTypeControl:
-		fields[workflowobjectref.FieldControlID] = o.ID
-	case enums.WorkflowObjectTypeEvidence:
-		fields[workflowobjectref.FieldEvidenceID] = o.ID
-	case enums.WorkflowObjectTypeInternalPolicy:
-		fields[workflowobjectref.FieldInternalPolicyID] = o.ID
-	case enums.WorkflowObjectTypeProcedure:
-		fields[workflowobjectref.FieldProcedureID] = o.ID
-	case enums.WorkflowObjectTypeSubcontrol:
-		fields[workflowobjectref.FieldSubcontrolID] = o.ID
-	}
-
-	return fields
 }

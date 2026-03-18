@@ -239,6 +239,16 @@ func AssessmentID(v string) predicate.CampaignHistory {
 	return predicate.CampaignHistory(sql.FieldEQ(FieldAssessmentID, v))
 }
 
+// EmailBrandingID applies equality check predicate on the "email_branding_id" field. It's identical to EmailBrandingIDEQ.
+func EmailBrandingID(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEQ(FieldEmailBrandingID, v))
+}
+
+// EmailTemplateID applies equality check predicate on the "email_template_id" field. It's identical to EmailTemplateIDEQ.
+func EmailTemplateID(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEQ(FieldEmailTemplateID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.CampaignHistory {
 	return predicate.CampaignHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2342,6 +2352,156 @@ func MetadataIsNil() predicate.CampaignHistory {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.CampaignHistory {
 	return predicate.CampaignHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
+func EmailBrandingIDEQ(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEQ(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDNEQ applies the NEQ predicate on the "email_branding_id" field.
+func EmailBrandingIDNEQ(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNEQ(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDIn applies the In predicate on the "email_branding_id" field.
+func EmailBrandingIDIn(vs ...string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldIn(FieldEmailBrandingID, vs...))
+}
+
+// EmailBrandingIDNotIn applies the NotIn predicate on the "email_branding_id" field.
+func EmailBrandingIDNotIn(vs ...string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNotIn(FieldEmailBrandingID, vs...))
+}
+
+// EmailBrandingIDGT applies the GT predicate on the "email_branding_id" field.
+func EmailBrandingIDGT(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldGT(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDGTE applies the GTE predicate on the "email_branding_id" field.
+func EmailBrandingIDGTE(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldGTE(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDLT applies the LT predicate on the "email_branding_id" field.
+func EmailBrandingIDLT(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldLT(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDLTE applies the LTE predicate on the "email_branding_id" field.
+func EmailBrandingIDLTE(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldLTE(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDContains applies the Contains predicate on the "email_branding_id" field.
+func EmailBrandingIDContains(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldContains(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDHasPrefix applies the HasPrefix predicate on the "email_branding_id" field.
+func EmailBrandingIDHasPrefix(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldHasPrefix(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDHasSuffix applies the HasSuffix predicate on the "email_branding_id" field.
+func EmailBrandingIDHasSuffix(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldHasSuffix(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDIsNil applies the IsNil predicate on the "email_branding_id" field.
+func EmailBrandingIDIsNil() predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldIsNull(FieldEmailBrandingID))
+}
+
+// EmailBrandingIDNotNil applies the NotNil predicate on the "email_branding_id" field.
+func EmailBrandingIDNotNil() predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNotNull(FieldEmailBrandingID))
+}
+
+// EmailBrandingIDEqualFold applies the EqualFold predicate on the "email_branding_id" field.
+func EmailBrandingIDEqualFold(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEqualFold(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDContainsFold applies the ContainsFold predicate on the "email_branding_id" field.
+func EmailBrandingIDContainsFold(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldContainsFold(FieldEmailBrandingID, v))
+}
+
+// EmailTemplateIDEQ applies the EQ predicate on the "email_template_id" field.
+func EmailTemplateIDEQ(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEQ(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDNEQ applies the NEQ predicate on the "email_template_id" field.
+func EmailTemplateIDNEQ(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNEQ(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDIn applies the In predicate on the "email_template_id" field.
+func EmailTemplateIDIn(vs ...string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldIn(FieldEmailTemplateID, vs...))
+}
+
+// EmailTemplateIDNotIn applies the NotIn predicate on the "email_template_id" field.
+func EmailTemplateIDNotIn(vs ...string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNotIn(FieldEmailTemplateID, vs...))
+}
+
+// EmailTemplateIDGT applies the GT predicate on the "email_template_id" field.
+func EmailTemplateIDGT(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldGT(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDGTE applies the GTE predicate on the "email_template_id" field.
+func EmailTemplateIDGTE(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldGTE(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDLT applies the LT predicate on the "email_template_id" field.
+func EmailTemplateIDLT(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldLT(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDLTE applies the LTE predicate on the "email_template_id" field.
+func EmailTemplateIDLTE(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldLTE(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDContains applies the Contains predicate on the "email_template_id" field.
+func EmailTemplateIDContains(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldContains(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDHasPrefix applies the HasPrefix predicate on the "email_template_id" field.
+func EmailTemplateIDHasPrefix(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldHasPrefix(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDHasSuffix applies the HasSuffix predicate on the "email_template_id" field.
+func EmailTemplateIDHasSuffix(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldHasSuffix(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDIsNil applies the IsNil predicate on the "email_template_id" field.
+func EmailTemplateIDIsNil() predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldIsNull(FieldEmailTemplateID))
+}
+
+// EmailTemplateIDNotNil applies the NotNil predicate on the "email_template_id" field.
+func EmailTemplateIDNotNil() predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNotNull(FieldEmailTemplateID))
+}
+
+// EmailTemplateIDEqualFold applies the EqualFold predicate on the "email_template_id" field.
+func EmailTemplateIDEqualFold(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEqualFold(FieldEmailTemplateID, v))
+}
+
+// EmailTemplateIDContainsFold applies the ContainsFold predicate on the "email_template_id" field.
+func EmailTemplateIDContainsFold(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldContainsFold(FieldEmailTemplateID, v))
 }
 
 // And groups predicates with the AND operator between them.

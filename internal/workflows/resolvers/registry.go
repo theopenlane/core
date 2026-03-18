@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows"
 )
@@ -42,11 +43,6 @@ func Get(key string) (ResolverFunc, bool) {
 func Keys() []string {
 	registry.RLock()
 	defer registry.RUnlock()
-	keys := make([]string, 0, len(registry.resolvers))
 
-	for k := range registry.resolvers {
-		keys = append(keys, k)
-	}
-
-	return keys
+	return lo.Keys(registry.resolvers)
 }

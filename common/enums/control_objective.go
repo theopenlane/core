@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // ObjectiveStatus is a custom type for control objective
 type ObjectiveStatus string
@@ -18,52 +14,26 @@ var (
 	ObjectiveActiveStatus ObjectiveStatus = "ACTIVE"
 )
 
+var objectiveStatusValues = []ObjectiveStatus{
+	ObjectiveActiveStatus,
+	ObjectiveArchivedStatus,
+	ObjectiveDraftStatus,
+}
+
 // Values returns a slice of strings that represents all the possible values of the ObjectiveStatus enum.
 // Possible default values are "DRAFT", "ARCHIVED", and "ACTIVE"
-func (ObjectiveStatus) Values() (kinds []string) {
-	for _, s := range []ObjectiveStatus{
-		ObjectiveActiveStatus,
-		ObjectiveArchivedStatus,
-		ObjectiveDraftStatus,
-	} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (ObjectiveStatus) Values() []string { return stringValues(objectiveStatusValues) }
 
 // String returns the objective status as a string
-func (r ObjectiveStatus) String() string {
-	return string(r)
-}
+func (r ObjectiveStatus) String() string { return string(r) }
 
 // ToObjectiveStatus returns the objective status enum based on string input
 func ToObjectiveStatus(r string) *ObjectiveStatus {
-	switch r := strings.ToUpper(r); r {
-	case ObjectiveActiveStatus.String():
-		return &ObjectiveActiveStatus
-	case ObjectiveArchivedStatus.String():
-		return &ObjectiveArchivedStatus
-	case ObjectiveDraftStatus.String():
-		return &ObjectiveDraftStatus
-	default:
-		return nil
-	}
+	return parse(r, objectiveStatusValues, nil)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r ObjectiveStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ObjectiveStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *ObjectiveStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ObjectiveStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = ObjectiveStatus(str)
-
-	return nil
-}
+func (r *ObjectiveStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

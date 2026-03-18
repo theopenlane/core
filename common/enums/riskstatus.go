@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // RiskStatus is a custom type for risk status
 type RiskStatus string
@@ -32,61 +28,23 @@ var (
 	RiskInvalid RiskStatus = "RISK_STATUS_INVALID"
 )
 
+var riskStatusValues = []RiskStatus{
+	RiskOpen, RiskInProgress, RiskOngoing, RiskIdentified, RiskMitigated,
+	RiskAccepted, RiskClosed, RiskTransferred, RiskArchived,
+}
+
 // Values returns a slice of strings that represents all the possible values of the RiskStatus enum.
 // Possible default values are "OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", and "ARCHIVED"
-func (RiskStatus) Values() (kinds []string) {
-	for _, s := range []RiskStatus{RiskOpen, RiskInProgress, RiskOngoing, RiskIdentified, RiskMitigated,
-		RiskAccepted, RiskClosed, RiskTransferred, RiskArchived} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (RiskStatus) Values() []string { return stringValues(riskStatusValues) }
 
 // String returns the risk status as a string
-func (r RiskStatus) String() string {
-	return string(r)
-}
+func (r RiskStatus) String() string { return string(r) }
 
 // ToRiskStatus returns the risk status enum based on string input
-func ToRiskStatus(r string) *RiskStatus {
-	switch r := strings.ToUpper(r); r {
-	case RiskOpen.String():
-		return &RiskOpen
-	case RiskInProgress.String():
-		return &RiskInProgress
-	case RiskOngoing.String():
-		return &RiskOngoing
-	case RiskIdentified.String():
-		return &RiskIdentified
-	case RiskMitigated.String():
-		return &RiskMitigated
-	case RiskAccepted.String():
-		return &RiskAccepted
-	case RiskClosed.String():
-		return &RiskClosed
-	case RiskTransferred.String():
-		return &RiskTransferred
-	case RiskArchived.String():
-		return &RiskArchived
-	default:
-		return nil
-	}
-}
+func ToRiskStatus(r string) *RiskStatus { return parse(r, riskStatusValues, nil) }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r RiskStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r RiskStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *RiskStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for RiskStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = RiskStatus(str)
-
-	return nil
-}
+func (r *RiskStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

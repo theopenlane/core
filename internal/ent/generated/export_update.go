@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -158,6 +159,26 @@ func (_u *ExportUpdate) SetNillableErrorMessage(v *string) *ExportUpdate {
 // ClearErrorMessage clears the value of the "error_message" field.
 func (_u *ExportUpdate) ClearErrorMessage() *ExportUpdate {
 	_u.mutation.ClearErrorMessage()
+	return _u
+}
+
+// SetExportMetadata sets the "export_metadata" field.
+func (_u *ExportUpdate) SetExportMetadata(v models.ExportMetadata) *ExportUpdate {
+	_u.mutation.SetExportMetadata(v)
+	return _u
+}
+
+// SetNillableExportMetadata sets the "export_metadata" field if the given value is not nil.
+func (_u *ExportUpdate) SetNillableExportMetadata(v *models.ExportMetadata) *ExportUpdate {
+	if v != nil {
+		_u.SetExportMetadata(*v)
+	}
+	return _u
+}
+
+// ClearExportMetadata clears the value of the "export_metadata" field.
+func (_u *ExportUpdate) ClearExportMetadata() *ExportUpdate {
+	_u.mutation.ClearExportMetadata()
 	return _u
 }
 
@@ -366,6 +387,12 @@ func (_u *ExportUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ErrorMessageCleared() {
 		_spec.ClearField(export.FieldErrorMessage, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExportMetadata(); ok {
+		_spec.SetField(export.FieldExportMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.ExportMetadataCleared() {
+		_spec.ClearField(export.FieldExportMetadata, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -644,6 +671,26 @@ func (_u *ExportUpdateOne) ClearErrorMessage() *ExportUpdateOne {
 	return _u
 }
 
+// SetExportMetadata sets the "export_metadata" field.
+func (_u *ExportUpdateOne) SetExportMetadata(v models.ExportMetadata) *ExportUpdateOne {
+	_u.mutation.SetExportMetadata(v)
+	return _u
+}
+
+// SetNillableExportMetadata sets the "export_metadata" field if the given value is not nil.
+func (_u *ExportUpdateOne) SetNillableExportMetadata(v *models.ExportMetadata) *ExportUpdateOne {
+	if v != nil {
+		_u.SetExportMetadata(*v)
+	}
+	return _u
+}
+
+// ClearExportMetadata clears the value of the "export_metadata" field.
+func (_u *ExportUpdateOne) ClearExportMetadata() *ExportUpdateOne {
+	_u.mutation.ClearExportMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ExportUpdateOne) SetOwner(v *Organization) *ExportUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -879,6 +926,12 @@ func (_u *ExportUpdateOne) sqlSave(ctx context.Context) (_node *Export, err erro
 	}
 	if _u.mutation.ErrorMessageCleared() {
 		_spec.ClearField(export.FieldErrorMessage, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExportMetadata(); ok {
+		_spec.SetField(export.FieldExportMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.ExportMetadataCleared() {
+		_spec.ClearField(export.FieldExportMetadata, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

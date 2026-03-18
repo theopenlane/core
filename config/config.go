@@ -17,7 +17,6 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/beacon/otelx"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
@@ -27,6 +26,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
 
+	integrationconfig "github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/workflows"
@@ -36,9 +36,9 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/shortlinks"
 )
 
 const (
@@ -66,8 +66,6 @@ type Config struct {
 	JobQueue riverqueue.Config `json:"jobqueue" koanf:"jobqueue"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
-	// Tracer contains the tracing config for opentelemetry
-	Tracer otelx.Config `json:"tracer" koanf:"tracer"`
 	// Email contains email sending configuration for the server
 	Email emailtemplates.Config `json:"email" koanf:"email"`
 	// Sessions config for user sessions and cookies
@@ -86,18 +84,18 @@ type Config struct {
 	Slack Slack `json:"slack" koanf:"slack"`
 	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
 	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationoauthprovider" koanf:"integrationoauthprovider"`
+	// IntegrationProviders contains provider spec overrides keyed by provider name.
+	IntegrationProviders map[string]integrationconfig.ProviderSpec `json:"integrationproviders" koanf:"integrationproviders"`
+	// IntegrationGitHubApp contains configuration for GitHub App integrations
+	IntegrationGitHubApp handlers.IntegrationGitHubAppConfig `json:"integrationgithubapp" koanf:"integrationgithubapp"`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
-	// EmailWebhook contains webhook configuration for email providers
-	EmailWebhook EmailWebhook `json:"emailwebhook" koanf:"emailwebhook"`
-}
-
-// EmailWebhook contains webhook configuration for email providers (e.g., Resend).
-type EmailWebhook struct {
-	// Enabled is a flag to enable or disable email webhooks
-	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// ResendSecret is the signing secret used to verify Resend webhook payloads
-	ResendSecret string `json:"resendsecret" koanf:"resendsecret" default:"" sensitive:"true"`
+	// CampaignWebhook contains webhook configuration for campaign-related email providers
+	CampaignWebhook handlers.CampaignWebhookConfig `json:"campaignwebhook" koanf:"campaignwebhook"`
+	// Cloudflare contains configuration for Cloudflare integration
+	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
+	// Shortlinks contains configuration for the URL shortening service
+	Shortlinks shortlinks.Config `json:"shortlinks" koanf:"shortlinks"`
 }
 
 // Server settings for the echo server
@@ -128,8 +126,6 @@ type Server struct {
 	CORS cors.Config `json:"cors" koanf:"cors"`
 	// Secure contains settings for the secure middleware
 	Secure secure.Config `json:"secure" koanf:"secure"`
-	// Redirect contains settings for the redirect middleware
-	Redirects redirect.Config `json:"redirects" koanf:"redirects"`
 	// CacheControl contains settings for the cache control middleware
 	CacheControl cachecontrol.Config `json:"cachecontrol" koanf:"cachecontrol"`
 	// Mime contains settings for the mime middleware
@@ -155,6 +151,9 @@ type Server struct {
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
 	// TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
 	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:""`
+	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
+	// Unread notifications are always pulled regardless of this setting
+	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys
@@ -163,10 +162,6 @@ type KeyWatcher struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// KeyDir is the path to the directory containing PEM keys for JWT signing
 	KeyDir string `json:"keydir" koanf:"keydir" default:"./keys"`
-	// ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
-	ExternalSecretsIntegration bool `json:"externalsecretsintegration" koanf:"externalsecretsintegration" default:"false"`
-	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
-	SecretManagerSecret string `json:"secretmanager" koanf:"secretmanager" default:"" sensitive:"true"`
 }
 
 // Auth settings including oauth2 providers and token configuration

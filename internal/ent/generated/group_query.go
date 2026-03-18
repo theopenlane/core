@@ -94,6 +94,7 @@ type GroupQuery struct {
 	withUsers                                   *UserQuery
 	withEvents                                  *EventQuery
 	withIntegrations                            *IntegrationQuery
+	withAvatarFile                              *FileQuery
 	withFiles                                   *FileQuery
 	withTasks                                   *TaskQuery
 	withCampaigns                               *CampaignQuery
@@ -1261,6 +1262,31 @@ func (_q *GroupQuery) QueryIntegrations() *IntegrationQuery {
 	return query
 }
 
+// QueryAvatarFile chains the current query on the "avatar_file" edge.
+func (_q *GroupQuery) QueryAvatarFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, group.AvatarFileTable, group.AvatarFileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryFiles chains the current query on the "files" edge.
 func (_q *GroupQuery) QueryFiles() *FileQuery {
 	query := (&FileClient{config: _q.config}).Query()
@@ -1646,6 +1672,7 @@ func (_q *GroupQuery) Clone() *GroupQuery {
 		withUsers:                              _q.withUsers.Clone(),
 		withEvents:                             _q.withEvents.Clone(),
 		withIntegrations:                       _q.withIntegrations.Clone(),
+		withAvatarFile:                         _q.withAvatarFile.Clone(),
 		withFiles:                              _q.withFiles.Clone(),
 		withTasks:                              _q.withTasks.Clone(),
 		withCampaigns:                          _q.withCampaigns.Clone(),
@@ -2132,6 +2159,17 @@ func (_q *GroupQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *GroupQu
 	return _q
 }
 
+// WithAvatarFile tells the query-builder to eager-load the nodes that are connected to
+// the "avatar_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithAvatarFile(opts ...func(*FileQuery)) *GroupQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAvatarFile = query
+	return _q
+}
+
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *GroupQuery) WithFiles(opts ...func(*FileQuery)) *GroupQuery {
@@ -2283,7 +2321,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [49]bool{
+		loadedTypes = [50]bool{
 			_q.withOwner != nil,
 			_q.withProgramEditors != nil,
 			_q.withProgramBlockedGroups != nil,
@@ -2327,6 +2365,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			_q.withUsers != nil,
 			_q.withEvents != nil,
 			_q.withIntegrations != nil,
+			_q.withAvatarFile != nil,
 			_q.withFiles != nil,
 			_q.withTasks != nil,
 			_q.withCampaigns != nil,
@@ -2683,6 +2722,12 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Group) { n.Edges.Integrations = []*Integration{} },
 			func(n *Group, e *Integration) { n.Edges.Integrations = append(n.Edges.Integrations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAvatarFile; query != nil {
+		if err := _q.loadAvatarFile(ctx, query, nodes, nil,
+			func(n *Group, e *File) { n.Edges.AvatarFile = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -5632,6 +5677,38 @@ func (_q *GroupQuery) loadIntegrations(ctx context.Context, query *IntegrationQu
 	}
 	return nil
 }
+func (_q *GroupQuery) loadAvatarFile(ctx context.Context, query *FileQuery, nodes []*Group, init func(*Group), assign func(*Group, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Group)
+	for i := range nodes {
+		if nodes[i].AvatarLocalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].AvatarLocalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "avatar_local_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *GroupQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Group, init func(*Group), assign func(*Group, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
@@ -5974,6 +6051,9 @@ func (_q *GroupQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(group.FieldOwnerID)
+		}
+		if _q.withAvatarFile != nil {
+			_spec.Node.AddColumnOnce(group.FieldAvatarLocalFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

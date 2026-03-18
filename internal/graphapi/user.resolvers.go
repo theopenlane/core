@@ -76,9 +76,13 @@ func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, e
 
 // Self is the resolver for the self field.
 func (r *queryResolver) Self(ctx context.Context) (*generated.User, error) {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "user"})
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "user"})
+	}
+	userID := caller.SubjectID
+	if userID == "" {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "user"})
 	}
 
 	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(userID)).CollectFields(ctx)

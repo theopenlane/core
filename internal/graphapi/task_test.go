@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQueryTask(t *testing.T) {
@@ -893,11 +892,8 @@ func TestMutationUpdateTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	group := (&GroupMemberBuilder{client: suite.client, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(adminUser.UserCtx, t)
 
-	pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
-	assert.NilError(t, err)
-
-	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	assert.NilError(t, err)
+	pngFile := uploadFile(t, logoFilePath)
+	pdfFile := uploadFile(t, pdfFilePath)
 
 	taskCommentID := ""
 
@@ -909,7 +905,7 @@ func TestMutationUpdateTask(t *testing.T) {
 	taskRisk := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// make sure the user cannot can see the task before they are the assigner
-	_, err = suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
+	_, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// make sure the user cannot can see the task before they are the assignee
@@ -960,12 +956,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				Text: lo.ToPtr("sarah is better"),
 			},
 			files: []*graphql.Upload{
-				{
-					File:        pngFile.RawFile,
-					Filename:    pngFile.OriginalName,
-					Size:        pngFile.Size,
-					ContentType: pngFile.ContentType,
-				},
+				pngFile,
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -977,12 +968,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				Text: lo.ToPtr("sarah is still better"),
 			},
 			files: []*graphql.Upload{
-				{
-					File:        pdfFile.RawFile,
-					Filename:    pdfFile.OriginalName,
-					Size:        pdfFile.Size,
-					ContentType: pdfFile.ContentType,
-				},
+				pdfFile,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),

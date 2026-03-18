@@ -36,20 +36,20 @@ import (
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/integrations/registry"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 )
 
@@ -192,13 +192,14 @@ func WithAuth() ServerOption {
 
 		// add oauth providers for integrations (separate config)
 		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
-		if s.Config.Settings.IntegrationOauthProvider.Enabled && s.Config.Handler.IntegrationRegistry == nil {
-			registry, err := registry.NewRegistry(context.Background())
+		s.Config.Handler.IntegrationGitHubApp = s.Config.Settings.IntegrationGitHubApp
+		if (s.Config.Settings.IntegrationOauthProvider.Enabled || s.Config.Settings.IntegrationGitHubApp.Enabled) && s.Config.Handler.IntegrationRegistry == nil {
+			integrationRegistry, err := registry.NewRegistry(context.Background(), s.Config.Settings.IntegrationProviders)
 			if err != nil {
 				log.Panic().Err(err).Msg("failed to build integration provider registry")
 			}
 
-			s.Config.Handler.IntegrationRegistry = registry
+			s.Config.Handler.IntegrationRegistry = integrationRegistry
 		}
 
 		// add auth middleware
@@ -279,11 +280,13 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
+			WithWorkflowsConfig(s.Config.Settings.Workflows).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
-			WithAuthOptions(getAuthOptions(s)...)
+			WithAuthOptions(getAuthOptions(s)...).
+			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(
@@ -479,16 +482,6 @@ func WithSecureMW() ServerOption {
 	})
 }
 
-// WithRedirects sets up the redirects for the server
-func WithRedirects() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Server.Redirects.Enabled {
-			redirects := s.Config.Settings.Server.Redirects
-			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, redirect.NewWithConfig(redirects))
-		}
-	})
-}
-
 // WithCacheHeaders sets up the cache control headers for the server
 func WithCacheHeaders() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
@@ -586,15 +579,6 @@ func WithKeyDirOption() ServerOption {
 	})
 }
 
-// WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
-func WithSecretManagerKeysOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Keywatcher.SecretManagerSecret != "" && s.Config.Settings.Keywatcher.ExternalSecretsIntegration {
-			WithSecretManagerKeys(s.Config.Settings.Server.SecretManagerSecret).apply(s)
-		}
-	})
-}
-
 // WithCSRF sets up the CSRF middleware for the server
 func WithCSRF() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
@@ -616,5 +600,36 @@ func WithWorkflows(wf *engine.WorkflowEngine) ServerOption {
 		if s.Config.Settings.Workflows.Enabled {
 			s.Config.Handler.WorkflowEngine = wf
 		}
+	})
+}
+
+// WithCampaignWebhookConfig sets up webhook configuration for campaign-related email providers.
+func WithCampaignWebhookConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.CampaignWebhook = s.Config.Settings.CampaignWebhook
+	})
+}
+
+// WithCloudflareConfig sets up the Cloudflare configuration for the server
+func WithCloudflareConfig() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.CloudflareConfig = s.Config.Settings.Cloudflare
+	})
+}
+
+// WithShortlinks sets up the shortlinks client for URL shortening
+func WithShortlinks() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if !s.Config.Settings.Shortlinks.Enabled {
+			return
+		}
+
+		client, err := shortlinks.NewClientFromConfig(s.Config.Settings.Shortlinks)
+		if err != nil {
+			log.Warn().Err(err).Msg("failed to create shortlinks client, URL shortening will be disabled")
+			return
+		}
+
+		s.Config.Handler.ShortlinksClient = client
 	})
 }

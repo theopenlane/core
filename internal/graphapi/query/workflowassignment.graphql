@@ -28,6 +28,17 @@ query GetAllWorkflowAssignments {
         updatedAt
         updatedBy
         workflowInstanceID
+        workflowAssignmentTargets {
+          edges {
+            node {
+              id
+              targetType
+              targetUserID
+              targetGroupID
+              resolverKey
+            }
+          }
+        }
       }
     }
   }
@@ -54,6 +65,17 @@ query GetWorkflowAssignmentByID($workflowAssignmentId: ID!) {
     updatedAt
     updatedBy
     workflowInstanceID
+    workflowAssignmentTargets {
+      edges {
+        node {
+          id
+          targetType
+          targetUserID
+          targetGroupID
+          resolverKey
+        }
+      }
+    }
   }
 }
 
@@ -87,6 +109,17 @@ query GetWorkflowAssignments($first: Int, $last: Int, $where: WorkflowAssignment
         updatedAt
         updatedBy
         workflowInstanceID
+        workflowAssignmentTargets {
+          edges {
+            node {
+              id
+              targetType
+              targetUserID
+              targetGroupID
+              resolverKey
+            }
+          }
+        }
       }
     }
   }

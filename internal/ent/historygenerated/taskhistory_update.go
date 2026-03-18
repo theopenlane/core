@@ -246,6 +246,26 @@ func (_u *TaskHistoryUpdate) ClearScopeID() *TaskHistoryUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *TaskHistoryUpdate) SetExternalUUID(v string) *TaskHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableExternalUUID(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *TaskHistoryUpdate) ClearExternalUUID() *TaskHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *TaskHistoryUpdate) SetTitle(v string) *TaskHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -622,6 +642,12 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(taskhistory.FieldScopeID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(taskhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(taskhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
 	}
@@ -926,6 +952,26 @@ func (_u *TaskHistoryUpdateOne) SetNillableScopeID(v *string) *TaskHistoryUpdate
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *TaskHistoryUpdateOne) ClearScopeID() *TaskHistoryUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *TaskHistoryUpdateOne) SetExternalUUID(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableExternalUUID(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *TaskHistoryUpdateOne) ClearExternalUUID() *TaskHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -1334,6 +1380,12 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(taskhistory.FieldScopeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(taskhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(taskhistory.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)

@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // ScheduledJobRunStatus is a custom type representing the various states of ScheduledJobRunStatus.
 type ScheduledJobRunStatus string
@@ -18,44 +14,21 @@ var (
 	ScheduledJobRunStatusInvalid ScheduledJobRunStatus = "SCHEDULEDJOBRUNSTATUS_INVALID"
 )
 
+var scheduledJobRunStatusValues = []ScheduledJobRunStatus{ScheduledJobRunStatusPending, ScheduledJobRunStatusAcquired}
+
 // Values returns a slice of strings representing all valid ScheduledJobRunStatus values.
-func (ScheduledJobRunStatus) Values() []string {
-	return []string{
-		string(ScheduledJobRunStatusPending),
-		string(ScheduledJobRunStatusAcquired),
-	}
-}
+func (ScheduledJobRunStatus) Values() []string { return stringValues(scheduledJobRunStatusValues) }
 
 // String returns the string representation of the ScheduledJobRunStatus value.
-func (r ScheduledJobRunStatus) String() string {
-	return strings.ToUpper(string(r))
-}
+func (r ScheduledJobRunStatus) String() string { return string(r) }
 
 // ToScheduledJobRunStatus converts a string to its corresponding ScheduledJobRunStatus enum value.
 func ToScheduledJobRunStatus(r string) *ScheduledJobRunStatus {
-	switch strings.ToUpper(r) {
-	case ScheduledJobRunStatusPending.String():
-		return &ScheduledJobRunStatusPending
-	case ScheduledJobRunStatusAcquired.String():
-		return &ScheduledJobRunStatusAcquired
-	default:
-		return &ScheduledJobRunStatusInvalid
-	}
+	return parse(r, scheduledJobRunStatusValues, &ScheduledJobRunStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r ScheduledJobRunStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ScheduledJobRunStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *ScheduledJobRunStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ScheduledJobRunStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = ScheduledJobRunStatus(str)
-
-	return nil
-}
+func (r *ScheduledJobRunStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

@@ -94,6 +94,8 @@ const (
 	FieldCriticalityID = "criticality_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -190,6 +192,16 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
 	EdgeIdentityHolders = "identity_holders"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
+	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
+	EdgeDirectorySyncRuns = "directory_sync_runs"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
+	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
+	EdgeDirectoryMemberships = "directory_memberships"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// EdgeSourceAssets holds the string denoting the source_assets edge name in mutations.
@@ -206,6 +218,8 @@ const (
 	EdgeGeneratedScans = "generated_scans"
 	// EdgePlatformOwner holds the string denoting the platform_owner edge name in mutations.
 	EdgePlatformOwner = "platform_owner"
+	// EdgeSystemDetail holds the string denoting the system_detail edge name in mutations.
+	EdgeSystemDetail = "system_detail"
 	// Table holds the table name of the platform in the database.
 	Table = "platforms"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -392,6 +406,41 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
+	// IntegrationsTable is the table that holds the integrations relation/edge.
+	IntegrationsTable = "integrations"
+	// IntegrationsInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationsInverseTable = "integrations"
+	// IntegrationsColumn is the table column denoting the integrations relation/edge.
+	IntegrationsColumn = "platform_id"
+	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
+	DirectorySyncRunsTable = "directory_sync_runs"
+	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
+	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
+	DirectorySyncRunsInverseTable = "directory_sync_runs"
+	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
+	DirectorySyncRunsColumn = "platform_id"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
+	DirectoryAccountsTable = "directory_accounts"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
+	DirectoryAccountsColumn = "platform_id"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
+	DirectoryGroupsTable = "directory_groups"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
+	DirectoryGroupsColumn = "platform_id"
+	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
+	DirectoryMembershipsTable = "directory_memberships"
+	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
+	DirectoryMembershipsInverseTable = "directory_memberships"
+	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
+	DirectoryMembershipsColumn = "platform_id"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -440,6 +489,13 @@ const (
 	PlatformOwnerInverseTable = "users"
 	// PlatformOwnerColumn is the table column denoting the platform_owner relation/edge.
 	PlatformOwnerColumn = "platform_owner_id"
+	// SystemDetailTable is the table that holds the system_detail relation/edge.
+	SystemDetailTable = "system_details"
+	// SystemDetailInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailInverseTable = "system_details"
+	// SystemDetailColumn is the table column denoting the system_detail relation/edge.
+	SystemDetailColumn = "platform_id"
 )
 
 // Columns holds all SQL columns for platform fields.
@@ -483,6 +539,7 @@ var Columns = []string{
 	FieldCriticalityName,
 	FieldCriticalityID,
 	FieldWorkflowEligibleMarker,
+	FieldExternalUUID,
 	FieldName,
 	FieldDescription,
 	FieldBusinessPurpose,
@@ -825,6 +882,11 @@ func ByCriticalityID(opts ...sql.OrderTermOption) OrderOption {
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
+}
+
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -1213,6 +1275,76 @@ func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
+	}
+}
+
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
+func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
+	}
+}
+
+// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
+func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
+	}
+}
+
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryMembershipsCount orders the results by directory_memberships count.
+func ByDirectoryMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryMembershipsStep(), opts...)
+	}
+}
+
+// ByDirectoryMemberships orders the results by directory_memberships terms.
+func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1315,6 +1447,13 @@ func ByGeneratedScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 func ByPlatformOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPlatformOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySystemDetailField orders the results by system_detail field.
+func BySystemDetailField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -1527,6 +1666,41 @@ func newIdentityHoldersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
 	)
 }
+func newIntegrationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+	)
+}
+func newDirectorySyncRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+	)
+}
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+	)
+}
+func newDirectoryGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
+	)
+}
+func newDirectoryMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+	)
+}
 func newWorkflowObjectRefsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1581,6 +1755,13 @@ func newPlatformOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformOwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, PlatformOwnerTable, PlatformOwnerColumn),
+	)
+}
+func newSystemDetailStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
 	)
 }
 

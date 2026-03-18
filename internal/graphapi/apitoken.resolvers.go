@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -20,7 +21,8 @@ import (
 // CreateAPIToken is the resolver for the createAPIToken field.
 func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -46,7 +48,8 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -57,7 +60,7 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 
 // CreateBulkCSVAPIToken is the resolver for the createBulkCSVAPIToken field.
 func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateAPITokenInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.APITokenCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -70,13 +73,27 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
 	}
 
-	return r.bulkCreateAPIToken(ctx, data)
+	if err := resolveCSVReferencesForSchema(ctx, "APIToken", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateAPITokenInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateAPIToken(ctx, inputs)
 }
 
 // UpdateAPIToken is the resolver for the updateAPIToken field.
@@ -87,7 +104,8 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -134,6 +152,35 @@ func (r *mutationResolver) DeleteBulkAPIToken(ctx context.Context, ids []string)
 	}
 
 	return r.bulkDeleteAPIToken(ctx, ids)
+}
+
+// UpdateBulkAPIToken is the resolver for the updateBulkAPIToken field.
+func (r *mutationResolver) UpdateBulkAPIToken(ctx context.Context, ids []string, input generated.UpdateAPITokenInput) (*model.APITokenBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateAPIToken(ctx, ids, input)
+}
+
+// UpdateBulkCSVAPIToken is the resolver for the updateBulkCSVAPIToken field.
+func (r *mutationResolver) UpdateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.APITokenCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "apitoken"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "APIToken", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVAPIToken(ctx, data)
 }
 
 // APIToken is the resolver for the apiToken field.

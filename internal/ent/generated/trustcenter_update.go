@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -252,6 +253,26 @@ func (_u *TrustCenterUpdate) SetNillablePirschIdentificationCode(v *string) *Tru
 // ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
 func (_u *TrustCenterUpdate) ClearPirschIdentificationCode() *TrustCenterUpdate {
 	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_u *TrustCenterUpdate) SetPirschAccessLink(v string) *TrustCenterUpdate {
+	_u.mutation.SetPirschAccessLink(v)
+	return _u
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePirschAccessLink(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPirschAccessLink(*v)
+	}
+	return _u
+}
+
+// ClearPirschAccessLink clears the value of the "pirsch_access_link" field.
+func (_u *TrustCenterUpdate) ClearPirschAccessLink() *TrustCenterUpdate {
+	_u.mutation.ClearPirschAccessLink()
 	return _u
 }
 
@@ -502,6 +523,21 @@ func (_u *TrustCenterUpdate) AddTrustCenterNdaRequests(v ...*TrustCenterNDAReque
 	return _u.AddTrustCenterNdaRequestIDs(ids...)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_u *TrustCenterUpdate) AddTrustCenterFaqIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterFaqIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdate) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -732,6 +768,27 @@ func (_u *TrustCenterUpdate) RemoveTrustCenterNdaRequests(v ...*TrustCenterNDARe
 	return _u.RemoveTrustCenterNdaRequestIDs(ids...)
 }
 
+// ClearTrustCenterFaqs clears all "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdate) ClearTrustCenterFaqs() *TrustCenterUpdate {
+	_u.mutation.ClearTrustCenterFaqs()
+	return _u
+}
+
+// RemoveTrustCenterFaqIDs removes the "trust_center_faqs" edge to TrustCenterFAQ entities by IDs.
+func (_u *TrustCenterUpdate) RemoveTrustCenterFaqIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterFaqs removes "trust_center_faqs" edges to TrustCenterFAQ entities.
+func (_u *TrustCenterUpdate) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterFaqIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -779,6 +836,11 @@ func (_u *TrustCenterUpdate) check() error {
 	if v, ok := _u.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PirschAccessLink(); ok {
+		if err := trustcenter.PirschAccessLinkValidator(v); err != nil {
+			return &ValidationError{Name: "pirsch_access_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.pirsch_access_link": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.PreviewStatus(); ok {
@@ -870,6 +932,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenter.FieldPirschAccessLink, field.TypeString, value)
+	}
+	if _u.mutation.PirschAccessLinkCleared() {
+		_spec.ClearField(trustcenter.FieldPirschAccessLink, field.TypeString)
 	}
 	if value, ok := _u.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
@@ -1501,6 +1569,54 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterFaqsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenter
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1732,6 +1848,26 @@ func (_u *TrustCenterUpdateOne) SetNillablePirschIdentificationCode(v *string) *
 // ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
 func (_u *TrustCenterUpdateOne) ClearPirschIdentificationCode() *TrustCenterUpdateOne {
 	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
+// SetPirschAccessLink sets the "pirsch_access_link" field.
+func (_u *TrustCenterUpdateOne) SetPirschAccessLink(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetPirschAccessLink(v)
+	return _u
+}
+
+// SetNillablePirschAccessLink sets the "pirsch_access_link" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePirschAccessLink(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPirschAccessLink(*v)
+	}
+	return _u
+}
+
+// ClearPirschAccessLink clears the value of the "pirsch_access_link" field.
+func (_u *TrustCenterUpdateOne) ClearPirschAccessLink() *TrustCenterUpdateOne {
+	_u.mutation.ClearPirschAccessLink()
 	return _u
 }
 
@@ -1982,6 +2118,21 @@ func (_u *TrustCenterUpdateOne) AddTrustCenterNdaRequests(v ...*TrustCenterNDARe
 	return _u.AddTrustCenterNdaRequestIDs(ids...)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_u *TrustCenterUpdateOne) AddTrustCenterFaqIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdateOne) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterFaqIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -2212,6 +2363,27 @@ func (_u *TrustCenterUpdateOne) RemoveTrustCenterNdaRequests(v ...*TrustCenterND
 	return _u.RemoveTrustCenterNdaRequestIDs(ids...)
 }
 
+// ClearTrustCenterFaqs clears all "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdateOne) ClearTrustCenterFaqs() *TrustCenterUpdateOne {
+	_u.mutation.ClearTrustCenterFaqs()
+	return _u
+}
+
+// RemoveTrustCenterFaqIDs removes the "trust_center_faqs" edge to TrustCenterFAQ entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterFaqIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterFaqs removes "trust_center_faqs" edges to TrustCenterFAQ entities.
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterFaqIDs(ids...)
+}
+
 // Where appends a list predicates to the TrustCenterUpdate builder.
 func (_u *TrustCenterUpdateOne) Where(ps ...predicate.TrustCenter) *TrustCenterUpdateOne {
 	_u.mutation.Where(ps...)
@@ -2272,6 +2444,11 @@ func (_u *TrustCenterUpdateOne) check() error {
 	if v, ok := _u.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PirschAccessLink(); ok {
+		if err := trustcenter.PirschAccessLinkValidator(v); err != nil {
+			return &ValidationError{Name: "pirsch_access_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.pirsch_access_link": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.PreviewStatus(); ok {
@@ -2380,6 +2557,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschAccessLink(); ok {
+		_spec.SetField(trustcenter.FieldPirschAccessLink, field.TypeString, value)
+	}
+	if _u.mutation.PirschAccessLinkCleared() {
+		_spec.ClearField(trustcenter.FieldPirschAccessLink, field.TypeString)
 	}
 	if value, ok := _u.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
@@ -3006,6 +3189,54 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterFaqsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

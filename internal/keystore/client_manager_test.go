@@ -139,7 +139,6 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -147,5 +146,63 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 				t.Fatalf("RegisterDescriptor() error = %v, want %v", err, tc.wantErr)
 			}
 		})
+	}
+}
+
+func TestClientPoolManagerBuildFromPayload(t *testing.T) {
+	t.Parallel()
+
+	provider := types.ProviderType("acme")
+	payload := types.CredentialPayload{
+		Provider: provider,
+		Kind:     types.CredentialKindAPIKey,
+		Data: models.CredentialSet{
+			APIToken: "direct-token",
+		},
+	}
+
+	var captured types.CredentialPayload
+	var capturedConfig map[string]any
+	descriptor := types.ClientDescriptor{
+		Provider: provider,
+		Name:     types.ClientName("rest"),
+		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (any, error) {
+			captured = cred
+			capturedConfig = config
+			return &pooledClient{id: cred.Data.APIToken}, nil
+		},
+	}
+
+	manager, err := NewClientPoolManager(&credentialSourceStub{getPayload: payload}, []types.ClientDescriptor{descriptor})
+	if err != nil {
+		t.Fatalf("NewClientPoolManager() error = %v", err)
+	}
+
+	reqConfig := map[string]any{"region": "eu-west-1"}
+	result, err := manager.BuildFromPayload(context.Background(), provider, descriptor.Name, payload, reqConfig)
+	if err != nil {
+		t.Fatalf("BuildFromPayload() error = %v", err)
+	}
+
+	client, ok := result.(*pooledClient)
+	if !ok {
+		t.Fatalf("expected *pooledClient, got %T", result)
+	}
+	if client.id != payload.Data.APIToken {
+		t.Fatalf("expected client built from provided payload, got %s", client.id)
+	}
+	if captured.Data.APIToken != payload.Data.APIToken {
+		t.Fatalf("expected builder to receive provided payload, got %s", captured.Data.APIToken)
+	}
+	if capturedConfig["region"] != "eu-west-1" {
+		t.Fatalf("expected config to be passed to builder, got %v", capturedConfig["region"])
+	}
+	if reqConfig["region"] != "eu-west-1" {
+		t.Fatalf("expected caller config to remain unchanged, got %v", reqConfig["region"])
+	}
+
+	_, err = manager.BuildFromPayload(context.Background(), provider, types.ClientName("missing"), payload, nil)
+	if !errors.Is(err, ErrClientNotRegistered) {
+		t.Fatalf("expected ErrClientNotRegistered for unknown client, got %v", err)
 	}
 }

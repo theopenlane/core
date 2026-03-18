@@ -110,6 +110,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "identityHolderCreators":
+				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
 			case "scheduledJobCreators":
 				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
 			case "standardCreators":
@@ -134,6 +136,14 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
+			case "emailBrandings":
+				return ec.fieldContext_Organization_emailBrandings(ctx, field)
+			case "emailTemplates":
+				return ec.fieldContext_Organization_emailTemplates(ctx, field)
+			case "notificationPreferences":
+				return ec.fieldContext_Organization_notificationPreferences(ctx, field)
+			case "notificationTemplates":
+				return ec.fieldContext_Organization_notificationTemplates(ctx, field)
 			case "users":
 				return ec.fieldContext_Organization_users(ctx, field)
 			case "files":
@@ -178,6 +188,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Organization_programs(ctx, field)
+			case "systemDetails":
+				return ec.fieldContext_Organization_systemDetails(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Organization_procedures(ctx, field)
 			case "internalPolicies":
@@ -226,6 +238,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Organization_scans(ctx, field)
+			case "slaDefinitions":
+				return ec.fieldContext_Organization_slaDefinitions(ctx, field)
 			case "subprocessors":
 				return ec.fieldContext_Organization_subprocessors(ctx, field)
 			case "exports":
@@ -314,6 +328,10 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_in
 
 func (ec *executionContext) unmarshalInputOrgMembersInput(ctx context.Context, obj any) (model.OrgMembersInput, error) {
 	var it model.OrgMembersInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -342,7 +360,6 @@ func (ec *executionContext) unmarshalInputOrgMembersInput(ctx context.Context, o
 			it.UserID = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -384,10 +401,10 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

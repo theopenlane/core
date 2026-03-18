@@ -44,8 +44,6 @@ var (
 	ErrMissingRequiredName = errors.New("name or display name is required but not provided")
 	// ErrTooManyAvatarFiles is returned when a user attempts to upload more than one avatar file
 	ErrTooManyAvatarFiles = errors.New("too many avatar files uploaded, only one is allowed")
-	// ErrFailedToRegisterListener is returned when a listener fails to register
-	ErrFailedToRegisterListener = errors.New("failed to register listener")
 	// ErrNoControls is returned when a subcontrol has no controls assigned
 	ErrNoControls = errors.New("subcontrol must have at least one control assigned")
 	// ErrUnableToCast is returned when a type assertion fails
@@ -89,6 +87,10 @@ var (
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
 	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
 	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
+	// ErrGalaRuntimeUnavailable is returned when gala dual emit is enabled but runtime is unavailable
+	ErrGalaRuntimeUnavailable = errors.New("gala runtime unavailable")
+	// ErrGalaMutationEnqueueFailed is returned when gala mutation enqueue fails.
+	ErrGalaMutationEnqueueFailed = errors.New("gala mutation enqueue failed")
 	// ErrNotSingularTrustCenter is returned when an org is trying to create multiple trust centers
 	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 	// ErrStatusApprovedNotAllowed is returned when a user attempts to set status to APPROVED without being in the approver or delegate group
@@ -106,10 +108,14 @@ var (
 	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
 	// ErrUnableToCreateContact is returned when a contact could not be created
 	ErrUnableToCreateContact = errors.New("unable to create a contact")
+	// ErrUnableToCreateAssessmentResponse is returned when an assessment response could not be created
+	ErrUnableToCreateAssessmentResponse = errors.New("unable to create assessment response")
 	// ErrTooManyLogoFiles is returned when a user attempts to upload more than one logo file
 	ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
 	// ErrTooManyFaviconFiles is returned when a user attempts to upload more than one favicon file
 	ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
+	// ErrTooManyHeroImageFiles is returned when a user attempts to upload more than one hero image file
+	ErrTooManyHeroImageFiles = errors.New("too many hero image files uploaded, only one is allowed")
 	// ErrMissingTrustCenterID is returned when a trust center id is required but not provided
 	ErrMissingTrustCenterID = errors.New("trust center id is required")
 	// ErrMissingFileID is returned when a file id is required but not provided
@@ -123,6 +129,66 @@ var (
 	// ErrNDATemplateRequired is returned when nda requests mutation runs but there is no file for the
 	// user to sign
 	ErrNDATemplateRequired = errors.New("you need a nda template before a request can be made")
+	// ErrMutationMissingID is returned when a mutation does not have an ID
+	ErrMutationMissingID = errors.New("mutation missing ID")
+	// ErrProposedChangesNotSupported is returned when proposed changes are not supported for a schema type
+	ErrProposedChangesNotSupported = errors.New("proposed changes not supported for this schema type")
+	// ErrFailedToGetUserFromContext is returned when the user cannot be resolved from the context
+	ErrFailedToGetUserFromContext = errors.New("failed to get user from context")
+	// ErrFailedToGetObjectOwnerID is returned when the owner id cannot be resolved for a workflow object
+	ErrFailedToGetObjectOwnerID = errors.New("failed to get object owner id")
+	// ErrFailedToQueryObjectRefs is returned when workflow object refs cannot be queried
+	ErrFailedToQueryObjectRefs = errors.New("failed to query object refs")
+	// ErrFailedToComputeProposalHash is returned when a workflow proposal hash cannot be computed
+	ErrFailedToComputeProposalHash = errors.New("failed to compute proposal hash")
+	// ErrFailedToQueryExistingProposal is returned when an existing proposal cannot be queried
+	ErrFailedToQueryExistingProposal = errors.New("failed to query existing proposal")
+	// ErrFailedToUpdateProposal is returned when a workflow proposal cannot be updated
+	ErrFailedToUpdateProposal = errors.New("failed to update proposal")
+	// ErrFailedToBeginTransaction is returned when a workflow transaction cannot be started
+	ErrFailedToBeginTransaction = errors.New("failed to begin transaction")
+	// ErrFailedToCreateWorkflowInstance is returned when a workflow instance cannot be created
+	ErrFailedToCreateWorkflowInstance = errors.New("failed to create workflow instance")
+	// ErrFailedToCreateWorkflowObjectRef is returned when a workflow object ref cannot be created
+	ErrFailedToCreateWorkflowObjectRef = errors.New("failed to create workflow object ref")
+	// ErrFailedToCreateWorkflowProposal is returned when a workflow proposal cannot be created
+	ErrFailedToCreateWorkflowProposal = errors.New("failed to create workflow proposal inside of ent hooks")
+	// ErrFailedToCreateWorkflowProposal is returned when a workflow proposal cannot be created
+	ErrFailedToUpdateWorkflowProposal = errors.New("failed to update workflow proposal inside of ent hooks")
+	// ErrFailedToLinkProposalToInstance is returned when a proposal cannot be linked to an instance
+	ErrFailedToLinkProposalToInstance = errors.New("failed to link proposal to instance")
+	// ErrFailedToCommitProposalTransaction is returned when proposal staging transaction cannot be committed
+	ErrFailedToCommitProposalTransaction = errors.New("failed to commit proposal transaction")
+	// ErrFailedToQueryAssignments is returned when workflow assignments cannot be queried
+	ErrFailedToQueryAssignments = errors.New("failed to query assignments")
+	// ErrFailedToInvalidateAssignment is returned when an assignment cannot be invalidated
+	ErrFailedToInvalidateAssignment = errors.New("failed to invalidate assignment")
+	// ErrWorkflowProposalMissingObjectRef is returned when a proposal is missing its object ref edge
+	ErrWorkflowProposalMissingObjectRef = errors.New("workflow proposal missing object ref")
+	// ErrFailedToDeriveObjectFromRef is returned when a workflow object cannot be derived from a ref
+	ErrFailedToDeriveObjectFromRef = errors.New("failed to derive object from ref")
+	// ErrFailedToLoadWorkflowObject is returned when a workflow object cannot be loaded
+	ErrFailedToLoadWorkflowObject = errors.New("failed to load workflow object")
+	// ErrFailedToFindMatchingDefinitions is returned when workflow definitions cannot be matched
+	ErrFailedToFindMatchingDefinitions = errors.New("failed to find matching definitions")
+	// ErrFailedToRecordAssignmentInvalidationEvent is returned when assignment invalidation events cannot be recorded
+	ErrFailedToRecordAssignmentInvalidationEvent = errors.New("failed to record assignment invalidation event")
+	// ErrFailedToResolveInvalidationNotificationOwner is returned when the owner for invalidation notifications cannot be resolved
+	ErrFailedToResolveInvalidationNotificationOwner = errors.New("failed to resolve invalidation notification owner")
+	// ErrFailedToSendInvalidationNotification is returned when invalidation notifications cannot be sent
+	ErrFailedToSendInvalidationNotification = errors.New("failed to send invalidation notification")
+	// ErrFailedToQueryWorkflowProposal is returned when a workflow proposal cannot be queried
+	ErrFailedToQueryWorkflowProposal = errors.New("failed to query workflow proposal")
+	// ErrFailedToQueryWorkflowInstances is returned when workflow instances cannot be queried
+	ErrFailedToQueryWorkflowInstances = errors.New("failed to query workflow instances")
+	// ErrFailedToLoadWorkflowProposalForTrigger is returned when a submitted proposal cannot be loaded for triggering
+	ErrFailedToLoadWorkflowProposalForTrigger = errors.New("failed to load workflow proposal for trigger")
+	// ErrFailedToResumeWorkflowInstance is returned when a workflow instance cannot be resumed
+	ErrFailedToResumeWorkflowInstance = errors.New("failed to resume workflow instance")
+	// ErrFailedToTriggerWorkflow is returned when a workflow cannot be triggered
+	ErrFailedToTriggerWorkflow = errors.New("failed to trigger workflow")
+	// ErrMissingIDForTrustCenterNDARequest is returned when a mutation for trust center nda request is missing the ID field, which is required to determine the trust center and send the appropriate email
+	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

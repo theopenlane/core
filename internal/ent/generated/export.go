@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
@@ -48,6 +49,10 @@ type Export struct {
 	Filters string `json:"filters,omitempty"`
 	// if we try to export and it fails, the error message will be stored here
 	ErrorMessage string `json:"error_message,omitempty"`
+	// the mode of export, e.g., flat or folder
+	Mode enums.ExportMode `json:"mode,omitempty"`
+	// metadata for the export record
+	ExportMetadata models.ExportMetadata `json:"export_metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExportQuery when eager-loading is set.
 	Edges        ExportEdges `json:"edges"`
@@ -106,9 +111,9 @@ func (*Export) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case export.FieldFields:
+		case export.FieldFields, export.FieldExportMetadata:
 			values[i] = new([]byte)
-		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldRequestorID, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldFilters, export.FieldErrorMessage:
+		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldRequestorID, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldFilters, export.FieldErrorMessage, export.FieldMode:
 			values[i] = new(sql.NullString)
 		case export.FieldCreatedAt, export.FieldUpdatedAt, export.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -219,6 +224,20 @@ func (_m *Export) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ErrorMessage = value.String
 			}
+		case export.FieldMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mode", values[i])
+			} else if value.Valid {
+				_m.Mode = enums.ExportMode(value.String)
+			}
+		case export.FieldExportMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field export_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ExportMetadata); err != nil {
+					return fmt.Errorf("unmarshal field export_metadata: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -311,6 +330,12 @@ func (_m *Export) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("error_message=")
 	builder.WriteString(_m.ErrorMessage)
+	builder.WriteString(", ")
+	builder.WriteString("mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Mode))
+	builder.WriteString(", ")
+	builder.WriteString("export_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ExportMetadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

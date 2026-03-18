@@ -24,7 +24,7 @@ func HookCreatePersonalAccessToken() ent.Hook {
 				return nil, err
 			}
 
-			if err := validateExpirationTime(m); err != nil {
+			if err := validateTimeNotInPast(m.ExpiresAt()); err != nil {
 				return nil, err
 			}
 

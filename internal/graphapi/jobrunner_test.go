@@ -120,7 +120,6 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-
 			resp, err := tc.client.DeleteJobRunner(tc.ctx, tc.runnerID)
 
 			if tc.errorMsg != "" {

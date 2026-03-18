@@ -7,7 +7,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/mapx"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
@@ -42,10 +44,7 @@ func (r Resolver) WithDevelopment(dev bool) *Resolver {
 
 // WithAllowedOrigins sets the allowed origins for websocket connections
 func (r Resolver) WithAllowedOrigins(origins []string) *Resolver {
-	r.origins = make(map[string]struct{}, len(origins))
-	for _, o := range origins {
-		r.origins[o] = struct{}{}
-	}
+	r.origins = mapx.MapSetFromSlice(origins)
 
 	return &r
 }
@@ -72,6 +71,13 @@ func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
 	return &r
 }
 
+// WithWorkflowsConfig sets the workflows config for CEL validation in resolvers.
+func (r Resolver) WithWorkflowsConfig(cfg workflows.Config) *Resolver {
+	r.workflowsConfig = cfg
+
+	return &r
+}
+
 // WithWebsocketPingInterval sets the websocket ping interval for the resolver
 func (r Resolver) WithWebsocketPingInterval(interval time.Duration) *Resolver {
 	r.websocketPingInterval = interval
@@ -82,6 +88,14 @@ func (r Resolver) WithWebsocketPingInterval(interval time.Duration) *Resolver {
 // WithSSEKeepAliveInterval sets the sse keep-alive interval for the resolver
 func (r Resolver) WithSSEKeepAliveInterval(interval time.Duration) *Resolver {
 	r.sseKeepAliveInterval = interval
+
+	return &r
+}
+
+// WithNotificationLookbackDays sets the number of days of read notifications to pull when starting a notification subscription
+// Unread notifications are always pulled regardless of this setting
+func (r Resolver) WithNotificationLookbackDays(days int) *Resolver {
+	r.notificationLookbackDays = days
 
 	return &r
 }
@@ -110,8 +124,8 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 
 // WithPool adds a worker pool to the resolver for parallel processing
 func (r *Resolver) WithPool(maxWorkers int) {
-	r.pool = soiree.NewPool(
-		soiree.WithWorkers(maxWorkers),
-		soiree.WithPoolName("graphapi-worker-pool"),
+	r.pool = gala.NewPool(
+		gala.WithWorkers(maxWorkers),
+		gala.WithPoolName("graphapi-worker-pool"),
 	)
 }

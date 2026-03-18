@@ -14,6 +14,8 @@ import (
 )
 
 func TestValidateWorkflowDefinitionInput(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name       string
 		schemaType string
@@ -75,11 +77,38 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 			},
 			wantErr: ErrSchemaTypeMismatch,
 		},
+		{
+			name:       "review action missing params",
+			schemaType: "Control",
+			doc: &models.WorkflowDefinitionDocument{
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl},
+				},
+				Actions: []models.WorkflowAction{
+					{Key: "review", Type: string(enums.WorkflowActionTypeReview)},
+				},
+			},
+			wantErr: ErrActionInvalidParams,
+		},
+		{
+			name:       "invalid approval timing",
+			schemaType: "Control",
+			doc: &models.WorkflowDefinitionDocument{
+				ApprovalTiming: enums.WorkflowApprovalTiming("INVALID"),
+				Triggers: []models.WorkflowTrigger{
+					{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl},
+				},
+				Actions: []models.WorkflowAction{
+					{Key: "notify", Type: string(enums.WorkflowActionTypeNotification)},
+				},
+			},
+			wantErr: ErrApprovalTimingInvalid,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateWorkflowDefinitionInput(tt.schemaType, tt.doc)
+			err := validateWorkflowDefinitionInput(tt.schemaType, tt.doc, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)
@@ -91,7 +120,27 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 	}
 }
 
+func TestValidateReviewActionParams(t *testing.T) {
+	t.Parallel()
+
+	params := workflows.ReviewActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{
+				{Type: enums.WorkflowTargetTypeUser, ID: "user-1"},
+			},
+		},
+		Label: "Review Required",
+	}
+	raw, err := json.Marshal(params)
+	require.NoError(t, err)
+
+	err = validateReviewActionParams(raw)
+	assert.NoError(t, err)
+}
+
 func TestValidateTrigger(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name       string
 		schemaType string
@@ -144,7 +193,7 @@ func TestValidateTrigger(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateTrigger(tt.schemaType, tt.trigger, 0)
+			err := validateTrigger(tt.schemaType, tt.trigger, 0, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)
@@ -157,6 +206,8 @@ func TestValidateTrigger(t *testing.T) {
 }
 
 func TestValidateApprovalActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name           string
 		params         json.RawMessage
@@ -229,10 +280,13 @@ func TestValidateApprovalActionParams(t *testing.T) {
 }
 
 func TestValidateWebhookActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
-		name    string
-		params  json.RawMessage
-		wantErr error
+		name            string
+		params          json.RawMessage
+		wantErr         error
+		wantErrContains string
 	}{
 		{
 			name:    "empty params",
@@ -254,15 +308,33 @@ func TestValidateWebhookActionParams(t *testing.T) {
 			params:  json.RawMessage(`{"url": "https://example.com/webhook", "method": "POST"}`),
 			wantErr: nil,
 		},
+		{
+			name:    "legacy payload rejected",
+			params:  json.RawMessage(`{"url": "https://example.com/webhook", "payload": {"text": "nope"}}`),
+			wantErr: ErrWebhookPayloadUnsupported,
+		},
+		{
+			name:            "invalid payload expression",
+			params:          json.RawMessage(`{"url": "https://example.com/webhook", "payload_expr": "1 +"}`),
+			wantErrContains: "CEL compilation failed",
+		},
+		{
+			name:    "valid payload expression",
+			params:  json.RawMessage(`{"url": "https://example.com/webhook", "payload_expr": "{\"value\": \"ok\"}"}`),
+			wantErr: nil,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateWebhookActionParams(tt.params)
+			err := validateWebhookActionParams(tt.params, nil)
 
 			if tt.wantErr != nil {
 				require.Error(t, err)
 				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+			} else if tt.wantErrContains != "" {
+				require.Error(t, err)
+				assert.Contains(t, err.Error(), tt.wantErrContains)
 			} else {
 				assert.NoError(t, err)
 			}
@@ -271,6 +343,8 @@ func TestValidateWebhookActionParams(t *testing.T) {
 }
 
 func TestValidateFieldUpdateActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		params  json.RawMessage
@@ -308,6 +382,8 @@ func TestValidateFieldUpdateActionParams(t *testing.T) {
 }
 
 func TestValidateTarget(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		target  workflows.TargetConfig
@@ -365,6 +441,8 @@ func TestValidateTarget(t *testing.T) {
 }
 
 func TestFilterApprovalActions(t *testing.T) {
+	t.Parallel()
+
 	actions := []models.WorkflowAction{
 		{Key: "approval1", Type: string(enums.WorkflowActionTypeApproval)},
 		{Key: "webhook1", Type: string(enums.WorkflowActionTypeWebhook)},
@@ -380,6 +458,8 @@ func TestFilterApprovalActions(t *testing.T) {
 }
 
 func TestExtractFieldSetKey(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		action   models.WorkflowAction
@@ -415,7 +495,48 @@ func TestExtractFieldSetKey(t *testing.T) {
 	}
 }
 
+func TestValidateApprovalSubmissionMode(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		mode    enums.WorkflowApprovalSubmissionMode
+		wantErr error
+	}{
+		{
+			name:    "empty mode is valid",
+			mode:    "",
+			wantErr: nil,
+		},
+		{
+			name:    "auto submit mode is valid",
+			mode:    enums.WorkflowApprovalSubmissionModeAutoSubmit,
+			wantErr: nil,
+		},
+		{
+			name:    "manual submit mode is not supported",
+			mode:    enums.WorkflowApprovalSubmissionModeManualSubmit,
+			wantErr: ErrManualSubmitModeNotSupported,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateApprovalSubmissionMode(tt.mode)
+
+			if tt.wantErr != nil {
+				require.Error(t, err)
+				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
 func TestValidateRequiredField(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		required any

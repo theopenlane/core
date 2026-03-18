@@ -17,8 +17,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -54,9 +58,13 @@ type IdentityHolderQuery struct {
 	withTemplates                *TemplateQuery
 	withAssets                   *AssetQuery
 	withEntities                 *EntityQuery
+	withDirectoryAccounts        *DirectoryAccountQuery
+	withControls                 *ControlQuery
 	withPlatforms                *PlatformQuery
 	withCampaigns                *CampaignQuery
 	withTasks                    *TaskQuery
+	withFiles                    *FileQuery
+	withFindings                 *FindingQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
 	withAccessPlatforms          *PlatformQuery
 	withUser                     *UserQuery
@@ -70,9 +78,13 @@ type IdentityHolderQuery struct {
 	withNamedTemplates           map[string]*TemplateQuery
 	withNamedAssets              map[string]*AssetQuery
 	withNamedEntities            map[string]*EntityQuery
+	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
+	withNamedControls            map[string]*ControlQuery
 	withNamedPlatforms           map[string]*PlatformQuery
 	withNamedCampaigns           map[string]*CampaignQuery
 	withNamedTasks               map[string]*TaskQuery
+	withNamedFiles               map[string]*FileQuery
+	withNamedFindings            map[string]*FindingQuery
 	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
 	withNamedAccessPlatforms     map[string]*PlatformQuery
 	// intermediate query (i.e. traversal path).
@@ -461,6 +473,56 @@ func (_q *IdentityHolderQuery) QueryEntities() *EntityQuery {
 	return query
 }
 
+// QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
+func (_q *IdentityHolderQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryAccountsTable, identityholder.DirectoryAccountsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControls chains the current query on the "controls" edge.
+func (_q *IdentityHolderQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.ControlsTable, identityholder.ControlsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlIdentityHolders
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatforms chains the current query on the "platforms" edge.
 func (_q *IdentityHolderQuery) QueryPlatforms() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -530,6 +592,56 @@ func (_q *IdentityHolderQuery) QueryTasks() *TaskQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.IdentityHolderTasks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (_q *IdentityHolderQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.FilesTable, identityholder.FilesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *IdentityHolderQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.FindingsTable, identityholder.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -817,9 +929,13 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withTemplates:           _q.withTemplates.Clone(),
 		withAssets:              _q.withAssets.Clone(),
 		withEntities:            _q.withEntities.Clone(),
+		withDirectoryAccounts:   _q.withDirectoryAccounts.Clone(),
+		withControls:            _q.withControls.Clone(),
 		withPlatforms:           _q.withPlatforms.Clone(),
 		withCampaigns:           _q.withCampaigns.Clone(),
 		withTasks:               _q.withTasks.Clone(),
+		withFiles:               _q.withFiles.Clone(),
+		withFindings:            _q.withFindings.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
 		withAccessPlatforms:     _q.withAccessPlatforms.Clone(),
 		withUser:                _q.withUser.Clone(),
@@ -984,6 +1100,28 @@ func (_q *IdentityHolderQuery) WithEntities(opts ...func(*EntityQuery)) *Identit
 	return _q
 }
 
+// WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
+// the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *IdentityHolderQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryAccounts = query
+	return _q
+}
+
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithControls(opts ...func(*ControlQuery)) *IdentityHolderQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControls = query
+	return _q
+}
+
 // WithPlatforms tells the query-builder to eager-load the nodes that are connected to
 // the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithPlatforms(opts ...func(*PlatformQuery)) *IdentityHolderQuery {
@@ -1014,6 +1152,28 @@ func (_q *IdentityHolderQuery) WithTasks(opts ...func(*TaskQuery)) *IdentityHold
 		opt(query)
 	}
 	_q.withTasks = query
+	return _q
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithFiles(opts ...func(*FileQuery)) *IdentityHolderQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFiles = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithFindings(opts ...func(*FindingQuery)) *IdentityHolderQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
 	return _q
 }
 
@@ -1134,7 +1294,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [24]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1149,9 +1309,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withTemplates != nil,
 			_q.withAssets != nil,
 			_q.withEntities != nil,
+			_q.withDirectoryAccounts != nil,
+			_q.withControls != nil,
 			_q.withPlatforms != nil,
 			_q.withCampaigns != nil,
 			_q.withTasks != nil,
+			_q.withFiles != nil,
+			_q.withFindings != nil,
 			_q.withWorkflowObjectRefs != nil,
 			_q.withAccessPlatforms != nil,
 			_q.withUser != nil,
@@ -1274,6 +1438,22 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withDirectoryAccounts; query != nil {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
+			func(n *IdentityHolder, e *DirectoryAccount) {
+				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.Controls = []*Control{} },
+			func(n *IdentityHolder, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatforms; query != nil {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *IdentityHolder) { n.Edges.Platforms = []*Platform{} },
@@ -1292,6 +1472,20 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *IdentityHolder) { n.Edges.Tasks = []*Task{} },
 			func(n *IdentityHolder, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.Files = []*File{} },
+			func(n *IdentityHolder, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.Findings = []*Finding{} },
+			func(n *IdentityHolder, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1373,6 +1567,20 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedDirectoryAccounts {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedDirectoryAccounts(name) },
+			func(n *IdentityHolder, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedControls(name) },
+			func(n *IdentityHolder, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedPlatforms {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedPlatforms(name) },
@@ -1391,6 +1599,20 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedTasks(name) },
 			func(n *IdentityHolder, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedFiles(name) },
+			func(n *IdentityHolder, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedFindings(name) },
+			func(n *IdentityHolder, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1961,6 +2183,101 @@ func (_q *IdentityHolderQuery) loadEntities(ctx context.Context, query *EntityQu
 	}
 	return nil
 }
+func (_q *IdentityHolderQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *DirectoryAccount)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*IdentityHolder)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directoryaccount.FieldIdentityHolderID)
+	}
+	query.Where(predicate.DirectoryAccount(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(identityholder.DirectoryAccountsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IdentityHolderID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "identity_holder_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *IdentityHolderQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Control)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IdentityHolder)
+	nids := make(map[string]map[*IdentityHolder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(identityholder.ControlsTable)
+		joinT.Schema(_q.schemaConfig.ControlIdentityHolders)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(identityholder.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(identityholder.ControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(identityholder.ControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IdentityHolder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *IdentityHolderQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Platform)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*IdentityHolder)
@@ -2140,6 +2457,130 @@ func (_q *IdentityHolderQuery) loadTasks(ctx context.Context, query *TaskQuery, 
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IdentityHolderQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IdentityHolder)
+	nids := make(map[string]map[*IdentityHolder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(identityholder.FilesTable)
+		joinT.Schema(_q.schemaConfig.IdentityHolderFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(identityholder.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(identityholder.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(identityholder.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IdentityHolder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IdentityHolderQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IdentityHolder)
+	nids := make(map[string]map[*IdentityHolder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(identityholder.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingIdentityHolders)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(identityholder.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(identityholder.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(identityholder.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IdentityHolder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2470,6 +2911,34 @@ func (_q *IdentityHolderQuery) WithNamedEntities(name string, opts ...func(*Enti
 	return _q
 }
 
+// WithNamedDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to the "directory_accounts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedDirectoryAccounts(name string, opts ...func(*DirectoryAccountQuery)) *IdentityHolderQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryAccounts == nil {
+		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
+	}
+	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *IdentityHolderQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
+	}
+	_q.withNamedControls[name] = query
+	return _q
+}
+
 // WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *IdentityHolderQuery {
@@ -2509,6 +2978,34 @@ func (_q *IdentityHolderQuery) WithNamedTasks(name string, opts ...func(*TaskQue
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *IdentityHolderQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
+	}
+	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *IdentityHolderQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
 	return _q
 }
 

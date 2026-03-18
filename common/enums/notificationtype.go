@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // NotificationType represents the type of notification
 type NotificationType string
@@ -18,46 +14,22 @@ var (
 	NotificationTypeInvalid NotificationType = "INVALID"
 )
 
+var notificationTypeValues = []NotificationType{NotificationTypeOrganization, NotificationTypeUser}
+
 // Values returns a slice of strings that represents all the possible values of the NotificationType enum.
 // Possible default values are "ORGANIZATION" and "USER".
-func (NotificationType) Values() (kinds []string) {
-	for _, s := range []NotificationType{NotificationTypeOrganization, NotificationTypeUser} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (NotificationType) Values() []string { return stringValues(notificationTypeValues) }
 
 // String returns the NotificationType as a string
-func (r NotificationType) String() string {
-	return string(r)
-}
+func (r NotificationType) String() string { return string(r) }
 
 // ToNotificationType returns the notification type enum based on string input
 func ToNotificationType(r string) *NotificationType {
-	switch r := strings.ToUpper(r); r {
-	case NotificationTypeOrganization.String():
-		return &NotificationTypeOrganization
-	case NotificationTypeUser.String():
-		return &NotificationTypeUser
-	default:
-		return &NotificationTypeInvalid
-	}
+	return parse(r, notificationTypeValues, &NotificationTypeInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r NotificationType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r NotificationType) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *NotificationType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for NotificationType, got: %T", v) //nolint:err113
-	}
-
-	*r = NotificationType(str)
-
-	return nil
-}
+func (r *NotificationType) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

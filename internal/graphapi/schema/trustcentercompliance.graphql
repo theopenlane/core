@@ -69,6 +69,28 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): TrustCenterComplianceBulkDeletePayload!
+    """
+    Update multiple existing trustCenterCompliances
+    """
+    updateBulkTrustCenterCompliance(
+        """
+        IDs of the trustCenterCompliances to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterCompliances with
+        """
+        input: UpdateTrustCenterComplianceInput!
+    ): TrustCenterComplianceBulkUpdatePayload!
+    """
+    Update multiple existing trustCenterCompliances via file upload
+    """
+    updateBulkCSVTrustCenterCompliance(
+        """
+        csv file containing values of the trustCenterCompliance, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterComplianceBulkUpdatePayload!
 }
 
 """
@@ -119,4 +141,18 @@ type TrustCenterComplianceBulkDeletePayload {
     Deleted trustCenterCompliance IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceBulkUpdatePayload {
+    """
+    Updated trustCenterCompliances
+    """
+    trustCenterCompliances: [TrustCenterCompliance!]
+    """
+    IDs of the updated trustCenterCompliances
+    """
+    updatedIDs: [ID!]
 }

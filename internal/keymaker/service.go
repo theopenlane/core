@@ -3,13 +3,12 @@ package keymaker
 import (
 	"context"
 	"fmt"
+	"maps"
 	"strings"
 	"time"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/integrations"
+	"github.com/theopenlane/core/internal/integrations"
 )
 
 // defaultSessionTTL is the duration that OAuth sessions remain valid if no custom TTL is configured
@@ -133,12 +132,8 @@ type CompleteResult struct {
 
 // BeginAuthorization starts an OAuth/OIDC transaction with the requested provider
 func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (BeginResponse, error) {
-	if strings.TrimSpace(req.OrgID) == "" {
+	if req.OrgID == "" {
 		return BeginResponse{}, integrations.ErrOrgIDRequired
-	}
-
-	if strings.TrimSpace(req.IntegrationID) == "" {
-		return BeginResponse{}, integrations.ErrIntegrationIDRequired
 	}
 
 	if req.Provider == types.ProviderUnknown {
@@ -154,10 +149,10 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		OrgID:          req.OrgID,
 		IntegrationID:  req.IntegrationID,
 		RedirectURI:    req.RedirectURI,
-		State:          strings.TrimSpace(req.State),
+		State:          req.State,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       lo.Assign(map[string]any{}, req.Metadata),
-		LabelOverrides: lo.Assign(map[string]string{}, req.LabelOverrides),
+		Metadata:       maps.Clone(req.Metadata),
+		LabelOverrides: maps.Clone(req.LabelOverrides),
 	}
 
 	session, err := provider.BeginAuth(ctx, authCtx)
@@ -176,8 +171,8 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		OrgID:          req.OrgID,
 		IntegrationID:  req.IntegrationID,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       lo.Assign(map[string]any{}, req.Metadata),
-		LabelOverrides: lo.Assign(map[string]string{}, req.LabelOverrides),
+		Metadata:       maps.Clone(req.Metadata),
+		LabelOverrides: maps.Clone(req.LabelOverrides),
 		AuthSession:    session,
 		CreatedAt:      s.now(),
 	}
@@ -197,10 +192,10 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 
 // CompleteAuthorization finalizes an OAuth/OIDC transaction and persists the resulting credential
 func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest) (CompleteResult, error) {
-	if strings.TrimSpace(req.State) == "" {
+	if req.State == "" {
 		return CompleteResult{}, integrations.ErrStateRequired
 	}
-	if strings.TrimSpace(req.Code) == "" {
+	if req.Code == "" {
 		return CompleteResult{}, integrations.ErrAuthorizationCodeRequired
 	}
 

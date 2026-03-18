@@ -85,15 +85,16 @@ type File struct {
 	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
-	Edges               FileEdges `json:"edges"`
-	export_files        *string
-	finding_files       *string
-	integration_files   *string
-	note_files          *string
-	remediation_files   *string
-	review_files        *string
-	vulnerability_files *string
-	selectValues        sql.SelectValues
+	Edges                FileEdges `json:"edges"`
+	email_template_files *string
+	export_files         *string
+	finding_files        *string
+	integration_files    *string
+	note_files           *string
+	remediation_files    *string
+	review_files         *string
+	vulnerability_files  *string
+	selectValues         sql.SelectValues
 
 	// PresignedURL is the presigned URL for the file when using s3 storage
 	PresignedURL string `json:"presignedURL,omitempty"`
@@ -127,6 +128,8 @@ type FileEdges struct {
 	Platform []*Platform `json:"platform,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// IdentityHolder holds the value of the identity_holder edge.
+	IdentityHolder []*IdentityHolder `json:"identity_holder,omitempty"`
 	// Scan holds the value of the scan edge.
 	Scan []*Scan `json:"scan,omitempty"`
 	// Events holds the value of the events edge.
@@ -143,9 +146,9 @@ type FileEdges struct {
 	OriginalTrustCenterDoc []*TrustCenterDoc `json:"original_trust_center_doc,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedOrganization           map[string][]*Organization
 	namedGroups                 map[string][]*Group
@@ -157,6 +160,7 @@ type FileEdges struct {
 	namedProgram                map[string][]*Program
 	namedPlatform               map[string][]*Platform
 	namedEvidence               map[string][]*Evidence
+	namedIdentityHolder         map[string][]*IdentityHolder
 	namedScan                   map[string][]*Scan
 	namedEvents                 map[string][]*Event
 	namedIntegrations           map[string][]*Integration
@@ -278,10 +282,19 @@ func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
 	return nil, &NotLoadedError{edge: "evidence"}
 }
 
+// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) IdentityHolderOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[12] {
+		return e.IdentityHolder, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holder"}
+}
+
 // ScanOrErr returns the Scan value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ScanOrErr() ([]*Scan, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Scan, nil
 	}
 	return nil, &NotLoadedError{edge: "scan"}
@@ -290,7 +303,7 @@ func (e FileEdges) ScanOrErr() ([]*Scan, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -299,7 +312,7 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -308,7 +321,7 @@ func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
 // SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Secrets, nil
 	}
 	return nil, &NotLoadedError{edge: "secrets"}
@@ -317,7 +330,7 @@ func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
 // TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.TrustCenterEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_entities"}
@@ -326,7 +339,7 @@ func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 // TrustCenterDocOrErr returns the TrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.TrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_doc"}
@@ -335,7 +348,7 @@ func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 // OriginalTrustCenterDocOrErr returns the OriginalTrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.OriginalTrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
@@ -356,19 +369,21 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
-		case file.ForeignKeys[0]: // export_files
+		case file.ForeignKeys[0]: // email_template_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[1]: // finding_files
+		case file.ForeignKeys[1]: // export_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[2]: // integration_files
+		case file.ForeignKeys[2]: // finding_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[3]: // note_files
+		case file.ForeignKeys[3]: // integration_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[4]: // remediation_files
+		case file.ForeignKeys[4]: // note_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[5]: // review_files
+		case file.ForeignKeys[5]: // remediation_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[6]: // vulnerability_files
+		case file.ForeignKeys[6]: // review_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[7]: // vulnerability_files
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -592,47 +607,54 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_template_files", values[i])
+			} else if value.Valid {
+				_m.email_template_files = new(string)
+				*_m.email_template_files = value.String
+			}
+		case file.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field export_files", values[i])
 			} else if value.Valid {
 				_m.export_files = new(string)
 				*_m.export_files = value.String
 			}
-		case file.ForeignKeys[1]:
+		case file.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_files", values[i])
 			} else if value.Valid {
 				_m.finding_files = new(string)
 				*_m.finding_files = value.String
 			}
-		case file.ForeignKeys[2]:
+		case file.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field integration_files", values[i])
 			} else if value.Valid {
 				_m.integration_files = new(string)
 				*_m.integration_files = value.String
 			}
-		case file.ForeignKeys[3]:
+		case file.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
 			} else if value.Valid {
 				_m.note_files = new(string)
 				*_m.note_files = value.String
 			}
-		case file.ForeignKeys[4]:
+		case file.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_files", values[i])
 			} else if value.Valid {
 				_m.remediation_files = new(string)
 				*_m.remediation_files = value.String
 			}
-		case file.ForeignKeys[5]:
+		case file.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_files", values[i])
 			} else if value.Valid {
 				_m.review_files = new(string)
 				*_m.review_files = value.String
 			}
-		case file.ForeignKeys[6]:
+		case file.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_files", values[i])
 			} else if value.Valid {
@@ -710,6 +732,11 @@ func (_m *File) QueryPlatform() *PlatformQuery {
 // QueryEvidence queries the "evidence" edge of the File entity.
 func (_m *File) QueryEvidence() *EvidenceQuery {
 	return NewFileClient(_m.config).QueryEvidence(_m)
+}
+
+// QueryIdentityHolder queries the "identity_holder" edge of the File entity.
+func (_m *File) QueryIdentityHolder() *IdentityHolderQuery {
+	return NewFileClient(_m.config).QueryIdentityHolder(_m)
 }
 
 // QueryScan queries the "scan" edge of the File entity.
@@ -1112,6 +1139,30 @@ func (_m *File) appendNamedEvidence(name string, edges ...*Evidence) {
 		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
 		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedIdentityHolder returns the IdentityHolder named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedIdentityHolder(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolder == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolder[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedIdentityHolder(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolder == nil {
+		_m.Edges.namedIdentityHolder = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolder[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolder[name] = append(_m.Edges.namedIdentityHolder[name], edges...)
 	}
 }
 

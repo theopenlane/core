@@ -26,6 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -34,13 +36,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -52,6 +55,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -71,10 +76,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -83,6 +90,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -100,83 +108,62 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/contextx"
 )
 
 func APITokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup apitoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup apitoken edge")))
 
 	return nil
 }
 
 func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplan edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplan edge")))
 
 	return nil
 }
 
 func AssessmentEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessment edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessment edge")))
 
 	return nil
 }
 
 func AssessmentResponseEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentresponse edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentresponse edge")))
 
 	return nil
 }
 
 func AssetEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup asset edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup asset edge")))
 
 	return nil
 }
 
 func CampaignEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaign edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaign edge")))
 
 	return nil
 }
 
 func CampaignTargetEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaigntarget edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup campaigntarget edge")))
 
 	return nil
 }
 
 func ContactEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")))
 
 	return nil
 }
 
 func ControlEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge")))
 
-	{
-		ids, err := FromContext(ctx).Subcontrol.Query().Where(subcontrol.HasControlWith(control.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying subcontrol ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := SubcontrolEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up subcontrol edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
 		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", subcontrolCount).Msg("error deleting subcontrol")
-			return err
-		}
-	}
-
-	if exists, err := FromContext(ctx).FindingControl.Query().Where((findingcontrol.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
-		if findingcontrolCount, err := FromContext(ctx).FindingControl.Delete().Where(findingcontrol.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", findingcontrolCount).Msg("error deleting findingcontrol")
 			return err
 		}
 	}
@@ -185,37 +172,37 @@ func ControlEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func ControlImplementationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementation edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementation edge")))
 
 	return nil
 }
 
 func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjective edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjective edge")))
 
 	return nil
 }
 
 func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomain edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomain edge")))
 
 	return nil
 }
 
 func CustomTypeEnumEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customtypeenum edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customtypeenum edge")))
 
 	return nil
 }
 
 func DNSVerificationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverification edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverification edge")))
 
 	return nil
 }
 
 func DirectoryAccountEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directoryaccount edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directoryaccount edge")))
 
 	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasDirectoryAccountWith(directoryaccount.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasDirectoryAccountWith(directoryaccount.ID(id))).Exec(ctx); err != nil {
@@ -228,7 +215,7 @@ func DirectoryAccountEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygroup edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygroup edge")))
 
 	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasDirectoryGroupWith(directorygroup.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasDirectoryGroupWith(directorygroup.ID(id))).Exec(ctx); err != nil {
@@ -241,33 +228,20 @@ func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func DirectoryMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembership edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembership edge")))
 
 	return nil
 }
 
 func DirectorySyncRunEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorysyncrun edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorysyncrun edge")))
 
 	return nil
 }
 
 func DiscussionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussion edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussion edge")))
 
-	{
-		ids, err := FromContext(ctx).Note.Query().Where(note.HasDiscussionWith(discussion.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying note ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NoteEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up note edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Note.Query().Where((note.HasDiscussionWith(discussion.ID(id)))).Exist(ctx); err == nil && exists {
 		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasDiscussionWith(discussion.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("error deleting note")
@@ -279,87 +253,86 @@ func DiscussionEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func DocumentDataEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdata edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdata edge")))
+
+	return nil
+}
+
+func EmailBrandingEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailbranding edge")))
+
+	return nil
+}
+
+func EmailTemplateEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailtemplate edge")))
 
 	return nil
 }
 
 func EmailVerificationTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailverificationtoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup emailverificationtoken edge")))
 
 	return nil
 }
 
 func EntityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entity edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entity edge")))
 
 	return nil
 }
 
 func EntityTypeEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytype edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytype edge")))
 
 	return nil
 }
 
 func EventEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup event edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup event edge")))
 
 	return nil
 }
 
 func EvidenceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidence edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidence edge")))
 
 	return nil
 }
 
 func ExportEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup export edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup export edge")))
 
 	return nil
 }
 
 func FileEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup file edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup file edge")))
 
 	return nil
 }
 
 func FileDownloadTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filedownloadtoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filedownloadtoken edge")))
 
 	return nil
 }
 
 func FindingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup finding edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup finding edge")))
 
 	return nil
 }
 
 func FindingControlEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrol edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrol edge")))
 
 	return nil
 }
 
 func GroupEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup group edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup group edge")))
 
-	{
-		ids, err := FromContext(ctx).GroupSetting.Query().Where(groupsetting.HasGroupWith(group.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying groupsetting ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := GroupSettingEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up groupsetting edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).GroupSetting.Query().Where((groupsetting.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupsettingCount, err := FromContext(ctx).GroupSetting.Delete().Where(groupsetting.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", groupsettingCount).Msg("error deleting groupsetting")
@@ -378,93 +351,92 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func GroupMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembership edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembership edge")))
 
 	return nil
 }
 
 func GroupSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsetting edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsetting edge")))
 
 	return nil
 }
 
 func HushEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")))
 
 	return nil
 }
 
 func IdentityHolderEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup identityholder edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup identityholder edge")))
 
 	return nil
 }
 
 func ImpersonationEventEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup impersonationevent edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup impersonationevent edge")))
 
 	return nil
 }
 
 func IntegrationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integration edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integration edge")))
+
+	return nil
+}
+
+func IntegrationRunEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationrun edge")))
+
+	return nil
+}
+
+func IntegrationWebhookEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationwebhook edge")))
 
 	return nil
 }
 
 func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")))
 
 	return nil
 }
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")))
 
 	return nil
 }
 
 func JobResultEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobresult edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobresult edge")))
 
 	return nil
 }
 
 func JobRunnerEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunner edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunner edge")))
 
 	return nil
 }
 
 func JobRunnerRegistrationTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnerregistrationtoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnerregistrationtoken edge")))
 
 	return nil
 }
 
 func JobRunnerTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnertoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnertoken edge")))
 
 	return nil
 }
 
 func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobtemplate edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobtemplate edge")))
 
-	{
-		ids, err := FromContext(ctx).ScheduledJob.Query().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjob ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjob edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasJobTemplateWith(jobtemplate.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
@@ -476,43 +448,62 @@ func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func MappableDomainEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomain edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomain edge")))
 
 	return nil
 }
 
 func MappedControlEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappedcontrol edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappedcontrol edge")))
 
 	return nil
 }
 
 func NarrativeEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge")))
 
 	return nil
 }
 
 func NoteEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")))
+
+	if exists, err := FromContext(ctx).TrustCenterFAQ.Query().Where((trustcenterfaq.HasNoteWith(note.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterfaqCount, err := FromContext(ctx).TrustCenterFAQ.Delete().Where(trustcenterfaq.HasNoteWith(note.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterfaqCount).Msg("error deleting trustcenterfaq")
+			return err
+		}
+	}
 
 	return nil
 }
 
 func NotificationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notification edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notification edge")))
+
+	return nil
+}
+
+func NotificationPreferenceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notificationpreference edge")))
+
+	return nil
+}
+
+func NotificationTemplateEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notificationtemplate edge")))
 
 	return nil
 }
 
 func OnboardingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup onboarding edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup onboarding edge")))
 
 	return nil
 }
 
 func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")))
 
 	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
@@ -532,31 +523,31 @@ func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func OrgModuleEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmodule edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmodule edge")))
 
 	return nil
 }
 
 func OrgPriceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgprice edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgprice edge")))
 
 	return nil
 }
 
 func OrgProductEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgproduct edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgproduct edge")))
 
 	return nil
 }
 
 func OrgSubscriptionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")))
 
 	return nil
 }
 
 func OrganizationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge")))
 
 	if exists, err := FromContext(ctx).Organization.Query().Where(organization.HasParentWith(organization.ID(id))).Exist(ctx); err == nil && exists {
 		if organizationCount, err := FromContext(ctx).Organization.Delete().Where(organization.HasParentWith(organization.ID(id))).Exec(ctx); err != nil {
@@ -565,19 +556,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).OrganizationSetting.Query().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying organizationsetting ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := OrganizationSettingEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up organizationsetting edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", organizationsettingCount).Msg("error deleting organizationsetting")
@@ -585,19 +563,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).APIToken.Query().Where(apitoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying apitoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := APITokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up apitoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).APIToken.Query().Where((apitoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if apitokenCount, err := FromContext(ctx).APIToken.Delete().Where(apitoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", apitokenCount).Msg("error deleting apitoken")
@@ -605,19 +570,48 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).File.Query().Where(file.HasOrganizationWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying file ids for cleanup")
+	if exists, err := FromContext(ctx).EmailBranding.Query().Where((emailbranding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if emailbrandingCount, err := FromContext(ctx).EmailBranding.Delete().Where(emailbranding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", emailbrandingCount).Msg("error deleting emailbranding")
 			return err
 		}
-		for _, edgeID := range ids {
-			if err := FileEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up file edges")
-				return err
-			}
+	}
+
+	if exists, err := FromContext(ctx).EmailTemplate.Query().Where((emailtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if emailtemplateCount, err := FromContext(ctx).EmailTemplate.Delete().Where(emailtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", emailtemplateCount).Msg("error deleting emailtemplate")
+			return err
 		}
 	}
+
+	if exists, err := FromContext(ctx).IntegrationWebhook.Query().Where((integrationwebhook.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if integrationwebhookCount, err := FromContext(ctx).IntegrationWebhook.Delete().Where(integrationwebhook.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", integrationwebhookCount).Msg("error deleting integrationwebhook")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).IntegrationRun.Query().Where((integrationrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if integrationrunCount, err := FromContext(ctx).IntegrationRun.Delete().Where(integrationrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", integrationrunCount).Msg("error deleting integrationrun")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).NotificationPreference.Query().Where((notificationpreference.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if notificationpreferenceCount, err := FromContext(ctx).NotificationPreference.Delete().Where(notificationpreference.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", notificationpreferenceCount).Msg("error deleting notificationpreference")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).NotificationTemplate.Query().Where((notificationtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if notificationtemplateCount, err := FromContext(ctx).NotificationTemplate.Delete().Where(notificationtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", notificationtemplateCount).Msg("error deleting notificationtemplate")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).File.Query().Where((file.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("error deleting file")
@@ -625,19 +619,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Hush.Query().Where(hush.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying hush ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := HushEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up hush edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Hush.Query().Where((hush.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if hushCount, err := FromContext(ctx).Hush.Delete().Where(hush.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", hushCount).Msg("error deleting hush")
@@ -645,19 +626,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Group.Query().Where(group.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying group ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := GroupEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up group edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Group.Query().Where((group.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupCount, err := FromContext(ctx).Group.Delete().Where(group.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", groupCount).Msg("error deleting group")
@@ -665,19 +633,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Template.Query().Where(template.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying template ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TemplateEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up template edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Template.Query().Where((template.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", templateCount).Msg("error deleting template")
@@ -685,19 +640,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Integration.Query().Where(integration.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying integration ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := IntegrationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up integration edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Integration.Query().Where((integration.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if integrationCount, err := FromContext(ctx).Integration.Delete().Where(integration.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", integrationCount).Msg("error deleting integration")
@@ -705,19 +647,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).DocumentData.Query().Where(documentdata.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying documentdata ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DocumentDataEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up documentdata edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", documentdataCount).Msg("error deleting documentdata")
@@ -725,19 +654,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).OrgSubscription.Query().Where(orgsubscription.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying orgsubscription ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := OrgSubscriptionEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up orgsubscription edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).OrgSubscription.Query().Where((orgsubscription.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgsubscriptionCount, err := FromContext(ctx).OrgSubscription.Delete().Where(orgsubscription.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgsubscriptionCount).Msg("error deleting orgsubscription")
@@ -745,19 +661,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).OrgProduct.Query().Where(orgproduct.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying orgproduct ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := OrgProductEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up orgproduct edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).OrgProduct.Query().Where((orgproduct.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgproductCount, err := FromContext(ctx).OrgProduct.Delete().Where(orgproduct.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgproductCount).Msg("error deleting orgproduct")
@@ -765,19 +668,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).OrgPrice.Query().Where(orgprice.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying orgprice ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := OrgPriceEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up orgprice edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).OrgPrice.Query().Where((orgprice.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgpriceCount, err := FromContext(ctx).OrgPrice.Delete().Where(orgprice.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgpriceCount).Msg("error deleting orgprice")
@@ -785,19 +675,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).OrgModule.Query().Where(orgmodule.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying orgmodule ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := OrgModuleEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up orgmodule edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).OrgModule.Query().Where((orgmodule.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmoduleCount, err := FromContext(ctx).OrgModule.Delete().Where(orgmodule.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgmoduleCount).Msg("error deleting orgmodule")
@@ -805,19 +682,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Invite.Query().Where(invite.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying invite ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := InviteEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up invite edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Invite.Query().Where((invite.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if inviteCount, err := FromContext(ctx).Invite.Delete().Where(invite.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", inviteCount).Msg("error deleting invite")
@@ -825,19 +689,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Subscriber.Query().Where(subscriber.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying subscriber ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := SubscriberEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up subscriber edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Subscriber.Query().Where((subscriber.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subscriberCount, err := FromContext(ctx).Subscriber.Delete().Where(subscriber.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", subscriberCount).Msg("error deleting subscriber")
@@ -845,19 +696,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Entity.Query().Where(entity.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying entity ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := EntityEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up entity edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Entity.Query().Where((entity.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entityCount, err := FromContext(ctx).Entity.Delete().Where(entity.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", entityCount).Msg("error deleting entity")
@@ -865,19 +703,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Platform.Query().Where(platform.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying platform ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := PlatformEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up platform edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Platform.Query().Where((platform.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if platformCount, err := FromContext(ctx).Platform.Delete().Where(platform.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", platformCount).Msg("error deleting platform")
@@ -885,19 +710,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).IdentityHolder.Query().Where(identityholder.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying identityholder ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := IdentityHolderEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up identityholder edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).IdentityHolder.Query().Where((identityholder.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if identityholderCount, err := FromContext(ctx).IdentityHolder.Delete().Where(identityholder.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", identityholderCount).Msg("error deleting identityholder")
@@ -905,19 +717,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Campaign.Query().Where(campaign.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying campaign ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := CampaignEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up campaign edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Campaign.Query().Where((campaign.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if campaignCount, err := FromContext(ctx).Campaign.Delete().Where(campaign.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", campaignCount).Msg("error deleting campaign")
@@ -925,19 +724,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).CampaignTarget.Query().Where(campaigntarget.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying campaigntarget ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := CampaignTargetEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up campaigntarget edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).CampaignTarget.Query().Where((campaigntarget.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if campaigntargetCount, err := FromContext(ctx).CampaignTarget.Delete().Where(campaigntarget.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", campaigntargetCount).Msg("error deleting campaigntarget")
@@ -945,19 +731,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).EntityType.Query().Where(entitytype.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying entitytype ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := EntityTypeEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up entitytype edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).EntityType.Query().Where((entitytype.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitytypeCount, err := FromContext(ctx).EntityType.Delete().Where(entitytype.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", entitytypeCount).Msg("error deleting entitytype")
@@ -965,19 +738,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Contact.Query().Where(contact.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying contact ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ContactEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up contact edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Contact.Query().Where((contact.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if contactCount, err := FromContext(ctx).Contact.Delete().Where(contact.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", contactCount).Msg("error deleting contact")
@@ -985,19 +745,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Note.Query().Where(note.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying note ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NoteEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up note edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Note.Query().Where((note.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("error deleting note")
@@ -1005,19 +752,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Task.Query().Where(task.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying task ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TaskEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up task edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Task.Query().Where((task.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if taskCount, err := FromContext(ctx).Task.Delete().Where(task.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", taskCount).Msg("error deleting task")
@@ -1025,19 +759,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Program.Query().Where(program.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying program ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ProgramEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up program edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Program.Query().Where((program.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if programCount, err := FromContext(ctx).Program.Delete().Where(program.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", programCount).Msg("error deleting program")
@@ -1045,19 +766,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Procedure.Query().Where(procedure.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying procedure ids for cleanup")
+	if exists, err := FromContext(ctx).SystemDetail.Query().Where((systemdetail.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if systemdetailCount, err := FromContext(ctx).SystemDetail.Delete().Where(systemdetail.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", systemdetailCount).Msg("error deleting systemdetail")
 			return err
 		}
-		for _, edgeID := range ids {
-			if err := ProcedureEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up procedure edges")
-				return err
-			}
-		}
 	}
+
 	if exists, err := FromContext(ctx).Procedure.Query().Where((procedure.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if procedureCount, err := FromContext(ctx).Procedure.Delete().Where(procedure.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", procedureCount).Msg("error deleting procedure")
@@ -1065,19 +780,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).InternalPolicy.Query().Where(internalpolicy.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying internalpolicy ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := InternalPolicyEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up internalpolicy edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).InternalPolicy.Query().Where((internalpolicy.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if internalpolicyCount, err := FromContext(ctx).InternalPolicy.Delete().Where(internalpolicy.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", internalpolicyCount).Msg("error deleting internalpolicy")
@@ -1085,19 +787,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Risk.Query().Where(risk.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying risk ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := RiskEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up risk edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Risk.Query().Where((risk.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if riskCount, err := FromContext(ctx).Risk.Delete().Where(risk.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", riskCount).Msg("error deleting risk")
@@ -1105,19 +794,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).ControlObjective.Query().Where(controlobjective.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying controlobjective ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ControlObjectiveEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up controlobjective edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).ControlObjective.Query().Where((controlobjective.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlobjectiveCount, err := FromContext(ctx).ControlObjective.Delete().Where(controlobjective.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", controlobjectiveCount).Msg("error deleting controlobjective")
@@ -1125,19 +801,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Narrative.Query().Where(narrative.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying narrative ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NarrativeEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up narrative edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Narrative.Query().Where((narrative.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if narrativeCount, err := FromContext(ctx).Narrative.Delete().Where(narrative.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", narrativeCount).Msg("error deleting narrative")
@@ -1145,19 +808,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Control.Query().Where(control.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying control ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ControlEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up control edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Control.Query().Where((control.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlCount, err := FromContext(ctx).Control.Delete().Where(control.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", controlCount).Msg("error deleting control")
@@ -1165,19 +815,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Subcontrol.Query().Where(subcontrol.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying subcontrol ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := SubcontrolEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up subcontrol edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", subcontrolCount).Msg("error deleting subcontrol")
@@ -1185,19 +822,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).ControlImplementation.Query().Where(controlimplementation.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying controlimplementation ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ControlImplementationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up controlimplementation edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", controlimplementationCount).Msg("error deleting controlimplementation")
@@ -1205,19 +829,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).MappedControl.Query().Where(mappedcontrol.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying mappedcontrol ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := MappedControlEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up mappedcontrol edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).MappedControl.Query().Where((mappedcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if mappedcontrolCount, err := FromContext(ctx).MappedControl.Delete().Where(mappedcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", mappedcontrolCount).Msg("error deleting mappedcontrol")
@@ -1225,19 +836,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Evidence.Query().Where(evidence.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying evidence ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := EvidenceEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up evidence edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Evidence.Query().Where((evidence.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if evidenceCount, err := FromContext(ctx).Evidence.Delete().Where(evidence.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", evidenceCount).Msg("error deleting evidence")
@@ -1245,19 +843,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Standard.Query().Where(standard.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying standard ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := StandardEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up standard edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Standard.Query().Where((standard.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if standardCount, err := FromContext(ctx).Standard.Delete().Where(standard.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", standardCount).Msg("error deleting standard")
@@ -1265,19 +850,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).ActionPlan.Query().Where(actionplan.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying actionplan ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ActionPlanEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up actionplan edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).ActionPlan.Query().Where((actionplan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if actionplanCount, err := FromContext(ctx).ActionPlan.Delete().Where(actionplan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", actionplanCount).Msg("error deleting actionplan")
@@ -1285,19 +857,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).CustomDomain.Query().Where(customdomain.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying customdomain ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := CustomDomainEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up customdomain edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).CustomDomain.Query().Where((customdomain.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if customdomainCount, err := FromContext(ctx).CustomDomain.Delete().Where(customdomain.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", customdomainCount).Msg("error deleting customdomain")
@@ -1305,19 +864,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).JobRunner.Query().Where(jobrunner.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunner ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunner edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).JobRunner.Query().Where((jobrunner.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnerCount, err := FromContext(ctx).JobRunner.Delete().Where(jobrunner.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerCount).Msg("error deleting jobrunner")
@@ -1325,19 +871,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).JobRunnerToken.Query().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunnertoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunnertoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).JobRunnerToken.Query().Where((jobrunnertoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnertokenCount, err := FromContext(ctx).JobRunnerToken.Delete().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnertokenCount).Msg("error deleting jobrunnertoken")
@@ -1345,19 +878,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunnerregistrationtoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerRegistrationTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunnerregistrationtoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where((jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnerregistrationtokenCount, err := FromContext(ctx).JobRunnerRegistrationToken.Delete().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerregistrationtokenCount).Msg("error deleting jobrunnerregistrationtoken")
@@ -1365,19 +885,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).DNSVerification.Query().Where(dnsverification.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying dnsverification ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DNSVerificationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up dnsverification edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DNSVerification.Query().Where((dnsverification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if dnsverificationCount, err := FromContext(ctx).DNSVerification.Delete().Where(dnsverification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", dnsverificationCount).Msg("error deleting dnsverification")
@@ -1385,19 +892,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).JobTemplate.Query().Where(jobtemplate.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobtemplate ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobTemplateEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobtemplate edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).JobTemplate.Query().Where((jobtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobtemplateCount, err := FromContext(ctx).JobTemplate.Delete().Where(jobtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", jobtemplateCount).Msg("error deleting jobtemplate")
@@ -1405,19 +899,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).ScheduledJob.Query().Where(scheduledjob.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjob ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjob edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
@@ -1425,19 +906,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).JobResult.Query().Where(jobresult.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobresult ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobResultEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobresult edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).JobResult.Query().Where((jobresult.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobresultCount, err := FromContext(ctx).JobResult.Delete().Where(jobresult.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", jobresultCount).Msg("error deleting jobresult")
@@ -1445,19 +913,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).ScheduledJobRun.Query().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjobrun ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobRunEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjobrun edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).ScheduledJobRun.Query().Where((scheduledjobrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobrunCount, err := FromContext(ctx).ScheduledJobRun.Delete().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobrunCount).Msg("error deleting scheduledjobrun")
@@ -1465,19 +920,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenter.Query().Where(trustcenter.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenter ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcenter edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenter.Query().Where((trustcenter.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterCount, err := FromContext(ctx).TrustCenter.Delete().Where(trustcenter.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterCount).Msg("error deleting trustcenter")
@@ -1485,19 +927,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Asset.Query().Where(asset.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying asset ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := AssetEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up asset edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Asset.Query().Where((asset.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if assetCount, err := FromContext(ctx).Asset.Delete().Where(asset.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", assetCount).Msg("error deleting asset")
@@ -1505,19 +934,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Scan.Query().Where(scan.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scan ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScanEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scan edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Scan.Query().Where((scan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scanCount, err := FromContext(ctx).Scan.Delete().Where(scan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", scanCount).Msg("error deleting scan")
@@ -1525,19 +941,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Subprocessor.Query().Where(subprocessor.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying subprocessor ids for cleanup")
+	if exists, err := FromContext(ctx).SLADefinition.Query().Where((sladefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if sladefinitionCount, err := FromContext(ctx).SLADefinition.Delete().Where(sladefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", sladefinitionCount).Msg("error deleting sladefinition")
 			return err
 		}
-		for _, edgeID := range ids {
-			if err := SubprocessorEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up subprocessor edges")
-				return err
-			}
-		}
 	}
+
 	if exists, err := FromContext(ctx).Subprocessor.Query().Where((subprocessor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subprocessorCount, err := FromContext(ctx).Subprocessor.Delete().Where(subprocessor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", subprocessorCount).Msg("error deleting subprocessor")
@@ -1545,19 +955,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Export.Query().Where(export.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying export ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ExportEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up export edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Export.Query().Where((export.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if exportCount, err := FromContext(ctx).Export.Delete().Where(export.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", exportCount).Msg("error deleting export")
@@ -1565,19 +962,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenterwatermarkconfig ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterWatermarkConfigEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcenterwatermarkconfig edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("error deleting trustcenterwatermarkconfig")
@@ -1585,19 +969,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Assessment.Query().Where(assessment.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying assessment ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := AssessmentEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up assessment edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Assessment.Query().Where((assessment.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if assessmentCount, err := FromContext(ctx).Assessment.Delete().Where(assessment.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentCount).Msg("error deleting assessment")
@@ -1605,19 +976,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).AssessmentResponse.Query().Where(assessmentresponse.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying assessmentresponse ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := AssessmentResponseEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up assessmentresponse edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).AssessmentResponse.Query().Where((assessmentresponse.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if assessmentresponseCount, err := FromContext(ctx).AssessmentResponse.Delete().Where(assessmentresponse.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentresponseCount).Msg("error deleting assessmentresponse")
@@ -1625,19 +983,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).CustomTypeEnum.Query().Where(customtypeenum.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying customtypeenum ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := CustomTypeEnumEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up customtypeenum edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).CustomTypeEnum.Query().Where((customtypeenum.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if customtypeenumCount, err := FromContext(ctx).CustomTypeEnum.Delete().Where(customtypeenum.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", customtypeenumCount).Msg("error deleting customtypeenum")
@@ -1645,19 +990,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TagDefinition.Query().Where(tagdefinition.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying tagdefinition ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TagDefinitionEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up tagdefinition edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TagDefinition.Query().Where((tagdefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if tagdefinitionCount, err := FromContext(ctx).TagDefinition.Delete().Where(tagdefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", tagdefinitionCount).Msg("error deleting tagdefinition")
@@ -1665,19 +997,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Remediation.Query().Where(remediation.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying remediation ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := RemediationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up remediation edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Remediation.Query().Where((remediation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if remediationCount, err := FromContext(ctx).Remediation.Delete().Where(remediation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", remediationCount).Msg("error deleting remediation")
@@ -1685,19 +1004,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Finding.Query().Where(finding.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying finding ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := FindingEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up finding edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Finding.Query().Where((finding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if findingCount, err := FromContext(ctx).Finding.Delete().Where(finding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", findingCount).Msg("error deleting finding")
@@ -1705,19 +1011,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Review.Query().Where(review.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying review ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ReviewEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up review edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Review.Query().Where((review.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if reviewCount, err := FromContext(ctx).Review.Delete().Where(review.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", reviewCount).Msg("error deleting review")
@@ -1725,19 +1018,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Vulnerability.Query().Where(vulnerability.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying vulnerability ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := VulnerabilityEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up vulnerability edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Vulnerability.Query().Where((vulnerability.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if vulnerabilityCount, err := FromContext(ctx).Vulnerability.Delete().Where(vulnerability.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", vulnerabilityCount).Msg("error deleting vulnerability")
@@ -1745,19 +1025,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Notification.Query().Where(notification.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying notification ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NotificationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up notification edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("error deleting notification")
@@ -1765,19 +1032,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowDefinition.Query().Where(workflowdefinition.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowdefinition ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowDefinitionEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowdefinition edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowDefinition.Query().Where((workflowdefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workflowdefinitionCount, err := FromContext(ctx).WorkflowDefinition.Delete().Where(workflowdefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workflowdefinitionCount).Msg("error deleting workflowdefinition")
@@ -1785,19 +1039,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowInstance.Query().Where(workflowinstance.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowinstance ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowInstanceEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowinstance edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowInstance.Query().Where((workflowinstance.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workflowinstanceCount, err := FromContext(ctx).WorkflowInstance.Delete().Where(workflowinstance.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workflowinstanceCount).Msg("error deleting workflowinstance")
@@ -1805,19 +1046,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowEvent.Query().Where(workflowevent.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowevent ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowEventEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowevent edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowEvent.Query().Where((workflowevent.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workfloweventCount, err := FromContext(ctx).WorkflowEvent.Delete().Where(workflowevent.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workfloweventCount).Msg("error deleting workflowevent")
@@ -1825,19 +1053,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowAssignment.Query().Where(workflowassignment.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowassignment ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowAssignmentEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowassignment edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowAssignment.Query().Where((workflowassignment.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workflowassignmentCount, err := FromContext(ctx).WorkflowAssignment.Delete().Where(workflowassignment.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmentCount).Msg("error deleting workflowassignment")
@@ -1845,19 +1060,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowAssignmentTarget.Query().Where(workflowassignmenttarget.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowassignmenttarget ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowAssignmentTargetEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowassignmenttarget edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowAssignmentTarget.Query().Where((workflowassignmenttarget.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workflowassignmenttargetCount, err := FromContext(ctx).WorkflowAssignmentTarget.Delete().Where(workflowassignmenttarget.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmenttargetCount).Msg("error deleting workflowassignmenttarget")
@@ -1865,19 +1067,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowObjectRef.Query().Where(workflowobjectref.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowobjectref ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowObjectRefEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowobjectref edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowObjectRef.Query().Where((workflowobjectref.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workflowobjectrefCount, err := FromContext(ctx).WorkflowObjectRef.Delete().Where(workflowobjectref.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workflowobjectrefCount).Msg("error deleting workflowobjectref")
@@ -1885,19 +1074,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).WorkflowProposal.Query().Where(workflowproposal.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying workflowproposal ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WorkflowProposalEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up workflowproposal edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).WorkflowProposal.Query().Where((workflowproposal.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if workflowproposalCount, err := FromContext(ctx).WorkflowProposal.Delete().Where(workflowproposal.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", workflowproposalCount).Msg("error deleting workflowproposal")
@@ -1905,19 +1081,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).DirectoryAccount.Query().Where(directoryaccount.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying directoryaccount ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DirectoryAccountEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up directoryaccount edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DirectoryAccount.Query().Where((directoryaccount.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directoryaccountCount, err := FromContext(ctx).DirectoryAccount.Delete().Where(directoryaccount.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directoryaccountCount).Msg("error deleting directoryaccount")
@@ -1925,19 +1088,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).DirectoryGroup.Query().Where(directorygroup.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying directorygroup ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DirectoryGroupEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up directorygroup edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DirectoryGroup.Query().Where((directorygroup.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorygroupCount, err := FromContext(ctx).DirectoryGroup.Delete().Where(directorygroup.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directorygroupCount).Msg("error deleting directorygroup")
@@ -1945,19 +1095,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).DirectoryMembership.Query().Where(directorymembership.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying directorymembership ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DirectoryMembershipEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up directorymembership edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directorymembershipCount).Msg("error deleting directorymembership")
@@ -1965,19 +1102,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).DirectorySyncRun.Query().Where(directorysyncrun.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying directorysyncrun ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DirectorySyncRunEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up directorysyncrun edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DirectorySyncRun.Query().Where((directorysyncrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorysyncrunCount, err := FromContext(ctx).DirectorySyncRun.Delete().Where(directorysyncrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directorysyncrunCount).Msg("error deleting directorysyncrun")
@@ -1985,19 +1109,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Discussion.Query().Where(discussion.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying discussion ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DiscussionEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up discussion edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Discussion.Query().Where((discussion.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if discussionCount, err := FromContext(ctx).Discussion.Delete().Where(discussion.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", discussionCount).Msg("error deleting discussion")
@@ -2016,37 +1127,37 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func OrganizationSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsetting edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsetting edge")))
 
 	return nil
 }
 
 func PasswordResetTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup passwordresettoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup passwordresettoken edge")))
 
 	return nil
 }
 
 func PersonalAccessTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge")))
 
 	return nil
 }
 
 func PlatformEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup platform edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup platform edge")))
 
 	return nil
 }
 
 func ProcedureEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedure edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedure edge")))
 
 	return nil
 }
 
 func ProgramEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup program edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup program edge")))
 
 	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasProgramWith(program.ID(id)))).Exist(ctx); err == nil && exists {
 		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasProgramWith(program.ID(id))).Exec(ctx); err != nil {
@@ -2059,75 +1170,68 @@ func ProgramEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge")))
 
 	return nil
 }
 
 func RemediationEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup remediation edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup remediation edge")))
 
 	return nil
 }
 
 func ReviewEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup review edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup review edge")))
 
 	return nil
 }
 
 func RiskEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge")))
+
+	return nil
+}
+
+func SLADefinitionEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup sladefinition edge")))
 
 	return nil
 }
 
 func ScanEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scan edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scan edge")))
 
 	return nil
 }
 
 func ScheduledJobEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")))
 
 	return nil
 }
 
 func ScheduledJobRunEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobrun edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobrun edge")))
 
 	return nil
 }
 
 func StandardEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge")))
 
 	return nil
 }
 
 func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")))
 
 	return nil
 }
 
 func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")))
 
-	{
-		ids, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where(trustcentersubprocessor.HasSubprocessorWith(subprocessor.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcentersubprocessor ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterSubprocessorEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcentersubprocessor edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasSubprocessorWith(subprocessor.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasSubprocessorWith(subprocessor.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersubprocessorCount).Msg("error deleting trustcentersubprocessor")
@@ -2139,45 +1243,38 @@ func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func SubscriberEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")))
+
+	return nil
+}
+
+func SystemDetailEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup systemdetail edge")))
 
 	return nil
 }
 
 func TFASettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tfasetting edge")))
 
 	return nil
 }
 
 func TagDefinitionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tagdefinition edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup tagdefinition edge")))
 
 	return nil
 }
 
 func TaskEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup task edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup task edge")))
 
 	return nil
 }
 
 func TemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge")))
 
-	{
-		ids, err := FromContext(ctx).DocumentData.Query().Where(documentdata.HasTemplateWith(template.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying documentdata ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DocumentDataEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up documentdata edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasTemplateWith(template.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasTemplateWith(template.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", documentdataCount).Msg("error deleting documentdata")
@@ -2189,11 +1286,18 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenter edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenter edge")))
 
-	if exists, err := FromContext(ctx).TrustCenterSetting.Query().Where((trustcentersetting.TrustCenterID(id))).Exist(ctx); err == nil && exists {
-		if trustcentersettingCount, err := FromContext(ctx).TrustCenterSetting.Delete().Where(trustcentersetting.TrustCenterID(id)).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersettingCount).Msg("error deleting trustcentersetting")
+	if exists, err := FromContext(ctx).CustomDomain.Query().Where((customdomain.TrustCenterID(id))).Exist(ctx); err == nil && exists {
+		if customdomainCount, err := FromContext(ctx).CustomDomain.Delete().Where(customdomain.TrustCenterID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", customdomainCount).Msg("error deleting customdomain")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).CustomDomain.Query().Where((customdomain.TrustCenterID(id))).Exist(ctx); err == nil && exists {
+		if customdomainCount, err := FromContext(ctx).CustomDomain.Delete().Where(customdomain.TrustCenterID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", customdomainCount).Msg("error deleting customdomain")
 			return err
 		}
 	}
@@ -2205,19 +1309,13 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenterwatermarkconfig ids for cleanup")
+	if exists, err := FromContext(ctx).TrustCenterSetting.Query().Where((trustcentersetting.TrustCenterID(id))).Exist(ctx); err == nil && exists {
+		if trustcentersettingCount, err := FromContext(ctx).TrustCenterSetting.Delete().Where(trustcentersetting.TrustCenterID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersettingCount).Msg("error deleting trustcentersetting")
 			return err
 		}
-		for _, edgeID := range ids {
-			if err := TrustCenterWatermarkConfigEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcenterwatermarkconfig edges")
-				return err
-			}
-		}
 	}
+
 	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("error deleting trustcenterwatermarkconfig")
@@ -2225,19 +1323,6 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where(trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcentersubprocessor ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterSubprocessorEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcentersubprocessor edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersubprocessorCount).Msg("error deleting trustcentersubprocessor")
@@ -2245,19 +1330,6 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterDoc.Query().Where(trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenterdoc ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterDocEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcenterdoc edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterDoc.Query().Where((trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterdocCount, err := FromContext(ctx).TrustCenterDoc.Delete().Where(trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterdocCount).Msg("error deleting trustcenterdoc")
@@ -2265,19 +1337,6 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterCompliance.Query().Where(trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcentercompliance ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterComplianceEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcentercompliance edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterCompliance.Query().Where((trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentercomplianceCount, err := FromContext(ctx).TrustCenterCompliance.Delete().Where(trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentercomplianceCount).Msg("error deleting trustcentercompliance")
@@ -2285,19 +1344,6 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Template.Query().Where(template.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying template ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TemplateEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up template edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Template.Query().Where((template.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", templateCount).Msg("error deleting template")
@@ -2305,19 +1351,6 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Note.Query().Where(note.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying note ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NoteEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up note edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Note.Query().Where((note.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("error deleting note")
@@ -2325,19 +1358,6 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterEntity.Query().Where(trustcenterentity.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenterentity ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterEntityEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcenterentity edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterEntity.Query().Where((trustcenterentity.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterentityCount, err := FromContext(ctx).TrustCenterEntity.Delete().Where(trustcenterentity.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterentityCount).Msg("error deleting trustcenterentity")
@@ -2345,22 +1365,16 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TrustCenterNDARequest.Query().Where(trustcenterndarequest.HasTrustCenterWith(trustcenter.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying trustcenterndarequest ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TrustCenterNDARequestEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up trustcenterndarequest edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TrustCenterNDARequest.Query().Where((trustcenterndarequest.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterndarequestCount, err := FromContext(ctx).TrustCenterNDARequest.Delete().Where(trustcenterndarequest.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterndarequestCount).Msg("error deleting trustcenterndarequest")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TrustCenterFAQ.Query().Where((trustcenterfaq.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterfaqCount, err := FromContext(ctx).TrustCenterFAQ.Delete().Where(trustcenterfaq.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterfaqCount).Msg("error deleting trustcenterfaq")
 			return err
 		}
 	}
@@ -2369,27 +1383,14 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TrustCenterComplianceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliance edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliance edge")))
 
 	return nil
 }
 
 func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")))
 
-	{
-		ids, err := FromContext(ctx).File.Query().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying file ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := FileEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up file edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).File.Query().Where((file.HasTrustCenterDocWith(trustcenterdoc.ID(id)))).Exist(ctx); err == nil && exists {
 		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("error deleting file")
@@ -2397,19 +1398,6 @@ func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).File.Query().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying file ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := FileEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up file edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).File.Query().Where((file.HasTrustCenterDocWith(trustcenterdoc.ID(id)))).Exist(ctx); err == nil && exists {
 		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("error deleting file")
@@ -2421,51 +1409,44 @@ func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func TrustCenterEntityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentity edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentity edge")))
+
+	return nil
+}
+
+func TrustCenterFAQEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterfaq edge")))
 
 	return nil
 }
 
 func TrustCenterNDARequestEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterndarequest edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterndarequest edge")))
 
 	return nil
 }
 
 func TrustCenterSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersetting edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersetting edge")))
 
 	return nil
 }
 
 func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessor edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessor edge")))
 
 	return nil
 }
 
 func TrustCenterWatermarkConfigEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfig edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfig edge")))
 
 	return nil
 }
 
 func UserEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge")))
 
-	{
-		ids, err := FromContext(ctx).PersonalAccessToken.Query().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying personalaccesstoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := PersonalAccessTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up personalaccesstoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).PersonalAccessToken.Query().Where((personalaccesstoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if personalaccesstokenCount, err := FromContext(ctx).PersonalAccessToken.Delete().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", personalaccesstokenCount).Msg("error deleting personalaccesstoken")
@@ -2473,19 +1454,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).TFASetting.Query().Where(tfasetting.HasOwnerWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying tfasetting ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := TFASettingEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up tfasetting edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).TFASetting.Query().Where((tfasetting.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if tfasettingCount, err := FromContext(ctx).TFASetting.Delete().Where(tfasetting.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", tfasettingCount).Msg("error deleting tfasetting")
@@ -2493,19 +1461,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).UserSetting.Query().Where(usersetting.HasUserWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying usersetting ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := UserSettingEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up usersetting edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).UserSetting.Query().Where((usersetting.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if usersettingCount, err := FromContext(ctx).UserSetting.Delete().Where(usersetting.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", usersettingCount).Msg("error deleting usersetting")
@@ -2513,19 +1468,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).EmailVerificationToken.Query().Where(emailverificationtoken.HasOwnerWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying emailverificationtoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := EmailVerificationTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up emailverificationtoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).EmailVerificationToken.Query().Where((emailverificationtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if emailverificationtokenCount, err := FromContext(ctx).EmailVerificationToken.Delete().Where(emailverificationtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", emailverificationtokenCount).Msg("error deleting emailverificationtoken")
@@ -2533,19 +1475,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).FileDownloadToken.Query().Where(filedownloadtoken.HasOwnerWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying filedownloadtoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := FileDownloadTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up filedownloadtoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).FileDownloadToken.Query().Where((filedownloadtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if filedownloadtokenCount, err := FromContext(ctx).FileDownloadToken.Delete().Where(filedownloadtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", filedownloadtokenCount).Msg("error deleting filedownloadtoken")
@@ -2553,19 +1482,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).PasswordResetToken.Query().Where(passwordresettoken.HasOwnerWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying passwordresettoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := PasswordResetTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up passwordresettoken edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).PasswordResetToken.Query().Where((passwordresettoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if passwordresettokenCount, err := FromContext(ctx).PasswordResetToken.Delete().Where(passwordresettoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", passwordresettokenCount).Msg("error deleting passwordresettoken")
@@ -2573,19 +1489,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Webauthn.Query().Where(webauthn.HasOwnerWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying webauthn ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := WebauthnEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up webauthn edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Webauthn.Query().Where((webauthn.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if webauthnCount, err := FromContext(ctx).Webauthn.Delete().Where(webauthn.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", webauthnCount).Msg("error deleting webauthn")
@@ -2593,19 +1496,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Notification.Query().Where(notification.HasUserWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying notification ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NotificationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up notification edges")
-				return err
-			}
-		}
-	}
 	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("error deleting notification")
@@ -2631,61 +1521,103 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func UserSettingEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")))
 
 	return nil
 }
 
 func VulnerabilityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerability edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerability edge")))
 
 	return nil
 }
 
 func WebauthnEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup webauthn edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup webauthn edge")))
 
 	return nil
 }
 
 func WorkflowAssignmentEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignment edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignment edge")))
+
+	if exists, err := FromContext(ctx).WorkflowAssignmentTarget.Query().Where((workflowassignmenttarget.WorkflowAssignmentID(id))).Exist(ctx); err == nil && exists {
+		if workflowassignmenttargetCount, err := FromContext(ctx).WorkflowAssignmentTarget.Delete().Where(workflowassignmenttarget.WorkflowAssignmentID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmenttargetCount).Msg("error deleting workflowassignmenttarget")
+			return err
+		}
+	}
 
 	return nil
 }
 
 func WorkflowAssignmentTargetEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttarget edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttarget edge")))
 
 	return nil
 }
 
 func WorkflowDefinitionEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinition edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinition edge")))
+
+	if exists, err := FromContext(ctx).WorkflowInstance.Query().Where((workflowinstance.WorkflowDefinitionID(id))).Exist(ctx); err == nil && exists {
+		if workflowinstanceCount, err := FromContext(ctx).WorkflowInstance.Delete().Where(workflowinstance.WorkflowDefinitionID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowinstanceCount).Msg("error deleting workflowinstance")
+			return err
+		}
+	}
 
 	return nil
 }
 
 func WorkflowEventEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowevent edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowevent edge")))
 
 	return nil
 }
 
 func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstance edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstance edge")))
+
+	if exists, err := FromContext(ctx).WorkflowAssignment.Query().Where((workflowassignment.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
+		if workflowassignmentCount, err := FromContext(ctx).WorkflowAssignment.Delete().Where(workflowassignment.WorkflowInstanceID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmentCount).Msg("error deleting workflowassignment")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowEvent.Query().Where((workflowevent.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
+		if workfloweventCount, err := FromContext(ctx).WorkflowEvent.Delete().Where(workflowevent.WorkflowInstanceID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workfloweventCount).Msg("error deleting workflowevent")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowObjectRef.Query().Where((workflowobjectref.WorkflowInstanceID(id))).Exist(ctx); err == nil && exists {
+		if workflowobjectrefCount, err := FromContext(ctx).WorkflowObjectRef.Delete().Where(workflowobjectref.WorkflowInstanceID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowobjectrefCount).Msg("error deleting workflowobjectref")
+			return err
+		}
+	}
 
 	return nil
 }
 
 func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")))
+
+	if exists, err := FromContext(ctx).WorkflowProposal.Query().Where((workflowproposal.WorkflowObjectRefID(id))).Exist(ctx); err == nil && exists {
+		if workflowproposalCount, err := FromContext(ctx).WorkflowProposal.Delete().Where(workflowproposal.WorkflowObjectRefID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowproposalCount).Msg("error deleting workflowproposal")
+			return err
+		}
+	}
 
 	return nil
 }
 
 func WorkflowProposalEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowproposal edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowproposal edge")))
 
 	return nil
 }

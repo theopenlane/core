@@ -19,7 +19,7 @@ import (
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.
-func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentersetting"})
@@ -31,7 +31,7 @@ func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input g
 }
 
 // UpdateTrustCenterSetting is the resolver for the updateTrustCenterSetting field.
-func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
@@ -51,14 +51,15 @@ func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id stri
 }
 
 // UpdateTrustCenterPreviewSetting is the resolver for the updateTrustCenterPreviewSetting field.
-func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
 	transactionCtx := withTransactionalMutation(ctx)
 	trustCenter, err := resolveTrustCenterForPreviewSetting(ctx, transactionCtx, "")
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
-	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -105,6 +106,7 @@ func (r *mutationResolver) PublishTrustCenterSetting(ctx context.Context) (*mode
 		SecondaryForegroundColor: &previewSetting.SecondaryForegroundColor,
 		LogoFileID:               previewSetting.LogoLocalFileID,
 		FaviconFileID:            previewSetting.FaviconLocalFileID,
+		HeroImageFileID:          previewSetting.HeroImageLocalFileID,
 		LogoRemoteURL:            previewSetting.LogoRemoteURL,
 		FaviconRemoteURL:         previewSetting.FaviconRemoteURL,
 	}

@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVIdentityHolder($input: Upload!) {
   createBulkCSVIdentityHolder(input: $input) {
     identityHolders {
@@ -131,7 +130,7 @@ mutation DeleteIdentityHolder($deleteIdentityHolderId: ID!) {
   }
 }
 
-query GetAllIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!]){
+query GetAllIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!]) {
   identityHolders(
     first: $first
     last: $last
@@ -183,10 +182,35 @@ query GetAllIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cu
         updatedBy
         userID
         workflowEligibleMarker
+        campaigns {
+          edges {
+            node {
+              id
+              name
+              status
+              displayID
+            }
+          }
+        }
+        directoryAccounts {
+          edges {
+            node {
+              id
+              integrationID
+              externalID
+              canonicalEmail
+              displayName
+              directoryName
+              avatarRemoteURL
+              avatarLocalFileID
+            }
+          }
+        }
       }
     }
   }
 }
+
 query GetIdentityHolderByID($identityHolderId: ID!) {
   identityHolder(id: $identityHolderId) {
     alternateEmail
@@ -224,18 +248,28 @@ query GetIdentityHolderByID($identityHolderId: ID!) {
     updatedBy
     userID
     workflowEligibleMarker
+    campaigns {
+      edges {
+        node {
+          id
+          name
+          status
+          displayID
+        }
+      }
+    }
   }
 }
 
 query GetIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!], $where: IdentityHolderWhereInput) {
   identityHolders(
-      first: $first
-      last: $last
-      after: $after
-      before: $before
-      orderBy: $orderBy
-      where: $where
-    ) {
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -280,10 +314,21 @@ query GetIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Curso
         updatedBy
         userID
         workflowEligibleMarker
+        campaigns {
+          edges {
+            node {
+              id
+              name
+              status
+              displayID
+            }
+          }
+        }
       }
     }
   }
 }
+
 mutation UpdateIdentityHolder($updateIdentityHolderId: ID!, $input: UpdateIdentityHolderInput!) {
   updateIdentityHolder(id: $updateIdentityHolderId, input: $input) {
     identityHolder {

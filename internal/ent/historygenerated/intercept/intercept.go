@@ -27,6 +27,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -45,6 +47,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -59,14 +63,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -598,6 +605,60 @@ func (f TraverseDocumentDataHistory) Traverse(ctx context.Context, q historygene
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.DocumentDataHistoryQuery", q)
 }
 
+// The EmailBrandingHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type EmailBrandingHistoryFunc func(context.Context, *historygenerated.EmailBrandingHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f EmailBrandingHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.EmailBrandingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.EmailBrandingHistoryQuery", q)
+}
+
+// The TraverseEmailBrandingHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseEmailBrandingHistory func(context.Context, *historygenerated.EmailBrandingHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseEmailBrandingHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseEmailBrandingHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.EmailBrandingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.EmailBrandingHistoryQuery", q)
+}
+
+// The EmailTemplateHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type EmailTemplateHistoryFunc func(context.Context, *historygenerated.EmailTemplateHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f EmailTemplateHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.EmailTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.EmailTemplateHistoryQuery", q)
+}
+
+// The TraverseEmailTemplateHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseEmailTemplateHistory func(context.Context, *historygenerated.EmailTemplateHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseEmailTemplateHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseEmailTemplateHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.EmailTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.EmailTemplateHistoryQuery", q)
+}
+
 // The EntityHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type EntityHistoryFunc func(context.Context, *historygenerated.EntityHistoryQuery) (historygenerated.Value, error)
 
@@ -1084,6 +1145,60 @@ func (f TraverseNoteHistory) Traverse(ctx context.Context, q historygenerated.Qu
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.NoteHistoryQuery", q)
 }
 
+// The NotificationPreferenceHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NotificationPreferenceHistoryFunc func(context.Context, *historygenerated.NotificationPreferenceHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NotificationPreferenceHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.NotificationPreferenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.NotificationPreferenceHistoryQuery", q)
+}
+
+// The TraverseNotificationPreferenceHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNotificationPreferenceHistory func(context.Context, *historygenerated.NotificationPreferenceHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNotificationPreferenceHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNotificationPreferenceHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.NotificationPreferenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.NotificationPreferenceHistoryQuery", q)
+}
+
+// The NotificationTemplateHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NotificationTemplateHistoryFunc func(context.Context, *historygenerated.NotificationTemplateHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NotificationTemplateHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.NotificationTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.NotificationTemplateHistoryQuery", q)
+}
+
+// The TraverseNotificationTemplateHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNotificationTemplateHistory func(context.Context, *historygenerated.NotificationTemplateHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNotificationTemplateHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNotificationTemplateHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.NotificationTemplateHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.NotificationTemplateHistoryQuery", q)
+}
+
 // The OrgMembershipHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrgMembershipHistoryFunc func(context.Context, *historygenerated.OrgMembershipHistoryQuery) (historygenerated.Value, error)
 
@@ -1381,6 +1496,33 @@ func (f TraverseRiskHistory) Traverse(ctx context.Context, q historygenerated.Qu
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.RiskHistoryQuery", q)
 }
 
+// The SLADefinitionHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SLADefinitionHistoryFunc func(context.Context, *historygenerated.SLADefinitionHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SLADefinitionHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.SLADefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.SLADefinitionHistoryQuery", q)
+}
+
+// The TraverseSLADefinitionHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSLADefinitionHistory func(context.Context, *historygenerated.SLADefinitionHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSLADefinitionHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSLADefinitionHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.SLADefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SLADefinitionHistoryQuery", q)
+}
+
 // The ScanHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ScanHistoryFunc func(context.Context, *historygenerated.ScanHistoryQuery) (historygenerated.Value, error)
 
@@ -1516,6 +1658,33 @@ func (f TraverseSubprocessorHistory) Traverse(ctx context.Context, q historygene
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SubprocessorHistoryQuery", q)
 }
 
+// The SystemDetailHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SystemDetailHistoryFunc func(context.Context, *historygenerated.SystemDetailHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SystemDetailHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.SystemDetailHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.SystemDetailHistoryQuery", q)
+}
+
+// The TraverseSystemDetailHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSystemDetailHistory func(context.Context, *historygenerated.SystemDetailHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSystemDetailHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSystemDetailHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.SystemDetailHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SystemDetailHistoryQuery", q)
+}
+
 // The TaskHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TaskHistoryFunc func(context.Context, *historygenerated.TaskHistoryQuery) (historygenerated.Value, error)
 
@@ -1649,6 +1818,33 @@ func (f TraverseTrustCenterEntityHistory) Traverse(ctx context.Context, q histor
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.TrustCenterEntityHistoryQuery", q)
+}
+
+// The TrustCenterFAQHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterFAQHistoryFunc func(context.Context, *historygenerated.TrustCenterFAQHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterFAQHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.TrustCenterFAQHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.TrustCenterFAQHistoryQuery", q)
+}
+
+// The TraverseTrustCenterFAQHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterFAQHistory func(context.Context, *historygenerated.TrustCenterFAQHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterFAQHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterFAQHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.TrustCenterFAQHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.TrustCenterFAQHistoryQuery", q)
 }
 
 // The TrustCenterHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2066,6 +2262,10 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.DiscussionHistoryQuery, predicate.DiscussionHistory, discussionhistory.OrderOption]{typ: historygenerated.TypeDiscussionHistory, tq: q}, nil
 	case *historygenerated.DocumentDataHistoryQuery:
 		return &query[*historygenerated.DocumentDataHistoryQuery, predicate.DocumentDataHistory, documentdatahistory.OrderOption]{typ: historygenerated.TypeDocumentDataHistory, tq: q}, nil
+	case *historygenerated.EmailBrandingHistoryQuery:
+		return &query[*historygenerated.EmailBrandingHistoryQuery, predicate.EmailBrandingHistory, emailbrandinghistory.OrderOption]{typ: historygenerated.TypeEmailBrandingHistory, tq: q}, nil
+	case *historygenerated.EmailTemplateHistoryQuery:
+		return &query[*historygenerated.EmailTemplateHistoryQuery, predicate.EmailTemplateHistory, emailtemplatehistory.OrderOption]{typ: historygenerated.TypeEmailTemplateHistory, tq: q}, nil
 	case *historygenerated.EntityHistoryQuery:
 		return &query[*historygenerated.EntityHistoryQuery, predicate.EntityHistory, entityhistory.OrderOption]{typ: historygenerated.TypeEntityHistory, tq: q}, nil
 	case *historygenerated.EntityTypeHistoryQuery:
@@ -2102,6 +2302,10 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.NarrativeHistoryQuery, predicate.NarrativeHistory, narrativehistory.OrderOption]{typ: historygenerated.TypeNarrativeHistory, tq: q}, nil
 	case *historygenerated.NoteHistoryQuery:
 		return &query[*historygenerated.NoteHistoryQuery, predicate.NoteHistory, notehistory.OrderOption]{typ: historygenerated.TypeNoteHistory, tq: q}, nil
+	case *historygenerated.NotificationPreferenceHistoryQuery:
+		return &query[*historygenerated.NotificationPreferenceHistoryQuery, predicate.NotificationPreferenceHistory, notificationpreferencehistory.OrderOption]{typ: historygenerated.TypeNotificationPreferenceHistory, tq: q}, nil
+	case *historygenerated.NotificationTemplateHistoryQuery:
+		return &query[*historygenerated.NotificationTemplateHistoryQuery, predicate.NotificationTemplateHistory, notificationtemplatehistory.OrderOption]{typ: historygenerated.TypeNotificationTemplateHistory, tq: q}, nil
 	case *historygenerated.OrgMembershipHistoryQuery:
 		return &query[*historygenerated.OrgMembershipHistoryQuery, predicate.OrgMembershipHistory, orgmembershiphistory.OrderOption]{typ: historygenerated.TypeOrgMembershipHistory, tq: q}, nil
 	case *historygenerated.OrgSubscriptionHistoryQuery:
@@ -2124,6 +2328,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.ReviewHistoryQuery, predicate.ReviewHistory, reviewhistory.OrderOption]{typ: historygenerated.TypeReviewHistory, tq: q}, nil
 	case *historygenerated.RiskHistoryQuery:
 		return &query[*historygenerated.RiskHistoryQuery, predicate.RiskHistory, riskhistory.OrderOption]{typ: historygenerated.TypeRiskHistory, tq: q}, nil
+	case *historygenerated.SLADefinitionHistoryQuery:
+		return &query[*historygenerated.SLADefinitionHistoryQuery, predicate.SLADefinitionHistory, sladefinitionhistory.OrderOption]{typ: historygenerated.TypeSLADefinitionHistory, tq: q}, nil
 	case *historygenerated.ScanHistoryQuery:
 		return &query[*historygenerated.ScanHistoryQuery, predicate.ScanHistory, scanhistory.OrderOption]{typ: historygenerated.TypeScanHistory, tq: q}, nil
 	case *historygenerated.ScheduledJobHistoryQuery:
@@ -2134,6 +2340,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.SubcontrolHistoryQuery, predicate.SubcontrolHistory, subcontrolhistory.OrderOption]{typ: historygenerated.TypeSubcontrolHistory, tq: q}, nil
 	case *historygenerated.SubprocessorHistoryQuery:
 		return &query[*historygenerated.SubprocessorHistoryQuery, predicate.SubprocessorHistory, subprocessorhistory.OrderOption]{typ: historygenerated.TypeSubprocessorHistory, tq: q}, nil
+	case *historygenerated.SystemDetailHistoryQuery:
+		return &query[*historygenerated.SystemDetailHistoryQuery, predicate.SystemDetailHistory, systemdetailhistory.OrderOption]{typ: historygenerated.TypeSystemDetailHistory, tq: q}, nil
 	case *historygenerated.TaskHistoryQuery:
 		return &query[*historygenerated.TaskHistoryQuery, predicate.TaskHistory, taskhistory.OrderOption]{typ: historygenerated.TypeTaskHistory, tq: q}, nil
 	case *historygenerated.TemplateHistoryQuery:
@@ -2144,6 +2352,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.TrustCenterDocHistoryQuery, predicate.TrustCenterDocHistory, trustcenterdochistory.OrderOption]{typ: historygenerated.TypeTrustCenterDocHistory, tq: q}, nil
 	case *historygenerated.TrustCenterEntityHistoryQuery:
 		return &query[*historygenerated.TrustCenterEntityHistoryQuery, predicate.TrustCenterEntityHistory, trustcenterentityhistory.OrderOption]{typ: historygenerated.TypeTrustCenterEntityHistory, tq: q}, nil
+	case *historygenerated.TrustCenterFAQHistoryQuery:
+		return &query[*historygenerated.TrustCenterFAQHistoryQuery, predicate.TrustCenterFAQHistory, trustcenterfaqhistory.OrderOption]{typ: historygenerated.TypeTrustCenterFAQHistory, tq: q}, nil
 	case *historygenerated.TrustCenterHistoryQuery:
 		return &query[*historygenerated.TrustCenterHistoryQuery, predicate.TrustCenterHistory, trustcenterhistory.OrderOption]{typ: historygenerated.TypeTrustCenterHistory, tq: q}, nil
 	case *historygenerated.TrustCenterNDARequestHistoryQuery:

@@ -46,7 +46,7 @@ func HookTags() ent.Hook {
 			// this ensures we do not create global tags automatically from internal requests without
 			// organization context
 			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			if err != nil || orgID == "" {
+			if err != nil {
 				return next.Mutate(ctx, m)
 			}
 

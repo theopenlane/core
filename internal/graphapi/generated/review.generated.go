@@ -165,6 +165,201 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 	return fc, nil
 }
 
+func (ec *executionContext) _ReviewBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ReviewBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReviewBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReviewBulkUpdatePayload_reviews(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ReviewBulkUpdatePayload_reviews,
+		func(ctx context.Context) (any, error) {
+			return obj.Reviews, nil
+		},
+		nil,
+		ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_reviews(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReviewBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Review_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Review_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Review_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Review_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Review_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Review_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Review_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Review_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_Review_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_Review_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Review_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Review_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Review_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Review_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Review_externalID(ctx, field)
+			case "externalOwnerID":
+				return ec.fieldContext_Review_externalOwnerID(ctx, field)
+			case "title":
+				return ec.fieldContext_Review_title(ctx, field)
+			case "state":
+				return ec.fieldContext_Review_state(ctx, field)
+			case "category":
+				return ec.fieldContext_Review_category(ctx, field)
+			case "classification":
+				return ec.fieldContext_Review_classification(ctx, field)
+			case "summary":
+				return ec.fieldContext_Review_summary(ctx, field)
+			case "details":
+				return ec.fieldContext_Review_details(ctx, field)
+			case "reporter":
+				return ec.fieldContext_Review_reporter(ctx, field)
+			case "approved":
+				return ec.fieldContext_Review_approved(ctx, field)
+			case "reviewedAt":
+				return ec.fieldContext_Review_reviewedAt(ctx, field)
+			case "reportedAt":
+				return ec.fieldContext_Review_reportedAt(ctx, field)
+			case "approvedAt":
+				return ec.fieldContext_Review_approvedAt(ctx, field)
+			case "reviewerID":
+				return ec.fieldContext_Review_reviewerID(ctx, field)
+			case "source":
+				return ec.fieldContext_Review_source(ctx, field)
+			case "externalURI":
+				return ec.fieldContext_Review_externalURI(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Review_metadata(ctx, field)
+			case "rawPayload":
+				return ec.fieldContext_Review_rawPayload(ctx, field)
+			case "owner":
+				return ec.fieldContext_Review_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Review_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Review_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Review_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Review_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Review_scope(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Review_integrations(ctx, field)
+			case "findings":
+				return ec.fieldContext_Review_findings(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Review_vulnerabilities(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Review_actionPlans(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Review_remediations(ctx, field)
+			case "controls":
+				return ec.fieldContext_Review_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Review_subcontrols(ctx, field)
+			case "risks":
+				return ec.fieldContext_Review_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_Review_programs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Review_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Review_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Review_tasks(ctx, field)
+			case "reviewer":
+				return ec.fieldContext_Review_reviewer(ctx, field)
+			case "comments":
+				return ec.fieldContext_Review_comments(ctx, field)
+			case "files":
+				return ec.fieldContext_Review_files(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReviewBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ReviewBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReviewBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ReviewCreatePayload_review(ctx context.Context, field graphql.CollectedField, obj *model.ReviewCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -502,10 +697,87 @@ func (ec *executionContext) _ReviewBulkCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var reviewBulkDeletePayloadImplementors = []string{"ReviewBulkDeletePayload"}
+
+func (ec *executionContext) _ReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ReviewBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reviewBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReviewBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ReviewBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var reviewBulkUpdatePayloadImplementors = []string{"ReviewBulkUpdatePayload"}
+
+func (ec *executionContext) _ReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ReviewBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reviewBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReviewBulkUpdatePayload")
+		case "reviews":
+			out.Values[i] = ec._ReviewBulkUpdatePayload_reviews(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._ReviewBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -541,10 +813,10 @@ func (ec *executionContext) _ReviewCreatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -580,10 +852,10 @@ func (ec *executionContext) _ReviewDeletePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -619,10 +891,10 @@ func (ec *executionContext) _ReviewUpdatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -649,6 +921,34 @@ func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._ReviewBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNReviewBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkDeletePayload) graphql.Marshaler {
+	return ec._ReviewBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ReviewBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNReviewBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkUpdatePayload) graphql.Marshaler {
+	return ec._ReviewBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNReviewBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ReviewBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNReviewCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewCreatePayload) graphql.Marshaler {

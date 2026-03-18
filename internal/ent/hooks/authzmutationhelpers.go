@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"entgo.io/ent"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -242,13 +242,8 @@ func GetObjectIDFromEntValue(m ent.Value) (string, error) {
 		ID string `json:"id"`
 	}
 
-	tmp, err := json.Marshal(m)
-	if err != nil {
-		return "", err
-	}
-
 	var o objectIDer
-	if err := json.Unmarshal(tmp, &o); err != nil {
+	if err := jsonx.RoundTrip(m, &o); err != nil {
 		return "", err
 	}
 
@@ -382,14 +377,8 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 		return nil, nil
 	}
 
-	// unmarshal the input
-	tmp, err := json.Marshal(input)
-	if err != nil {
-		return nil, err
-	}
-
 	var v map[string]interface{}
-	if err := json.Unmarshal(tmp, &v); err != nil {
+	if err := jsonx.RoundTrip(input, &v); err != nil {
 		return nil, err
 	}
 
@@ -406,14 +395,9 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 		}
 	}
 
-	tmp, err = json.Marshal(out)
-	if err != nil {
-		return nil, err
-	}
-
 	// return the ids if they are set
 	var ids []string
-	if err := json.Unmarshal(tmp, &ids); err != nil {
+	if err := jsonx.RoundTrip(out, &ids); err != nil {
 		return nil, err
 	}
 
@@ -422,8 +406,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 
 // addTokenEditPermissions adds the edit permissions for the api token to the object
 func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
-	// get auth info from context
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
@@ -431,7 +414,7 @@ func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID stri
 	}
 
 	req := fgax.TupleRequest{
-		SubjectID:   ac.SubjectID,
+		SubjectID:   subjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    fgax.CanEdit,
 		ObjectID:    oID,
@@ -476,7 +459,7 @@ func addUserRelation(ctx context.Context, m generated.Mutation, relation string)
 		return nil
 	}
 
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
@@ -484,7 +467,7 @@ func addUserRelation(ctx context.Context, m generated.Mutation, relation string)
 	}
 
 	req := fgax.TupleRequest{
-		SubjectID:   ac.SubjectID,
+		SubjectID:   subjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    relation,
 		ObjectID:    objID,

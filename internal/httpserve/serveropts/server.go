@@ -34,8 +34,10 @@ func NewServerOptions(opts []ServerOption, cfgLoc string) *ServerOptions {
 	return so
 }
 
-// AddServerOptions applies a server option after the initial setup
+// AddServerOptions applies server options after the initial setup
 // this should be used when information is not available on NewServerOptions
-func (so *ServerOptions) AddServerOptions(opt ServerOption) {
-	opt.apply(so)
+func (so *ServerOptions) AddServerOptions(opts ...ServerOption) {
+	for _, opt := range opts {
+		opt.apply(so)
+	}
 }

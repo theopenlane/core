@@ -45,6 +45,8 @@ type ControlHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// human readable title of the control for quick identification
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
@@ -61,8 +63,16 @@ type ControlHistory struct {
 	ResponsiblePartyID string `json:"responsible_party_id,omitempty"`
 	// status of the control
 	Status enums.ControlStatus `json:"status,omitempty"`
+	// OSCAL-aligned implementation status of the control
+	ImplementationStatus enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
+	// narrative describing current implementation state for OSCAL export
+	ImplementationDescription string `json:"implementation_description,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation string `json:"public_representation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"source_name,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"reference_framework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -120,8 +130,12 @@ type ControlHistory struct {
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the standard that the control belongs to, if applicable
-	StandardID   string `json:"standard_id,omitempty"`
-	selectValues sql.SelectValues
+	StandardID string `json:"standard_id,omitempty"`
+	// visibility of the control on the trust center, controls the publishing state for trust center display
+	TrustCenterVisibility enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
+	// indicates the control is derived from the trust center standard, set by the system during control clone
+	IsTrustCenterControl bool `json:"is_trust_center_control,omitempty"`
+	selectValues         sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -133,9 +147,9 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker:
+		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker, controlhistory.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -228,6 +242,13 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case controlhistory.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
+			}
 		case controlhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -280,11 +301,36 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = enums.ControlStatus(value.String)
 			}
+		case controlhistory.FieldImplementationStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_status", values[i])
+			} else if value.Valid {
+				_m.ImplementationStatus = enums.ControlImplementationStatus(value.String)
+			}
+		case controlhistory.FieldImplementationDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_description", values[i])
+			} else if value.Valid {
+				_m.ImplementationDescription = value.String
+			}
+		case controlhistory.FieldPublicRepresentation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field public_representation", values[i])
+			} else if value.Valid {
+				_m.PublicRepresentation = value.String
+			}
 		case controlhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				_m.Source = enums.ControlSource(value.String)
+			}
+		case controlhistory.FieldSourceName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_name", values[i])
+			} else if value.Valid {
+				_m.SourceName = new(string)
+				*_m.SourceName = value.String
 			}
 		case controlhistory.FieldReferenceFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -483,6 +529,18 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StandardID = value.String
 			}
+		case controlhistory.FieldTrustCenterVisibility:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_visibility", values[i])
+			} else if value.Valid {
+				_m.TrustCenterVisibility = enums.TrustCenterControlVisibility(value.String)
+			}
+		case controlhistory.FieldIsTrustCenterControl:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_trust_center_control", values[i])
+			} else if value.Valid {
+				_m.IsTrustCenterControl = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -552,6 +610,11 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
@@ -576,8 +639,22 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
+	builder.WriteString("implementation_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ImplementationStatus))
+	builder.WriteString(", ")
+	builder.WriteString("implementation_description=")
+	builder.WriteString(_m.ImplementationDescription)
+	builder.WriteString(", ")
+	builder.WriteString("public_representation=")
+	builder.WriteString(_m.PublicRepresentation)
+	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
+	if v := _m.SourceName; v != nil {
+		builder.WriteString("source_name=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")
@@ -675,6 +752,12 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("standard_id=")
 	builder.WriteString(_m.StandardID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_visibility=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TrustCenterVisibility))
+	builder.WriteString(", ")
+	builder.WriteString("is_trust_center_control=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTrustCenterControl))
 	builder.WriteByte(')')
 	return builder.String()
 }

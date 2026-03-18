@@ -17,11 +17,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -53,6 +55,7 @@ type FindingQuery struct {
 	withViewers                 *GroupQuery
 	withEnvironment             *CustomTypeEnumQuery
 	withScope                   *CustomTypeEnumQuery
+	withFindingStatus           *CustomTypeEnumQuery
 	withIntegrations            *IntegrationQuery
 	withVulnerabilities         *VulnerabilityQuery
 	withActionPlans             *ActionPlanQuery
@@ -64,6 +67,8 @@ type FindingQuery struct {
 	withEntities                *EntityQuery
 	withScans                   *ScanQuery
 	withTasks                   *TaskQuery
+	withDirectoryAccounts       *DirectoryAccountQuery
+	withIdentityHolders         *IdentityHolderQuery
 	withRemediations            *RemediationQuery
 	withReviews                 *ReviewQuery
 	withComments                *NoteQuery
@@ -87,6 +92,8 @@ type FindingQuery struct {
 	withNamedEntities           map[string]*EntityQuery
 	withNamedScans              map[string]*ScanQuery
 	withNamedTasks              map[string]*TaskQuery
+	withNamedDirectoryAccounts  map[string]*DirectoryAccountQuery
+	withNamedIdentityHolders    map[string]*IdentityHolderQuery
 	withNamedRemediations       map[string]*RemediationQuery
 	withNamedReviews            map[string]*ReviewQuery
 	withNamedComments           map[string]*NoteQuery
@@ -269,6 +276,31 @@ func (_q *FindingQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.ScopeTable, finding.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindingStatus chains the current query on the "finding_status" edge.
+func (_q *FindingQuery) QueryFindingStatus() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingStatusTable, finding.FindingStatusColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -548,6 +580,56 @@ func (_q *FindingQuery) QueryTasks() *TaskQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
+func (_q *FindingQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.DirectoryAccountsTable, finding.DirectoryAccountsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *FindingQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.IdentityHoldersTable, finding.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.FindingIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -902,6 +984,7 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		withViewers:            _q.withViewers.Clone(),
 		withEnvironment:        _q.withEnvironment.Clone(),
 		withScope:              _q.withScope.Clone(),
+		withFindingStatus:      _q.withFindingStatus.Clone(),
 		withIntegrations:       _q.withIntegrations.Clone(),
 		withVulnerabilities:    _q.withVulnerabilities.Clone(),
 		withActionPlans:        _q.withActionPlans.Clone(),
@@ -913,6 +996,8 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		withEntities:           _q.withEntities.Clone(),
 		withScans:              _q.withScans.Clone(),
 		withTasks:              _q.withTasks.Clone(),
+		withDirectoryAccounts:  _q.withDirectoryAccounts.Clone(),
+		withIdentityHolders:    _q.withIdentityHolders.Clone(),
 		withRemediations:       _q.withRemediations.Clone(),
 		withReviews:            _q.withReviews.Clone(),
 		withComments:           _q.withComments.Clone(),
@@ -989,6 +1074,17 @@ func (_q *FindingQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *FindingQu
 		opt(query)
 	}
 	_q.withScope = query
+	return _q
+}
+
+// WithFindingStatus tells the query-builder to eager-load the nodes that are connected to
+// the "finding_status" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithFindingStatus(opts ...func(*CustomTypeEnumQuery)) *FindingQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindingStatus = query
 	return _q
 }
 
@@ -1110,6 +1206,28 @@ func (_q *FindingQuery) WithTasks(opts ...func(*TaskQuery)) *FindingQuery {
 		opt(query)
 	}
 	_q.withTasks = query
+	return _q
+}
+
+// WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
+// the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *FindingQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryAccounts = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *FindingQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
 	return _q
 }
 
@@ -1264,13 +1382,14 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		nodes       = []*Finding{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
+			_q.withFindingStatus != nil,
 			_q.withIntegrations != nil,
 			_q.withVulnerabilities != nil,
 			_q.withActionPlans != nil,
@@ -1282,6 +1401,8 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			_q.withEntities != nil,
 			_q.withScans != nil,
 			_q.withTasks != nil,
+			_q.withDirectoryAccounts != nil,
+			_q.withIdentityHolders != nil,
 			_q.withRemediations != nil,
 			_q.withReviews != nil,
 			_q.withComments != nil,
@@ -1352,6 +1473,12 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	if query := _q.withScope; query != nil {
 		if err := _q.loadScope(ctx, query, nodes, nil,
 			func(n *Finding, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindingStatus; query != nil {
+		if err := _q.loadFindingStatus(ctx, query, nodes, nil,
+			func(n *Finding, e *CustomTypeEnum) { n.Edges.FindingStatus = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1429,6 +1556,22 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Finding) { n.Edges.Tasks = []*Task{} },
 			func(n *Finding, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryAccounts; query != nil {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *Finding) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
+			func(n *Finding, e *DirectoryAccount) {
+				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Finding) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Finding, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1571,6 +1714,20 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedTasks(name) },
 			func(n *Finding, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryAccounts {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *Finding) { n.appendNamedDirectoryAccounts(name) },
+			func(n *Finding, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Finding) { n.appendNamedIdentityHolders(name) },
+			func(n *Finding, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1797,6 +1954,35 @@ func (_q *FindingQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuer
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadFindingStatus(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].FindingStatusID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "finding_status_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2238,6 +2424,130 @@ func (_q *FindingQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes [
 	}
 	return nil
 }
+func (_q *FindingQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *DirectoryAccount)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.DirectoryAccountsTable)
+		joinT.Schema(_q.schemaConfig.FindingDirectoryAccounts)
+		s.Join(joinT).On(s.C(directoryaccount.FieldID), joinT.C(finding.DirectoryAccountsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.DirectoryAccountsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.DirectoryAccountsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DirectoryAccount](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "directory_accounts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.IdentityHoldersTable)
+		joinT.Schema(_q.schemaConfig.FindingIdentityHolders)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(finding.IdentityHoldersPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.IdentityHoldersPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.IdentityHoldersPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *FindingQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Remediation)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Finding)
@@ -2462,6 +2772,9 @@ func (_q *FindingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withScope != nil {
 			_spec.Node.AddColumnOnce(finding.FieldScopeID)
+		}
+		if _q.withFindingStatus != nil {
+			_spec.Node.AddColumnOnce(finding.FieldFindingStatusID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -2724,6 +3037,34 @@ func (_q *FindingQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *F
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to the "directory_accounts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithNamedDirectoryAccounts(name string, opts ...func(*DirectoryAccountQuery)) *FindingQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryAccounts == nil {
+		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
+	}
+	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *FindingQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
 	return _q
 }
 

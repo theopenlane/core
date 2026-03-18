@@ -19,6 +19,8 @@ load_template() {
         if [[ "$arg" == *"="* ]]; then
             key="${arg%%=*}"
             value="${arg#*=}"
+            # Support escaped newlines/tabs in substituted values (e.g. "\n- item").
+            value=$(printf '%b' "$value")
             content="${content//\{\{${key}\}\}/$value}"
         fi
     done

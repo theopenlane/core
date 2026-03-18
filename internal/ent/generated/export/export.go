@@ -46,6 +46,10 @@ const (
 	FieldFilters = "filters"
 	// FieldErrorMessage holds the string denoting the error_message field in the database.
 	FieldErrorMessage = "error_message"
+	// FieldMode holds the string denoting the mode field in the database.
+	FieldMode = "mode"
+	// FieldExportMetadata holds the string denoting the export_metadata field in the database.
+	FieldExportMetadata = "export_metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -94,6 +98,8 @@ var Columns = []string{
 	FieldFields,
 	FieldFilters,
 	FieldErrorMessage,
+	FieldMode,
+	FieldExportMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -132,7 +138,7 @@ var (
 // ExportTypeValidator is a validator for the "export_type" field enum values. It is called by the builders before save.
 func ExportTypeValidator(et enums.ExportType) error {
 	switch et.String() {
-	case "CONTROL", "DIRECTORY_MEMBERSHIP", "EVIDENCE", "FINDING", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY":
+	case "ASSET", "CONTROL", "DIRECTORY_MEMBERSHIP", "ENTITY", "EVIDENCE", "FINDING", "IDENTITY_HOLDER", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "SYSTEM_DETAIL", "TASK", "TRUST_CENTER_FAQ", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for export_type field: %q", et)
@@ -144,7 +150,7 @@ const DefaultFormat enums.ExportFormat = "CSV"
 // FormatValidator is a validator for the "format" field enum values. It is called by the builders before save.
 func FormatValidator(f enums.ExportFormat) error {
 	switch f.String() {
-	case "CSV":
+	case "CSV", "MARKDOWN", "DOCX", "PDF":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for format field: %q", f)
@@ -160,6 +166,18 @@ func StatusValidator(s enums.ExportStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultMode enums.ExportMode = "FLAT"
+
+// ModeValidator is a validator for the "mode" field enum values. It is called by the builders before save.
+func ModeValidator(m enums.ExportMode) error {
+	switch m.String() {
+	case "FLAT", "FOLDER":
+		return nil
+	default:
+		return fmt.Errorf("export: invalid enum value for mode field: %q", m)
 	}
 }
 
@@ -234,6 +252,11 @@ func ByFilters(opts ...sql.OrderTermOption) OrderOption {
 // ByErrorMessage orders the results by the error_message field.
 func ByErrorMessage(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldErrorMessage, opts...).ToFunc()
+}
+
+// ByMode orders the results by the mode field.
+func ByMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMode, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -311,4 +334,11 @@ var (
 	_ graphql.Marshaler = (*enums.ExportStatus)(nil)
 	// enums.ExportStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ExportStatus)(nil)
+)
+
+var (
+	// enums.ExportMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ExportMode)(nil)
+	// enums.ExportMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ExportMode)(nil)
 )

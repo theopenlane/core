@@ -3,7 +3,7 @@ package testclient
 import (
 	"net/url"
 
-	"github.com/Yamashou/gqlgenc/clientv2"
+	"github.com/gqlgo/gqlgenc/clientv2"
 )
 
 // Config is the configuration for the API client

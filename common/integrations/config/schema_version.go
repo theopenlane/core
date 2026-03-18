@@ -1,5 +1,7 @@
 package config
 
+import "github.com/samber/lo"
+
 // DefaultSchemaVersion is the schema version assigned when specs omit the field
 const DefaultSchemaVersion = "v1"
 
@@ -14,12 +16,7 @@ func (s *ProviderSpec) supportsSchemaVersion() bool {
 		return false
 	}
 
-	version := s.SchemaVersion
-	if version == "" {
-		version = DefaultSchemaVersion
-	}
-
-	_, ok := supportedSchemaVersions[version]
+	_, ok := supportedSchemaVersions[lo.CoalesceOrEmpty(s.SchemaVersion, DefaultSchemaVersion)]
 
 	return ok
 }

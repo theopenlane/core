@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -37,10 +38,10 @@ type DirectorySyncRunQuery struct {
 	withEnvironment               *CustomTypeEnumQuery
 	withScope                     *CustomTypeEnumQuery
 	withIntegration               *IntegrationQuery
+	withPlatform                  *PlatformQuery
 	withDirectoryAccounts         *DirectoryAccountQuery
 	withDirectoryGroups           *DirectoryGroupQuery
 	withDirectoryMemberships      *DirectoryMembershipQuery
-	withFKs                       bool
 	loadTotal                     []func(context.Context, []*DirectorySyncRun) error
 	modifiers                     []func(*sql.Selector)
 	withNamedDirectoryAccounts    map[string]*DirectoryAccountQuery
@@ -171,10 +172,35 @@ func (_q *DirectorySyncRunQuery) QueryIntegration() *IntegrationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, selector),
 			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directorysyncrun.IntegrationTable, directorysyncrun.IntegrationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorysyncrun.IntegrationTable, directorysyncrun.IntegrationColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatform chains the current query on the "platform" edge.
+func (_q *DirectorySyncRunQuery) QueryPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorysyncrun.PlatformTable, directorysyncrun.PlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
 		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -453,6 +479,7 @@ func (_q *DirectorySyncRunQuery) Clone() *DirectorySyncRunQuery {
 		withEnvironment:          _q.withEnvironment.Clone(),
 		withScope:                _q.withScope.Clone(),
 		withIntegration:          _q.withIntegration.Clone(),
+		withPlatform:             _q.withPlatform.Clone(),
 		withDirectoryAccounts:    _q.withDirectoryAccounts.Clone(),
 		withDirectoryGroups:      _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships: _q.withDirectoryMemberships.Clone(),
@@ -504,6 +531,17 @@ func (_q *DirectorySyncRunQuery) WithIntegration(opts ...func(*IntegrationQuery)
 		opt(query)
 	}
 	_q.withIntegration = query
+	return _q
+}
+
+// WithPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectorySyncRunQuery) WithPlatform(opts ...func(*PlatformQuery)) *DirectorySyncRunQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatform = query
 	return _q
 }
 
@@ -623,21 +661,18 @@ func (_q *DirectorySyncRunQuery) prepareQuery(ctx context.Context) error {
 func (_q *DirectorySyncRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DirectorySyncRun, error) {
 	var (
 		nodes       = []*DirectorySyncRun{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withIntegration != nil,
+			_q.withPlatform != nil,
 			_q.withDirectoryAccounts != nil,
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, directorysyncrun.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DirectorySyncRun).scanValues(nil, columns)
 	}
@@ -682,6 +717,12 @@ func (_q *DirectorySyncRunQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if query := _q.withIntegration; query != nil {
 		if err := _q.loadIntegration(ctx, query, nodes, nil,
 			func(n *DirectorySyncRun, e *Integration) { n.Edges.Integration = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatform; query != nil {
+		if err := _q.loadPlatform(ctx, query, nodes, nil,
+			func(n *DirectorySyncRun, e *Platform) { n.Edges.Platform = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -857,6 +898,35 @@ func (_q *DirectorySyncRunQuery) loadIntegration(ctx context.Context, query *Int
 	}
 	return nil
 }
+func (_q *DirectorySyncRunQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*DirectorySyncRun, init func(*DirectorySyncRun), assign func(*DirectorySyncRun, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectorySyncRun)
+	for i := range nodes {
+		fk := nodes[i].PlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *DirectorySyncRunQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*DirectorySyncRun, init func(*DirectorySyncRun), assign func(*DirectorySyncRun, *DirectoryAccount)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*DirectorySyncRun)
@@ -867,7 +937,9 @@ func (_q *DirectorySyncRunQuery) loadDirectoryAccounts(ctx context.Context, quer
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directoryaccount.FieldDirectorySyncRunID)
+	}
 	query.Where(predicate.DirectoryAccount(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(directorysyncrun.DirectoryAccountsColumn), fks...))
 	}))
@@ -876,13 +948,10 @@ func (_q *DirectorySyncRunQuery) loadDirectoryAccounts(ctx context.Context, quer
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.directory_sync_run_directory_accounts
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "directory_sync_run_directory_accounts" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.DirectorySyncRunID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "directory_sync_run_directory_accounts" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "directory_sync_run_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -898,7 +967,9 @@ func (_q *DirectorySyncRunQuery) loadDirectoryGroups(ctx context.Context, query 
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorygroup.FieldDirectorySyncRunID)
+	}
 	query.Where(predicate.DirectoryGroup(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(directorysyncrun.DirectoryGroupsColumn), fks...))
 	}))
@@ -907,13 +978,10 @@ func (_q *DirectorySyncRunQuery) loadDirectoryGroups(ctx context.Context, query 
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.directory_sync_run_directory_groups
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "directory_sync_run_directory_groups" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.DirectorySyncRunID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "directory_sync_run_directory_groups" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "directory_sync_run_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -929,7 +997,9 @@ func (_q *DirectorySyncRunQuery) loadDirectoryMemberships(ctx context.Context, q
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorymembership.FieldDirectorySyncRunID)
+	}
 	query.Where(predicate.DirectoryMembership(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(directorysyncrun.DirectoryMembershipsColumn), fks...))
 	}))
@@ -938,13 +1008,10 @@ func (_q *DirectorySyncRunQuery) loadDirectoryMemberships(ctx context.Context, q
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.directory_sync_run_directory_memberships
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "directory_sync_run_directory_memberships" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.DirectorySyncRunID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "directory_sync_run_directory_memberships" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "directory_sync_run_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -992,6 +1059,9 @@ func (_q *DirectorySyncRunQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withIntegration != nil {
 			_spec.Node.AddColumnOnce(directorysyncrun.FieldIntegrationID)
+		}
+		if _q.withPlatform != nil {
+			_spec.Node.AddColumnOnce(directorysyncrun.FieldPlatformID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

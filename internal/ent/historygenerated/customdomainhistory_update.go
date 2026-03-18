@@ -204,6 +204,26 @@ func (_u *CustomDomainHistoryUpdate) ClearDNSVerificationID() *CustomDomainHisto
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CustomDomainHistoryUpdate) SetTrustCenterID(v string) *CustomDomainHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdate) SetNillableTrustCenterID(v *string) *CustomDomainHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CustomDomainHistoryUpdate) ClearTrustCenterID() *CustomDomainHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the CustomDomainHistoryMutation object of the builder.
 func (_u *CustomDomainHistoryUpdate) Mutation() *CustomDomainHistoryMutation {
 	return _u.mutation
@@ -336,6 +356,12 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.DNSVerificationIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldDNSVerificationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(customdomainhistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -531,6 +557,26 @@ func (_u *CustomDomainHistoryUpdateOne) ClearDNSVerificationID() *CustomDomainHi
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *CustomDomainHistoryUpdateOne) SetTrustCenterID(v string) *CustomDomainHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *CustomDomainHistoryUpdateOne) SetNillableTrustCenterID(v *string) *CustomDomainHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *CustomDomainHistoryUpdateOne) ClearTrustCenterID() *CustomDomainHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the CustomDomainHistoryMutation object of the builder.
 func (_u *CustomDomainHistoryUpdateOne) Mutation() *CustomDomainHistoryMutation {
 	return _u.mutation
@@ -693,6 +739,12 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	}
 	if _u.mutation.DNSVerificationIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldDNSVerificationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(customdomainhistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

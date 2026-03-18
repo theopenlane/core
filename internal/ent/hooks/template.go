@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -15,7 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
-type clearingNDAFilesKeyOp struct{}
+var clearingNDAFilesOperationContextKey = contextx.NewKey[bool]()
 
 // HookTemplate runs on template create and update mutations
 func HookTemplate() ent.Hook {
@@ -43,7 +44,7 @@ func HookTemplate() ent.Hook {
 func HookTemplateFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TemplateFunc(func(ctx context.Context, m *generated.TemplateMutation) (generated.Value, error) {
-			if ok, _ := ctx.Value(clearingNDAFilesKeyOp{}).(bool); ok {
+			if skipping, ok := clearingNDAFilesOperationContextKey.Get(ctx); ok && skipping {
 				return next.Mutate(ctx, m)
 			}
 
@@ -58,7 +59,7 @@ func HookTemplateFiles() ent.Hook {
 				}
 
 				if trustCenterID, ok := m.TrustCenterID(); ok && trustCenterID != "" {
-					clearCtx := context.WithValue(ctx, clearingNDAFilesKeyOp{}, true)
+					clearCtx := clearingNDAFilesOperationContextKey.Set(ctx, true)
 					_, err = m.Client().Template.Update().
 						Where(template.TrustCenterIDEQ(trustCenterID)).
 						ClearFiles().
@@ -84,10 +85,5 @@ func checkTemplateFiles(ctx context.Context, m *generated.TemplateMutation) (con
 		return ctx, nil
 	}
 
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut *generated.TemplateMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TemplateMutation) string { return mut.Type() },
-	)
-
-	return objects.ProcessFilesForMutation(ctx, adapter, key)
+	return objects.ProcessFilesForMutation(ctx, m, key)
 }

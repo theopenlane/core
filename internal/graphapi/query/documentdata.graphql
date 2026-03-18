@@ -30,8 +30,8 @@ query GetDocumentDataByID($documentDataId: ID!) {
   }
 }
 
-mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDataInput!) {
-  updateDocumentData(id: $updateDocumentDataId, input: $input) {
+mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDataInput!, $documentDataFile: Upload) {
+  updateDocumentData(id: $updateDocumentDataId, input: $input, documentDataFile: $documentDataFile) {
     documentData {
       id
       templateID

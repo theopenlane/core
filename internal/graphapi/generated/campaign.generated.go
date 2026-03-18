@@ -124,6 +124,10 @@ func (ec *executionContext) fieldContext_CampaignBulkCreatePayload_campaigns(_ c
 				return ec.fieldContext_Campaign_assessmentID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Campaign_metadata(ctx, field)
+			case "emailBrandingID":
+				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
+			case "emailTemplateID":
+				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
 			case "blockedGroups":
@@ -140,6 +144,10 @@ func (ec *executionContext) fieldContext_CampaignBulkCreatePayload_campaigns(_ c
 				return ec.fieldContext_Campaign_assessment(ctx, field)
 			case "template":
 				return ec.fieldContext_Campaign_template(ctx, field)
+			case "emailBranding":
+				return ec.fieldContext_Campaign_emailBranding(ctx, field)
+			case "emailTemplate":
+				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
 			case "entity":
 				return ec.fieldContext_Campaign_entity(ctx, field)
 			case "campaignTargets":
@@ -154,6 +162,8 @@ func (ec *executionContext) fieldContext_CampaignBulkCreatePayload_campaigns(_ c
 				return ec.fieldContext_Campaign_groups(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Campaign_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Campaign_controls(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
@@ -267,6 +277,10 @@ func (ec *executionContext) fieldContext_CampaignCreatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_assessmentID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Campaign_metadata(ctx, field)
+			case "emailBrandingID":
+				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
+			case "emailTemplateID":
+				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
 			case "blockedGroups":
@@ -283,6 +297,10 @@ func (ec *executionContext) fieldContext_CampaignCreatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_assessment(ctx, field)
 			case "template":
 				return ec.fieldContext_Campaign_template(ctx, field)
+			case "emailBranding":
+				return ec.fieldContext_Campaign_emailBranding(ctx, field)
+			case "emailTemplate":
+				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
 			case "entity":
 				return ec.fieldContext_Campaign_entity(ctx, field)
 			case "campaignTargets":
@@ -297,6 +315,8 @@ func (ec *executionContext) fieldContext_CampaignCreatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_groups(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Campaign_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Campaign_controls(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
@@ -439,6 +459,10 @@ func (ec *executionContext) fieldContext_CampaignUpdatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_assessmentID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Campaign_metadata(ctx, field)
+			case "emailBrandingID":
+				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
+			case "emailTemplateID":
+				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
 			case "blockedGroups":
@@ -455,6 +479,10 @@ func (ec *executionContext) fieldContext_CampaignUpdatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_assessment(ctx, field)
 			case "template":
 				return ec.fieldContext_Campaign_template(ctx, field)
+			case "emailBranding":
+				return ec.fieldContext_Campaign_emailBranding(ctx, field)
+			case "emailTemplate":
+				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
 			case "entity":
 				return ec.fieldContext_Campaign_entity(ctx, field)
 			case "campaignTargets":
@@ -469,6 +497,8 @@ func (ec *executionContext) fieldContext_CampaignUpdatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_groups(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Campaign_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Campaign_controls(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
@@ -520,10 +550,10 @@ func (ec *executionContext) _CampaignBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -559,10 +589,10 @@ func (ec *executionContext) _CampaignCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -598,10 +628,10 @@ func (ec *executionContext) _CampaignDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -637,10 +667,10 @@ func (ec *executionContext) _CampaignUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

@@ -52,6 +52,12 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
+	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
+	FieldIdentityHolderID = "identity_holder_id"
+	// FieldDirectoryName holds the string denoting the directory_name field in the database.
+	FieldDirectoryName = "directory_name"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldSecondaryKey holds the string denoting the secondary_key field in the database.
@@ -60,6 +66,12 @@ const (
 	FieldCanonicalEmail = "canonical_email"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
+	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
+	FieldAvatarRemoteURL = "avatar_remote_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
+	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
+	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldGivenName holds the string denoting the given_name field in the database.
 	FieldGivenName = "given_name"
 	// FieldFamilyName holds the string denoting the family_name field in the database.
@@ -113,10 +125,16 @@ var Columns = []string{
 	FieldScopeID,
 	FieldIntegrationID,
 	FieldDirectorySyncRunID,
+	FieldPlatformID,
+	FieldIdentityHolderID,
+	FieldDirectoryName,
 	FieldExternalID,
 	FieldSecondaryKey,
 	FieldCanonicalEmail,
 	FieldDisplayName,
+	FieldAvatarRemoteURL,
+	FieldAvatarLocalFileID,
+	FieldAvatarUpdatedAt,
 	FieldGivenName,
 	FieldFamilyName,
 	FieldJobTitle,
@@ -163,6 +181,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
+	DefaultAvatarUpdatedAt func() time.Time
+	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
+	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultProfileHash holds the default value on creation for the "profile_hash" field.
@@ -300,6 +322,21 @@ func ByDirectorySyncRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectorySyncRunID, opts...).ToFunc()
 }
 
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
+// ByIdentityHolderID orders the results by the identity_holder_id field.
+func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDirectoryName orders the results by the directory_name field.
+func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
+}
+
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
@@ -318,6 +355,21 @@ func ByCanonicalEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByAvatarRemoteURL orders the results by the avatar_remote_url field.
+func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
+}
+
+// ByAvatarUpdatedAt orders the results by the avatar_updated_at field.
+func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarUpdatedAt, opts...).ToFunc()
 }
 
 // ByGivenName orders the results by the given_name field.

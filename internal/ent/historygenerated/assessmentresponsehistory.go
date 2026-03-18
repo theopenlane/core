@@ -82,7 +82,9 @@ type AssessmentResponseHistory struct {
 	DueDate time.Time `json:"due_date,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID string `json:"document_data_id,omitempty"`
-	selectValues   sql.SelectValues
+	// is this a draft response? can the user resume from where they left?
+	IsDraft      bool `json:"is_draft,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -94,7 +96,7 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmentresponsehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmentresponsehistory.FieldIsTest:
+		case assessmentresponsehistory.FieldIsTest, assessmentresponsehistory.FieldIsDraft:
 			values[i] = new(sql.NullBool)
 		case assessmentresponsehistory.FieldSendAttempts, assessmentresponsehistory.FieldEmailOpenCount, assessmentresponsehistory.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
@@ -305,6 +307,12 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.DocumentDataID = value.String
 			}
+		case assessmentresponsehistory.FieldIsDraft:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_draft", values[i])
+			} else if value.Valid {
+				_m.IsDraft = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -430,6 +438,9 @@ func (_m *AssessmentResponseHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("document_data_id=")
 	builder.WriteString(_m.DocumentDataID)
+	builder.WriteString(", ")
+	builder.WriteString("is_draft=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsDraft))
 	builder.WriteByte(')')
 	return builder.String()
 }

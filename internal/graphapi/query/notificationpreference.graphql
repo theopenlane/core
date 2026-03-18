@@ -1,0 +1,347 @@
+
+mutation CreateBulkCSVNotificationPreference($input: Upload!) {
+  createBulkCSVNotificationPreference(input: $input) {
+    notificationPreferences {
+      cadence
+      channel
+      config
+      createdAt
+      createdBy
+      destination
+      enabled
+      id
+      isDefault
+      lastError
+      lastUsedAt
+      metadata
+      muteUntil
+      ownerID
+      priority
+      provider
+      quietHoursEnd
+      quietHoursStart
+      status
+      templateID
+      timezone
+      topicOverrides
+      topicPatterns
+      updatedAt
+      updatedBy
+      userID
+      verifiedAt
+    }
+  }
+}
+
+mutation CreateBulkNotificationPreference($input: [CreateNotificationPreferenceInput!]) {
+  createBulkNotificationPreference(input: $input) {
+    notificationPreferences {
+      cadence
+      channel
+      config
+      createdAt
+      createdBy
+      destination
+      enabled
+      id
+      isDefault
+      lastError
+      lastUsedAt
+      metadata
+      muteUntil
+      ownerID
+      priority
+      provider
+      quietHoursEnd
+      quietHoursStart
+      status
+      templateID
+      timezone
+      topicOverrides
+      topicPatterns
+      updatedAt
+      updatedBy
+      userID
+      verifiedAt
+    }
+  }
+}
+
+mutation CreateNotificationPreference($input: CreateNotificationPreferenceInput!) {
+  createNotificationPreference(input: $input) {
+    notificationPreference {
+      cadence
+      channel
+      config
+      createdAt
+      createdBy
+      destination
+      enabled
+      id
+      isDefault
+      lastError
+      lastUsedAt
+      metadata
+      muteUntil
+      ownerID
+      priority
+      provider
+      quietHoursEnd
+      quietHoursStart
+      status
+      templateID
+      timezone
+      topicOverrides
+      topicPatterns
+      updatedAt
+      updatedBy
+      userID
+      verifiedAt
+    }
+  }
+}
+
+mutation DeleteNotificationPreference($deleteNotificationPreferenceId: ID!) {
+  deleteNotificationPreference(id: $deleteNotificationPreferenceId) {
+    deletedID
+  }
+}
+
+mutation UpdateBulkNotificationPreference($ids: [ID!]!, $input: UpdateNotificationPreferenceInput!) {
+  updateBulkNotificationPreference(ids: $ids, input: $input) {
+    notificationPreferences {
+      cadence
+      channel
+      config
+      createdAt
+      createdBy
+      destination
+      enabled
+      id
+      isDefault
+      lastError
+      lastUsedAt
+      metadata
+      muteUntil
+      ownerID
+      priority
+      provider
+      quietHoursEnd
+      quietHoursStart
+      status
+      templateID
+      timezone
+      topicOverrides
+      topicPatterns
+      updatedAt
+      updatedBy
+      userID
+      verifiedAt
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkCSVNotificationPreference($input: Upload!) {
+  updateBulkCSVNotificationPreference(input: $input) {
+    notificationPreferences {
+      cadence
+      channel
+      config
+      createdAt
+      createdBy
+      destination
+      enabled
+      id
+      isDefault
+      lastError
+      lastUsedAt
+      metadata
+      muteUntil
+      ownerID
+      priority
+      provider
+      quietHoursEnd
+      quietHoursStart
+      status
+      templateID
+      timezone
+      topicOverrides
+      topicPatterns
+      updatedAt
+      updatedBy
+      userID
+      verifiedAt
+    }
+    updatedIDs
+  }
+}
+
+mutation DeleteBulkNotificationPreference($ids: [ID!]!) {
+  deleteBulkNotificationPreference(ids: $ids) {
+    deletedIDs
+  }
+}
+
+query GetAllNotificationPreferences($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationPreferenceOrder!]){
+  notificationPreferences(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cadence
+        channel
+        config
+        createdAt
+        createdBy
+        destination
+        enabled
+        id
+        isDefault
+        lastError
+        lastUsedAt
+        metadata
+        muteUntil
+        ownerID
+        priority
+        provider
+        quietHoursEnd
+        quietHoursStart
+        status
+        templateID
+        timezone
+        topicOverrides
+        topicPatterns
+        updatedAt
+        updatedBy
+        userID
+        verifiedAt
+      }
+    }
+  }
+}
+query GetNotificationPreferenceByID($notificationPreferenceId: ID!) {
+  notificationPreference(id: $notificationPreferenceId) {
+    cadence
+    channel
+    config
+    createdAt
+    createdBy
+    destination
+    enabled
+    id
+    isDefault
+    lastError
+    lastUsedAt
+    metadata
+    muteUntil
+    ownerID
+    priority
+    provider
+    quietHoursEnd
+    quietHoursStart
+    status
+    templateID
+    timezone
+    topicOverrides
+    topicPatterns
+    updatedAt
+    updatedBy
+    userID
+    verifiedAt
+  }
+}
+
+query GetNotificationPreferences($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationPreferenceOrder!], $where: NotificationPreferenceWhereInput) {
+  notificationPreferences(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cadence
+        channel
+        config
+        createdAt
+        createdBy
+        destination
+        enabled
+        id
+        isDefault
+        lastError
+        lastUsedAt
+        metadata
+        muteUntil
+        ownerID
+        priority
+        provider
+        quietHoursEnd
+        quietHoursStart
+        status
+        templateID
+        timezone
+        topicOverrides
+        topicPatterns
+        updatedAt
+        updatedBy
+        userID
+        verifiedAt
+      }
+    }
+  }
+}
+mutation UpdateNotificationPreference($updateNotificationPreferenceId: ID!, $input: UpdateNotificationPreferenceInput!) {
+  updateNotificationPreference(id: $updateNotificationPreferenceId, input: $input) {
+    notificationPreference {
+      cadence
+      channel
+      config
+      createdAt
+      createdBy
+      destination
+      enabled
+      id
+      isDefault
+      lastError
+      lastUsedAt
+      metadata
+      muteUntil
+      ownerID
+      priority
+      provider
+      quietHoursEnd
+      quietHoursStart
+      status
+      templateID
+      timezone
+      topicOverrides
+      topicPatterns
+      updatedAt
+      updatedBy
+      userID
+      verifiedAt
+    }
+  }
+}

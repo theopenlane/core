@@ -15,8 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func validateExpirationTime(m mutationWithExpirationTime) error {
-	t, ok := m.ExpiresAt()
+func validateTimeNotInPast(t time.Time, ok bool) error {
 	if !ok {
 		return nil
 	}
@@ -26,10 +25,6 @@ func validateExpirationTime(m mutationWithExpirationTime) error {
 	}
 
 	return nil
-}
-
-type mutationWithExpirationTime interface {
-	ExpiresAt() (time.Time, bool)
 }
 
 // HookCreateAPIToken runs on api token mutations and sets the owner id
@@ -44,7 +39,7 @@ func HookCreateAPIToken() ent.Hook {
 			// set organization on the token
 			m.SetOwnerID(orgID)
 
-			if err := validateExpirationTime(m); err != nil {
+			if err := validateTimeNotInPast(m.ExpiresAt()); err != nil {
 				return nil, err
 			}
 
@@ -80,7 +75,7 @@ func HookCreateAPIToken() ent.Hook {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-					return nil, err
+					return nil, ErrInternalServerError
 				}
 			}
 
@@ -122,7 +117,7 @@ func HookUpdateAPIToken() ent.Hook {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-					return nil, err
+					return nil, ErrInternalServerError
 				}
 			}
 

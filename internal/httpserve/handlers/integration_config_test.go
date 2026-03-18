@@ -27,7 +27,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
@@ -37,15 +37,16 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcp_scc"},
+		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
 		Body:                    payload,
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req = req.WithContext(testUser.UserCtx)
 
@@ -57,12 +58,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	var resp models.IntegrationConfigResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Equal(t, "gcp_scc", resp.Provider)
+	assert.Equal(t, "gcpscc", resp.Provider)
 
 	stored := suite.db.Integration.Query().
 		Where(
 			integration.OwnerID(testUser.OrganizationID),
-			integration.Kind("gcp_scc"),
+			integration.Kind("gcpscc"),
 		).
 		WithSecrets().
 		OnlyX(testUser.UserCtx)
@@ -82,7 +83,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
@@ -94,12 +95,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcp_scc"},
+		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
 		Body:                    payload,
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req = req.WithContext(testUser.UserCtx)
 
@@ -125,7 +126,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider()
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
@@ -135,6 +136,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider()
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -143,7 +145,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider()
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req = req.WithContext(testUser.UserCtx)
 
@@ -161,7 +163,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnknownProvider()
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
@@ -171,6 +173,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnknownProvider()
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
@@ -197,7 +200,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderEmptyPayload() {
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
@@ -205,12 +208,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderEmptyPayload() {
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcp_scc"},
+		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
 		Body:                    models.IntegrationConfigRequest{},
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req = req.WithContext(testUser.UserCtx)
 
@@ -228,22 +231,23 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
 	payload := models.IntegrationConfigRequest{
 		ProjectID:           "sample-project",
 		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcp_scc"},
+		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
 		Body:                    payload,
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 
 	rec := httptest.NewRecorder()
@@ -260,7 +264,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
@@ -270,15 +274,16 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	initialPayload := models.IntegrationConfigRequest{
 		ProjectID:           "initial-project",
 		ServiceAccountEmail: "initial@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcp_scc"},
+		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
 		Body:                    initialPayload,
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req = req.WithContext(testUser.UserCtx)
 
@@ -289,15 +294,16 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	updatedPayload := models.IntegrationConfigRequest{
 		ProjectID:           "updated-project",
 		ServiceAccountEmail: "updated@example.iam.gserviceaccount.com",
+		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
 	body, err = json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcp_scc"},
+		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
 		Body:                    updatedPayload,
 	})
 	require.NoError(t, err)
 
-	req = httptest.NewRequest(http.MethodPost, "/v1/integrations/gcp_scc/config", bytes.NewReader(body))
+	req = httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	req = req.WithContext(testUser.UserCtx)
 
@@ -308,7 +314,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	stored := suite.db.Integration.Query().
 		Where(
 			integration.OwnerID(testUser.OrganizationID),
-			integration.Kind("gcp_scc"),
+			integration.Kind("gcpscc"),
 		).
 		WithSecrets().
 		OnlyX(testUser.UserCtx)

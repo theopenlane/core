@@ -3,6 +3,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html"
 	"log"
@@ -87,7 +88,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	windowSize := 1 * time.Minute
-	dataStore := ratelimit.NewMapLimitStore(2*windowSize, 10*time.Second)
+	dataStore := ratelimit.NewMapLimitStore(context.Background(), 2*windowSize, 10*time.Second)
 	rateLimiter := ratelimit.New(dataStore, 5, windowSize)
 	rateLimiterHandler := rateLimitMiddleware(rateLimiter)
 	helloHandler := http.HandlerFunc(hello)

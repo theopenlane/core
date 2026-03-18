@@ -89,8 +89,6 @@ func checkTrustCenterEntityFiles(ctx context.Context, m *generated.TrustCenterEn
 	key := "logoFile"
 	ctx, err := processSingleMutationFile(ctx, m, key, "trust_center_entity", ErrTooManyAvatarFiles,
 		func(mut *generated.TrustCenterEntityMutation, id string) { mut.SetLogoFileID(id) },
-		func(mut *generated.TrustCenterEntityMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustCenterEntityMutation) string { return mut.Type() },
 	)
 	if err != nil {
 		return ctx, err

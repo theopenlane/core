@@ -158,6 +158,11 @@ func Notes(v string) predicate.WorkflowAssignmentHistory {
 	return predicate.WorkflowAssignmentHistory(sql.FieldEQ(FieldNotes, v))
 }
 
+// DueAt applies equality check predicate on the "due_at" field. It's identical to DueAtEQ.
+func DueAt(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldEQ(FieldDueAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.WorkflowAssignmentHistory {
 	return predicate.WorkflowAssignmentHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1441,6 +1446,56 @@ func NotesEqualFold(v string) predicate.WorkflowAssignmentHistory {
 // NotesContainsFold applies the ContainsFold predicate on the "notes" field.
 func NotesContainsFold(v string) predicate.WorkflowAssignmentHistory {
 	return predicate.WorkflowAssignmentHistory(sql.FieldContainsFold(FieldNotes, v))
+}
+
+// DueAtEQ applies the EQ predicate on the "due_at" field.
+func DueAtEQ(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldEQ(FieldDueAt, v))
+}
+
+// DueAtNEQ applies the NEQ predicate on the "due_at" field.
+func DueAtNEQ(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldNEQ(FieldDueAt, v))
+}
+
+// DueAtIn applies the In predicate on the "due_at" field.
+func DueAtIn(vs ...time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldIn(FieldDueAt, vs...))
+}
+
+// DueAtNotIn applies the NotIn predicate on the "due_at" field.
+func DueAtNotIn(vs ...time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldNotIn(FieldDueAt, vs...))
+}
+
+// DueAtGT applies the GT predicate on the "due_at" field.
+func DueAtGT(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldGT(FieldDueAt, v))
+}
+
+// DueAtGTE applies the GTE predicate on the "due_at" field.
+func DueAtGTE(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldGTE(FieldDueAt, v))
+}
+
+// DueAtLT applies the LT predicate on the "due_at" field.
+func DueAtLT(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldLT(FieldDueAt, v))
+}
+
+// DueAtLTE applies the LTE predicate on the "due_at" field.
+func DueAtLTE(v time.Time) predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldLTE(FieldDueAt, v))
+}
+
+// DueAtIsNil applies the IsNil predicate on the "due_at" field.
+func DueAtIsNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldIsNull(FieldDueAt))
+}
+
+// DueAtNotNil applies the NotNil predicate on the "due_at" field.
+func DueAtNotNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldNotNull(FieldDueAt))
 }
 
 // And groups predicates with the AND operator between them.

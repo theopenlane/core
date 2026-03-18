@@ -31,6 +31,21 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			Description: "ActionPlan objects",
 			EligibleFields: []WorkflowFieldInfo{
 				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.DocumentStatus",
+				},
+				{
+					Name:  "details",
+					Label: "Details",
+					Type:  "string",
+				},
+				{
+					Name:  "details_json",
+					Label: "DetailsJSON",
+					Type:  "[]interface {}",
+				},
+				{
 					Name:  "workflow_eligible_marker",
 					Label: "WorkflowEligibleMarker",
 					Type:  "bool",
@@ -233,6 +248,21 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			Description: "InternalPolicy objects",
 			EligibleFields: []WorkflowFieldInfo{
 				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.DocumentStatus",
+				},
+				{
+					Name:  "details",
+					Label: "Details",
+					Type:  "string",
+				},
+				{
+					Name:  "details_json",
+					Label: "DetailsJSON",
+					Type:  "[]interface {}",
+				},
+				{
 					Name:  "workflow_eligible_marker",
 					Label: "WorkflowEligibleMarker",
 					Type:  "bool",
@@ -276,6 +306,21 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			Label:       "Procedure",
 			Description: "Procedure objects",
 			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.DocumentStatus",
+				},
+				{
+					Name:  "details",
+					Label: "Details",
+					Type:  "string",
+				},
+				{
+					Name:  "details_json",
+					Label: "DetailsJSON",
+					Type:  "[]interface {}",
+				},
 				{
 					Name:  "workflow_eligible_marker",
 					Label: "WorkflowEligibleMarker",

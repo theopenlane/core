@@ -144,17 +144,54 @@ safe_push_branch() {
     fi
 }
 
-# Function to safely delete a remote branch
+# Function to normalize GitHub repository references to owner/repo form
+normalize_github_repo() {
+    local repo="$1"
+
+    repo="${repo#git@github.com:}"
+    repo="${repo#ssh://git@github.com/}"
+    repo="${repo#https://github.com/}"
+    repo="${repo#http://github.com/}"
+    repo="${repo%.git}"
+    repo="${repo#/}"
+
+    echo "$repo"
+}
+
+# Function to safely delete a remote branch (best effort)
 safe_delete_branch() {
     local branch="$1"
+    local repo="${2:-${HELM_CHART_REPO:-}}"
 
-    if git push origin --delete "$branch" 2>/dev/null; then
-        echo "✅ Branch $branch deleted successfully"
-        return 0
-    else
-        echo "⚠️  Failed to delete branch $branch (may not exist)"
+    if [[ -z "$branch" ]]; then
+        echo "WARNING: No branch name provided for deletion"
         return 1
     fi
+
+    local normalized_repo=""
+    if [[ -n "$repo" ]]; then
+        normalized_repo=$(normalize_github_repo "$repo")
+    fi
+
+    local encoded_branch="${branch//%/%25}"
+    encoded_branch="${encoded_branch//\//%2F}"
+
+    if [[ -n "$normalized_repo" ]] && command -v gh >/dev/null 2>&1; then
+        if gh api --repo "$normalized_repo" -X DELETE "repos/{owner}/{repo}/git/refs/heads/${encoded_branch}" >/dev/null 2>&1; then
+            echo "Branch $branch deleted successfully"
+        else
+            echo "WARNING: Failed to delete branch $branch from $normalized_repo (may not exist)"
+        fi
+        return 0
+    fi
+
+    if GIT_TERMINAL_PROMPT=0 git push origin --delete "$branch" >/dev/null 2>&1; then
+        echo "Branch $branch deleted successfully"
+    else
+        echo "WARNING: Failed to delete branch $branch (may not exist)"
+    fi
+
+    return 0
 }
 
 # Function to check if running in correct build context

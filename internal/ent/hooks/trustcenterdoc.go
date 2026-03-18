@@ -18,8 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
-// internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
-type internalTrustCenterDocUpdateKey struct{}
+var internalTrustCenterDocUpdateContextKey = contextx.NewKey[struct{}]()
 
 // HookCreateTrustCenterDoc is an ent hook that processes file uploads and sets appropriate fields and permissions on create
 func HookCreateTrustCenterDoc() ent.Hook {
@@ -120,7 +119,9 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for trust center doc visibility")
+
+					return nil, ErrInternalServerError
 				}
 			}
 
@@ -143,7 +144,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
 			// Skip hook logic if this is an internal operation from the create hook
-			if _, isInternal := contextx.From[internalTrustCenterDocUpdateKey](ctx); isInternal {
+			if _, isInternal := internalTrustCenterDocUpdateContextKey.Get(ctx); isInternal {
 				logx.FromContext(ctx).Debug().Msg("skipping update hook for internal operation")
 				return next.Mutate(ctx, m)
 			}
@@ -240,7 +241,9 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 				if len(tuples) > 0 {
 					if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-						return nil, err
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for trust center doc visibility")
+
+						return nil, ErrInternalServerError
 					}
 				}
 			}
@@ -273,7 +276,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 					// Use privacy allow context for internal update operation to bypass authorization checks
 					// and mark as internal operation to avoid triggering the update hook logic
 					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-					internalCtx := contextx.With(allowCtx, internalTrustCenterDocUpdateKey{})
+					internalCtx := internalTrustCenterDocUpdateContextKey.Set(allowCtx, struct{}{})
 					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
 					if err != nil {
 						return nil, err
@@ -338,7 +341,8 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 	if len(writes) > 0 || len(deletes) > 0 {
 		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to update file access permissions")
-			return err
+
+			return ErrInternalServerError
 		}
 	}
 	return nil
@@ -348,26 +352,12 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 func checkTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMutation) (context.Context, error) {
 	key := "trustCenterDocFile"
 
-	// Create adapter for the existing mutation interface
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut *generated.TrustCenterDocMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustCenterDocMutation) string { return mut.Type() },
-	)
-
-	// Use the generic helper to process files
-	return objects.ProcessFilesForMutation(ctx, adapter, key, "trust_center_doc")
+	return objects.ProcessFilesForMutation(ctx, m, key, "trust_center_doc")
 }
 
 // checkWatermarkedTrustCenterDocFile checks if the watermarked doc file is provided and sets the parent information
 func checkWatermarkedTrustCenterDocFile(ctx context.Context, m *generated.TrustCenterDocMutation) (context.Context, error) {
 	key := "watermarkedTrustCenterDocFile"
 
-	// Create adapter for the existing mutation interface
-	adapter := objects.NewGenericMutationAdapter(m,
-		func(mut *generated.TrustCenterDocMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustCenterDocMutation) string { return mut.Type() },
-	)
-
-	// Use the generic helper to process files
-	return objects.ProcessFilesForMutation(ctx, adapter, key, "trust_center_doc")
+	return objects.ProcessFilesForMutation(ctx, m, key, "trust_center_doc")
 }

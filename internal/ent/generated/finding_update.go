@@ -12,16 +12,19 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -262,6 +265,46 @@ func (_u *FindingUpdate) ClearScopeID() *FindingUpdate {
 	return _u
 }
 
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_u *FindingUpdate) SetFindingStatusName(v string) *FindingUpdate {
+	_u.mutation.SetFindingStatusName(v)
+	return _u
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableFindingStatusName(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetFindingStatusName(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusName clears the value of the "finding_status_name" field.
+func (_u *FindingUpdate) ClearFindingStatusName() *FindingUpdate {
+	_u.mutation.ClearFindingStatusName()
+	return _u
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_u *FindingUpdate) SetFindingStatusID(v string) *FindingUpdate {
+	_u.mutation.SetFindingStatusID(v)
+	return _u
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableFindingStatusID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetFindingStatusID(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusID clears the value of the "finding_status_id" field.
+func (_u *FindingUpdate) ClearFindingStatusID() *FindingUpdate {
+	_u.mutation.ClearFindingStatusID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdate) SetExternalID(v string) *FindingUpdate {
 	_u.mutation.SetExternalID(v)
@@ -279,6 +322,46 @@ func (_u *FindingUpdate) SetNillableExternalID(v *string) *FindingUpdate {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdate) ClearExternalID() *FindingUpdate {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *FindingUpdate) SetStatus(v string) *FindingUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableStatus(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingUpdate) ClearStatus() *FindingUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingUpdate) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingUpdate) ClearSecurityLevel() *FindingUpdate {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -881,26 +964,6 @@ func (_u *FindingUpdate) ClearRemediationSLA() *FindingUpdate {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingUpdate) SetStatus(v string) *FindingUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingUpdate) SetNillableStatus(v *string) *FindingUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingUpdate) ClearStatus() *FindingUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingUpdate) SetEventTime(v models.DateTime) *FindingUpdate {
 	_u.mutation.SetEventTime(v)
@@ -1058,6 +1121,11 @@ func (_u *FindingUpdate) SetEnvironment(v *CustomTypeEnum) *FindingUpdate {
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) SetScope(v *CustomTypeEnum) *FindingUpdate {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) SetFindingStatus(v *CustomTypeEnum) *FindingUpdate {
+	return _u.SetFindingStatusID(v.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -1223,6 +1291,36 @@ func (_u *FindingUpdate) AddTasks(v ...*Task) *FindingUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *FindingUpdate) AddDirectoryAccountIDs(ids ...string) *FindingUpdate {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *FindingUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *FindingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *FindingUpdate) AddIdentityHolderIDs(ids ...string) *FindingUpdate {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *FindingUpdate) AddIdentityHolders(v ...*IdentityHolder) *FindingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
 }
 
 // AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
@@ -1392,6 +1490,12 @@ func (_u *FindingUpdate) ClearEnvironment() *FindingUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) ClearScope() *FindingUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearFindingStatus clears the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) ClearFindingStatus() *FindingUpdate {
+	_u.mutation.ClearFindingStatus()
 	return _u
 }
 
@@ -1626,6 +1730,48 @@ func (_u *FindingUpdate) RemoveTasks(v ...*Task) *FindingUpdate {
 	return _u.RemoveTaskIDs(ids...)
 }
 
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *FindingUpdate) ClearDirectoryAccounts() *FindingUpdate {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *FindingUpdate) RemoveDirectoryAccountIDs(ids ...string) *FindingUpdate {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *FindingUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) *FindingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *FindingUpdate) ClearIdentityHolders() *FindingUpdate {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *FindingUpdate) RemoveIdentityHolderIDs(ids ...string) *FindingUpdate {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *FindingUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *FindingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
 // ClearRemediations clears all "remediations" edges to the Remediation entity.
 func (_u *FindingUpdate) ClearRemediations() *FindingUpdate {
 	_u.mutation.ClearRemediations()
@@ -1794,6 +1940,16 @@ func (_u *FindingUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingUpdate) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1801,6 +1957,9 @@ func (_u *FindingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Findin
 }
 
 func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(finding.Table, finding.Columns, sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1877,11 +2036,29 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(finding.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.FindingStatusName(); ok {
+		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusNameCleared() {
+		_spec.ClearField(finding.FieldFindingStatusName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(finding.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(finding.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -2091,12 +2268,6 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(finding.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)
@@ -2329,6 +2500,37 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -2889,6 +3091,102 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.RemediationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3411,6 +3709,46 @@ func (_u *FindingUpdateOne) ClearScopeID() *FindingUpdateOne {
 	return _u
 }
 
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_u *FindingUpdateOne) SetFindingStatusName(v string) *FindingUpdateOne {
+	_u.mutation.SetFindingStatusName(v)
+	return _u
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableFindingStatusName(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetFindingStatusName(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusName clears the value of the "finding_status_name" field.
+func (_u *FindingUpdateOne) ClearFindingStatusName() *FindingUpdateOne {
+	_u.mutation.ClearFindingStatusName()
+	return _u
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_u *FindingUpdateOne) SetFindingStatusID(v string) *FindingUpdateOne {
+	_u.mutation.SetFindingStatusID(v)
+	return _u
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableFindingStatusID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetFindingStatusID(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusID clears the value of the "finding_status_id" field.
+func (_u *FindingUpdateOne) ClearFindingStatusID() *FindingUpdateOne {
+	_u.mutation.ClearFindingStatusID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdateOne) SetExternalID(v string) *FindingUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -3428,6 +3766,46 @@ func (_u *FindingUpdateOne) SetNillableExternalID(v *string) *FindingUpdateOne {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdateOne) ClearExternalID() *FindingUpdateOne {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *FindingUpdateOne) SetStatus(v string) *FindingUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableStatus(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingUpdateOne) ClearStatus() *FindingUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingUpdateOne) ClearSecurityLevel() *FindingUpdateOne {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -4030,26 +4408,6 @@ func (_u *FindingUpdateOne) ClearRemediationSLA() *FindingUpdateOne {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingUpdateOne) SetStatus(v string) *FindingUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingUpdateOne) SetNillableStatus(v *string) *FindingUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingUpdateOne) ClearStatus() *FindingUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingUpdateOne) SetEventTime(v models.DateTime) *FindingUpdateOne {
 	_u.mutation.SetEventTime(v)
@@ -4207,6 +4565,11 @@ func (_u *FindingUpdateOne) SetEnvironment(v *CustomTypeEnum) *FindingUpdateOne 
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) SetScope(v *CustomTypeEnum) *FindingUpdateOne {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) SetFindingStatus(v *CustomTypeEnum) *FindingUpdateOne {
+	return _u.SetFindingStatusID(v.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -4372,6 +4735,36 @@ func (_u *FindingUpdateOne) AddTasks(v ...*Task) *FindingUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *FindingUpdateOne) AddDirectoryAccountIDs(ids ...string) *FindingUpdateOne {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *FindingUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) *FindingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *FindingUpdateOne) AddIdentityHolderIDs(ids ...string) *FindingUpdateOne {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *FindingUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *FindingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
 }
 
 // AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
@@ -4541,6 +4934,12 @@ func (_u *FindingUpdateOne) ClearEnvironment() *FindingUpdateOne {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) ClearScope() *FindingUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearFindingStatus clears the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) ClearFindingStatus() *FindingUpdateOne {
+	_u.mutation.ClearFindingStatus()
 	return _u
 }
 
@@ -4775,6 +5174,48 @@ func (_u *FindingUpdateOne) RemoveTasks(v ...*Task) *FindingUpdateOne {
 	return _u.RemoveTaskIDs(ids...)
 }
 
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *FindingUpdateOne) ClearDirectoryAccounts() *FindingUpdateOne {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *FindingUpdateOne) RemoveDirectoryAccountIDs(ids ...string) *FindingUpdateOne {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *FindingUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccount) *FindingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *FindingUpdateOne) ClearIdentityHolders() *FindingUpdateOne {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *FindingUpdateOne) RemoveIdentityHolderIDs(ids ...string) *FindingUpdateOne {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *FindingUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *FindingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
 // ClearRemediations clears all "remediations" edges to the Remediation entity.
 func (_u *FindingUpdateOne) ClearRemediations() *FindingUpdateOne {
 	_u.mutation.ClearRemediations()
@@ -4956,6 +5397,16 @@ func (_u *FindingUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingUpdateOne) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -4963,6 +5414,9 @@ func (_u *FindingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Fin
 }
 
 func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(finding.Table, finding.Columns, sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -5056,11 +5510,29 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(finding.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.FindingStatusName(); ok {
+		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusNameCleared() {
+		_spec.ClearField(finding.FieldFindingStatusName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(finding.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(finding.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -5270,12 +5742,6 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(finding.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)
@@ -5508,6 +5974,37 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -6063,6 +6560,102 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -69,8 +69,6 @@ func checkTrustCenterWatermarkConfigFiles(ctx context.Context, m *generated.Trus
 			mut.SetFileID(id)
 			mut.ClearText()
 		},
-		func(mut *generated.TrustCenterWatermarkConfigMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustCenterWatermarkConfigMutation) string { return mut.Type() },
 	)
 	if err != nil {
 		return ctx, err

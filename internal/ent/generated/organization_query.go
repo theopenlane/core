@@ -33,6 +33,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -45,6 +47,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -56,6 +60,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -74,10 +80,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -118,6 +126,7 @@ type OrganizationQuery struct {
 	withProcedureCreators                    *GroupQuery
 	withProgramCreators                      *GroupQuery
 	withRiskCreators                         *GroupQuery
+	withIdentityHolderCreators               *GroupQuery
 	withScheduledJobCreators                 *GroupQuery
 	withStandardCreators                     *GroupQuery
 	withTemplateCreators                     *GroupQuery
@@ -130,6 +139,12 @@ type OrganizationQuery struct {
 	withSetting                              *OrganizationSettingQuery
 	withPersonalAccessTokens                 *PersonalAccessTokenQuery
 	withAPITokens                            *APITokenQuery
+	withEmailBrandings                       *EmailBrandingQuery
+	withEmailTemplates                       *EmailTemplateQuery
+	withIntegrationWebhooks                  *IntegrationWebhookQuery
+	withIntegrationRuns                      *IntegrationRunQuery
+	withNotificationPreferences              *NotificationPreferenceQuery
+	withNotificationTemplates                *NotificationTemplateQuery
 	withUsers                                *UserQuery
 	withFiles                                *FileQuery
 	withEvents                               *EventQuery
@@ -155,6 +170,7 @@ type OrganizationQuery struct {
 	withNotes                                *NoteQuery
 	withTasks                                *TaskQuery
 	withPrograms                             *ProgramQuery
+	withSystemDetails                        *SystemDetailQuery
 	withProcedures                           *ProcedureQuery
 	withInternalPolicies                     *InternalPolicyQuery
 	withRisks                                *RiskQuery
@@ -179,6 +195,7 @@ type OrganizationQuery struct {
 	withTrustCenters                         *TrustCenterQuery
 	withAssets                               *AssetQuery
 	withScans                                *ScanQuery
+	withSLADefinitions                       *SLADefinitionQuery
 	withSubprocessors                        *SubprocessorQuery
 	withExports                              *ExportQuery
 	withTrustCenterWatermarkConfigs          *TrustCenterWatermarkConfigQuery
@@ -221,6 +238,7 @@ type OrganizationQuery struct {
 	withNamedProcedureCreators               map[string]*GroupQuery
 	withNamedProgramCreators                 map[string]*GroupQuery
 	withNamedRiskCreators                    map[string]*GroupQuery
+	withNamedIdentityHolderCreators          map[string]*GroupQuery
 	withNamedScheduledJobCreators            map[string]*GroupQuery
 	withNamedStandardCreators                map[string]*GroupQuery
 	withNamedTemplateCreators                map[string]*GroupQuery
@@ -231,6 +249,12 @@ type OrganizationQuery struct {
 	withNamedChildren                        map[string]*OrganizationQuery
 	withNamedPersonalAccessTokens            map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                       map[string]*APITokenQuery
+	withNamedEmailBrandings                  map[string]*EmailBrandingQuery
+	withNamedEmailTemplates                  map[string]*EmailTemplateQuery
+	withNamedIntegrationWebhooks             map[string]*IntegrationWebhookQuery
+	withNamedIntegrationRuns                 map[string]*IntegrationRunQuery
+	withNamedNotificationPreferences         map[string]*NotificationPreferenceQuery
+	withNamedNotificationTemplates           map[string]*NotificationTemplateQuery
 	withNamedUsers                           map[string]*UserQuery
 	withNamedFiles                           map[string]*FileQuery
 	withNamedEvents                          map[string]*EventQuery
@@ -255,6 +279,7 @@ type OrganizationQuery struct {
 	withNamedNotes                           map[string]*NoteQuery
 	withNamedTasks                           map[string]*TaskQuery
 	withNamedPrograms                        map[string]*ProgramQuery
+	withNamedSystemDetails                   map[string]*SystemDetailQuery
 	withNamedProcedures                      map[string]*ProcedureQuery
 	withNamedInternalPolicies                map[string]*InternalPolicyQuery
 	withNamedRisks                           map[string]*RiskQuery
@@ -279,6 +304,7 @@ type OrganizationQuery struct {
 	withNamedTrustCenters                    map[string]*TrustCenterQuery
 	withNamedAssets                          map[string]*AssetQuery
 	withNamedScans                           map[string]*ScanQuery
+	withNamedSLADefinitions                  map[string]*SLADefinitionQuery
 	withNamedSubprocessors                   map[string]*SubprocessorQuery
 	withNamedExports                         map[string]*ExportQuery
 	withNamedTrustCenterWatermarkConfigs     map[string]*TrustCenterWatermarkConfigQuery
@@ -691,6 +717,31 @@ func (_q *OrganizationQuery) QueryRiskCreators() *GroupQuery {
 	return query
 }
 
+// QueryIdentityHolderCreators chains the current query on the "identity_holder_creators" edge.
+func (_q *OrganizationQuery) QueryIdentityHolderCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IdentityHolderCreatorsTable, organization.IdentityHolderCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryScheduledJobCreators chains the current query on the "scheduled_job_creators" edge.
 func (_q *OrganizationQuery) QueryScheduledJobCreators() *GroupQuery {
 	query := (&GroupClient{config: _q.config}).Query()
@@ -985,6 +1036,156 @@ func (_q *OrganizationQuery) QueryAPITokens() *APITokenQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEmailBrandings chains the current query on the "email_brandings" edge.
+func (_q *OrganizationQuery) QueryEmailBrandings() *EmailBrandingQuery {
+	query := (&EmailBrandingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailBrandingsTable, organization.EmailBrandingsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.EmailBranding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates chains the current query on the "email_templates" edge.
+func (_q *OrganizationQuery) QueryEmailTemplates() *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailTemplatesTable, organization.EmailTemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrationWebhooks chains the current query on the "integration_webhooks" edge.
+func (_q *OrganizationQuery) QueryIntegrationWebhooks() *IntegrationWebhookQuery {
+	query := (&IntegrationWebhookClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(integrationwebhook.Table, integrationwebhook.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationWebhooksTable, organization.IntegrationWebhooksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationWebhook
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *OrganizationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationRunsTable, organization.IntegrationRunsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationRun
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotificationPreferences chains the current query on the "notification_preferences" edge.
+func (_q *OrganizationQuery) QueryNotificationPreferences() *NotificationPreferenceQuery {
+	query := (&NotificationPreferenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(notificationpreference.Table, notificationpreference.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationPreferencesTable, organization.NotificationPreferencesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.NotificationPreference
+		step.Edge.Schema = schemaConfig.NotificationPreference
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotificationTemplates chains the current query on the "notification_templates" edge.
+func (_q *OrganizationQuery) QueryNotificationTemplates() *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationTemplatesTable, organization.NotificationTemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1616,6 +1817,31 @@ func (_q *OrganizationQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QuerySystemDetails chains the current query on the "system_details" edge.
+func (_q *OrganizationQuery) QuerySystemDetails() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SystemDetailsTable, organization.SystemDetailsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryProcedures chains the current query on the "procedures" edge.
 func (_q *OrganizationQuery) QueryProcedures() *ProcedureQuery {
 	query := (&ProcedureClient{config: _q.config}).Query()
@@ -2210,6 +2436,31 @@ func (_q *OrganizationQuery) QueryScans() *ScanQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySLADefinitions chains the current query on the "sla_definitions" edge.
+func (_q *OrganizationQuery) QuerySLADefinitions() *SLADefinitionQuery {
+	query := (&SLADefinitionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(sladefinition.Table, sladefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SLADefinitionsTable, organization.SLADefinitionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SLADefinition
+		step.Edge.Schema = schemaConfig.SLADefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3072,6 +3323,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withProcedureCreators:               _q.withProcedureCreators.Clone(),
 		withProgramCreators:                 _q.withProgramCreators.Clone(),
 		withRiskCreators:                    _q.withRiskCreators.Clone(),
+		withIdentityHolderCreators:          _q.withIdentityHolderCreators.Clone(),
 		withScheduledJobCreators:            _q.withScheduledJobCreators.Clone(),
 		withStandardCreators:                _q.withStandardCreators.Clone(),
 		withTemplateCreators:                _q.withTemplateCreators.Clone(),
@@ -3084,6 +3336,12 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withSetting:                         _q.withSetting.Clone(),
 		withPersonalAccessTokens:            _q.withPersonalAccessTokens.Clone(),
 		withAPITokens:                       _q.withAPITokens.Clone(),
+		withEmailBrandings:                  _q.withEmailBrandings.Clone(),
+		withEmailTemplates:                  _q.withEmailTemplates.Clone(),
+		withIntegrationWebhooks:             _q.withIntegrationWebhooks.Clone(),
+		withIntegrationRuns:                 _q.withIntegrationRuns.Clone(),
+		withNotificationPreferences:         _q.withNotificationPreferences.Clone(),
+		withNotificationTemplates:           _q.withNotificationTemplates.Clone(),
 		withUsers:                           _q.withUsers.Clone(),
 		withFiles:                           _q.withFiles.Clone(),
 		withEvents:                          _q.withEvents.Clone(),
@@ -3109,6 +3367,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withNotes:                           _q.withNotes.Clone(),
 		withTasks:                           _q.withTasks.Clone(),
 		withPrograms:                        _q.withPrograms.Clone(),
+		withSystemDetails:                   _q.withSystemDetails.Clone(),
 		withProcedures:                      _q.withProcedures.Clone(),
 		withInternalPolicies:                _q.withInternalPolicies.Clone(),
 		withRisks:                           _q.withRisks.Clone(),
@@ -3133,6 +3392,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withTrustCenters:                    _q.withTrustCenters.Clone(),
 		withAssets:                          _q.withAssets.Clone(),
 		withScans:                           _q.withScans.Clone(),
+		withSLADefinitions:                  _q.withSLADefinitions.Clone(),
 		withSubprocessors:                   _q.withSubprocessors.Clone(),
 		withExports:                         _q.withExports.Clone(),
 		withTrustCenterWatermarkConfigs:     _q.withTrustCenterWatermarkConfigs.Clone(),
@@ -3320,6 +3580,17 @@ func (_q *OrganizationQuery) WithRiskCreators(opts ...func(*GroupQuery)) *Organi
 	return _q
 }
 
+// WithIdentityHolderCreators tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIdentityHolderCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolderCreators = query
+	return _q
+}
+
 // WithScheduledJobCreators tells the query-builder to eager-load the nodes that are connected to
 // the "scheduled_job_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithScheduledJobCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -3449,6 +3720,72 @@ func (_q *OrganizationQuery) WithAPITokens(opts ...func(*APITokenQuery)) *Organi
 		opt(query)
 	}
 	_q.withAPITokens = query
+	return _q
+}
+
+// WithEmailBrandings tells the query-builder to eager-load the nodes that are connected to
+// the "email_brandings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithEmailBrandings(opts ...func(*EmailBrandingQuery)) *OrganizationQuery {
+	query := (&EmailBrandingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEmailBrandings = query
+	return _q
+}
+
+// WithEmailTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "email_templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithEmailTemplates(opts ...func(*EmailTemplateQuery)) *OrganizationQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEmailTemplates = query
+	return _q
+}
+
+// WithIntegrationWebhooks tells the query-builder to eager-load the nodes that are connected to
+// the "integration_webhooks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIntegrationWebhooks(opts ...func(*IntegrationWebhookQuery)) *OrganizationQuery {
+	query := (&IntegrationWebhookClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationWebhooks = query
+	return _q
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *OrganizationQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
+}
+
+// WithNotificationPreferences tells the query-builder to eager-load the nodes that are connected to
+// the "notification_preferences" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNotificationPreferences(opts ...func(*NotificationPreferenceQuery)) *OrganizationQuery {
+	query := (&NotificationPreferenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotificationPreferences = query
+	return _q
+}
+
+// WithNotificationTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "notification_templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNotificationTemplates(opts ...func(*NotificationTemplateQuery)) *OrganizationQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotificationTemplates = query
 	return _q
 }
 
@@ -3727,6 +4064,17 @@ func (_q *OrganizationQuery) WithPrograms(opts ...func(*ProgramQuery)) *Organiza
 	return _q
 }
 
+// WithSystemDetails tells the query-builder to eager-load the nodes that are connected to
+// the "system_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithSystemDetails(opts ...func(*SystemDetailQuery)) *OrganizationQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetails = query
+	return _q
+}
+
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithProcedures(opts ...func(*ProcedureQuery)) *OrganizationQuery {
@@ -3988,6 +4336,17 @@ func (_q *OrganizationQuery) WithScans(opts ...func(*ScanQuery)) *OrganizationQu
 		opt(query)
 	}
 	_q.withScans = query
+	return _q
+}
+
+// WithSLADefinitions tells the query-builder to eager-load the nodes that are connected to
+// the "sla_definitions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithSLADefinitions(opts ...func(*SLADefinitionQuery)) *OrganizationQuery {
+	query := (&SLADefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSLADefinitions = query
 	return _q
 }
 
@@ -4361,7 +4720,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [101]bool{
+		loadedTypes = [110]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4376,6 +4735,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withProcedureCreators != nil,
 			_q.withProgramCreators != nil,
 			_q.withRiskCreators != nil,
+			_q.withIdentityHolderCreators != nil,
 			_q.withScheduledJobCreators != nil,
 			_q.withStandardCreators != nil,
 			_q.withTemplateCreators != nil,
@@ -4388,6 +4748,12 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSetting != nil,
 			_q.withPersonalAccessTokens != nil,
 			_q.withAPITokens != nil,
+			_q.withEmailBrandings != nil,
+			_q.withEmailTemplates != nil,
+			_q.withIntegrationWebhooks != nil,
+			_q.withIntegrationRuns != nil,
+			_q.withNotificationPreferences != nil,
+			_q.withNotificationTemplates != nil,
 			_q.withUsers != nil,
 			_q.withFiles != nil,
 			_q.withEvents != nil,
@@ -4413,6 +4779,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withNotes != nil,
 			_q.withTasks != nil,
 			_q.withPrograms != nil,
+			_q.withSystemDetails != nil,
 			_q.withProcedures != nil,
 			_q.withInternalPolicies != nil,
 			_q.withRisks != nil,
@@ -4437,6 +4804,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withTrustCenters != nil,
 			_q.withAssets != nil,
 			_q.withScans != nil,
+			_q.withSLADefinitions != nil,
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
@@ -4596,6 +4964,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withIdentityHolderCreators; query != nil {
+		if err := _q.loadIdentityHolderCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IdentityHolderCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.IdentityHolderCreators = append(n.Edges.IdentityHolderCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withScheduledJobCreators; query != nil {
 		if err := _q.loadScheduledJobCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.ScheduledJobCreators = []*Group{} },
@@ -4685,6 +5062,54 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.Edges.APITokens = []*APIToken{} },
 			func(n *Organization, e *APIToken) { n.Edges.APITokens = append(n.Edges.APITokens, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEmailBrandings; query != nil {
+		if err := _q.loadEmailBrandings(ctx, query, nodes,
+			func(n *Organization) { n.Edges.EmailBrandings = []*EmailBranding{} },
+			func(n *Organization, e *EmailBranding) { n.Edges.EmailBrandings = append(n.Edges.EmailBrandings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEmailTemplates; query != nil {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *Organization) { n.Edges.EmailTemplates = []*EmailTemplate{} },
+			func(n *Organization, e *EmailTemplate) { n.Edges.EmailTemplates = append(n.Edges.EmailTemplates, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrationWebhooks; query != nil {
+		if err := _q.loadIntegrationWebhooks(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IntegrationWebhooks = []*IntegrationWebhook{} },
+			func(n *Organization, e *IntegrationWebhook) {
+				n.Edges.IntegrationWebhooks = append(n.Edges.IntegrationWebhooks, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Organization, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withNotificationPreferences; query != nil {
+		if err := _q.loadNotificationPreferences(ctx, query, nodes,
+			func(n *Organization) { n.Edges.NotificationPreferences = []*NotificationPreference{} },
+			func(n *Organization, e *NotificationPreference) {
+				n.Edges.NotificationPreferences = append(n.Edges.NotificationPreferences, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withNotificationTemplates; query != nil {
+		if err := _q.loadNotificationTemplates(ctx, query, nodes,
+			func(n *Organization) { n.Edges.NotificationTemplates = []*NotificationTemplate{} },
+			func(n *Organization, e *NotificationTemplate) {
+				n.Edges.NotificationTemplates = append(n.Edges.NotificationTemplates, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -4861,6 +5286,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Programs = []*Program{} },
 			func(n *Organization, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetails; query != nil {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Organization) { n.Edges.SystemDetails = []*SystemDetail{} },
+			func(n *Organization, e *SystemDetail) { n.Edges.SystemDetails = append(n.Edges.SystemDetails, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5041,6 +5473,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Scans = []*Scan{} },
 			func(n *Organization, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSLADefinitions; query != nil {
+		if err := _q.loadSLADefinitions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.SLADefinitions = []*SLADefinition{} },
+			func(n *Organization, e *SLADefinition) { n.Edges.SLADefinitions = append(n.Edges.SLADefinitions, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5348,6 +5787,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIdentityHolderCreators {
+		if err := _q.loadIdentityHolderCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIdentityHolderCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedIdentityHolderCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedScheduledJobCreators {
 		if err := _q.loadScheduledJobCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedScheduledJobCreators(name) },
@@ -5415,6 +5861,48 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAPITokens(name) },
 			func(n *Organization, e *APIToken) { n.appendNamedAPITokens(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmailBrandings {
+		if err := _q.loadEmailBrandings(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedEmailBrandings(name) },
+			func(n *Organization, e *EmailBranding) { n.appendNamedEmailBrandings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmailTemplates {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedEmailTemplates(name) },
+			func(n *Organization, e *EmailTemplate) { n.appendNamedEmailTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationWebhooks {
+		if err := _q.loadIntegrationWebhooks(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIntegrationWebhooks(name) },
+			func(n *Organization, e *IntegrationWebhook) { n.appendNamedIntegrationWebhooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIntegrationRuns(name) },
+			func(n *Organization, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedNotificationPreferences {
+		if err := _q.loadNotificationPreferences(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedNotificationPreferences(name) },
+			func(n *Organization, e *NotificationPreference) { n.appendNamedNotificationPreferences(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedNotificationTemplates {
+		if err := _q.loadNotificationTemplates(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedNotificationTemplates(name) },
+			func(n *Organization, e *NotificationTemplate) { n.appendNamedNotificationTemplates(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5586,6 +6074,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedSystemDetails {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSystemDetails(name) },
+			func(n *Organization, e *SystemDetail) { n.appendNamedSystemDetails(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedProcedures {
 		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedProcedures(name) },
@@ -5753,6 +6248,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedScans(name) },
 			func(n *Organization, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSLADefinitions {
+		if err := _q.loadSLADefinitions(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSLADefinitions(name) },
+			func(n *Organization, e *SLADefinition) { n.appendNamedSLADefinitions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6382,6 +6884,37 @@ func (_q *OrganizationQuery) loadRiskCreators(ctx context.Context, query *GroupQ
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadIdentityHolderCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IdentityHolderCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_identity_holder_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_identity_holder_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_identity_holder_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadScheduledJobCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -6762,6 +7295,186 @@ func (_q *OrganizationQuery) loadAPITokens(ctx context.Context, query *APITokenQ
 	}
 	query.Where(predicate.APIToken(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.APITokensColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadEmailBrandings(ctx context.Context, query *EmailBrandingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *EmailBranding)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(emailbranding.FieldOwnerID)
+	}
+	query.Where(predicate.EmailBranding(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.EmailBrandingsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadEmailTemplates(ctx context.Context, query *EmailTemplateQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *EmailTemplate)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(emailtemplate.FieldOwnerID)
+	}
+	query.Where(predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.EmailTemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadIntegrationWebhooks(ctx context.Context, query *IntegrationWebhookQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *IntegrationWebhook)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integrationwebhook.FieldOwnerID)
+	}
+	query.Where(predicate.IntegrationWebhook(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IntegrationWebhooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integrationrun.FieldOwnerID)
+	}
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadNotificationPreferences(ctx context.Context, query *NotificationPreferenceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *NotificationPreference)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(notificationpreference.FieldOwnerID)
+	}
+	query.Where(predicate.NotificationPreference(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.NotificationPreferencesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadNotificationTemplates(ctx context.Context, query *NotificationTemplateQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *NotificationTemplate)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(notificationtemplate.FieldOwnerID)
+	}
+	query.Where(predicate.NotificationTemplate(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.NotificationTemplatesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -7634,6 +8347,36 @@ func (_q *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadSystemDetails(ctx context.Context, query *SystemDetailQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *SystemDetail)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(systemdetail.FieldOwnerID)
+	}
+	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SystemDetailsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Procedure)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -8366,6 +9109,36 @@ func (_q *OrganizationQuery) loadScans(ctx context.Context, query *ScanQuery, no
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadSLADefinitions(ctx context.Context, query *SLADefinitionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *SLADefinition)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(sladefinition.FieldOwnerID)
+	}
+	query.Where(predicate.SLADefinition(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SLADefinitionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadSubprocessors(ctx context.Context, query *SubprocessorQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Subprocessor)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -8986,7 +9759,6 @@ func (_q *OrganizationQuery) loadDirectoryAccounts(ctx context.Context, query *D
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directoryaccount.FieldOwnerID)
 	}
@@ -9017,7 +9789,6 @@ func (_q *OrganizationQuery) loadDirectoryGroups(ctx context.Context, query *Dir
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorygroup.FieldOwnerID)
 	}
@@ -9048,7 +9819,6 @@ func (_q *OrganizationQuery) loadDirectoryMemberships(ctx context.Context, query
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorymembership.FieldOwnerID)
 	}
@@ -9079,7 +9849,6 @@ func (_q *OrganizationQuery) loadDirectorySyncRuns(ctx context.Context, query *D
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorysyncrun.FieldOwnerID)
 	}
@@ -9462,6 +10231,20 @@ func (_q *OrganizationQuery) WithNamedRiskCreators(name string, opts ...func(*Gr
 	return _q
 }
 
+// WithNamedIdentityHolderCreators tells the query-builder to eager-load the nodes that are connected to the "identity_holder_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIdentityHolderCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolderCreators == nil {
+		_q.withNamedIdentityHolderCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedIdentityHolderCreators[name] = query
+	return _q
+}
+
 // WithNamedScheduledJobCreators tells the query-builder to eager-load the nodes that are connected to the "scheduled_job_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedScheduledJobCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -9599,6 +10382,90 @@ func (_q *OrganizationQuery) WithNamedAPITokens(name string, opts ...func(*APITo
 		_q.withNamedAPITokens = make(map[string]*APITokenQuery)
 	}
 	_q.withNamedAPITokens[name] = query
+	return _q
+}
+
+// WithNamedEmailBrandings tells the query-builder to eager-load the nodes that are connected to the "email_brandings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedEmailBrandings(name string, opts ...func(*EmailBrandingQuery)) *OrganizationQuery {
+	query := (&EmailBrandingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmailBrandings == nil {
+		_q.withNamedEmailBrandings = make(map[string]*EmailBrandingQuery)
+	}
+	_q.withNamedEmailBrandings[name] = query
+	return _q
+}
+
+// WithNamedEmailTemplates tells the query-builder to eager-load the nodes that are connected to the "email_templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedEmailTemplates(name string, opts ...func(*EmailTemplateQuery)) *OrganizationQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmailTemplates == nil {
+		_q.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery)
+	}
+	_q.withNamedEmailTemplates[name] = query
+	return _q
+}
+
+// WithNamedIntegrationWebhooks tells the query-builder to eager-load the nodes that are connected to the "integration_webhooks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIntegrationWebhooks(name string, opts ...func(*IntegrationWebhookQuery)) *OrganizationQuery {
+	query := (&IntegrationWebhookClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationWebhooks == nil {
+		_q.withNamedIntegrationWebhooks = make(map[string]*IntegrationWebhookQuery)
+	}
+	_q.withNamedIntegrationWebhooks[name] = query
+	return _q
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *OrganizationQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
+}
+
+// WithNamedNotificationPreferences tells the query-builder to eager-load the nodes that are connected to the "notification_preferences"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedNotificationPreferences(name string, opts ...func(*NotificationPreferenceQuery)) *OrganizationQuery {
+	query := (&NotificationPreferenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedNotificationPreferences == nil {
+		_q.withNamedNotificationPreferences = make(map[string]*NotificationPreferenceQuery)
+	}
+	_q.withNamedNotificationPreferences[name] = query
+	return _q
+}
+
+// WithNamedNotificationTemplates tells the query-builder to eager-load the nodes that are connected to the "notification_templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedNotificationTemplates(name string, opts ...func(*NotificationTemplateQuery)) *OrganizationQuery {
+	query := (&NotificationTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedNotificationTemplates == nil {
+		_q.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery)
+	}
+	_q.withNamedNotificationTemplates[name] = query
 	return _q
 }
 
@@ -9938,6 +10805,20 @@ func (_q *OrganizationQuery) WithNamedPrograms(name string, opts ...func(*Progra
 	return _q
 }
 
+// WithNamedSystemDetails tells the query-builder to eager-load the nodes that are connected to the "system_details"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedSystemDetails(name string, opts ...func(*SystemDetailQuery)) *OrganizationQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSystemDetails == nil {
+		_q.withNamedSystemDetails = make(map[string]*SystemDetailQuery)
+	}
+	_q.withNamedSystemDetails[name] = query
+	return _q
+}
+
 // WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *OrganizationQuery {
@@ -10271,6 +11152,20 @@ func (_q *OrganizationQuery) WithNamedScans(name string, opts ...func(*ScanQuery
 		_q.withNamedScans = make(map[string]*ScanQuery)
 	}
 	_q.withNamedScans[name] = query
+	return _q
+}
+
+// WithNamedSLADefinitions tells the query-builder to eager-load the nodes that are connected to the "sla_definitions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedSLADefinitions(name string, opts ...func(*SLADefinitionQuery)) *OrganizationQuery {
+	query := (&SLADefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSLADefinitions == nil {
+		_q.withNamedSLADefinitions = make(map[string]*SLADefinitionQuery)
+	}
+	_q.withNamedSLADefinitions[name] = query
 	return _q
 }
 

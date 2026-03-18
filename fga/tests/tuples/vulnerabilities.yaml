@@ -24,3 +24,11 @@
 - user: organization:openlane#owner
   relation: editor
   object: vulnerability:vulnerability-2
+
+# vulnerability-3 is associated with a scan
+- user: organization:openlane
+  relation: parent
+  object: scan:scan-1
+- user: scan:scan-1
+  relation: parent
+  object: vulnerability:vulnerability-3

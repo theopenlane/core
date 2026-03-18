@@ -229,6 +229,20 @@ func (_c *GroupHistoryCreate) SetNillableLogoURL(v *string) *GroupHistoryCreate 
 	return _c
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_c *GroupHistoryCreate) SetAvatarLocalFileID(v string) *GroupHistoryCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableAvatarLocalFileID(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
+	}
+	return _c
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_c *GroupHistoryCreate) SetDisplayName(v string) *GroupHistoryCreate {
 	_c.mutation.SetDisplayName(v)
@@ -240,6 +254,40 @@ func (_c *GroupHistoryCreate) SetNillableDisplayName(v *string) *GroupHistoryCre
 	if v != nil {
 		_c.SetDisplayName(*v)
 	}
+	return _c
+}
+
+// SetOscalRole sets the "oscal_role" field.
+func (_c *GroupHistoryCreate) SetOscalRole(v string) *GroupHistoryCreate {
+	_c.mutation.SetOscalRole(v)
+	return _c
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableOscalRole(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetOscalRole(*v)
+	}
+	return _c
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_c *GroupHistoryCreate) SetOscalPartyUUID(v string) *GroupHistoryCreate {
+	_c.mutation.SetOscalPartyUUID(v)
+	return _c
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableOscalPartyUUID(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetOscalPartyUUID(*v)
+	}
+	return _c
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_c *GroupHistoryCreate) SetOscalContactUuids(v []string) *GroupHistoryCreate {
+	_c.mutation.SetOscalContactUuids(v)
 	return _c
 }
 
@@ -523,9 +571,25 @@ func (_c *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec)
 		_spec.SetField(grouphistory.FieldLogoURL, field.TypeString, value)
 		_node.LogoURL = value
 	}
+	if value, ok := _c.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
+		_node.AvatarLocalFileID = &value
+	}
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.OscalRole(); ok {
+		_spec.SetField(grouphistory.FieldOscalRole, field.TypeString, value)
+		_node.OscalRole = &value
+	}
+	if value, ok := _c.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(grouphistory.FieldOscalPartyUUID, field.TypeString, value)
+		_node.OscalPartyUUID = &value
+	}
+	if value, ok := _c.mutation.OscalContactUuids(); ok {
+		_spec.SetField(grouphistory.FieldOscalContactUuids, field.TypeJSON, value)
+		_node.OscalContactUuids = value
 	}
 	if value, ok := _c.mutation.ScimExternalID(); ok {
 		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)

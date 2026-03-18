@@ -41,6 +41,8 @@ type Subcontrol struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// human readable title of the control for quick identification
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
@@ -57,8 +59,16 @@ type Subcontrol struct {
 	ResponsiblePartyID string `json:"responsible_party_id,omitempty"`
 	// status of the control
 	Status enums.ControlStatus `json:"status,omitempty"`
+	// OSCAL-aligned implementation status of the control
+	ImplementationStatus enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
+	// narrative describing current implementation state for OSCAL export
+	ImplementationDescription string `json:"implementation_description,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation string `json:"public_representation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"source_name,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"reference_framework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -399,7 +409,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subcontrol.FieldSystemOwned, subcontrol.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldSubcontrolKindName, subcontrol.FieldSubcontrolKindID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldExternalUUID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationDescription, subcontrol.FieldPublicRepresentation, subcontrol.FieldSource, subcontrol.FieldSourceName, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldSubcontrolKindName, subcontrol.FieldSubcontrolKindID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -488,6 +498,13 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case subcontrol.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
+			}
 		case subcontrol.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -540,11 +557,36 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = enums.ControlStatus(value.String)
 			}
+		case subcontrol.FieldImplementationStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_status", values[i])
+			} else if value.Valid {
+				_m.ImplementationStatus = enums.ControlImplementationStatus(value.String)
+			}
+		case subcontrol.FieldImplementationDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_description", values[i])
+			} else if value.Valid {
+				_m.ImplementationDescription = value.String
+			}
+		case subcontrol.FieldPublicRepresentation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field public_representation", values[i])
+			} else if value.Valid {
+				_m.PublicRepresentation = value.String
+			}
 		case subcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				_m.Source = enums.ControlSource(value.String)
+			}
+		case subcontrol.FieldSourceName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_name", values[i])
+			} else if value.Valid {
+				_m.SourceName = new(string)
+				*_m.SourceName = value.String
 			}
 		case subcontrol.FieldReferenceFramework:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -933,6 +975,11 @@ func (_m *Subcontrol) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
@@ -957,8 +1004,22 @@ func (_m *Subcontrol) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
+	builder.WriteString("implementation_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ImplementationStatus))
+	builder.WriteString(", ")
+	builder.WriteString("implementation_description=")
+	builder.WriteString(_m.ImplementationDescription)
+	builder.WriteString(", ")
+	builder.WriteString("public_representation=")
+	builder.WriteString(_m.PublicRepresentation)
+	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))
+	builder.WriteString(", ")
+	if v := _m.SourceName; v != nil {
+		builder.WriteString("source_name=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.ReferenceFramework; v != nil {
 		builder.WriteString("reference_framework=")

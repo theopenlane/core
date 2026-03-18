@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -35,12 +36,21 @@ func (r *mutationResolver) CreateBulkRemediation(ctx context.Context, input []*g
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	return r.bulkCreateRemediation(ctx, input)
 }
 
 // CreateBulkCSVRemediation is the resolver for the createBulkCSVRemediation field.
 func (r *mutationResolver) CreateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateRemediationInput](input)
+	data, err := common.UnmarshalBulkData[csvgenerated.RemediationCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
@@ -51,7 +61,29 @@ func (r *mutationResolver) CreateBulkCSVRemediation(ctx context.Context, input g
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	return r.bulkCreateRemediation(ctx, data)
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
+			return nil, ownerErr
+		}
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Remediation", data); err != nil {
+		return nil, err
+	}
+
+	inputs := make([]*generated.CreateRemediationInput, 0, len(data))
+	for i := range data {
+		inputs = append(inputs, &data[i].Input)
+	}
+
+	return r.bulkCreateRemediation(ctx, inputs)
 }
 
 // UpdateRemediation is the resolver for the updateRemediation field.
@@ -87,6 +119,44 @@ func (r *mutationResolver) DeleteRemediation(ctx context.Context, id string) (*m
 	return &model.RemediationDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// UpdateBulkRemediation is the resolver for the updateBulkRemediation field.
+func (r *mutationResolver) UpdateBulkRemediation(ctx context.Context, ids []string, input generated.UpdateRemediationInput) (*model.RemediationBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateRemediation(ctx, ids, input)
+}
+
+// UpdateBulkCSVRemediation is the resolver for the updateBulkCSVRemediation field.
+func (r *mutationResolver) UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.RemediationCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "remediation"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Remediation", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVRemediation(ctx, data)
+}
+
+// DeleteBulkRemediation is the resolver for the deleteBulkRemediation field.
+func (r *mutationResolver) DeleteBulkRemediation(ctx context.Context, ids []string) (*model.RemediationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteRemediation(ctx, ids)
 }
 
 // Remediation is the resolver for the remediation field.
