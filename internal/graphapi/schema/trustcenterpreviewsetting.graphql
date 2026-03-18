@@ -9,6 +9,7 @@ extend type Mutation {
     input: CreateTrustCenterPreviewSettingInput!
     logoFile: Upload
     faviconFile: Upload
+    heroImageFile: Upload
   ): TrustCenterPreviewSettingCreatePayload!
 }
 
@@ -78,4 +79,8 @@ input CreateTrustCenterPreviewSettingInput {
   accent color for the trust center
   """
   accentColor: String
+  """
+  hero image local file ID
+  """
+  heroImageFileID: ID
 }

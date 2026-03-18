@@ -15284,6 +15284,14 @@ func (_m *TrustCenterSetting) FaviconFile(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterSetting) HeroImageFile(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.HeroImageFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryHeroImageFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSubprocessor) TrustCenterSubprocessorKind(ctx context.Context) (*CustomTypeEnum, error) {
 	result, err := _m.Edges.TrustCenterSubprocessorKindOrErr()
 	if IsNotLoaded(err) {

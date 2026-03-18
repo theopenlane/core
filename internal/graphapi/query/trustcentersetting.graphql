@@ -15,6 +15,10 @@ mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
       }
       logoRemoteURL
       logoLocalFileID
+      heroImageFile {
+        presignedURL
+      }
+      heroImageLocalFileID
       themeMode
       font
       foregroundColor
@@ -61,6 +65,10 @@ query GetAllTrustCenterSettings {
         }
         faviconRemoteURL
         faviconLocalFileID
+        heroImageFile {
+          presignedURL
+        }
+        heroImageLocalFileID
         themeMode
         font
         foregroundColor
@@ -93,6 +101,10 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     }
     faviconRemoteURL
     faviconLocalFileID
+    heroImageFile {
+      presignedURL
+    }
+    heroImageLocalFileID
     themeMode
     font
     foregroundColor
@@ -132,6 +144,10 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         }
         faviconRemoteURL
         faviconLocalFileID
+        heroImageFile {
+          presignedURL
+        }
+        heroImageLocalFileID
         themeMode
         font
         foregroundColor
@@ -143,12 +159,13 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
   }
 }
 
-mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
+mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload, $heroImageFile: Upload) {
   updateTrustCenterSetting(
     id: $updateTrustCenterSettingId
     input: $input
     logoFile: $logoFile
     faviconFile: $faviconFile
+    heroImageFile: $heroImageFile
   ) {
     trustCenterSetting {
       createdAt

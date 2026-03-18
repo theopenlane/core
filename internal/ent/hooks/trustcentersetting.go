@@ -193,6 +193,7 @@ func getTrustCenterSettingID(ctx context.Context, m *generated.TrustCenterSettin
 func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingMutation) (context.Context, error) {
 	logoKey := "logoFile"
 	faviconKey := "faviconFile"
+	heroImageKey := "heroImageFile"
 
 	var err error
 
@@ -205,6 +206,13 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 
 	ctx, err = processSingleMutationFile(ctx, m, faviconKey, "trust_center_setting", ErrTooManyFaviconFiles,
 		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetFaviconLocalFileID(id) },
+	)
+	if err != nil {
+		return ctx, err
+	}
+
+	ctx, err = processSingleMutationFile(ctx, m, heroImageKey, "trust_center_setting", ErrTooManyHeroImageFiles,
+		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetHeroImageLocalFileID(id) },
 	)
 	if err != nil {
 		return ctx, err

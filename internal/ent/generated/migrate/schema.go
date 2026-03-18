@@ -7504,6 +7504,7 @@ var (
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingsTable holds the schema information for the "trust_center_settings" table.
 	TrustCenterSettingsTable = &schema.Table{
@@ -7520,6 +7521,12 @@ var (
 			{
 				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[29]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_files_hero_image_file",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[30]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -13575,6 +13582,7 @@ func init() {
 	TrustCenterNdaRequestsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
+	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
 	TrustCenterSubprocessorsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterSubprocessorsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable

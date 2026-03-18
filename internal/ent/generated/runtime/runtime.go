@@ -7884,35 +7884,35 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescPrimaryColor is the schema descriptor for primary_color field.
-	trustcentersettingDescPrimaryColor := trustcentersettingFields[10].Descriptor()
+	trustcentersettingDescPrimaryColor := trustcentersettingFields[11].Descriptor()
 	// trustcentersetting.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
 	trustcentersetting.PrimaryColorValidator = trustcentersettingDescPrimaryColor.Validators[0].(func(string) error)
 	// trustcentersettingDescForegroundColor is the schema descriptor for foreground_color field.
-	trustcentersettingDescForegroundColor := trustcentersettingFields[12].Descriptor()
+	trustcentersettingDescForegroundColor := trustcentersettingFields[13].Descriptor()
 	// trustcentersetting.ForegroundColorValidator is a validator for the "foreground_color" field. It is called by the builders before save.
 	trustcentersetting.ForegroundColorValidator = trustcentersettingDescForegroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescBackgroundColor is the schema descriptor for background_color field.
-	trustcentersettingDescBackgroundColor := trustcentersettingFields[13].Descriptor()
+	trustcentersettingDescBackgroundColor := trustcentersettingFields[14].Descriptor()
 	// trustcentersetting.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
 	trustcentersetting.BackgroundColorValidator = trustcentersettingDescBackgroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescAccentColor is the schema descriptor for accent_color field.
-	trustcentersettingDescAccentColor := trustcentersettingFields[14].Descriptor()
+	trustcentersettingDescAccentColor := trustcentersettingFields[15].Descriptor()
 	// trustcentersetting.AccentColorValidator is a validator for the "accent_color" field. It is called by the builders before save.
 	trustcentersetting.AccentColorValidator = trustcentersettingDescAccentColor.Validators[0].(func(string) error)
 	// trustcentersettingDescSecondaryBackgroundColor is the schema descriptor for secondary_background_color field.
-	trustcentersettingDescSecondaryBackgroundColor := trustcentersettingFields[15].Descriptor()
+	trustcentersettingDescSecondaryBackgroundColor := trustcentersettingFields[16].Descriptor()
 	// trustcentersetting.SecondaryBackgroundColorValidator is a validator for the "secondary_background_color" field. It is called by the builders before save.
 	trustcentersetting.SecondaryBackgroundColorValidator = trustcentersettingDescSecondaryBackgroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescSecondaryForegroundColor is the schema descriptor for secondary_foreground_color field.
-	trustcentersettingDescSecondaryForegroundColor := trustcentersettingFields[16].Descriptor()
+	trustcentersettingDescSecondaryForegroundColor := trustcentersettingFields[17].Descriptor()
 	// trustcentersetting.SecondaryForegroundColorValidator is a validator for the "secondary_foreground_color" field. It is called by the builders before save.
 	trustcentersetting.SecondaryForegroundColorValidator = trustcentersettingDescSecondaryForegroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescRemoveBranding is the schema descriptor for remove_branding field.
-	trustcentersettingDescRemoveBranding := trustcentersettingFields[18].Descriptor()
+	trustcentersettingDescRemoveBranding := trustcentersettingFields[19].Descriptor()
 	// trustcentersetting.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
 	trustcentersetting.DefaultRemoveBranding = trustcentersettingDescRemoveBranding.Default.(bool)
 	// trustcentersettingDescCompanyDomain is the schema descriptor for company_domain field.
-	trustcentersettingDescCompanyDomain := trustcentersettingFields[19].Descriptor()
+	trustcentersettingDescCompanyDomain := trustcentersettingFields[20].Descriptor()
 	// trustcentersetting.CompanyDomainValidator is a validator for the "company_domain" field. It is called by the builders before save.
 	trustcentersetting.CompanyDomainValidator = func() func(string) error {
 		validators := trustcentersettingDescCompanyDomain.Validators
@@ -7930,15 +7930,15 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescSecurityContact is the schema descriptor for security_contact field.
-	trustcentersettingDescSecurityContact := trustcentersettingFields[20].Descriptor()
+	trustcentersettingDescSecurityContact := trustcentersettingFields[21].Descriptor()
 	// trustcentersetting.SecurityContactValidator is a validator for the "security_contact" field. It is called by the builders before save.
 	trustcentersetting.SecurityContactValidator = trustcentersettingDescSecurityContact.Validators[0].(func(string) error)
 	// trustcentersettingDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
-	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[21].Descriptor()
+	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[22].Descriptor()
 	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
-	trustcentersettingDescStatusPageURL := trustcentersettingFields[22].Descriptor()
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[23].Descriptor()
 	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	trustcentersetting.StatusPageURLValidator = func() func(string) error {
 		validators := trustcentersettingDescStatusPageURL.Validators

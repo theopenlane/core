@@ -2723,6 +2723,7 @@ type ComplexityRoot struct {
 		FaviconRemoteURL         func(childComplexity int) int
 		Font                     func(childComplexity int) int
 		ForegroundColor          func(childComplexity int) int
+		HeroImageLocalFileID     func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
@@ -18316,6 +18317,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.ForegroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.heroImageLocalFileID":
+		if e.ComplexityRoot.TrustCenterSettingHistory.HeroImageLocalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.HeroImageLocalFileID(childComplexity), true
 
 	case "TrustCenterSettingHistory.historyTime":
 		if e.ComplexityRoot.TrustCenterSettingHistory.HistoryTime == nil {
@@ -56698,6 +56706,10 @@ type TrustCenterSettingHistory implements Node {
   """
   faviconLocalFileID: String
   """
+  Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+  """
+  heroImageLocalFileID: String
+  """
   Theme mode for the trust center
   """
   themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
@@ -57108,6 +57120,24 @@ input TrustCenterSettingHistoryWhereInput {
   faviconLocalFileIDNotNil: Boolean
   faviconLocalFileIDEqualFold: String
   faviconLocalFileIDContainsFold: String
+  """
+  hero_image_local_file_id field predicates
+  """
+  heroImageLocalFileID: String
+  heroImageLocalFileIDNEQ: String
+  heroImageLocalFileIDIn: [String!]
+  heroImageLocalFileIDNotIn: [String!]
+  heroImageLocalFileIDGT: String
+  heroImageLocalFileIDGTE: String
+  heroImageLocalFileIDLT: String
+  heroImageLocalFileIDLTE: String
+  heroImageLocalFileIDContains: String
+  heroImageLocalFileIDHasPrefix: String
+  heroImageLocalFileIDHasSuffix: String
+  heroImageLocalFileIDIsNil: Boolean
+  heroImageLocalFileIDNotNil: Boolean
+  heroImageLocalFileIDEqualFold: String
+  heroImageLocalFileIDContainsFold: String
   """
   theme_mode field predicates
   """

@@ -3961,6 +3961,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "hero_image_file": {
+	ObjectType:      "file",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "trust_center_subprocessor": {"trust_center_subprocessor_kind": {
 	ObjectType:      "trust_center_subprocessor_kind",
