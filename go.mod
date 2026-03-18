@@ -16,7 +16,7 @@ require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
+	entgo.io/ent v0.14.6-0.20260317212542-e0ba79d911cc
 	github.com/99designs/gqlgen v0.17.88
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/alicebob/miniredis/v2 v2.37.0
@@ -220,7 +220,7 @@ require (
 	github.com/oasdiff/yaml v0.0.0-20260313112342-a3ea61cb4d4c // indirect
 	github.com/oasdiff/yaml3 v0.0.0-20260224194419-61cd415a242b // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
-	github.com/olekukonko/ll v0.1.3 // indirect
+	github.com/olekukonko/ll v0.1.4-0.20260115111900-9e59c2286df0 // indirect
 	github.com/onsi/gomega v1.38.2 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.8 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
@@ -308,7 +308,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/wrap v0.2.0 // indirect
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
-	github.com/olekukonko/tablewriter v1.1.2 // indirect
+	github.com/olekukonko/tablewriter v1.1.3 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.3 // indirect
