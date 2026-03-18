@@ -107,5 +107,6 @@ func (SLADefinition) Policy() ent.Policy {
 func (SLADefinition) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogVulnerabilityManagementModule,
+		models.CatalogComplianceModule,
 	}
 }
