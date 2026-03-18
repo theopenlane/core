@@ -80,6 +80,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -13470,6 +13471,20 @@ var (
 			}
 		},
 	}
+	// FindingOrderFieldSecurityLevel orders Finding by security_level.
+	FindingOrderFieldSecurityLevel = &FindingOrderField{
+		Value: func(_m *Finding) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: finding.FieldSecurityLevel,
+		toTerm: finding.BySecurityLevel,
+		toCursor: func(_m *Finding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// FindingOrderFieldExternalOwnerID orders Finding by external_owner_id.
 	FindingOrderFieldExternalOwnerID = &FindingOrderField{
 		Value: func(_m *Finding) (ent.Value, error) {
@@ -13524,6 +13539,8 @@ func (f FindingOrderField) String() string {
 		str = "updated_at"
 	case FindingOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case FindingOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case FindingOrderFieldCategory.column:
@@ -13552,6 +13569,8 @@ func (f *FindingOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingOrderFieldUpdatedAt
 	case "external_id":
 		*f = *FindingOrderFieldExternalID
+	case "security_level":
+		*f = *FindingOrderFieldSecurityLevel
 	case "external_owner_id":
 		*f = *FindingOrderFieldExternalOwnerID
 	case "category":
@@ -27811,6 +27830,397 @@ func (_m *Risk) ToEdge(order *RiskOrder) *RiskEdge {
 	}
 }
 
+// SLADefinitionEdge is the edge representation of SLADefinition.
+type SLADefinitionEdge struct {
+	Node   *SLADefinition `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// SLADefinitionConnection is the connection containing edges to SLADefinition.
+type SLADefinitionConnection struct {
+	Edges      []*SLADefinitionEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *SLADefinitionConnection) build(nodes []*SLADefinition, pager *sladefinitionPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SLADefinition
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SLADefinition {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SLADefinition {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SLADefinitionEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SLADefinitionEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SLADefinitionPaginateOption enables pagination customization.
+type SLADefinitionPaginateOption func(*sladefinitionPager) error
+
+// WithSLADefinitionOrder configures pagination ordering.
+func WithSLADefinitionOrder(order []*SLADefinitionOrder) SLADefinitionPaginateOption {
+	return func(pager *sladefinitionPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithSLADefinitionFilter configures pagination filter.
+func WithSLADefinitionFilter(filter func(*SLADefinitionQuery) (*SLADefinitionQuery, error)) SLADefinitionPaginateOption {
+	return func(pager *sladefinitionPager) error {
+		if filter == nil {
+			return errors.New("SLADefinitionQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type sladefinitionPager struct {
+	reverse bool
+	order   []*SLADefinitionOrder
+	filter  func(*SLADefinitionQuery) (*SLADefinitionQuery, error)
+}
+
+func newSLADefinitionPager(opts []SLADefinitionPaginateOption, reverse bool) (*sladefinitionPager, error) {
+	pager := &sladefinitionPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *sladefinitionPager) applyFilter(query *SLADefinitionQuery) (*SLADefinitionQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *sladefinitionPager) toCursor(_m *SLADefinition) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *sladefinitionPager) applyCursors(query *SLADefinitionQuery, after, before *Cursor) (*SLADefinitionQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultSLADefinitionOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *sladefinitionPager) applyOrder(query *SLADefinitionQuery) *SLADefinitionQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultSLADefinitionOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultSLADefinitionOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *sladefinitionPager) orderExpr(query *SLADefinitionQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultSLADefinitionOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SLADefinition.
+func (_m *SLADefinitionQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SLADefinitionPaginateOption,
+) (*SLADefinitionConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSLADefinitionPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &SLADefinitionConnection{Edges: []*SLADefinitionEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SLADefinitionOrderFieldCreatedAt orders SLADefinition by created_at.
+	SLADefinitionOrderFieldCreatedAt = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: sladefinition.FieldCreatedAt,
+		toTerm: sladefinition.ByCreatedAt,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// SLADefinitionOrderFieldUpdatedAt orders SLADefinition by updated_at.
+	SLADefinitionOrderFieldUpdatedAt = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: sladefinition.FieldUpdatedAt,
+		toTerm: sladefinition.ByUpdatedAt,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// SLADefinitionOrderFieldSLADays orders SLADefinition by sla_days.
+	SLADefinitionOrderFieldSLADays = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.SLADays, nil
+		},
+		column: sladefinition.FieldSLADays,
+		toTerm: sladefinition.BySLADays,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SLADays,
+			}
+		},
+	}
+	// SLADefinitionOrderFieldSecurityLevel orders SLADefinition by security_level.
+	SLADefinitionOrderFieldSecurityLevel = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: sladefinition.FieldSecurityLevel,
+		toTerm: sladefinition.BySecurityLevel,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SLADefinitionOrderField) String() string {
+	var str string
+	switch f.column {
+	case SLADefinitionOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SLADefinitionOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SLADefinitionOrderFieldSLADays.column:
+		str = "sla_days"
+	case SLADefinitionOrderFieldSecurityLevel.column:
+		str = "security_level"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SLADefinitionOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SLADefinitionOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SLADefinitionOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *SLADefinitionOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SLADefinitionOrderFieldUpdatedAt
+	case "sla_days":
+		*f = *SLADefinitionOrderFieldSLADays
+	case "security_level":
+		*f = *SLADefinitionOrderFieldSecurityLevel
+	default:
+		return fmt.Errorf("%s is not a valid SLADefinitionOrderField", str)
+	}
+	return nil
+}
+
+// SLADefinitionOrderField defines the ordering field of SLADefinition.
+type SLADefinitionOrderField struct {
+	// Value extracts the ordering value from the given SLADefinition.
+	Value    func(*SLADefinition) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) sladefinition.OrderOption
+	toCursor func(*SLADefinition) Cursor
+}
+
+// SLADefinitionOrder defines the ordering of SLADefinition.
+type SLADefinitionOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *SLADefinitionOrderField `json:"field"`
+}
+
+// DefaultSLADefinitionOrder is the default ordering of SLADefinition.
+var DefaultSLADefinitionOrder = &SLADefinitionOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: sladefinition.FieldID,
+		toTerm: sladefinition.ByID,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts SLADefinition into SLADefinitionEdge.
+func (_m *SLADefinition) ToEdge(order *SLADefinitionOrder) *SLADefinitionEdge {
+	if order == nil {
+		order = DefaultSLADefinitionOrder
+	}
+	return &SLADefinitionEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // ScanEdge is the edge representation of Scan.
 type ScanEdge struct {
 	Node   *Scan  `json:"node"`
@@ -37102,6 +37512,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityOrderFieldSecurityLevel orders Vulnerability by security_level.
+	VulnerabilityOrderFieldSecurityLevel = &VulnerabilityOrderField{
+		Value: func(_m *Vulnerability) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: vulnerability.FieldSecurityLevel,
+		toTerm: vulnerability.BySecurityLevel,
+		toCursor: func(_m *Vulnerability) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// VulnerabilityOrderFieldExternalID orders Vulnerability by external_id.
 	VulnerabilityOrderFieldExternalID = &VulnerabilityOrderField{
 		Value: func(_m *Vulnerability) (ent.Value, error) {
@@ -37170,6 +37594,8 @@ func (f VulnerabilityOrderField) String() string {
 		str = "updated_at"
 	case VulnerabilityOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
+	case VulnerabilityOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case VulnerabilityOrderFieldExternalID.column:
 		str = "external_id"
 	case VulnerabilityOrderFieldCveID.column:
@@ -37200,6 +37626,8 @@ func (f *VulnerabilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityOrderFieldUpdatedAt
 	case "external_owner_id":
 		*f = *VulnerabilityOrderFieldExternalOwnerID
+	case "security_level":
+		*f = *VulnerabilityOrderFieldSecurityLevel
 	case "external_id":
 		*f = *VulnerabilityOrderFieldExternalID
 	case "cve_id":

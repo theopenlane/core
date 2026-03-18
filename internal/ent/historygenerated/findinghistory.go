@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
 	"github.com/theopenlane/entx/history"
@@ -60,8 +61,16 @@ type FindingHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the finding
 	ScopeID string `json:"scope_id,omitempty"`
+	// the status of the finding
+	FindingStatusName string `json:"finding_status_name,omitempty"`
+	// the status of the finding
+	FindingStatusID string `json:"finding_status_id,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
+	// lifecycle status of the finding
+	Status string `json:"status,omitempty"`
+	// incoming source severity
+	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -120,8 +129,6 @@ type FindingHistory struct {
 	Vector string `json:"vector,omitempty"`
 	// remediation service level agreement in days
 	RemediationSLA int `json:"remediation_sla,omitempty"`
-	// lifecycle status of the finding
-	Status string `json:"status,omitempty"`
 	// timestamp when the finding was last observed by the source
 	EventTime *models.DateTime `json:"event_time,omitempty"`
 	// timestamp when the finding was first reported by the source
@@ -154,7 +161,7 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case findinghistory.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldExternalID, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldStatus, findinghistory.FieldExternalURI:
+		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldStatus, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case findinghistory.FieldHistoryTime, findinghistory.FieldCreatedAt, findinghistory.FieldUpdatedAt, findinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -297,11 +304,35 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
+		case findinghistory.FieldFindingStatusName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_status_name", values[i])
+			} else if value.Valid {
+				_m.FindingStatusName = value.String
+			}
+		case findinghistory.FieldFindingStatusID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_status_id", values[i])
+			} else if value.Valid {
+				_m.FindingStatusID = value.String
+			}
 		case findinghistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
 			} else if value.Valid {
 				_m.ExternalID = value.String
+			}
+		case findinghistory.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = value.String
+			}
+		case findinghistory.FieldSecurityLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_level", values[i])
+			} else if value.Valid {
+				_m.SecurityLevel = enums.SecurityLevel(value.String)
 			}
 		case findinghistory.FieldExternalOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -487,12 +518,6 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.RemediationSLA = int(value.Int64)
 			}
-		case findinghistory.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = value.String
-			}
 		case findinghistory.FieldEventTime:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field event_time", values[i])
@@ -633,8 +658,20 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
+	builder.WriteString("finding_status_name=")
+	builder.WriteString(_m.FindingStatusName)
+	builder.WriteString(", ")
+	builder.WriteString("finding_status_id=")
+	builder.WriteString(_m.FindingStatusID)
+	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(_m.Status)
+	builder.WriteString(", ")
+	builder.WriteString("security_level=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
 	builder.WriteString(", ")
 	builder.WriteString("external_owner_id=")
 	builder.WriteString(_m.ExternalOwnerID)
@@ -722,9 +759,6 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("remediation_sla=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RemediationSLA))
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(_m.Status)
 	builder.WriteString(", ")
 	if v := _m.EventTime; v != nil {
 		builder.WriteString("event_time=")

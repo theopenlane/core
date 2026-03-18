@@ -238,6 +238,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Organization_scans(ctx, field)
+			case "slaDefinitions":
+				return ec.fieldContext_Organization_slaDefinitions(ctx, field)
 			case "subprocessors":
 				return ec.fieldContext_Organization_subprocessors(ctx, field)
 			case "exports":

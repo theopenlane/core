@@ -96,6 +96,8 @@ const (
 	IntegrationMappingVulnerabilityTags = "tags"
 	IntegrationMappingVulnerabilityValidated = "validated"
 	IntegrationMappingVulnerabilityVector = "vector"
+	IntegrationMappingVulnerabilityVulnerabilityStatusID = "vulnerabilityStatusID"
+	IntegrationMappingVulnerabilityVulnerabilityStatusName = "vulnerabilityStatusName"
 )
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata.
@@ -613,6 +615,20 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				Required: false,
 				UpsertKey: false,
 			},
+			{
+				InputKey: "vulnerabilityStatusID",
+				EntField: "vulnerability_status_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "vulnerabilityStatusName",
+				EntField: "vulnerability_status_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
 		},
 		AllowedKeys: map[string]struct{}{
 			"blocking": {},
@@ -651,6 +667,8 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"tags": {},
 			"validated": {},
 			"vector": {},
+			"vulnerabilityStatusID": {},
+			"vulnerabilityStatusName": {},
 		},
 		RequiredKeys: []string{
 			"externalID",

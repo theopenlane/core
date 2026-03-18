@@ -1643,14 +1643,13 @@ func TestMutationUpdateControl(t *testing.T) {
 			ctx:       context.Background(),
 		},
 		{
-			name: "invalid custom control enum for control kind",
+			name: "auto-create custom control enum for control kind",
 			request: testclient.UpdateControlInput{
 				ControlKindName: lo.ToPtr("InvalidKind"),
 			},
-			controlID:   control.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "value does not exist:",
+			controlID: control.ID,
+			client:    suite.client.apiWithPAT,
+			ctx:       context.Background(),
 		},
 		{
 			name: "update ref code to empty",
@@ -1673,14 +1672,13 @@ func TestMutationUpdateControl(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update not allowed, cannot access another org's custom control kind",
+			name: "update allowed, auto-creates custom control kind in own org",
 			request: testclient.UpdateControlInput{
 				ControlKindName: &kindCustom.Name,
 			},
-			controlID:   controlAnotherOrg.ID,
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: "value does not exist:",
+			controlID: controlAnotherOrg.ID,
+			client:    suite.client.api,
+			ctx:       testUser2.UserCtx,
 		},
 		{
 			name: "update allowed, user added to one of the programs",

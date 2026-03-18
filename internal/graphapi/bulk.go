@@ -6470,6 +6470,160 @@ func (r *mutationResolver) bulkUpdateCSVScheduledJob(ctx context.Context, inputs
 	}, nil
 }
 
+// bulkCreateSLADefinition uses the CreateBulk function to create multiple SLADefinition entities
+func (r *mutationResolver) bulkCreateSLADefinition(ctx context.Context, input []*generated.CreateSLADefinitionInput) (*model.SLADefinitionBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.SLADefinitionCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.SLADefinition.Create().SetInput(*data)
+	}
+
+	res, err := c.SLADefinition.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "sladefinition"})
+	}
+
+	// return response
+	return &model.SLADefinitionBulkCreatePayload{
+		SLADefinitions: res,
+	}, nil
+}
+
+// bulkUpdateSLADefinition updates multiple SLADefinition entities
+func (r *mutationResolver) bulkUpdateSLADefinition(ctx context.Context, ids []string, input generated.UpdateSLADefinitionInput) (*model.SLADefinitionBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.SLADefinition, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each sladefinition individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for sladefinition")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.SLADefinition.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("sladefinition_id", id).Msg("failed to get sladefinition in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("sladefinition_id", id).Msg("failed to update sladefinition in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.SLADefinitionBulkUpdatePayload{
+		SLADefinitions: results,
+		UpdatedIDs:     updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVSLADefinition updates multiple SLADefinition entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVSLADefinition(ctx context.Context, inputs []*csvgenerated.SLADefinitionCSVUpdateInput) (*model.SLADefinitionBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.SLADefinition, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each sladefinition individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for sladefinition")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.SLADefinition.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("sladefinition_id", input.ID).Msg("failed to get sladefinition in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("sladefinition_id", input.ID).Msg("failed to update sladefinition in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "sladefinition"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.SLADefinitionBulkUpdatePayload{
+		SLADefinitions: results,
+		UpdatedIDs:     updatedIDs,
+	}, nil
+}
+
+// bulkDeleteSLADefinition deletes multiple SLADefinition entities by their IDs
+func (r *mutationResolver) bulkDeleteSLADefinition(ctx context.Context, ids []string) (*model.SLADefinitionBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each sladefinition individually to ensure proper cleanup
+			if err := r.db.SLADefinition.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("sladefinition_id", id).Msg("failed to delete sladefinition in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.SLADefinitionEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("sladefinition_id", id).Msg("failed to cleanup sladefinition edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some sladefinition deletions failed")
+	}
+
+	return &model.SLADefinitionBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateSubcontrol uses the CreateBulk function to create multiple Subcontrol entities
 func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

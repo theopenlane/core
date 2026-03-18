@@ -82,8 +82,16 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -142,8 +150,6 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -168,6 +174,8 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -296,8 +304,16 @@ func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ con
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -356,8 +372,6 @@ func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ con
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -382,6 +396,8 @@ func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ con
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -510,8 +526,16 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -570,8 +594,6 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -596,6 +618,8 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":
@@ -724,8 +748,16 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Finding_scopeID(ctx, field)
+			case "findingStatusName":
+				return ec.fieldContext_Finding_findingStatusName(ctx, field)
+			case "findingStatusID":
+				return ec.fieldContext_Finding_findingStatusID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Finding_externalID(ctx, field)
+			case "status":
+				return ec.fieldContext_Finding_status(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_Finding_securityLevel(ctx, field)
 			case "externalOwnerID":
 				return ec.fieldContext_Finding_externalOwnerID(ctx, field)
 			case "source":
@@ -784,8 +816,6 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -810,6 +840,8 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_environment(ctx, field)
 			case "scope":
 				return ec.fieldContext_Finding_scope(ctx, field)
+			case "findingStatus":
+				return ec.fieldContext_Finding_findingStatus(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Finding_integrations(ctx, field)
 			case "vulnerabilities":

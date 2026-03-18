@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -264,6 +265,46 @@ func (_u *FindingUpdate) ClearScopeID() *FindingUpdate {
 	return _u
 }
 
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_u *FindingUpdate) SetFindingStatusName(v string) *FindingUpdate {
+	_u.mutation.SetFindingStatusName(v)
+	return _u
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableFindingStatusName(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetFindingStatusName(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusName clears the value of the "finding_status_name" field.
+func (_u *FindingUpdate) ClearFindingStatusName() *FindingUpdate {
+	_u.mutation.ClearFindingStatusName()
+	return _u
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_u *FindingUpdate) SetFindingStatusID(v string) *FindingUpdate {
+	_u.mutation.SetFindingStatusID(v)
+	return _u
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableFindingStatusID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetFindingStatusID(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusID clears the value of the "finding_status_id" field.
+func (_u *FindingUpdate) ClearFindingStatusID() *FindingUpdate {
+	_u.mutation.ClearFindingStatusID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdate) SetExternalID(v string) *FindingUpdate {
 	_u.mutation.SetExternalID(v)
@@ -281,6 +322,46 @@ func (_u *FindingUpdate) SetNillableExternalID(v *string) *FindingUpdate {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdate) ClearExternalID() *FindingUpdate {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *FindingUpdate) SetStatus(v string) *FindingUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableStatus(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingUpdate) ClearStatus() *FindingUpdate {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingUpdate) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingUpdate) ClearSecurityLevel() *FindingUpdate {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -883,26 +964,6 @@ func (_u *FindingUpdate) ClearRemediationSLA() *FindingUpdate {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingUpdate) SetStatus(v string) *FindingUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingUpdate) SetNillableStatus(v *string) *FindingUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingUpdate) ClearStatus() *FindingUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingUpdate) SetEventTime(v models.DateTime) *FindingUpdate {
 	_u.mutation.SetEventTime(v)
@@ -1060,6 +1121,11 @@ func (_u *FindingUpdate) SetEnvironment(v *CustomTypeEnum) *FindingUpdate {
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) SetScope(v *CustomTypeEnum) *FindingUpdate {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) SetFindingStatus(v *CustomTypeEnum) *FindingUpdate {
+	return _u.SetFindingStatusID(v.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -1424,6 +1490,12 @@ func (_u *FindingUpdate) ClearEnvironment() *FindingUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) ClearScope() *FindingUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearFindingStatus clears the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdate) ClearFindingStatus() *FindingUpdate {
+	_u.mutation.ClearFindingStatus()
 	return _u
 }
 
@@ -1868,6 +1940,16 @@ func (_u *FindingUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingUpdate) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1875,6 +1957,9 @@ func (_u *FindingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Findin
 }
 
 func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(finding.Table, finding.Columns, sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1951,11 +2036,29 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(finding.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.FindingStatusName(); ok {
+		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusNameCleared() {
+		_spec.ClearField(finding.FieldFindingStatusName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(finding.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(finding.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -2165,12 +2268,6 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(finding.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)
@@ -2403,6 +2500,37 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -3581,6 +3709,46 @@ func (_u *FindingUpdateOne) ClearScopeID() *FindingUpdateOne {
 	return _u
 }
 
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_u *FindingUpdateOne) SetFindingStatusName(v string) *FindingUpdateOne {
+	_u.mutation.SetFindingStatusName(v)
+	return _u
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableFindingStatusName(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetFindingStatusName(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusName clears the value of the "finding_status_name" field.
+func (_u *FindingUpdateOne) ClearFindingStatusName() *FindingUpdateOne {
+	_u.mutation.ClearFindingStatusName()
+	return _u
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_u *FindingUpdateOne) SetFindingStatusID(v string) *FindingUpdateOne {
+	_u.mutation.SetFindingStatusID(v)
+	return _u
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableFindingStatusID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetFindingStatusID(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusID clears the value of the "finding_status_id" field.
+func (_u *FindingUpdateOne) ClearFindingStatusID() *FindingUpdateOne {
+	_u.mutation.ClearFindingStatusID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingUpdateOne) SetExternalID(v string) *FindingUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -3598,6 +3766,46 @@ func (_u *FindingUpdateOne) SetNillableExternalID(v *string) *FindingUpdateOne {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdateOne) ClearExternalID() *FindingUpdateOne {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *FindingUpdateOne) SetStatus(v string) *FindingUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableStatus(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *FindingUpdateOne) ClearStatus() *FindingUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingUpdateOne) ClearSecurityLevel() *FindingUpdateOne {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -4200,26 +4408,6 @@ func (_u *FindingUpdateOne) ClearRemediationSLA() *FindingUpdateOne {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingUpdateOne) SetStatus(v string) *FindingUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingUpdateOne) SetNillableStatus(v *string) *FindingUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingUpdateOne) ClearStatus() *FindingUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingUpdateOne) SetEventTime(v models.DateTime) *FindingUpdateOne {
 	_u.mutation.SetEventTime(v)
@@ -4377,6 +4565,11 @@ func (_u *FindingUpdateOne) SetEnvironment(v *CustomTypeEnum) *FindingUpdateOne 
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) SetScope(v *CustomTypeEnum) *FindingUpdateOne {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) SetFindingStatus(v *CustomTypeEnum) *FindingUpdateOne {
+	return _u.SetFindingStatusID(v.ID)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -4741,6 +4934,12 @@ func (_u *FindingUpdateOne) ClearEnvironment() *FindingUpdateOne {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) ClearScope() *FindingUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearFindingStatus clears the "finding_status" edge to the CustomTypeEnum entity.
+func (_u *FindingUpdateOne) ClearFindingStatus() *FindingUpdateOne {
+	_u.mutation.ClearFindingStatus()
 	return _u
 }
 
@@ -5198,6 +5397,16 @@ func (_u *FindingUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingUpdateOne) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -5205,6 +5414,9 @@ func (_u *FindingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Fin
 }
 
 func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(finding.Table, finding.Columns, sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -5298,11 +5510,29 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(finding.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.FindingStatusName(); ok {
+		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusNameCleared() {
+		_spec.ClearField(finding.FieldFindingStatusName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(finding.FieldStatus, field.TypeString, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(finding.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(finding.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -5512,12 +5742,6 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(finding.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)
@@ -5750,6 +5974,37 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

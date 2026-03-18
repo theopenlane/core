@@ -3524,6 +3524,35 @@ func HasScansWith(preds ...predicate.Scan) predicate.Organization {
 	})
 }
 
+// HasSLADefinitions applies the HasEdge predicate on the "sla_definitions" edge.
+func HasSLADefinitions() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SLADefinitionsTable, SLADefinitionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SLADefinition
+		step.Edge.Schema = schemaConfig.SLADefinition
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSLADefinitionsWith applies the HasEdge predicate on the "sla_definitions" edge with a given conditions (other predicates).
+func HasSLADefinitionsWith(preds ...predicate.SLADefinition) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newSLADefinitionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SLADefinition
+		step.Edge.Schema = schemaConfig.SLADefinition
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasSubprocessors applies the HasEdge predicate on the "subprocessors" edge.
 func HasSubprocessors() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
