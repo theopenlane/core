@@ -286,6 +286,20 @@ func (_c *ControlCreate) SetNillableImplementationDescription(v *string) *Contro
 	return _c
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_c *ControlCreate) SetPublicRepresentation(v string) *ControlCreate {
+	_c.mutation.SetPublicRepresentation(v)
+	return _c
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_c *ControlCreate) SetNillablePublicRepresentation(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetPublicRepresentation(*v)
+	}
+	return _c
+}
+
 // SetSource sets the "source" field.
 func (_c *ControlCreate) SetSource(v enums.ControlSource) *ControlCreate {
 	_c.mutation.SetSource(v)
@@ -296,6 +310,20 @@ func (_c *ControlCreate) SetSource(v enums.ControlSource) *ControlCreate {
 func (_c *ControlCreate) SetNillableSource(v *enums.ControlSource) *ControlCreate {
 	if v != nil {
 		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceName sets the "source_name" field.
+func (_c *ControlCreate) SetSourceName(v string) *ControlCreate {
+	_c.mutation.SetSourceName(v)
+	return _c
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableSourceName(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetSourceName(*v)
 	}
 	return _c
 }
@@ -1392,9 +1420,17 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldImplementationDescription, field.TypeString, value)
 		_node.ImplementationDescription = value
 	}
+	if value, ok := _c.mutation.PublicRepresentation(); ok {
+		_spec.SetField(control.FieldPublicRepresentation, field.TypeString, value)
+		_node.PublicRepresentation = value
+	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceName(); ok {
+		_spec.SetField(control.FieldSourceName, field.TypeString, value)
+		_node.SourceName = &value
 	}
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(control.FieldReferenceFramework, field.TypeString, value)

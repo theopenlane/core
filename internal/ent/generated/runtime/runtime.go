@@ -1038,7 +1038,7 @@ func init() {
 	// control.DefaultTags holds the default value on creation for the tags field.
 	control.DefaultTags = controlDescTags.Default.([]string)
 	// controlDescReferenceFrameworkRevision is the schema descriptor for reference_framework_revision field.
-	controlDescReferenceFrameworkRevision := controlMixinFields5[13].Descriptor()
+	controlDescReferenceFrameworkRevision := controlMixinFields5[15].Descriptor()
 	// control.ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	control.ReferenceFrameworkRevisionValidator = controlDescReferenceFrameworkRevision.Validators[0].(func(string) error)
 	// controlDescOwnerID is the schema descriptor for owner_id field.
@@ -6787,7 +6787,7 @@ func init() {
 	// subcontrol.DefaultTags holds the default value on creation for the tags field.
 	subcontrol.DefaultTags = subcontrolDescTags.Default.([]string)
 	// subcontrolDescReferenceFrameworkRevision is the schema descriptor for reference_framework_revision field.
-	subcontrolDescReferenceFrameworkRevision := subcontrolMixinFields5[13].Descriptor()
+	subcontrolDescReferenceFrameworkRevision := subcontrolMixinFields5[15].Descriptor()
 	// subcontrol.ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	subcontrol.ReferenceFrameworkRevisionValidator = subcontrolDescReferenceFrameworkRevision.Validators[0].(func(string) error)
 	// subcontrolDescOwnerID is the schema descriptor for owner_id field.

@@ -138,6 +138,16 @@ func ImplementationDescription(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldImplementationDescription, v))
 }
 
+// PublicRepresentation applies equality check predicate on the "public_representation" field. It's identical to PublicRepresentationEQ.
+func PublicRepresentation(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldPublicRepresentation, v))
+}
+
+// SourceName applies equality check predicate on the "source_name" field. It's identical to SourceNameEQ.
+func SourceName(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldSourceName, v))
+}
+
 // ReferenceFramework applies equality check predicate on the "reference_framework" field. It's identical to ReferenceFrameworkEQ.
 func ReferenceFramework(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFramework, v))
@@ -1293,6 +1303,81 @@ func ImplementationDescriptionContainsFold(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldContainsFold(FieldImplementationDescription, v))
 }
 
+// PublicRepresentationEQ applies the EQ predicate on the "public_representation" field.
+func PublicRepresentationEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationNEQ applies the NEQ predicate on the "public_representation" field.
+func PublicRepresentationNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationIn applies the In predicate on the "public_representation" field.
+func PublicRepresentationIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldPublicRepresentation, vs...))
+}
+
+// PublicRepresentationNotIn applies the NotIn predicate on the "public_representation" field.
+func PublicRepresentationNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldPublicRepresentation, vs...))
+}
+
+// PublicRepresentationGT applies the GT predicate on the "public_representation" field.
+func PublicRepresentationGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationGTE applies the GTE predicate on the "public_representation" field.
+func PublicRepresentationGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationLT applies the LT predicate on the "public_representation" field.
+func PublicRepresentationLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationLTE applies the LTE predicate on the "public_representation" field.
+func PublicRepresentationLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationContains applies the Contains predicate on the "public_representation" field.
+func PublicRepresentationContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationHasPrefix applies the HasPrefix predicate on the "public_representation" field.
+func PublicRepresentationHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationHasSuffix applies the HasSuffix predicate on the "public_representation" field.
+func PublicRepresentationHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationIsNil applies the IsNil predicate on the "public_representation" field.
+func PublicRepresentationIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldPublicRepresentation))
+}
+
+// PublicRepresentationNotNil applies the NotNil predicate on the "public_representation" field.
+func PublicRepresentationNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldPublicRepresentation))
+}
+
+// PublicRepresentationEqualFold applies the EqualFold predicate on the "public_representation" field.
+func PublicRepresentationEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldPublicRepresentation, v))
+}
+
+// PublicRepresentationContainsFold applies the ContainsFold predicate on the "public_representation" field.
+func PublicRepresentationContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldPublicRepresentation, v))
+}
+
 // SourceEQ applies the EQ predicate on the "source" field.
 func SourceEQ(v enums.ControlSource) predicate.Subcontrol {
 	vc := v
@@ -1331,6 +1416,81 @@ func SourceIsNil() predicate.Subcontrol {
 // SourceNotNil applies the NotNil predicate on the "source" field.
 func SourceNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldSource))
+}
+
+// SourceNameEQ applies the EQ predicate on the "source_name" field.
+func SourceNameEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldSourceName, v))
+}
+
+// SourceNameNEQ applies the NEQ predicate on the "source_name" field.
+func SourceNameNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldSourceName, v))
+}
+
+// SourceNameIn applies the In predicate on the "source_name" field.
+func SourceNameIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldSourceName, vs...))
+}
+
+// SourceNameNotIn applies the NotIn predicate on the "source_name" field.
+func SourceNameNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldSourceName, vs...))
+}
+
+// SourceNameGT applies the GT predicate on the "source_name" field.
+func SourceNameGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldSourceName, v))
+}
+
+// SourceNameGTE applies the GTE predicate on the "source_name" field.
+func SourceNameGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldSourceName, v))
+}
+
+// SourceNameLT applies the LT predicate on the "source_name" field.
+func SourceNameLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldSourceName, v))
+}
+
+// SourceNameLTE applies the LTE predicate on the "source_name" field.
+func SourceNameLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldSourceName, v))
+}
+
+// SourceNameContains applies the Contains predicate on the "source_name" field.
+func SourceNameContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldSourceName, v))
+}
+
+// SourceNameHasPrefix applies the HasPrefix predicate on the "source_name" field.
+func SourceNameHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldSourceName, v))
+}
+
+// SourceNameHasSuffix applies the HasSuffix predicate on the "source_name" field.
+func SourceNameHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldSourceName, v))
+}
+
+// SourceNameIsNil applies the IsNil predicate on the "source_name" field.
+func SourceNameIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldSourceName))
+}
+
+// SourceNameNotNil applies the NotNil predicate on the "source_name" field.
+func SourceNameNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldSourceName))
+}
+
+// SourceNameEqualFold applies the EqualFold predicate on the "source_name" field.
+func SourceNameEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldSourceName, v))
+}
+
+// SourceNameContainsFold applies the ContainsFold predicate on the "source_name" field.
+func SourceNameContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldSourceName, v))
 }
 
 // ReferenceFrameworkEQ applies the EQ predicate on the "reference_framework" field.

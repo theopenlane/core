@@ -442,7 +442,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldStatus:                     {Type: field.TypeEnum, Column: controlhistory.FieldStatus},
 			controlhistory.FieldImplementationStatus:       {Type: field.TypeEnum, Column: controlhistory.FieldImplementationStatus},
 			controlhistory.FieldImplementationDescription:  {Type: field.TypeString, Column: controlhistory.FieldImplementationDescription},
+			controlhistory.FieldPublicRepresentation:       {Type: field.TypeString, Column: controlhistory.FieldPublicRepresentation},
 			controlhistory.FieldSource:                     {Type: field.TypeEnum, Column: controlhistory.FieldSource},
+			controlhistory.FieldSourceName:                 {Type: field.TypeString, Column: controlhistory.FieldSourceName},
 			controlhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: controlhistory.FieldReferenceFramework},
 			controlhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: controlhistory.FieldReferenceFrameworkRevision},
 			controlhistory.FieldCategory:                   {Type: field.TypeString, Column: controlhistory.FieldCategory},
@@ -2348,7 +2350,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldStatus:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldStatus},
 			subcontrolhistory.FieldImplementationStatus:       {Type: field.TypeEnum, Column: subcontrolhistory.FieldImplementationStatus},
 			subcontrolhistory.FieldImplementationDescription:  {Type: field.TypeString, Column: subcontrolhistory.FieldImplementationDescription},
+			subcontrolhistory.FieldPublicRepresentation:       {Type: field.TypeString, Column: subcontrolhistory.FieldPublicRepresentation},
 			subcontrolhistory.FieldSource:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
+			subcontrolhistory.FieldSourceName:                 {Type: field.TypeString, Column: subcontrolhistory.FieldSourceName},
 			subcontrolhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFramework},
 			subcontrolhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFrameworkRevision},
 			subcontrolhistory.FieldCategory:                   {Type: field.TypeString, Column: subcontrolhistory.FieldCategory},
@@ -4743,9 +4747,19 @@ func (f *ControlHistoryFilter) WhereImplementationDescription(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldImplementationDescription))
 }
 
+// WherePublicRepresentation applies the entql string predicate on the public_representation field.
+func (f *ControlHistoryFilter) WherePublicRepresentation(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldPublicRepresentation))
+}
+
 // WhereSource applies the entql string predicate on the source field.
 func (f *ControlHistoryFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldSource))
+}
+
+// WhereSourceName applies the entql string predicate on the source_name field.
+func (f *ControlHistoryFilter) WhereSourceName(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldSourceName))
 }
 
 // WhereReferenceFramework applies the entql string predicate on the reference_framework field.
@@ -13098,9 +13112,19 @@ func (f *SubcontrolHistoryFilter) WhereImplementationDescription(p entql.StringP
 	f.Where(p.Field(subcontrolhistory.FieldImplementationDescription))
 }
 
+// WherePublicRepresentation applies the entql string predicate on the public_representation field.
+func (f *SubcontrolHistoryFilter) WherePublicRepresentation(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldPublicRepresentation))
+}
+
 // WhereSource applies the entql string predicate on the source field.
 func (f *SubcontrolHistoryFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldSource))
+}
+
+// WhereSourceName applies the entql string predicate on the source_name field.
+func (f *SubcontrolHistoryFilter) WhereSourceName(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldSourceName))
 }
 
 // WhereReferenceFramework applies the entql string predicate on the reference_framework field.

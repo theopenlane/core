@@ -480,15 +480,15 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[41].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[43].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[50].Descriptor()
+	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[52].Descriptor()
 	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// controlhistoryDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
-	controlhistoryDescIsTrustCenterControl := controlhistoryFields[54].Descriptor()
+	controlhistoryDescIsTrustCenterControl := controlhistoryFields[56].Descriptor()
 	// controlhistory.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
 	controlhistory.DefaultIsTrustCenterControl = controlhistoryDescIsTrustCenterControl.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -2518,11 +2518,11 @@ func init() {
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[41].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[43].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[46].Descriptor()
+	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[48].Descriptor()
 	// subcontrolhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	subcontrolhistory.DefaultWorkflowEligibleMarker = subcontrolhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.
