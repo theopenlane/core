@@ -101,7 +101,7 @@ func (q *ActionPlanQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ActionPlanMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -111,17 +111,13 @@ func (m *ActionPlanMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -130,28 +126,26 @@ func (m *ActionPlanMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "action_plan",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "action_plan",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ActionPlanMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -162,18 +156,11 @@ func (m *ActionPlanMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -182,28 +169,26 @@ func (m *ActionPlanMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "action_plan",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "action_plan",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *AssessmentQuery) CheckAccess(ctx context.Context) error {
@@ -264,7 +249,7 @@ func (q *AssessmentQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *AssessmentMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -274,17 +259,13 @@ func (m *AssessmentMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -293,28 +274,26 @@ func (m *AssessmentMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "assessment",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "assessment",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *AssessmentMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -325,18 +304,11 @@ func (m *AssessmentMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -345,28 +317,26 @@ func (m *AssessmentMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "assessment",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "assessment",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *AssessmentResponseQuery) CheckAccess(ctx context.Context) error {
@@ -427,7 +397,7 @@ func (q *AssessmentResponseQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *AssessmentResponseMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -437,17 +407,13 @@ func (m *AssessmentResponseMutation) CheckAccessForEdit(ctx context.Context) err
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -456,28 +422,26 @@ func (m *AssessmentResponseMutation) CheckAccessForEdit(ctx context.Context) err
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "assessment_response",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "assessment_response",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *AssessmentResponseMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -488,18 +452,11 @@ func (m *AssessmentResponseMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -508,28 +465,26 @@ func (m *AssessmentResponseMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "assessment_response",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "assessment_response",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *AssetQuery) CheckAccess(ctx context.Context) error {
@@ -590,7 +545,7 @@ func (q *AssetQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *AssetMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -600,17 +555,13 @@ func (m *AssetMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -619,28 +570,26 @@ func (m *AssetMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "asset",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "asset",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *AssetMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -651,18 +600,11 @@ func (m *AssetMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -671,28 +613,26 @@ func (m *AssetMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "asset",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "asset",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *CampaignQuery) CheckAccess(ctx context.Context) error {
@@ -753,7 +693,7 @@ func (q *CampaignQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *CampaignMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -763,17 +703,13 @@ func (m *CampaignMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -782,28 +718,26 @@ func (m *CampaignMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "campaign",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "campaign",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *CampaignMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -814,18 +748,11 @@ func (m *CampaignMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -834,28 +761,26 @@ func (m *CampaignMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "campaign",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "campaign",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *CampaignTargetQuery) CheckAccess(ctx context.Context) error {
@@ -916,7 +841,7 @@ func (q *CampaignTargetQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *CampaignTargetMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -926,17 +851,13 @@ func (m *CampaignTargetMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -945,28 +866,26 @@ func (m *CampaignTargetMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "campaign_target",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "campaign_target",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *CampaignTargetMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -977,18 +896,11 @@ func (m *CampaignTargetMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -997,28 +909,26 @@ func (m *CampaignTargetMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "campaign_target",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "campaign_target",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ControlQuery) CheckAccess(ctx context.Context) error {
@@ -1079,7 +989,7 @@ func (q *ControlQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ControlMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -1089,17 +999,13 @@ func (m *ControlMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1108,28 +1014,26 @@ func (m *ControlMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "control",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "control",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ControlMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -1140,18 +1044,11 @@ func (m *ControlMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1160,28 +1057,26 @@ func (m *ControlMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "control",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "control",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ControlImplementationQuery) CheckAccess(ctx context.Context) error {
@@ -1242,7 +1137,7 @@ func (q *ControlImplementationQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ControlImplementationMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -1252,17 +1147,13 @@ func (m *ControlImplementationMutation) CheckAccessForEdit(ctx context.Context) 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1271,28 +1162,26 @@ func (m *ControlImplementationMutation) CheckAccessForEdit(ctx context.Context) 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "control_implementation",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "control_implementation",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ControlImplementationMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -1303,18 +1192,11 @@ func (m *ControlImplementationMutation) CheckAccessForDelete(ctx context.Context
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1323,28 +1205,26 @@ func (m *ControlImplementationMutation) CheckAccessForDelete(ctx context.Context
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "control_implementation",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "control_implementation",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
@@ -1405,7 +1285,7 @@ func (q *ControlObjectiveQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -1415,17 +1295,13 @@ func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1434,28 +1310,26 @@ func (m *ControlObjectiveMutation) CheckAccessForEdit(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "control_objective",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "control_objective",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -1466,18 +1340,11 @@ func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) err
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1486,28 +1353,26 @@ func (m *ControlObjectiveMutation) CheckAccessForDelete(ctx context.Context) err
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "control_objective",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "control_objective",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *DiscussionQuery) CheckAccess(ctx context.Context) error {
@@ -1568,7 +1433,7 @@ func (q *DiscussionQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *DiscussionMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -1578,17 +1443,13 @@ func (m *DiscussionMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1597,28 +1458,26 @@ func (m *DiscussionMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "discussion",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "discussion",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *DiscussionMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -1629,18 +1488,11 @@ func (m *DiscussionMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1649,28 +1501,26 @@ func (m *DiscussionMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "discussion",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "discussion",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
@@ -1731,7 +1581,7 @@ func (q *DocumentDataQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -1741,17 +1591,13 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1760,28 +1606,26 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "document_data",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "document_data",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -1792,18 +1636,11 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1812,28 +1649,26 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "document_data",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "document_data",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *EntityQuery) CheckAccess(ctx context.Context) error {
@@ -1894,7 +1729,7 @@ func (q *EntityQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -1904,17 +1739,13 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1923,28 +1754,26 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "entity",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "entity",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -1955,18 +1784,11 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -1975,28 +1797,26 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "entity",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "entity",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *EvidenceQuery) CheckAccess(ctx context.Context) error {
@@ -2057,7 +1877,7 @@ func (q *EvidenceQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *EvidenceMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -2067,17 +1887,13 @@ func (m *EvidenceMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2086,28 +1902,26 @@ func (m *EvidenceMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "evidence",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "evidence",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *EvidenceMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -2118,18 +1932,11 @@ func (m *EvidenceMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2138,28 +1945,26 @@ func (m *EvidenceMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "evidence",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "evidence",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *FileQuery) CheckAccess(ctx context.Context) error {
@@ -2220,7 +2025,7 @@ func (q *FileQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -2230,17 +2035,13 @@ func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2249,28 +2050,26 @@ func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "file",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "file",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -2281,18 +2080,11 @@ func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2301,28 +2093,26 @@ func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "file",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "file",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *FindingQuery) CheckAccess(ctx context.Context) error {
@@ -2383,7 +2173,7 @@ func (q *FindingQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *FindingMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -2393,17 +2183,13 @@ func (m *FindingMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2412,28 +2198,26 @@ func (m *FindingMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "finding",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "finding",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *FindingMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -2444,18 +2228,11 @@ func (m *FindingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2464,28 +2241,26 @@ func (m *FindingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "finding",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "finding",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *FindingControlQuery) CheckAccess(ctx context.Context) error {
@@ -2546,7 +2321,7 @@ func (q *FindingControlQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *FindingControlMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -2556,17 +2331,13 @@ func (m *FindingControlMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2575,28 +2346,26 @@ func (m *FindingControlMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "finding_control",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "finding_control",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *FindingControlMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -2607,18 +2376,11 @@ func (m *FindingControlMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2627,28 +2389,26 @@ func (m *FindingControlMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "finding_control",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "finding_control",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *GroupQuery) CheckAccess(ctx context.Context) error {
@@ -2709,7 +2469,7 @@ func (q *GroupQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -2719,17 +2479,13 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2738,28 +2494,26 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "group",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "group",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -2770,18 +2524,11 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2790,28 +2537,26 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "group",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "group",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
@@ -2888,7 +2633,7 @@ func (q *GroupMembershipQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -2903,21 +2648,17 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 	// check if the input is a CreateGroupMembershipInput
 	input, ok := gInput.(CreateGroupMembershipInput)
 	if ok {
-		ids = append(ids, input.GroupID)
+		objectID = input.GroupID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["groupid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["groupid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -2926,13 +2667,13 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.GroupID)
+			objectID = ob.GroupID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2941,28 +2682,26 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "group",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "group",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -2973,18 +2712,11 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -2993,28 +2725,26 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "group",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "group",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
@@ -3091,7 +2821,7 @@ func (q *GroupSettingQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -3106,21 +2836,17 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 	// check if the input is a CreateGroupSettingInput
 	input, ok := gInput.(CreateGroupSettingInput)
 	if ok {
-		ids = append(ids, *input.GroupID)
+		objectID = *input.GroupID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["groupid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["groupid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -3129,13 +2855,13 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.GroupID)
+			objectID = ob.GroupID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3144,28 +2870,26 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "group",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "group",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -3176,18 +2900,11 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3196,28 +2913,26 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "group",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "group",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *IdentityHolderQuery) CheckAccess(ctx context.Context) error {
@@ -3278,7 +2993,7 @@ func (q *IdentityHolderQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *IdentityHolderMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -3288,17 +3003,13 @@ func (m *IdentityHolderMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3307,28 +3018,26 @@ func (m *IdentityHolderMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "identity_holder",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "identity_holder",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *IdentityHolderMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -3339,18 +3048,11 @@ func (m *IdentityHolderMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3359,28 +3061,26 @@ func (m *IdentityHolderMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "identity_holder",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "identity_holder",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
@@ -3441,7 +3141,7 @@ func (q *InternalPolicyQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -3451,17 +3151,13 @@ func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3470,28 +3166,26 @@ func (m *InternalPolicyMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "internal_policy",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "internal_policy",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -3502,18 +3196,11 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3522,28 +3209,26 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "internal_policy",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "internal_policy",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *JobTemplateQuery) CheckAccess(ctx context.Context) error {
@@ -3604,7 +3289,7 @@ func (q *JobTemplateQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *JobTemplateMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -3614,17 +3299,13 @@ func (m *JobTemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3633,28 +3314,26 @@ func (m *JobTemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "job_template",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "job_template",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *JobTemplateMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -3665,18 +3344,11 @@ func (m *JobTemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3685,28 +3357,26 @@ func (m *JobTemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "job_template",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "job_template",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *MappedControlQuery) CheckAccess(ctx context.Context) error {
@@ -3767,7 +3437,7 @@ func (q *MappedControlQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *MappedControlMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -3777,17 +3447,13 @@ func (m *MappedControlMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3796,28 +3462,26 @@ func (m *MappedControlMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "mapped_control",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "mapped_control",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *MappedControlMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -3828,18 +3492,11 @@ func (m *MappedControlMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3848,28 +3505,26 @@ func (m *MappedControlMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "mapped_control",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "mapped_control",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *NarrativeQuery) CheckAccess(ctx context.Context) error {
@@ -3930,7 +3585,7 @@ func (q *NarrativeQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *NarrativeMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -3940,17 +3595,13 @@ func (m *NarrativeMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -3959,28 +3610,26 @@ func (m *NarrativeMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "narrative",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "narrative",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *NarrativeMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -3991,18 +3640,11 @@ func (m *NarrativeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4011,28 +3653,26 @@ func (m *NarrativeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "narrative",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "narrative",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *NoteQuery) CheckAccess(ctx context.Context) error {
@@ -4093,7 +3733,7 @@ func (q *NoteQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -4103,17 +3743,13 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4122,28 +3758,26 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "note",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "note",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -4154,18 +3788,11 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4174,28 +3801,26 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "note",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "note",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
@@ -4272,7 +3897,7 @@ func (q *OrgMembershipQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -4287,21 +3912,17 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 	// check if the input is a CreateOrgMembershipInput
 	input, ok := gInput.(CreateOrgMembershipInput)
 	if ok {
-		ids = append(ids, input.OrganizationID)
+		objectID = input.OrganizationID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["organizationid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["organizationid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -4310,13 +3931,13 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.OrganizationID)
+			objectID = ob.OrganizationID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4325,28 +3946,26 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "organization",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "organization",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -4357,18 +3976,11 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4377,28 +3989,26 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "organization",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "organization",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *OrganizationQuery) CheckAccess(ctx context.Context) error {
@@ -4459,7 +4069,7 @@ func (q *OrganizationQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -4469,17 +4079,13 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4488,28 +4094,26 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "organization",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "organization",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -4520,18 +4124,11 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4540,28 +4137,26 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "organization",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "organization",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
@@ -4638,7 +4233,7 @@ func (q *OrganizationSettingQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -4653,21 +4248,17 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 	// check if the input is a CreateOrganizationSettingInput
 	input, ok := gInput.(CreateOrganizationSettingInput)
 	if ok {
-		ids = append(ids, *input.OrganizationID)
+		objectID = *input.OrganizationID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["organizationid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["organizationid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -4676,13 +4267,13 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.OrganizationID)
+			objectID = ob.OrganizationID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4691,28 +4282,26 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "organization",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "organization",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -4723,18 +4312,11 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4743,28 +4325,26 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "organization",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "organization",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *PlatformQuery) CheckAccess(ctx context.Context) error {
@@ -4825,7 +4405,7 @@ func (q *PlatformQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *PlatformMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -4835,17 +4415,13 @@ func (m *PlatformMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4854,28 +4430,26 @@ func (m *PlatformMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "platform",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "platform",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *PlatformMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -4886,18 +4460,11 @@ func (m *PlatformMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -4906,28 +4473,26 @@ func (m *PlatformMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "platform",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "platform",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ProcedureQuery) CheckAccess(ctx context.Context) error {
@@ -4988,7 +4553,7 @@ func (q *ProcedureQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ProcedureMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -4998,17 +4563,13 @@ func (m *ProcedureMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5017,28 +4578,26 @@ func (m *ProcedureMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "procedure",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "procedure",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ProcedureMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -5049,18 +4608,11 @@ func (m *ProcedureMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5069,28 +4621,26 @@ func (m *ProcedureMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "procedure",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "procedure",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ProgramQuery) CheckAccess(ctx context.Context) error {
@@ -5151,7 +4701,7 @@ func (q *ProgramQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -5161,17 +4711,13 @@ func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5180,28 +4726,26 @@ func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "program",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "program",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -5212,18 +4756,11 @@ func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5232,28 +4769,26 @@ func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "program",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "program",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
@@ -5330,7 +4865,7 @@ func (q *ProgramMembershipQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -5345,21 +4880,17 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 	// check if the input is a CreateProgramMembershipInput
 	input, ok := gInput.(CreateProgramMembershipInput)
 	if ok {
-		ids = append(ids, input.ProgramID)
+		objectID = input.ProgramID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["programid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["programid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -5368,13 +4899,13 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.ProgramID)
+			objectID = ob.ProgramID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5383,28 +4914,26 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "program",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "program",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -5415,18 +4944,11 @@ func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5435,28 +4957,26 @@ func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "program",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "program",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *RemediationQuery) CheckAccess(ctx context.Context) error {
@@ -5517,7 +5037,7 @@ func (q *RemediationQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *RemediationMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -5527,17 +5047,13 @@ func (m *RemediationMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5546,28 +5062,26 @@ func (m *RemediationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "remediation",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "remediation",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *RemediationMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -5578,18 +5092,11 @@ func (m *RemediationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5598,28 +5105,26 @@ func (m *RemediationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "remediation",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "remediation",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *ReviewQuery) CheckAccess(ctx context.Context) error {
@@ -5680,7 +5185,7 @@ func (q *ReviewQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *ReviewMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -5690,17 +5195,13 @@ func (m *ReviewMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5709,28 +5210,26 @@ func (m *ReviewMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "review",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "review",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *ReviewMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -5741,18 +5240,11 @@ func (m *ReviewMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5761,28 +5253,26 @@ func (m *ReviewMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "review",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "review",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *RiskQuery) CheckAccess(ctx context.Context) error {
@@ -5843,7 +5333,7 @@ func (q *RiskQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *RiskMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -5853,17 +5343,13 @@ func (m *RiskMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5872,28 +5358,26 @@ func (m *RiskMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "risk",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "risk",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *RiskMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -5904,18 +5388,11 @@ func (m *RiskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -5924,28 +5401,26 @@ func (m *RiskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "risk",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "risk",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *SubcontrolQuery) CheckAccess(ctx context.Context) error {
@@ -6006,7 +5481,7 @@ func (q *SubcontrolQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *SubcontrolMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -6016,17 +5491,13 @@ func (m *SubcontrolMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6035,28 +5506,26 @@ func (m *SubcontrolMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "subcontrol",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "subcontrol",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *SubcontrolMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -6067,18 +5536,11 @@ func (m *SubcontrolMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6087,28 +5549,26 @@ func (m *SubcontrolMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "subcontrol",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "subcontrol",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *SubprocessorQuery) CheckAccess(ctx context.Context) error {
@@ -6169,7 +5629,7 @@ func (q *SubprocessorQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *SubprocessorMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -6179,17 +5639,13 @@ func (m *SubprocessorMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6198,28 +5654,26 @@ func (m *SubprocessorMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "subprocessor",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "subprocessor",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *SubprocessorMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -6230,18 +5684,11 @@ func (m *SubprocessorMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6250,28 +5697,26 @@ func (m *SubprocessorMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "subprocessor",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "subprocessor",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *SystemDetailQuery) CheckAccess(ctx context.Context) error {
@@ -6332,7 +5777,7 @@ func (q *SystemDetailQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *SystemDetailMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -6342,17 +5787,13 @@ func (m *SystemDetailMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6361,28 +5802,26 @@ func (m *SystemDetailMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "system_detail",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "system_detail",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *SystemDetailMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -6393,18 +5832,11 @@ func (m *SystemDetailMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6413,28 +5845,26 @@ func (m *SystemDetailMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "system_detail",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "system_detail",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TaskQuery) CheckAccess(ctx context.Context) error {
@@ -6495,7 +5925,7 @@ func (q *TaskQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -6505,17 +5935,13 @@ func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6524,28 +5950,26 @@ func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "task",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "task",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -6556,18 +5980,11 @@ func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6576,28 +5993,26 @@ func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "task",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "task",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
@@ -6658,7 +6073,7 @@ func (q *TemplateQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -6668,17 +6083,13 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6687,28 +6098,26 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "template",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "template",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -6719,18 +6128,11 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6739,28 +6141,26 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "template",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "template",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterQuery) CheckAccess(ctx context.Context) error {
@@ -6821,7 +6221,7 @@ func (q *TrustCenterQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -6831,17 +6231,13 @@ func (m *TrustCenterMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6850,28 +6246,26 @@ func (m *TrustCenterMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -6882,18 +6276,11 @@ func (m *TrustCenterMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -6902,28 +6289,26 @@ func (m *TrustCenterMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterComplianceQuery) CheckAccess(ctx context.Context) error {
@@ -7000,7 +6385,7 @@ func (q *TrustCenterComplianceQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterComplianceMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -7015,21 +6400,17 @@ func (m *TrustCenterComplianceMutation) CheckAccessForEdit(ctx context.Context) 
 	// check if the input is a CreateTrustCenterComplianceInput
 	input, ok := gInput.(CreateTrustCenterComplianceInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -7038,13 +6419,13 @@ func (m *TrustCenterComplianceMutation) CheckAccessForEdit(ctx context.Context) 
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7053,28 +6434,26 @@ func (m *TrustCenterComplianceMutation) CheckAccessForEdit(ctx context.Context) 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterComplianceMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -7085,18 +6464,11 @@ func (m *TrustCenterComplianceMutation) CheckAccessForDelete(ctx context.Context
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7105,28 +6477,26 @@ func (m *TrustCenterComplianceMutation) CheckAccessForDelete(ctx context.Context
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterDocQuery) CheckAccess(ctx context.Context) error {
@@ -7203,7 +6573,7 @@ func (q *TrustCenterDocQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterDocMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -7218,21 +6588,17 @@ func (m *TrustCenterDocMutation) CheckAccessForEdit(ctx context.Context) error {
 	// check if the input is a CreateTrustCenterDocInput
 	input, ok := gInput.(CreateTrustCenterDocInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -7241,13 +6607,13 @@ func (m *TrustCenterDocMutation) CheckAccessForEdit(ctx context.Context) error {
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7256,28 +6622,26 @@ func (m *TrustCenterDocMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterDocMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -7288,18 +6652,11 @@ func (m *TrustCenterDocMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7308,28 +6665,26 @@ func (m *TrustCenterDocMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterEntityQuery) CheckAccess(ctx context.Context) error {
@@ -7406,7 +6761,7 @@ func (q *TrustCenterEntityQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterEntityMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -7421,21 +6776,17 @@ func (m *TrustCenterEntityMutation) CheckAccessForEdit(ctx context.Context) erro
 	// check if the input is a CreateTrustCenterEntityInput
 	input, ok := gInput.(CreateTrustCenterEntityInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -7444,13 +6795,13 @@ func (m *TrustCenterEntityMutation) CheckAccessForEdit(ctx context.Context) erro
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7459,28 +6810,26 @@ func (m *TrustCenterEntityMutation) CheckAccessForEdit(ctx context.Context) erro
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterEntityMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -7491,18 +6840,11 @@ func (m *TrustCenterEntityMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7511,28 +6853,26 @@ func (m *TrustCenterEntityMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterFAQQuery) CheckAccess(ctx context.Context) error {
@@ -7609,7 +6949,7 @@ func (q *TrustCenterFAQQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterFAQMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -7624,21 +6964,17 @@ func (m *TrustCenterFAQMutation) CheckAccessForEdit(ctx context.Context) error {
 	// check if the input is a CreateTrustCenterFAQInput
 	input, ok := gInput.(CreateTrustCenterFAQInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -7647,13 +6983,13 @@ func (m *TrustCenterFAQMutation) CheckAccessForEdit(ctx context.Context) error {
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7662,28 +6998,26 @@ func (m *TrustCenterFAQMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterFAQMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -7694,18 +7028,11 @@ func (m *TrustCenterFAQMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7714,28 +7041,26 @@ func (m *TrustCenterFAQMutation) CheckAccessForDelete(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterNDARequestQuery) CheckAccess(ctx context.Context) error {
@@ -7796,7 +7121,7 @@ func (q *TrustCenterNDARequestQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterNDARequestMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -7806,17 +7131,13 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForEdit(ctx context.Context) 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7825,28 +7146,26 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForEdit(ctx context.Context) 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center_nda_request",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center_nda_request",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterNDARequestMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -7857,18 +7176,11 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForDelete(ctx context.Context
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -7877,28 +7189,26 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForDelete(ctx context.Context
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center_nda_request",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center_nda_request",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterSettingQuery) CheckAccess(ctx context.Context) error {
@@ -7975,7 +7285,7 @@ func (q *TrustCenterSettingQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterSettingMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -7990,21 +7300,17 @@ func (m *TrustCenterSettingMutation) CheckAccessForEdit(ctx context.Context) err
 	// check if the input is a CreateTrustCenterSettingInput
 	input, ok := gInput.(CreateTrustCenterSettingInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -8013,13 +7319,13 @@ func (m *TrustCenterSettingMutation) CheckAccessForEdit(ctx context.Context) err
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8028,28 +7334,26 @@ func (m *TrustCenterSettingMutation) CheckAccessForEdit(ctx context.Context) err
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterSettingMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -8060,18 +7364,11 @@ func (m *TrustCenterSettingMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8080,28 +7377,26 @@ func (m *TrustCenterSettingMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterSubprocessorQuery) CheckAccess(ctx context.Context) error {
@@ -8178,7 +7473,7 @@ func (q *TrustCenterSubprocessorQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *TrustCenterSubprocessorMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -8193,21 +7488,17 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForEdit(ctx context.Context
 	// check if the input is a CreateTrustCenterSubprocessorInput
 	input, ok := gInput.(CreateTrustCenterSubprocessorInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -8216,13 +7507,13 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForEdit(ctx context.Context
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8231,28 +7522,26 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForEdit(ctx context.Context
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterSubprocessorMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -8263,18 +7552,11 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForDelete(ctx context.Conte
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8283,28 +7565,26 @@ func (m *TrustCenterSubprocessorMutation) CheckAccessForDelete(ctx context.Conte
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *TrustCenterWatermarkConfigQuery) CheckAccess(ctx context.Context) error {
@@ -8381,7 +7661,7 @@ func (q *TrustCenterWatermarkConfigQuery) CheckAccess(ctx context.Context) error
 }
 
 func (m *TrustCenterWatermarkConfigMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -8396,21 +7676,17 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForEdit(ctx context.Cont
 	// check if the input is a CreateTrustCenterWatermarkConfigInput
 	input, ok := gInput.(CreateTrustCenterWatermarkConfigInput)
 	if ok {
-		ids = append(ids, *input.TrustCenterID)
+		objectID = *input.TrustCenterID
 
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["trustcenterid"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["trustcenterid"].(string)
 	}
 	// if this is still empty, we need to query the object to get the object id
 	// this happens on join tables where we have the join ID (for updates and deletes)
-	if len(ids) == 0 {
+	if objectID == "" {
 		id, ok := gCtx.Args["id"].(string)
 		if ok {
 			// allow this query to run
@@ -8419,13 +7695,13 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForEdit(ctx context.Cont
 			if err != nil {
 				return privacy.Skipf("nil request, skipping auth check")
 			}
-			ids = append(ids, ob.TrustCenterID)
+			objectID = ob.TrustCenterID
 		}
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8434,28 +7710,26 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForEdit(ctx context.Cont
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *TrustCenterWatermarkConfigMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -8466,18 +7740,11 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForDelete(ctx context.Co
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8486,28 +7753,26 @@ func (m *TrustCenterWatermarkConfigMutation) CheckAccessForDelete(ctx context.Co
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "trust_center",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "trust_center",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *VulnerabilityQuery) CheckAccess(ctx context.Context) error {
@@ -8568,7 +7833,7 @@ func (q *VulnerabilityQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *VulnerabilityMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -8578,17 +7843,13 @@ func (m *VulnerabilityMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8597,28 +7858,26 @@ func (m *VulnerabilityMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "vulnerability",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "vulnerability",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *VulnerabilityMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -8629,18 +7888,11 @@ func (m *VulnerabilityMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8649,28 +7901,26 @@ func (m *VulnerabilityMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "vulnerability",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "vulnerability",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *WorkflowAssignmentQuery) CheckAccess(ctx context.Context) error {
@@ -8731,7 +7981,7 @@ func (q *WorkflowAssignmentQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *WorkflowAssignmentMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -8741,17 +7991,13 @@ func (m *WorkflowAssignmentMutation) CheckAccessForEdit(ctx context.Context) err
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8760,28 +8006,26 @@ func (m *WorkflowAssignmentMutation) CheckAccessForEdit(ctx context.Context) err
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "workflow_assignment",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "workflow_assignment",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *WorkflowAssignmentMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -8792,18 +8036,11 @@ func (m *WorkflowAssignmentMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8812,28 +8049,26 @@ func (m *WorkflowAssignmentMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "workflow_assignment",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "workflow_assignment",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *WorkflowDefinitionQuery) CheckAccess(ctx context.Context) error {
@@ -8894,7 +8129,7 @@ func (q *WorkflowDefinitionQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *WorkflowDefinitionMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -8904,17 +8139,13 @@ func (m *WorkflowDefinitionMutation) CheckAccessForEdit(ctx context.Context) err
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8923,28 +8154,26 @@ func (m *WorkflowDefinitionMutation) CheckAccessForEdit(ctx context.Context) err
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "workflow_definition",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "workflow_definition",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *WorkflowDefinitionMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -8955,18 +8184,11 @@ func (m *WorkflowDefinitionMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -8975,28 +8197,26 @@ func (m *WorkflowDefinitionMutation) CheckAccessForDelete(ctx context.Context) e
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "workflow_definition",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "workflow_definition",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *WorkflowEventQuery) CheckAccess(ctx context.Context) error {
@@ -9057,7 +8277,7 @@ func (q *WorkflowEventQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *WorkflowEventMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -9067,17 +8287,13 @@ func (m *WorkflowEventMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -9086,28 +8302,26 @@ func (m *WorkflowEventMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "workflow_event",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "workflow_event",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *WorkflowEventMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -9118,18 +8332,11 @@ func (m *WorkflowEventMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -9138,28 +8345,26 @@ func (m *WorkflowEventMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "workflow_event",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "workflow_event",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *WorkflowInstanceQuery) CheckAccess(ctx context.Context) error {
@@ -9220,7 +8425,7 @@ func (q *WorkflowInstanceQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *WorkflowInstanceMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -9230,17 +8435,13 @@ func (m *WorkflowInstanceMutation) CheckAccessForEdit(ctx context.Context) error
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -9249,28 +8450,26 @@ func (m *WorkflowInstanceMutation) CheckAccessForEdit(ctx context.Context) error
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "workflow_instance",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "workflow_instance",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *WorkflowInstanceMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -9281,18 +8480,11 @@ func (m *WorkflowInstanceMutation) CheckAccessForDelete(ctx context.Context) err
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -9301,28 +8493,26 @@ func (m *WorkflowInstanceMutation) CheckAccessForDelete(ctx context.Context) err
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "workflow_instance",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "workflow_instance",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (q *WorkflowObjectRefQuery) CheckAccess(ctx context.Context) error {
@@ -9383,7 +8573,7 @@ func (q *WorkflowObjectRefQuery) CheckAccess(ctx context.Context) error {
 }
 
 func (m *WorkflowObjectRefMutation) CheckAccessForEdit(ctx context.Context) error {
-	var ids []string
+	var objectID string
 
 	gCtx := graphql.GetFieldContext(ctx)
 	if gCtx == nil {
@@ -9393,17 +8583,13 @@ func (m *WorkflowObjectRefMutation) CheckAccessForEdit(ctx context.Context) erro
 	}
 
 	// check the id from the args
-	if len(ids) == 0 {
-		if id, ok := gCtx.Args["id"].(string); ok {
-			ids = append(ids, id)
-		} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-			ids = bulkIDs
-		}
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
-	if len(ids) == 0 {
-		return privacy.Skipf("nil request, bypassing auth check")
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -9412,28 +8598,26 @@ func (m *WorkflowObjectRefMutation) CheckAccessForEdit(ctx context.Context) erro
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanEdit,
-			ObjectType:  "workflow_object_ref",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "workflow_object_ref",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
 
 func (m *WorkflowObjectRefMutation) CheckAccessForDelete(ctx context.Context) error {
@@ -9444,18 +8628,11 @@ func (m *WorkflowObjectRefMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	var ids []string
-
-	if id, ok := gCtx.Args["id"].(string); ok {
-		ids = append(ids, id)
-	} else if bulkIDs, ok := gCtx.Args["ids"].([]string); ok {
-		ids = bulkIDs
-	}
-
-	if len(ids) == 0 {
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
 		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
 
-		return privacy.Skipf("nil request, bypassing auth check")
+		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
@@ -9464,26 +8641,24 @@ func (m *WorkflowObjectRefMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Skipf("unable to get caller from context")
 	}
 
-	checks := make([]fgax.AccessCheck, 0, len(ids))
-	for _, objectID := range ids {
-		checks = append(checks, fgax.AccessCheck{
-			Relation:    fgax.CanDelete,
-			ObjectType:  "workflow_object_ref",
-			ObjectID:    objectID,
-			SubjectType: caller.SubjectType(),
-			SubjectID:   caller.SubjectID,
-			Context:     newOrganizationContextKey(caller.SubjectEmail),
-		})
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "workflow_object_ref",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
-	log.Debug().Interface("access_checks", checks).Msg("batch checking relationship tuples")
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
 
-	allowedIDs, err := m.Authz.BatchCheckObjectAccess(ctx, checks)
-	if err != nil || len(allowedIDs) != len(ids) {
-		log.Error().Err(err).Int("allowed", len(allowedIDs)).Int("requested", len(ids)).Msg("access denied")
-
-		return ErrPermissionDenied
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
 	}
 
-	return privacy.Allow
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
 }
