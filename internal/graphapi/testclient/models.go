@@ -3871,8 +3871,12 @@ type Control struct {
 	ImplementationStatus *enums.ControlImplementationStatus `json:"implementationStatus,omitempty"`
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription *string `json:"implementationDescription,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation *string `json:"publicRepresentation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"sourceName,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -5055,6 +5059,22 @@ type ControlWhereInput struct {
 	ImplementationDescriptionNotNil       *bool    `json:"implementationDescriptionNotNil,omitempty"`
 	ImplementationDescriptionEqualFold    *string  `json:"implementationDescriptionEqualFold,omitempty"`
 	ImplementationDescriptionContainsFold *string  `json:"implementationDescriptionContainsFold,omitempty"`
+	// public_representation field predicates
+	PublicRepresentation             *string  `json:"publicRepresentation,omitempty"`
+	PublicRepresentationNeq          *string  `json:"publicRepresentationNEQ,omitempty"`
+	PublicRepresentationIn           []string `json:"publicRepresentationIn,omitempty"`
+	PublicRepresentationNotIn        []string `json:"publicRepresentationNotIn,omitempty"`
+	PublicRepresentationGt           *string  `json:"publicRepresentationGT,omitempty"`
+	PublicRepresentationGte          *string  `json:"publicRepresentationGTE,omitempty"`
+	PublicRepresentationLt           *string  `json:"publicRepresentationLT,omitempty"`
+	PublicRepresentationLte          *string  `json:"publicRepresentationLTE,omitempty"`
+	PublicRepresentationContains     *string  `json:"publicRepresentationContains,omitempty"`
+	PublicRepresentationHasPrefix    *string  `json:"publicRepresentationHasPrefix,omitempty"`
+	PublicRepresentationHasSuffix    *string  `json:"publicRepresentationHasSuffix,omitempty"`
+	PublicRepresentationIsNil        *bool    `json:"publicRepresentationIsNil,omitempty"`
+	PublicRepresentationNotNil       *bool    `json:"publicRepresentationNotNil,omitempty"`
+	PublicRepresentationEqualFold    *string  `json:"publicRepresentationEqualFold,omitempty"`
+	PublicRepresentationContainsFold *string  `json:"publicRepresentationContainsFold,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -5062,6 +5082,22 @@ type ControlWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// source_name field predicates
+	SourceName             *string  `json:"sourceName,omitempty"`
+	SourceNameNeq          *string  `json:"sourceNameNEQ,omitempty"`
+	SourceNameIn           []string `json:"sourceNameIn,omitempty"`
+	SourceNameNotIn        []string `json:"sourceNameNotIn,omitempty"`
+	SourceNameGt           *string  `json:"sourceNameGT,omitempty"`
+	SourceNameGte          *string  `json:"sourceNameGTE,omitempty"`
+	SourceNameLt           *string  `json:"sourceNameLT,omitempty"`
+	SourceNameLte          *string  `json:"sourceNameLTE,omitempty"`
+	SourceNameContains     *string  `json:"sourceNameContains,omitempty"`
+	SourceNameHasPrefix    *string  `json:"sourceNameHasPrefix,omitempty"`
+	SourceNameHasSuffix    *string  `json:"sourceNameHasSuffix,omitempty"`
+	SourceNameIsNil        *bool    `json:"sourceNameIsNil,omitempty"`
+	SourceNameNotNil       *bool    `json:"sourceNameNotNil,omitempty"`
+	SourceNameEqualFold    *string  `json:"sourceNameEqualFold,omitempty"`
+	SourceNameContainsFold *string  `json:"sourceNameContainsFold,omitempty"`
 	// reference_framework field predicates
 	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
 	ReferenceFrameworkNeq          *string  `json:"referenceFrameworkNEQ,omitempty"`
@@ -5918,8 +5954,12 @@ type CreateControlInput struct {
 	ImplementationStatus *enums.ControlImplementationStatus `json:"implementationStatus,omitempty"`
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription *string `json:"implementationDescription,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation *string `json:"publicRepresentation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"sourceName,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -8323,8 +8363,12 @@ type CreateSubcontrolInput struct {
 	ImplementationStatus *enums.ControlImplementationStatus `json:"implementationStatus,omitempty"`
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription *string `json:"implementationDescription,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation *string `json:"publicRepresentation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"sourceName,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -31945,8 +31989,12 @@ type Subcontrol struct {
 	ImplementationStatus *enums.ControlImplementationStatus `json:"implementationStatus,omitempty"`
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription *string `json:"implementationDescription,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation *string `json:"publicRepresentation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName *string `json:"sourceName,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
@@ -32306,6 +32354,22 @@ type SubcontrolWhereInput struct {
 	ImplementationDescriptionNotNil       *bool    `json:"implementationDescriptionNotNil,omitempty"`
 	ImplementationDescriptionEqualFold    *string  `json:"implementationDescriptionEqualFold,omitempty"`
 	ImplementationDescriptionContainsFold *string  `json:"implementationDescriptionContainsFold,omitempty"`
+	// public_representation field predicates
+	PublicRepresentation             *string  `json:"publicRepresentation,omitempty"`
+	PublicRepresentationNeq          *string  `json:"publicRepresentationNEQ,omitempty"`
+	PublicRepresentationIn           []string `json:"publicRepresentationIn,omitempty"`
+	PublicRepresentationNotIn        []string `json:"publicRepresentationNotIn,omitempty"`
+	PublicRepresentationGt           *string  `json:"publicRepresentationGT,omitempty"`
+	PublicRepresentationGte          *string  `json:"publicRepresentationGTE,omitempty"`
+	PublicRepresentationLt           *string  `json:"publicRepresentationLT,omitempty"`
+	PublicRepresentationLte          *string  `json:"publicRepresentationLTE,omitempty"`
+	PublicRepresentationContains     *string  `json:"publicRepresentationContains,omitempty"`
+	PublicRepresentationHasPrefix    *string  `json:"publicRepresentationHasPrefix,omitempty"`
+	PublicRepresentationHasSuffix    *string  `json:"publicRepresentationHasSuffix,omitempty"`
+	PublicRepresentationIsNil        *bool    `json:"publicRepresentationIsNil,omitempty"`
+	PublicRepresentationNotNil       *bool    `json:"publicRepresentationNotNil,omitempty"`
+	PublicRepresentationEqualFold    *string  `json:"publicRepresentationEqualFold,omitempty"`
+	PublicRepresentationContainsFold *string  `json:"publicRepresentationContainsFold,omitempty"`
 	// source field predicates
 	Source       *enums.ControlSource  `json:"source,omitempty"`
 	SourceNeq    *enums.ControlSource  `json:"sourceNEQ,omitempty"`
@@ -32313,6 +32377,22 @@ type SubcontrolWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// source_name field predicates
+	SourceName             *string  `json:"sourceName,omitempty"`
+	SourceNameNeq          *string  `json:"sourceNameNEQ,omitempty"`
+	SourceNameIn           []string `json:"sourceNameIn,omitempty"`
+	SourceNameNotIn        []string `json:"sourceNameNotIn,omitempty"`
+	SourceNameGt           *string  `json:"sourceNameGT,omitempty"`
+	SourceNameGte          *string  `json:"sourceNameGTE,omitempty"`
+	SourceNameLt           *string  `json:"sourceNameLT,omitempty"`
+	SourceNameLte          *string  `json:"sourceNameLTE,omitempty"`
+	SourceNameContains     *string  `json:"sourceNameContains,omitempty"`
+	SourceNameHasPrefix    *string  `json:"sourceNameHasPrefix,omitempty"`
+	SourceNameHasSuffix    *string  `json:"sourceNameHasSuffix,omitempty"`
+	SourceNameIsNil        *bool    `json:"sourceNameIsNil,omitempty"`
+	SourceNameNotNil       *bool    `json:"sourceNameNotNil,omitempty"`
+	SourceNameEqualFold    *string  `json:"sourceNameEqualFold,omitempty"`
+	SourceNameContainsFold *string  `json:"sourceNameContainsFold,omitempty"`
 	// reference_framework field predicates
 	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
 	ReferenceFrameworkNeq          *string  `json:"referenceFrameworkNEQ,omitempty"`
@@ -38358,9 +38438,15 @@ type UpdateControlInput struct {
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription      *string `json:"implementationDescription,omitempty"`
 	ClearImplementationDescription *bool   `json:"clearImplementationDescription,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation      *string `json:"publicRepresentation,omitempty"`
+	ClearPublicRepresentation *bool   `json:"clearPublicRepresentation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName      *string `json:"sourceName,omitempty"`
+	ClearSourceName *bool   `json:"clearSourceName,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
 	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
@@ -42398,9 +42484,15 @@ type UpdateSubcontrolInput struct {
 	// narrative describing current implementation state for OSCAL export
 	ImplementationDescription      *string `json:"implementationDescription,omitempty"`
 	ClearImplementationDescription *bool   `json:"clearImplementationDescription,omitempty"`
+	// a public representation of the control that can be shared with external parties without revealing sensitive information
+	PublicRepresentation      *string `json:"publicRepresentation,omitempty"`
+	ClearPublicRepresentation *bool   `json:"clearPublicRepresentation,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// name of the source of the controls if not directly from a standard
+	SourceName      *string `json:"sourceName,omitempty"`
+	ClearSourceName *bool   `json:"clearSourceName,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
 	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`

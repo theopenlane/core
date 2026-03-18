@@ -477,7 +477,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldStatus:                     {Type: field.TypeEnum, Column: control.FieldStatus},
 			control.FieldImplementationStatus:       {Type: field.TypeEnum, Column: control.FieldImplementationStatus},
 			control.FieldImplementationDescription:  {Type: field.TypeString, Column: control.FieldImplementationDescription},
+			control.FieldPublicRepresentation:       {Type: field.TypeString, Column: control.FieldPublicRepresentation},
 			control.FieldSource:                     {Type: field.TypeEnum, Column: control.FieldSource},
+			control.FieldSourceName:                 {Type: field.TypeString, Column: control.FieldSourceName},
 			control.FieldReferenceFramework:         {Type: field.TypeString, Column: control.FieldReferenceFramework},
 			control.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: control.FieldReferenceFrameworkRevision},
 			control.FieldCategory:                   {Type: field.TypeString, Column: control.FieldCategory},
@@ -2860,7 +2862,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldStatus:                     {Type: field.TypeEnum, Column: subcontrol.FieldStatus},
 			subcontrol.FieldImplementationStatus:       {Type: field.TypeEnum, Column: subcontrol.FieldImplementationStatus},
 			subcontrol.FieldImplementationDescription:  {Type: field.TypeString, Column: subcontrol.FieldImplementationDescription},
+			subcontrol.FieldPublicRepresentation:       {Type: field.TypeString, Column: subcontrol.FieldPublicRepresentation},
 			subcontrol.FieldSource:                     {Type: field.TypeEnum, Column: subcontrol.FieldSource},
+			subcontrol.FieldSourceName:                 {Type: field.TypeString, Column: subcontrol.FieldSourceName},
 			subcontrol.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrol.FieldReferenceFramework},
 			subcontrol.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrol.FieldReferenceFrameworkRevision},
 			subcontrol.FieldCategory:                   {Type: field.TypeString, Column: subcontrol.FieldCategory},
@@ -19706,9 +19710,19 @@ func (f *ControlFilter) WhereImplementationDescription(p entql.StringP) {
 	f.Where(p.Field(control.FieldImplementationDescription))
 }
 
+// WherePublicRepresentation applies the entql string predicate on the public_representation field.
+func (f *ControlFilter) WherePublicRepresentation(p entql.StringP) {
+	f.Where(p.Field(control.FieldPublicRepresentation))
+}
+
 // WhereSource applies the entql string predicate on the source field.
 func (f *ControlFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(control.FieldSource))
+}
+
+// WhereSourceName applies the entql string predicate on the source_name field.
+func (f *ControlFilter) WhereSourceName(p entql.StringP) {
+	f.Where(p.Field(control.FieldSourceName))
 }
 
 // WhereReferenceFramework applies the entql string predicate on the reference_framework field.
@@ -40704,9 +40718,19 @@ func (f *SubcontrolFilter) WhereImplementationDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldImplementationDescription))
 }
 
+// WherePublicRepresentation applies the entql string predicate on the public_representation field.
+func (f *SubcontrolFilter) WherePublicRepresentation(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldPublicRepresentation))
+}
+
 // WhereSource applies the entql string predicate on the source field.
 func (f *SubcontrolFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldSource))
+}
+
+// WhereSourceName applies the entql string predicate on the source_name field.
+func (f *SubcontrolFilter) WhereSourceName(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldSourceName))
 }
 
 // WhereReferenceFramework applies the entql string predicate on the reference_framework field.

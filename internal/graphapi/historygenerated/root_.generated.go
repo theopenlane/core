@@ -383,6 +383,7 @@ type ComplexityRoot struct {
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
+		PublicRepresentation       func(childComplexity int) int
 		Ref                        func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
@@ -393,6 +394,7 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
@@ -2381,6 +2383,7 @@ type ComplexityRoot struct {
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
+		PublicRepresentation       func(childComplexity int) int
 		Ref                        func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
@@ -2389,6 +2392,7 @@ type ComplexityRoot struct {
 		References                 func(childComplexity int) int
 		ResponsiblePartyID         func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
 		SubcontrolKindID           func(childComplexity int) int
@@ -5217,6 +5221,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ControlHistory.OwnerID(childComplexity), true
 
+	case "ControlHistory.publicRepresentation":
+		if e.ComplexityRoot.ControlHistory.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.PublicRepresentation(childComplexity), true
+
 	case "ControlHistory.ref":
 		if e.ComplexityRoot.ControlHistory.Ref == nil {
 			break
@@ -5286,6 +5297,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.Source(childComplexity), true
+
+	case "ControlHistory.sourceName":
+		if e.ComplexityRoot.ControlHistory.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.SourceName(childComplexity), true
 
 	case "ControlHistory.standardID":
 		if e.ComplexityRoot.ControlHistory.StandardID == nil {
@@ -16595,6 +16613,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubcontrolHistory.OwnerID(childComplexity), true
 
+	case "SubcontrolHistory.publicRepresentation":
+		if e.ComplexityRoot.SubcontrolHistory.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.PublicRepresentation(childComplexity), true
+
 	case "SubcontrolHistory.ref":
 		if e.ComplexityRoot.SubcontrolHistory.Ref == nil {
 			break
@@ -16650,6 +16675,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.Source(childComplexity), true
+
+	case "SubcontrolHistory.sourceName":
+		if e.ComplexityRoot.SubcontrolHistory.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.SourceName(childComplexity), true
 
 	case "SubcontrolHistory.status":
 		if e.ComplexityRoot.SubcontrolHistory.Status == nil {
@@ -25552,9 +25584,17 @@ type ControlHistory implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlHistoryControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -26064,6 +26104,24 @@ input ControlHistoryWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: ControlHistoryControlSource
@@ -26072,6 +26130,24 @@ input ControlHistoryWhereInput {
   sourceNotIn: [ControlHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -52632,9 +52708,17 @@ type SubcontrolHistory implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolHistoryControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -53113,6 +53197,24 @@ input SubcontrolHistoryWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: SubcontrolHistoryControlSource
@@ -53121,6 +53223,24 @@ input SubcontrolHistoryWhereInput {
   sourceNotIn: [SubcontrolHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """

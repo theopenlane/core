@@ -9593,10 +9593,20 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldImplementationDescription)
 				fieldSeen[control.FieldImplementationDescription] = struct{}{}
 			}
+		case "publicRepresentation":
+			if _, ok := fieldSeen[control.FieldPublicRepresentation]; !ok {
+				selectedFields = append(selectedFields, control.FieldPublicRepresentation)
+				fieldSeen[control.FieldPublicRepresentation] = struct{}{}
+			}
 		case "source":
 			if _, ok := fieldSeen[control.FieldSource]; !ok {
 				selectedFields = append(selectedFields, control.FieldSource)
 				fieldSeen[control.FieldSource] = struct{}{}
+			}
+		case "sourceName":
+			if _, ok := fieldSeen[control.FieldSourceName]; !ok {
+				selectedFields = append(selectedFields, control.FieldSourceName)
+				fieldSeen[control.FieldSourceName] = struct{}{}
 			}
 		case "referenceFramework":
 			if _, ok := fieldSeen[control.FieldReferenceFramework]; !ok {
@@ -68737,10 +68747,20 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldImplementationDescription)
 				fieldSeen[subcontrol.FieldImplementationDescription] = struct{}{}
 			}
+		case "publicRepresentation":
+			if _, ok := fieldSeen[subcontrol.FieldPublicRepresentation]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldPublicRepresentation)
+				fieldSeen[subcontrol.FieldPublicRepresentation] = struct{}{}
+			}
 		case "source":
 			if _, ok := fieldSeen[subcontrol.FieldSource]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldSource)
 				fieldSeen[subcontrol.FieldSource] = struct{}{}
+			}
+		case "sourceName":
+			if _, ok := fieldSeen[subcontrol.FieldSourceName]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldSourceName)
+				fieldSeen[subcontrol.FieldSourceName] = struct{}{}
 			}
 		case "referenceFramework":
 			if _, ok := fieldSeen[subcontrol.FieldReferenceFramework]; !ok {

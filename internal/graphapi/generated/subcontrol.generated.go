@@ -88,8 +88,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Subcontrol_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Subcontrol_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -282,8 +286,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Subcontrol_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Subcontrol_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -476,8 +484,12 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Subcontrol_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Subcontrol_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
@@ -670,8 +682,12 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
 			case "implementationDescription":
 				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
+			case "publicRepresentation":
+				return ec.fieldContext_Subcontrol_publicRepresentation(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "sourceName":
+				return ec.fieldContext_Subcontrol_sourceName(ctx, field)
 			case "referenceFramework":
 				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
