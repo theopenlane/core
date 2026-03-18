@@ -6603,6 +6603,7 @@ func (c *EmailBrandingUpdateOne) SetInput(i UpdateEmailBrandingInput) *EmailBran
 
 // CreateEmailTemplateInput represents a mutation input for creating emailtemplates.
 type CreateEmailTemplateInput struct {
+	Revision                *string
 	InternalNotes           *string
 	SystemInternalID        *string
 	Key                     string
@@ -6619,6 +6620,8 @@ type CreateEmailTemplateInput struct {
 	Metadata                map[string]interface{}
 	Active                  *bool
 	Version                 *int
+	TemplateContext         *enums.TemplateContext
+	Defaults                map[string]interface{}
 	OwnerID                 *string
 	EmailBrandingID         *string
 	IntegrationID           *string
@@ -6626,10 +6629,14 @@ type CreateEmailTemplateInput struct {
 	WorkflowInstanceID      *string
 	CampaignIDs             []string
 	NotificationTemplateIDs []string
+	FileIDs                 []string
 }
 
 // Mutate applies the CreateEmailTemplateInput on the EmailTemplateMutation builder.
 func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -6674,6 +6681,12 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
+	if v := i.TemplateContext; v != nil {
+		m.SetTemplateContext(*v)
+	}
+	if v := i.Defaults; v != nil {
+		m.SetDefaults(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -6695,6 +6708,9 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.NotificationTemplateIDs; len(v) > 0 {
 		m.AddNotificationTemplateIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateEmailTemplateInput on the EmailTemplateCreate builder.
@@ -6705,6 +6721,8 @@ func (c *EmailTemplateCreate) SetInput(i CreateEmailTemplateInput) *EmailTemplat
 
 // UpdateEmailTemplateInput represents a mutation input for updating emailtemplates.
 type UpdateEmailTemplateInput struct {
+	ClearRevision                 bool
+	Revision                      *string
 	ClearInternalNotes            bool
 	InternalNotes                 *string
 	ClearSystemInternalID         bool
@@ -6731,6 +6749,10 @@ type UpdateEmailTemplateInput struct {
 	Metadata                      map[string]interface{}
 	Active                        *bool
 	Version                       *int
+	ClearTemplateContext          bool
+	TemplateContext               *enums.TemplateContext
+	ClearDefaults                 bool
+	Defaults                      map[string]interface{}
 	ClearEmailBranding            bool
 	EmailBrandingID               *string
 	ClearIntegration              bool
@@ -6745,10 +6767,19 @@ type UpdateEmailTemplateInput struct {
 	ClearNotificationTemplates    bool
 	AddNotificationTemplateIDs    []string
 	RemoveNotificationTemplateIDs []string
+	ClearFiles                    bool
+	AddFileIDs                    []string
+	RemoveFileIDs                 []string
 }
 
 // Mutate applies the UpdateEmailTemplateInput on the EmailTemplateMutation builder.
 func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -6827,6 +6858,18 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
+	if i.ClearTemplateContext {
+		m.ClearTemplateContext()
+	}
+	if v := i.TemplateContext; v != nil {
+		m.SetTemplateContext(*v)
+	}
+	if i.ClearDefaults {
+		m.ClearDefaults()
+	}
+	if v := i.Defaults; v != nil {
+		m.SetDefaults(v)
+	}
 	if i.ClearEmailBranding {
 		m.ClearEmailBranding()
 	}
@@ -6868,6 +6911,15 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	}
 	if v := i.RemoveNotificationTemplateIDs; len(v) > 0 {
 		m.RemoveNotificationTemplateIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 
@@ -14787,6 +14839,7 @@ func (c *NotificationPreferenceUpdateOne) SetInput(i UpdateNotificationPreferenc
 
 // CreateNotificationTemplateInput represents a mutation input for creating notificationtemplates.
 type CreateNotificationTemplateInput struct {
+	Revision             *string
 	InternalNotes        *string
 	SystemInternalID     *string
 	Key                  string
@@ -14805,6 +14858,8 @@ type CreateNotificationTemplateInput struct {
 	Metadata             map[string]interface{}
 	Active               *bool
 	Version              *int
+	TemplateContext      *enums.TemplateContext
+	Defaults             map[string]interface{}
 	OwnerID              *string
 	IntegrationID        *string
 	WorkflowDefinitionID *string
@@ -14814,6 +14869,9 @@ type CreateNotificationTemplateInput struct {
 
 // Mutate applies the CreateNotificationTemplateInput on the NotificationTemplateMutation builder.
 func (i *CreateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation) {
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -14860,6 +14918,12 @@ func (i *CreateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
+	if v := i.TemplateContext; v != nil {
+		m.SetTemplateContext(*v)
+	}
+	if v := i.Defaults; v != nil {
+		m.SetDefaults(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -14885,6 +14949,8 @@ func (c *NotificationTemplateCreate) SetInput(i CreateNotificationTemplateInput)
 
 // UpdateNotificationTemplateInput represents a mutation input for updating notificationtemplates.
 type UpdateNotificationTemplateInput struct {
+	ClearRevision           bool
+	Revision                *string
 	ClearInternalNotes      bool
 	InternalNotes           *string
 	ClearSystemInternalID   bool
@@ -14913,6 +14979,10 @@ type UpdateNotificationTemplateInput struct {
 	Metadata                map[string]interface{}
 	Active                  *bool
 	Version                 *int
+	ClearTemplateContext    bool
+	TemplateContext         *enums.TemplateContext
+	ClearDefaults           bool
+	Defaults                map[string]interface{}
 	ClearIntegration        bool
 	IntegrationID           *string
 	ClearWorkflowDefinition bool
@@ -14926,6 +14996,12 @@ type UpdateNotificationTemplateInput struct {
 
 // Mutate applies the UpdateNotificationTemplateInput on the NotificationTemplateMutation builder.
 func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation) {
+	if i.ClearRevision {
+		m.ClearRevision()
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -15009,6 +15085,18 @@ func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
+	}
+	if i.ClearTemplateContext {
+		m.ClearTemplateContext()
+	}
+	if v := i.TemplateContext; v != nil {
+		m.SetTemplateContext(*v)
+	}
+	if i.ClearDefaults {
+		m.ClearDefaults()
+	}
+	if v := i.Defaults; v != nil {
+		m.SetDefaults(v)
 	}
 	if i.ClearIntegration {
 		m.ClearIntegration()
@@ -25517,6 +25605,7 @@ type CreateTrustCenterSettingInput struct {
 	EditorIDs                []string
 	LogoFileID               *string
 	FaviconFileID            *string
+	HeroImageFileID          *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -25593,6 +25682,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.FaviconFileID; v != nil {
 		m.SetFaviconFileID(*v)
 	}
+	if v := i.HeroImageFileID; v != nil {
+		m.SetHeroImageFileID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterSettingInput on the TrustCenterSettingCreate builder.
@@ -25651,6 +25743,8 @@ type UpdateTrustCenterSettingInput struct {
 	LogoFileID                    *string
 	ClearFaviconFile              bool
 	FaviconFileID                 *string
+	ClearHeroImageFile            bool
+	HeroImageFileID               *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -25798,6 +25892,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.FaviconFileID; v != nil {
 		m.SetFaviconFileID(*v)
+	}
+	if i.ClearHeroImageFile {
+		m.ClearHeroImageFile()
+	}
+	if v := i.HeroImageFileID; v != nil {
+		m.SetHeroImageFileID(*v)
 	}
 }
 

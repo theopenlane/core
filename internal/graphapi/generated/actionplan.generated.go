@@ -549,10 +549,10 @@ type MutationResolver interface {
 	DenyNDARequests(ctx context.Context, ids []string) (*model.BulkUpdateStatusPayload, error)
 	DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error)
 	RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error)
-	CreateTrustCenterPreviewSetting(ctx context.Context, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterPreviewSettingCreatePayload, error)
-	CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error)
-	UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
-	UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
+	CreateTrustCenterPreviewSetting(ctx context.Context, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterPreviewSettingCreatePayload, error)
+	CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error)
+	UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
+	UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
 	PublishTrustCenterSetting(ctx context.Context) (*model.TrustCenterSettingUpdatePayload, error)
 	DeleteTrustCenterSetting(ctx context.Context, id string) (*model.TrustCenterSettingDeletePayload, error)
 	CreateTrustCenterSubprocessor(ctx context.Context, input generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorCreatePayload, error)
@@ -3232,6 +3232,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterPreviewSetting_args(
 		return nil, err
 	}
 	args["faviconFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg3
 	return args, nil
 }
 
@@ -3253,6 +3258,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterSetting_args(ctx con
 		return nil, err
 	}
 	args["faviconFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg3
 	return args, nil
 }
 
@@ -7914,6 +7924,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterPreviewSetting_args(
 		return nil, err
 	}
 	args["faviconFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg3
 	return args, nil
 }
 
@@ -7940,6 +7955,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterSetting_args(ctx con
 		return nil, err
 	}
 	args["faviconFile"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg4
 	return args, nil
 }
 
@@ -32973,7 +32993,7 @@ func (ec *executionContext) _Mutation_createTrustCenterPreviewSetting(ctx contex
 		ec.fieldContext_Mutation_createTrustCenterPreviewSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterPreviewSetting(ctx, fc.Args["input"].(model.CreateTrustCenterPreviewSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterPreviewSetting(ctx, fc.Args["input"].(model.CreateTrustCenterPreviewSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload,
@@ -33018,7 +33038,7 @@ func (ec *executionContext) _Mutation_createTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_createTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterSetting(ctx, fc.Args["input"].(generated.CreateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterSetting(ctx, fc.Args["input"].(generated.CreateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload,
@@ -33063,7 +33083,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_updateTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
@@ -33108,7 +33128,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterPreviewSetting(ctx contex
 		ec.fieldContext_Mutation_updateTrustCenterPreviewSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,

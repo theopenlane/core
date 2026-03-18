@@ -17376,6 +17376,95 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 			_q.WithNamedNotificationTemplates(alias, func(wq *NotificationTemplateQuery) {
 				*wq = *query
 			})
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newFilePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*EmailTemplate) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"email_template_files"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(emailtemplate.FilesColumn), ids...))
+						})
+						if err := query.GroupBy(emailtemplate.FilesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[7][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*EmailTemplate) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Files)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[7][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(emailtemplate.FilesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[emailtemplate.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, emailtemplate.FieldCreatedAt)
@@ -17395,6 +17484,11 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[emailtemplate.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, emailtemplate.FieldUpdatedBy)
 				fieldSeen[emailtemplate.FieldUpdatedBy] = struct{}{}
+			}
+		case "revision":
+			if _, ok := fieldSeen[emailtemplate.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, emailtemplate.FieldRevision)
+				fieldSeen[emailtemplate.FieldRevision] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[emailtemplate.FieldOwnerID]; !ok {
@@ -17485,6 +17579,16 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[emailtemplate.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, emailtemplate.FieldVersion)
 				fieldSeen[emailtemplate.FieldVersion] = struct{}{}
+			}
+		case "templateContext":
+			if _, ok := fieldSeen[emailtemplate.FieldTemplateContext]; !ok {
+				selectedFields = append(selectedFields, emailtemplate.FieldTemplateContext)
+				fieldSeen[emailtemplate.FieldTemplateContext] = struct{}{}
+			}
+		case "defaults":
+			if _, ok := fieldSeen[emailtemplate.FieldDefaults]; !ok {
+				selectedFields = append(selectedFields, emailtemplate.FieldDefaults)
+				fieldSeen[emailtemplate.FieldDefaults] = struct{}{}
 			}
 		case "emailBrandingID":
 			if _, ok := fieldSeen[emailtemplate.FieldEmailBrandingID]; !ok {
@@ -35428,6 +35532,36 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, integration.FieldMetadata)
 				fieldSeen[integration.FieldMetadata] = struct{}{}
 			}
+		case "definitionID":
+			if _, ok := fieldSeen[integration.FieldDefinitionID]; !ok {
+				selectedFields = append(selectedFields, integration.FieldDefinitionID)
+				fieldSeen[integration.FieldDefinitionID] = struct{}{}
+			}
+		case "definitionVersion":
+			if _, ok := fieldSeen[integration.FieldDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, integration.FieldDefinitionVersion)
+				fieldSeen[integration.FieldDefinitionVersion] = struct{}{}
+			}
+		case "definitionSlug":
+			if _, ok := fieldSeen[integration.FieldDefinitionSlug]; !ok {
+				selectedFields = append(selectedFields, integration.FieldDefinitionSlug)
+				fieldSeen[integration.FieldDefinitionSlug] = struct{}{}
+			}
+		case "family":
+			if _, ok := fieldSeen[integration.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, integration.FieldFamily)
+				fieldSeen[integration.FieldFamily] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[integration.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, integration.FieldStatus)
+				fieldSeen[integration.FieldStatus] = struct{}{}
+			}
+		case "providerMetadataSnapshot":
+			if _, ok := fieldSeen[integration.FieldProviderMetadataSnapshot]; !ok {
+				selectedFields = append(selectedFields, integration.FieldProviderMetadataSnapshot)
+				fieldSeen[integration.FieldProviderMetadataSnapshot] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -41558,6 +41692,11 @@ func (_q *NotificationTemplateQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, notificationtemplate.FieldUpdatedBy)
 				fieldSeen[notificationtemplate.FieldUpdatedBy] = struct{}{}
 			}
+		case "revision":
+			if _, ok := fieldSeen[notificationtemplate.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, notificationtemplate.FieldRevision)
+				fieldSeen[notificationtemplate.FieldRevision] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[notificationtemplate.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, notificationtemplate.FieldOwnerID)
@@ -41672,6 +41811,16 @@ func (_q *NotificationTemplateQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[notificationtemplate.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, notificationtemplate.FieldVersion)
 				fieldSeen[notificationtemplate.FieldVersion] = struct{}{}
+			}
+		case "templateContext":
+			if _, ok := fieldSeen[notificationtemplate.FieldTemplateContext]; !ok {
+				selectedFields = append(selectedFields, notificationtemplate.FieldTemplateContext)
+				fieldSeen[notificationtemplate.FieldTemplateContext] = struct{}{}
+			}
+		case "defaults":
+			if _, ok := fieldSeen[notificationtemplate.FieldDefaults]; !ok {
+				selectedFields = append(selectedFields, notificationtemplate.FieldDefaults)
+				fieldSeen[notificationtemplate.FieldDefaults] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -75222,6 +75371,21 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
 			}
+
+		case "heroImageFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withHeroImageFile = query
+			if _, ok := fieldSeen[trustcentersetting.FieldHeroImageLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldHeroImageLocalFileID)
+				fieldSeen[trustcentersetting.FieldHeroImageLocalFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcentersetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldCreatedAt)
@@ -75286,6 +75450,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcentersetting.FieldFaviconLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
+			}
+		case "heroImageLocalFileID":
+			if _, ok := fieldSeen[trustcentersetting.FieldHeroImageLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldHeroImageLocalFileID)
+				fieldSeen[trustcentersetting.FieldHeroImageLocalFileID] = struct{}{}
 			}
 		case "themeMode":
 			if _, ok := fieldSeen[trustcentersetting.FieldThemeMode]; !ok {

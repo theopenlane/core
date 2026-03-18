@@ -6724,6 +6724,10 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -6794,6 +6798,14 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if version, exists := m.Version(); exists {
 		create = create.SetVersion(version)
+	}
+
+	if templateContext, exists := m.TemplateContext(); exists {
+		create = create.SetTemplateContext(templateContext)
+	}
+
+	if defaults, exists := m.Defaults(); exists {
+		create = create.SetDefaults(defaults)
 	}
 
 	if emailBrandingID, exists := m.EmailBrandingID(); exists {
@@ -6877,6 +6889,12 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(emailtemplate.DeletedBy)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(emailtemplate.Revision)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -6987,6 +7005,18 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetVersion(emailtemplate.Version)
 		}
 
+		if templateContext, exists := m.TemplateContext(); exists {
+			create = create.SetTemplateContext(templateContext)
+		} else {
+			create = create.SetTemplateContext(emailtemplate.TemplateContext)
+		}
+
+		if defaults, exists := m.Defaults(); exists {
+			create = create.SetDefaults(defaults)
+		} else {
+			create = create.SetDefaults(emailtemplate.Defaults)
+		}
+
 		if emailBrandingID, exists := m.EmailBrandingID(); exists {
 			create = create.SetEmailBrandingID(emailBrandingID)
 		} else {
@@ -7052,6 +7082,7 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedBy(emailtemplate.UpdatedBy).
 			SetDeletedAt(emailtemplate.DeletedAt).
 			SetDeletedBy(emailtemplate.DeletedBy).
+			SetRevision(emailtemplate.Revision).
 			SetOwnerID(emailtemplate.OwnerID).
 			SetSystemOwned(emailtemplate.SystemOwned).
 			SetNillableInternalNotes(emailtemplate.InternalNotes).
@@ -7070,6 +7101,8 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetMetadata(emailtemplate.Metadata).
 			SetActive(emailtemplate.Active).
 			SetVersion(emailtemplate.Version).
+			SetTemplateContext(emailtemplate.TemplateContext).
+			SetDefaults(emailtemplate.Defaults).
 			SetEmailBrandingID(emailtemplate.EmailBrandingID).
 			SetIntegrationID(emailtemplate.IntegrationID).
 			SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID).
@@ -11375,6 +11408,30 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetMetadata(metadata)
 	}
 
+	if definitionID, exists := m.DefinitionID(); exists {
+		create = create.SetDefinitionID(definitionID)
+	}
+
+	if definitionVersion, exists := m.DefinitionVersion(); exists {
+		create = create.SetDefinitionVersion(definitionVersion)
+	}
+
+	if definitionSlug, exists := m.DefinitionSlug(); exists {
+		create = create.SetDefinitionSlug(definitionSlug)
+	}
+
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if providerMetadataSnapshot, exists := m.ProviderMetadataSnapshot(); exists {
+		create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11550,6 +11607,42 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetMetadata(integration.Metadata)
 		}
 
+		if definitionID, exists := m.DefinitionID(); exists {
+			create = create.SetDefinitionID(definitionID)
+		} else {
+			create = create.SetDefinitionID(integration.DefinitionID)
+		}
+
+		if definitionVersion, exists := m.DefinitionVersion(); exists {
+			create = create.SetDefinitionVersion(definitionVersion)
+		} else {
+			create = create.SetDefinitionVersion(integration.DefinitionVersion)
+		}
+
+		if definitionSlug, exists := m.DefinitionSlug(); exists {
+			create = create.SetDefinitionSlug(definitionSlug)
+		} else {
+			create = create.SetDefinitionSlug(integration.DefinitionSlug)
+		}
+
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
+		} else {
+			create = create.SetFamily(integration.Family)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(integration.Status)
+		}
+
+		if providerMetadataSnapshot, exists := m.ProviderMetadataSnapshot(); exists {
+			create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
+		} else {
+			create = create.SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11609,6 +11702,12 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetConfig(integration.Config).
 			SetProviderState(integration.ProviderState).
 			SetMetadata(integration.Metadata).
+			SetDefinitionID(integration.DefinitionID).
+			SetDefinitionVersion(integration.DefinitionVersion).
+			SetDefinitionSlug(integration.DefinitionSlug).
+			SetFamily(integration.Family).
+			SetStatus(integration.Status).
+			SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -13835,6 +13934,10 @@ func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Conte
 		create = create.SetDeletedBy(deletedBy)
 	}
 
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -13927,6 +14030,14 @@ func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Conte
 		create = create.SetVersion(version)
 	}
 
+	if templateContext, exists := m.TemplateContext(); exists {
+		create = create.SetTemplateContext(templateContext)
+	}
+
+	if defaults, exists := m.Defaults(); exists {
+		create = create.SetDefaults(defaults)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -13992,6 +14103,12 @@ func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Conte
 			create = create.SetDeletedBy(deletedBy)
 		} else {
 			create = create.SetDeletedBy(notificationtemplate.DeletedBy)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(notificationtemplate.Revision)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -14132,6 +14249,18 @@ func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Conte
 			create = create.SetVersion(notificationtemplate.Version)
 		}
 
+		if templateContext, exists := m.TemplateContext(); exists {
+			create = create.SetTemplateContext(templateContext)
+		} else {
+			create = create.SetTemplateContext(notificationtemplate.TemplateContext)
+		}
+
+		if defaults, exists := m.Defaults(); exists {
+			create = create.SetDefaults(defaults)
+		} else {
+			create = create.SetDefaults(notificationtemplate.Defaults)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -14173,6 +14302,7 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 			SetUpdatedBy(notificationtemplate.UpdatedBy).
 			SetDeletedAt(notificationtemplate.DeletedAt).
 			SetDeletedBy(notificationtemplate.DeletedBy).
+			SetRevision(notificationtemplate.Revision).
 			SetOwnerID(notificationtemplate.OwnerID).
 			SetSystemOwned(notificationtemplate.SystemOwned).
 			SetNillableInternalNotes(notificationtemplate.InternalNotes).
@@ -14196,6 +14326,8 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 			SetMetadata(notificationtemplate.Metadata).
 			SetActive(notificationtemplate.Active).
 			SetVersion(notificationtemplate.Version).
+			SetTemplateContext(notificationtemplate.TemplateContext).
+			SetDefaults(notificationtemplate.Defaults).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -22925,6 +23057,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
 	}
 
+	if heroImageLocalFileID, exists := m.HeroImageLocalFileID(); exists {
+		create = create.SetNillableHeroImageLocalFileID(&heroImageLocalFileID)
+	}
+
 	if themeMode, exists := m.ThemeMode(); exists {
 		create = create.SetThemeMode(themeMode)
 	}
@@ -23102,6 +23238,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID)
 		}
 
+		if heroImageLocalFileID, exists := m.HeroImageLocalFileID(); exists {
+			create = create.SetNillableHeroImageLocalFileID(&heroImageLocalFileID)
+		} else {
+			create = create.SetNillableHeroImageLocalFileID(trustcentersetting.HeroImageLocalFileID)
+		}
+
 		if themeMode, exists := m.ThemeMode(); exists {
 			create = create.SetThemeMode(themeMode)
 		} else {
@@ -23236,6 +23378,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).
 			SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL).
 			SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID).
+			SetNillableHeroImageLocalFileID(trustcentersetting.HeroImageLocalFileID).
 			SetThemeMode(trustcentersetting.ThemeMode).
 			SetPrimaryColor(trustcentersetting.PrimaryColor).
 			SetFont(trustcentersetting.Font).

@@ -286,6 +286,26 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearFaviconLocalFileID() *TrustCente
 	return _u
 }
 
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetHeroImageLocalFileID(v)
+	return _u
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetHeroImageLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearHeroImageLocalFileID() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearHeroImageLocalFileID()
+	return _u
+}
+
 // SetThemeMode sets the "theme_mode" field.
 func (_u *TrustCenterSettingHistoryUpdate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdate {
 	_u.mutation.SetThemeMode(v)
@@ -708,6 +728,12 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.FaviconLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
 	}
+	if value, ok := _u.mutation.HeroImageLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.HeroImageLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
 	}
@@ -1062,6 +1088,26 @@ func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconLocalFileID(v *s
 // ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
 func (_u *TrustCenterSettingHistoryUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdateOne {
 	_u.mutation.ClearFaviconLocalFileID()
+	return _u
+}
+
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetHeroImageLocalFileID(v)
+	return _u
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetHeroImageLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearHeroImageLocalFileID() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearHeroImageLocalFileID()
 	return _u
 }
 
@@ -1516,6 +1562,12 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.FaviconLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.HeroImageLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.HeroImageLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ThemeMode(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)

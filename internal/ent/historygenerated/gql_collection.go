@@ -4055,6 +4055,11 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldUpdatedBy)
 				fieldSeen[emailtemplatehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "revision":
+			if _, ok := fieldSeen[emailtemplatehistory.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, emailtemplatehistory.FieldRevision)
+				fieldSeen[emailtemplatehistory.FieldRevision] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldOwnerID)
@@ -4144,6 +4149,16 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[emailtemplatehistory.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldVersion)
 				fieldSeen[emailtemplatehistory.FieldVersion] = struct{}{}
+			}
+		case "templateContext":
+			if _, ok := fieldSeen[emailtemplatehistory.FieldTemplateContext]; !ok {
+				selectedFields = append(selectedFields, emailtemplatehistory.FieldTemplateContext)
+				fieldSeen[emailtemplatehistory.FieldTemplateContext] = struct{}{}
+			}
+		case "defaults":
+			if _, ok := fieldSeen[emailtemplatehistory.FieldDefaults]; !ok {
+				selectedFields = append(selectedFields, emailtemplatehistory.FieldDefaults)
+				fieldSeen[emailtemplatehistory.FieldDefaults] = struct{}{}
 			}
 		case "emailBrandingID":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldEmailBrandingID]; !ok {
@@ -6793,6 +6808,36 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, integrationhistory.FieldMetadata)
 				fieldSeen[integrationhistory.FieldMetadata] = struct{}{}
 			}
+		case "definitionID":
+			if _, ok := fieldSeen[integrationhistory.FieldDefinitionID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldDefinitionID)
+				fieldSeen[integrationhistory.FieldDefinitionID] = struct{}{}
+			}
+		case "definitionVersion":
+			if _, ok := fieldSeen[integrationhistory.FieldDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldDefinitionVersion)
+				fieldSeen[integrationhistory.FieldDefinitionVersion] = struct{}{}
+			}
+		case "definitionSlug":
+			if _, ok := fieldSeen[integrationhistory.FieldDefinitionSlug]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldDefinitionSlug)
+				fieldSeen[integrationhistory.FieldDefinitionSlug] = struct{}{}
+			}
+		case "family":
+			if _, ok := fieldSeen[integrationhistory.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldFamily)
+				fieldSeen[integrationhistory.FieldFamily] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[integrationhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldStatus)
+				fieldSeen[integrationhistory.FieldStatus] = struct{}{}
+			}
+		case "providerMetadataSnapshot":
+			if _, ok := fieldSeen[integrationhistory.FieldProviderMetadataSnapshot]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldProviderMetadataSnapshot)
+				fieldSeen[integrationhistory.FieldProviderMetadataSnapshot] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -8230,6 +8275,11 @@ func (_q *NotificationTemplateHistoryQuery) collectField(ctx context.Context, on
 				selectedFields = append(selectedFields, notificationtemplatehistory.FieldUpdatedBy)
 				fieldSeen[notificationtemplatehistory.FieldUpdatedBy] = struct{}{}
 			}
+		case "revision":
+			if _, ok := fieldSeen[notificationtemplatehistory.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, notificationtemplatehistory.FieldRevision)
+				fieldSeen[notificationtemplatehistory.FieldRevision] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[notificationtemplatehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, notificationtemplatehistory.FieldOwnerID)
@@ -8344,6 +8394,16 @@ func (_q *NotificationTemplateHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[notificationtemplatehistory.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, notificationtemplatehistory.FieldVersion)
 				fieldSeen[notificationtemplatehistory.FieldVersion] = struct{}{}
+			}
+		case "templateContext":
+			if _, ok := fieldSeen[notificationtemplatehistory.FieldTemplateContext]; !ok {
+				selectedFields = append(selectedFields, notificationtemplatehistory.FieldTemplateContext)
+				fieldSeen[notificationtemplatehistory.FieldTemplateContext] = struct{}{}
+			}
+		case "defaults":
+			if _, ok := fieldSeen[notificationtemplatehistory.FieldDefaults]; !ok {
+				selectedFields = append(selectedFields, notificationtemplatehistory.FieldDefaults)
+				fieldSeen[notificationtemplatehistory.FieldDefaults] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -13643,6 +13703,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID] = struct{}{}
+			}
+		case "heroImageLocalFileID":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldHeroImageLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldHeroImageLocalFileID)
+				fieldSeen[trustcentersettinghistory.FieldHeroImageLocalFileID] = struct{}{}
 			}
 		case "themeMode":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldThemeMode]; !ok {

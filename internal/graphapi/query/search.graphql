@@ -310,6 +310,8 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          definitionID
+          definitionSlug
           id
           kind
           name

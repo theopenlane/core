@@ -235,7 +235,6 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 
 	_, err = m.Client().Group.Delete().
 		Where(
-			group.CreatedBy(userID),
 			group.IsManaged(true),
 			group.OwnerID(orgID),
 			group.Name(getUserGroupName(user.DisplayName, user.ID)),

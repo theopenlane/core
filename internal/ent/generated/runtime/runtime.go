@@ -2172,7 +2172,7 @@ func init() {
 	// emailbranding.DefaultID holds the default value on creation for the id field.
 	emailbranding.DefaultID = emailbrandingDescID.Default.(func() string)
 	emailtemplateMixin := schema.EmailTemplate{}.Mixin()
-	emailtemplate.Policy = privacy.NewPolicies(emailtemplateMixin[5], schema.EmailTemplate{})
+	emailtemplate.Policy = privacy.NewPolicies(emailtemplateMixin[6], schema.EmailTemplate{})
 	emailtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := emailtemplate.Policy.EvalMutation(ctx, m); err != nil {
@@ -2183,33 +2183,41 @@ func init() {
 	}
 	emailtemplateMixinHooks0 := emailtemplateMixin[0].Hooks()
 	emailtemplateMixinHooks1 := emailtemplateMixin[1].Hooks()
-	emailtemplateMixinHooks4 := emailtemplateMixin[4].Hooks()
+	emailtemplateMixinHooks3 := emailtemplateMixin[3].Hooks()
 	emailtemplateMixinHooks5 := emailtemplateMixin[5].Hooks()
+	emailtemplateMixinHooks6 := emailtemplateMixin[6].Hooks()
+	emailtemplateHooks := schema.EmailTemplate{}.Hooks()
 
 	emailtemplate.Hooks[1] = emailtemplateMixinHooks0[0]
 
 	emailtemplate.Hooks[2] = emailtemplateMixinHooks1[0]
 
-	emailtemplate.Hooks[3] = emailtemplateMixinHooks4[0]
+	emailtemplate.Hooks[3] = emailtemplateMixinHooks3[0]
 
-	emailtemplate.Hooks[4] = emailtemplateMixinHooks4[1]
+	emailtemplate.Hooks[4] = emailtemplateMixinHooks5[0]
 
-	emailtemplate.Hooks[5] = emailtemplateMixinHooks5[0]
+	emailtemplate.Hooks[5] = emailtemplateMixinHooks5[1]
 
-	emailtemplate.Hooks[6] = emailtemplateMixinHooks5[1]
+	emailtemplate.Hooks[6] = emailtemplateMixinHooks6[0]
+
+	emailtemplate.Hooks[7] = emailtemplateMixinHooks6[1]
+
+	emailtemplate.Hooks[8] = emailtemplateHooks[0]
 	emailtemplateMixinInters1 := emailtemplateMixin[1].Interceptors()
-	emailtemplateMixinInters4 := emailtemplateMixin[4].Interceptors()
+	emailtemplateMixinInters5 := emailtemplateMixin[5].Interceptors()
 	emailtemplate.Interceptors[0] = emailtemplateMixinInters1[0]
-	emailtemplate.Interceptors[1] = emailtemplateMixinInters4[0]
-	emailtemplate.Interceptors[2] = emailtemplateMixinInters4[1]
+	emailtemplate.Interceptors[1] = emailtemplateMixinInters5[0]
+	emailtemplate.Interceptors[2] = emailtemplateMixinInters5[1]
 	emailtemplateMixinFields0 := emailtemplateMixin[0].Fields()
 	_ = emailtemplateMixinFields0
 	emailtemplateMixinFields2 := emailtemplateMixin[2].Fields()
 	_ = emailtemplateMixinFields2
-	emailtemplateMixinFields4 := emailtemplateMixin[4].Fields()
-	_ = emailtemplateMixinFields4
+	emailtemplateMixinFields3 := emailtemplateMixin[3].Fields()
+	_ = emailtemplateMixinFields3
 	emailtemplateMixinFields5 := emailtemplateMixin[5].Fields()
 	_ = emailtemplateMixinFields5
+	emailtemplateMixinFields6 := emailtemplateMixin[6].Fields()
+	_ = emailtemplateMixinFields6
 	emailtemplateFields := schema.EmailTemplate{}.Fields()
 	_ = emailtemplateFields
 	// emailtemplateDescCreatedAt is the schema descriptor for created_at field.
@@ -2222,12 +2230,18 @@ func init() {
 	emailtemplate.DefaultUpdatedAt = emailtemplateDescUpdatedAt.Default.(func() time.Time)
 	// emailtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	emailtemplate.UpdateDefaultUpdatedAt = emailtemplateDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// emailtemplateDescRevision is the schema descriptor for revision field.
+	emailtemplateDescRevision := emailtemplateMixinFields3[0].Descriptor()
+	// emailtemplate.DefaultRevision holds the default value on creation for the revision field.
+	emailtemplate.DefaultRevision = emailtemplateDescRevision.Default.(string)
+	// emailtemplate.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	emailtemplate.RevisionValidator = emailtemplateDescRevision.Validators[0].(func(string) error)
 	// emailtemplateDescOwnerID is the schema descriptor for owner_id field.
-	emailtemplateDescOwnerID := emailtemplateMixinFields4[0].Descriptor()
+	emailtemplateDescOwnerID := emailtemplateMixinFields5[0].Descriptor()
 	// emailtemplate.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	emailtemplate.OwnerIDValidator = emailtemplateDescOwnerID.Validators[0].(func(string) error)
 	// emailtemplateDescSystemOwned is the schema descriptor for system_owned field.
-	emailtemplateDescSystemOwned := emailtemplateMixinFields5[0].Descriptor()
+	emailtemplateDescSystemOwned := emailtemplateMixinFields6[0].Descriptor()
 	// emailtemplate.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	emailtemplate.DefaultSystemOwned = emailtemplateDescSystemOwned.Default.(bool)
 	// emailtemplateDescKey is the schema descriptor for key field.
@@ -4771,7 +4785,7 @@ func init() {
 	// notificationpreference.DefaultID holds the default value on creation for the id field.
 	notificationpreference.DefaultID = notificationpreferenceDescID.Default.(func() string)
 	notificationtemplateMixin := schema.NotificationTemplate{}.Mixin()
-	notificationtemplate.Policy = privacy.NewPolicies(notificationtemplateMixin[5], schema.NotificationTemplate{})
+	notificationtemplate.Policy = privacy.NewPolicies(notificationtemplateMixin[6], schema.NotificationTemplate{})
 	notificationtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := notificationtemplate.Policy.EvalMutation(ctx, m); err != nil {
@@ -4782,33 +4796,41 @@ func init() {
 	}
 	notificationtemplateMixinHooks0 := notificationtemplateMixin[0].Hooks()
 	notificationtemplateMixinHooks1 := notificationtemplateMixin[1].Hooks()
-	notificationtemplateMixinHooks4 := notificationtemplateMixin[4].Hooks()
+	notificationtemplateMixinHooks3 := notificationtemplateMixin[3].Hooks()
 	notificationtemplateMixinHooks5 := notificationtemplateMixin[5].Hooks()
+	notificationtemplateMixinHooks6 := notificationtemplateMixin[6].Hooks()
+	notificationtemplateHooks := schema.NotificationTemplate{}.Hooks()
 
 	notificationtemplate.Hooks[1] = notificationtemplateMixinHooks0[0]
 
 	notificationtemplate.Hooks[2] = notificationtemplateMixinHooks1[0]
 
-	notificationtemplate.Hooks[3] = notificationtemplateMixinHooks4[0]
+	notificationtemplate.Hooks[3] = notificationtemplateMixinHooks3[0]
 
-	notificationtemplate.Hooks[4] = notificationtemplateMixinHooks4[1]
+	notificationtemplate.Hooks[4] = notificationtemplateMixinHooks5[0]
 
-	notificationtemplate.Hooks[5] = notificationtemplateMixinHooks5[0]
+	notificationtemplate.Hooks[5] = notificationtemplateMixinHooks5[1]
 
-	notificationtemplate.Hooks[6] = notificationtemplateMixinHooks5[1]
+	notificationtemplate.Hooks[6] = notificationtemplateMixinHooks6[0]
+
+	notificationtemplate.Hooks[7] = notificationtemplateMixinHooks6[1]
+
+	notificationtemplate.Hooks[8] = notificationtemplateHooks[0]
 	notificationtemplateMixinInters1 := notificationtemplateMixin[1].Interceptors()
-	notificationtemplateMixinInters4 := notificationtemplateMixin[4].Interceptors()
+	notificationtemplateMixinInters5 := notificationtemplateMixin[5].Interceptors()
 	notificationtemplate.Interceptors[0] = notificationtemplateMixinInters1[0]
-	notificationtemplate.Interceptors[1] = notificationtemplateMixinInters4[0]
-	notificationtemplate.Interceptors[2] = notificationtemplateMixinInters4[1]
+	notificationtemplate.Interceptors[1] = notificationtemplateMixinInters5[0]
+	notificationtemplate.Interceptors[2] = notificationtemplateMixinInters5[1]
 	notificationtemplateMixinFields0 := notificationtemplateMixin[0].Fields()
 	_ = notificationtemplateMixinFields0
 	notificationtemplateMixinFields2 := notificationtemplateMixin[2].Fields()
 	_ = notificationtemplateMixinFields2
-	notificationtemplateMixinFields4 := notificationtemplateMixin[4].Fields()
-	_ = notificationtemplateMixinFields4
+	notificationtemplateMixinFields3 := notificationtemplateMixin[3].Fields()
+	_ = notificationtemplateMixinFields3
 	notificationtemplateMixinFields5 := notificationtemplateMixin[5].Fields()
 	_ = notificationtemplateMixinFields5
+	notificationtemplateMixinFields6 := notificationtemplateMixin[6].Fields()
+	_ = notificationtemplateMixinFields6
 	notificationtemplateFields := schema.NotificationTemplate{}.Fields()
 	_ = notificationtemplateFields
 	// notificationtemplateDescCreatedAt is the schema descriptor for created_at field.
@@ -4821,12 +4843,18 @@ func init() {
 	notificationtemplate.DefaultUpdatedAt = notificationtemplateDescUpdatedAt.Default.(func() time.Time)
 	// notificationtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	notificationtemplate.UpdateDefaultUpdatedAt = notificationtemplateDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationtemplateDescRevision is the schema descriptor for revision field.
+	notificationtemplateDescRevision := notificationtemplateMixinFields3[0].Descriptor()
+	// notificationtemplate.DefaultRevision holds the default value on creation for the revision field.
+	notificationtemplate.DefaultRevision = notificationtemplateDescRevision.Default.(string)
+	// notificationtemplate.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	notificationtemplate.RevisionValidator = notificationtemplateDescRevision.Validators[0].(func(string) error)
 	// notificationtemplateDescOwnerID is the schema descriptor for owner_id field.
-	notificationtemplateDescOwnerID := notificationtemplateMixinFields4[0].Descriptor()
+	notificationtemplateDescOwnerID := notificationtemplateMixinFields5[0].Descriptor()
 	// notificationtemplate.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	notificationtemplate.OwnerIDValidator = notificationtemplateDescOwnerID.Validators[0].(func(string) error)
 	// notificationtemplateDescSystemOwned is the schema descriptor for system_owned field.
-	notificationtemplateDescSystemOwned := notificationtemplateMixinFields5[0].Descriptor()
+	notificationtemplateDescSystemOwned := notificationtemplateMixinFields6[0].Descriptor()
 	// notificationtemplate.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	notificationtemplate.DefaultSystemOwned = notificationtemplateDescSystemOwned.Default.(bool)
 	// notificationtemplateDescKey is the schema descriptor for key field.
@@ -7856,35 +7884,35 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescPrimaryColor is the schema descriptor for primary_color field.
-	trustcentersettingDescPrimaryColor := trustcentersettingFields[10].Descriptor()
+	trustcentersettingDescPrimaryColor := trustcentersettingFields[11].Descriptor()
 	// trustcentersetting.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
 	trustcentersetting.PrimaryColorValidator = trustcentersettingDescPrimaryColor.Validators[0].(func(string) error)
 	// trustcentersettingDescForegroundColor is the schema descriptor for foreground_color field.
-	trustcentersettingDescForegroundColor := trustcentersettingFields[12].Descriptor()
+	trustcentersettingDescForegroundColor := trustcentersettingFields[13].Descriptor()
 	// trustcentersetting.ForegroundColorValidator is a validator for the "foreground_color" field. It is called by the builders before save.
 	trustcentersetting.ForegroundColorValidator = trustcentersettingDescForegroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescBackgroundColor is the schema descriptor for background_color field.
-	trustcentersettingDescBackgroundColor := trustcentersettingFields[13].Descriptor()
+	trustcentersettingDescBackgroundColor := trustcentersettingFields[14].Descriptor()
 	// trustcentersetting.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
 	trustcentersetting.BackgroundColorValidator = trustcentersettingDescBackgroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescAccentColor is the schema descriptor for accent_color field.
-	trustcentersettingDescAccentColor := trustcentersettingFields[14].Descriptor()
+	trustcentersettingDescAccentColor := trustcentersettingFields[15].Descriptor()
 	// trustcentersetting.AccentColorValidator is a validator for the "accent_color" field. It is called by the builders before save.
 	trustcentersetting.AccentColorValidator = trustcentersettingDescAccentColor.Validators[0].(func(string) error)
 	// trustcentersettingDescSecondaryBackgroundColor is the schema descriptor for secondary_background_color field.
-	trustcentersettingDescSecondaryBackgroundColor := trustcentersettingFields[15].Descriptor()
+	trustcentersettingDescSecondaryBackgroundColor := trustcentersettingFields[16].Descriptor()
 	// trustcentersetting.SecondaryBackgroundColorValidator is a validator for the "secondary_background_color" field. It is called by the builders before save.
 	trustcentersetting.SecondaryBackgroundColorValidator = trustcentersettingDescSecondaryBackgroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescSecondaryForegroundColor is the schema descriptor for secondary_foreground_color field.
-	trustcentersettingDescSecondaryForegroundColor := trustcentersettingFields[16].Descriptor()
+	trustcentersettingDescSecondaryForegroundColor := trustcentersettingFields[17].Descriptor()
 	// trustcentersetting.SecondaryForegroundColorValidator is a validator for the "secondary_foreground_color" field. It is called by the builders before save.
 	trustcentersetting.SecondaryForegroundColorValidator = trustcentersettingDescSecondaryForegroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescRemoveBranding is the schema descriptor for remove_branding field.
-	trustcentersettingDescRemoveBranding := trustcentersettingFields[18].Descriptor()
+	trustcentersettingDescRemoveBranding := trustcentersettingFields[19].Descriptor()
 	// trustcentersetting.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
 	trustcentersetting.DefaultRemoveBranding = trustcentersettingDescRemoveBranding.Default.(bool)
 	// trustcentersettingDescCompanyDomain is the schema descriptor for company_domain field.
-	trustcentersettingDescCompanyDomain := trustcentersettingFields[19].Descriptor()
+	trustcentersettingDescCompanyDomain := trustcentersettingFields[20].Descriptor()
 	// trustcentersetting.CompanyDomainValidator is a validator for the "company_domain" field. It is called by the builders before save.
 	trustcentersetting.CompanyDomainValidator = func() func(string) error {
 		validators := trustcentersettingDescCompanyDomain.Validators
@@ -7902,15 +7930,15 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescSecurityContact is the schema descriptor for security_contact field.
-	trustcentersettingDescSecurityContact := trustcentersettingFields[20].Descriptor()
+	trustcentersettingDescSecurityContact := trustcentersettingFields[21].Descriptor()
 	// trustcentersetting.SecurityContactValidator is a validator for the "security_contact" field. It is called by the builders before save.
 	trustcentersetting.SecurityContactValidator = trustcentersettingDescSecurityContact.Validators[0].(func(string) error)
 	// trustcentersettingDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
-	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[21].Descriptor()
+	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[22].Descriptor()
 	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
 	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
-	trustcentersettingDescStatusPageURL := trustcentersettingFields[22].Descriptor()
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[23].Descriptor()
 	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	trustcentersetting.StatusPageURLValidator = func() func(string) error {
 		validators := trustcentersettingDescStatusPageURL.Validators

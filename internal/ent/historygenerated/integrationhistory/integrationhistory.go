@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -73,6 +74,18 @@ const (
 	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldDefinitionID holds the string denoting the definition_id field in the database.
+	FieldDefinitionID = "definition_id"
+	// FieldDefinitionVersion holds the string denoting the definition_version field in the database.
+	FieldDefinitionVersion = "definition_version"
+	// FieldDefinitionSlug holds the string denoting the definition_slug field in the database.
+	FieldDefinitionSlug = "definition_slug"
+	// FieldFamily holds the string denoting the family field in the database.
+	FieldFamily = "family"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldProviderMetadataSnapshot holds the string denoting the provider_metadata_snapshot field in the database.
+	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// Table holds the table name of the integrationhistory in the database.
 	Table = "integration_history"
 )
@@ -107,6 +120,12 @@ var Columns = []string{
 	FieldConfig,
 	FieldProviderState,
 	FieldMetadata,
+	FieldDefinitionID,
+	FieldDefinitionVersion,
+	FieldDefinitionSlug,
+	FieldFamily,
+	FieldStatus,
+	FieldProviderMetadataSnapshot,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -151,6 +170,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("integrationhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultStatus enums.IntegrationStatus = "PENDING"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.IntegrationStatus) error {
+	switch s.String() {
+	case "PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED":
+		return nil
+	default:
+		return fmt.Errorf("integrationhistory: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -272,9 +303,41 @@ func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
+// ByDefinitionID orders the results by the definition_id field.
+func ByDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefinitionID, opts...).ToFunc()
+}
+
+// ByDefinitionVersion orders the results by the definition_version field.
+func ByDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefinitionVersion, opts...).ToFunc()
+}
+
+// ByDefinitionSlug orders the results by the definition_slug field.
+func ByDefinitionSlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefinitionSlug, opts...).ToFunc()
+}
+
+// ByFamily orders the results by the family field.
+func ByFamily(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFamily, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.IntegrationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.IntegrationStatus)(nil)
+	// enums.IntegrationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.IntegrationStatus)(nil)
 )

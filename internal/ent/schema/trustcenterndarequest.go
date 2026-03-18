@@ -181,7 +181,7 @@ func (TrustCenterNDARequest) Policy() ent.Policy {
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
-			entfga.CheckEditAccess[*generated.TrustCenterNDARequestMutation](),
+			entfga.CheckEditAndDeleteAccess[*generated.TrustCenterNDARequestMutation](),
 		),
 	)
 }

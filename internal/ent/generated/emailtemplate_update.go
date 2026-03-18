@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -107,6 +108,26 @@ func (_u *EmailTemplateUpdate) SetNillableDeletedBy(v *string) *EmailTemplateUpd
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *EmailTemplateUpdate) ClearDeletedBy() *EmailTemplateUpdate {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetRevision sets the "revision" field.
+func (_u *EmailTemplateUpdate) SetRevision(v string) *EmailTemplateUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_u *EmailTemplateUpdate) SetNillableRevision(v *string) *EmailTemplateUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
+	}
+	return _u
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (_u *EmailTemplateUpdate) ClearRevision() *EmailTemplateUpdate {
+	_u.mutation.ClearRevision()
 	return _u
 }
 
@@ -377,6 +398,38 @@ func (_u *EmailTemplateUpdate) AddVersion(v int) *EmailTemplateUpdate {
 	return _u
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_u *EmailTemplateUpdate) SetTemplateContext(v enums.TemplateContext) *EmailTemplateUpdate {
+	_u.mutation.SetTemplateContext(v)
+	return _u
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_u *EmailTemplateUpdate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateUpdate {
+	if v != nil {
+		_u.SetTemplateContext(*v)
+	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *EmailTemplateUpdate) ClearTemplateContext() *EmailTemplateUpdate {
+	_u.mutation.ClearTemplateContext()
+	return _u
+}
+
+// SetDefaults sets the "defaults" field.
+func (_u *EmailTemplateUpdate) SetDefaults(v map[string]interface{}) *EmailTemplateUpdate {
+	_u.mutation.SetDefaults(v)
+	return _u
+}
+
+// ClearDefaults clears the value of the "defaults" field.
+func (_u *EmailTemplateUpdate) ClearDefaults() *EmailTemplateUpdate {
+	_u.mutation.ClearDefaults()
+	return _u
+}
+
 // SetEmailBrandingID sets the "email_branding_id" field.
 func (_u *EmailTemplateUpdate) SetEmailBrandingID(v string) *EmailTemplateUpdate {
 	_u.mutation.SetEmailBrandingID(v)
@@ -507,6 +560,21 @@ func (_u *EmailTemplateUpdate) AddNotificationTemplates(v ...*NotificationTempla
 	return _u.AddNotificationTemplateIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *EmailTemplateUpdate) AddFileIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *EmailTemplateUpdate) AddFiles(v ...*File) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
 // Mutation returns the EmailTemplateMutation object of the builder.
 func (_u *EmailTemplateUpdate) Mutation() *EmailTemplateMutation {
 	return _u.mutation
@@ -578,6 +646,27 @@ func (_u *EmailTemplateUpdate) RemoveNotificationTemplates(v ...*NotificationTem
 	return _u.RemoveNotificationTemplateIDs(ids...)
 }
 
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *EmailTemplateUpdate) ClearFiles() *EmailTemplateUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *EmailTemplateUpdate) RemoveFileIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *EmailTemplateUpdate) RemoveFiles(v ...*File) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *EmailTemplateUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -622,6 +711,11 @@ func (_u *EmailTemplateUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *EmailTemplateUpdate) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
+		if err := emailtemplate.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.revision": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Key(); ok {
 		if err := emailtemplate.KeyValidator(v); err != nil {
 			return &ValidationError{Name: "key", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.key": %w`, err)}
@@ -635,6 +729,11 @@ func (_u *EmailTemplateUpdate) check() error {
 	if v, ok := _u.mutation.Format(); ok {
 		if err := emailtemplate.FormatValidator(v); err != nil {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.format": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TemplateContext(); ok {
+		if err := emailtemplate.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.template_context": %w`, err)}
 		}
 	}
 	return nil
@@ -687,6 +786,12 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(emailtemplate.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Revision(); ok {
+		_spec.SetField(emailtemplate.FieldRevision, field.TypeString, value)
+	}
+	if _u.mutation.RevisionCleared() {
+		_spec.ClearField(emailtemplate.FieldRevision, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(emailtemplate.FieldSystemOwned, field.TypeBool)
@@ -771,6 +876,18 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if value, ok := _u.mutation.AddedVersion(); ok {
 		_spec.AddField(emailtemplate.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.TemplateContext(); ok {
+		_spec.SetField(emailtemplate.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(emailtemplate.FieldTemplateContext, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.Defaults(); ok {
+		_spec.SetField(emailtemplate.FieldDefaults, field.TypeJSON, value)
+	}
+	if _u.mutation.DefaultsCleared() {
+		_spec.ClearField(emailtemplate.FieldDefaults, field.TypeJSON)
 	}
 	if _u.mutation.EmailBrandingCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -992,6 +1109,54 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.EmailTemplate
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1085,6 +1250,26 @@ func (_u *EmailTemplateUpdateOne) SetNillableDeletedBy(v *string) *EmailTemplate
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *EmailTemplateUpdateOne) ClearDeletedBy() *EmailTemplateUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetRevision sets the "revision" field.
+func (_u *EmailTemplateUpdateOne) SetRevision(v string) *EmailTemplateUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_u *EmailTemplateUpdateOne) SetNillableRevision(v *string) *EmailTemplateUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
+	}
+	return _u
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (_u *EmailTemplateUpdateOne) ClearRevision() *EmailTemplateUpdateOne {
+	_u.mutation.ClearRevision()
 	return _u
 }
 
@@ -1355,6 +1540,38 @@ func (_u *EmailTemplateUpdateOne) AddVersion(v int) *EmailTemplateUpdateOne {
 	return _u
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_u *EmailTemplateUpdateOne) SetTemplateContext(v enums.TemplateContext) *EmailTemplateUpdateOne {
+	_u.mutation.SetTemplateContext(v)
+	return _u
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_u *EmailTemplateUpdateOne) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateUpdateOne {
+	if v != nil {
+		_u.SetTemplateContext(*v)
+	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *EmailTemplateUpdateOne) ClearTemplateContext() *EmailTemplateUpdateOne {
+	_u.mutation.ClearTemplateContext()
+	return _u
+}
+
+// SetDefaults sets the "defaults" field.
+func (_u *EmailTemplateUpdateOne) SetDefaults(v map[string]interface{}) *EmailTemplateUpdateOne {
+	_u.mutation.SetDefaults(v)
+	return _u
+}
+
+// ClearDefaults clears the value of the "defaults" field.
+func (_u *EmailTemplateUpdateOne) ClearDefaults() *EmailTemplateUpdateOne {
+	_u.mutation.ClearDefaults()
+	return _u
+}
+
 // SetEmailBrandingID sets the "email_branding_id" field.
 func (_u *EmailTemplateUpdateOne) SetEmailBrandingID(v string) *EmailTemplateUpdateOne {
 	_u.mutation.SetEmailBrandingID(v)
@@ -1485,6 +1702,21 @@ func (_u *EmailTemplateUpdateOne) AddNotificationTemplates(v ...*NotificationTem
 	return _u.AddNotificationTemplateIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *EmailTemplateUpdateOne) AddFileIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *EmailTemplateUpdateOne) AddFiles(v ...*File) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
+}
+
 // Mutation returns the EmailTemplateMutation object of the builder.
 func (_u *EmailTemplateUpdateOne) Mutation() *EmailTemplateMutation {
 	return _u.mutation
@@ -1556,6 +1788,27 @@ func (_u *EmailTemplateUpdateOne) RemoveNotificationTemplates(v ...*Notification
 	return _u.RemoveNotificationTemplateIDs(ids...)
 }
 
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *EmailTemplateUpdateOne) ClearFiles() *EmailTemplateUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *EmailTemplateUpdateOne) RemoveFileIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *EmailTemplateUpdateOne) RemoveFiles(v ...*File) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
+}
+
 // Where appends a list predicates to the EmailTemplateUpdate builder.
 func (_u *EmailTemplateUpdateOne) Where(ps ...predicate.EmailTemplate) *EmailTemplateUpdateOne {
 	_u.mutation.Where(ps...)
@@ -1613,6 +1866,11 @@ func (_u *EmailTemplateUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *EmailTemplateUpdateOne) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
+		if err := emailtemplate.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.revision": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Key(); ok {
 		if err := emailtemplate.KeyValidator(v); err != nil {
 			return &ValidationError{Name: "key", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.key": %w`, err)}
@@ -1626,6 +1884,11 @@ func (_u *EmailTemplateUpdateOne) check() error {
 	if v, ok := _u.mutation.Format(); ok {
 		if err := emailtemplate.FormatValidator(v); err != nil {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.format": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TemplateContext(); ok {
+		if err := emailtemplate.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.template_context": %w`, err)}
 		}
 	}
 	return nil
@@ -1695,6 +1958,12 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(emailtemplate.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Revision(); ok {
+		_spec.SetField(emailtemplate.FieldRevision, field.TypeString, value)
+	}
+	if _u.mutation.RevisionCleared() {
+		_spec.ClearField(emailtemplate.FieldRevision, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(emailtemplate.FieldSystemOwned, field.TypeBool)
@@ -1779,6 +2048,18 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 	}
 	if value, ok := _u.mutation.AddedVersion(); ok {
 		_spec.AddField(emailtemplate.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.TemplateContext(); ok {
+		_spec.SetField(emailtemplate.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(emailtemplate.FieldTemplateContext, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.Defaults(); ok {
+		_spec.SetField(emailtemplate.FieldDefaults, field.TypeJSON, value)
+	}
+	if _u.mutation.DefaultsCleared() {
+		_spec.ClearField(emailtemplate.FieldDefaults, field.TypeJSON)
 	}
 	if _u.mutation.EmailBrandingCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1995,6 +2276,54 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 			},
 		}
 		edge.Schema = _u.schemaConfig.NotificationTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

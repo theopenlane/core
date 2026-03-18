@@ -57,6 +57,8 @@ type TrustCenterSettingHistory struct {
 	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
 	// The local favicon file id, takes precedence over the favicon remote URL
 	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
+	// Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+	HeroImageLocalFileID *string `json:"hero_image_local_file_id,omitempty"`
 	// Theme mode for the trust center
 	ThemeMode enums.TrustCenterThemeMode `json:"theme_mode,omitempty"`
 	// primary color for the trust center
@@ -97,7 +99,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldStatusPageURL:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -233,6 +235,13 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.FaviconLocalFileID = new(string)
 				*_m.FaviconLocalFileID = value.String
+			}
+		case trustcentersettinghistory.FieldHeroImageLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field hero_image_local_file_id", values[i])
+			} else if value.Valid {
+				_m.HeroImageLocalFileID = new(string)
+				*_m.HeroImageLocalFileID = value.String
 			}
 		case trustcentersettinghistory.FieldThemeMode:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -416,6 +425,11 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.FaviconLocalFileID; v != nil {
 		builder.WriteString("favicon_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.HeroImageLocalFileID; v != nil {
+		builder.WriteString("hero_image_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

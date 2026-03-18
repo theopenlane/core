@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_TrustCenterPreviewSettingCreatePayload_
 				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
 			case "faviconLocalFileID":
 				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
+			case "heroImageLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
 			case "themeMode":
 				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
 			case "primaryColor":
@@ -115,6 +117,8 @@ func (ec *executionContext) fieldContext_TrustCenterPreviewSettingCreatePayload_
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":
 				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
+			case "heroImageFile":
+				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},
@@ -137,7 +141,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "title", "overview", "primaryColor", "logoRemoteURL", "logoFileID", "faviconRemoteURL", "faviconFileID", "themeMode", "font", "foregroundColor", "backgroundColor", "accentColor"}
+	fieldsInOrder := [...]string{"trustCenterID", "title", "overview", "primaryColor", "logoRemoteURL", "logoFileID", "faviconRemoteURL", "faviconFileID", "themeMode", "font", "foregroundColor", "backgroundColor", "accentColor", "heroImageFileID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -235,6 +239,13 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 				return it, err
 			}
 			it.AccentColor = data
+		case "heroImageFileID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heroImageFileID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HeroImageFileID = data
 		}
 	}
 	return it, nil

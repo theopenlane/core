@@ -286,6 +286,26 @@ func (_u *TrustCenterSettingUpdate) ClearFaviconLocalFileID() *TrustCenterSettin
 	return _u
 }
 
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingUpdate) SetHeroImageLocalFileID(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetHeroImageLocalFileID(v)
+	return _u
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetHeroImageLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingUpdate) ClearHeroImageLocalFileID() *TrustCenterSettingUpdate {
+	_u.mutation.ClearHeroImageLocalFileID()
+	return _u
+}
+
 // SetThemeMode sets the "theme_mode" field.
 func (_u *TrustCenterSettingUpdate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
 	_u.mutation.SetThemeMode(v)
@@ -614,6 +634,25 @@ func (_u *TrustCenterSettingUpdate) SetFaviconFile(v *File) *TrustCenterSettingU
 	return _u.SetFaviconFileID(v.ID)
 }
 
+// SetHeroImageFileID sets the "hero_image_file" edge to the File entity by ID.
+func (_u *TrustCenterSettingUpdate) SetHeroImageFileID(id string) *TrustCenterSettingUpdate {
+	_u.mutation.SetHeroImageFileID(id)
+	return _u
+}
+
+// SetNillableHeroImageFileID sets the "hero_image_file" edge to the File entity by ID if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableHeroImageFileID(id *string) *TrustCenterSettingUpdate {
+	if id != nil {
+		_u = _u.SetHeroImageFileID(*id)
+	}
+	return _u
+}
+
+// SetHeroImageFile sets the "hero_image_file" edge to the File entity.
+func (_u *TrustCenterSettingUpdate) SetHeroImageFile(v *File) *TrustCenterSettingUpdate {
+	return _u.SetHeroImageFileID(v.ID)
+}
+
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
@@ -670,6 +709,12 @@ func (_u *TrustCenterSettingUpdate) ClearLogoFile() *TrustCenterSettingUpdate {
 // ClearFaviconFile clears the "favicon_file" edge to the File entity.
 func (_u *TrustCenterSettingUpdate) ClearFaviconFile() *TrustCenterSettingUpdate {
 	_u.mutation.ClearFaviconFile()
+	return _u
+}
+
+// ClearHeroImageFile clears the "hero_image_file" edge to the File entity.
+func (_u *TrustCenterSettingUpdate) ClearHeroImageFile() *TrustCenterSettingUpdate {
+	_u.mutation.ClearHeroImageFile()
 	return _u
 }
 
@@ -1129,6 +1174,37 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.HeroImageFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.HeroImageFileTable,
+			Columns: []string{trustcentersetting.HeroImageFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.HeroImageFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.HeroImageFileTable,
+			Columns: []string{trustcentersetting.HeroImageFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSetting
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1402,6 +1478,26 @@ func (_u *TrustCenterSettingUpdateOne) SetNillableFaviconLocalFileID(v *string) 
 // ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
 func (_u *TrustCenterSettingUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearFaviconLocalFileID()
+	return _u
+}
+
+// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingUpdateOne) SetHeroImageLocalFileID(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetHeroImageLocalFileID(v)
+	return _u
+}
+
+// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetHeroImageLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
+func (_u *TrustCenterSettingUpdateOne) ClearHeroImageLocalFileID() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearHeroImageLocalFileID()
 	return _u
 }
 
@@ -1733,6 +1829,25 @@ func (_u *TrustCenterSettingUpdateOne) SetFaviconFile(v *File) *TrustCenterSetti
 	return _u.SetFaviconFileID(v.ID)
 }
 
+// SetHeroImageFileID sets the "hero_image_file" edge to the File entity by ID.
+func (_u *TrustCenterSettingUpdateOne) SetHeroImageFileID(id string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetHeroImageFileID(id)
+	return _u
+}
+
+// SetNillableHeroImageFileID sets the "hero_image_file" edge to the File entity by ID if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableHeroImageFileID(id *string) *TrustCenterSettingUpdateOne {
+	if id != nil {
+		_u = _u.SetHeroImageFileID(*id)
+	}
+	return _u
+}
+
+// SetHeroImageFile sets the "hero_image_file" edge to the File entity.
+func (_u *TrustCenterSettingUpdateOne) SetHeroImageFile(v *File) *TrustCenterSettingUpdateOne {
+	return _u.SetHeroImageFileID(v.ID)
+}
+
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
@@ -1789,6 +1904,12 @@ func (_u *TrustCenterSettingUpdateOne) ClearLogoFile() *TrustCenterSettingUpdate
 // ClearFaviconFile clears the "favicon_file" edge to the File entity.
 func (_u *TrustCenterSettingUpdateOne) ClearFaviconFile() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearFaviconFile()
+	return _u
+}
+
+// ClearHeroImageFile clears the "hero_image_file" edge to the File entity.
+func (_u *TrustCenterSettingUpdateOne) ClearHeroImageFile() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearHeroImageFile()
 	return _u
 }
 
@@ -2267,6 +2388,37 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 			Inverse: false,
 			Table:   trustcentersetting.FaviconFileTable,
 			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.HeroImageFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.HeroImageFileTable,
+			Columns: []string{trustcentersetting.HeroImageFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.HeroImageFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.HeroImageFileTable,
+			Columns: []string{trustcentersetting.HeroImageFileColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
