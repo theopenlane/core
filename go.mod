@@ -68,7 +68,7 @@ require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
-	github.com/nyaruka/phonenumbers v1.6.11
+	github.com/nyaruka/phonenumbers v1.6.12
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.5
 	github.com/pkg/errors v0.9.1
@@ -88,7 +88,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.4.1
-	github.com/theopenlane/core/common v1.0.12
+	github.com/theopenlane/core/common v1.0.13
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
