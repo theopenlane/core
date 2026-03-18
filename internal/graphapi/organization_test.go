@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
@@ -24,6 +25,21 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
+
+func waitForCondition(t *testing.T, condition func() bool, msg string) {
+	t.Helper()
+
+	deadline := time.Now().Add(5 * time.Second)
+	for time.Now().Before(deadline) {
+		if condition() {
+			return
+		}
+
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	t.Fatalf("timed out waiting for condition: %s", msg)
+}
 
 func TestQueryOrganization(t *testing.T) {
 	t.Parallel()
