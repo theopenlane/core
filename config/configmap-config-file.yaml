@@ -573,6 +573,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.authz.modelfile }}
       modelfile: {{ .Values.openlane.coreConfiguration.authz.modelfile | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.authz.modulefile }}
+      modulefile: {{ .Values.openlane.coreConfiguration.authz.modulefile | quote }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.authz.credentials }}
       credentials:
         {{- if .Values.openlane.coreConfiguration.authz.credentials.clientid }}

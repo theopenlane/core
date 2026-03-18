@@ -290,6 +290,8 @@ coreConfiguration:
     createnewmodel: false  # @schema type:boolean; default:false
     # -- path to the fga model file
     modelfile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
+    # -- path to the fga module file
+    modulefile: ""  # @schema type:string
     # -- credentials for the openFGA client
     credentials:
       # -- client id for the openFGA client
