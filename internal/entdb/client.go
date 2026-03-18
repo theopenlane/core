@@ -25,6 +25,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/gala"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
@@ -53,15 +56,19 @@ type client struct {
 // options for creating the ent client
 type Option func(*ent.Client)
 
-// WithEventer adds the eventer hooks and listeners to the ent client
-func WithEventer(eventer *hooks.Eventer) Option {
+// WithWorkflows wires workflow-related hooks and optionally configures the workflow engine.
+func WithWorkflows(workflowConfig *workflows.Config, galaRuntime *gala.Gala) Option {
 	return func(c *ent.Client) {
-		eventer.Initialize(c)
-		hooks.RegisterGlobalHooks(c, eventer)
+		if workflowConfig != nil && workflowConfig.Enabled {
+			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, galaRuntime, workflowConfig)
+			if err != nil {
+				log.Fatal().Err(err).Msg("failed to create workflow engine")
+			}
 
-		if err := hooks.RegisterListeners(eventer); err != nil {
-			log.Fatal().Err(err).Msg("failed registering listeners")
+			c.WorkflowEngine = wfEngine
 		}
+
+		hooks.RegisterGlobalHooks(c)
 	}
 }
 
@@ -403,7 +410,7 @@ func NewTestFixture() *testutils.TestFixture {
 	}
 
 	if testDBContainerExpiry == "" {
-		testDBContainerExpiry = "5" // default expiry of 5 minutes
+		testDBContainerExpiry = "10" // default expiry of 10 minutes
 	}
 
 	expiry, err := strconv.Atoi(testDBContainerExpiry)
@@ -416,7 +423,8 @@ func NewTestFixture() *testutils.TestFixture {
 		testutils.WithMaxConn(200)) //nolint:mnd
 }
 
-// NewTestClient creates a entdb client that can be used for TEST purposes ONLY
+// NewTestClient creates an entdb client that can be used for TEST purposes ONLY.
+// clientOpts allows passing entdb options like WithWorkflows; pass nil if not needed.
 func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, clientOpts []Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
 		Debug:           true,
