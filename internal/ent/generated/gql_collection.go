@@ -75933,6 +75933,21 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
 			}
+
+		case "heroImageFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withHeroImageFile = query
+			if _, ok := fieldSeen[trustcentersetting.FieldHeroImageLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldHeroImageLocalFileID)
+				fieldSeen[trustcentersetting.FieldHeroImageLocalFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcentersetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldCreatedAt)
@@ -75997,6 +76012,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcentersetting.FieldFaviconLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
+			}
+		case "heroImageLocalFileID":
+			if _, ok := fieldSeen[trustcentersetting.FieldHeroImageLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldHeroImageLocalFileID)
+				fieldSeen[trustcentersetting.FieldHeroImageLocalFileID] = struct{}{}
 			}
 		case "themeMode":
 			if _, ok := fieldSeen[trustcentersetting.FieldThemeMode]; !ok {

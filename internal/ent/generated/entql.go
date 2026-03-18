@@ -3298,6 +3298,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldLogoLocalFileID:          {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
 			trustcentersetting.FieldFaviconRemoteURL:         {Type: field.TypeString, Column: trustcentersetting.FieldFaviconRemoteURL},
 			trustcentersetting.FieldFaviconLocalFileID:       {Type: field.TypeString, Column: trustcentersetting.FieldFaviconLocalFileID},
+			trustcentersetting.FieldHeroImageLocalFileID:     {Type: field.TypeString, Column: trustcentersetting.FieldHeroImageLocalFileID},
 			trustcentersetting.FieldThemeMode:                {Type: field.TypeEnum, Column: trustcentersetting.FieldThemeMode},
 			trustcentersetting.FieldPrimaryColor:             {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
 			trustcentersetting.FieldFont:                     {Type: field.TypeString, Column: trustcentersetting.FieldFont},
@@ -15420,6 +15421,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   trustcentersetting.FaviconFileTable,
 			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
+	)
+	graph.MustAddE(
+		"hero_image_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.HeroImageFileTable,
+			Columns: []string{trustcentersetting.HeroImageFileColumn},
 			Bidi:    false,
 		},
 		"TrustCenterSetting",
@@ -44043,6 +44056,11 @@ func (f *TrustCenterSettingFilter) WhereFaviconLocalFileID(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldFaviconLocalFileID))
 }
 
+// WhereHeroImageLocalFileID applies the entql string predicate on the hero_image_local_file_id field.
+func (f *TrustCenterSettingFilter) WhereHeroImageLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldHeroImageLocalFileID))
+}
+
 // WhereThemeMode applies the entql string predicate on the theme_mode field.
 func (f *TrustCenterSettingFilter) WhereThemeMode(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldThemeMode))
@@ -44163,6 +44181,20 @@ func (f *TrustCenterSettingFilter) WhereHasFaviconFile() {
 // WhereHasFaviconFileWith applies a predicate to check if query has an edge favicon_file with a given conditions (other predicates).
 func (f *TrustCenterSettingFilter) WhereHasFaviconFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("favicon_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasHeroImageFile applies a predicate to check if query has an edge hero_image_file.
+func (f *TrustCenterSettingFilter) WhereHasHeroImageFile() {
+	f.Where(entql.HasEdge("hero_image_file"))
+}
+
+// WhereHasHeroImageFileWith applies a predicate to check if query has an edge hero_image_file with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasHeroImageFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("hero_image_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

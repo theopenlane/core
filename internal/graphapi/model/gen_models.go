@@ -632,6 +632,8 @@ type CreateTrustCenterPreviewSettingInput struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
+	// hero image local file ID
+	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
 }
 
 // Return response for createBulkCustomDomain mutation

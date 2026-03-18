@@ -8732,6 +8732,8 @@ type CreateTrustCenterPreviewSettingInput struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
+	// hero image local file ID
+	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
 }
 
 // CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -8781,6 +8783,7 @@ type CreateTrustCenterSettingInput struct {
 	EditorIDs       []string `json:"editorIDs,omitempty"`
 	LogoFileID      *string  `json:"logoFileID,omitempty"`
 	FaviconFileID   *string  `json:"faviconFileID,omitempty"`
+	HeroImageFileID *string  `json:"heroImageFileID,omitempty"`
 }
 
 // CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -36366,6 +36369,8 @@ type TrustCenterSetting struct {
 	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
 	// The local favicon file id, takes precedence over the favicon remote URL
 	FaviconLocalFileID *string `json:"faviconLocalFileID,omitempty"`
+	// Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+	HeroImageLocalFileID *string `json:"heroImageLocalFileID,omitempty"`
 	// Theme mode for the trust center
 	ThemeMode *enums.TrustCenterThemeMode `json:"themeMode,omitempty"`
 	// primary color for the trust center
@@ -36398,6 +36403,7 @@ type TrustCenterSetting struct {
 	Editors       *GroupConnection `json:"editors"`
 	LogoFile      *File            `json:"logoFile,omitempty"`
 	FaviconFile   *File            `json:"faviconFile,omitempty"`
+	HeroImageFile *File            `json:"heroImageFile,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -36667,6 +36673,22 @@ type TrustCenterSettingWhereInput struct {
 	FaviconLocalFileIDNotNil       *bool    `json:"faviconLocalFileIDNotNil,omitempty"`
 	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
 	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
+	// hero_image_local_file_id field predicates
+	HeroImageLocalFileID             *string  `json:"heroImageLocalFileID,omitempty"`
+	HeroImageLocalFileIdneq          *string  `json:"heroImageLocalFileIDNEQ,omitempty"`
+	HeroImageLocalFileIDIn           []string `json:"heroImageLocalFileIDIn,omitempty"`
+	HeroImageLocalFileIDNotIn        []string `json:"heroImageLocalFileIDNotIn,omitempty"`
+	HeroImageLocalFileIdgt           *string  `json:"heroImageLocalFileIDGT,omitempty"`
+	HeroImageLocalFileIdgte          *string  `json:"heroImageLocalFileIDGTE,omitempty"`
+	HeroImageLocalFileIdlt           *string  `json:"heroImageLocalFileIDLT,omitempty"`
+	HeroImageLocalFileIdlte          *string  `json:"heroImageLocalFileIDLTE,omitempty"`
+	HeroImageLocalFileIDContains     *string  `json:"heroImageLocalFileIDContains,omitempty"`
+	HeroImageLocalFileIDHasPrefix    *string  `json:"heroImageLocalFileIDHasPrefix,omitempty"`
+	HeroImageLocalFileIDHasSuffix    *string  `json:"heroImageLocalFileIDHasSuffix,omitempty"`
+	HeroImageLocalFileIDIsNil        *bool    `json:"heroImageLocalFileIDIsNil,omitempty"`
+	HeroImageLocalFileIDNotNil       *bool    `json:"heroImageLocalFileIDNotNil,omitempty"`
+	HeroImageLocalFileIDEqualFold    *string  `json:"heroImageLocalFileIDEqualFold,omitempty"`
+	HeroImageLocalFileIDContainsFold *string  `json:"heroImageLocalFileIDContainsFold,omitempty"`
 	// theme_mode field predicates
 	ThemeMode       *enums.TrustCenterThemeMode  `json:"themeMode,omitempty"`
 	ThemeModeNeq    *enums.TrustCenterThemeMode  `json:"themeModeNEQ,omitempty"`
@@ -36863,6 +36885,9 @@ type TrustCenterSettingWhereInput struct {
 	// favicon_file edge predicates
 	HasFaviconFile     *bool             `json:"hasFaviconFile,omitempty"`
 	HasFaviconFileWith []*FileWhereInput `json:"hasFaviconFileWith,omitempty"`
+	// hero_image_file edge predicates
+	HasHeroImageFile     *bool             `json:"hasHeroImageFile,omitempty"`
+	HasHeroImageFileWith []*FileWhereInput `json:"hasHeroImageFileWith,omitempty"`
 }
 
 type TrustCenterSubprocessor struct {
@@ -43066,6 +43091,8 @@ type UpdateTrustCenterSettingInput struct {
 	ClearLogoFile         *bool    `json:"clearLogoFile,omitempty"`
 	FaviconFileID         *string  `json:"faviconFileID,omitempty"`
 	ClearFaviconFile      *bool    `json:"clearFaviconFile,omitempty"`
+	HeroImageFileID       *string  `json:"heroImageFileID,omitempty"`
+	ClearHeroImageFile    *bool    `json:"clearHeroImageFile,omitempty"`
 }
 
 // UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.

@@ -13874,6 +13874,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID] = struct{}{}
 			}
+		case "heroImageLocalFileID":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldHeroImageLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldHeroImageLocalFileID)
+				fieldSeen[trustcentersettinghistory.FieldHeroImageLocalFileID] = struct{}{}
+			}
 		case "themeMode":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldThemeMode]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldThemeMode)

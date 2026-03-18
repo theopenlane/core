@@ -16,7 +16,7 @@ import (
 )
 
 // CreateTrustCenterPreviewSetting is the resolver for the createTrustCenterPreviewSetting field.
-func (r *mutationResolver) CreateTrustCenterPreviewSetting(ctx context.Context, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterPreviewSettingCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterPreviewSetting(ctx context.Context, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterPreviewSettingCreatePayload, error) {
 	transactionCtx := withTransactionalMutation(ctx)
 
 	// Get the trust center to verify it exists and get the owner ID

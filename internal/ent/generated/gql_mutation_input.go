@@ -25785,6 +25785,7 @@ type CreateTrustCenterSettingInput struct {
 	EditorIDs                []string
 	LogoFileID               *string
 	FaviconFileID            *string
+	HeroImageFileID          *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -25861,6 +25862,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.FaviconFileID; v != nil {
 		m.SetFaviconFileID(*v)
 	}
+	if v := i.HeroImageFileID; v != nil {
+		m.SetHeroImageFileID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterSettingInput on the TrustCenterSettingCreate builder.
@@ -25919,6 +25923,8 @@ type UpdateTrustCenterSettingInput struct {
 	LogoFileID                    *string
 	ClearFaviconFile              bool
 	FaviconFileID                 *string
+	ClearHeroImageFile            bool
+	HeroImageFileID               *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -26066,6 +26072,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.FaviconFileID; v != nil {
 		m.SetFaviconFileID(*v)
+	}
+	if i.ClearHeroImageFile {
+		m.ClearHeroImageFile()
+	}
+	if v := i.HeroImageFileID; v != nil {
+		m.SetHeroImageFileID(*v)
 	}
 }
 

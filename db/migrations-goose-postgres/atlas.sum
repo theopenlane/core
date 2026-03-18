@@ -1,4 +1,4 @@
-h1:nsQgyYdBn+ko1Tk9q781m2/LTr7ptZL4MTEQ50Z9YwY=
+h1:QzHlQfzQU8KohJMaSnkrPbZBB06WAjDWn4R2QkjH42g=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -69,5 +69,5 @@ h1:nsQgyYdBn+ko1Tk9q781m2/LTr7ptZL4MTEQ50Z9YwY=
 20260311180555_managed_group_avatar_history.sql h1:5xCNyNHOIupPjIdz/9S5o7oHikOD5lDBZJMp4UYhWJs=
 20260313193851_integrationsemailtemplates.sql h1:1CsXC89FKo2cvWT5gIo8UXxVsRUFPy7VnZ7FfiAIKU0=
 20260313193856_integrationsemailtemplates_history.sql h1:qul2RpNb6JbukXWpyZhXRKEpvtfAOnMIgwhr6wQH2PI=
-20260317153312_sla_definition.sql h1:Ftkt0yCtL+wQUbQYIyQAvOLldVDmm7/myB3BcLRc8Ws=
-20260317153320_sla_definition_history.sql h1:iuS1Vh019MonQJnh9LnABQJTDlDfeuwpe/K+KXlZNTQ=
+20260317230033_trustcenter_settings_hero_file.sql h1:peg/mW2/kPcnQZHLbh64CzFQPxX9X4UITWNKz6+sMXE=
+20260317230043_trustcenter_settings_hero_file_history.sql h1:bKaHFU1ltW6QzK8FAcoJ/nVS9VZU3u9TEt0pagqEFhs=

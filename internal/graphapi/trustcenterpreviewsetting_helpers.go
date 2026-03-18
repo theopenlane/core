@@ -36,6 +36,7 @@ func buildPreviewSettingCreateInput(trustCenterID string, input *model.CreateTru
 	createInput.LogoFileID = input.LogoFileID
 	createInput.FaviconRemoteURL = input.FaviconRemoteURL
 	createInput.FaviconFileID = input.FaviconFileID
+	createInput.HeroImageFileID = input.HeroImageFileID
 	createInput.ThemeMode = input.ThemeMode
 	createInput.Font = input.Font
 	createInput.ForegroundColor = input.ForegroundColor
@@ -54,6 +55,7 @@ func buildPreviewSettingUpdateInput(input model.CreateTrustCenterPreviewSettingI
 		LogoFileID:       input.LogoFileID,
 		FaviconRemoteURL: input.FaviconRemoteURL,
 		FaviconFileID:    input.FaviconFileID,
+		HeroImageFileID:  input.HeroImageFileID,
 		ThemeMode:        input.ThemeMode,
 		Font:             input.Font,
 		ForegroundColor:  input.ForegroundColor,

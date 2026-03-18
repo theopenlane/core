@@ -2734,6 +2734,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldLogoLocalFileID:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
 			trustcentersettinghistory.FieldFaviconRemoteURL:         {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
 			trustcentersettinghistory.FieldFaviconLocalFileID:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
+			trustcentersettinghistory.FieldHeroImageLocalFileID:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldHeroImageLocalFileID},
 			trustcentersettinghistory.FieldThemeMode:                {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
 			trustcentersettinghistory.FieldPrimaryColor:             {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
 			trustcentersettinghistory.FieldFont:                     {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
@@ -14750,6 +14751,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereFaviconRemoteURL(p entql.StringP)
 // WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
 func (f *TrustCenterSettingHistoryFilter) WhereFaviconLocalFileID(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldFaviconLocalFileID))
+}
+
+// WhereHeroImageLocalFileID applies the entql string predicate on the hero_image_local_file_id field.
+func (f *TrustCenterSettingHistoryFilter) WhereHeroImageLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldHeroImageLocalFileID))
 }
 
 // WhereThemeMode applies the entql string predicate on the theme_mode field.

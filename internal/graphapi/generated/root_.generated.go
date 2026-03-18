@@ -3473,8 +3473,8 @@ type ComplexityRoot struct {
 		CreateTrustCenterFaq                 func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
 		CreateTrustCenterNDARequest          func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
 		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
-		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
+		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
 		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
@@ -3826,8 +3826,8 @@ type ComplexityRoot struct {
 		UpdateTrustCenterNDARequest          func(childComplexity int, id string, input generated.UpdateTrustCenterNDARequestInput) int
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
+		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
@@ -6633,6 +6633,8 @@ type ComplexityRoot struct {
 		FaviconRemoteURL         func(childComplexity int) int
 		Font                     func(childComplexity int) int
 		ForegroundColor          func(childComplexity int) int
+		HeroImageFile            func(childComplexity int) int
+		HeroImageLocalFileID     func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		LogoFile                 func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
@@ -26049,7 +26051,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.createTrustCenterSetting":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterSetting == nil {
@@ -26061,7 +26063,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.createTrustCenterSubprocessor":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterSubprocessor == nil {
@@ -30280,7 +30282,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterSetting == nil {
@@ -30292,7 +30294,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSubprocessor":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterSubprocessor == nil {
@@ -46425,6 +46427,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.ForegroundColor(childComplexity), true
+
+	case "TrustCenterSetting.heroImageFile":
+		if e.ComplexityRoot.TrustCenterSetting.HeroImageFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.HeroImageFile(childComplexity), true
+
+	case "TrustCenterSetting.heroImageLocalFileID":
+		if e.ComplexityRoot.TrustCenterSetting.HeroImageLocalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.HeroImageLocalFileID(childComplexity), true
 
 	case "TrustCenterSetting.id":
 		if e.ComplexityRoot.TrustCenterSetting.ID == nil {
@@ -69237,6 +69253,7 @@ input CreateTrustCenterSettingInput {
   editorIDs: [ID!]
   logoFileID: ID
   faviconFileID: ID
+  heroImageFileID: ID
 }
 """
 CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -121649,6 +121666,10 @@ type TrustCenterSetting implements Node {
   """
   faviconLocalFileID: ID
   """
+  Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+  """
+  heroImageLocalFileID: ID
+  """
   Theme mode for the trust center
   """
   themeMode: TrustCenterSettingTrustCenterThemeMode
@@ -121768,6 +121789,7 @@ type TrustCenterSetting implements Node {
   ): GroupConnection!
   logoFile: File
   faviconFile: File
+  heroImageFile: File
 }
 """
 A connection to a list of items.
@@ -122079,6 +122101,24 @@ input TrustCenterSettingWhereInput {
   faviconLocalFileIDEqualFold: ID
   faviconLocalFileIDContainsFold: ID
   """
+  hero_image_local_file_id field predicates
+  """
+  heroImageLocalFileID: ID
+  heroImageLocalFileIDNEQ: ID
+  heroImageLocalFileIDIn: [ID!]
+  heroImageLocalFileIDNotIn: [ID!]
+  heroImageLocalFileIDGT: ID
+  heroImageLocalFileIDGTE: ID
+  heroImageLocalFileIDLT: ID
+  heroImageLocalFileIDLTE: ID
+  heroImageLocalFileIDContains: ID
+  heroImageLocalFileIDHasPrefix: ID
+  heroImageLocalFileIDHasSuffix: ID
+  heroImageLocalFileIDIsNil: Boolean
+  heroImageLocalFileIDNotNil: Boolean
+  heroImageLocalFileIDEqualFold: ID
+  heroImageLocalFileIDContainsFold: ID
+  """
   theme_mode field predicates
   """
   themeMode: TrustCenterSettingTrustCenterThemeMode
@@ -122310,6 +122350,11 @@ input TrustCenterSettingWhereInput {
   """
   hasFaviconFile: Boolean
   hasFaviconFileWith: [FileWhereInput!]
+  """
+  hero_image_file edge predicates
+  """
+  hasHeroImageFile: Boolean
+  hasHeroImageFileWith: [FileWhereInput!]
 }
 type TrustCenterSubprocessor implements Node {
   id: ID!
@@ -130607,6 +130652,8 @@ input UpdateTrustCenterSettingInput {
   clearLogoFile: Boolean
   faviconFileID: ID
   clearFaviconFile: Boolean
+  heroImageFileID: ID
+  clearHeroImageFile: Boolean
 }
 """
 UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
@@ -147618,6 +147665,7 @@ type TrustCenterNDARequestBulkDeletePayload {
     input: CreateTrustCenterPreviewSettingInput!
     logoFile: Upload
     faviconFile: Upload
+    heroImageFile: Upload
   ): TrustCenterPreviewSettingCreatePayload!
 }
 
@@ -147687,6 +147735,10 @@ input CreateTrustCenterPreviewSettingInput {
   accent color for the trust center
   """
   accentColor: String
+  """
+  hero image local file ID
+  """
+  heroImageFileID: ID
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {
@@ -147712,6 +147764,7 @@ extend type Mutation{
         input: CreateTrustCenterSettingInput!
         logoFile: Upload
         faviconFile: Upload
+        heroImageFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting by targeting the ID
@@ -147727,6 +147780,7 @@ extend type Mutation{
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
         faviconFile: Upload
+        heroImageFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Update an existing trustCenterSetting preview settings
@@ -147738,6 +147792,7 @@ extend type Mutation{
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
         faviconFile: Upload
+        heroImageFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Publish changes from preview to live environment

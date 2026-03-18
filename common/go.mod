@@ -3,7 +3,7 @@ module github.com/theopenlane/core/common
 go 1.25.7
 
 require (
-	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
+	entgo.io/ent v0.14.6-0.20260317212542-e0ba79d911cc
 	github.com/aws/aws-sdk-go-v2 v1.41.4
 	github.com/aws/aws-sdk-go-v2/config v1.32.12
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.12
@@ -21,7 +21,7 @@ require (
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.11.27
+	github.com/theopenlane/core v1.11.29
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.23.0
 	github.com/theopenlane/httpsling v0.3.0
