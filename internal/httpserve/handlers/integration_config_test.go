@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/integrations/definition"
@@ -32,7 +33,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderSuccess"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
@@ -41,8 +42,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		Provider: configTestProviderID,
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 		UserInput: handlers.IntegrationConfigBody(
 			mustMarshalJSON(t, map[string]any{"filterExpr": "payload.severity == \"HIGH\""}),
 		),
@@ -79,7 +80,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderByID"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
@@ -88,8 +89,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		Provider: configTestProviderID,
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -105,7 +106,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderInvalid"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
@@ -114,8 +115,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		Provider: configTestProviderID,
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -131,14 +132,14 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderUnauthorized"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		Provider: configTestProviderID,
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -154,7 +155,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderUpdate"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
@@ -163,12 +164,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
-		Provider: configTestProviderID,
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
-		Provider:       configTestProviderID,
+		DefinitionID:   configTestProviderID,
 		InstallationID: first.InstallationID,
 		Body:           handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
 	})
@@ -185,12 +186,93 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Equal(t, "updated-project", providerData["projectId"])
 }
 
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUserInputOnly() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderUpdateUserInputOnly"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
+	})
+
+	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
+		DefinitionID:   configTestProviderID,
+		InstallationID: first.InstallationID,
+		UserInput:      handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
+	})
+
+	assert.Equal(t, first.InstallationID, second.InstallationID)
+
+	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
+	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
+	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored)
+	require.NoError(t, err)
+	require.True(t, ok)
+
+	providerData, err := jsonx.ToMap(credential.ProviderData)
+	require.NoError(t, err)
+	assert.Equal(t, "initial-project", providerData["projectId"])
+	assert.Equal(t, "initial@example.iam.gserviceaccount.com", providerData["serviceAccountEmail"])
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOnlyUpdateWithoutCredentialSchema() {
+	t := suite.T()
+
+	const definitionID = "def_test_user_input_only"
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderUserInputOnly"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{userInputOnlyTestDefinitionBuilder(definitionID, "oidc-generic")})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	rec := suite.db.Integration.Create().
+		SetOwnerID(testUser.OrganizationID).
+		SetName("OIDC Generic").
+		SetDefinitionID(definitionID).
+		SetDefinitionSlug("oidc-generic").
+		SetStatus(enums.IntegrationStatusConnected).
+		SaveX(testUser.UserCtx)
+
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		DefinitionID:   definitionID,
+		InstallationID: rec.ID,
+		UserInput:      handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.actor == \"service-account\""})),
+	})
+
+	httpRec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+definitionID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(httpRec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusOK, httpRec.Code)
+
+	stored := suite.db.Integration.GetX(testUser.UserCtx, rec.ID)
+	assert.Equal(t, `payload.actor == "service-account"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
+}
+
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallationDefinitionMismatch() {
 	t := suite.T()
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderMismatch"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{
 		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
@@ -202,12 +284,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	other := performIntegrationConfigRequest(t, suite, testUser.UserCtx, "def_test_other", handlers.IntegrationConfigPayload{
-		Provider: "def_test_other",
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
+		DefinitionID: "def_test_other",
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
 	})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		Provider:       configTestProviderID,
+		DefinitionID:   configTestProviderID,
 		InstallationID: other.InstallationID,
 		Body:           handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
@@ -225,7 +307,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 
 	op := openapi3.NewOperation()
 	op.OperationID = "ConfigureIntegrationProviderHealthFailure"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", true)})
 	defer restore()
@@ -234,8 +316,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		Provider: configTestProviderID,
-		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -286,6 +368,23 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) def
 					Topic:       gala.TopicName("integration." + slug + ".health.default"),
 					Handle:      healthHandler,
 				},
+			},
+		}, nil
+	})
+}
+
+func userInputOnlyTestDefinitionBuilder(definitionID, slug string) definition.Builder {
+	return definition.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          definitionID,
+				Slug:        slug,
+				DisplayName: "User Input Test",
+				Active:      true,
+				Visible:     true,
+			},
+			UserInput: &types.UserInputRegistration{
+				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
 			},
 		}, nil
 	})

@@ -46,7 +46,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(req.Provider)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(req.DefinitionID)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -63,13 +63,24 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
 	if err != nil {
-		logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("invalid integration operation request")
+		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("invalid integration operation request")
 		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 	}
 
 	inlineExecution := operationName == "health.default" || operation.Policy.Inline
 	queueCtx := context.WithoutCancel(requestCtx)
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
+
+	if inlineExecution {
+		if err := operations.ValidateConfig(operation.ConfigSchema, configDoc); err != nil {
+			if errors.Is(err, operations.ErrOperationConfigInvalid) {
+				logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("invalid inline integration operation request")
+				return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
+			}
+
+			return h.InternalServerError(ctx, err, openapiCtx)
+		}
+	}
 
 	if integrationID != "" {
 		installationRec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
@@ -179,7 +190,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	if err != nil {
 		if errors.Is(err, operations.ErrDispatchInputInvalid) {
-			logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Str("integration_id", integrationID).Msg("invalid integration operation request")
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Str("integration_id", integrationID).Msg("invalid integration operation request")
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 

@@ -55,7 +55,7 @@ func registerRefreshIntegrationTokenHandler(router *Router) error {
 	}
 
 	config := Config{
-		Path:        "/integrations/:provider/refresh",
+		Path:        "/integrations/:definitionID/refresh",
 		Method:      http.MethodPost,
 		Name:        "RefreshIntegrationToken",
 		Description: "Refresh integration token",
@@ -75,7 +75,7 @@ func registerIntegrationConfigHandler(router *Router) error {
 	}
 
 	config := Config{
-		Path:           "/integrations/:provider/config",
+		Path:           "/integrations/:definitionID/config",
 		Method:         http.MethodPost,
 		Name:           "ConfigureIntegrationProvider",
 		Description:    "Persist integration credentials or configuration",
@@ -116,7 +116,7 @@ func registerIntegrationOperationHandler(router *Router) error {
 	}
 
 	config := Config{
-		Path:        "/integrations/:provider/operations/run",
+		Path:        "/integrations/:definitionID/operations/run",
 		Method:      http.MethodPost,
 		Name:        "RunIntegrationOperation",
 		Description: "Execute a provider operation using stored credentials",

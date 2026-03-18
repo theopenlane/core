@@ -38,6 +38,8 @@ type Definition struct {
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition
 	UserInput *UserInputRegistration `json:"userInput,omitempty"`
+	// Installation describes installation-scoped identity metadata for the definition
+	Installation *InstallationRegistration `json:"installation,omitempty"`
 	// Credentials describes how the definition accepts credentials
 	Credentials *CredentialRegistration `json:"credentials,omitempty"`
 	// Auth describes the definition's auth flow when it has one

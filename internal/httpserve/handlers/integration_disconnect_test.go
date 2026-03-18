@@ -27,7 +27,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegration"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
@@ -66,7 +66,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationNotFound"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
@@ -108,7 +108,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationInvalidProvider() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationInvalidProvider"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
@@ -127,7 +127,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationUnauthorized() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationUnauthorized"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
 	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/"+disconnectTestDefinitionID, nil)
 
@@ -142,7 +142,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationWithExplicitID() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationWithID"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
@@ -171,7 +171,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFoundWithID() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationNotFoundWithID"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()

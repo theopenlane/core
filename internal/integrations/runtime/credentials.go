@@ -6,6 +6,7 @@ import (
 
 	"github.com/samber/do/v2"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -31,6 +32,7 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	db := do.MustInvoke[*ent.Client](r.injector)
+	store := do.MustInvoke[*keystore.Store](r.injector)
 
 	installation, err := db.Integration.Get(systemCtx, installationID)
 	if err != nil {
@@ -39,6 +41,22 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 		}
 
 		return err
+	}
+
+	previousState := installation.ProviderState
+	previousStatus := installation.Status
+	previousCredential, hadPreviousCredential, err := store.LoadCredential(systemCtx, installation)
+	if err != nil {
+		return err
+	}
+
+	rollbackCredential := func() {
+		if hadPreviousCredential {
+			_ = store.SaveCredential(systemCtx, installation, previousCredential)
+			return
+		}
+
+		_ = store.DeleteCredential(systemCtx, installation.ID)
 	}
 
 	if len(result.State) > 0 {
@@ -58,7 +76,35 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 		installation.ProviderState = nextState
 	}
 
-	return do.MustInvoke[*keystore.Store](r.injector).SaveCredential(systemCtx, installation, result.Credential)
+	if err := store.SaveCredential(systemCtx, installation, result.Credential); err != nil {
+		if len(result.State) > 0 {
+			_ = db.Integration.UpdateOneID(installation.ID).SetProviderState(previousState).Exec(systemCtx)
+		}
+
+		return err
+	}
+
+	if err := db.Integration.UpdateOneID(installation.ID).
+		SetStatus(enums.IntegrationStatusConnected).
+		Exec(systemCtx); err != nil {
+		rollbackCredential()
+		_ = db.Integration.UpdateOneID(installation.ID).SetProviderState(previousState).Exec(systemCtx)
+
+		return err
+	}
+
+	installation.Status = enums.IntegrationStatusConnected
+	if err := r.SyncWebhooks(systemCtx, installation); err != nil {
+		rollbackCredential()
+		_ = db.Integration.UpdateOneID(installation.ID).
+			SetProviderState(previousState).
+			SetStatus(previousStatus).
+			Exec(systemCtx)
+
+		return err
+	}
+
+	return nil
 }
 
 // LoadCredential resolves persisted credentials for one installation

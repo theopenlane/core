@@ -26,22 +26,19 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
+
 	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
 		return err
 	}
 
 	requestCtx := ctx.Request().Context()
 
-	if payload.Provider == "" {
-		return h.BadRequest(ctx, rout.MissingField("provider"), openapiCtx)
-	}
-
 	caller, ok := auth.CallerFromContext(requestCtx)
 	if !ok || caller == nil {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.Provider)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -50,157 +47,127 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
-	if def.Credentials == nil || len(def.Credentials.Schema) == 0 {
-		return h.BadRequest(ctx, rout.MissingField("credentialsSchema"), openapiCtx)
+	userInputProvided := len(payload.UserInput) > 0
+	userInput := json.RawMessage(payload.UserInput)
+
+	if err := validateDefinitionUserInput(def, payload.UserInput); err != nil {
+		if errors.Is(err, ErrInvalidInput) {
+			return h.InvalidInput(ctx, err, openapiCtx)
+		}
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	attrs := payload.Body.ToMap()
-	if len(attrs) == 0 {
-		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
-	}
+	credentialProvided := len(attrs) > 0
 
-	credentialValidation, err := jsonx.ValidateSchema(def.Credentials.Schema, attrs)
-	if err != nil {
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-	if !credentialValidation.Valid() {
-		return h.InvalidInput(ctx, ErrInvalidInput, openapiCtx)
-	}
-
-	providerData, err := json.Marshal(attrs)
-	if err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
-	}
-
-	userInputProvided := len(payload.UserInput) > 0
-	userInput := json.RawMessage(payload.UserInput)
-	if userInputProvided && def.UserInput != nil && len(def.UserInput.Schema) > 0 {
-		userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, payload.UserInput.ToMap())
-		if err != nil {
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-		if !userInputValidation.Valid() {
-			return h.InvalidInput(ctx, ErrInvalidInput, openapiCtx)
+	if !credentialProvided {
+		if !userInputProvided || payload.InstallationID == "" {
+			return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
 		}
 	}
 
-	var (
-		installationID  string
-		installationRec *ent.Integration
-		created         bool
-	)
+	var providerData json.RawMessage
+	if credentialProvided {
+		if def.Credentials == nil || len(def.Credentials.Schema) == 0 {
+			return h.BadRequest(ctx, rout.MissingField("credentialsSchema"), openapiCtx)
+		}
 
-	switch {
-	case payload.InstallationID != "":
-		// Caller is updating credentials on an existing installation.
-		rec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, payload.InstallationID, def.ID)
+		credentialValidation, err := jsonx.ValidateSchema(def.Credentials.Schema, attrs)
 		if err != nil {
-			if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
-				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+			if !credentialValidation.Valid() {
+				return h.InvalidInput(ctx, ErrInvalidInput, openapiCtx)
 			}
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", payload.InstallationID).Msg("installation not found")
-			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
-		}
-
-		installationID = rec.ID
-		installationRec = rec
-
-	default:
-		// No installation ID provided — create a new installation.
-		name := def.DisplayName
-		if name == "" {
-			name = def.Slug
-		}
-
-		rec, err := h.DBClient.Integration.Create().
-			SetOwnerID(caller.OrganizationID).
-			SetName(name).
-			SetDefinitionID(def.ID).
-			SetDefinitionSlug(def.Slug).
-			SetFamily(def.Family).
-			SetStatus(enums.IntegrationStatusPending).
-			Save(requestCtx)
-		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("failed to create installation")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
-		installationID = rec.ID
-		installationRec = rec
-		created = true
+		providerData, err = json.Marshal(attrs)
+		if err != nil {
+			return h.InternalServerError(ctx, err, openapiCtx)
+		}
 	}
 
-	previousConfig := installationRec.Config
-	previousStatus := installationRec.Status
-	if userInputProvided {
-		nextConfig := installationRec.Config
-		nextConfig.ClientConfig = userInput
-		installationRec.Config = nextConfig
-	}
-
-	credential := types.CredentialSet{ProviderData: providerData}
-	healthOperation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, "health.default")
+	installationRec, created, err := h.resolveOrCreateDefinitionIntegration(requestCtx, caller.OrganizationID, payload.InstallationID, def)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("health operation not registered")
+		if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+		}
+		if errors.Is(err, integrationsruntime.ErrInstallationNotFound) {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", payload.InstallationID).Msg("installation not found")
+
+			return h.NotFound(ctx, ErrIntegrationNotFound, openapiCtx)
+		}
+
+		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("failed to resolve installation")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if _, err := h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, credential, nil); err != nil {
-		if created {
-			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
+	installationID := installationRec.ID
+	if userInputProvided {
+		config := installationRec.Config
+		config.ClientConfig = userInput
+
+		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(config).Exec(requestCtx); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist integration user input")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
-		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationID).Msg("provider health check failed")
-		return h.BadRequest(ctx, wrapIntegrationError("validate", ErrProviderHealthCheckFailed), openapiCtx)
+		installationRec.Config = config
 	}
 
 	var (
+		previousStatus        = installationRec.Status
 		previousCredential    types.CredentialSet
 		hadPreviousCredential bool
 	)
 
-	if !created {
+	if !created && credentialProvided {
 		previousCredential, hadPreviousCredential, err = h.IntegrationsRuntime.LoadCredential(requestCtx, installationRec)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationID).Msg("failed to load existing credential before update")
+
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 	}
 
-	if userInputProvided {
-		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(installationRec.Config).Exec(requestCtx); err != nil {
-			if created {
-				_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
-			}
+	if credentialProvided {
+		credential := types.CredentialSet{ProviderData: providerData}
 
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist integration user input")
+		healthOperation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, "health.default")
+		if err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("health operation not registered")
+
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
-	}
 
-	if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credential); err != nil {
-		if created {
-			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
-		} else if userInputProvided {
-			_ = h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(previousConfig).Exec(requestCtx)
+		if _, err := h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, credential, nil); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationID).Msg("provider health check failed")
+			return h.BadRequest(ctx, wrapIntegrationError("validate", ErrProviderHealthCheckFailed), openapiCtx)
 		}
 
-		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to save credential")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credential); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to save credential")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).
+			SetStatus(enums.IntegrationStatusConnected).
+			Exec(requestCtx); err != nil {
+			h.rollbackConfiguredIntegration(requestCtx, installationRec, previousStatus, previousCredential, hadPreviousCredential, false)
+
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to update integration status")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		installationRec.Status = enums.IntegrationStatusConnected
 	}
 
-	if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).
-		SetStatus(enums.IntegrationStatusConnected).
-		Exec(requestCtx); err != nil {
-		h.rollbackConfiguredIntegration(requestCtx, installationRec, created, previousConfig, previousStatus, previousCredential, hadPreviousCredential, false)
-
-		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to update integration status")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	installationRec.Status = enums.IntegrationStatusConnected
 	if err := h.IntegrationsRuntime.SyncWebhooks(requestCtx, installationRec); err != nil {
-		h.rollbackConfiguredIntegration(requestCtx, installationRec, created, previousConfig, previousStatus, previousCredential, hadPreviousCredential, true)
+		if credentialProvided {
+			h.rollbackConfiguredIntegration(requestCtx, installationRec, previousStatus, previousCredential, hadPreviousCredential, true)
+		}
 
 		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to sync integration webhooks")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -213,43 +180,26 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	})
 }
 
-func (h *Handler) rollbackConfiguredIntegration(ctx context.Context, installationRec *ent.Integration, created bool, previousConfig types.IntegrationConfig, previousStatus enums.IntegrationStatus, previousCredential types.CredentialSet, hadPreviousCredential bool, statusUpdated bool) {
+func (h *Handler) rollbackConfiguredIntegration(ctx context.Context, installationRec *ent.Integration, previousStatus enums.IntegrationStatus, previousCredential types.CredentialSet, hadPreviousCredential bool, statusUpdated bool) {
 	if installationRec == nil {
 		return
 	}
 
-	logger := logx.FromContext(ctx)
-
-	if created {
-		if err := h.IntegrationsRuntime.DeleteCredential(ctx, installationRec.ID); err != nil {
-			logger.Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to delete credential during integration rollback")
-		}
-
-		if err := h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(ctx); err != nil {
-			logger.Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to delete integration during rollback")
-		}
-
-		return
-	}
-
-	update := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(previousConfig)
 	if statusUpdated {
-		update.SetStatus(previousStatus)
-	}
-
-	if err := update.Exec(ctx); err != nil {
-		logger.Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to restore integration state during rollback")
+		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetStatus(previousStatus).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to restore integration status during rollback")
+		}
 	}
 
 	if hadPreviousCredential {
 		if err := h.IntegrationsRuntime.SaveCredential(ctx, installationRec, previousCredential); err != nil {
-			logger.Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to restore credential during integration rollback")
+			logx.FromContext(ctx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to restore credential during integration rollback")
 		}
 
 		return
 	}
 
 	if err := h.IntegrationsRuntime.DeleteCredential(ctx, installationRec.ID); err != nil {
-		logger.Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to delete credential during integration rollback")
+		logx.FromContext(ctx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to delete credential during integration rollback")
 	}
 }

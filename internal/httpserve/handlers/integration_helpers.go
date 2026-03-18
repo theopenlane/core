@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
@@ -8,11 +9,17 @@ import (
 	"net/http"
 	"strings"
 
+	entsql "entgo.io/ent/dialect/sql"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	entintegration "github.com/theopenlane/core/internal/ent/generated/integration"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // statePayloadParts is the number of parts in an encoded OAuth state payload.
@@ -176,4 +183,113 @@ func wrapIntegrationError(operation string, err error) error {
 
 func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
+}
+
+func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBody) error {
+	if len(input) == 0 || def.UserInput == nil || len(def.UserInput.Schema) == 0 {
+		return nil
+	}
+
+	userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, input.ToMap())
+	if err != nil {
+		return err
+	}
+	if !userInputValidation.Valid() {
+		return ErrInvalidInput
+	}
+
+	return nil
+}
+
+func (h *Handler) resolveOrCreateDefinitionIntegration(ctx context.Context, ownerID, installationID string, def types.Definition) (*ent.Integration, bool, error) {
+	if installationID != "" {
+		record, err := h.IntegrationsRuntime.ResolveInstallation(ctx, ownerID, installationID, def.ID)
+		if err != nil {
+			return nil, false, err
+		}
+
+		if err := h.refreshDefinitionIntegration(ctx, record, def); err != nil {
+			return nil, false, err
+		}
+
+		return record, false, nil
+	}
+
+	record, err := h.findLatestDefinitionIntegration(ctx, ownerID, def.ID)
+	if err != nil {
+		return nil, false, err
+	}
+
+	if record != nil {
+		if err := h.refreshDefinitionIntegration(ctx, record, def); err != nil {
+			return nil, false, err
+		}
+
+		return record, false, nil
+	}
+
+	record, err = h.DBClient.Integration.Create().
+		SetOwnerID(ownerID).
+		SetName(def.DisplayName).
+		SetDefinitionID(def.ID).
+		SetDefinitionSlug(def.Slug).
+		SetFamily(def.Family).
+		SetStatus(enums.IntegrationStatusPending).
+		Save(ctx)
+	if err != nil {
+		return nil, false, err
+	}
+
+	return record, true, nil
+}
+
+func (h *Handler) findLatestDefinitionIntegration(ctx context.Context, ownerID, definitionID string) (*ent.Integration, error) {
+	record, err := h.DBClient.Integration.Query().
+		Where(
+			entintegration.OwnerIDEQ(ownerID),
+			entintegration.DefinitionIDEQ(definitionID),
+		).
+		Order(
+			entintegration.ByUpdatedAt(entsql.OrderDesc()),
+			entintegration.ByCreatedAt(entsql.OrderDesc()),
+		).
+		First(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return record, nil
+}
+
+func (h *Handler) refreshDefinitionIntegration(ctx context.Context, installation *ent.Integration, def types.Definition) error {
+	if installation == nil {
+		return nil
+	}
+
+	if installation.Name == def.DisplayName &&
+		installation.DefinitionID == def.ID &&
+		installation.DefinitionSlug == def.Slug &&
+		installation.Family == def.Family {
+		return nil
+	}
+
+	if err := h.DBClient.Integration.UpdateOneID(installation.ID).
+		SetName(def.DisplayName).
+		SetDefinitionID(def.ID).
+		SetDefinitionSlug(def.Slug).
+		SetFamily(def.Family).
+		Exec(ctx); err != nil {
+		return err
+	}
+
+	installation.Name = def.DisplayName
+	installation.DefinitionID = def.ID
+	installation.DefinitionSlug = def.Slug
+	installation.Family = def.Family
+
+	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"maps"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
 
@@ -37,6 +38,10 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 			integrationwebhook.IntegrationIDEQ(installation.ID),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
+		Order(
+			integrationwebhook.ByUpdatedAt(sql.OrderDesc()),
+			integrationwebhook.ByCreatedAt(sql.OrderDesc()),
+		).
 		All(ctx)
 	if err != nil {
 		return err
@@ -48,7 +53,14 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 	}
 
 	staleIDs := make([]string, 0, len(existing))
+	seenBaseRows := make(map[string]struct{}, len(existing))
 	for _, webhook := range existing {
+		baseKey := webhook.Provider + "\x00" + webhook.Name
+		if _, ok := seenBaseRows[baseKey]; ok {
+			staleIDs = append(staleIDs, webhook.ID)
+			continue
+		}
+
 		if webhook.Provider != installation.DefinitionSlug {
 			staleIDs = append(staleIDs, webhook.ID)
 			continue
@@ -56,7 +68,10 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 
 		if _, ok := currentWebhooks[webhook.Name]; !ok {
 			staleIDs = append(staleIDs, webhook.ID)
+			continue
 		}
+
+		seenBaseRows[baseKey] = struct{}{}
 	}
 
 	if len(staleIDs) > 0 {
@@ -257,12 +272,16 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 			integrationwebhook.NameEQ(registration.Name),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
-		Only(ctx)
+		Order(
+			integrationwebhook.ByUpdatedAt(sql.OrderDesc()),
+			integrationwebhook.ByCreatedAt(sql.OrderDesc()),
+		).
+		All(ctx)
 	if err != nil {
-		if !ent.IsNotFound(err) {
-			return nil, err
-		}
+		return nil, err
+	}
 
+	if len(existing) == 0 {
 		return db.IntegrationWebhook.Create().
 			SetOwnerID(installation.OwnerID).
 			SetIntegrationID(installation.ID).
@@ -273,7 +292,18 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 			Save(ctx)
 	}
 
-	return db.IntegrationWebhook.UpdateOneID(existing.ID).
+	if len(existing) > 1 {
+		duplicateIDs := lo.Map(existing[1:], func(record *ent.IntegrationWebhook, _ int) string {
+			return record.ID
+		})
+		if _, err := db.IntegrationWebhook.Delete().
+			Where(integrationwebhook.IDIn(duplicateIDs...)).
+			Exec(ctx); err != nil {
+			return nil, err
+		}
+	}
+
+	return db.IntegrationWebhook.UpdateOneID(existing[0].ID).
 		SetAllowedEvents(allowedEvents).
 		SetStatus(status).
 		Save(ctx)

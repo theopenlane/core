@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/eddy"
 
 	"github.com/theopenlane/core/common/helpers"
@@ -62,15 +63,12 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
-	record, err := s.db.Hush.Query().
-		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installation.ID))).
-		Only(integrationSystemContext(ctx))
+	record, ok, err := s.activeCredentialRecord(integrationSystemContext(ctx), installation.ID)
 	if err != nil {
-		if ent.IsNotFound(err) {
-			return types.CredentialSet{}, false, nil
-		}
-
 		return types.CredentialSet{}, false, err
+	}
+	if !ok {
+		return types.CredentialSet{}, false, nil
 	}
 
 	return types.CredentialSet(record.CredentialSet), true, nil
@@ -87,14 +85,12 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 
 	systemCtx := integrationSystemContext(ctx)
 
-	existing, err := s.db.Hush.Query().
-		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installation.ID))).
-		Only(systemCtx)
+	existing, ok, err := s.activeCredentialRecord(systemCtx, installation.ID)
 	if err != nil {
-		if !ent.IsNotFound(err) {
-			return err
-		}
+		return err
+	}
 
+	if !ok {
 		if err := s.db.Hush.Create().
 			SetOwnerID(installation.OwnerID).
 			SetName(installationCredentialName).
@@ -104,16 +100,12 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 			Exec(systemCtx); err != nil {
 			return err
 		}
-
-		s.InvalidateClients(installation.ID)
-
-		return nil
-	}
-
-	if err := existing.Update().
-		SetCredentialSet(credential).
-		Exec(systemCtx); err != nil {
-		return err
+	} else {
+		if err := existing.Update().
+			SetCredentialSet(credential).
+			Exec(systemCtx); err != nil {
+			return err
+		}
 	}
 
 	s.InvalidateClients(installation.ID)
@@ -239,6 +231,26 @@ func cloneCredentialSet(credential types.CredentialSet) types.CredentialSet {
 	}
 
 	return clone
+}
+
+func (s *Store) activeCredentialRecord(ctx context.Context, installationID string) (*ent.Hush, bool, error) {
+	records, err := s.db.Hush.Query().
+		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installationID))).
+		Order(
+			enthush.ByUpdatedAt(sql.OrderDesc()),
+			enthush.ByCreatedAt(sql.OrderDesc()),
+		).
+		All(ctx)
+	if err != nil {
+		return nil, false, err
+	}
+	if len(records) == 0 {
+		return nil, false, nil
+	}
+
+	// Prefer the most recently updated credential so sequential rotation keeps working
+	// even when older rows still exist for the same installation.
+	return records[0], true, nil
 }
 
 func integrationSystemContext(ctx context.Context) context.Context {

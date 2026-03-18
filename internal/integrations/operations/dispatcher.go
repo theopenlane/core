@@ -32,7 +32,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return DispatchResult{}, err
 	}
 
-	if err := validateConfig(operation.ConfigSchema, req.Config); err != nil {
+	if err := ValidateConfig(operation.ConfigSchema, req.Config); err != nil {
 		if err == ErrOperationConfigInvalid {
 			return DispatchResult{}, ErrDispatchInputInvalid
 		}
@@ -91,8 +91,8 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}, nil
 }
 
-// validateConfig validates one raw configuration payload against the operation schema
-func validateConfig(schema json.RawMessage, value json.RawMessage) error {
+// ValidateConfig validates one raw configuration payload against the operation schema.
+func ValidateConfig(schema json.RawMessage, value json.RawMessage) error {
 	if len(schema) == 0 {
 		return nil
 	}

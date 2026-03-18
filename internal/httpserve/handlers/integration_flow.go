@@ -12,11 +12,8 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -60,55 +57,31 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	userInputProvided := len(in.UserInput) > 0
 	userInput := json.RawMessage(in.UserInput)
 
-	var (
-		installationID      string
-		installationRec     *ent.Integration
-		createdInstallation bool
-	)
+	if err := validateDefinitionUserInput(def, in.UserInput); err != nil {
+		if errors.Is(err, ErrInvalidInput) {
+			return h.InvalidInput(ctx, err, openapiCtx)
+		}
 
-	if in.InstallationID != "" {
-		rec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, in.InstallationID, def.ID)
-		if err != nil {
-			if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
-				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
-			}
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	installationRec, _, err := h.resolveOrCreateDefinitionIntegration(requestCtx, caller.OrganizationID, in.InstallationID, def)
+	if err != nil {
+		if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+		}
+		if errors.Is(err, integrationsruntime.ErrInstallationNotFound) {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
 
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		installationID = rec.ID
-		installationRec = rec
-	} else {
-		name := def.DisplayName
-		if name == "" {
-			name = def.Slug
-		}
+		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", in.DefinitionID).Msg("failed to resolve installation for oauth flow")
 
-		create := h.DBClient.Integration.Create().
-			SetOwnerID(caller.OrganizationID).
-			SetName(name).
-			SetDefinitionID(def.ID).
-			SetDefinitionSlug(def.Slug).
-			SetFamily(def.Family).
-			SetStatus(enums.IntegrationStatusPending)
-		if userInputProvided {
-			create.SetConfig(types.IntegrationConfig{ClientConfig: userInput})
-		}
-
-		rec, err := create.Save(requestCtx)
-		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", in.DefinitionID).Msg("failed to create installation for oauth flow")
-
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-
-		installationID = rec.ID
-		installationRec = rec
-		createdInstallation = true
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if userInputProvided && !createdInstallation {
+	if userInputProvided {
 		config := installationRec.Config
 		config.ClientConfig = userInput
 
@@ -123,13 +96,9 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
 		DefinitionID:   def.ID,
-		InstallationID: installationID,
+		InstallationID: installationRec.ID,
 	})
 	if err != nil {
-		if createdInstallation {
-			_ = h.DBClient.Integration.DeleteOneID(installationID).Exec(requestCtx)
-		}
-
 		switch {
 		case errors.Is(err, keymaker.ErrInstallationNotFound),
 			errors.Is(err, keymaker.ErrInstallationOwnerMismatch):
@@ -225,47 +194,12 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	result, err := h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
+	_, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
 		State: stateCookie.Value,
 		Input: callbackInput,
 	})
 	if err != nil {
-		switch {
-		case errors.Is(err, keymaker.ErrAuthStateNotFound),
-			errors.Is(err, keymaker.ErrAuthStateExpired),
-			errors.Is(err, keymaker.ErrAuthStateTokenRequired):
-			return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
-		case errors.Is(err, keymaker.ErrInstallationNotFound),
-			errors.Is(err, keymaker.ErrInstallationOwnerMismatch):
-			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
-		case errors.Is(err, keymaker.ErrInstallationDefinitionMismatch):
-			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
-		default:
-			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to complete oauth callback")
-
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-	}
-
-	if err := h.DBClient.Integration.UpdateOneID(result.InstallationID).
-		SetStatus(enums.IntegrationStatusConnected).
-		Exec(reqCtx); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", result.InstallationID).Msg("failed to update integration status after oauth callback")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	installationRecord, err := h.IntegrationsRuntime.ResolveInstallation(reqCtx, callbackCaller.OrganizationID, result.InstallationID, result.DefinitionID)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", result.InstallationID).Msg("failed to reload installation after oauth callback")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	if err := h.IntegrationsRuntime.SyncWebhooks(reqCtx, installationRecord); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", result.InstallationID).Msg("failed to sync integration webhooks after oauth callback")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
 	cfg := h.getOauthCookieConfig()

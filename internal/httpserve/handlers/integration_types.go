@@ -36,8 +36,8 @@ func (b *IntegrationConfigBody) UnmarshalJSON(data []byte) error {
 
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
 type IntegrationConfigPayload struct {
-	// Provider is the canonical definition ID.
-	Provider string `param:"provider" description:"Integration definition ID" example:"def_01K0GWKSP000000000000000001"`
+	// DefinitionID is the canonical integration definition ID from the path.
+	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GWKSP000000000000000001"`
 	// InstallationID is the optional existing installation to update credentials on.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
@@ -59,8 +59,8 @@ type IntegrationOperationBody struct {
 
 // IntegrationOperationPayload is the request type for running an integration operation.
 type IntegrationOperationPayload struct {
-	// Provider is the canonical definition ID.
-	Provider string `param:"provider" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
+	// DefinitionID is the canonical integration definition ID from the path.
+	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
 	// IntegrationID scopes the operation to a specific installation record.
 	IntegrationID string `query:"integration_id,omitempty" description:"Optional installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// Body holds the operation name and optional configuration.
@@ -202,13 +202,13 @@ func (r *RefreshInstallationCredentialRequest) Validate() error {
 
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	Provider: "def_01K0GWKSP000000000000000001",
-	Body:     IntegrationConfigBody(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
+	DefinitionID: "def_01K0GWKSP000000000000000001",
+	Body:         IntegrationConfigBody(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
 // ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.
 var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
-	Provider: "def_01K0GHAPP000000000000000001",
+	DefinitionID: "def_01K0GHAPP000000000000000001",
 	Body: IntegrationOperationBody{
 		Operation: "health.default",
 	},

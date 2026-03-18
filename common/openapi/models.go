@@ -2604,15 +2604,15 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
 type DisconnectIntegrationRequest struct {
-	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
+	// DefinitionID is the definitionid value.
+	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
 	// IntegrationID is the integrationid value.
 	IntegrationID string `query:"integration_id,omitempty" description:"Specific integration ID to delete"`
 }
 
 // ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
 var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
-	Provider: "def_01K0GHAPP000000000000000001",
+	DefinitionID: "def_01K0GHAPP000000000000000001",
 }
 
 // =========

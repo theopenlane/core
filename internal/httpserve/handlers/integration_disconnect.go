@@ -5,13 +5,13 @@ import (
 	"fmt"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/utils/rout"
 )
 
 // DisconnectIntegration removes the stored integration configuration and secrets for a provider.
@@ -31,11 +31,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
-	if in.Provider == "" {
-		return h.BadRequest(ctx, rout.MissingField("provider"), openapi)
-	}
-
-	def, ok := h.IntegrationsRuntime.Registry().Definition(in.Provider)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(in.DefinitionID)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 	}

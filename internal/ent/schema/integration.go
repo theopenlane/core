@@ -89,6 +89,13 @@ func (Integration) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.JSON("installation_metadata", openapi.IntegrationInstallationMetadata{}).
+			Comment("stable, non-secret installation identity metadata for the provider").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("provider_state", openapi.IntegrationProviderState{}).
 			Comment("provider-specific integration state captured during auth/config").
 			Optional().
