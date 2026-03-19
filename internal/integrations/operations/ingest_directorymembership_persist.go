@@ -3,41 +3,131 @@ package operations
 
 import (
 	"context"
+	"fmt"
+	"strings"
+
+	"entgo.io/ent/dialect/sql"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // persistDirectoryMembershipInput upserts one DirectoryMembership record using the ingest lookup key fields
 func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryMembershipInput) error {
-	if createInput.DirectoryAccountID == "" {
+	if createInput.DirectoryAccountID == "" || createInput.DirectoryGroupID == "" {
 		return ErrIngestUpsertKeyMissing
 	}
 
-	if createInput.DirectoryGroupID == "" {
-		return ErrIngestUpsertKeyMissing
+	resolvedInput, err := resolveDirectoryMembershipInput(ctx, db, integration, createInput)
+	if err != nil {
+		return err
 	}
 
-	existing, err := db.DirectoryMembership.Query().
-		Where(directorymembership.IntegrationID(integration.ID)).
-		Where(directorymembership.DirectoryAccountID(createInput.DirectoryAccountID)).
-		Where(directorymembership.DirectoryGroupID(createInput.DirectoryGroupID)).
+	return persistRoundTripUpsert(
+		ctx,
+		resolvedInput,
+		func(ctx context.Context) (*ent.DirectoryMembership, error) {
+			return db.DirectoryMembership.Query().
+				Where(directorymembership.IntegrationID(integration.ID)).
+				Where(directorymembership.DirectoryAccountID(resolvedInput.DirectoryAccountID)).
+				Where(directorymembership.DirectoryGroupID(resolvedInput.DirectoryGroupID)).
+				Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateDirectoryMembershipInput) error {
+			return db.DirectoryMembership.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.DirectoryMembership, input ent.UpdateDirectoryMembershipInput) error {
+			return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
+}
+
+// resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence.
+func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
+	accountID, err := resolveDirectoryAccountID(ctx, db, integration, input.DirectoryAccountID)
+	if err != nil {
+		return input, err
+	}
+
+	groupID, err := resolveDirectoryGroupID(ctx, db, integration, input.DirectoryGroupID)
+	if err != nil {
+		return input, err
+	}
+
+	input.DirectoryAccountID = accountID
+	input.DirectoryGroupID = groupID
+
+	return input, nil
+}
+
+func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration *ent.Integration, value string) (string, error) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return "", ErrIngestUpsertKeyMissing
+	}
+
+	account, err := db.DirectoryAccount.Query().
+		Where(directoryaccount.ID(value), directoryaccount.IntegrationID(integration.ID)).
 		Only(ctx)
-
 	switch {
 	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		return wrapIngestPersistError(db.DirectoryMembership.Create().SetInput(createInput).Exec(ctx))
-	default:
-		return wrapIngestPersistError(err)
+		return account.ID, nil
+	case !ent.IsNotFound(err):
+		return "", err
 	}
 
-	var updateInput ent.UpdateDirectoryMembershipInput
-	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
-		return ErrIngestMappedDocumentInvalid
+	account, err = db.DirectoryAccount.Query().
+		Where(directoryaccount.IntegrationID(integration.ID)).
+		Where(directoryaccount.Or(
+			directoryaccount.ExternalID(value),
+			directoryaccount.CanonicalEmail(value),
+		)).
+		Order(directoryaccount.ByCreatedAt(sql.OrderDesc())).
+		First(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return "", fmt.Errorf("%w: unresolved directory account reference %q", ErrIngestMappedDocumentInvalid, value)
+		}
+
+		return "", err
 	}
 
-	return wrapIngestPersistError(db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx))
+	return account.ID, nil
+}
+
+func resolveDirectoryGroupID(ctx context.Context, db *ent.Client, integration *ent.Integration, value string) (string, error) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return "", ErrIngestUpsertKeyMissing
+	}
+
+	group, err := db.DirectoryGroup.Query().
+		Where(directorygroup.ID(value), directorygroup.IntegrationID(integration.ID)).
+		Only(ctx)
+	switch {
+	case err == nil:
+		return group.ID, nil
+	case !ent.IsNotFound(err):
+		return "", err
+	}
+
+	group, err = db.DirectoryGroup.Query().
+		Where(directorygroup.IntegrationID(integration.ID)).
+		Where(directorygroup.Or(
+			directorygroup.ExternalID(value),
+			directorygroup.Email(value),
+		)).
+		Order(directorygroup.ByCreatedAt(sql.OrderDesc())).
+		First(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return "", fmt.Errorf("%w: unresolved directory group reference %q", ErrIngestMappedDocumentInvalid, value)
+		}
+
+		return "", err
+	}
+
+	return group.ID, nil
 }

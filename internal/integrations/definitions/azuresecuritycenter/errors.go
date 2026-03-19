@@ -11,16 +11,18 @@ var (
 	ErrClientSecretMissing = errors.New("azuresecuritycenter: client secret required")
 	// ErrSubscriptionIDMissing indicates the Azure subscription ID is missing
 	ErrSubscriptionIDMissing = errors.New("azuresecuritycenter: subscription ID required")
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("azuresecuritycenter: unexpected client type")
 	// ErrCredentialInvalid indicates credential metadata could not be decoded
 	ErrCredentialInvalid = errors.New("azuresecuritycenter: credential invalid")
-	// ErrTokenExchangeFailed indicates the Azure token exchange failed
-	ErrTokenExchangeFailed = errors.New("azuresecuritycenter: token exchange failed")
-	// ErrPricingsClientBuildFailed indicates the pricings client could not be constructed
-	ErrPricingsClientBuildFailed = errors.New("azuresecuritycenter: pricings client build failed")
-	// ErrPricingFetchFailed indicates the pricing list request failed
-	ErrPricingFetchFailed = errors.New("azuresecuritycenter: pricing fetch failed")
+	// ErrCredentialBuildFailed indicates the Azure credential could not be constructed
+	ErrCredentialBuildFailed = errors.New("azuresecuritycenter: credential build failed")
+	// ErrAssessmentsClientBuildFailed indicates an armsecurity assessments client could not be constructed
+	ErrAssessmentsClientBuildFailed = errors.New("azuresecuritycenter: assessments client build failed")
+	// ErrAssessmentFetchFailed indicates the assessments list request failed
+	ErrAssessmentFetchFailed = errors.New("azuresecuritycenter: assessment fetch failed")
+	// ErrSubAssessmentFetchFailed indicates the sub-assessments list request failed
+	ErrSubAssessmentFetchFailed = errors.New("azuresecuritycenter: sub-assessment fetch failed")
+	// ErrIngestPayloadEncode indicates an ingest envelope payload could not be serialized
+	ErrIngestPayloadEncode = errors.New("azuresecuritycenter: ingest payload encode failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("azuresecuritycenter: result encode failed")
 )

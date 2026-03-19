@@ -4,9 +4,8 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
-	"fmt"
-	"net/http"
 	"strings"
 
 	echo "github.com/theopenlane/echox"
@@ -15,20 +14,18 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
-// statePayloadParts is the number of parts in an encoded OAuth state payload.
-const statePayloadParts = 3
+const (
+	// statePayloadParts is the number of parts in an encoded OAuth state payload
+	statePayloadParts = 3
+)
 
 var (
-	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
-	errIntegrationsRuntimeNotConfigured       = errors.New("integrations runtime not configured")
-	// errDBClientNotConfigured indicates the database client is missing.
-	errDBClientNotConfigured = errors.New("database client not configured")
-	// errGitHubAppNotConfigured indicates required GitHub App operator credentials are absent from the provider spec.
+	errIntegrationsRuntimeNotConfigured = errors.New("integrations runtime not configured")
+	// errGitHubAppNotConfigured indicates required GitHub App operator credentials are absent from the provider spec
 	errGitHubAppNotConfigured = errors.New("github app integration not configured: required credentials missing from provider spec")
 )
 
@@ -49,68 +46,11 @@ var (
 	ErrIntegrationIDRequired = errors.New("integration ID is required")
 	// ErrIntegrationNotFound is returned when integration is not found
 	ErrIntegrationNotFound = errors.New("integration not found")
-	// ErrDeleteSecrets is returned when deleting integration secrets fails
-	ErrDeleteSecrets = errors.New("failed to delete integration secrets")
 	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
 	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
 	// ErrProviderHealthCheckFailed indicates the provider health check failed
 	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
-
-// integrationHTTPStatus maps known integration errors to HTTP status codes.
-// Returns http.StatusInternalServerError for unrecognized errors.
-func integrationHTTPStatus(err error) int {
-	switch {
-	case errors.Is(err, ErrIntegrationNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, ErrInvalidState):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrInvalidStateFormat):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrMissingCode):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrIntegrationIDRequired):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrInvalidProvider):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrProviderDisabled):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrUnsupportedAuthType):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrExchangeAuthCode):
-		return http.StatusBadRequest
-	case errors.Is(err, ErrValidateToken):
-		return http.StatusBadRequest
-	case errors.Is(err, keystore.ErrCredentialNotFound):
-		return http.StatusBadRequest
-	case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
-		return http.StatusBadRequest
-	case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
-		return http.StatusBadRequest
-	case errors.Is(err, integrationsruntime.ErrDefinitionNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, integrationsruntime.ErrOperationNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, engine.ErrInstallationNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, engine.ErrInstallationIDRequired):
-		return http.StatusBadRequest
-	case errors.Is(err, engine.ErrIntegrationProviderRequired):
-		return http.StatusBadRequest
-	case errors.Is(err, engine.ErrIntegrationOperationCriteriaRequired):
-		return http.StatusBadRequest
-	case errors.Is(err, engine.ErrIntegrationScopeConditionFalse):
-		return http.StatusBadRequest
-	case errors.Is(err, engine.ErrIntegrationDefinitionNotFound):
-		return http.StatusNotFound
-	case errors.Is(err, engine.ErrIntegrationOperationNotFound):
-		return http.StatusNotFound
-	default:
-		return http.StatusInternalServerError
-	}
-}
 
 func (h *Handler) requireIntegrationsRuntime(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	if h.IntegrationsRuntime != nil {
@@ -174,13 +114,109 @@ func stateFingerprint(state string) string {
 	return base64.RawURLEncoding.EncodeToString(sum[:8])
 }
 
-// OAuth error helpers reused across handlers to preserve consistent messaging.
-func wrapIntegrationError(operation string, err error) error {
-	return fmt.Errorf("failed to %s integration: %w", operation, err)
+// resolveActiveDefinition looks up a definition by ID and rejects inactive providers.
+// Returns the resolved definition on success; returns and writes the HTTP error response on failure.
+func (h *Handler) resolveActiveDefinition(ctx echo.Context, defID string, openapiCtx *OpenAPIContext) (types.Definition, error) {
+	def, ok := h.IntegrationsRuntime.Registry().Definition(defID)
+	if !ok {
+		return types.Definition{}, h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+	}
+
+	if !def.Active {
+		return types.Definition{}, h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
+	}
+
+	return def, nil
 }
 
-func wrapTokenError(operation, provider string, err error) error {
-	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
+// persistInstallationUserInput writes userInput into the installation's client config and persists it.
+// If the JSON contains a "name" key, the installation display name is updated as well.
+func (h *Handler) persistInstallationUserInput(ctx context.Context, installationRec *ent.Integration, userInput json.RawMessage) error {
+	config := installationRec.Config
+	config.ClientConfig = userInput
+
+	update := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(config)
+
+	var inputMap map[string]any
+	if err := json.Unmarshal(userInput, &inputMap); err == nil {
+		if name, ok := inputMap["name"].(string); ok && name != "" {
+			update.SetName(name)
+			installationRec.Name = name
+		}
+	}
+
+	if err := update.Exec(ctx); err != nil {
+		return err
+	}
+
+	installationRec.Config = config
+
+	return nil
+}
+
+// finalizeIntegrationConnection runs the post-credential sequence shared by all install paths:
+// health check, credential save, installation metadata resolve and save, status update to Connected.
+// callbackInput is passed to the installation metadata resolver and may be nil.
+func (h *Handler) finalizeIntegrationConnection(
+	ctx echo.Context,
+	openapiCtx *OpenAPIContext,
+	installationRec *ent.Integration,
+	def types.Definition,
+	credential types.CredentialSet,
+	callbackInput json.RawMessage,
+) error {
+	requestCtx := ctx.Request().Context()
+	logger := logx.FromContext(requestCtx).With().
+		Str("definition_id", def.ID).
+		Str("installation_id", installationRec.ID).
+		Logger()
+
+	healthOperation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, types.HealthDefaultOperation)
+	if err != nil {
+		logger.Error().Err(err).Msg("health operation not registered")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if _, err := h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, credential, nil); err != nil {
+		logger.Error().Err(err).Msg("provider health check failed")
+		return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credential); err != nil {
+		logger.Error().Err(err).Msg("failed to save credential")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if def.Installation != nil {
+		metadata, ok, err := def.Installation.Resolve(requestCtx, types.InstallationRequest{
+			Installation: installationRec,
+			Credential:   credential,
+			Config:       installationRec.Config,
+			Input:        callbackInput,
+		})
+		if err != nil {
+			logger.Error().Err(err).Msg("failed to resolve installation metadata")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		if ok {
+			if err := integrationsruntime.SaveInstallationMetadata(requestCtx, installationRec, metadata); err != nil {
+				logger.Error().Err(err).Msg("failed to save installation metadata")
+				return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+			}
+		}
+	}
+
+	if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).
+		SetStatus(enums.IntegrationStatusConnected).
+		Exec(requestCtx); err != nil {
+		logger.Error().Err(err).Msg("failed to update integration status")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	installationRec.Status = enums.IntegrationStatusConnected
+
+	return nil
 }
 
 func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBody) error {
@@ -188,7 +224,7 @@ func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBo
 		return nil
 	}
 
-	userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, input.ToMap())
+	userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, input.RawMessage())
 	if err != nil {
 		return err
 	}
@@ -229,10 +265,6 @@ func (h *Handler) resolveOrCreateDefinitionIntegration(ctx context.Context, owne
 }
 
 func (h *Handler) refreshDefinitionIntegration(ctx context.Context, installation *ent.Integration, def types.Definition) error {
-	if installation == nil {
-		return nil
-	}
-
 	if installation.DefinitionID == def.ID &&
 		installation.DefinitionSlug == def.Slug &&
 		installation.Family == def.Family {

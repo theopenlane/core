@@ -44,14 +44,12 @@ type SettingsScan struct {
 
 // Handle adapts settings scan to the generic operation registration boundary
 func (s SettingsScan) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := SCCClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return s.Run(ctx, request.Credential, c)
-	}
+	return providerkit.OperationWithClientRequest(
+		SCCClient,
+		func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client) (json.RawMessage, error) {
+			return s.Run(ctx, request.Credential, client)
+		},
+	)
 }
 
 // Run scans GCP SCC notification configs

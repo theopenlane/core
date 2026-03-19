@@ -8,30 +8,25 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// HealthCheck reports whether Defender pricing data can be listed
+// HealthCheck reports whether the Security Center assessments API is accessible
 type HealthCheck struct {
-	// Count is the number of Defender pricing records returned by the health probe
+	// Count is the number of assessments returned by the health probe
 	Count int `json:"count"`
 }
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		apc, err := SecurityCenterClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return h.Run(ctx, apc)
-	}
+	return providerkit.OperationWithClient(SecurityCenterClient, h.Run)
 }
 
-// Run verifies access by fetching Defender pricing data
-func (HealthCheck) Run(ctx context.Context, client *azurePricingsClient) (json.RawMessage, error) {
-	resp, err := client.client.List(ctx, client.scope, nil)
+// Run verifies access by fetching the first page of security assessments
+func (HealthCheck) Run(ctx context.Context, client *azureSecurityClient) (json.RawMessage, error) {
+	pager := client.assessments.NewListPager(client.scope(), nil)
+
+	page, err := pager.NextPage(ctx)
 	if err != nil {
-		return nil, ErrPricingFetchFailed
+		return nil, ErrAssessmentFetchFailed
 	}
 
-	return providerkit.EncodeResult(HealthCheck{Count: len(resp.Value)}, ErrResultEncode)
+	return providerkit.EncodeResult(HealthCheck{Count: len(page.Value)}, ErrResultEncode)
 }

@@ -265,9 +265,7 @@ func isWhitelistedInternalError(err error) bool {
 		ErrUnableToVerifyEmail,
 		ErrUnableToRegisterJobRunner,
 		ErrObjectStoreUnavailable,
-		ErrFailedToExtractSessionID,
-		errIntegrationWorkflowEngineNotConfigured,
-		errDBClientNotConfigured:
+		ErrFailedToExtractSessionID:
 		return true
 	default:
 		return false

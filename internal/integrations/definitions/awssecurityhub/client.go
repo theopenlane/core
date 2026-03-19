@@ -3,47 +3,29 @@ package awssecurityhub
 import (
 	"context"
 
+	awssdk "github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 
-	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// defaultSessionName is the STS session name used when no override is present in the credential metadata
-const defaultSessionName = "openlane-awssecurityhub"
+// SecurityHubClientBuilder builds AWS Security Hub clients for one installation.
+type SecurityHubClientBuilder struct{}
 
-// Client builds AWS Security Hub clients for one installation
-type Client struct{}
-
-// Build constructs the AWS Security Hub client using STS AssumeRole
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	if len(req.Credential.ProviderData) == 0 {
-		return nil, ErrCredentialMetadataRequired
-	}
-
-	meta, err := awskit.MetadataFromProviderData(req.Credential.ProviderData, defaultSessionName)
-	if err != nil {
-		return nil, ErrCredentialMetadataInvalid
-	}
-
-	if meta.RoleARN == "" {
-		return nil, ErrRoleARNMissing
-	}
-
-	if meta.Region == "" {
-		return nil, ErrRegionMissing
-	}
-
-	cfg, err := awskit.BuildAWSConfig(ctx, meta.Region, awskit.CredentialsFromMetadata(meta), awskit.AssumeRole{
-		RoleARN:         meta.RoleARN,
-		ExternalID:      meta.ExternalID,
-		SessionName:     meta.SessionName,
-		SessionDuration: meta.SessionDuration,
+// Build constructs the AWS Security Hub client using the shared AWS credential inputs.
+func (SecurityHubClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+	return buildAWSServiceClient(ctx, req, func(cfg awssdk.Config) *securityhub.Client {
+		return securityhub.NewFromConfig(cfg)
 	})
-	if err != nil {
-		return nil, ErrAWSConfigBuildFailed
-	}
-
-	return securityhub.NewFromConfig(cfg), nil
 }
 
+// AuditManagerClientBuilder builds AWS Audit Manager clients for one installation.
+type AuditManagerClientBuilder struct{}
+
+// Build constructs the AWS Audit Manager client using the shared AWS credential inputs.
+func (AuditManagerClientBuilder) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+	return buildAWSServiceClient(ctx, req, func(cfg awssdk.Config) *auditmanager.Client {
+		return auditmanager.NewFromConfig(cfg)
+	})
+}

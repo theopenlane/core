@@ -15,7 +15,7 @@ func Builder() definition.Builder {
 				Slug:        Slug,
 				Family:      "okta",
 				DisplayName: "Okta",
-				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance analysis.",
+				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
 				Category:    "sso",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta/overview",
 				Labels:      map[string]string{"vendor": "okta", "product": "identity"},

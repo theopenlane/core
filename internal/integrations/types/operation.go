@@ -60,3 +60,5 @@ type OperationRegistration struct {
 	// set for operations that produce ingest data — mutually exclusive with Handle
 	IngestHandle IngestHandler `json:"-"`
 }
+
+const HealthDefaultOperation = "health.default"

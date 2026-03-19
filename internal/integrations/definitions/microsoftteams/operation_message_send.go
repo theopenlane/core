@@ -3,8 +3,11 @@ package microsoftteams
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"net/url"
+
+	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
+	"github.com/microsoftgraph/msgraph-sdk-go/models"
+
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -18,8 +21,8 @@ type MessageOperationInput struct {
 	ChannelID string `json:"channel_id" jsonschema:"required,title=Channel ID"`
 	// Body is the message body content
 	Body string `json:"body" jsonschema:"required,title=Message Body"`
-	// BodyFormat controls the content type (text or html)
-	BodyFormat string `json:"body_format,omitempty" jsonschema:"title=Body Format"`
+	// BodyFormat controls the content type: text or html
+	BodyFormat string `json:"body_format,omitempty" jsonschema:"title=Body Format,enum=text,enum=html"`
 	// Subject is an optional message subject
 	Subject string `json:"subject,omitempty" jsonschema:"title=Subject"`
 }
@@ -34,41 +37,13 @@ type MessageSend struct {
 	MessageID string `json:"messageId"`
 }
 
-// channelMessageBody is the Graph API chat message body payload
-type channelMessageBody struct {
-	// ContentType is the content type of the message body (text or html)
-	ContentType string `json:"contentType"`
-	// Content is the message body text
-	Content string `json:"content"`
-}
-
-// channelMessageRequest is the Graph API request payload for creating a channel message
-type channelMessageRequest struct {
-	// Body holds the message body content and format
-	Body channelMessageBody `json:"body"`
-	// Subject is the optional message subject line
-	Subject string `json:"subject,omitempty"`
-}
-
 // Handle adapts message send to the generic operation registration boundary
 func (m MessageSend) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := TeamsClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		cfg, err := MessageSendOperation.UnmarshalConfig(request.Config)
-		if err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
-
-		return m.Run(ctx, c, cfg)
-	}
+	return providerkit.OperationWithClientConfig(TeamsClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Microsoft Teams channel message via Microsoft Graph
-func (MessageSend) Run(ctx context.Context, c *providerkit.AuthenticatedClient, cfg MessageOperationInput) (json.RawMessage, error) {
+func (MessageSend) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, cfg MessageOperationInput) (json.RawMessage, error) {
 	if cfg.TeamID == "" || cfg.ChannelID == "" {
 		return nil, ErrChannelMissing
 	}
@@ -77,38 +52,30 @@ func (MessageSend) Run(ctx context.Context, c *providerkit.AuthenticatedClient, 
 		return nil, ErrMessageEmpty
 	}
 
-	contentType := cfg.BodyFormat
-	if contentType == "" {
-		contentType = "text"
+	contentType := models.TEXT_BODYTYPE
+	if cfg.BodyFormat == "html" {
+		contentType = models.HTML_BODYTYPE
 	}
 
-	switch contentType {
-	case "text", "html":
-	default:
-		return nil, ErrBodyFormatInvalid
+	msgBody := models.NewItemBody()
+	msgBody.SetContent(&cfg.Body)
+	msgBody.SetContentType(&contentType)
+
+	msg := models.NewChatMessage()
+	msg.SetBody(msgBody)
+
+	if cfg.Subject != "" {
+		msg.SetSubject(&cfg.Subject)
 	}
 
-	payload := channelMessageRequest{
-		Body: channelMessageBody{
-			ContentType: contentType,
-			Content:     cfg.Body,
-		},
-		Subject: cfg.Subject,
-	}
-
-	path := fmt.Sprintf("teams/%s/channels/%s/messages", url.PathEscape(cfg.TeamID), url.PathEscape(cfg.ChannelID))
-
-	var resp struct {
-		ID string `json:"id"`
-	}
-
-	if err := c.PostJSON(ctx, path, payload, &resp); err != nil {
+	result, err := c.Teams().ByTeamId(cfg.TeamID).Channels().ByChannelId(cfg.ChannelID).Messages().Post(ctx, msg, nil)
+	if err != nil {
 		return nil, ErrChannelMessageSendFailed
 	}
 
 	return providerkit.EncodeResult(MessageSend{
 		TeamID:    cfg.TeamID,
 		ChannelID: cfg.ChannelID,
-		MessageID: resp.ID,
+		MessageID: lo.FromPtr(result.GetId()),
 	}, ErrResultEncode)
 }

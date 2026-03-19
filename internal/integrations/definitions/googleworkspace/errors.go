@@ -11,8 +11,6 @@ var (
 	ErrAdminServiceBuildFailed = errors.New("googleworkspace: admin service build failed")
 	// ErrHealthCheckFailed indicates the health check request failed
 	ErrHealthCheckFailed = errors.New("googleworkspace: health check failed")
-	// ErrDirectorySyncConfigInvalid indicates directory sync config could not be decoded
-	ErrDirectorySyncConfigInvalid = errors.New("googleworkspace: directory sync config invalid")
 	// ErrDirectoryUsersFetchFailed indicates the users listing failed
 	ErrDirectoryUsersFetchFailed = errors.New("googleworkspace: directory users fetch failed")
 	// ErrDirectoryGroupsFetchFailed indicates the groups listing failed

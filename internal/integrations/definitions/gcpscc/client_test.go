@@ -17,7 +17,6 @@ func TestMetadataFromCredential(t *testing.T) {
 			ProjectID:         "project-123",
 			OrganizationID:    "org-123",
 			SourceID:          "source-123",
-			FindingFilter:     "state=\"ACTIVE\"",
 			ServiceAccountKey: "\"{\\n  \\\"type\\\":\\\"service_account\\\"\\n}\"",
 		})
 		require.NoError(t, err)

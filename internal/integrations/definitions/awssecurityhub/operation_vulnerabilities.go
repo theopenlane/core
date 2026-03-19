@@ -2,14 +2,12 @@ package awssecurityhub
 
 import (
 	"context"
-	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -21,16 +19,8 @@ const (
 	maxPageSize = int32(100)
 )
 
-// FindingsConfig holds per-invocation parameters for the vulnerabilities.collect operation
-// Severity, RecordState, and WorkflowStatus are pushed to the Security Hub server-side
-// filter so that only matching findings are transferred over the wire
+// FindingsConfig holds per-invocation execution controls for the vulnerabilities.collect operation
 type FindingsConfig struct {
-	// Severity filters by ASFF severity label. Valid values: INFORMATIONAL, LOW, MEDIUM, HIGH, CRITICAL
-	Severity string `json:"severity,omitempty" jsonschema:"title=Severity Filter,description=ASFF severity label filter (INFORMATIONAL LOW MEDIUM HIGH CRITICAL)."`
-	// RecordState filters by finding record state. Valid values: ACTIVE, ARCHIVED
-	RecordState string `json:"recordState,omitempty" jsonschema:"title=Record State,description=Finding record state filter (ACTIVE ARCHIVED)."`
-	// WorkflowStatus filters by finding workflow status. Valid values: NEW, NOTIFIED, RESOLVED, SUPPRESSED
-	WorkflowStatus string `json:"workflowStatus,omitempty" jsonschema:"title=Workflow Status,description=Finding workflow status filter (NEW NOTIFIED RESOLVED SUPPRESSED)."`
 	// MaxFindings caps the total number of findings returned; 0 means no limit
 	MaxFindings int `json:"maxFindings,omitempty" jsonschema:"title=Max Findings,description=Maximum number of findings to collect. 0 means no limit."`
 }
@@ -40,26 +30,21 @@ type VulnerabilitiesCollect struct{}
 
 // IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
 func (v VulnerabilitiesCollect) IngestHandle() types.IngestHandler {
-	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
-		c, err := SecurityHubClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		cfg, err := VulnerabilitiesCollectOperation.UnmarshalConfig(request.Config)
-		if err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
-
-		return v.Run(ctx, request.Credential, c, cfg)
-	}
+	return providerkit.IngestWithClientRequestConfig(
+		SecurityHubClient,
+		VulnerabilitiesCollectOperation,
+		ErrOperationConfigInvalid,
+		func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+			return v.Run(ctx, request.Credential, client, cfg)
+		},
+	)
 }
 
-// Run collects Security Hub findings using server-side filters
+// Run collects Security Hub findings using credential-defined collection scope
 func (VulnerabilitiesCollect) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-	meta, err := awskit.MetadataFromProviderData(credential.ProviderData, defaultSessionName)
+	awsCredential, err := credentialSchemaFromSet(credential)
 	if err != nil {
-		return nil, ErrCredentialMetadataInvalid
+		return nil, err
 	}
 
 	pageSize := defaultPageSize
@@ -67,7 +52,7 @@ func (VulnerabilitiesCollect) Run(ctx context.Context, credential types.Credenti
 		pageSize = int32(cfg.MaxFindings) //nolint:gosec
 	}
 
-	filters := buildSecurityHubFilters(meta, cfg)
+	filters := buildSecurityHubFilters(awsCredential)
 
 	var (
 		envelopes []types.MappingEnvelope
@@ -123,42 +108,18 @@ collectLoop:
 	}, nil
 }
 
-// buildSecurityHubFilters constructs a server-side filter from credential metadata and per-invocation config
-// Account and region scoping come from the credential; severity, record state, and workflow status
-// come from the operation config. All filters are applied server-side via the GetFindings API
-func buildSecurityHubFilters(meta awskit.Metadata, cfg FindingsConfig) *securityhubtypes.AwsSecurityFindingFilters {
+// buildSecurityHubFilters constructs a server-side filter from credential metadata
+// so account and region scope stay tied to integration setup.
+func buildSecurityHubFilters(credential CredentialSchema) *securityhubtypes.AwsSecurityFindingFilters {
 	var filters securityhubtypes.AwsSecurityFindingFilters
 
-	if meta.AccountScope == awskit.AccountScopeSpecific {
-		filters.AwsAccountId = toStringFilters(meta.AccountIDs)
+	if credential.AccountScope == AccountScopeSpecific {
+		filters.AwsAccountId = toStringFilters(credential.AccountIDs)
 	}
 
-	filters.Region = toStringFilters(meta.LinkedRegions)
+	filters.Region = toStringFilters(credential.LinkedRegions)
 
-	if sev := strings.ToUpper(cfg.Severity); sev != "" {
-		filters.SeverityLabel = []securityhubtypes.StringFilter{{
-			Comparison: securityhubtypes.StringFilterComparisonEquals,
-			Value:      awssdk.String(sev),
-		}}
-	}
-
-	if rs := strings.ToUpper(cfg.RecordState); rs != "" {
-		filters.RecordState = []securityhubtypes.StringFilter{{
-			Comparison: securityhubtypes.StringFilterComparisonEquals,
-			Value:      awssdk.String(rs),
-		}}
-	}
-
-	if ws := strings.ToUpper(cfg.WorkflowStatus); ws != "" {
-		filters.WorkflowStatus = []securityhubtypes.StringFilter{{
-			Comparison: securityhubtypes.StringFilterComparisonEquals,
-			Value:      awssdk.String(ws),
-		}}
-	}
-
-	if len(filters.AwsAccountId) == 0 && len(filters.Region) == 0 &&
-		len(filters.SeverityLabel) == 0 && len(filters.RecordState) == 0 &&
-		len(filters.WorkflowStatus) == 0 {
+	if len(filters.AwsAccountId) == 0 && len(filters.Region) == 0 {
 		return nil
 	}
 

@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -72,9 +73,10 @@ func (e *IntegrationScopeEvaluator) EvaluateConditionWithVars(ctx context.Contex
 		return e.emptyExpressionResult, nil
 	}
 
-	// Validate compilation first to return ErrCELCompilationFailed distinctly from runtime errors
-	if err := e.Validate(expr); err != nil {
-		return false, err
+	// Compile first to return ErrCELCompilationFailed distinctly from runtime errors
+	_, issues := e.evaluator.Compile(expr)
+	if issues != nil && issues.Err() != nil {
+		return false, fmt.Errorf("%w: %w", ErrCELCompilationFailed, issues.Err())
 	}
 
 	out, _, err := e.evaluator.Evaluate(ctx, expr, vars.CELVars())
@@ -82,17 +84,14 @@ func (e *IntegrationScopeEvaluator) EvaluateConditionWithVars(ctx context.Contex
 		return false, fmt.Errorf("%w: %w", ErrConditionFailed, err)
 	}
 
-	if out == nil {
-		return false, ErrCELNilOutput
-	}
-
-	if out.Type() != celtypes.BoolType {
-		return false, ErrCELTypeMismatch
-	}
-
-	result, ok := out.Value().(bool)
-	if !ok {
-		result = out.Equal(celtypes.True) == celtypes.True
+	result, boolErr := celx.BoolResult(out)
+	if boolErr != nil {
+		switch {
+		case errors.Is(boolErr, celx.ErrNilOutput):
+			return false, ErrCELNilOutput
+		default:
+			return false, ErrCELTypeMismatch
+		}
 	}
 
 	return result, nil

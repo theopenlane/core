@@ -5,14 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -63,12 +61,6 @@ type IntegrationQueueResult struct {
 	EventID string
 	// Status captures the run status at queue time
 	Status enums.IntegrationRunStatus
-}
-
-// integrationActionRuntimeParams defines the integration action params used at runtime.
-// Embeds IntegrationActionParams so the JSON schema type and the execution type stay in sync.
-type integrationActionRuntimeParams struct {
-	workflows.IntegrationActionParams
 }
 
 // integrationOpContext captures common integration operation log fields
@@ -134,13 +126,8 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 	return nil
 }
 
-// QueueIntegrationOperation queues an integration operation for async execution
+// QueueIntegrationOperation resolves the installation and dispatches the operation
 func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req IntegrationQueueRequest) (IntegrationQueueResult, error) {
-	return e.queueIntegrationOperation(ctx, req)
-}
-
-// queueIntegrationOperation resolves the installation and dispatches the operation
-func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req IntegrationQueueRequest) (IntegrationQueueResult, error) {
 	if e.integrationRuntime == nil {
 		return IntegrationQueueResult{}, ErrIntegrationOperationsRequired
 	}
@@ -218,7 +205,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		return ErrIntegrationOperationsRequired
 	}
 
-	var params integrationActionRuntimeParams
+	var params workflows.IntegrationActionParams
 	if err := jsonx.RoundTrip(action.Params, &params); err != nil {
 		return errors.Join(ErrUnmarshalParams, err)
 	}
@@ -247,7 +234,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		meta.ObjectType = obj.Type
 	}
 
-	_, err := e.queueIntegrationOperation(ctx, IntegrationQueueRequest{
+	_, err := e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
 		OrgID:           orgID,
 		InstallationID:  params.InstallationID,
 		DefinitionID:    params.DefinitionID,
@@ -277,7 +264,7 @@ func (e *WorkflowEngine) handleIntegrationOperation(ctx gala.HandlerContext, env
 		return ErrIntegrationOperationsRequired
 	}
 
-	systemCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
+	systemCtx := workflows.AllowContext(ctx.Context)
 
 	execErr := e.integrationRuntime.HandleOperation(systemCtx, envelope)
 
@@ -333,11 +320,3 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 	})
 }
 
-// integrationOperationContext applies optional timeout policy to operation execution
-func integrationOperationContext(parent context.Context, timeoutSeconds int) (context.Context, context.CancelFunc) {
-	if timeoutSeconds <= 0 {
-		return parent, func() {}
-	}
-
-	return context.WithTimeout(parent, time.Duration(timeoutSeconds)*time.Second)
-}

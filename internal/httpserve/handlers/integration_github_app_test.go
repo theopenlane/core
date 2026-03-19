@@ -29,8 +29,8 @@ func newGitHubAppRuntimeForTest(t *testing.T, cfg *githubapp.Config) *integratio
 	return integrationsruntime.NewForTesting(reg)
 }
 
-// TestValidateGitHubAppConfig verifies required configuration errors and success cases.
-func TestValidateGitHubAppConfig(t *testing.T) {
+// TestResolveGitHubAppDefinition verifies required configuration errors and success cases.
+func TestResolveGitHubAppDefinition(t *testing.T) {
 	cases := []struct {
 		name    string
 		cfg     *githubapp.Config
@@ -58,7 +58,7 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 			if tc.cfg != nil {
 				h.IntegrationsConfig = catalog.Config{GitHubApp: *tc.cfg}
 			}
-			err := h.validateGitHubAppConfig()
+			_, err := h.resolveGitHubAppDefinition()
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
 			} else {
@@ -76,8 +76,10 @@ func TestGitHubAppInstallURL(t *testing.T) {
 		IntegrationsConfig:  catalog.Config{GitHubApp: *cfg},
 	}
 
-	installURL, err := h.githubAppInstallURL("state-value")
-	assert.NoError(t, err)
+	_, err := h.resolveGitHubAppDefinition()
+	require.NoError(t, err)
+
+	installURL := h.githubAppInstallURL("state-value")
 
 	parsed, err := url.Parse(installURL)
 	assert.NoError(t, err)
@@ -91,7 +93,7 @@ func TestGitHubAppInstallURLMissingSlug(t *testing.T) {
 	// no provider registered → Definition() returns !ok → ErrProviderDisabled
 	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, nil)}
 
-	_, err := h.githubAppInstallURL("state")
+	_, err := h.resolveGitHubAppDefinition()
 	assert.ErrorIs(t, err, ErrProviderDisabled)
 }
 

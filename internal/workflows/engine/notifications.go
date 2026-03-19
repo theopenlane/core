@@ -10,92 +10,75 @@ import (
 	"github.com/theopenlane/core/internal/workflows/observability"
 )
 
-// getExecutedNotifications returns a set of notification keys already executed for the instance.
+// notificationExecutionState tracks which conditional notification actions have fired for an instance
+type notificationExecutionState struct {
+	ExecutedNotifications []string `json:"executed_notifications,omitempty"`
+}
+
+// parseNotificationExecutionState reads the execution state from instance context data
+func parseNotificationExecutionState(data json.RawMessage) notificationExecutionState {
+	if len(data) == 0 {
+		return notificationExecutionState{}
+	}
+
+	var state notificationExecutionState
+	if err := json.Unmarshal(data, &state); err != nil {
+		return notificationExecutionState{}
+	}
+
+	return state
+}
+
+// mergeNotificationExecutionState appends new keys into the existing context data JSON,
+// preserving any other keys already stored there
+func mergeNotificationExecutionState(data json.RawMessage, newKeys []string) (json.RawMessage, error) {
+	var full map[string]any
+	if len(data) > 0 {
+		if err := json.Unmarshal(data, &full); err != nil {
+			full = make(map[string]any)
+		}
+	} else {
+		full = make(map[string]any)
+	}
+
+	existing := parseNotificationExecutionState(data)
+	existing.ExecutedNotifications = append(existing.ExecutedNotifications, newKeys...)
+	full["executed_notifications"] = existing.ExecutedNotifications
+
+	return json.Marshal(full)
+}
+
+// getExecutedNotifications returns a set of notification keys already executed for the instance
 func (l *WorkflowListeners) getExecutedNotifications(instance *generated.WorkflowInstance) map[string]bool {
-	executed := make(map[string]bool)
-	if instance == nil || len(instance.Context.Data) == 0 {
-		return executed
+	if instance == nil {
+		return make(map[string]bool)
 	}
 
-	var data map[string]any
-	if err := json.Unmarshal(instance.Context.Data, &data); err != nil {
-		return executed
-	}
+	state := parseNotificationExecutionState(instance.Context.Data)
+	executed := make(map[string]bool, len(state.ExecutedNotifications))
 
-	raw, ok := data["executed_notifications"]
-	if !ok || raw == nil {
-		return executed
-	}
-
-	switch values := raw.(type) {
-	case []any:
-		for _, v := range values {
-			if s, ok := v.(string); ok {
-				executed[s] = true
-			}
-		}
-	case []string:
-		for _, s := range values {
-			executed[s] = true
-		}
+	for _, key := range state.ExecutedNotifications {
+		executed[key] = true
 	}
 
 	return executed
 }
 
 // trackExecutedNotifications updates the instance context with newly executed notification keys
-func (l *WorkflowListeners) trackExecutedNotifications(scope *observability.Scope, instanceID string, keys []string) {
+func (l *WorkflowListeners) trackExecutedNotifications(scope *observability.Scope, instance *generated.WorkflowInstance, keys []string) {
 	ctx := scope.Context()
 	allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
 	if err != nil {
 		observability.WarnListener(ctx, observability.OpHandleAssignmentCompleted, "assignment_state_change", observability.Fields{
-			workflowevent.FieldWorkflowInstanceID: instanceID,
+			workflowevent.FieldWorkflowInstanceID: instance.ID,
 		}, err)
 		return
 	}
 
-	instance, err := l.client.WorkflowInstance.Query().
-		Where(
-			workflowinstance.IDEQ(instanceID),
-			workflowinstance.OwnerIDEQ(orgID),
-		).
-		Only(allowCtx)
+	newData, err := mergeNotificationExecutionState(instance.Context.Data, keys)
 	if err != nil {
 		observability.WarnListener(ctx, observability.OpHandleAssignmentCompleted, "assignment_state_change", observability.Fields{
-			workflowevent.FieldWorkflowInstanceID: instanceID,
-		}, err)
-		return
-	}
-
-	// Parse existing data
-	var data map[string]any
-	if len(instance.Context.Data) > 0 {
-		if err := json.Unmarshal(instance.Context.Data, &data); err != nil {
-			data = make(map[string]any)
-		}
-	} else {
-		data = make(map[string]any)
-	}
-
-	// Get existing executed notifications
-	var existing []string
-	if executedRaw, ok := data["executed_notifications"].([]any); ok {
-		for _, v := range executedRaw {
-			if s, ok := v.(string); ok {
-				existing = append(existing, s)
-			}
-		}
-	}
-
-	// Add new keys
-	existing = append(existing, keys...)
-	data["executed_notifications"] = existing
-
-	// Marshal back to json.RawMessage
-	newData, err := json.Marshal(data)
-	if err != nil {
-		observability.WarnListener(ctx, observability.OpHandleAssignmentCompleted, "assignment_state_change", observability.Fields{
-			workflowevent.FieldWorkflowInstanceID: instanceID,
+			workflowevent.FieldWorkflowInstanceID: instance.ID,
 		}, err)
 		return
 	}
@@ -105,13 +88,13 @@ func (l *WorkflowListeners) trackExecutedNotifications(scope *observability.Scop
 
 	if err := l.client.WorkflowInstance.Update().
 		Where(
-			workflowinstance.IDEQ(instanceID),
+			workflowinstance.IDEQ(instance.ID),
 			workflowinstance.OwnerIDEQ(orgID),
 		).
 		SetContext(newContext).
 		Exec(allowCtx); err != nil {
 		observability.WarnListener(ctx, observability.OpHandleAssignmentCompleted, "assignment_state_change", observability.Fields{
-			workflowevent.FieldWorkflowInstanceID: instanceID,
+			workflowevent.FieldWorkflowInstanceID: instance.ID,
 		}, err)
 	}
 }

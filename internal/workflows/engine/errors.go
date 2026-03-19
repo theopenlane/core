@@ -25,8 +25,6 @@ var (
 	ErrObjectRefMissingID = errors.New("workflow object ref has no object ID set")
 	// ErrCELTypeMismatch is returned when a CEL expression returns a non-boolean type
 	ErrCELTypeMismatch = errors.New("CEL expression must return boolean")
-	// ErrCELValueExtraction is returned when extracting a boolean value from CEL fails
-	ErrCELValueExtraction = errors.New("failed to extract boolean value from CEL result")
 	// ErrEvaluationTimeout is returned when CEL evaluation exceeds the timeout
 	ErrEvaluationTimeout = errors.New("CEL evaluation timeout")
 	// ErrCELNilOutput is returned when CEL evaluation returns nil output

@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// Builder returns the GCP SCC definition builder with the supplied operator config applied
-func Builder(_ Config) definition.Builder {
+// Builder returns the GCP SCC definition builder
+func Builder() definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -16,15 +16,12 @@ func Builder(_ Config) definition.Builder {
 				Slug:        Slug,
 				Family:      "gcp",
 				DisplayName: "GCP Security Command Center",
-				Description: "Collect Google Cloud Security Command Center findings and settings for security posture reporting.",
+				Description: "Collect Google Cloud Security Command Center findings for security posture reporting.",
 				Category:    "cloud",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/gcp_scc/overview",
-				Labels:      map[string]string{"vendor": "google", "product": "security-command-center"},
+				Labels:      map[string]string{"vendor": "google", "product": "Security Command Center"},
 				Active:      false,
 				Visible:     true,
-			},
-			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
@@ -42,7 +39,7 @@ func Builder(_ Config) definition.Builder {
 			Operations: []types.OperationRegistration{
 				{
 					Name:        HealthDefaultOperation.Name(),
-					Description: "Verify GCP SCC access by listing findings with a minimal query",
+					Description: "Verify GCP SCC access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SCCClient.ID(),
 					Handle:      HealthCheck{}.Handle(),
@@ -55,8 +52,8 @@ func Builder(_ Config) definition.Builder {
 					ConfigSchema: providerkit.SchemaFrom[FindingsConfig](),
 					Ingest: []types.IngestContract{
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+						},
 					},
 					IngestHandle: FindingsCollect{}.IngestHandle(),
 				},

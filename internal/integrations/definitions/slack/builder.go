@@ -15,7 +15,7 @@ func Builder(cfg Config) definition.Builder {
 				Slug:        Slug,
 				Family:      "slack",
 				DisplayName: "Slack",
-				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications to channels.",
+				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
 				Category:    "collab",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/slack/overview",
 				Labels:      map[string]string{"vendor": "slack"},
@@ -29,8 +29,8 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
-				StartPath:    "/v1/integrations/oauth/start",
-				CallbackPath: "/v1/integrations/oauth/callback",
+				StartPath:    types.DefaultAuthStartPath,
+				CallbackPath: types.DefaultAuthCompletePath,
 				OAuth: &types.OAuthPublicConfig{
 					ClientID:    cfg.ClientID,
 					AuthURL:     "https://slack.com/oauth/v2/authorize",

@@ -97,11 +97,10 @@ func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 
 	return map[string]any{
 		celVarEnvelope: map[string]any{
-			"alertType": envelope.Variant,
-			"variant":   envelope.Variant,
-			"resource":  envelope.Resource,
-			"action":    envelope.Action,
-			"payload":   payload,
+			"variant":  envelope.Variant,
+			"resource": envelope.Resource,
+			"action":   envelope.Action,
+			"payload":  payload,
 		},
 		celVarVariant:  envelope.Variant,
 		celVarResource: envelope.Resource,

@@ -6,7 +6,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // persistEntityInput upserts one Entity record using the ingest lookup key fields
@@ -15,24 +14,20 @@ func persistEntityInput(ctx context.Context, db *ent.Client, integration *ent.In
 		return ErrIngestUpsertKeyMissing
 	}
 
-	existing, err := db.Entity.Query().
-		Where(entity.OwnerID(integration.OwnerID)).
-		Where(entity.ExternalID(*createInput.ExternalID)).
-		Only(ctx)
-
-	switch {
-	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		return wrapIngestPersistError(db.Entity.Create().SetInput(createInput).Exec(ctx))
-	default:
-		return wrapIngestPersistError(err)
-	}
-
-	var updateInput ent.UpdateEntityInput
-	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	return wrapIngestPersistError(db.Entity.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx))
+	return persistRoundTripUpsert(
+		ctx,
+		createInput,
+		func(ctx context.Context) (*ent.Entity, error) {
+			return db.Entity.Query().
+				Where(entity.OwnerID(integration.OwnerID)).
+				Where(entity.ExternalID(*createInput.ExternalID)).
+				Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateEntityInput) error {
+			return db.Entity.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.Entity, input ent.UpdateEntityInput) error {
+			return db.Entity.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
 }

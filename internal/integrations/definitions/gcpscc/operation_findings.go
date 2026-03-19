@@ -27,12 +27,6 @@ const (
 
 // FindingsConfig holds per-invocation parameters for the findings.collect operation
 type FindingsConfig struct {
-	// Filter is a server-side CEL filter for findings
-	Filter string `json:"filter,omitempty"`
-	// SourceID scopes collection to a single SCC source
-	SourceID string `json:"sourceId,omitempty"`
-	// SourceIDs scopes collection to multiple SCC sources
-	SourceIDs []string `json:"sourceIds,omitempty"`
 	// PageSize controls the number of findings per API page
 	PageSize int `json:"page_size,omitempty"`
 	// MaxFindings caps the total number of findings returned
@@ -44,19 +38,14 @@ type FindingsCollect struct{}
 
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
-		c, err := SCCClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		cfg, err := FindingsCollectOperation.UnmarshalConfig(request.Config)
-		if err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
-
-		return f.Run(ctx, request.Credential, c, cfg)
-	}
+	return providerkit.IngestWithClientRequestConfig(
+		SCCClient,
+		FindingsCollectOperation,
+		ErrOperationConfigInvalid,
+		func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+			return f.Run(ctx, request.Credential, client, cfg)
+		},
+	)
 }
 
 // Run collects GCP SCC findings from configured sources
@@ -66,12 +55,10 @@ func (FindingsCollect) Run(ctx context.Context, credential types.CredentialSet, 
 		return nil, err
 	}
 
-	sources, err := resolveSources(meta, cfg)
+	sources, err := resolveSources(meta)
 	if err != nil {
 		return nil, err
 	}
-
-	filter := lo.CoalesceOrEmpty(cfg.Filter, meta.FindingFilter)
 
 	pageSize := cfg.PageSize
 	if pageSize <= 0 {
@@ -100,7 +87,6 @@ collectLoop:
 	for _, sourceName := range sources {
 		req := &securitycenterpb.ListFindingsRequest{
 			Parent:   sourceName,
-			Filter:   filter,
 			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
 		}
 
@@ -201,22 +187,14 @@ func resolveParents(meta CredentialSchema) ([]string, error) {
 	return nil, ErrProjectIDRequired
 }
 
-// resolveSources resolves source resource names from config and metadata
-func resolveSources(meta CredentialSchema, cfg FindingsConfig) ([]string, error) {
+// resolveSources resolves source resource names from credential metadata
+func resolveSources(meta CredentialSchema) ([]string, error) {
 	raw := make([]string, 0, 1+len(meta.SourceIDs))
 
-	if cfg.SourceID != "" {
-		raw = append(raw, cfg.SourceID)
-	}
+	raw = append(raw, meta.SourceIDs...)
 
-	raw = append(raw, cfg.SourceIDs...)
-
-	if len(raw) == 0 {
-		raw = append(raw, meta.SourceIDs...)
-
-		if len(raw) == 0 && meta.SourceID != "" {
-			raw = append(raw, meta.SourceID)
-		}
+	if len(raw) == 0 && meta.SourceID != "" {
+		raw = append(raw, meta.SourceID)
 	}
 
 	if len(raw) == 0 {

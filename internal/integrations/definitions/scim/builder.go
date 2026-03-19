@@ -23,19 +23,13 @@ func Builder() definition.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[OperatorConfig](),
-			},
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
-			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Operations: []types.OperationRegistration{
 				{
 					Name:        HealthDefaultOperation.Name(),
-					Description: "Validate SCIM configuration",
+					Description: "Report push-based SCIM health status",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					Handle:      HealthCheck{}.Handle(),
 				},
@@ -45,14 +39,14 @@ func Builder() definition.Builder {
 					Topic:       DirectorySyncOperation.Topic(Slug),
 					Ingest: []types.IngestContract{
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
 					},
 					Handle: DirectorySync{}.Handle(),
 				},

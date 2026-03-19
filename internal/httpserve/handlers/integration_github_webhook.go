@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"strconv"
 
 	"entgo.io/ent/dialect/sql"
@@ -14,7 +13,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -33,11 +31,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 
 	payload, err := readIntegrationWebhookPayload(ctx)
 	if err != nil {
-		if errors.Is(err, errPayloadEmpty) {
-			return h.BadRequest(ctx, err, openapiCtx)
-		}
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
 	webhook, err := h.IntegrationsRuntime.Registry().Webhook(githubapp.DefinitionID.ID(), githubapp.InstallationEventsWebhook.Name())
@@ -57,22 +51,23 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 
 	installation, err := h.resolveGitHubAppWebhookInstallation(requestCtx, payload)
 	if err != nil {
-		if errors.Is(err, githubapp.ErrWebhookPayloadInvalid) || errors.Is(err, githubapp.ErrInstallationIDMissing) {
-			return h.BadRequest(ctx, err, openapiCtx)
-		}
-
-		if errors.Is(err, integrationsruntime.ErrInstallationNotFound) {
+		if ent.IsNotFound(err) {
 			logx.FromContext(requestCtx).Warn().Err(err).Msg("ignoring github app webhook for unknown installation")
 			return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
 		}
 
 		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to resolve github app webhook installation")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		return h.BadRequest(ctx, err, openapiCtx)
 	}
+
+	logger := logx.FromContext(requestCtx).With().
+		Str("integration_id", installation.ID).
+		Str("webhook", webhook.Name).
+		Logger()
 
 	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name, "")
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", installation.ID).Str("webhook", webhook.Name).Msg("failed to ensure github app webhook")
+		logger.Error().Err(err).Msg("failed to ensure webhook")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
@@ -85,16 +80,7 @@ func (h *Handler) resolveGitHubAppWebhookInstallation(ctx context.Context, paylo
 		return nil, err
 	}
 
-	record, err := h.lookupGitHubAppIntegrationByProviderInstallationID(ctx, "", providerInstallationID)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return nil, integrationsruntime.ErrInstallationNotFound
-		}
-
-		return nil, err
-	}
-
-	return record, nil
+	return h.lookupGitHubAppIntegrationByProviderInstallationID(ctx, "", providerInstallationID)
 }
 
 func (h *Handler) lookupGitHubAppIntegrationByProviderInstallationID(ctx context.Context, ownerID, providerInstallationID string) (*ent.Integration, error) {

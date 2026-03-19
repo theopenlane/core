@@ -4,49 +4,38 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
-	// azureSubscriptionScopePrefix is the ARM resource scope prefix for subscription-level requests
-	azureSubscriptionScopePrefix = "subscriptions/"
-	// defaultAzureScope is the Azure Resource Manager OAuth scope for management API access
-	defaultAzureScope = "https://management.azure.com/.default"
-	// azureTokenURLTemplate is the Microsoft identity platform token endpoint template, parameterized by tenant ID
-	azureTokenURLTemplate = "https://login.microsoftonline.com/%s/oauth2/v2.0/token"
+	// subscriptionScopeFormat is the ARM subscription scope format for Security Center requests
+	subscriptionScopeFormat = "/subscriptions/%s"
 )
 
-// Client builds Azure Defender for Cloud clients for one installation
+// azureSecurityClient wraps the armsecurity clients with the installation subscription scope
+type azureSecurityClient struct {
+	// assessments is the ARM Security Center assessments client
+	assessments *armsecurity.AssessmentsClient
+	// subassessments is the ARM Security Center sub-assessments client
+	subassessments *armsecurity.SubAssessmentsClient
+	// subscriptionID is the Azure subscription identifier used to construct the ARM scope
+	subscriptionID string
+}
+
+// scope returns the ARM subscription scope string for this installation
+func (c *azureSecurityClient) scope() string {
+	return fmt.Sprintf(subscriptionScopeFormat, c.subscriptionID)
+}
+
+// Client builds Azure Security Center clients for one installation
 type Client struct{}
 
-// staticAzureCredential implements azcore.TokenCredential for a pre-obtained bearer token
-type staticAzureCredential struct {
-	// token is the pre-obtained bearer token returned on every GetToken call
-	token string
-}
-
-// azurePricingsClient wraps a PricingsClient with its subscription scope
-type azurePricingsClient struct {
-	// client is the underlying Azure Defender for Cloud pricings client
-	client *armsecurity.PricingsClient
-	// scope is the ARM subscription scope string used for pricings queries
-	scope string
-}
-
-// GetToken satisfies azcore.TokenCredential for a pre-obtained bearer token
-func (s staticAzureCredential) GetToken(_ context.Context, _ policy.TokenRequestOptions) (azcore.AccessToken, error) {
-	return azcore.AccessToken{Token: s.token}, nil
-}
-
-// Build constructs an Azure Defender for Cloud client via client credentials flow
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+// Build constructs an Azure Security Center client using client credentials
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
 	var cred CredentialSchema
 	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
 		return nil, ErrCredentialInvalid
@@ -63,28 +52,24 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 		return nil, ErrSubscriptionIDMissing
 	}
 
-	tokenURL := fmt.Sprintf(azureTokenURLTemplate, cred.TenantID)
-	cfg := clientcredentials.Config{
-		ClientID:     cred.ClientID,
-		ClientSecret: cred.ClientSecret,
-		TokenURL:     tokenURL,
-		Scopes:       []string{defaultAzureScope},
-		AuthStyle:    oauth2.AuthStyleInParams,
-	}
-
-	token, err := cfg.Token(ctx)
+	azCred, err := azidentity.NewClientSecretCredential(cred.TenantID, cred.ClientID, cred.ClientSecret, nil)
 	if err != nil {
-		return nil, ErrTokenExchangeFailed
+		return nil, ErrCredentialBuildFailed
 	}
 
-	pricingsClient, err := armsecurity.NewPricingsClient(staticAzureCredential{token: token.AccessToken}, nil)
+	assessments, err := armsecurity.NewAssessmentsClient(azCred, nil)
 	if err != nil {
-		return nil, ErrPricingsClientBuildFailed
+		return nil, ErrAssessmentsClientBuildFailed
 	}
 
-	return &azurePricingsClient{
-		client: pricingsClient,
-		scope:  fmt.Sprintf("%s%s", azureSubscriptionScopePrefix, cred.SubscriptionID),
+	subassessments, err := armsecurity.NewSubAssessmentsClient(azCred, nil)
+	if err != nil {
+		return nil, ErrAssessmentsClientBuildFailed
+	}
+
+	return &azureSecurityClient{
+		assessments:    assessments,
+		subassessments: subassessments,
+		subscriptionID: cred.SubscriptionID,
 	}, nil
 }
-

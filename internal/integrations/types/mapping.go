@@ -4,8 +4,6 @@ import "encoding/json"
 
 // MappingOverride is one mapping customization
 type MappingOverride struct {
-	// Version is the optional version of the mapping spec, used for migration and compatibility checks
-	Version string `json:"version,omitempty"`
 	// FilterExpr is the optional CEL expression used to filter provider payloads before mapping
 	FilterExpr string `json:"filterExpr,omitempty"`
 	// MapExpr is the CEL expression used to map provider payloads to the normalized schema

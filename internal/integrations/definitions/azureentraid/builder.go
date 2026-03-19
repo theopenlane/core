@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// Builder returns the Azure Entra ID definition builder with the supplied operator config applied
+// Builder returns the Azure EntraID definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
 		return types.Definition{
@@ -14,11 +14,11 @@ func Builder(cfg Config) definition.Builder {
 				ID:          DefinitionID.ID(),
 				Slug:        Slug,
 				Family:      "azure",
-				DisplayName: "Azure Entra ID",
+				DisplayName: "Azure EntraID",
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
-				Labels:      map[string]string{"vendor": "microsoft", "product": "entra-id"},
+				Labels:      map[string]string{"vendor": "microsoft", "product": "EntraID"},
 				Active:      false,
 				Visible:     true,
 			},
@@ -28,31 +28,27 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Auth: &types.AuthRegistration{
-				StartPath:    types.DefaultAuthStartPath,
-				CallbackPath: types.DefaultAuthCompletePath,
-				OAuth: &types.OAuthPublicConfig{
-					ClientID:    cfg.ClientID,
-					AuthURL:     azureAuthURL,
-					TokenURL:    azureTokenURL,
-					RedirectURI: cfg.RedirectURL,
-					Scopes:      azureEntraScopes,
-				},
-				ClientSecret: cfg.ClientSecret,
+			Credentials: &types.CredentialRegistration{
+				Schema: providerkit.SchemaFrom[CredentialSchema](),
 			},
 			Clients: []types.ClientRegistration{
 				{
+					Ref:         EntraCredential.ID(),
+					Description: "Azure client credentials token credential for auth verification",
+					Build:       CredentialClient{cfg: cfg}.Build,
+				},
+				{
 					Ref:         EntraClient.ID(),
-					Description: "Microsoft Graph API client",
-					Build:       Client{}.Build,
+					Description: "Microsoft Graph service client for directory operations",
+					Build:       GraphClient{cfg: cfg}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
 					Name:        HealthDefaultOperation.Name(),
-					Description: "Call Microsoft Graph /organization to verify tenant access",
+					Description: "Verify Azure client credentials can acquire a token against Microsoft Graph",
 					Topic:       HealthDefaultOperation.Topic(Slug),
-					ClientRef:   EntraClient.ID(),
+					ClientRef:   EntraCredential.ID(),
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{

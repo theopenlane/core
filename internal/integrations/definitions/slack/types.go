@@ -12,9 +12,9 @@ var (
 	// SlackClient is the client ref for the Slack Web API client used by this definition
 	SlackClient = types.NewClientRef[*slackgo.Client]()
 	// HealthDefaultOperation is the operation ref for the Slack health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 	// TeamInspectOperation is the operation ref for the Slack team inspect operation
-	TeamInspectOperation = types.NewOperationRef[struct{}]("team.inspect")
+	TeamInspectOperation = types.NewOperationRef[TeamInspect]("team.inspect")
 	// ChannelsListOperation is the operation ref for the Slack channels list operation
 	ChannelsListOperation = types.NewOperationRef[ChannelsListOperationInput]("channels.list")
 	// MessageSendOperation is the operation ref for the Slack message send operation

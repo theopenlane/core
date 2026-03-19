@@ -4,6 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/samber/lo"
+
+	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
+	"github.com/microsoftgraph/msgraph-sdk-go/models"
+
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -15,56 +20,54 @@ type DirectoryInspect struct {
 	// DisplayName is the organization display name
 	DisplayName string `json:"displayName"`
 	// VerifiedDomains is the list of verified domains for the tenant
-	VerifiedDomains any `json:"verifiedDomains"`
+	VerifiedDomains []verifiedDomain `json:"verifiedDomains"`
 }
 
-type graphOrganization struct {
-	ID              string `json:"id"`
-	DisplayName     string `json:"displayName"`
-	TenantID        string `json:"tenantId"`
-	VerifiedDomains []any  `json:"verifiedDomains"`
-}
-
-type graphOrganizationResponse struct {
-	Value []graphOrganization `json:"value"`
+// verifiedDomain holds one verified domain entry for an Entra ID tenant
+type verifiedDomain struct {
+	// Name is the domain name
+	Name string `json:"name"`
+	// IsDefault indicates whether this is the default domain for the tenant
+	IsDefault bool `json:"isDefault"`
 }
 
 // Handle adapts directory inspect to the generic operation registration boundary
 func (d DirectoryInspect) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := EntraClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return d.Run(ctx, c)
-	}
+	return providerkit.OperationWithClient(EntraClient, d.Run)
 }
 
 // Run collects Azure Entra ID tenant metadata via Microsoft Graph
-func (DirectoryInspect) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
-	org, err := fetchOrganization(ctx, c)
+func (DirectoryInspect) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient) (json.RawMessage, error) {
+	result, err := c.Organization().Get(ctx, nil)
 	if err != nil {
-		return nil, err
+		return nil, ErrOrganizationLookupFailed
 	}
 
+	orgs := result.GetValue()
+	if len(orgs) == 0 {
+		return nil, ErrNoOrganizations
+	}
+
+	org := orgs[0]
+
 	return providerkit.EncodeResult(DirectoryInspect{
-		ID:              org.ID,
-		DisplayName:     org.DisplayName,
-		VerifiedDomains: org.VerifiedDomains,
+		ID:              lo.FromPtr(org.GetId()),
+		DisplayName:     lo.FromPtr(org.GetDisplayName()),
+		VerifiedDomains: collectVerifiedDomains(org.GetVerifiedDomains()),
 	}, ErrResultEncode)
 }
 
-// fetchOrganization retrieves the first organization entry from Microsoft Graph
-func fetchOrganization(ctx context.Context, client *providerkit.AuthenticatedClient) (graphOrganization, error) {
-	var resp graphOrganizationResponse
-	if err := client.GetJSON(ctx, "organization?$select=id,displayName,tenantId,verifiedDomains&$top=1", &resp); err != nil {
-		return graphOrganization{}, ErrOrganizationLookupFailed
+// collectVerifiedDomains maps SDK verified domain models to the local type
+func collectVerifiedDomains(raw []models.VerifiedDomainable) []verifiedDomain {
+	out := make([]verifiedDomain, 0, len(raw))
+	for _, d := range raw {
+		if d == nil {
+			continue
+		}
+		out = append(out, verifiedDomain{
+			Name:      lo.FromPtr(d.GetName()),
+			IsDefault: lo.FromPtr(d.GetIsDefault()),
+		})
 	}
-
-	if len(resp.Value) == 0 {
-		return graphOrganization{}, ErrNoOrganizations
-	}
-
-	return resp.Value[0], nil
+	return out
 }

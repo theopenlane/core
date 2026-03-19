@@ -2,11 +2,9 @@ package catalog
 
 import (
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
-	"github.com/theopenlane/core/internal/integrations/definitions/gcpscc"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
-	"github.com/theopenlane/core/internal/integrations/definitions/oidcgeneric"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 )
 
@@ -22,10 +20,6 @@ type Config struct {
 	GoogleWorkspace googleworkspace.Config `json:"googleworkspace" koanf:"googleworkspace"`
 	// AzureEntraID holds OAuth credentials for the Azure Entra ID definition
 	AzureEntraID azureentraid.Config `json:"azureentraid" koanf:"azureentraid"`
-	// GCPSCC holds workload identity configuration for the GCP Security Command Center definition
-	GCPSCC gcpscc.Config `json:"gcpscc" koanf:"gcpscc"`
-	// OIDCGeneric holds credentials for the generic OIDC definition
-	OIDCGeneric oidcgeneric.Config `json:"oidcgeneric" koanf:"oidcgeneric"`
 	// MicrosoftTeams holds OAuth credentials for the Microsoft Teams definition
 	MicrosoftTeams microsoftteams.Config `json:"microsoftteams" koanf:"microsoftteams"`
 }

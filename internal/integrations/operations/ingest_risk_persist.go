@@ -6,7 +6,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // persistRiskInput upserts one Risk record using the ingest lookup key fields
@@ -15,24 +14,20 @@ func persistRiskInput(ctx context.Context, db *ent.Client, integration *ent.Inte
 		return ErrIngestUpsertKeyMissing
 	}
 
-	existing, err := db.Risk.Query().
-		Where(risk.OwnerID(integration.OwnerID)).
-		Where(risk.ExternalID(*createInput.ExternalID)).
-		Only(ctx)
-
-	switch {
-	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		return wrapIngestPersistError(db.Risk.Create().SetInput(createInput).Exec(ctx))
-	default:
-		return wrapIngestPersistError(err)
-	}
-
-	var updateInput ent.UpdateRiskInput
-	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	return wrapIngestPersistError(db.Risk.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx))
+	return persistRoundTripUpsert(
+		ctx,
+		createInput,
+		func(ctx context.Context) (*ent.Risk, error) {
+			return db.Risk.Query().
+				Where(risk.OwnerID(integration.OwnerID)).
+				Where(risk.ExternalID(*createInput.ExternalID)).
+				Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateRiskInput) error {
+			return db.Risk.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.Risk, input ent.UpdateRiskInput) error {
+			return db.Risk.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
 }

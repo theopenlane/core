@@ -45,10 +45,6 @@ const (
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
-	// RepositoryFilter limits repository collection to matching repositories
-	RepositoryFilter string `json:"repositoryFilter,omitempty" jsonschema:"title=Repository Filter Expression"`
-	// SecurityOnly limits collection to security-focused data
-	SecurityOnly bool `json:"securityOnly,omitempty" jsonschema:"title=Collect Security Signals Only"`
 }
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes

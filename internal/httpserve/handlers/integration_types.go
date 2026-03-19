@@ -1,27 +1,29 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
 	"time"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // IntegrationConfigBody is a raw JSON object body for non-OAuth provider configuration.
 // It accepts arbitrary key-value pairs dictated by each provider's credentials schema.
 type IntegrationConfigBody json.RawMessage
 
-// ToMap converts the body to a map[string]any for schema validation and attribute access.
-func (b IntegrationConfigBody) ToMap() map[string]any {
-	m, _ := jsonx.ToMap(json.RawMessage(b))
-	if m == nil {
-		return map[string]any{}
-	}
+// RawMessage returns the body as json.RawMessage.
+func (b IntegrationConfigBody) RawMessage() json.RawMessage {
+	return json.RawMessage(b)
+}
 
-	return m
+// IsNullOrEmptyObject reports whether the body is absent, null, or an empty JSON object.
+func (b IntegrationConfigBody) IsNullOrEmptyObject() bool {
+	trimmed := bytes.TrimSpace(b)
+
+	return len(trimmed) == 0 || bytes.Equal(trimmed, []byte("null")) || bytes.Equal(trimmed, []byte("{}"))
 }
 
 // MarshalJSON implements json.Marshaler.

@@ -1,2 +1,2 @@
-// Package awssecurityhub defines the AWS Security Hub reference definition for integrations
+// Package awssecurityhub defines the consolidated AWS Security Hub and Audit Manager integration definition.
 package awssecurityhub

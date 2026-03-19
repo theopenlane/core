@@ -6,7 +6,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // persistAssetInput upserts one Asset record using the ingest lookup key fields
@@ -15,24 +14,20 @@ func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Int
 		return ErrIngestUpsertKeyMissing
 	}
 
-	existing, err := db.Asset.Query().
-		Where(asset.OwnerID(integration.OwnerID)).
-		Where(asset.SourceIdentifier(*createInput.SourceIdentifier)).
-		Only(ctx)
-
-	switch {
-	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		return wrapIngestPersistError(db.Asset.Create().SetInput(createInput).Exec(ctx))
-	default:
-		return wrapIngestPersistError(err)
-	}
-
-	var updateInput ent.UpdateAssetInput
-	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	return wrapIngestPersistError(db.Asset.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx))
+	return persistRoundTripUpsert(
+		ctx,
+		createInput,
+		func(ctx context.Context) (*ent.Asset, error) {
+			return db.Asset.Query().
+				Where(asset.OwnerID(integration.OwnerID)).
+				Where(asset.SourceIdentifier(*createInput.SourceIdentifier)).
+				Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateAssetInput) error {
+			return db.Asset.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.Asset, input ent.UpdateAssetInput) error {
+			return db.Asset.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
 }

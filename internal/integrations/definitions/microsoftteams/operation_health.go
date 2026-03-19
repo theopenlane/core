@@ -4,19 +4,12 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/samber/lo"
+	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
+
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
-
-// ProfileResponse is the raw Microsoft Graph /me response shape
-type ProfileResponse struct {
-	// ID is the Microsoft Graph user identifier
-	ID string `json:"id"`
-	// DisplayName is the user's display name
-	DisplayName string `json:"displayName"`
-	// Mail is the user's email address
-	Mail string `json:"mail"`
-}
 
 // HealthCheck holds the result of a Microsoft Teams health check
 type HealthCheck struct {
@@ -28,25 +21,18 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := TeamsClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return h.Run(ctx, c)
-	}
+	return providerkit.OperationWithClient(TeamsClient, h.Run)
 }
 
-// Run executes the Microsoft Teams health check
-func (HealthCheck) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
-	var profile ProfileResponse
-	if err := c.GetJSON(ctx, "me", &profile); err != nil {
+// Run executes the Microsoft Teams health check via Microsoft Graph
+func (HealthCheck) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient) (json.RawMessage, error) {
+	me, err := c.Me().Get(ctx, nil)
+	if err != nil {
 		return nil, ErrProfileLookupFailed
 	}
 
 	return providerkit.EncodeResult(HealthCheck{
-		ID:   profile.ID,
-		Mail: profile.Mail,
+		ID:   lo.FromPtr(me.GetId()),
+		Mail: lo.FromPtr(me.GetMail()),
 	}, ErrResultEncode)
 }

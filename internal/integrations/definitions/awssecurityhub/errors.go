@@ -3,8 +3,6 @@ package awssecurityhub
 import "errors"
 
 var (
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("awssecurityhub: unexpected client type")
 	// ErrCredentialMetadataRequired indicates no credential metadata was provided
 	ErrCredentialMetadataRequired = errors.New("awssecurityhub: credential metadata required")
 	// ErrCredentialMetadataInvalid indicates credential metadata could not be decoded
@@ -19,6 +17,8 @@ var (
 	ErrDescribeHubFailed = errors.New("awssecurityhub: describe hub failed")
 	// ErrOperationConfigInvalid indicates operation config could not be decoded
 	ErrOperationConfigInvalid = errors.New("awssecurityhub: operation config invalid")
+	// ErrListAssessmentsFailed indicates ListAssessments failed
+	ErrListAssessmentsFailed = errors.New("awssecurityhub: list assessments failed")
 	// ErrFindingsFetchFailed indicates GetFindings failed
 	ErrFindingsFetchFailed = errors.New("awssecurityhub: findings fetch failed")
 	// ErrFindingEncode indicates a finding payload could not be serialized

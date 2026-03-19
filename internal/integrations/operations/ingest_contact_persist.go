@@ -6,7 +6,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // persistContactInput upserts one Contact record using the ingest lookup key fields.
@@ -30,21 +29,17 @@ func persistContactInput(ctx context.Context, db *ent.Client, integration *ent.I
 		q = q.Where(contact.Email(*createInput.Email))
 	}
 
-	existing, err := q.Only(ctx)
-
-	switch {
-	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		return wrapIngestPersistError(db.Contact.Create().SetInput(createInput).Exec(ctx))
-	default:
-		return wrapIngestPersistError(err)
-	}
-
-	var updateInput ent.UpdateContactInput
-	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	return wrapIngestPersistError(db.Contact.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx))
+	return persistRoundTripUpsert(
+		ctx,
+		createInput,
+		func(ctx context.Context) (*ent.Contact, error) {
+			return q.Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateContactInput) error {
+			return db.Contact.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.Contact, input ent.UpdateContactInput) error {
+			return db.Contact.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
 }

@@ -4,11 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/samber/lo"
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/googleapi"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -25,22 +23,6 @@ const (
 	// memberDirectoryFields is the Google Admin SDK field mask for group member listing requests
 	memberDirectoryFields = "nextPageToken,members(id,email,role,type,status,delivery_settings)"
 )
-
-// DirectorySyncConfig controls the directory sync operation
-type DirectorySyncConfig struct {
-	// Customer scopes the listing to a specific customer identifier
-	Customer string `json:"customer,omitempty" jsonschema:"title=Customer ID"`
-	// Domain scopes the listing to a specific domain
-	Domain string `json:"domain,omitempty" jsonschema:"title=Domain"`
-	// Query is a search query to filter users and groups server-side
-	Query string `json:"query,omitempty" jsonschema:"title=Directory Query"`
-	// OrganizationalUnit filters collected users to one org unit path and its descendants
-	OrganizationalUnit string `json:"organizationalUnitPath,omitempty" jsonschema:"title=Organizational Unit Path"`
-	// IncludeSuspended overrides whether suspended users are emitted
-	IncludeSuspended *bool `json:"includeSuspendedUsers,omitempty" jsonschema:"title=Include Suspended Users"`
-	// IncludeGroups overrides whether groups and memberships are emitted
-	IncludeGroups *bool `json:"includeGroups,omitempty" jsonschema:"title=Sync Groups"`
-}
 
 // directoryEntityRef is a lightweight reference to a directory user or group by ID and email
 type directoryEntityRef struct {
@@ -63,23 +45,21 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
-		svc, err := WorkspaceClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
+	return providerkit.IngestWithClientRequest(
+		WorkspaceClient,
+		func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
+			var cfg UserInput
+			if request.Integration != nil {
+				_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
+			}
 
-		cfg, err := DirectorySyncOperation.UnmarshalConfig(request.Config)
-		if err != nil {
-			return nil, ErrDirectorySyncConfigInvalid
-		}
-
-		return d.Run(ctx, svc, resolveDirectorySyncConfig(request.Integration, cfg))
-	}
+			return d.Run(ctx, svc, cfg)
+		},
+	)
 }
 
 // Run collects Google Workspace directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectorySyncConfig) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg UserInput) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, svc, cfg)
 	if err != nil {
 		return nil, err
@@ -116,7 +96,7 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectoryS
 		},
 	}
 
-	if !lo.FromPtrOr(cfg.IncludeGroups, false) {
+	if !cfg.EnableGroupSync {
 		return payloadSets, nil
 	}
 
@@ -182,36 +162,9 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectoryS
 	return payloadSets, nil
 }
 
-// resolveDirectorySyncConfig merges stored installation defaults with per-run overrides
-func resolveDirectorySyncConfig(installation *generated.Integration, cfg DirectorySyncConfig) DirectorySyncConfig {
-	var defaults UserInput
-	if installation != nil {
-		_ = jsonx.UnmarshalIfPresent(installation.Config.ClientConfig, &defaults)
-	}
-
-	settings := DirectorySyncConfig{
-		Customer:           firstNonEmpty(cfg.Customer, defaults.CustomerID),
-		Domain:             cfg.Domain,
-		Query:              cfg.Query,
-		OrganizationalUnit: firstNonEmpty(cfg.OrganizationalUnit, defaults.OrganizationalUnit),
-		IncludeSuspended:   lo.ToPtr(defaults.IncludeSuspended),
-		IncludeGroups:      lo.ToPtr(defaults.EnableGroupSync),
-	}
-
-	if cfg.IncludeSuspended != nil {
-		settings.IncludeSuspended = lo.ToPtr(*cfg.IncludeSuspended)
-	}
-
-	if cfg.IncludeGroups != nil {
-		settings.IncludeGroups = lo.ToPtr(*cfg.IncludeGroups)
-	}
-
-	return settings
-}
-
 // listDirectoryUsers pages through Google Workspace users using the resolved sync settings
-func listDirectoryUsers(ctx context.Context, svc *admin.Service, cfg DirectorySyncConfig) ([]*admin.User, error) {
-	customer := firstNonEmpty(cfg.Customer, "my_customer")
+func listDirectoryUsers(ctx context.Context, svc *admin.Service, cfg UserInput) ([]*admin.User, error) {
+	customer := firstNonEmpty(cfg.CustomerID, "my_customer")
 	users := make([]*admin.User, 0)
 	pageToken := ""
 
@@ -259,8 +212,8 @@ func listDirectoryUsers(ctx context.Context, svc *admin.Service, cfg DirectorySy
 }
 
 // listDirectoryGroups pages through Google Workspace groups using the resolved sync settings
-func listDirectoryGroups(ctx context.Context, svc *admin.Service, cfg DirectorySyncConfig) ([]*admin.Group, error) {
-	customer := firstNonEmpty(cfg.Customer, "my_customer")
+func listDirectoryGroups(ctx context.Context, svc *admin.Service, cfg UserInput) ([]*admin.Group, error) {
+	customer := firstNonEmpty(cfg.CustomerID, "my_customer")
 	groups := make([]*admin.Group, 0)
 	pageToken := ""
 
@@ -351,12 +304,12 @@ func listGroupMembers(ctx context.Context, svc *admin.Service, group *admin.Grou
 }
 
 // isUserIncluded applies client-side filters that are not directly represented in the ingest mapping
-func isUserIncluded(user *admin.User, cfg DirectorySyncConfig) bool {
+func isUserIncluded(user *admin.User, cfg UserInput) bool {
 	if user == nil {
 		return false
 	}
 
-	if !lo.FromPtrOr(cfg.IncludeSuspended, false) && user.Suspended {
+	if !cfg.IncludeSuspended && user.Suspended {
 		return false
 	}
 
@@ -456,3 +409,4 @@ func firstNonEmpty(values ...string) string {
 
 	return ""
 }
+

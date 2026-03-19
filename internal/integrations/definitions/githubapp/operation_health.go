@@ -13,14 +13,7 @@ type HealthCheck struct{}
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		githubClient, err := GitHubClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return h.Run(ctx, githubClient)
-	}
+	return providerkit.OperationWithClient(GitHubClient, h.Run)
 }
 
 // Run executes the health check using the GitHub GraphQL client

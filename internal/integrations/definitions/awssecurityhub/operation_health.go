@@ -6,7 +6,6 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 
-	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -25,21 +24,19 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := SecurityHubClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return h.Run(ctx, request.Credential, c)
-	}
+	return providerkit.OperationWithClientRequest(
+		SecurityHubClient,
+		func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) (json.RawMessage, error) {
+			return h.Run(ctx, request.Credential, client)
+		},
+	)
 }
 
 // Run validates Security Hub access by calling DescribeHub
 func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client) (json.RawMessage, error) {
-	meta, err := awskit.MetadataFromProviderData(credential.ProviderData, defaultSessionName)
+	awsCredential, err := credentialSchemaFromSet(credential)
 	if err != nil {
-		return nil, ErrCredentialMetadataInvalid
+		return nil, err
 	}
 
 	resp, err := c.DescribeHub(ctx, &securityhub.DescribeHubInput{})
@@ -48,8 +45,8 @@ func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *s
 	}
 
 	details := HealthCheck{
-		Region:  meta.Region,
-		RoleARN: meta.RoleARN,
+		Region:  awsCredential.HomeRegion,
+		RoleARN: awsCredential.RoleARN,
 	}
 
 	if resp.HubArn != nil {

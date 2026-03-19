@@ -44,14 +44,7 @@ type repositoryNode struct {
 
 // Handle adapts repository sync to the generic operation registration boundary
 func (r RepositorySync) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		githubClient, err := GitHubClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return r.Run(ctx, githubClient)
-	}
+	return providerkit.OperationWithClient(GitHubClient, r.Run)
 }
 
 // Run enumerates repositories accessible to the installation

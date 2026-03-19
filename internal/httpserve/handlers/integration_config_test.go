@@ -127,6 +127,32 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	require.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectPayload() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderRejectsNonObjectPayload"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		DefinitionID: configTestProviderID,
+		Body:         handlers.IntegrationConfigBody(`["not","an","object"]`),
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	t := suite.T()
 

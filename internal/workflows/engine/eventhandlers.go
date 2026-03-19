@@ -9,8 +9,9 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -94,7 +95,7 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 		triggerInput.SetChangeSet(changeSet)
 		_, err := l.engine.TriggerWorkflow(ctx.Context, def, obj, triggerInput)
 		if err != nil && !errors.Is(err, workflows.ErrWorkflowAlreadyActive) {
-			log.Ctx(ctx.Context).Error().Err(err).Str("definition_id", def.ID).Msg("failed to trigger workflow")
+			logx.FromContext(ctx.Context).Error().Err(err).Str("definition_id", def.ID).Msg("failed to trigger workflow")
 		}
 	}
 
@@ -147,7 +148,7 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.Handle
 		return nil
 	}
 
-	log.Info().Str("assignment_id", assignmentID).Str("new_status", newStatus.String()).Msg("workflow assignment status changed")
+	logx.FromContext(ctx.Context).Info().Str("assignment_id", assignmentID).Str("new_status", newStatus.String()).Msg("workflow assignment status changed")
 
 	return l.engine.CompleteAssignment(ctx.Context, assignmentID, newStatus, nil, nil)
 }
@@ -533,9 +534,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 				workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
 			})
 		}
-	}
 
-	if assignment.Status == enums.WorkflowAssignmentStatusChangesRequested {
 		if err := l.closePendingApprovalsForChangeRequest(scope, assignmentsByAction, expectedIndices, actionIndex, useExpected, assignment, approvalMeta.ActionKey); err != nil {
 			scope.Warn(err, observability.Fields{
 				workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
@@ -738,13 +737,9 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 	requesterID := requesterAssignment.ActorUserID
 	decidedAt := time.Now().UTC()
 
-	indices := make([]int, 0, len(expectedIndices))
-	if useExpected {
-		for idx := range expectedIndices {
-			indices = append(indices, idx)
-		}
-	} else {
-		indices = append(indices, actionIndex)
+	indices := lo.Keys(expectedIndices)
+	if !useExpected {
+		indices = []int{actionIndex}
 	}
 
 	for _, idx := range indices {

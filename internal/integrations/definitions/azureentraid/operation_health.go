@@ -4,42 +4,32 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
+
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // HealthCheck holds the result of an Azure Entra ID health check
 type HealthCheck struct {
-	// ID is the organization identifier
-	ID string `json:"id"`
-	// TenantID is the Azure tenant identifier
-	TenantID string `json:"tenantId"`
-	// DisplayName is the organization display name
-	DisplayName string `json:"displayName"`
+	// Authenticated reports whether the client credentials successfully acquired a token
+	Authenticated bool `json:"authenticated"`
 }
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := EntraClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return h.Run(ctx, c)
-	}
+	return providerkit.OperationWithClient(EntraCredential, h.Run)
 }
 
-// Run executes the Azure Entra ID health check
-func (HealthCheck) Run(ctx context.Context, c *providerkit.AuthenticatedClient) (json.RawMessage, error) {
-	org, err := fetchOrganization(ctx, c)
+// Run executes the Azure Entra ID health check by verifying token acquisition
+func (HealthCheck) Run(ctx context.Context, cred azcore.TokenCredential) (json.RawMessage, error) {
+	_, err := cred.GetToken(ctx, policy.TokenRequestOptions{
+		Scopes: []string{graphScope},
+	})
 	if err != nil {
-		return nil, err
+		return nil, ErrTokenAcquireFailed
 	}
 
-	return providerkit.EncodeResult(HealthCheck{
-		ID:          org.ID,
-		TenantID:    org.TenantID,
-		DisplayName: org.DisplayName,
-	}, ErrResultEncode)
+	return providerkit.EncodeResult(HealthCheck{Authenticated: true}, ErrResultEncode)
 }

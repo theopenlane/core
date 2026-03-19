@@ -5,31 +5,6 @@ import (
 	"testing"
 )
 
-func TestDecodeApprovalActionParamsSupportsLegacyAssignees(t *testing.T) {
-	t.Parallel()
-
-	raw := json.RawMessage(`{
-		"assignees": {
-			"users": ["user-1"],
-			"groups": ["group-1"]
-		},
-		"fields": ["status"]
-	}`)
-
-	params, err := decodeApprovalActionParams(raw)
-	if err != nil {
-		t.Fatalf("decodeApprovalActionParams() unexpected error: %v", err)
-	}
-
-	if len(params.Targets) != 2 {
-		t.Fatalf("expected 2 targets from legacy assignees, got %d", len(params.Targets))
-	}
-
-	if params.Targets[0].ID != "user-1" || params.Targets[1].ID != "group-1" {
-		t.Fatalf("unexpected target conversion: %#v", params.Targets)
-	}
-}
-
 func TestDecodeApprovalActionParamsCoercesLegacyRequired(t *testing.T) {
 	t.Parallel()
 

@@ -12,9 +12,9 @@ var (
 	// OktaClient is the client ref for the Okta API client used by this definition
 	OktaClient = types.NewClientRef[*oktagosdk.APIClient]()
 	// HealthDefaultOperation is the operation ref for the Okta health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 	// PoliciesCollectOperation is the operation ref for the Okta policies collection operation
-	PoliciesCollectOperation = types.NewOperationRef[struct{}]("policies.collect")
+	PoliciesCollectOperation = types.NewOperationRef[PoliciesCollect]("policies.collect")
 )
 
 // Slug is the unique identifier for the Okta integration
@@ -24,8 +24,6 @@ const Slug = "okta"
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
-	// OrgURL is the Okta organization URL
-	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
 }
 
 // CredentialSchema holds the Okta tenant credentials for one installation

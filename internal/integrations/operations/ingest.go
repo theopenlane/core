@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -52,6 +53,12 @@ type mappedIngestRecord struct {
 	Variant string
 	// Payload is the mapped JSON document ready for unmarshaling into the ent create input type
 	Payload json.RawMessage
+}
+
+var directorySyncRunSchemas = map[string]struct{}{
+	integrationgenerated.IntegrationMappingSchemaDirectoryAccount:    {},
+	integrationgenerated.IntegrationMappingSchemaDirectoryGroup:      {},
+	integrationgenerated.IntegrationMappingSchemaDirectoryMembership: {},
 }
 
 // EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
@@ -194,38 +201,29 @@ func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr strin
 
 // findMapping looks up the mapping spec for the given schema and variant
 func findMapping(mappings []types.MappingRegistration, schema string, variant string) (types.MappingOverride, bool) {
-	for _, mapping := range mappings {
-		if mapping.Schema == schema && mapping.Variant == variant {
-			return mapping.Spec, true
-		}
+	mapping, ok := lo.Find(mappings, func(mapping types.MappingRegistration) bool {
+		return mapping.Schema == schema && mapping.Variant == variant
+	})
+	if !ok {
+		return types.MappingOverride{}, false
 	}
 
-	return types.MappingOverride{}, false
+	return mapping.Spec, true
 }
 
 // contractIncludesSchema checks whether the given list of contracts includes a contract for the given schema
 func contractIncludesSchema(contracts []types.IngestContract, schema string) bool {
-	for _, contract := range contracts {
-		if contract.Schema == schema {
-			return true
-		}
-	}
-
-	return false
+	return lo.ContainsBy(contracts, func(contract types.IngestContract) bool {
+		return contract.Schema == schema
+	})
 }
 
 // needsDirectorySyncRun checks whether any of the given contracts require a directory sync run to be created
 func needsDirectorySyncRun(contracts []types.IngestContract) bool {
-	for _, contract := range contracts {
-		switch contract.Schema {
-		case integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-			integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-			integrationgenerated.IntegrationMappingSchemaDirectoryMembership:
-			return true
-		}
-	}
-
-	return false
+	return lo.ContainsBy(contracts, func(contract types.IngestContract) bool {
+		_, ok := directorySyncRunSchemas[contract.Schema]
+		return ok
+	})
 }
 
 // createDirectorySyncRun creates a new directory sync run in the database and returns its ID so that we can pass it down into the ingest context

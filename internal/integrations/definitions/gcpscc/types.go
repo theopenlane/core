@@ -15,11 +15,11 @@ var (
 	// SCCClient is the client ref for the GCP Security Command Center client used by this definition
 	SCCClient = types.NewClientRef[*cloudscc.Client]()
 	// HealthDefaultOperation is the operation ref for the GCP SCC health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 	// FindingsCollectOperation is the operation ref for the GCP SCC findings collection operation
 	FindingsCollectOperation = types.NewOperationRef[FindingsConfig]("findings.collect")
 	// SettingsScanOperation is the operation ref for the GCP SCC settings scan operation
-	SettingsScanOperation = types.NewOperationRef[struct{}]("settings.scan")
+	SettingsScanOperation = types.NewOperationRef[SettingsScan]("settings.scan")
 )
 
 // Slug is the unique identifier for the GCP Security Command Center integration
@@ -36,14 +36,6 @@ const (
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
-	// OrganizationID is the GCP organization identifier
-	OrganizationID string `json:"organizationId,omitempty" jsonschema:"title=Organization ID"`
-	// ProjectIDs limits collection to specific GCP project identifiers
-	ProjectIDs []string `json:"projectIds,omitempty" jsonschema:"title=Project IDs"`
-	// ProjectScope controls whether collection covers all or specific projects
-	ProjectScope string `json:"projectScope,omitempty" jsonschema:"title=Project Scope"`
-	// SourceID is the SCC source identifier
-	SourceID string `json:"sourceId,omitempty" jsonschema:"title=SCC Source ID"`
 }
 
 // CredentialSchema holds the GCP SCC credentials for one installation
@@ -56,26 +48,14 @@ type CredentialSchema struct {
 	ProjectScope string `json:"projectScope,omitempty" jsonschema:"title=Project Scope"`
 	// ProjectIDs lists the specific GCP projects used when project scope is specific
 	ProjectIDs []string `json:"projectIds,omitempty" jsonschema:"title=Project IDs"`
-	// WorkloadIdentityProvider is the workload identity provider resource name
-	WorkloadIdentityProvider string `json:"workloadIdentityProvider,omitempty" jsonschema:"title=Workload Identity Provider"`
-	// Audience is the STS audience used for workload identity federation
-	Audience string `json:"audience,omitempty" jsonschema:"title=Audience"`
-	// ServiceAccountEmail is the service account email used for impersonation
-	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty" jsonschema:"title=Service Account Email"`
 	// SourceID is the default SCC source identifier used when a run does not override it
 	SourceID string `json:"sourceId,omitempty" jsonschema:"title=SCC Source ID"`
 	// SourceIDs lists the SCC source identifiers used for collection
 	SourceIDs []string `json:"sourceIds,omitempty" jsonschema:"title=SCC Source IDs"`
 	// Scopes lists the OAuth scopes requested for service account credentials
 	Scopes []string `json:"scopes,omitempty" jsonschema:"title=OAuth Scopes"`
-	// TokenLifetime is the requested lifetime for impersonated access tokens
-	TokenLifetime string `json:"tokenLifetime,omitempty" jsonschema:"title=Token Lifetime"`
-	// FindingFilter is the default SCC findings filter applied during collection
-	FindingFilter string `json:"findingFilter,omitempty" jsonschema:"title=Findings Filter"`
 	// ServiceAccountKey is the service account key JSON used for direct credentials
 	ServiceAccountKey string `json:"serviceAccountKey,omitempty" jsonschema:"title=Service Account Key JSON"`
-	// SubjectToken is the external subject token used for workload identity federation
-	SubjectToken string `json:"subjectToken,omitempty" jsonschema:"title=Subject Token"`
 }
 
 // applyDefaults fills in fallback values for missing optional fields

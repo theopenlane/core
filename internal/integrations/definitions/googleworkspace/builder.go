@@ -30,8 +30,8 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
-				StartPath:    "/v1/integrations/oauth/start",
-				CallbackPath: "/v1/integrations/oauth/callback",
+				StartPath:    types.DefaultAuthStartPath,
+				CallbackPath: types.DefaultAuthCompletePath,
 				OAuth: &types.OAuthPublicConfig{
 					ClientID:    cfg.ClientID,
 					AuthURL:     "https://accounts.google.com/o/oauth2/v2/auth",
@@ -65,21 +65,20 @@ func Builder(cfg Config) definition.Builder {
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
-					Name:         DirectorySyncOperation.Name(),
-					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:        DirectorySyncOperation.Topic(Slug),
-					ClientRef:    WorkspaceClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[DirectorySyncConfig](),
+					Name:        DirectorySyncOperation.Name(),
+					Description: "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   WorkspaceClient.ID(),
 					Ingest: []types.IngestContract{
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
 				},

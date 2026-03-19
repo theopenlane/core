@@ -1,6 +1,7 @@
 package awssecurityhub
 
 import (
+	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -11,8 +12,12 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
 	SecurityHubClient = types.NewClientRef[*securityhub.Client]()
+	// AuditManagerClient is the client ref for the AWS Audit Manager client used by this definition
+	AuditManagerClient = types.NewClientRef[*auditmanager.Client]()
 	// HealthDefaultOperation is the operation ref for the AWS Security Hub health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
+	// AssessmentsListOperation is the operation ref for the AWS Audit Manager assessments list operation
+	AssessmentsListOperation = types.NewOperationRef[AssessmentsConfig]("assessments.list")
 	// VulnerabilitiesCollectOperation is the operation ref for the Security Hub vulnerabilities collection operation
 	VulnerabilitiesCollectOperation = types.NewOperationRef[FindingsConfig]("vulnerabilities.collect")
 )
@@ -23,32 +28,26 @@ const Slug = "aws_security_hub"
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty"    jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
-	// AccountScope controls whether collection covers all delegated accounts or a subset
-	AccountScope string `json:"accountScope,omitempty"  jsonschema:"title=Account Scope"`
-	// AccountIDs lists the specific AWS account IDs used when account scope is specific
-	AccountIDs []string `json:"accountIds,omitempty"    jsonschema:"title=Account IDs"`
-	// LinkedRegions limits findings collection to the listed source regions
-	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
 }
 
-// CredentialSchema holds the AWS STS role and optional static key material for one Security Hub installation
-// Fields are named to match awskit.ProviderData JSON tags so MetadataFromProviderData decodes them correctly
+// CredentialSchema holds the AWS assume-role and optional static source credential inputs
+// shared by the AWS service clients exposed from this definition.
 type CredentialSchema struct {
 	// RoleARN is the cross-account IAM role ARN Openlane should assume in the tenant environment
 	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
 	// ExternalID is the external ID required in the tenant role trust policy
 	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy."`
 	// HomeRegion is the AWS region where Security Hub cross-region aggregation is managed
-	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Security Hub Home Region,description=AWS region where Security Hub cross-region aggregation is managed (e.g. us-east-1)."`
+	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Home Region,description=AWS region used for Security Hub aggregation and other service API calls (e.g. us-east-1)."`
+	// AccountID is the AWS account ID for reference in assessment summaries and run metadata
+	AccountID string `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=Optional AWS account ID for reference in results and reporting."`
 	// AccountScope controls whether collection covers all delegated accounts or a subset
 	AccountScope string `json:"accountScope,omitempty"    jsonschema:"title=Account Scope,description=Collect from all delegated accounts or restrict to specific account IDs.,enum=all,enum=specific"`
 	// AccountIDs lists the specific AWS account IDs used when account scope is specific
 	AccountIDs []string `json:"accountIds,omitempty"      jsonschema:"title=Account IDs,description=Required when accountScope is specific."`
 	// LinkedRegions limits findings collection to the listed source regions
 	LinkedRegions []string `json:"linkedRegions,omitempty"   jsonschema:"title=Linked Regions,description=Filter findings to these source regions. Empty means all regions."`
-	// AccountID is the AWS account ID for reference
-	AccountID string `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=AWS account ID for reference."`
 	// SessionName is an optional STS session name override
 	SessionName string `json:"sessionName,omitempty"     jsonschema:"title=Session Name,description=Optional STS session name override."`
 	// SessionDuration is an optional STS session duration override

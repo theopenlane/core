@@ -40,14 +40,7 @@ type PoliciesCollect struct {
 
 // Handle adapts policy collection to the generic operation registration boundary
 func (p PoliciesCollect) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := OktaClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return p.Run(ctx, c)
-	}
+	return providerkit.OperationWithClient(OktaClient, p.Run)
 }
 
 // Run collects Okta sign-on policy metadata

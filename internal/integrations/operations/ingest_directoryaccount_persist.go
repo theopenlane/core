@@ -6,7 +6,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // persistDirectoryAccountInput upserts one DirectoryAccount record using the ingest lookup key fields
@@ -15,24 +14,20 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 		return ErrIngestUpsertKeyMissing
 	}
 
-	existing, err := db.DirectoryAccount.Query().
-		Where(directoryaccount.IntegrationID(integration.ID)).
-		Where(directoryaccount.ExternalID(createInput.ExternalID)).
-		Only(ctx)
-
-	switch {
-	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		return wrapIngestPersistError(db.DirectoryAccount.Create().SetInput(createInput).Exec(ctx))
-	default:
-		return wrapIngestPersistError(err)
-	}
-
-	var updateInput ent.UpdateDirectoryAccountInput
-	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	return wrapIngestPersistError(db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx))
+	return persistRoundTripUpsert(
+		ctx,
+		createInput,
+		func(ctx context.Context) (*ent.DirectoryAccount, error) {
+			return db.DirectoryAccount.Query().
+				Where(directoryaccount.IntegrationID(integration.ID)).
+				Where(directoryaccount.ExternalID(createInput.ExternalID)).
+				Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateDirectoryAccountInput) error {
+			return db.DirectoryAccount.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.DirectoryAccount, input ent.UpdateDirectoryAccountInput) error {
+			return db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
 }

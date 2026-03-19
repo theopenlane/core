@@ -70,6 +70,19 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 	return entry.definition, true
 }
 
+// Definitions returns all registered definitions in stable id order
+func (r *Registry) Definitions() []types.Definition {
+	out := lo.MapToSlice(r.definitions, func(_ string, entry definitionEntry) types.Definition {
+		return entry.definition
+	})
+
+	slices.SortFunc(out, func(a, b types.Definition) int {
+		return cmp.Compare(a.ID, b.ID)
+	})
+
+	return out
+}
+
 // Client returns one client registration for a definition
 func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegistration, error) {
 	return lookupInEntry(r, id, clientID, func(e definitionEntry) map[types.ClientID]types.ClientRegistration {
@@ -122,6 +135,18 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return e.definition.Slug == def.Slug
 	}) {
 		return ErrDefinitionSlugAlreadyRegistered
+	}
+
+	if def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0 {
+		return ErrOperatorConfigSchemaRequired
+	}
+
+	if def.Credentials != nil && len(def.Credentials.Schema) == 0 {
+		return ErrCredentialSchemaRequired
+	}
+
+	if def.UserInput != nil && len(def.UserInput.Schema) == 0 {
+		return ErrUserInputSchemaRequired
 	}
 
 	return nil

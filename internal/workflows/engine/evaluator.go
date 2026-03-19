@@ -323,7 +323,7 @@ func (l *WorkflowListeners) reEvaluateNotifyActions(scope *observability.Scope, 
 
 	// Persist newly executed notification keys to instance context
 	if len(newlyExecuted) > 0 {
-		l.trackExecutedNotifications(scope, instance.ID, newlyExecuted)
+		l.trackExecutedNotifications(scope, instance, newlyExecuted)
 	}
 }
 

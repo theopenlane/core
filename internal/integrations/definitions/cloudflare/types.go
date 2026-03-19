@@ -12,7 +12,7 @@ var (
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
 	CloudflareClient = types.NewClientRef[*cf.Client]()
 	// HealthDefaultOperation is the operation ref for the Cloudflare health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 )
 
 // Slug is the unique identifier for the Cloudflare integration
@@ -22,14 +22,10 @@ const Slug = "cloudflare"
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
-	// ZoneIDs limits collection to specific Cloudflare zone identifiers
-	ZoneIDs []string `json:"zoneIds,omitempty" jsonschema:"title=Zone IDs"`
 }
 
 // CredentialSchema holds the Cloudflare API credentials for one installation
 type CredentialSchema struct {
 	// APIToken is the Cloudflare API token with permissions to read account and zone metadata
 	APIToken string `json:"apiToken"          jsonschema:"required,title=API Token"`
-	// AccountID is the Cloudflare account identifier
-	AccountID string `json:"accountId"         jsonschema:"required,title=Account ID"`
 }

@@ -47,46 +47,118 @@ var ingestSchemaOrder = []string{
 
 // schemaRegistrations maps each supported ingest schema to its registration
 var schemaRegistrations = map[string]schemaRegistration{
-	integrationgenerated.IntegrationMappingSchemaAsset: {
-		register: registerAssetListener,
-		emit:     emitAsset,
-		persist:  persistAsset,
-	},
-	integrationgenerated.IntegrationMappingSchemaContact: {
-		register: registerContactListener,
-		emit:     emitContact,
-		persist:  persistContact,
-	},
-	integrationgenerated.IntegrationMappingSchemaDirectoryAccount: {
-		register: registerDirectoryAccountListener,
-		emit:     emitDirectoryAccount,
-		persist:  persistDirectoryAccount,
-	},
-	integrationgenerated.IntegrationMappingSchemaDirectoryGroup: {
-		register: registerDirectoryGroupListener,
-		emit:     emitDirectoryGroup,
-		persist:  persistDirectoryGroup,
-	},
-	integrationgenerated.IntegrationMappingSchemaDirectoryMembership: {
-		register: registerDirectoryMembershipListener,
-		emit:     emitDirectoryMembership,
-		persist:  persistDirectoryMembership,
-	},
-	integrationgenerated.IntegrationMappingSchemaEntity: {
-		register: registerEntityListener,
-		emit:     emitEntity,
-		persist:  persistEntity,
-	},
-	integrationgenerated.IntegrationMappingSchemaRisk: {
-		register: registerRiskListener,
-		emit:     emitRisk,
-		persist:  persistRisk,
-	},
-	integrationgenerated.IntegrationMappingSchemaVulnerability: {
-		register: registerVulnerabilityListener,
-		emit:     emitVulnerability,
-		persist:  persistVulnerability,
-	},
+	integrationgenerated.IntegrationMappingSchemaAsset: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestAssetRequestedTopic,
+		prepareAssetInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateAssetInput) integrationgenerated.IntegrationIngestAssetRequested {
+			return integrationgenerated.IntegrationIngestAssetRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestAssetRequested) (string, ent.CreateAssetInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistAssetInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaContact: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestContactRequestedTopic,
+		prepareContactInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateContactInput) integrationgenerated.IntegrationIngestContactRequested {
+			return integrationgenerated.IntegrationIngestContactRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestContactRequested) (string, ent.CreateContactInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistContactInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaDirectoryAccount: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestDirectoryAccountRequestedTopic,
+		prepareDirectoryAccountInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateDirectoryAccountInput) integrationgenerated.IntegrationIngestDirectoryAccountRequested {
+			return integrationgenerated.IntegrationIngestDirectoryAccountRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestDirectoryAccountRequested) (string, ent.CreateDirectoryAccountInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistDirectoryAccountInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaDirectoryGroup: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestDirectoryGroupRequestedTopic,
+		prepareDirectoryGroupInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateDirectoryGroupInput) integrationgenerated.IntegrationIngestDirectoryGroupRequested {
+			return integrationgenerated.IntegrationIngestDirectoryGroupRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestDirectoryGroupRequested) (string, ent.CreateDirectoryGroupInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistDirectoryGroupInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaDirectoryMembership: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestDirectoryMembershipRequestedTopic,
+		prepareDirectoryMembershipInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateDirectoryMembershipInput) integrationgenerated.IntegrationIngestDirectoryMembershipRequested {
+			return integrationgenerated.IntegrationIngestDirectoryMembershipRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestDirectoryMembershipRequested) (string, ent.CreateDirectoryMembershipInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistDirectoryMembershipInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaEntity: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestEntityRequestedTopic,
+		prepareEntityInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateEntityInput) integrationgenerated.IntegrationIngestEntityRequested {
+			return integrationgenerated.IntegrationIngestEntityRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestEntityRequested) (string, ent.CreateEntityInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistEntityInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaRisk: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestRiskRequestedTopic,
+		prepareRiskInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateRiskInput) integrationgenerated.IntegrationIngestRiskRequested {
+			return integrationgenerated.IntegrationIngestRiskRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestRiskRequested) (string, ent.CreateRiskInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistRiskInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaVulnerability: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestVulnerabilityRequestedTopic,
+		prepareVulnerabilityInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateVulnerabilityInput) integrationgenerated.IntegrationIngestVulnerabilityRequested {
+			return integrationgenerated.IntegrationIngestVulnerabilityRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestVulnerabilityRequested) (string, ent.CreateVulnerabilityInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistVulnerabilityInput,
+	),
 }
 
 // lookupIngestSchemaRegistration returns the registration for one schema name
@@ -138,6 +210,99 @@ func persistMappedRecord(ctx context.Context, db *ent.Client, integration *ent.I
 	return registration.persist(ctx, db, integration, payload)
 }
 
+// emitTyped decodes one typed ingest input, applies schema-specific preparation, and emits the wrapped Gala event.
+func emitTyped[TInput any, TEvent any](
+	ctx context.Context,
+	runtime *gala.Gala,
+	integration *ent.Integration,
+	metadata integrationgenerated.IntegrationIngestMetadata,
+	headers gala.Headers,
+	payload json.RawMessage,
+	topic gala.Topic[TEvent],
+	prepare func(context.Context, TInput, *ent.Integration) TInput,
+	wrap func(integrationgenerated.IntegrationIngestMetadata, TInput) TEvent,
+) error {
+	var input TInput
+	if err := json.Unmarshal(payload, &input); err != nil {
+		return ErrIngestMappedDocumentInvalid
+	}
+
+	input = prepare(ctx, input, integration)
+
+	receipt := runtime.EmitWithHeaders(ctx, topic.Name, wrap(metadata, input), headers)
+
+	return receipt.Err
+}
+
+// persistTyped decodes one typed ingest input, applies schema-specific preparation, and persists it synchronously.
+func persistTyped[TInput any](
+	ctx context.Context,
+	db *ent.Client,
+	integration *ent.Integration,
+	payload json.RawMessage,
+	prepare func(context.Context, TInput, *ent.Integration) TInput,
+	persist func(context.Context, *ent.Client, *ent.Integration, TInput) error,
+) error {
+	var input TInput
+	if err := json.Unmarshal(payload, &input); err != nil {
+		return ErrIngestMappedDocumentInvalid
+	}
+
+	input = prepare(ctx, input, integration)
+
+	return persist(ctx, db, integration, input)
+}
+
+// handleIngestRequested resolves the ent client and installation, then delegates to the typed persist function.
+func handleIngestRequested[TInput any](
+	ctx gala.HandlerContext,
+	integrationID string,
+	input TInput,
+	persist func(context.Context, *ent.Client, *ent.Integration, TInput) error,
+) error {
+	db, err := do.Invoke[*ent.Client](ctx.Injector)
+	if err != nil {
+		return err
+	}
+
+	integration, err := db.Integration.Get(ctx.Context, integrationID)
+	if err != nil {
+		return err
+	}
+
+	return persist(ctx.Context, db, integration, input)
+}
+
+// buildSchemaRegistration assembles one ingest schema registration from shared generic helpers and schema-specific closures.
+func buildSchemaRegistration[TInput any, TEvent any](
+	topic gala.Topic[TEvent],
+	prepare func(context.Context, TInput, *ent.Integration) TInput,
+	wrap func(integrationgenerated.IntegrationIngestMetadata, TInput) TEvent,
+	unwrap func(TEvent) (string, TInput),
+	persistInput func(context.Context, *ent.Client, *ent.Integration, TInput) error,
+) schemaRegistration {
+	return schemaRegistration{
+		register: func(runtime *gala.Gala) error {
+			_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[TEvent]{
+				Topic: topic,
+				Name:  string(topic.Name),
+				Handle: func(ctx gala.HandlerContext, payload TEvent) error {
+					integrationID, input := unwrap(payload)
+					return handleIngestRequested(ctx, integrationID, input, persistInput)
+				},
+			})
+
+			return err
+		},
+		emit: func(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
+			return emitTyped(ctx, runtime, integration, metadata, headers, payload, topic, prepare, wrap)
+		},
+		persist: func(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
+			return persistTyped(ctx, db, integration, payload, prepare, persistInput)
+		},
+	}
+}
+
 // buildIngestMetadata constructs integration ingest metadata from operation context and options
 func buildIngestMetadata(integration *ent.Integration, operationName string, record mappedIngestRecord, options IngestOptions) integrationgenerated.IntegrationIngestMetadata {
 	source := options.Source
@@ -158,11 +323,11 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 	}
 
 	if options.WorkflowMeta != nil {
-		metadata.WorkflowInstanceID  = options.WorkflowMeta.InstanceID
-		metadata.WorkflowActionKey   = options.WorkflowMeta.ActionKey
+		metadata.WorkflowInstanceID = options.WorkflowMeta.InstanceID
+		metadata.WorkflowActionKey = options.WorkflowMeta.ActionKey
 		metadata.WorkflowActionIndex = options.WorkflowMeta.ActionIndex
-		metadata.WorkflowObjectID    = options.WorkflowMeta.ObjectID
-		metadata.WorkflowObjectType  = string(options.WorkflowMeta.ObjectType)
+		metadata.WorkflowObjectID = options.WorkflowMeta.ObjectID
+		metadata.WorkflowObjectType = string(options.WorkflowMeta.ObjectType)
 	}
 
 	return metadata
@@ -195,526 +360,87 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 	}
 }
 
-// registerAssetListener registers the Gala listener for Asset ingest requests
-func registerAssetListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestAssetRequested]{
-		Topic: integrationgenerated.IntegrationIngestAssetRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestAssetRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestAssetRequested) error {
-			return handleAssetRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitAsset marshals one mapped payload into a typed Asset ingest request and emits it via Gala
-func emitAsset(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateAssetInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareAssetInput applies integration-scoped defaults before emit or sync persistence.
+func prepareAssetInput(ctx context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
+	_ = ctx
 	input = integrationgenerated.PrepareAssetInput(input, integration)
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestAssetRequestedTopic.Name, integrationgenerated.IntegrationIngestAssetRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleAssetRequested loads the ent client and integration, then delegates to persistAssetInput
-func handleAssetRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestAssetRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistAssetInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistAsset is the sync-path adapter for the schema registry
-func persistAsset(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateAssetInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareAssetInput(input, integration)
-
-	return persistAssetInput(ctx, db, integration, input)
-}
-
-// registerContactListener registers the Gala listener for Contact ingest requests
-func registerContactListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestContactRequested]{
-		Topic: integrationgenerated.IntegrationIngestContactRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestContactRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestContactRequested) error {
-			return handleContactRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitContact marshals one mapped payload into a typed Contact ingest request and emits it via Gala
-func emitContact(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateContactInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareContactInput applies integration-scoped defaults before emit or sync persistence.
+func prepareContactInput(ctx context.Context, input ent.CreateContactInput, integration *ent.Integration) ent.CreateContactInput {
+	_ = ctx
 	input = integrationgenerated.PrepareContactInput(input, integration)
-
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestContactRequestedTopic.Name, integrationgenerated.IntegrationIngestContactRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleContactRequested loads the ent client and integration, then delegates to persistContactInput
-func handleContactRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestContactRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistContactInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistContact is the sync-path adapter for the schema registry
-func persistContact(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateContactInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareContactInput(input, integration)
-
-	if input.OwnerID == nil && integration.OwnerID != "" {
-		input.OwnerID = &integration.OwnerID
-	}
-
-	return persistContactInput(ctx, db, integration, input)
-}
-
-// registerDirectoryAccountListener registers the Gala listener for DirectoryAccount ingest requests
-func registerDirectoryAccountListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestDirectoryAccountRequested]{
-		Topic: integrationgenerated.IntegrationIngestDirectoryAccountRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestDirectoryAccountRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestDirectoryAccountRequested) error {
-			return handleDirectoryAccountRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitDirectoryAccount marshals one mapped payload into a typed DirectoryAccount ingest request and emits it via Gala
-func emitDirectoryAccount(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateDirectoryAccountInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareDirectoryAccountInput applies integration-scoped defaults before emit or sync persistence.
+func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectoryAccountInput, integration *ent.Integration) ent.CreateDirectoryAccountInput {
 	input = integrationgenerated.PrepareDirectoryAccountInput(input, integration)
-
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
-
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
-
 	if input.DirectorySyncRunID == nil && dirSyncRunID != "" {
 		input.DirectorySyncRunID = &dirSyncRunID
 	}
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestDirectoryAccountRequestedTopic.Name, integrationgenerated.IntegrationIngestDirectoryAccountRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleDirectoryAccountRequested loads the ent client and integration, then delegates to persistDirectoryAccountInput
-func handleDirectoryAccountRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestDirectoryAccountRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistDirectoryAccountInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistDirectoryAccount is the sync-path adapter for the schema registry
-func persistDirectoryAccount(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateDirectoryAccountInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareDirectoryAccountInput(input, integration)
-
-	if input.OwnerID == nil && integration.OwnerID != "" {
-		input.OwnerID = &integration.OwnerID
-	}
-
-	dirSyncRunID := directorySyncRunIDFromContext(ctx)
-
-	if input.DirectorySyncRunID == nil && dirSyncRunID != "" {
-		input.DirectorySyncRunID = &dirSyncRunID
-	}
-
-	return persistDirectoryAccountInput(ctx, db, integration, input)
-}
-
-// registerDirectoryGroupListener registers the Gala listener for DirectoryGroup ingest requests
-func registerDirectoryGroupListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestDirectoryGroupRequested]{
-		Topic: integrationgenerated.IntegrationIngestDirectoryGroupRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestDirectoryGroupRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestDirectoryGroupRequested) error {
-			return handleDirectoryGroupRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitDirectoryGroup marshals one mapped payload into a typed DirectoryGroup ingest request and emits it via Gala
-func emitDirectoryGroup(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateDirectoryGroupInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareDirectoryGroupInput applies integration-scoped defaults before emit or sync persistence.
+func prepareDirectoryGroupInput(ctx context.Context, input ent.CreateDirectoryGroupInput, integration *ent.Integration) ent.CreateDirectoryGroupInput {
 	input = integrationgenerated.PrepareDirectoryGroupInput(input, integration)
-
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
-
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
-
 	if input.DirectorySyncRunID == "" && dirSyncRunID != "" {
 		input.DirectorySyncRunID = dirSyncRunID
 	}
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestDirectoryGroupRequestedTopic.Name, integrationgenerated.IntegrationIngestDirectoryGroupRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleDirectoryGroupRequested loads the ent client and integration, then delegates to persistDirectoryGroupInput
-func handleDirectoryGroupRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestDirectoryGroupRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistDirectoryGroupInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistDirectoryGroup is the sync-path adapter for the schema registry
-func persistDirectoryGroup(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateDirectoryGroupInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareDirectoryGroupInput(input, integration)
-
-	if input.OwnerID == nil && integration.OwnerID != "" {
-		input.OwnerID = &integration.OwnerID
-	}
-
-	dirSyncRunID := directorySyncRunIDFromContext(ctx)
-
-	if input.DirectorySyncRunID == "" && dirSyncRunID != "" {
-		input.DirectorySyncRunID = dirSyncRunID
-	}
-
-	return persistDirectoryGroupInput(ctx, db, integration, input)
-}
-
-// registerDirectoryMembershipListener registers the Gala listener for DirectoryMembership ingest requests
-func registerDirectoryMembershipListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestDirectoryMembershipRequested]{
-		Topic: integrationgenerated.IntegrationIngestDirectoryMembershipRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestDirectoryMembershipRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestDirectoryMembershipRequested) error {
-			return handleDirectoryMembershipRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitDirectoryMembership marshals one mapped payload into a typed DirectoryMembership ingest request and emits it via Gala
-func emitDirectoryMembership(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateDirectoryMembershipInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareDirectoryMembershipInput applies integration-scoped defaults before emit or sync persistence.
+func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirectoryMembershipInput, integration *ent.Integration) ent.CreateDirectoryMembershipInput {
 	input = integrationgenerated.PrepareDirectoryMembershipInput(input, integration)
-
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
-
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
-
 	if input.DirectorySyncRunID == "" && dirSyncRunID != "" {
 		input.DirectorySyncRunID = dirSyncRunID
 	}
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestDirectoryMembershipRequestedTopic.Name, integrationgenerated.IntegrationIngestDirectoryMembershipRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleDirectoryMembershipRequested loads the ent client and integration, then delegates to persistDirectoryMembershipInput
-func handleDirectoryMembershipRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestDirectoryMembershipRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistDirectoryMembershipInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistDirectoryMembership is the sync-path adapter for the schema registry
-func persistDirectoryMembership(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateDirectoryMembershipInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareDirectoryMembershipInput(input, integration)
-
-	if input.OwnerID == nil && integration.OwnerID != "" {
-		input.OwnerID = &integration.OwnerID
-	}
-
-	dirSyncRunID := directorySyncRunIDFromContext(ctx)
-
-	if input.DirectorySyncRunID == "" && dirSyncRunID != "" {
-		input.DirectorySyncRunID = dirSyncRunID
-	}
-
-	return persistDirectoryMembershipInput(ctx, db, integration, input)
-}
-
-// registerEntityListener registers the Gala listener for Entity ingest requests
-func registerEntityListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestEntityRequested]{
-		Topic: integrationgenerated.IntegrationIngestEntityRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestEntityRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestEntityRequested) error {
-			return handleEntityRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitEntity marshals one mapped payload into a typed Entity ingest request and emits it via Gala
-func emitEntity(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateEntityInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareEntityInput applies integration-scoped defaults before emit or sync persistence.
+func prepareEntityInput(ctx context.Context, input ent.CreateEntityInput, integration *ent.Integration) ent.CreateEntityInput {
+	_ = ctx
 	input = integrationgenerated.PrepareEntityInput(input, integration)
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestEntityRequestedTopic.Name, integrationgenerated.IntegrationIngestEntityRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleEntityRequested loads the ent client and integration, then delegates to persistEntityInput
-func handleEntityRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestEntityRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistEntityInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistEntity is the sync-path adapter for the schema registry
-func persistEntity(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateEntityInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareEntityInput(input, integration)
-
-	return persistEntityInput(ctx, db, integration, input)
-}
-
-// registerRiskListener registers the Gala listener for Risk ingest requests
-func registerRiskListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestRiskRequested]{
-		Topic: integrationgenerated.IntegrationIngestRiskRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestRiskRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestRiskRequested) error {
-			return handleRiskRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitRisk marshals one mapped payload into a typed Risk ingest request and emits it via Gala
-func emitRisk(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateRiskInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareRiskInput applies integration-scoped defaults before emit or sync persistence.
+func prepareRiskInput(ctx context.Context, input ent.CreateRiskInput, integration *ent.Integration) ent.CreateRiskInput {
+	_ = ctx
 	input = integrationgenerated.PrepareRiskInput(input, integration)
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestRiskRequestedTopic.Name, integrationgenerated.IntegrationIngestRiskRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
+	return input
 }
 
-// handleRiskRequested loads the ent client and integration, then delegates to persistRiskInput
-func handleRiskRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestRiskRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistRiskInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistRisk is the sync-path adapter for the schema registry
-func persistRisk(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateRiskInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareRiskInput(input, integration)
-
-	return persistRiskInput(ctx, db, integration, input)
-}
-
-// registerVulnerabilityListener registers the Gala listener for Vulnerability ingest requests
-func registerVulnerabilityListener(runtime *gala.Gala) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[integrationgenerated.IntegrationIngestVulnerabilityRequested]{
-		Topic: integrationgenerated.IntegrationIngestVulnerabilityRequestedTopic,
-		Name:  string(integrationgenerated.IntegrationIngestVulnerabilityRequestedTopic.Name),
-		Handle: func(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestVulnerabilityRequested) error {
-			return handleVulnerabilityRequested(ctx, payload)
-		},
-	})
-
-	return err
-}
-
-// emitVulnerability marshals one mapped payload into a typed Vulnerability ingest request and emits it via Gala
-func emitVulnerability(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error {
-	var input ent.CreateVulnerabilityInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
+// prepareVulnerabilityInput applies integration-scoped defaults before emit or sync persistence.
+func prepareVulnerabilityInput(ctx context.Context, input ent.CreateVulnerabilityInput, integration *ent.Integration) ent.CreateVulnerabilityInput {
+	_ = ctx
 	input = integrationgenerated.PrepareVulnerabilityInput(input, integration)
 
-	receipt := runtime.EmitWithHeaders(ctx, integrationgenerated.IntegrationIngestVulnerabilityRequestedTopic.Name, integrationgenerated.IntegrationIngestVulnerabilityRequested{
-		Metadata: metadata,
-		Input:    input,
-	}, headers)
-
-	return receipt.Err
-}
-
-// handleVulnerabilityRequested loads the ent client and integration, then delegates to persistVulnerabilityInput
-func handleVulnerabilityRequested(ctx gala.HandlerContext, payload integrationgenerated.IntegrationIngestVulnerabilityRequested) error {
-	db, err := do.Invoke[*ent.Client](ctx.Injector)
-	if err != nil {
-		return err
-	}
-
-	integration, err := db.Integration.Get(ctx.Context, payload.Metadata.IntegrationID)
-	if err != nil {
-		return err
-	}
-
-	return persistVulnerabilityInput(ctx.Context, db, integration, payload.Input)
-}
-
-// persistVulnerability is the sync-path adapter for the schema registry
-func persistVulnerability(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error {
-	var input ent.CreateVulnerabilityInput
-	if err := json.Unmarshal(payload, &input); err != nil {
-		return ErrIngestMappedDocumentInvalid
-	}
-
-	input = integrationgenerated.PrepareVulnerabilityInput(input, integration)
-
-	return persistVulnerabilityInput(ctx, db, integration, input)
+	return input
 }

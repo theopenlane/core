@@ -12,9 +12,9 @@ var (
 	// WorkspaceClient is the client ref for the Google Workspace Admin SDK client used by this definition
 	WorkspaceClient = types.NewClientRef[*admin.Service]()
 	// HealthDefaultOperation is the operation ref for the Google Workspace health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 	// DirectorySyncOperation is the operation ref for the Google Workspace directory sync operation
-	DirectorySyncOperation = types.NewOperationRef[DirectorySyncConfig]("directory.sync")
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 )
 
 // Slug is the unique identifier for the Google Workspace integration
@@ -28,6 +28,10 @@ type UserInput struct {
 	AdminEmail string `json:"adminEmail,omitempty" jsonschema:"title=Admin Email"`
 	// CustomerID is the Google Workspace customer identifier
 	CustomerID string `json:"customerId,omitempty" jsonschema:"title=Customer ID"`
+	// Domain scopes directory listing to a specific domain; if set, CustomerID is ignored for listing calls
+	Domain string `json:"domain,omitempty" jsonschema:"title=Domain"`
+	// Query is a server-side filter applied to user and group listing requests
+	Query string `json:"query,omitempty" jsonschema:"title=Directory Query"`
 	// OrganizationalUnit limits collection to a specific org unit path
 	OrganizationalUnit string `json:"organizationalUnitPath,omitempty" jsonschema:"title=Organizational Unit Path"`
 	// IncludeSuspended controls whether suspended users are included

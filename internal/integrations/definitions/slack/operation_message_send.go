@@ -46,19 +46,7 @@ type MessageDelivery struct {
 
 // Handle adapts message send to the generic operation registration boundary
 func (m MessageSend) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := SlackClient.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		cfg, err := MessageSendOperation.UnmarshalConfig(request.Config)
-		if err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
-
-		return m.Run(ctx, c, cfg)
-	}
+	return providerkit.OperationWithClientConfig(SlackClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Slack message via chat.postMessage

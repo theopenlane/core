@@ -165,7 +165,6 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 	actionIndex := actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key)
 	assignmentIDs := make([]string, 0)
 	targetUserIDs := make([]string, 0)
-	seenAssignmentIDs := make(map[string]struct{})
 	seenTargetUserIDs := make(map[string]struct{})
 	seenAssignments := make(map[string]struct{})
 
@@ -229,10 +228,7 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 			}
 
 			if assignment != nil {
-				if _, ok := seenAssignmentIDs[assignment.ID]; !ok {
-					seenAssignmentIDs[assignment.ID] = struct{}{}
-					assignmentIDs = append(assignmentIDs, assignment.ID)
-				}
+				assignmentIDs = append(assignmentIDs, assignment.ID)
 			}
 			if _, ok := seenTargetUserIDs[userID]; !ok {
 				seenTargetUserIDs[userID] = struct{}{}
@@ -353,16 +349,8 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 	})
 }
 
-type approvalAssignees struct {
-	Users     []string `json:"users"`
-	Groups    []string `json:"groups"`
-	Roles     []string `json:"roles"`
-	Resolvers []string `json:"resolvers"`
-}
-
 type approvalActionParamsCompat struct {
 	Targets       []wfworkflows.TargetConfig `json:"targets"`
-	Assignees     approvalAssignees          `json:"assignees"`
 	Required      any                        `json:"required"`
 	Label         string                     `json:"label"`
 	RequiredCount int                        `json:"required_count"`
@@ -379,11 +367,6 @@ func decodeApprovalActionParams(raw json.RawMessage) (wfworkflows.ApprovalAction
 		return wfworkflows.ApprovalActionParams{}, err
 	}
 
-	targets := parsed.Targets
-	if len(targets) == 0 {
-		targets = legacyApprovalTargets(parsed.Assignees)
-	}
-
 	required, requiredCount, err := approvalRequired(parsed.Required, parsed.RequiredCount)
 	if err != nil {
 		return wfworkflows.ApprovalActionParams{}, err
@@ -391,35 +374,13 @@ func decodeApprovalActionParams(raw json.RawMessage) (wfworkflows.ApprovalAction
 
 	return wfworkflows.ApprovalActionParams{
 		TargetedActionParams: wfworkflows.TargetedActionParams{
-			Targets: targets,
+			Targets: parsed.Targets,
 		},
 		Required:      required,
 		Label:         parsed.Label,
 		RequiredCount: requiredCount,
 		Fields:        parsed.Fields,
 	}, nil
-}
-
-func legacyApprovalTargets(assignees approvalAssignees) []wfworkflows.TargetConfig {
-	targets := make([]wfworkflows.TargetConfig, 0, len(assignees.Users)+len(assignees.Groups)+len(assignees.Roles)+len(assignees.Resolvers))
-
-	for _, id := range assignees.Users {
-		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeUser, ID: id})
-	}
-
-	for _, id := range assignees.Groups {
-		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeGroup, ID: id})
-	}
-
-	for _, id := range assignees.Roles {
-		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeRole, ID: id})
-	}
-
-	for _, key := range assignees.Resolvers {
-		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeResolver, ResolverKey: key})
-	}
-
-	return targets
 }
 
 func approvalRequired(required any, requiredCount int) (*bool, int, error) {
