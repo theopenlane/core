@@ -1,4 +1,4 @@
-h1:a+hITYB+lagXYGkBFkGGip+ZDs9i8B4xqDPDleZAsow=
+h1:lqNS26nKzdr8c60hVMWD6QuRoWbpcLSRsboXvFD/3hY=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -75,3 +75,5 @@ h1:a+hITYB+lagXYGkBFkGGip+ZDs9i8B4xqDPDleZAsow=
 20260318125624_sla_definition_history.sql h1:1eNflbWk9A9inOi0lFX9CcRCCNdK540b03IFflqhDck=
 20260318173135_control_public_rep.sql h1:k27dpzsqsgiUtyxZ+NmrWU3AVJDsQL3sKTxmB9EzFAk=
 20260318173139_control_public_rep_history.sql h1:k0DS+5TMecsdvHtYmVbQVFptnjXJ+Nvhwhw1YkjBXEI=
+20260319233234_entity_logo.sql h1:G8a+xvm2CQzlaFjjKyK6cz4l91A+lZO2nJ/GVCsY6bY=
+20260319233245_entity_logo_history.sql h1:l5XlN/Em025g3FUcdVfyaOYo1x2h8c33xvukQ8RD2oU=
