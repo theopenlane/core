@@ -67,8 +67,6 @@ func TestQueryTFASetting(t *testing.T) {
 }
 
 func TestMutationCreateTFASetting(t *testing.T) {
-	t.Parallel()
-
 	// create a user for this test
 	testUser := suite.userBuilder(context.Background(), t)
 	patClient := suite.setupPatClient(testUser, t)
@@ -177,8 +175,6 @@ func TestMutationCreateTFASetting(t *testing.T) {
 }
 
 func TestMutationUpdateTFASetting(t *testing.T) {
-	t.Parallel()
-
 	testUser := suite.userBuilder(context.Background(), t)
 	patClient := suite.setupPatClient(testUser, t)
 	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
