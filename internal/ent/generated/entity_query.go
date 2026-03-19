@@ -76,6 +76,7 @@ type EntityQuery struct {
 	withOutOfScopePlatforms               *PlatformQuery
 	withSourcePlatforms                   *PlatformQuery
 	withEntityType                        *EntityTypeQuery
+	withLogoFile                          *FileQuery
 	withFKs                               bool
 	loadTotal                             []func(context.Context, []*Entity) error
 	modifiers                             []func(*sql.Selector)
@@ -910,6 +911,31 @@ func (_q *EntityQuery) QueryEntityType() *EntityTypeQuery {
 	return query
 }
 
+// QueryLogoFile chains the current query on the "logo_file" edge.
+func (_q *EntityQuery) QueryLogoFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.LogoFileTable, entity.LogoFileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Entity entity from the query.
 // Returns a *NotFoundError when no Entity was found.
 func (_q *EntityQuery) First(ctx context.Context) (*Entity, error) {
@@ -1133,6 +1159,7 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withOutOfScopePlatforms:               _q.withOutOfScopePlatforms.Clone(),
 		withSourcePlatforms:                   _q.withSourcePlatforms.Clone(),
 		withEntityType:                        _q.withEntityType.Clone(),
+		withLogoFile:                          _q.withLogoFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1481,6 +1508,17 @@ func (_q *EntityQuery) WithEntityType(opts ...func(*EntityTypeQuery)) *EntityQue
 	return _q
 }
 
+// WithLogoFile tells the query-builder to eager-load the nodes that are connected to
+// the "logo_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithLogoFile(opts ...func(*FileQuery)) *EntityQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withLogoFile = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1566,7 +1604,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [31]bool{
+		loadedTypes = [32]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1598,6 +1636,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withOutOfScopePlatforms != nil,
 			_q.withSourcePlatforms != nil,
 			_q.withEntityType != nil,
+			_q.withLogoFile != nil,
 		}
 	)
 	if withFKs {
@@ -1833,6 +1872,12 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 	if query := _q.withEntityType; query != nil {
 		if err := _q.loadEntityType(ctx, query, nodes, nil,
 			func(n *Entity, e *EntityType) { n.Edges.EntityType = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withLogoFile; query != nil {
+		if err := _q.loadLogoFile(ctx, query, nodes, nil,
+			func(n *Entity, e *File) { n.Edges.LogoFile = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -3354,6 +3399,38 @@ func (_q *EntityQuery) loadEntityType(ctx context.Context, query *EntityTypeQuer
 	}
 	return nil
 }
+func (_q *EntityQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		if nodes[i].LogoFileID == nil {
+			continue
+		}
+		fk := *nodes[i].LogoFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "logo_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *EntityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3417,6 +3494,9 @@ func (_q *EntityQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withEntityType != nil {
 			_spec.Node.AddColumnOnce(entity.FieldEntityTypeID)
+		}
+		if _q.withLogoFile != nil {
+			_spec.Node.AddColumnOnce(entity.FieldLogoFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

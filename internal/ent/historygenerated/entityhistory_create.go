@@ -837,6 +837,20 @@ func (_c *EntityHistoryCreate) SetVendorMetadata(v map[string]interface{}) *Enti
 	return _c
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *EntityHistoryCreate) SetLogoFileID(v string) *EntityHistoryCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableLogoFileID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EntityHistoryCreate) SetID(v string) *EntityHistoryCreate {
 	_c.mutation.SetID(v)
@@ -1281,6 +1295,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.VendorMetadata(); ok {
 		_spec.SetField(entityhistory.FieldVendorMetadata, field.TypeJSON, value)
 		_node.VendorMetadata = value
+	}
+	if value, ok := _c.mutation.LogoFileID(); ok {
+		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+		_node.LogoFileID = &value
 	}
 	return _node, _spec
 }

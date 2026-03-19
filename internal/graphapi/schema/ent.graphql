@@ -11319,6 +11319,7 @@ input CreateEntityInput {
   outOfScopePlatformIDs: [ID!]
   sourcePlatformIDs: [ID!]
   entityTypeID: ID
+  logoFileID: ID
 }
 """
 CreateEntityTypeInput is used for create EntityType object.
@@ -21655,6 +21656,10 @@ type Entity implements Node {
   vendor metadata such as additional enrichment info, company size, public, etc.
   """
   vendorMetadata: Map
+  """
+  The logo file id for the entity
+  """
+  logoFileID: ID
   owner: Organization
   blockedGroups(
     """
@@ -22286,6 +22291,7 @@ type Entity implements Node {
     where: PlatformWhereInput
   ): PlatformConnection!
   entityType: EntityType
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -23448,6 +23454,24 @@ input EntityWhereInput {
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
   """
+  logo_file_id field predicates
+  """
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -23602,6 +23626,11 @@ input EntityWhereInput {
   """
   hasEntityType: Boolean
   hasEntityTypeWith: [EntityTypeWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -71304,6 +71333,8 @@ input UpdateEntityInput {
   clearSourcePlatforms: Boolean
   entityTypeID: ID
   clearEntityType: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateEntityTypeInput is used for update EntityType object.

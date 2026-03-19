@@ -9443,6 +9443,25 @@ func (c *EntityClient) QueryEntityType(_m *Entity) *EntityTypeQuery {
 	return query
 }
 
+// QueryLogoFile queries the logo_file edge of a Entity.
+func (c *EntityClient) QueryLogoFile(_m *Entity) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.LogoFileTable, entity.LogoFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EntityClient) Hooks() []Hook {
 	hooks := c.hooks.Entity

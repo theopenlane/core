@@ -168,10 +168,10 @@ type MutationResolver interface {
 	UpdateEmailTemplate(ctx context.Context, id string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateUpdatePayload, error)
 	DeleteEmailTemplate(ctx context.Context, id string) (*model.EmailTemplateDeletePayload, error)
 	DeleteBulkEmailTemplate(ctx context.Context, ids []string) (*model.EmailTemplateBulkDeletePayload, error)
-	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload) (*model.EntityCreatePayload, error)
+	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, logoFile *graphql.Upload) (*model.EntityCreatePayload, error)
 	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
-	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload) (*model.EntityUpdatePayload, error)
+	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, logoFile *graphql.Upload) (*model.EntityUpdatePayload, error)
 	DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error)
 	DeleteBulkEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error)
 	UpdateBulkEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error)
@@ -2513,6 +2513,11 @@ func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["entityFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg3
 	return args, nil
 }
 
@@ -6955,6 +6960,11 @@ func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["entityFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg3
 	return args, nil
 }
 
@@ -15798,7 +15808,7 @@ func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string), fc.Args["entityFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string), fc.Args["entityFiles"].([]*graphql.Upload), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityCreatePayload,
@@ -15933,7 +15943,7 @@ func (ec *executionContext) _Mutation_updateEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput), fc.Args["entityFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput), fc.Args["entityFiles"].([]*graphql.Upload), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityUpdatePayload,

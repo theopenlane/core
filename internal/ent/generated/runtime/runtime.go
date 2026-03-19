@@ -2397,6 +2397,10 @@ func init() {
 	entity.Hooks[16] = entityHooks[0]
 
 	entity.Hooks[17] = entityHooks[1]
+
+	entity.Hooks[18] = entityHooks[2]
+
+	entity.Hooks[19] = entityHooks[3]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]

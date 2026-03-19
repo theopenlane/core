@@ -3967,6 +3967,14 @@ func (_m *Entity) EntityType(ctx context.Context) (*EntityType, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Entity) LogoFile(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryLogoFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *EntityType) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

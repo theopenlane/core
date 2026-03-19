@@ -1739,6 +1739,8 @@ type ComplexityRoot struct {
 		LastReviewedAt                        func(childComplexity int) int
 		LinkedAssetIds                        func(childComplexity int) int
 		Links                                 func(childComplexity int) int
+		LogoFile                              func(childComplexity int) int
+		LogoFileID                            func(childComplexity int) int
 		MfaEnforced                           func(childComplexity int) int
 		MfaSupported                          func(childComplexity int) int
 		Name                                  func(childComplexity int) int
@@ -3413,7 +3415,7 @@ type ComplexityRoot struct {
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEmailBranding                  func(childComplexity int, input generated.CreateEmailBrandingInput) int
 		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
-		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload) int
+		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, logoFile *graphql.Upload) int
 		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -3766,7 +3768,7 @@ type ComplexityRoot struct {
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
 		UpdateEmailBranding                  func(childComplexity int, id string, input generated.UpdateEmailBrandingInput) int
 		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
-		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload) int
+		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, logoFile *graphql.Upload) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -15782,6 +15784,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Entity.Links(childComplexity), true
 
+	case "Entity.logoFile":
+		if e.ComplexityRoot.Entity.LogoFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.LogoFile(childComplexity), true
+
+	case "Entity.logoFileID":
+		if e.ComplexityRoot.Entity.LogoFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.LogoFileID(childComplexity), true
+
 	case "Entity.mfaEnforced":
 		if e.ComplexityRoot.Entity.MfaEnforced == nil {
 			break
@@ -25325,7 +25341,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string), args["entityFiles"].([]*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string), args["entityFiles"].([]*graphql.Upload), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createEntityType":
 		if e.ComplexityRoot.Mutation.CreateEntityType == nil {
@@ -29556,7 +29572,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateEntityInput), args["entityFiles"].([]*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateEntityInput), args["entityFiles"].([]*graphql.Upload), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateEntityType":
 		if e.ComplexityRoot.Mutation.UpdateEntityType == nil {
@@ -65901,6 +65917,7 @@ input CreateEntityInput {
   outOfScopePlatformIDs: [ID!]
   sourcePlatformIDs: [ID!]
   entityTypeID: ID
+  logoFileID: ID
 }
 """
 CreateEntityTypeInput is used for create EntityType object.
@@ -76237,6 +76254,10 @@ type Entity implements Node {
   vendor metadata such as additional enrichment info, company size, public, etc.
   """
   vendorMetadata: Map
+  """
+  The logo file id for the entity
+  """
+  logoFileID: ID
   owner: Organization
   blockedGroups(
     """
@@ -76868,6 +76889,7 @@ type Entity implements Node {
     where: PlatformWhereInput
   ): PlatformConnection!
   entityType: EntityType
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -78030,6 +78052,24 @@ input EntityWhereInput {
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
   """
+  logo_file_id field predicates
+  """
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -78184,6 +78224,11 @@ input EntityWhereInput {
   """
   hasEntityType: Boolean
   hasEntityTypeWith: [EntityTypeWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -125886,6 +125931,8 @@ input UpdateEntityInput {
   clearSourcePlatforms: Boolean
   entityTypeID: ID
   clearEntityType: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateEntityTypeInput is used for update EntityType object.
@@ -137962,6 +138009,10 @@ extend type Mutation{
         """
         entityTypeName: String
         entityFiles: [Upload!]
+        """
+        file to upload as the logo of the entity
+        """
+        logoFile: Upload
     ): EntityCreatePayload!
     """
     Create multiple new entities
@@ -138002,6 +138053,10 @@ extend type Mutation{
         """
         input: UpdateEntityInput!
         entityFiles: [Upload!]
+        """
+        file to upload as the logo of the entity
+        """
+        logoFile: Upload
     ): EntityUpdatePayload!
     """
     Delete an existing entity

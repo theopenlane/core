@@ -6575,6 +6575,7 @@ type CreateEntityInput struct {
 	OutOfScopePlatformIDs               []string         `json:"outOfScopePlatformIDs,omitempty"`
 	SourcePlatformIDs                   []string         `json:"sourcePlatformIDs,omitempty"`
 	EntityTypeID                        *string          `json:"entityTypeID,omitempty"`
+	LogoFileID                          *string          `json:"logoFileID,omitempty"`
 	Note                                *CreateNoteInput `json:"note,omitempty"`
 }
 
@@ -13418,7 +13419,9 @@ type Entity struct {
 	// when the entity contract is up for renewal
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
-	VendorMetadata                    map[string]any                `json:"vendorMetadata,omitempty"`
+	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
+	// The logo file id for the entity
+	LogoFileID                        *string                       `json:"logoFileID,omitempty"`
 	Owner                             *Organization                 `json:"owner,omitempty"`
 	BlockedGroups                     *GroupConnection              `json:"blockedGroups"`
 	Editors                           *GroupConnection              `json:"editors"`
@@ -13450,6 +13453,7 @@ type Entity struct {
 	OutOfScopePlatforms               *PlatformConnection           `json:"outOfScopePlatforms"`
 	SourcePlatforms                   *PlatformConnection           `json:"sourcePlatforms"`
 	EntityType                        *EntityType                   `json:"entityType,omitempty"`
+	LogoFile                          *File                         `json:"logoFile,omitempty"`
 }
 
 func (Entity) IsNode() {}
@@ -14421,6 +14425,22 @@ type EntityWhereInput struct {
 	ContractRenewalAtLte    *models.DateTime   `json:"contractRenewalAtLTE,omitempty"`
 	ContractRenewalAtIsNil  *bool              `json:"contractRenewalAtIsNil,omitempty"`
 	ContractRenewalAtNotNil *bool              `json:"contractRenewalAtNotNil,omitempty"`
+	// logo_file_id field predicates
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIdgt           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIdgte          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIdlt           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIdlte          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        *bool    `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -14514,6 +14534,9 @@ type EntityWhereInput struct {
 	// entity_type edge predicates
 	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
 	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
+	// logo_file edge predicates
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for domainsHas to contain a specific value
@@ -39434,6 +39457,8 @@ type UpdateEntityInput struct {
 	ClearSourcePlatforms                   *bool            `json:"clearSourcePlatforms,omitempty"`
 	EntityTypeID                           *string          `json:"entityTypeID,omitempty"`
 	ClearEntityType                        *bool            `json:"clearEntityType,omitempty"`
+	LogoFileID                             *string          `json:"logoFileID,omitempty"`
+	ClearLogoFile                          *bool            `json:"clearLogoFile,omitempty"`
 	Note                                   *CreateNoteInput `json:"note,omitempty"`
 }
 

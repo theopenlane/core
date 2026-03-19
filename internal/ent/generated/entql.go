@@ -1044,6 +1044,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldNextReviewAt:                          {Type: field.TypeTime, Column: entity.FieldNextReviewAt},
 			entity.FieldContractRenewalAt:                     {Type: field.TypeTime, Column: entity.FieldContractRenewalAt},
 			entity.FieldVendorMetadata:                        {Type: field.TypeJSON, Column: entity.FieldVendorMetadata},
+			entity.FieldLogoFileID:                            {Type: field.TypeString, Column: entity.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[24] = &sqlgraph.Node{
@@ -6873,6 +6874,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Entity",
 		"EntityType",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -24130,6 +24143,11 @@ func (f *EntityFilter) WhereVendorMetadata(p entql.BytesP) {
 	f.Where(p.Field(entity.FieldVendorMetadata))
 }
 
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *EntityFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldLogoFileID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *EntityFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -24558,6 +24576,20 @@ func (f *EntityFilter) WhereHasEntityType() {
 // WhereHasEntityTypeWith applies a predicate to check if query has an edge entity_type with a given conditions (other predicates).
 func (f *EntityFilter) WhereHasEntityTypeWith(preds ...predicate.EntityType) {
 	f.Where(entql.HasEdgeWith("entity_type", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *EntityFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

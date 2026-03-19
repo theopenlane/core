@@ -168,6 +168,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -230,6 +232,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -406,6 +410,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -468,6 +474,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -644,6 +652,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -706,6 +716,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -882,6 +894,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -944,6 +958,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},

@@ -1070,6 +1070,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "organization",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "logo_file": {
+	ObjectType:      "logo_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "entity_type": {"owner": {
 	ObjectType:      "owner",

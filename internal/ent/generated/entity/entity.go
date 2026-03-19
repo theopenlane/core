@@ -136,6 +136,8 @@ const (
 	FieldContractRenewalAt = "contract_renewal_at"
 	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
 	FieldVendorMetadata = "vendor_metadata"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -198,6 +200,8 @@ const (
 	EdgeSourcePlatforms = "source_platforms"
 	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
 	EdgeEntityType = "entity_type"
+	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
+	EdgeLogoFile = "logo_file"
 	// Table holds the table name of the entity in the database.
 	Table = "entities"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -389,6 +393,13 @@ const (
 	EntityTypeInverseTable = "entity_types"
 	// EntityTypeColumn is the table column denoting the entity_type relation/edge.
 	EntityTypeColumn = "entity_type_id"
+	// LogoFileTable is the table that holds the logo_file relation/edge.
+	LogoFileTable = "entities"
+	// LogoFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	LogoFileInverseTable = "files"
+	// LogoFileColumn is the table column denoting the logo_file relation/edge.
+	LogoFileColumn = "logo_file_id"
 )
 
 // Columns holds all SQL columns for entity fields.
@@ -453,6 +464,7 @@ var Columns = []string{
 	FieldNextReviewAt,
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
+	FieldLogoFileID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "entities"
@@ -533,7 +545,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
+	Hooks        [20]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -877,6 +889,11 @@ func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
 // ByContractRenewalAt orders the results by the contract_renewal_at field.
 func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
+}
+
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -1235,6 +1252,13 @@ func ByEntityTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEntityTypeStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByLogoFileField orders the results by logo_file field.
+func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1450,6 +1474,13 @@ func newEntityTypeStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntityTypeInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
+	)
+}
+func newLogoFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogoFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
 	)
 }
 

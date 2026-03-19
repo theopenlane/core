@@ -7033,6 +7033,7 @@ type CreateEntityInput struct {
 	OutOfScopePlatformIDs                 []string
 	SourcePlatformIDs                     []string
 	EntityTypeID                          *string
+	LogoFileID                            *string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -7253,6 +7254,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.EntityTypeID; v != nil {
 		m.SetEntityTypeID(*v)
 	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateEntityInput on the EntityCreate builder.
@@ -7430,6 +7434,8 @@ type UpdateEntityInput struct {
 	RemoveSourcePlatformIDs                    []string
 	ClearEntityType                            bool
 	EntityTypeID                               *string
+	ClearLogoFile                              bool
+	LogoFileID                                 *string
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -7934,6 +7940,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.EntityTypeID; v != nil {
 		m.SetEntityTypeID(*v)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
 	}
 }
 
