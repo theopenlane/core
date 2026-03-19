@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -51,12 +50,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	persistedWebhook, err := h.DBClient.IntegrationWebhook.Query().
-		Where(
-			integrationwebhook.EndpointIDEQ(endpointID),
-			integrationwebhook.ExternalEventIDIsNil(),
-		).
-		Only(requestCtx)
+	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(requestCtx, endpointID)
 	if err != nil {
 		if !ent.IsNotFound(err) {
 			logger.Error().Err(err).Msg("failed to query integration webhook")

@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 
@@ -58,14 +59,9 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	displayName := def.DisplayName
-	if displayName == "" {
-		displayName = def.Slug
-	}
-
 	return h.Success(ctx, models.DeleteIntegrationResponse{
 		Reply:     rout.Reply{Success: true},
-		Message:   fmt.Sprintf("%s integration disconnected", displayName),
+		Message:   fmt.Sprintf("%s integration disconnected", lo.CoalesceOrEmpty(def.DisplayName, def.Slug)),
 		DeletedID: integrationID,
 	})
 }

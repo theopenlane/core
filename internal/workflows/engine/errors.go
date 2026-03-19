@@ -47,8 +47,6 @@ var (
 	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation name required")
 	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation
 	ErrIntegrationScopeConditionFalse = errors.New("integration scope condition false")
-	// ErrIntegrationActionQueued indicates the integration action was queued for async processing
-	ErrIntegrationActionQueued = errors.New("integration action queued")
 	// ErrObjectNil is returned when the workflow object is nil
 	ErrObjectNil = errors.New("object is nil")
 	// ErrUnmarshalParams is returned when action params cannot be unmarshaled

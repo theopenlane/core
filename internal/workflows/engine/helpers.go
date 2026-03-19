@@ -5,6 +5,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"strings"
 
 	"github.com/samber/lo"
@@ -16,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // computeHMACSignature computes an HMAC-SHA256 signature for webhook authentication
@@ -26,47 +28,31 @@ func computeHMACSignature(secret string, payload []byte) string {
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
-// applyStringTemplates walks arbitrary maps/slices and replaces {{key}} tokens in string values
+// applyStringTemplates replaces {{key}} tokens in string values throughout a JSON-serializable map.
+// It marshals the map to JSON, performs token substitution on the raw bytes, then unmarshals back.
+// Replacement values are expected to be safe for direct JSON string embedding (e.g., IDs, enum strings).
 func applyStringTemplates(input map[string]any, replacements map[string]string) map[string]any {
-	if input == nil {
-		return map[string]any{}
+	if len(input) == 0 || len(replacements) == 0 {
+		return input
 	}
 
-	out := make(map[string]any, len(input))
-	for k, v := range input {
-		out[k] = replaceInValue(v, replacements)
+	raw, err := jsonx.ToRawMessage(input)
+	if err != nil || jsonx.IsEmptyRawMessage(raw) {
+		return input
 	}
-	return out
-}
 
-// replaceInValue recursively replaces tokens in nested values
-func replaceInValue(v any, replacements map[string]string) any {
-	switch val := v.(type) {
-	case string:
-		return replaceTokens(val, replacements)
-	case map[string]any:
-		result := make(map[string]any, len(val))
-		for k, nested := range val {
-			result[k] = replaceInValue(nested, replacements)
-		}
-		return result
-	case []any:
-		result := make([]any, len(val))
-		for i, nested := range val {
-			result[i] = replaceInValue(nested, replacements)
-		}
-		return result
-	default:
-		return v
-	}
-}
-
-// replaceTokens replaces {{key}} tokens in a string with their replacement values
-func replaceTokens(s string, replacements map[string]string) string {
-	out := s
+	pairs := make([]string, 0, len(replacements)*2)
 	for k, v := range replacements {
-		out = strings.ReplaceAll(out, "{{"+k+"}}", v)
+		pairs = append(pairs, "{{"+k+"}}", v)
 	}
+
+	replaced := strings.NewReplacer(pairs...).Replace(string(raw))
+
+	var out map[string]any
+	if err := json.Unmarshal([]byte(replaced), &out); err != nil {
+		return input
+	}
+
 	return out
 }
 
@@ -208,7 +194,6 @@ func buildTriggerContext(defID string, obj *workflows.Object, input TriggerInput
 		Assignments:          []models.WorkflowAssignmentContext{},
 		TriggerEventType:     input.EventType,
 		TriggerUserID:        userID,
-		Data:                 nil,
 	}
 
 	workflows.SetTriggerChangeSet(&contextData, input.ChangeSet())

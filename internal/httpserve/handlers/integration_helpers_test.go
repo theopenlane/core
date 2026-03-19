@@ -11,9 +11,9 @@ import (
 func TestParseStatePayload(t *testing.T) {
 	orgID := "org_123"
 	provider := "githubapp"
-	randomBytes := []byte("randombytes")
+	randomPart := base64.RawURLEncoding.EncodeToString([]byte("randombytes"))
 
-	stateData := buildStatePayload(orgID, provider, randomBytes)
+	stateData := orgID + ":" + provider + ":" + randomPart
 	state := base64.URLEncoding.EncodeToString([]byte(stateData))
 
 	gotOrg, gotProvider, err := parseStatePayload(state)

@@ -17,6 +17,8 @@ var (
 	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 	// PoliciesCollectOperation is the operation ref for the Okta policies collection operation
 	PoliciesCollectOperation = types.NewOperationRef[PoliciesCollect]("policies.collect")
+	// DirectorySyncOperation is the operation ref for the Okta directory sync operation
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 )
 
 // Slug is the unique identifier for the Okta integration
@@ -26,6 +28,10 @@ const Slug = "okta"
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	// Search is an optional Okta search expression applied server-side when listing users
+	Search string `json:"search,omitempty" jsonschema:"title=User Search Expression,description=Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."`
+	// EnableGroupSync controls whether group and membership records are collected
+	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
 }
 
 // CredentialSchema holds the Okta tenant credentials for one installation

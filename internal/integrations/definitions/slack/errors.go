@@ -23,4 +23,8 @@ var (
 	ErrMessageSendFailed = errors.New("slack: message send failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("slack: result encode failed")
+	// ErrUsersFetchFailed indicates the workspace users list request failed
+	ErrUsersFetchFailed = errors.New("slack: users fetch failed")
+	// ErrPayloadEncode indicates a collected Slack payload could not be serialized for ingest
+	ErrPayloadEncode = errors.New("slack: ingest payload encode failed")
 )

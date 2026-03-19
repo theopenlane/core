@@ -1,6 +1,7 @@
 package azureentraid
 
 import (
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -84,7 +85,26 @@ func Builder(cfg Config) definition.Builder {
 					ClientRef:   EntraClient.ID(),
 					Handle:      DirectoryInspect{}.Handle(),
 				},
+				{
+					Name:        DirectorySyncOperation.Name(),
+					Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   EntraClient.ID(),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
+					},
+					IngestHandle: DirectorySync{}.IngestHandle(),
+				},
 			},
+			Mappings: entraIDMappings(),
 		}, nil
 	})
 }

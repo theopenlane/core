@@ -51,8 +51,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	credentialInput := payload.Body.RawMessage()
-	credentialProvided := !payload.Body.IsNullOrEmptyObject()
+	credentialInput := payload.Body
+	credentialProvided := !isNullOrEmptyJSON(payload.Body)
 
 	if !credentialProvided {
 		if !userInputProvided || payload.InstallationID == "" {
@@ -69,7 +69,9 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		}
 
 		if len(credentialRegistration.Schema) == 0 {
-			return h.BadRequest(ctx, rout.MissingField("credentialSchemas"), openapiCtx)
+			// A missing credential schema is a definition registration error, not a user input error.
+			logger.Error().Str("credential_ref", payload.CredentialRef.String()).Msg("credential registration has no schema")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
 		credentialValidation, err := jsonx.ValidateSchema(credentialRegistration.Schema, credentialInput)
@@ -93,7 +95,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	logger = logger.With().Str("installation_id", installationRec.ID).Logger()
 
 	if userInputProvided {
-		if err := h.persistInstallationUserInput(requestCtx, installationRec, payload.UserInput.RawMessage()); err != nil {
+		if err := h.persistInstallationUserInput(requestCtx, installationRec, payload.UserInput); err != nil {
 			logger.Error().Err(err).Msg("failed to persist user input")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
@@ -103,6 +105,10 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		credential := types.CredentialSet{ProviderData: providerData}
 
 		if len(def.CredentialRegistrations) > 1 {
+			// Multi-credential definitions gather credentials one slot at a time.
+			// Save each slot as it arrives; attempt a health check after each save
+			// but do not fail — the integration remains Pending until all required
+			// slots are filled and the health check passes with full credentials.
 			if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credentialRegistration.Ref, credential); err != nil {
 				logger.Error().Err(err).Str("credential_ref", credentialRegistration.Ref.String()).Msg("failed to save credential")
 				return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -111,6 +117,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			healthOperation, healthErr := h.IntegrationsRuntime.Registry().Operation(def.ID, types.HealthDefaultOperation)
 			if healthErr == nil {
 				if _, healthErr = h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, nil, nil); healthErr == nil {
+					// MarkConnected failure is non-fatal here: the credential was saved and
+					// the health check passed; status can be reconciled on next credential update.
 					_ = h.IntegrationsRuntime.MarkConnected(requestCtx, installationRec)
 				} else {
 					logger.Info().Err(healthErr).Str("credential_ref", credentialRegistration.Ref.String()).Msg("credential slot saved; integration remains pending until all required credentials are configured")

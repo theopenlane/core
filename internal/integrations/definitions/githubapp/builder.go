@@ -79,6 +79,18 @@ func Builder(cfg Config) definition.Builder {
 					},
 					IngestHandle: VulnerabilityCollect{}.IngestHandle(),
 				},
+				{
+					Name:        DirectorySyncOperation.Name(),
+					Description: "Collect organization members as directory accounts",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   GitHubClient.ID(),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
+					},
+					IngestHandle: DirectorySync{}.IngestHandle(),
+				},
 			},
 			Mappings: githubAppMappings(),
 			Webhooks: []types.WebhookRegistration{

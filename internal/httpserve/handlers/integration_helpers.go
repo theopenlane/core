@@ -10,6 +10,7 @@ import (
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -30,40 +31,12 @@ var (
 	errGitHubAppNotConfigured = errors.New("github app integration not configured: required credentials missing from provider spec")
 )
 
-var (
-	// ErrInvalidState is returned when OAuth state validation fails
-	ErrInvalidState = errors.New("invalid OAuth state parameter")
-	// ErrMissingCode is returned when OAuth authorization code is missing
-	ErrMissingCode = errors.New("missing OAuth authorization code")
-	// ErrExchangeAuthCode is returned when OAuth code exchange fails
-	ErrExchangeAuthCode = errors.New("failed to exchange authorization code")
-	// ErrValidateToken is returned when OAuth token validation fails
-	ErrValidateToken = errors.New("failed to validate OAuth token")
-	// ErrInvalidStateFormat is returned when OAuth state format is invalid
-	ErrInvalidStateFormat = errors.New("invalid state format")
-	// ErrProviderRequired is returned when provider parameter is missing
-	ErrProviderRequired = errors.New("provider parameter is required")
-	// ErrIntegrationIDRequired is returned when integration ID is missing
-	ErrIntegrationIDRequired = errors.New("integration ID is required")
-	// ErrIntegrationNotFound is returned when integration is not found
-	ErrIntegrationNotFound = errors.New("integration not found")
-	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
-	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
-	// ErrProviderHealthCheckFailed indicates the provider health check failed
-	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
-)
-
 func (h *Handler) requireIntegrationsRuntime(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	if h.IntegrationsRuntime != nil {
 		return nil
 	}
 
 	return h.InternalServerError(ctx, errIntegrationsRuntimeNotConfigured, openapiCtx)
-}
-
-// buildStatePayload encodes the OAuth state payload for cookies and callbacks.
-func buildStatePayload(orgID, provider string, randomBytes []byte) string {
-	return orgID + ":" + provider + ":" + base64.URLEncoding.EncodeToString(randomBytes)
 }
 
 // parseStatePayload decodes the OAuth state payload and extracts the org and provider values.
@@ -236,12 +209,12 @@ func resolveCredentialRegistration(def types.Definition, credentialRef types.Cre
 	return types.CredentialRegistration{}, ErrInvalidInput
 }
 
-func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBody) error {
-	if len(input) == 0 || def.UserInput == nil || len(def.UserInput.Schema) == 0 {
+func validateDefinitionUserInput(def types.Definition, input json.RawMessage) error {
+	if isNullOrEmptyJSON(input) || def.UserInput == nil || len(def.UserInput.Schema) == 0 {
 		return nil
 	}
 
-	userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, input.RawMessage())
+	userInputValidation, err := jsonx.ValidateSchema(def.UserInput.Schema, input)
 	if err != nil {
 		return err
 	}
@@ -252,3 +225,16 @@ func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBo
 	return nil
 }
 
+// validateOAuthCallbackIdentity verifies that the authenticated caller matches the org and user
+// cookies captured at the start of the OAuth flow.
+func validateOAuthCallbackIdentity(caller *auth.Caller, orgCookieValue, userCookieValue string) error {
+	if caller.OrganizationID != orgCookieValue {
+		return ErrInvalidOrganizationContext
+	}
+
+	if caller.SubjectID != userCookieValue {
+		return ErrInvalidUserContext
+	}
+
+	return nil
+}

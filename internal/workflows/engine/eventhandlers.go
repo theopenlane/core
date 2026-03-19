@@ -2,7 +2,6 @@ package engine
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -309,9 +308,11 @@ func (l *WorkflowListeners) HandleActionStarted(ctx gala.HandlerContext, payload
 		return nil
 	}
 
-	// Execute action
-	execErr := l.engine.ProcessAction(scopeCtx, instance, action)
-	if errors.Is(execErr, ErrIntegrationActionQueued) {
+	// Execute action; install integration-queued flag so executeIntegrationAction can
+	// signal async dispatch without using an error return value.
+	actionCtx := withIntegrationQueuedFlag(scopeCtx)
+	execErr := l.engine.ProcessAction(actionCtx, instance, action)
+	if isIntegrationQueued(actionCtx) {
 		return nil
 	}
 	if errors.Is(execErr, ErrApprovalNoTargets) || errors.Is(execErr, ErrReviewNoTargets) {
@@ -659,32 +660,30 @@ func (l *WorkflowListeners) recordApprovalEvent(
 	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, action.Key, details)
 }
 
+// checkGroupResolution evaluates whether a single approval group is resolved, pending, or failed.
+// Returns (resolved, failed).
+func checkGroupResolution(actions []models.WorkflowAction, idx int, grouped []*generated.WorkflowAssignment) (bool, bool) {
+	if len(grouped) == 0 {
+		return false, false
+	}
+	groupMeta := grouped[0].ApprovalMetadata
+	groupRequired := requiredApprovalCount(actions[idx], groupMeta, grouped[0].Required)
+	switch resolveApproval(groupRequired, CountAssignmentStatus(grouped)) {
+	case approvalFailed:
+		return false, true
+	case approvalPending:
+		return false, false
+	default:
+		return true, false
+	}
+}
+
 func evaluateApprovalGroups(actions []models.WorkflowAction, assignmentsByAction map[int][]*generated.WorkflowAssignment, expectedIndices map[int]struct{}, useExpected bool) (bool, bool) {
 	allResolved := true
 
-	checkGroup := func(idx int, grouped []*generated.WorkflowAssignment) (bool, bool) {
-		if len(grouped) == 0 {
-			return false, false
-		}
-		groupMeta := grouped[0].ApprovalMetadata
-		groupRequired := requiredApprovalCount(actions[idx], groupMeta, grouped[0].Required)
-		groupCounts := CountAssignmentStatus(grouped)
-		groupResolution := resolveApproval(groupRequired, groupCounts)
-
-		if groupResolution == approvalFailed {
-			return false, true
-		}
-
-		if groupResolution == approvalPending {
-			return false, false
-		}
-
-		return true, false
-	}
-
 	if useExpected {
 		for idx := range expectedIndices {
-			resolved, failed := checkGroup(idx, assignmentsByAction[idx])
+			resolved, failed := checkGroupResolution(actions, idx, assignmentsByAction[idx])
 			if failed {
 				return false, true
 			}
@@ -696,7 +695,7 @@ func evaluateApprovalGroups(actions []models.WorkflowAction, assignmentsByAction
 	}
 
 	for idx, grouped := range assignmentsByAction {
-		resolved, failed := checkGroup(idx, grouped)
+		resolved, failed := checkGroupResolution(actions, idx, grouped)
 		if failed {
 			return false, true
 		}
@@ -714,11 +713,9 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 		return nil
 	}
 
-	allowCtx := workflows.AllowContext(scope.Context())
 	// These status updates are internal side effects of a change request; avoid
 	// re-entering assignment completion through mutation emission hooks.
-	allowCtx = workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(allowCtx)
+	allowCtx := workflows.SkipEventEmission(workflows.AllowContext(scope.Context()))
 	requesterID := requesterAssignment.ActorUserID
 	decidedAt := time.Now().UTC()
 
@@ -808,13 +805,6 @@ func (l *WorkflowListeners) HandleInstanceCompleted(ctx gala.HandlerContext, pay
 	return nil
 }
 
-// HandleAssignmentCreated records audit events for assignment creation.
-func (l *WorkflowListeners) HandleAssignmentCreated(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCreatedPayload) (err error) {
-	scope := observability.BeginListenerTopic(ctx, l.observer, gala.TopicWorkflowAssignmentCreated, payload, nil)
-	defer scope.End(err, nil)
-
-	return nil
-}
 
 // resumeWorkflowAfterApproval advances a paused workflow after approvals complete
 func (l *WorkflowListeners) resumeWorkflowAfterApproval(scope *observability.Scope, instance *generated.WorkflowInstance, orgID string, actionIndex int, obj *workflows.Object, def models.WorkflowDefinitionDocument, clearParallel bool) error {
@@ -961,18 +951,15 @@ func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.S
 		create.SetNotes(assignment.RejectionMetadata.RejectionReason)
 	}
 
-	assignmentCreated := true
-	requesterAssignment, err := create.Save(allowCtx)
-	if err != nil && generated.IsConstraintError(err) {
-		assignmentCreated = false
-		requesterAssignment, err = l.client.WorkflowAssignment.Query().
+	requesterAssignment, assignmentCreated, err := upsertAssignment(allowCtx, create, func() (*generated.WorkflowAssignment, error) {
+		return l.client.WorkflowAssignment.Query().
 			Where(
 				workflowassignment.WorkflowInstanceIDEQ(instance.ID),
 				workflowassignment.AssignmentKeyEQ(assignmentKey),
 				workflowassignment.OwnerIDEQ(orgID),
 			).
 			Only(allowCtx)
-	}
+	})
 	if err != nil {
 		return err
 	}
@@ -1020,16 +1007,8 @@ func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.S
 }
 
 // requiredApprovalCount resolves the approval quorum requirement for an action
-func requiredApprovalCount(action models.WorkflowAction, meta models.WorkflowAssignmentApproval, required bool) int {
+func requiredApprovalCount(_ models.WorkflowAction, meta models.WorkflowAssignmentApproval, required bool) int {
 	requiredCount := meta.RequiredCount
-	if requiredCount == 0 {
-		var params struct {
-			RequiredCount int `json:"required_count"`
-		}
-		if err := json.Unmarshal(action.Params, &params); err == nil && params.RequiredCount > 0 {
-			requiredCount = params.RequiredCount
-		}
-	}
 
 	// If approvals are optional (required=false) and no quorum was configured, default to one approval
 	if requiredCount == 0 && !required {

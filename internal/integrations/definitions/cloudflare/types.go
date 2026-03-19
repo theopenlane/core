@@ -15,6 +15,8 @@ var (
 	CloudflareClient = types.NewClientRef[*cf.Client]()
 	// HealthDefaultOperation is the operation ref for the Cloudflare health check
 	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
+	// DirectorySyncOperation is the operation ref for the directory account sync operation
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 )
 
 // Slug is the unique identifier for the Cloudflare integration
@@ -22,6 +24,8 @@ const Slug = "cloudflare"
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// AccountID is the Cloudflare account identifier used for account-scoped API calls
+	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID,description=Cloudflare account ID required for listing account members."`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
 }

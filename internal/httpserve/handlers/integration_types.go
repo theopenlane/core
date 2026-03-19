@@ -10,30 +10,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// IntegrationConfigBody is a raw JSON object body for non-OAuth provider configuration.
-// It accepts arbitrary key-value pairs dictated by each provider's credentials schema.
-type IntegrationConfigBody json.RawMessage
-
-// RawMessage returns the body as json.RawMessage.
-func (b IntegrationConfigBody) RawMessage() json.RawMessage {
-	return json.RawMessage(b)
-}
-
-// IsNullOrEmptyObject reports whether the body is absent, null, or an empty JSON object.
-func (b IntegrationConfigBody) IsNullOrEmptyObject() bool {
-	trimmed := bytes.TrimSpace(b)
+// isNullOrEmptyJSON reports whether v is absent, null, or an empty JSON object.
+func isNullOrEmptyJSON(v json.RawMessage) bool {
+	trimmed := bytes.TrimSpace(v)
 
 	return len(trimmed) == 0 || bytes.Equal(trimmed, []byte("null")) || bytes.Equal(trimmed, []byte("{}"))
-}
-
-// MarshalJSON implements json.Marshaler.
-func (b IntegrationConfigBody) MarshalJSON() ([]byte, error) {
-	return json.RawMessage(b).MarshalJSON()
-}
-
-// UnmarshalJSON implements json.Unmarshaler.
-func (b *IntegrationConfigBody) UnmarshalJSON(data []byte) error {
-	return (*json.RawMessage)(b).UnmarshalJSON(data)
 }
 
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
@@ -46,9 +27,9 @@ type IntegrationConfigPayload struct {
 	// CredentialRef selects which credential slot is being configured.
 	CredentialRef types.CredentialRef `json:"credentialRef"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
-	Body IntegrationConfigBody `json:"body"`
+	Body json.RawMessage `json:"body"`
 	// UserInput holds optional installation-scoped provider configuration.
-	UserInput IntegrationConfigBody `json:"userInput,omitempty"`
+	UserInput json.RawMessage `json:"userInput,omitempty"`
 }
 
 // IntegrationOperationBody is the request body for triggering a provider operation.
@@ -184,7 +165,7 @@ type OAuthFlowRequest struct {
 	// CredentialRef selects which auth-managed credential slot is being activated.
 	CredentialRef types.CredentialRef `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
-	UserInput IntegrationConfigBody `json:"userInput,omitempty"`
+	UserInput json.RawMessage `json:"userInput,omitempty"`
 }
 
 // Validate validates the OAuthFlowRequest.
@@ -221,7 +202,7 @@ func (r *RefreshInstallationCredentialRequest) Validate() error {
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 	DefinitionID: "def_01K0GWKSP000000000000000001",
-	Body:         IntegrationConfigBody(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
+	Body:         json.RawMessage(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
 // ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.

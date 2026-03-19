@@ -197,11 +197,7 @@ func singleCredential(credentials types.CredentialBindings, refs []types.Credent
 		return types.CredentialSet{}
 	}
 
-	for _, ref := range refs {
-		if credential, ok := credentials.Resolve(ref); ok {
-			return credential
-		}
-	}
+	credential, _ := credentials.Resolve(refs[0])
 
-	return types.CredentialSet{}
+	return credential
 }

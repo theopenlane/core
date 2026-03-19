@@ -56,10 +56,9 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 		return err
 	}
 
-	currentWebhooks := make(map[string]struct{}, len(def.Webhooks))
-	for _, webhook := range def.Webhooks {
-		currentWebhooks[webhook.Name] = struct{}{}
-	}
+	currentWebhooks := lo.Associate(def.Webhooks, func(w types.WebhookRegistration) (string, struct{}) {
+		return w.Name, struct{}{}
+	})
 
 	staleIDs := lo.FilterMap(existing, func(row *ent.IntegrationWebhook, _ int) (string, bool) {
 		_, current := currentWebhooks[row.Name]
@@ -132,6 +131,17 @@ func (r *Runtime) FinalizeWebhookDelivery(ctx context.Context, webhook *ent.Inte
 	return update.Exec(ctx)
 }
 
+// ResolveWebhookByEndpoint returns the persisted inbound webhook row for the given endpoint ID.
+// Only primary webhook rows (not delivery idempotency rows) are returned.
+func (r *Runtime) ResolveWebhookByEndpoint(ctx context.Context, endpointID string) (*ent.IntegrationWebhook, error) {
+	return do.MustInvoke[*ent.Client](r.injector).IntegrationWebhook.Query().
+		Where(
+			integrationwebhook.EndpointIDEQ(endpointID),
+			integrationwebhook.ExternalEventIDIsNil(),
+		).
+		Only(ctx)
+}
+
 // EnsureWebhook returns the persisted webhook row for one installation and definition webhook.
 // previousIntegrationID is non-empty when the caller knows the installation was just re-created
 // under a new ID and wants existing webhook rows rolled forward to preserve externally configured URLs.
@@ -141,13 +151,14 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, installation *ent.Integrati
 		return nil, err
 	}
 
-	for _, webhook := range def.Webhooks {
-		if webhook.Name == webhookName {
-			return r.ensureWebhook(ctx, installation, webhook, previousIntegrationID)
-		}
+	webhook, found := lo.Find(def.Webhooks, func(w types.WebhookRegistration) bool {
+		return w.Name == webhookName
+	})
+	if !found {
+		return nil, registry.ErrWebhookNotFound
 	}
 
-	return nil, registry.ErrWebhookNotFound
+	return r.ensureWebhook(ctx, installation, webhook, previousIntegrationID)
 }
 
 // DispatchWebhookEvent emits one normalized integration webhook event through Gala
@@ -235,7 +246,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 				Operation:      operation,
 				Config:         jsonx.CloneRawMessage(config),
 				RunType:        enums.IntegrationRunTypeEvent,
-				})
+			})
 
 			return dispatchErr
 		},

@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -49,7 +50,20 @@ func Builder() definition.Builder {
 					ClientRef:   CloudflareClient.ID(),
 					Handle:      HealthCheck{}.Handle(),
 				},
+				{
+					Name:        DirectorySyncOperation.Name(),
+					Description: "Collect account members as directory accounts",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   CloudflareClient.ID(),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
+					},
+					IngestHandle: DirectorySync{}.IngestHandle(),
+				},
 			},
+			Mappings: cloudflareMappings(),
 		}, nil
 	})
 }

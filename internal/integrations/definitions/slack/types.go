@@ -21,6 +21,8 @@ var (
 	ChannelsListOperation = types.NewOperationRef[ChannelsListOperationInput]("channels.list")
 	// MessageSendOperation is the operation ref for the Slack message send operation
 	MessageSendOperation = types.NewOperationRef[MessageOperationInput]("message.send")
+	// DirectorySyncOperation is the operation ref for the directory account sync operation
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 )
 
 // Slug is the unique identifier for the Slack integration

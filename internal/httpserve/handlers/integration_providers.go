@@ -15,18 +15,10 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPI
 		return err
 	}
 
-	reg := h.IntegrationsRuntime.Registry()
-	specs := reg.Catalog()
-	entries := make([]DefinitionCatalogEntry, 0, len(specs))
-
-	for _, spec := range specs {
-		def, ok := reg.Definition(spec.ID)
-		if !ok {
-			continue
-		}
-
-		entries = append(entries, buildDefinitionCatalogEntry(def))
-	}
+	defs := h.IntegrationsRuntime.Registry().Definitions()
+	entries := lo.Map(defs, func(def types.Definition, _ int) DefinitionCatalogEntry {
+		return buildDefinitionCatalogEntry(def)
+	})
 
 	return h.Success(ctx, IntegrationProvidersResponse{
 		Reply:     rout.Reply{Success: true},
@@ -52,10 +44,7 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 		Active:      spec.Active,
 		Visible:     spec.Visible,
 		HasAuth:     def.Auth != nil,
-	}
-
-	if def.Auth != nil && (def.Auth.StartPath != "" || def.Auth.CallbackPath != "" || def.Auth.OAuth != nil) {
-		entry.Auth = def.Auth
+		Auth:        def.Auth,
 	}
 
 	if len(def.CredentialRegistrations) > 0 {

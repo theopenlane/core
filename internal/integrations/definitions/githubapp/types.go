@@ -10,11 +10,13 @@ var (
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	GitHubClient = types.NewClientRef[GraphQLClient]()
 	// HealthDefaultOperation is the operation ref for the GitHub App health check
-	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
 	// RepositorySyncOperation is the operation ref for the repository sync operation
-	RepositorySyncOperation = types.NewOperationRef[struct{}]("repository.sync")
+	RepositorySyncOperation = types.NewOperationRef[RepositorySync]("repository.sync")
 	// VulnerabilityCollectOperation is the operation ref for the vulnerability collection operation
 	VulnerabilityCollectOperation = types.NewOperationRef[VulnerabilityCollectConfig]("vulnerability.collect")
+	// DirectorySyncOperation is the operation ref for the directory account sync operation
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events

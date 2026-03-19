@@ -20,6 +20,8 @@ var (
 	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
 	// DirectoryInspectOperation is the operation ref for the Azure Entra ID directory inspect operation
 	DirectoryInspectOperation = types.NewOperationRef[DirectoryInspect]("directory.inspect")
+	// DirectorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 )
 
 // Slug is the unique identifier for the Azure Entra ID integration
@@ -29,6 +31,10 @@ const Slug = "azure_entra_id"
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	// EnableGroupSync controls whether group and membership records are collected
+	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
+	// IncludeGuestUsers controls whether guest-type accounts are included in the sync
+	IncludeGuestUsers bool `json:"includeGuestUsers,omitempty" jsonschema:"title=Include Guest Users"`
 }
 
 // CredentialSchema holds the per-installation credential for one Entra ID tenant

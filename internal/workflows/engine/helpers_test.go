@@ -214,8 +214,8 @@ func TestApplyTriggerContext(t *testing.T) {
 		RemovedIDs:    map[string][]string{"controls": {"two"}},
 	}
 	existing := models.WorkflowInstanceContext{
-		Version: 0,
-		Data:    []byte(`{"foo":"bar"}`),
+		Version:               0,
+		ExecutedNotifications: []string{"notify-a"},
 	}
 
 	got := applyTriggerContext(existing, "def-123", obj, input, "user-999")
@@ -229,7 +229,7 @@ func TestApplyTriggerContext(t *testing.T) {
 	assert.Equal(t, input.AddedIDs, got.TriggerAddedIDs)
 	assert.Equal(t, input.RemovedIDs, got.TriggerRemovedIDs)
 	assert.Equal(t, "user-999", got.TriggerUserID)
-	assert.Equal(t, existing.Data, got.Data)
+	assert.Equal(t, existing.ExecutedNotifications, got.ExecutedNotifications)
 }
 
 func TestApprovalFailureMessage(t *testing.T) {
@@ -318,23 +318,14 @@ func TestGetExecutedNotifications(t *testing.T) {
 
 	instance := &generated.WorkflowInstance{
 		Context: models.WorkflowInstanceContext{
-			Data: []byte(`{"executed_notifications":["one","two"]}`),
+			ExecutedNotifications: []string{"one", "two"},
 		},
 	}
 	got := listeners.getExecutedNotifications(instance)
 	assert.True(t, got["one"])
 	assert.True(t, got["two"])
 
-	instance.Context.Data = []byte(`{"executed_notifications":["alpha", 3, "beta"]}`)
-	got = listeners.getExecutedNotifications(instance)
-	assert.True(t, got["alpha"])
-	assert.True(t, got["beta"])
-
-	instance.Context.Data = []byte(`{"executed_notifications":null}`)
-	got = listeners.getExecutedNotifications(instance)
-	assert.Empty(t, got)
-
-	instance.Context.Data = []byte(`not-json`)
+	instance.Context.ExecutedNotifications = nil
 	got = listeners.getExecutedNotifications(instance)
 	assert.Empty(t, got)
 }

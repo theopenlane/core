@@ -19,4 +19,12 @@ var (
 	ErrPoliciesFetchFailed = errors.New("okta: policies fetch failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("okta: result encode failed")
+	// ErrDirectoryUsersFetchFailed indicates the Okta users listing failed
+	ErrDirectoryUsersFetchFailed = errors.New("okta: directory users fetch failed")
+	// ErrDirectoryGroupsFetchFailed indicates the Okta groups listing failed
+	ErrDirectoryGroupsFetchFailed = errors.New("okta: directory groups fetch failed")
+	// ErrDirectoryGroupMembersFetchFailed indicates group member listing failed
+	ErrDirectoryGroupMembersFetchFailed = errors.New("okta: directory group members fetch failed")
+	// ErrPayloadEncode indicates a directory payload could not be serialized
+	ErrPayloadEncode = errors.New("okta: payload encode failed")
 )

@@ -77,6 +77,14 @@ func MarkSkipEventEmission(ctx context.Context) {
 	}
 }
 
+// SkipEventEmission installs the mutable skip flag and immediately marks it, combining
+// WithSkipEventEmission and MarkSkipEventEmission into a single call.
+func SkipEventEmission(ctx context.Context) context.Context {
+	ctx = WithSkipEventEmission(ctx)
+	MarkSkipEventEmission(ctx)
+	return ctx
+}
+
 // ShouldSkipEventEmission reports whether mutation event emission should be skipped.
 func ShouldSkipEventEmission(ctx context.Context) bool {
 	if ctx == nil {

@@ -1,6 +1,7 @@
 package slack
 
 import (
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -51,6 +52,7 @@ func Builder(cfg Config) definition.Builder {
 						"groups:read",
 						"team:read",
 						"users:read",
+					"users:read.email",
 					},
 				},
 				ClientSecret: cfg.ClientSecret,
@@ -95,7 +97,20 @@ func Builder(cfg Config) definition.Builder {
 					ConfigSchema: providerkit.SchemaFrom[MessageOperationInput](),
 					Handle:       MessageSend{}.Handle(),
 				},
+				{
+					Name:        DirectorySyncOperation.Name(),
+					Description: "Collect workspace users as directory accounts",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   SlackClient.ID(),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
+					},
+					IngestHandle: DirectorySync{}.IngestHandle(),
+				},
 			},
+			Mappings: slackMappings(),
 		}, nil
 	})
 }

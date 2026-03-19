@@ -15,4 +15,10 @@ var (
 	ErrClientType = errors.New("cloudflare: unexpected client type")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("cloudflare: result encode failed")
+	// ErrMembersFetchFailed indicates the account members list request failed
+	ErrMembersFetchFailed = errors.New("cloudflare: members fetch failed")
+	// ErrPayloadEncode indicates a collected Cloudflare payload could not be serialized for ingest
+	ErrPayloadEncode = errors.New("cloudflare: ingest payload encode failed")
+	// ErrAccountIDMissing indicates the account ID is missing from user input
+	ErrAccountIDMissing = errors.New("cloudflare: account id missing")
 )

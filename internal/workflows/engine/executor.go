@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"maps"
-	"strconv"
 	"strings"
 	"time"
 
@@ -207,22 +206,15 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 				assignmentCreate.SetRole(cfg.Role)
 			}
 
-			assignmentCreated := true
-			assignment, err := assignmentCreate.Save(allowCtx)
-			if err != nil {
-				if generated.IsConstraintError(err) {
-					assignmentCreated = false
-					assignment, err = e.client.WorkflowAssignment.
-						Query().
-						Where(
-							workflowassignment.WorkflowInstanceIDEQ(instance.ID),
-							workflowassignment.AssignmentKeyEQ(assignmentKey),
-							workflowassignment.OwnerIDEQ(ownerID),
-						).
-						Only(allowCtx)
-				}
-			}
-
+			assignment, assignmentCreated, err := upsertAssignment(allowCtx, assignmentCreate, func() (*generated.WorkflowAssignment, error) {
+				return e.client.WorkflowAssignment.Query().
+					Where(
+						workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+						workflowassignment.AssignmentKeyEQ(assignmentKey),
+						workflowassignment.OwnerIDEQ(ownerID),
+					).
+					Only(allowCtx)
+			})
 			if err != nil {
 				return ErrAssignmentCreationFailed
 			}
@@ -278,6 +270,23 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 	return nil
 }
 
+// upsertAssignment attempts to save a new WorkflowAssignment and falls back to loading
+// the existing record on a unique constraint error. Returns the record and whether it was created.
+func upsertAssignment(ctx context.Context, create *generated.WorkflowAssignmentCreate, query func() (*generated.WorkflowAssignment, error)) (*generated.WorkflowAssignment, bool, error) {
+	record, err := create.Save(ctx)
+	if err != nil {
+		if !generated.IsConstraintError(err) {
+			return nil, false, err
+		}
+		record, err = query()
+		if err != nil {
+			return nil, false, err
+		}
+		return record, false, nil
+	}
+	return record, true, nil
+}
+
 // executeFieldUpdate applies field updates to the target object
 func (e *WorkflowEngine) executeFieldUpdate(ctx context.Context, action models.WorkflowAction, obj *wfworkflows.Object) error {
 	var params wfworkflows.FieldUpdateActionParams
@@ -305,9 +314,11 @@ func (e *WorkflowEngine) executeFieldUpdate(ctx context.Context, action models.W
 
 // executeApproval creates workflow assignments for approval actions
 func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
-	params, err := decodeApprovalActionParams(action.Params)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
+	var params wfworkflows.ApprovalActionParams
+	if action.Params != nil {
+		if err := json.Unmarshal(action.Params, &params); err != nil {
+			return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
+		}
 	}
 
 	required := true
@@ -347,96 +358,6 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 		ProposedHash:   proposedHash,
 		NoTargetsError: ErrApprovalNoTargets,
 	})
-}
-
-type approvalActionParamsCompat struct {
-	Targets       []wfworkflows.TargetConfig `json:"targets"`
-	Required      any                        `json:"required"`
-	Label         string                     `json:"label"`
-	RequiredCount int                        `json:"required_count"`
-	Fields        []string                   `json:"fields,omitempty"`
-}
-
-func decodeApprovalActionParams(raw json.RawMessage) (wfworkflows.ApprovalActionParams, error) {
-	if len(raw) == 0 {
-		return wfworkflows.ApprovalActionParams{}, nil
-	}
-
-	var parsed approvalActionParamsCompat
-	if err := json.Unmarshal(raw, &parsed); err != nil {
-		return wfworkflows.ApprovalActionParams{}, err
-	}
-
-	required, requiredCount, err := approvalRequired(parsed.Required, parsed.RequiredCount)
-	if err != nil {
-		return wfworkflows.ApprovalActionParams{}, err
-	}
-
-	return wfworkflows.ApprovalActionParams{
-		TargetedActionParams: wfworkflows.TargetedActionParams{
-			Targets: parsed.Targets,
-		},
-		Required:      required,
-		Label:         parsed.Label,
-		RequiredCount: requiredCount,
-		Fields:        parsed.Fields,
-	}, nil
-}
-
-func approvalRequired(required any, requiredCount int) (*bool, int, error) {
-	switch v := required.(type) {
-	case nil:
-		return nil, requiredCount, nil
-	case bool:
-		value := v
-		return &value, requiredCount, nil
-	case float64:
-		if v < 0 {
-			return nil, requiredCount, fmt.Errorf("%w: required", wfworkflows.ErrApprovalActionParamsInvalid)
-		}
-
-		return approvalRequiredFromNumber(v, requiredCount), approvalRequiredCountFromNumber(v, requiredCount), nil
-	case string:
-		trimmed := strings.TrimSpace(v)
-		if trimmed == "" {
-			return nil, requiredCount, nil
-		}
-
-		switch strings.ToLower(trimmed) {
-		case "true":
-			value := true
-			return &value, requiredCount, nil
-		case "false":
-			value := false
-			return &value, requiredCount, nil
-		}
-
-		number, err := strconv.ParseFloat(trimmed, 64)
-		if err != nil || number < 0 {
-			return nil, requiredCount, fmt.Errorf("%w: required", wfworkflows.ErrApprovalActionParamsInvalid)
-		}
-
-		return approvalRequiredFromNumber(number, requiredCount), approvalRequiredCountFromNumber(number, requiredCount), nil
-	default:
-		return nil, requiredCount, fmt.Errorf("%w: required", wfworkflows.ErrApprovalActionParamsInvalid)
-	}
-}
-
-func approvalRequiredFromNumber(number float64, _ int) *bool {
-	required := number != 0
-	return &required
-}
-
-func approvalRequiredCountFromNumber(number float64, requiredCount int) int {
-	if requiredCount > 0 {
-		return requiredCount
-	}
-
-	if number > 1 && number == float64(int(number)) {
-		return int(number)
-	}
-
-	return requiredCount
 }
 
 // executeNotification sends notifications to targets

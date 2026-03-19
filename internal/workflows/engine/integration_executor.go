@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/rs/zerolog"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -20,6 +21,30 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
+
+// integrationQueuedFlag is a mutable flag set when an integration operation is successfully
+// queued, signaling callers without using an error return value.
+type integrationQueuedFlag struct{ queued bool }
+
+var integrationQueuedKey = contextx.NewKey[*integrationQueuedFlag]()
+
+// withIntegrationQueuedFlag installs a mutable queued flag into the context.
+func withIntegrationQueuedFlag(ctx context.Context) context.Context {
+	return integrationQueuedKey.Set(ctx, &integrationQueuedFlag{})
+}
+
+// markIntegrationQueued signals that an integration operation was queued.
+func markIntegrationQueued(ctx context.Context) {
+	if flag, ok := integrationQueuedKey.Get(ctx); ok && flag != nil {
+		flag.queued = true
+	}
+}
+
+// isIntegrationQueued reports whether an integration operation was queued.
+func isIntegrationQueued(ctx context.Context) bool {
+	flag, ok := integrationQueuedKey.Get(ctx)
+	return ok && flag != nil && flag.queued
+}
 
 // IntegrationDeps wires integration-specific dependencies into the workflow engine
 type IntegrationDeps struct {
@@ -103,27 +128,30 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 		return nil
 	}
 
-	if e.gala == nil || e.integrationListenersRegistered {
+	if e.gala == nil {
 		return nil
 	}
 
 	// Register one listener per operation topic; each listener executes the operation
 	// via the executor and emits workflow action completed when workflow meta is present.
-	for _, op := range e.integrationRuntime.Registry().Listeners() {
-		operation := op // capture for closure
-		if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[operations.Envelope]{
-			Topic: gala.Topic[operations.Envelope]{Name: operation.Topic},
-			Name:  fmt.Sprintf("engine.integrations.%s", operation.Topic),
-			Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
-				return e.handleIntegrationOperation(ctx, envelope)
-			},
-		}); err != nil {
-			return err
+	// sync.Once ensures idempotent registration even if SetIntegrationDeps is called concurrently.
+	e.integrationListenersOnce.Do(func() {
+		for _, op := range e.integrationRuntime.Registry().Listeners() {
+			operation := op // capture for closure
+			if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[operations.Envelope]{
+				Topic: gala.Topic[operations.Envelope]{Name: operation.Topic},
+				Name:  fmt.Sprintf("engine.integrations.%s", operation.Topic),
+				Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
+					return e.handleIntegrationOperation(ctx, envelope)
+				},
+			}); err != nil {
+				e.integrationListenersErr = err
+				return
+			}
 		}
-	}
+	})
 
-	e.integrationListenersRegistered = true
-	return nil
+	return e.integrationListenersErr
 }
 
 // QueueIntegrationOperation resolves the installation and dispatches the operation
@@ -216,17 +244,17 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 	}
 
 	_, err := e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
-		OrgID:           orgID,
-		InstallationID:  params.InstallationID,
-		DefinitionID:    params.DefinitionID,
-		Operation:       operationName,
-		Config:          jsonx.CloneRawMessage(params.Config),
-		ScopeExpression: params.ScopeExpression,
-		ScopePayload:    jsonx.CloneRawMessage(params.ScopePayload),
-		ScopeResource:   params.ScopeResource,
+		OrgID:              orgID,
+		InstallationID:     params.InstallationID,
+		DefinitionID:       params.DefinitionID,
+		Operation:          operationName,
+		Config:             jsonx.CloneRawMessage(params.Config),
+		ScopeExpression:    params.ScopeExpression,
+		ScopePayload:       jsonx.CloneRawMessage(params.ScopePayload),
+		ScopeResource:      params.ScopeResource,
 		ForceClientRebuild: params.ForceClientRebuild,
-		RunType:         enums.IntegrationRunTypeEvent,
-		WorkflowMeta:    meta,
+		RunType:            enums.IntegrationRunTypeEvent,
+		WorkflowMeta:       meta,
 	})
 	if err != nil {
 		if errors.Is(err, ErrIntegrationScopeConditionFalse) {
@@ -236,7 +264,8 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		return err
 	}
 
-	return ErrIntegrationActionQueued
+	markIntegrationQueued(ctx)
+	return nil
 }
 
 // handleIntegrationOperation executes an integration operation and emits workflow action completed when applicable

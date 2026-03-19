@@ -43,8 +43,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
-		UserInput: handlers.IntegrationConfigBody(
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		UserInput: json.RawMessage(
 			mustMarshalJSON(t, map[string]any{"filterExpr": "payload.severity == \"HIGH\""}),
 		),
 	})
@@ -90,7 +90,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -116,7 +116,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -142,7 +142,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectP
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(`["not","an","object"]`),
+		Body:         json.RawMessage(`["not","an","object"]`),
 	})
 
 	rec := httptest.NewRecorder()
@@ -165,7 +165,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -191,13 +191,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 
 	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
 		DefinitionID:   configTestProviderID,
 		InstallationID: first.InstallationID,
-		Body:           handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
+		Body:           json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
 	})
 
 	assert.Equal(t, first.InstallationID, second.InstallationID)
@@ -227,13 +227,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 
 	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
 		DefinitionID:   configTestProviderID,
 		InstallationID: first.InstallationID,
-		UserInput:      handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
+		UserInput:      json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
 	})
 
 	assert.Equal(t, first.InstallationID, second.InstallationID)
@@ -278,7 +278,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID:   definitionID,
 		InstallationID: rec.ID,
-		UserInput:      handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.actor == \"service-account\""})),
+		UserInput:      json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.actor == \"service-account\""})),
 	})
 
 	httpRec := httptest.NewRecorder()
@@ -311,13 +311,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 
 	other := performIntegrationConfigRequest(t, suite, testUser.UserCtx, "def_test_other", handlers.IntegrationConfigPayload{
 		DefinitionID: "def_test_other",
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
 	})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID:   configTestProviderID,
 		InstallationID: other.InstallationID,
-		Body:           handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		Body:           json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -343,7 +343,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
 		DefinitionID: configTestProviderID,
-		Body:         handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		Body:         json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()

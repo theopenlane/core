@@ -1,6 +1,7 @@
 package okta
 
 import (
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -56,7 +57,26 @@ func Builder() definition.Builder {
 					ClientRef:   OktaClient.ID(),
 					Handle:      PoliciesCollect{}.Handle(),
 				},
+				{
+					Name:        DirectorySyncOperation.Name(),
+					Description: "Collect Okta directory users, groups, and memberships as directory accounts",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   OktaClient.ID(),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
+					},
+					IngestHandle: DirectorySync{}.IngestHandle(),
+				},
 			},
+			Mappings: oktaMappings(),
 		}, nil
 	})
 }

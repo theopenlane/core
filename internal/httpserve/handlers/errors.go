@@ -154,6 +154,26 @@ var (
 	ErrResendWebhookDisabled = errors.New("resend webhook is not enabled")
 	// ErrResendWebhookMissingID is returned when resend webhook is missing svix-id header
 	ErrResendWebhookMissingID = errors.New("resend webhook is missing svix-id header")
+	// ErrInvalidState is returned when OAuth state validation fails
+	ErrInvalidState = errors.New("invalid OAuth state parameter")
+	// ErrMissingCode is returned when OAuth authorization code is missing
+	ErrMissingCode = errors.New("missing OAuth authorization code")
+	// ErrExchangeAuthCode is returned when OAuth code exchange fails
+	ErrExchangeAuthCode = errors.New("failed to exchange authorization code")
+	// ErrValidateToken is returned when OAuth token validation fails
+	ErrValidateToken = errors.New("failed to validate OAuth token")
+	// ErrInvalidStateFormat is returned when OAuth state format is invalid
+	ErrInvalidStateFormat = errors.New("invalid state format")
+	// ErrProviderRequired is returned when provider parameter is missing
+	ErrProviderRequired = errors.New("provider parameter is required")
+	// ErrIntegrationIDRequired is returned when integration ID is missing
+	ErrIntegrationIDRequired = errors.New("integration ID is required")
+	// ErrIntegrationNotFound is returned when the integration installation is not found
+	ErrIntegrationNotFound = errors.New("integration not found")
+	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
+	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
+	// ErrProviderHealthCheckFailed indicates the provider health check failed
+	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
 
 var (

@@ -361,16 +361,14 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 }
 
 // prepareAssetInput applies integration-scoped defaults before emit or sync persistence.
-func prepareAssetInput(ctx context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
-	_ = ctx
+func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
 	input = integrationgenerated.PrepareAssetInput(input, integration)
 
 	return input
 }
 
 // prepareContactInput applies integration-scoped defaults before emit or sync persistence.
-func prepareContactInput(ctx context.Context, input ent.CreateContactInput, integration *ent.Integration) ent.CreateContactInput {
-	_ = ctx
+func prepareContactInput(_ context.Context, input ent.CreateContactInput, integration *ent.Integration) ent.CreateContactInput {
 	input = integrationgenerated.PrepareContactInput(input, integration)
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
@@ -422,24 +420,21 @@ func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirect
 }
 
 // prepareEntityInput applies integration-scoped defaults before emit or sync persistence.
-func prepareEntityInput(ctx context.Context, input ent.CreateEntityInput, integration *ent.Integration) ent.CreateEntityInput {
-	_ = ctx
+func prepareEntityInput(_ context.Context, input ent.CreateEntityInput, integration *ent.Integration) ent.CreateEntityInput {
 	input = integrationgenerated.PrepareEntityInput(input, integration)
 
 	return input
 }
 
 // prepareRiskInput applies integration-scoped defaults before emit or sync persistence.
-func prepareRiskInput(ctx context.Context, input ent.CreateRiskInput, integration *ent.Integration) ent.CreateRiskInput {
-	_ = ctx
+func prepareRiskInput(_ context.Context, input ent.CreateRiskInput, integration *ent.Integration) ent.CreateRiskInput {
 	input = integrationgenerated.PrepareRiskInput(input, integration)
 
 	return input
 }
 
 // prepareVulnerabilityInput applies integration-scoped defaults before emit or sync persistence.
-func prepareVulnerabilityInput(ctx context.Context, input ent.CreateVulnerabilityInput, integration *ent.Integration) ent.CreateVulnerabilityInput {
-	_ = ctx
+func prepareVulnerabilityInput(_ context.Context, input ent.CreateVulnerabilityInput, integration *ent.Integration) ent.CreateVulnerabilityInput {
 	input = integrationgenerated.PrepareVulnerabilityInput(input, integration)
 
 	return input

@@ -22,10 +22,8 @@ import (
 const (
 	// githubAppSlug is the definition slug for the GitHub App integration
 	githubAppSlug = githubapp.Slug
-)
 
-// GitHub App cookie names used during install callbacks
-const (
+	// GitHub App cookie names used during install callbacks
 	githubAppStateCookieName  = "githubapp_state"
 	githubAppOrgIDCookieName  = "githubapp_org_id"
 	githubAppUserIDCookieName = "githubapp_user_id"
@@ -139,14 +137,9 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	if callbackCaller.OrganizationID != orgID {
-		logger.Error().Str("caller_org_id", callbackCaller.OrganizationID).Str("expected_org_id", orgID).Msg("github app callback organization mismatch")
-		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
-	}
-
-	if callbackCaller.SubjectID != userCookie.Value {
-		logger.Error().Str("caller_user_id", callbackCaller.SubjectID).Str("cookie_user_id", userCookie.Value).Msg("github app callback user mismatch")
-		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
+	if err := validateOAuthCallbackIdentity(callbackCaller, orgID, userCookie.Value); err != nil {
+		logger.Error().Err(err).Msg("github app callback identity mismatch")
+		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
 	integrationRecord, err := h.lookupGitHubAppIntegrationByProviderInstallationID(reqCtx, orgID, in.InstallationID)
@@ -190,7 +183,17 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		logger.Error().Err(err).Msg("failed to sync github app webhooks")
 	}
 
-	h.queueGitHubVulnerabilityBackfill(reqCtx, orgID, integrationRecord.ID)
+	if h.WorkflowEngine == nil || h.Gala == nil {
+		logger.Info().Msg("github app vulnerability backfill skipped: workflow engine or gala not configured")
+	} else if _, err := h.WorkflowEngine.QueueIntegrationOperation(context.WithoutCancel(reqCtx), engine.IntegrationQueueRequest{
+		OrgID:          orgID,
+		DefinitionID:   githubapp.DefinitionID.ID(),
+		InstallationID: integrationRecord.ID,
+		Operation:      githubapp.VulnerabilityCollectOperation.Name(),
+		RunType:        enums.IntegrationRunTypeEvent,
+	}); err != nil {
+		logger.Error().Err(err).Msg("failed to queue github vulnerability backfill")
+	}
 
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
@@ -227,26 +230,4 @@ func (h *Handler) resolveGitHubAppDefinition() (integrationstypes.Definition, er
 	}
 
 	return def, nil
-}
-
-// queueGitHubVulnerabilityBackfill schedules an initial vulnerability collection run after app installation
-func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, integrationID string) {
-	if h.WorkflowEngine == nil {
-		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: workflow engine not configured")
-		return
-	}
-	if h.Gala == nil {
-		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: gala runtime not configured")
-		return
-	}
-
-	if _, err := h.WorkflowEngine.QueueIntegrationOperation(context.WithoutCancel(ctx), engine.IntegrationQueueRequest{
-		OrgID:          orgID,
-		DefinitionID:   githubapp.DefinitionID.ID(),
-		InstallationID: integrationID,
-		Operation:      githubapp.VulnerabilityCollectOperation.Name(),
-		RunType:        enums.IntegrationRunTypeEvent,
-	}); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("org_id", orgID).Str("integration_id", integrationID).Msg("failed to queue github vulnerability backfill")
-	}
 }

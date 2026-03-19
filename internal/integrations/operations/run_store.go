@@ -33,16 +33,11 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 		return nil, err
 	}
 
-	runType := req.RunType
-	if runType == "" {
-		runType = enums.IntegrationRunTypeManual
-	}
-
 	return db.IntegrationRun.Create().
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(installation.ID).
 		SetOperationName(req.Operation).
-		SetRunType(runType).
+		SetRunType(req.RunType).
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(config).
 		Save(ctx)
