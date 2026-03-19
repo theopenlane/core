@@ -88,12 +88,6 @@ type githubWebhookRepoOwner struct {
 	Login string `json:"login"`
 }
 
-// githubWebhookVerificationStatePatch is the provider state patch written on successful ping verification
-type githubWebhookVerificationStatePatch struct {
-	// WebhookVerifiedAt records the UTC timestamp of the verified ping event
-	WebhookVerifiedAt time.Time `json:"webhookVerifiedAt"`
-}
-
 // githubWebhookVerificationMetadata is the integration metadata patch written on successful ping verification
 type githubWebhookVerificationMetadata struct {
 	// GitHubWebhookVerifiedAt records the UTC timestamp of the verified ping event
@@ -174,18 +168,6 @@ func (App) Event(ctx context.Context, request types.WebhookEventRequest) (types.
 
 // Handle marks the GitHub webhook as verified for the installation
 func (PingWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	statePatch, err := json.Marshal(githubWebhookVerificationStatePatch{
-		WebhookVerifiedAt: time.Now().UTC(),
-	})
-	if err != nil {
-		return ErrWebhookStatePatchEncode
-	}
-
-	nextState := request.Integration.ProviderState
-	if _, err := nextState.MergeProviderData(Slug, statePatch); err != nil {
-		return ErrWebhookStateMergeFailed
-	}
-
 	metadataPatch, err := jsonx.ToMap(githubWebhookVerificationMetadata{
 		GitHubWebhookVerifiedAt: time.Now().UTC(),
 	})
@@ -194,7 +176,6 @@ func (PingWebhook) Handle(ctx context.Context, request types.WebhookHandleReques
 	}
 
 	if err := request.DB.Integration.UpdateOneID(request.Integration.ID).
-		SetProviderState(nextState).
 		SetMetadata(mapx.DeepMergeMapAny(mapx.DeepCloneMapAny(request.Integration.Metadata), metadataPatch)).
 		Exec(ctx); err != nil {
 		return ErrWebhookPersistFailed

@@ -9,8 +9,10 @@ var (
 	ErrDefinitionIDRequired = errors.New("integrations/runtime: definition id required")
 	// ErrInstallationRequired indicates the installation record dependency is missing
 	ErrInstallationRequired = errors.New("integrations/runtime: installation required")
-	// ErrInstallationIDRequired indicates installation resolution requires an installation id when owner plus definition is ambiguous
+	// ErrInstallationIDRequired indicates installation resolution requires an installation id when no explicit id is given
 	ErrInstallationIDRequired = errors.New("integrations/runtime: installation id required")
+	// ErrInstallationAmbiguous indicates multiple installations matched the resolution query
+	ErrInstallationAmbiguous = errors.New("integrations/runtime: installation ambiguous")
 	// ErrInstallationNotFound indicates no matching installation could be resolved
 	ErrInstallationNotFound = errors.New("integrations/runtime: installation not found")
 	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
@@ -21,6 +23,4 @@ var (
 	ErrDefinitionNotFound = errors.New("integrations/runtime: definition not found")
 	// ErrOperationNotFound indicates the requested operation is not registered for the definition
 	ErrOperationNotFound = errors.New("integrations/runtime: operation not found")
-	// ErrInstallationMetadataInvalid indicates derived installation metadata failed schema validation
-	ErrInstallationMetadataInvalid = errors.New("integrations/runtime: installation metadata invalid")
 )

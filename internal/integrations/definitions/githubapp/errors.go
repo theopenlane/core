@@ -49,10 +49,6 @@ var (
 	ErrIngestPayloadEncode = errors.New("githubapp: ingest payload encode failed")
 	// ErrWebhookPayloadInvalid indicates the webhook payload could not be decoded
 	ErrWebhookPayloadInvalid = errors.New("githubapp: webhook payload invalid")
-	// ErrWebhookStatePatchEncode indicates the webhook state patch could not be serialized
-	ErrWebhookStatePatchEncode = errors.New("githubapp: webhook state patch encode failed")
-	// ErrWebhookStateMergeFailed indicates provider state merge failed
-	ErrWebhookStateMergeFailed = errors.New("githubapp: webhook state merge failed")
 	// ErrWebhookMetadataEncode indicates webhook metadata could not be encoded
 	ErrWebhookMetadataEncode = errors.New("githubapp: webhook metadata encode failed")
 	// ErrWebhookPersistFailed indicates webhook side effects could not be persisted

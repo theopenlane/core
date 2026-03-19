@@ -73,16 +73,13 @@ func Builder(cfg Config) definition.Builder {
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-							EnsurePayloads: true,
-						},
+								},
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-							EnsurePayloads: true,
-						},
+								},
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-							EnsurePayloads: true,
-						},
+								},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
 				},

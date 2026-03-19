@@ -40,6 +40,8 @@ const (
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldEndpointID holds the string denoting the endpoint_id field in the database.
+	FieldEndpointID = "endpoint_id"
 	// FieldEndpointURL holds the string denoting the endpoint_url field in the database.
 	FieldEndpointURL = "endpoint_url"
 	// FieldSecretToken holds the string denoting the secret_token field in the database.
@@ -94,6 +96,7 @@ var Columns = []string{
 	FieldProvider,
 	FieldName,
 	FieldStatus,
+	FieldEndpointID,
 	FieldEndpointURL,
 	FieldSecretToken,
 	FieldAllowedEvents,
@@ -134,8 +137,6 @@ var (
 	OwnerIDValidator func(string) error
 	// ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
 	ProviderValidator func(string) error
-	// EndpointURLValidator is a validator for the "endpoint_url" field. It is called by the builders before save.
-	EndpointURLValidator func(string) error
 	// DefaultSecretToken holds the default value on creation for the "secret_token" field.
 	DefaultSecretToken func() string
 	// DefaultID holds the default value on creation for the "id" field.
@@ -215,6 +216,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByEndpointID orders the results by the endpoint_id field.
+func ByEndpointID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndpointID, opts...).ToFunc()
 }
 
 // ByEndpointURL orders the results by the endpoint_url field.

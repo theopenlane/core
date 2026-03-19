@@ -7,25 +7,16 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// ResolveInstallationMetadata derives GitHub App installation metadata from callback input.
-func ResolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (types.IntegrationInstallationMetadata, error) {
-	if len(req.Input) == 0 {
-		return types.IntegrationInstallationMetadata{}, nil
-	}
-
+// resolveInstallationMetadata derives GitHub App installation metadata from callback input
+func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	var metadata InstallationMetadata
 	if err := jsonx.UnmarshalIfPresent(req.Input, &metadata); err != nil {
-		return types.IntegrationInstallationMetadata{}, ErrInstallationMetadataDecode
+		return InstallationMetadata{}, false, ErrInstallationMetadataDecode
 	}
 
 	if metadata.InstallationID == "" {
-		return types.IntegrationInstallationMetadata{}, nil
+		return InstallationMetadata{}, false, nil
 	}
 
-	attributes, err := jsonx.ToRawMessage(metadata)
-	if err != nil {
-		return types.IntegrationInstallationMetadata{}, ErrAuthProviderDataEncode
-	}
-
-	return types.IntegrationInstallationMetadata{Attributes: attributes}, nil
+	return metadata, true, nil
 }

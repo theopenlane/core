@@ -18,8 +18,6 @@ type ExecutionPolicy struct {
 type IngestContract struct {
 	// Schema is the normalized target schema emitted by the operation
 	Schema string `json:"schema"`
-	// EnsurePayloads forces payload preservation before ingest runs
-	EnsurePayloads bool `json:"ensurePayloads,omitempty"`
 }
 
 // OperationRequest bundles the inputs for executing one definition operation
@@ -52,8 +50,6 @@ type OperationRegistration struct {
 	ClientRef ClientID `json:"-"`
 	// ConfigSchema is the JSON schema for operation configuration
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
-	// OutputSchema is the JSON schema for operation output
-	OutputSchema json.RawMessage `json:"outputSchema,omitempty"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy,omitempty"`
 	// Ingest declares the normalized schemas emitted by the operation

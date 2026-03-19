@@ -3,6 +3,7 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
@@ -14,11 +15,7 @@ import (
 
 // Dispatch validates and enqueues one operation execution request
 func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
-	if req.InstallationID == "" {
-		return DispatchResult{}, ErrDispatchInputInvalid
-	}
-
-	if req.Operation == "" {
+	if req.InstallationID == "" || req.Operation == "" {
 		return DispatchResult{}, ErrDispatchInputInvalid
 	}
 
@@ -49,22 +46,20 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		InstallationID: req.InstallationID,
 		Operation:      req.Operation,
 		Config:         jsonx.CloneRawMessage(req.Config),
-		Force:          req.Force,
-		ClientForce:    req.ClientForce,
-		RunType:        runType,
+		ForceClientRebuild: req.ForceClientRebuild,
+		RunType:            runType,
 	})
 	if err != nil {
 		return DispatchResult{}, err
 	}
 
 	receipt := runtime.EmitWithHeaders(ctx, operation.Topic, Envelope{
-		RunID:          runRecord.ID,
-		InstallationID: installationRecord.ID,
-		DefinitionID:   installationRecord.DefinitionID,
-		Operation:      req.Operation,
-		Config:         jsonx.CloneRawMessage(req.Config),
-		Force:          req.Force,
-		ClientForce:    req.ClientForce,
+		RunID:              runRecord.ID,
+		InstallationID:     installationRecord.ID,
+		DefinitionID:       installationRecord.DefinitionID,
+		Operation:          req.Operation,
+		Config:             jsonx.CloneRawMessage(req.Config),
+		ForceClientRebuild: req.ForceClientRebuild,
 		WorkflowMeta:   req.WorkflowMeta,
 	}, gala.Headers{
 		IdempotencyKey: runRecord.ID,
@@ -75,11 +70,13 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		},
 	})
 	if receipt.Err != nil {
-		_ = CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
+		if completeErr := CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
 			Status:  enums.IntegrationRunStatusFailed,
 			Summary: "dispatch failed",
 			Error:   receipt.Err.Error(),
-		})
+		}); completeErr != nil {
+			return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+		}
 
 		return DispatchResult{}, receipt.Err
 	}

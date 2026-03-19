@@ -91,10 +91,8 @@ type IntegrationActionParams struct {
 	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
 	// ScopeResource is optional resource identity data exposed to scope expression evaluation
 	ScopeResource string `json:"scope_resource,omitempty"`
-	// Force requests a credential refresh for the installation
-	Force bool `json:"force_refresh"`
-	// ClientForce requests a client cache bypass for the installation
-	ClientForce bool `json:"client_force"`
+	// ForceClientRebuild requests a client cache bypass for the installation
+	ForceClientRebuild bool `json:"force_client_rebuild"`
 }
 
 // CreateObjectActionParams defines params for CREATE_OBJECT actions

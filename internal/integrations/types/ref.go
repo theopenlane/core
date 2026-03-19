@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -122,6 +123,40 @@ func NewWebhookRef(name string) WebhookRef {
 // Name returns the durable webhook identifier
 func (r WebhookRef) Name() string {
 	return r.name
+}
+
+type installationKey struct{ _ bool }
+
+// InstallationRef is a typed handle for one definition's installation metadata derivation
+type InstallationRef[T any] struct {
+	key *installationKey
+	fn  func(ctx context.Context, req InstallationRequest) (T, bool, error)
+}
+
+// NewInstallationRef creates a typed installation metadata handle
+func NewInstallationRef[T any](fn func(ctx context.Context, req InstallationRequest) (T, bool, error)) InstallationRef[T] {
+	return InstallationRef[T]{key: new(installationKey), fn: fn}
+}
+
+// Resolve derives and marshals installation metadata for one installation.
+// Returns false with a nil error when the provider function signals no metadata was produced.
+func (r InstallationRef[T]) Resolve(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error) {
+	typed, ok, err := r.fn(ctx, req)
+	if err != nil || !ok {
+		return IntegrationInstallationMetadata{}, ok, err
+	}
+
+	raw, err := jsonx.ToRawMessage(typed)
+	if err != nil {
+		return IntegrationInstallationMetadata{}, false, err
+	}
+
+	return IntegrationInstallationMetadata{Attributes: raw}, true, nil
+}
+
+// Registration adapts the typed ref to the InstallationRegistration contract for use in a definition builder
+func (r InstallationRef[T]) Registration() *InstallationRegistration {
+	return &InstallationRegistration{Resolve: r.Resolve}
 }
 
 type webhookEventKey struct{ _ bool }

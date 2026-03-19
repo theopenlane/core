@@ -196,12 +196,9 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 		Only(user.UserCtx)
 	require.NoError(t, err)
 
-	providerState, err := jsonx.ToMap(integrationRecord.ProviderState.ProviderData(githubAppSlug))
-	require.NoError(t, err)
-	require.Equal(t, "123", providerState["appId"])
-	require.Equal(t, "12345678", providerState["installationId"])
-	require.NotNil(t, integrationRecord.SystemInternalID)
-	require.Equal(t, "12345678", *integrationRecord.SystemInternalID)
+	var installationMeta githubapp.InstallationMetadata
+	require.NoError(t, jsonx.UnmarshalIfPresent(integrationRecord.InstallationMetadata.Attributes, &installationMeta))
+	require.Equal(t, "12345678", installationMeta.InstallationID)
 }
 
 func testRSAPrivateKeyPEM(t *testing.T) string {

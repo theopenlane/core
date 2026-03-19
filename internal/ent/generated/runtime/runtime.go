@@ -3707,12 +3707,8 @@ func init() {
 	integrationwebhookDescProvider := integrationwebhookFields[1].Descriptor()
 	// integrationwebhook.ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
 	integrationwebhook.ProviderValidator = integrationwebhookDescProvider.Validators[0].(func(string) error)
-	// integrationwebhookDescEndpointURL is the schema descriptor for endpoint_url field.
-	integrationwebhookDescEndpointURL := integrationwebhookFields[4].Descriptor()
-	// integrationwebhook.EndpointURLValidator is a validator for the "endpoint_url" field. It is called by the builders before save.
-	integrationwebhook.EndpointURLValidator = integrationwebhookDescEndpointURL.Validators[0].(func(string) error)
 	// integrationwebhookDescSecretToken is the schema descriptor for secret_token field.
-	integrationwebhookDescSecretToken := integrationwebhookFields[5].Descriptor()
+	integrationwebhookDescSecretToken := integrationwebhookFields[6].Descriptor()
 	// integrationwebhook.DefaultSecretToken holds the default value on creation for the secret_token field.
 	integrationwebhook.DefaultSecretToken = integrationwebhookDescSecretToken.Default.(func() string)
 	// integrationwebhookDescID is the schema descriptor for id field.

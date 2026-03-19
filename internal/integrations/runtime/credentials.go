@@ -2,8 +2,6 @@ package runtime
 
 import (
 	"context"
-	"encoding/json"
-
 	"github.com/samber/do/v2"
 
 	"github.com/theopenlane/core/common/enums"
@@ -43,25 +41,21 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 		return err
 	}
 
-	if len(result.State) > 0 {
-		providerKey := definition.ID
-
-		nextState := installation.ProviderState
-		if _, err := nextState.MergeProviderData(providerKey, json.RawMessage(result.State)); err != nil {
+	if definition.Installation != nil {
+		metadata, ok, err := definition.Installation.Resolve(systemCtx, types.InstallationRequest{
+			Installation: installation,
+			Credential:   result.Credential,
+			Config:       installation.Config,
+		})
+		if err != nil {
 			return err
 		}
 
-		if err := db.Integration.UpdateOneID(installation.ID).
-			SetProviderState(nextState).
-			Exec(systemCtx); err != nil {
-			return err
+		if ok {
+			if err := SaveInstallationMetadata(systemCtx, installation, metadata); err != nil {
+				return err
+			}
 		}
-
-		installation.ProviderState = nextState
-	}
-
-	if _, _, err := r.ResolveAndSaveInstallationMetadata(systemCtx, installation, definition, result.Credential, result.State); err != nil {
-		return err
 	}
 
 	if err := store.SaveCredential(systemCtx, installation, result.Credential); err != nil {
@@ -75,7 +69,7 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 	}
 
 	installation.Status = enums.IntegrationStatusConnected
-	if err := r.SyncWebhooks(systemCtx, installation); err != nil {
+	if err := r.SyncWebhooks(systemCtx, installation, ""); err != nil {
 		return err
 	}
 

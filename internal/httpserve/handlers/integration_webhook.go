@@ -9,8 +9,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 
-	"entgo.io/ent/dialect/sql"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -59,7 +57,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 
 	persistedWebhook, err := h.DBClient.IntegrationWebhook.Query().
 		Where(
-			func(s *sql.Selector) { s.Where(sql.EQ(s.C("endpoint_id"), endpointID)) },
+			integrationwebhook.EndpointIDEQ(endpointID),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
 		Only(requestCtx)

@@ -69,10 +69,6 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 		entry.UserInputSchema = jsonx.CloneRawMessage(def.UserInput.Schema)
 	}
 
-	if def.Installation != nil {
-		entry.InstallationSchema = jsonx.CloneRawMessage(def.Installation.Schema)
-	}
-
 	if len(def.Operations) > 0 {
 		entry.Operations = lo.Map(def.Operations, func(op types.OperationRegistration, _ int) DefinitionOperationEntry {
 			return DefinitionOperationEntry{

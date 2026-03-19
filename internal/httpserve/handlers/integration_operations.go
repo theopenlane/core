@@ -154,7 +154,6 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			InstallationID: integrationID,
 			Operation:      operationName,
 			Config:         configDoc,
-			Force:          req.Body.Force,
 			RunType:        enums.IntegrationRunTypeManual,
 		})
 	} else {
@@ -174,7 +173,6 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			InstallationID: installationRec.ID,
 			Operation:      operationName,
 			Config:         configDoc,
-			Force:          req.Body.Force,
 			RunType:        enums.IntegrationRunTypeManual,
 		})
 		if dispatchErr != nil {

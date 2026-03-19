@@ -3868,6 +3868,7 @@ var (
 		{Name: "provider", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "FAILED", "PENDING"}, Default: "PENDING"},
+		{Name: "endpoint_id", Type: field.TypeString, Nullable: true},
 		{Name: "endpoint_url", Type: field.TypeString, Nullable: true},
 		{Name: "secret_token", Type: field.TypeString, Nullable: true},
 		{Name: "allowed_events", Type: field.TypeJSON, Nullable: true},
@@ -3888,13 +3889,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integration_webhooks_integrations_integration_webhooks",
-				Columns:    []*schema.Column{IntegrationWebhooksColumns[19]},
+				Columns:    []*schema.Column{IntegrationWebhooksColumns[20]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integration_webhooks_organizations_integration_webhooks",
-				Columns:    []*schema.Column{IntegrationWebhooksColumns[20]},
+				Columns:    []*schema.Column{IntegrationWebhooksColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3903,7 +3904,7 @@ var (
 			{
 				Name:    "integrationwebhook_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationWebhooksColumns[20]},
+				Columns: []*schema.Column{IntegrationWebhooksColumns[21]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3911,9 +3912,17 @@ var (
 			{
 				Name:    "integrationwebhook_integration_id_name_external_event_id",
 				Unique:  true,
-				Columns: []*schema.Column{IntegrationWebhooksColumns[19], IntegrationWebhooksColumns[8], IntegrationWebhooksColumns[17]},
+				Columns: []*schema.Column{IntegrationWebhooksColumns[20], IntegrationWebhooksColumns[8], IntegrationWebhooksColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND external_event_id IS NOT NULL",
+				},
+			},
+			{
+				Name:    "integrationwebhook_endpoint_id",
+				Unique:  true,
+				Columns: []*schema.Column{IntegrationWebhooksColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND endpoint_id IS NOT NULL",
 				},
 			},
 		},

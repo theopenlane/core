@@ -70,7 +70,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name)
+	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name, "")
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", installation.ID).Str("webhook", webhook.Name).Msg("failed to ensure github app webhook")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -109,50 +109,7 @@ func (h *Handler) lookupGitHubAppIntegrationByProviderInstallationID(ctx context
 		query.Where(integration.OwnerIDEQ(ownerID))
 	}
 
-	record, err := query.Only(ctx)
-	if err == nil || !ent.IsNotFound(err) {
-		return record, err
-	}
-
-	query = h.DBClient.Integration.Query().
-		Where(
-			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
-			integration.SystemInternalIDEQ(providerInstallationID),
-		)
-	if ownerID != "" {
-		query.Where(integration.OwnerIDEQ(ownerID))
-	}
-
-	record, err = query.Only(ctx)
-	if err == nil || !ent.IsNotFound(err) {
-		return record, err
-	}
-
-	legacyQuery := h.DBClient.Integration.Query().
-		Where(
-			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
-			func(s *sql.Selector) {
-				s.Where(sqljson.ValueEQ(integration.FieldProviderState, providerInstallationID, sqljson.Path("providers", githubapp.Slug, "installationId")))
-			},
-		)
-	if ownerID != "" {
-		legacyQuery.Where(integration.OwnerIDEQ(ownerID))
-	}
-
-	record, err = legacyQuery.Only(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if record.SystemInternalID == nil || *record.SystemInternalID != providerInstallationID {
-		if updateErr := h.DBClient.Integration.UpdateOneID(record.ID).SetSystemInternalID(providerInstallationID).Exec(ctx); updateErr != nil {
-			logx.FromContext(ctx).Warn().Err(updateErr).Str("integration_id", record.ID).Msg("failed to backfill github app provider installation id")
-		} else {
-			record.SystemInternalID = &providerInstallationID
-		}
-	}
-
-	return record, nil
+	return query.Only(ctx)
 }
 
 func extractGitHubAppWebhookProviderInstallationID(payload []byte) (string, error) {

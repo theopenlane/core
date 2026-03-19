@@ -54,11 +54,6 @@ type mappedIngestRecord struct {
 	Payload json.RawMessage
 }
 
-// ProcessIngestAsync routes typed payload sets through the ingest pipeline
-func ProcessIngestAsync(ctx context.Context, ic IngestContext, operation types.OperationRegistration, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	return EmitPayloadSets(ctx, ic, operation.Name, operation.Ingest, payloadSets, options)
-}
-
 // EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
 func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	if needsDirectorySyncRun(contracts) {

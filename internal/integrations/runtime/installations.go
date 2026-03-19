@@ -58,7 +58,7 @@ func wrapInstallationQueryError(err error) error {
 	case ent.IsNotFound(err):
 		return ErrInstallationNotFound
 	case ent.IsNotSingular(err):
-		return ErrInstallationIDRequired
+		return ErrInstallationAmbiguous
 	default:
 		return err
 	}

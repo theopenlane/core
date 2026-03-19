@@ -19,8 +19,6 @@ const (
 	ScopeVariableConfig = "config"
 	// ScopeVariableInstallationConfig identifies installation-level config values in scope expressions (named "integration_config" for CEL expression compatibility)
 	ScopeVariableInstallationConfig = "integration_config"
-	// ScopeVariableProviderState identifies persisted provider state values in scope expressions
-	ScopeVariableProviderState = "provider_state"
 	// ScopeVariableOrgID identifies the installation owner id in scope expressions
 	ScopeVariableOrgID = "org_id"
 	// ScopeVariableInstallationID identifies the installation id in scope expressions (named "integration_id" for CEL expression compatibility)
@@ -41,8 +39,6 @@ type ScopeVars struct {
 	Config json.RawMessage
 	// InstallationConfig contains installation-level config values (exposed as "integration_config" in CEL for compatibility)
 	InstallationConfig json.RawMessage
-	// ProviderState contains installation provider state values
-	ProviderState json.RawMessage
 	// OrgID contains installation owner id values
 	OrgID string
 	// InstallationID contains installed integration id values (exposed as "integration_id" in CEL for compatibility)
@@ -58,7 +54,6 @@ func (v ScopeVars) CELVars() map[string]any {
 		ScopeVariableOperation:          v.Operation,
 		ScopeVariableConfig:             jsonx.DecodeAnyOrNil(v.Config),
 		ScopeVariableInstallationConfig: jsonx.DecodeAnyOrNil(v.InstallationConfig),
-		ScopeVariableProviderState:      jsonx.DecodeAnyOrNil(v.ProviderState),
 		ScopeVariableOrgID:              v.OrgID,
 		ScopeVariableInstallationID:     v.InstallationID,
 	}

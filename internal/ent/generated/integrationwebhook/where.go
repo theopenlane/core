@@ -118,6 +118,11 @@ func Name(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldEQ(FieldName, v))
 }
 
+// EndpointID applies equality check predicate on the "endpoint_id" field. It's identical to EndpointIDEQ.
+func EndpointID(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldEndpointID, v))
+}
+
 // EndpointURL applies equality check predicate on the "endpoint_url" field. It's identical to EndpointURLEQ.
 func EndpointURL(v string) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(sql.FieldEQ(FieldEndpointURL, v))
@@ -846,6 +851,81 @@ func StatusNotIn(vs ...enums.IntegrationWebhookStatus) predicate.IntegrationWebh
 		v[i] = vs[i]
 	}
 	return predicate.IntegrationWebhook(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// EndpointIDEQ applies the EQ predicate on the "endpoint_id" field.
+func EndpointIDEQ(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEQ(FieldEndpointID, v))
+}
+
+// EndpointIDNEQ applies the NEQ predicate on the "endpoint_id" field.
+func EndpointIDNEQ(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNEQ(FieldEndpointID, v))
+}
+
+// EndpointIDIn applies the In predicate on the "endpoint_id" field.
+func EndpointIDIn(vs ...string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldIn(FieldEndpointID, vs...))
+}
+
+// EndpointIDNotIn applies the NotIn predicate on the "endpoint_id" field.
+func EndpointIDNotIn(vs ...string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNotIn(FieldEndpointID, vs...))
+}
+
+// EndpointIDGT applies the GT predicate on the "endpoint_id" field.
+func EndpointIDGT(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldGT(FieldEndpointID, v))
+}
+
+// EndpointIDGTE applies the GTE predicate on the "endpoint_id" field.
+func EndpointIDGTE(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldGTE(FieldEndpointID, v))
+}
+
+// EndpointIDLT applies the LT predicate on the "endpoint_id" field.
+func EndpointIDLT(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldLT(FieldEndpointID, v))
+}
+
+// EndpointIDLTE applies the LTE predicate on the "endpoint_id" field.
+func EndpointIDLTE(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldLTE(FieldEndpointID, v))
+}
+
+// EndpointIDContains applies the Contains predicate on the "endpoint_id" field.
+func EndpointIDContains(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldContains(FieldEndpointID, v))
+}
+
+// EndpointIDHasPrefix applies the HasPrefix predicate on the "endpoint_id" field.
+func EndpointIDHasPrefix(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldHasPrefix(FieldEndpointID, v))
+}
+
+// EndpointIDHasSuffix applies the HasSuffix predicate on the "endpoint_id" field.
+func EndpointIDHasSuffix(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldHasSuffix(FieldEndpointID, v))
+}
+
+// EndpointIDIsNil applies the IsNil predicate on the "endpoint_id" field.
+func EndpointIDIsNil() predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldIsNull(FieldEndpointID))
+}
+
+// EndpointIDNotNil applies the NotNil predicate on the "endpoint_id" field.
+func EndpointIDNotNil() predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldNotNull(FieldEndpointID))
+}
+
+// EndpointIDEqualFold applies the EqualFold predicate on the "endpoint_id" field.
+func EndpointIDEqualFold(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldEqualFold(FieldEndpointID, v))
+}
+
+// EndpointIDContainsFold applies the ContainsFold predicate on the "endpoint_id" field.
+func EndpointIDContainsFold(v string) predicate.IntegrationWebhook {
+	return predicate.IntegrationWebhook(sql.FieldContainsFold(FieldEndpointID, v))
 }
 
 // EndpointURLEQ applies the EQ predicate on the "endpoint_url" field.

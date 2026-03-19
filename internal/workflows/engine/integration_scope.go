@@ -114,7 +114,6 @@ func buildIntegrationScopeEnv() (*cel.Env, error) {
 			decls.NewVariable(types.ScopeVariableOperation, celtypes.StringType),
 			decls.NewVariable(types.ScopeVariableConfig, celtypes.DynType),
 			decls.NewVariable(types.ScopeVariableInstallationConfig, celtypes.DynType),
-			decls.NewVariable(types.ScopeVariableProviderState, celtypes.DynType),
 			decls.NewVariable(types.ScopeVariableOrgID, celtypes.StringType),
 			decls.NewVariable(types.ScopeVariableInstallationID, celtypes.StringType),
 		),

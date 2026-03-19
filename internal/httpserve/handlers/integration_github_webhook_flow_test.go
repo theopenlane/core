@@ -18,12 +18,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/slacknotify"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
@@ -54,18 +53,13 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetSystemInternalID("456").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
-		SetProviderState(func() types.IntegrationProviderState {
-			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
-			require.NoError(t, mergeErr)
-			return doc
-		}()).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -93,18 +87,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetSystemInternalID("456").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
-		SetProviderState(func() types.IntegrationProviderState {
-			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
-			require.NoError(t, mergeErr)
-			return doc
-		}()).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -121,13 +110,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	require.NoError(t, err)
-	providerState, err := jsonx.ToMap(updated.ProviderState.ProviderData(githubAppSlug))
-	require.NoError(t, err)
-	require.NotNil(t, providerState)
-	webhookVerifiedAt, ok := providerState["webhookVerifiedAt"].(string)
-	require.True(t, ok)
-	require.NotEmpty(t, webhookVerifiedAt)
-
 	verifiedAtValue, ok := updated.Metadata["githubWebhookVerifiedAt"]
 	require.True(t, ok)
 	verifiedAtString, ok := verifiedAtValue.(string)
@@ -146,18 +128,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetSystemInternalID("456").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
-		SetProviderState(func() types.IntegrationProviderState {
-			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
-			require.NoError(t, mergeErr)
-			return doc
-		}()).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -174,11 +151,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	require.NoError(t, err)
-
-	providerState, err := jsonx.ToMap(updated.ProviderState.ProviderData(githubAppSlug))
-	require.NoError(t, err)
-	_, hasVerifiedAt := providerState["webhookVerifiedAt"]
-	assert.False(t, hasVerifiedAt)
 
 	_, hasMetadata := updated.Metadata["githubWebhookVerifiedAt"]
 	assert.False(t, hasMetadata)
@@ -200,18 +172,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		Exec(user.UserCtx)
 	require.NoError(t, err)
 
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	_, err = suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetSystemInternalID("456").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
-		SetProviderState(func() types.IntegrationProviderState {
-			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
-			require.NoError(t, mergeErr)
-			return doc
-		}()).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -259,18 +226,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetSystemInternalID("456").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
-		SetProviderState(func() types.IntegrationProviderState {
-			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
-			require.NoError(t, mergeErr)
-			return doc
-		}()).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 

@@ -56,8 +56,7 @@ func Builder(_ Config) definition.Builder {
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-							EnsurePayloads: true,
-						},
+								},
 					},
 					IngestHandle: FindingsCollect{}.IngestHandle(),
 				},

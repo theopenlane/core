@@ -24,8 +24,6 @@ type AuthStartResult struct {
 type AuthCompleteResult struct {
 	// Credential is the credential material produced by the auth flow
 	Credential CredentialSet `json:"credential"`
-	// State is the installation state produced by the auth flow
-	State json.RawMessage `json:"state,omitempty"`
 }
 
 // AuthStartFunc starts an auth flow for one definition

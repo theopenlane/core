@@ -6,6 +6,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definition"
@@ -150,20 +151,11 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	var operationHandle func(context.Context, operations.Envelope) error
-	if !config.SkipExecutorListeners {
-		operationHandle = func(ctx context.Context, envelope operations.Envelope) error {
-			return rt.HandleOperation(ctx, envelope)
-		}
-	}
-
 	if err := operations.RegisterRuntimeListeners(
 		do.MustInvoke[*gala.Gala](injector),
 		do.MustInvoke[*registry.Registry](injector),
-		operationHandle,
-		func(ctx context.Context, envelope operations.WebhookEnvelope) error {
-			return rt.HandleWebhookEvent(ctx, envelope)
-		},
+		lo.Ternary(!config.SkipExecutorListeners, rt.HandleOperation, nil),
+		rt.HandleWebhookEvent,
 	); err != nil {
 		return nil, err
 	}

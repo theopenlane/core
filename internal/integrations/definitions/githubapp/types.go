@@ -25,6 +25,8 @@ var (
 	CodeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	SecretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
+	// Installation is the typed installation metadata handle for the GitHub App definition
+	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 )
 
 // Slug is the unique identifier for the GitHub App integration

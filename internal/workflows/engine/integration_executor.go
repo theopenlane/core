@@ -47,10 +47,8 @@ type IntegrationQueueRequest struct {
 	ScopePayload json.RawMessage
 	// ScopeResource is optional resource identity exposed to scope expression evaluation
 	ScopeResource string
-	// Force requests credential refresh
-	Force bool
-	// ClientForce requests client refresh
-	ClientForce bool
+	// ForceClientRebuild requests client cache bypass
+	ForceClientRebuild bool
 	// RunType identifies the integration run type
 	RunType enums.IntegrationRunType
 	// WorkflowMeta links the operation to a workflow action
@@ -192,8 +190,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		InstallationID: installationRecord.ID,
 		Operation:      req.Operation,
 		Config:         jsonx.CloneRawMessage(req.Config),
-		Force:          req.Force,
-		ClientForce:    req.ClientForce,
+		ForceClientRebuild: req.ForceClientRebuild,
 		RunType:        runType,
 		WorkflowMeta:   req.WorkflowMeta,
 	})
@@ -259,8 +256,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		ScopeExpression: params.ScopeExpression,
 		ScopePayload:    jsonx.CloneRawMessage(params.ScopePayload),
 		ScopeResource:   params.ScopeResource,
-		Force:           params.Force,
-		ClientForce:     params.ClientForce,
+		ForceClientRebuild: params.ForceClientRebuild,
 		RunType:         enums.IntegrationRunTypeEvent,
 		WorkflowMeta:    meta,
 	})
@@ -325,11 +321,6 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		return true, nil
 	}
 
-	providerStateRaw, err := jsonx.ToRawMessage(installationRecord.ProviderState)
-	if err != nil {
-		return false, err
-	}
-
 	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, types.ScopeVars{
 		Payload:            req.ScopePayload,
 		Resource:           req.ScopeResource,
@@ -337,7 +328,6 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		Operation:          operationName,
 		Config:             operationConfig,
 		InstallationConfig: jsonx.CloneRawMessage(installationRecord.Config.ClientConfig),
-		ProviderState:      providerStateRaw,
 		OrgID:              req.OrgID,
 		InstallationID:     installationRecord.ID,
 	})

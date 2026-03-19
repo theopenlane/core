@@ -19,13 +19,13 @@ type InstallationRequest struct {
 	Input json.RawMessage
 }
 
-// InstallationFunc derives installation metadata for one definition installation
-type InstallationFunc func(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, error)
+// InstallationFunc derives, validates, and marshals installation metadata for one definition installation.
+// The bool return indicates whether metadata was produced; false with a nil error means the definition
+// does not yield metadata for this installation.
+type InstallationFunc func(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error)
 
 // InstallationRegistration describes how a definition derives installation metadata
 type InstallationRegistration struct {
-	// Schema is the JSON schema used to validate installation metadata
-	Schema json.RawMessage `json:"schema,omitempty"`
 	// Resolve derives installation metadata for the definition
 	Resolve InstallationFunc `json:"-"`
 }

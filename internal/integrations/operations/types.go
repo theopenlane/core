@@ -43,10 +43,8 @@ type DispatchRequest struct {
 	Operation string
 	// Config is the operation configuration payload
 	Config json.RawMessage
-	// Force requests credential refresh when a future minting layer exists
-	Force bool
-	// ClientForce requests client cache bypass
-	ClientForce bool
+	// ForceClientRebuild requests client cache bypass
+	ForceClientRebuild bool
 	// RunType is the integration run type recorded for the dispatch
 	RunType enums.IntegrationRunType
 	// WorkflowMeta carries optional workflow linkage for workflow-triggered operations
@@ -93,10 +91,8 @@ type Envelope struct {
 	Operation string `json:"operation"`
 	// Config is the operation configuration payload
 	Config json.RawMessage `json:"config,omitempty"`
-	// Force requests credential refresh when a future minting layer exists
-	Force bool `json:"force,omitempty"`
-	// ClientForce requests client cache bypass
-	ClientForce bool `json:"clientForce,omitempty"`
+	// ForceClientRebuild requests client cache bypass
+	ForceClientRebuild bool `json:"forceClientRebuild,omitempty"`
 	// WorkflowMeta carries optional workflow linkage for workflow-triggered operations
 	WorkflowMeta *WorkflowMeta `json:"workflowMeta,omitempty"`
 }

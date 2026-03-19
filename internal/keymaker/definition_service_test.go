@@ -29,7 +29,6 @@ func TestService_BeginAndComplete(t *testing.T) {
 			Complete: func(_ context.Context, _ json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
 				return types.AuthCompleteResult{
 					Credential: types.CredentialSet{OAuthAccessToken: "token-xyz"},
-					State:      json.RawMessage(`{"tenant":"t1"}`),
 				}, nil
 			},
 		},
@@ -74,10 +73,6 @@ func TestService_BeginAndComplete(t *testing.T) {
 		t.Fatalf("expected installation ID %q, got %q", installationID, result.InstallationID)
 	}
 
-	if string(result.State) != `{"tenant":"t1"}` {
-		t.Fatalf("expected state to round-trip, got %s", result.State)
-	}
-
 	if len(writer.saves) != 1 {
 		t.Fatalf("expected one credential save, got %d", len(writer.saves))
 	}
@@ -86,9 +81,6 @@ func TestService_BeginAndComplete(t *testing.T) {
 		t.Fatalf("expected installation ID %q in save, got %q", installationID, writer.saves[0].installationID)
 	}
 
-	if string(writer.saves[0].result.State) != `{"tenant":"t1"}` {
-		t.Fatalf("expected persisted state to match, got %s", writer.saves[0].result.State)
-	}
 }
 
 func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {

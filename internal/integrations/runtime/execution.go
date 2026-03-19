@@ -3,6 +3,7 @@ package runtime
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/samber/do/v2"
@@ -15,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ExecuteOperation runs one integration operation inline without run tracking.
@@ -33,6 +33,7 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integr
 func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
 	startedAt := time.Now()
 	db := do.MustInvoke[*ent.Client](r.injector)
+
 	failRun := func(execErr error, response json.RawMessage) error {
 		result := operations.RunResult{
 			Status: enums.IntegrationRunStatusFailed,
@@ -43,7 +44,10 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 				"response": jsonx.DecodeAnyOrNil(response),
 			}
 		}
-		_ = operations.CompleteRun(ctx, db, envelope.RunID, startedAt, result)
+		if completeErr := operations.CompleteRun(ctx, db, envelope.RunID, startedAt, result); completeErr != nil {
+			return errors.Join(execErr, completeErr)
+		}
+
 		return execErr
 	}
 
@@ -77,15 +81,9 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		credential = types.CredentialSet{}
 	}
 
-	response, err := r.executeResolvedOperation(ctx, installation, operation, credential, envelope.Config, envelope.ClientForce, ingestOptions)
+	response, err := r.executeResolvedOperation(ctx, installation, operation, credential, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
 	if err != nil {
 		return failRun(err, response)
-	}
-
-	if def, ok := r.Registry().Definition(installation.DefinitionID); ok {
-		if _, _, metaErr := r.ResolveAndSaveInstallationMetadata(ctx, installation, def, credential, nil); metaErr != nil {
-			logx.FromContext(ctx).Warn().Err(metaErr).Str("installation_id", installation.ID).Msg("failed to refresh installation metadata after operation")
-		}
 	}
 
 	return operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
@@ -129,12 +127,12 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 			return nil, err
 		}
 
-		if err := operations.ProcessIngestAsync(ctx, operations.IngestContext{
+		if err := operations.EmitPayloadSets(ctx, operations.IngestContext{
 			Registry:     r.Registry(),
 			DB:           do.MustInvoke[*ent.Client](r.injector),
 			Runtime:      do.MustInvoke[*gala.Gala](r.injector),
 			Installation: installation,
-		}, operation, payloadSets, ingestOptions); err != nil {
+		}, operation.Name, operation.Ingest, payloadSets, ingestOptions); err != nil {
 			return nil, err
 		}
 

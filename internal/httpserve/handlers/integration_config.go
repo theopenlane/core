@@ -145,9 +145,23 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
-		if _, _, err := h.IntegrationsRuntime.ResolveAndSaveInstallationMetadata(requestCtx, installationRec, def, credential, nil); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to save installation metadata")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		if def.Installation != nil {
+			metadata, ok, err := def.Installation.Resolve(requestCtx, types.InstallationRequest{
+				Installation: installationRec,
+				Credential:   credential,
+				Config:       installationRec.Config,
+			})
+			if err != nil {
+				logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to resolve installation metadata")
+				return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+			}
+
+			if ok {
+				if err := integrationsruntime.SaveInstallationMetadata(requestCtx, installationRec, metadata); err != nil {
+					logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to save installation metadata")
+					return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+				}
+			}
 		}
 
 		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).
@@ -160,7 +174,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		installationRec.Status = enums.IntegrationStatusConnected
 	}
 
-	if err := h.IntegrationsRuntime.SyncWebhooks(requestCtx, installationRec); err != nil {
+	if err := h.IntegrationsRuntime.SyncWebhooks(requestCtx, installationRec, ""); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to sync integration webhooks")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}

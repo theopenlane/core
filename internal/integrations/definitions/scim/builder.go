@@ -46,16 +46,13 @@ func Builder() definition.Builder {
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-							EnsurePayloads: true,
-						},
+								},
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-							EnsurePayloads: true,
-						},
+								},
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-							EnsurePayloads: true,
-						},
+								},
 					},
 					Handle: DirectorySync{}.Handle(),
 				},

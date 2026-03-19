@@ -31,10 +31,7 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Installation: &types.InstallationRegistration{
-				Schema:  providerkit.SchemaFrom[InstallationMetadata](),
-				Resolve: ResolveInstallationMetadata,
-			},
+			Installation: Installation.Registration(),
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/github/app/install",
 				CallbackPath: "/v1/integrations/github/app/callback",
@@ -70,8 +67,7 @@ func Builder(cfg Config) definition.Builder {
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-							EnsurePayloads: true,
-						},
+								},
 					},
 					IngestHandle: VulnerabilityCollect{}.IngestHandle(),
 				},
@@ -99,8 +95,7 @@ func Builder(cfg Config) definition.Builder {
 							Ingest: []types.IngestContract{
 								{
 									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-									EnsurePayloads: true,
-								},
+												},
 							},
 							Handle: DependabotAlertWebhook{}.Handle,
 						},
@@ -110,8 +105,7 @@ func Builder(cfg Config) definition.Builder {
 							Ingest: []types.IngestContract{
 								{
 									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-									EnsurePayloads: true,
-								},
+												},
 							},
 							Handle: CodeScanningAlertWebhook{}.Handle,
 						},
@@ -121,8 +115,7 @@ func Builder(cfg Config) definition.Builder {
 							Ingest: []types.IngestContract{
 								{
 									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-									EnsurePayloads: true,
-								},
+												},
 							},
 							Handle: SecretScanningAlertWebhook{}.Handle,
 						},

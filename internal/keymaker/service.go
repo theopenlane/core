@@ -105,8 +105,6 @@ type CompleteResult struct {
 	InstallationID string
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
-	// State contains persisted provider state produced by the auth flow
-	State json.RawMessage
 }
 
 // BeginAuth starts an auth transaction for the requested definition
@@ -207,7 +205,6 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		DefinitionID:   authState.DefinitionID,
 		InstallationID: authState.InstallationID,
 		Credential:     completeResult.Credential,
-		State:          jsonx.CloneRawMessage(completeResult.State),
 	}, nil
 }
 
