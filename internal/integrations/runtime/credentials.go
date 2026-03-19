@@ -43,22 +43,6 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 		return err
 	}
 
-	previousState := installation.ProviderState
-	previousStatus := installation.Status
-	previousCredential, hadPreviousCredential, err := store.LoadCredential(systemCtx, installation)
-	if err != nil {
-		return err
-	}
-
-	rollbackCredential := func() {
-		if hadPreviousCredential {
-			_ = store.SaveCredential(systemCtx, installation, previousCredential)
-			return
-		}
-
-		_ = store.DeleteCredential(systemCtx, installation.ID)
-	}
-
 	if len(result.State) > 0 {
 		providerKey := definition.ID
 
@@ -76,31 +60,22 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 		installation.ProviderState = nextState
 	}
 
-	if err := store.SaveCredential(systemCtx, installation, result.Credential); err != nil {
-		if len(result.State) > 0 {
-			_ = db.Integration.UpdateOneID(installation.ID).SetProviderState(previousState).Exec(systemCtx)
-		}
+	if _, _, err := r.ResolveAndSaveInstallationMetadata(systemCtx, installation, definition, result.Credential, result.State); err != nil {
+		return err
+	}
 
+	if err := store.SaveCredential(systemCtx, installation, result.Credential); err != nil {
 		return err
 	}
 
 	if err := db.Integration.UpdateOneID(installation.ID).
 		SetStatus(enums.IntegrationStatusConnected).
 		Exec(systemCtx); err != nil {
-		rollbackCredential()
-		_ = db.Integration.UpdateOneID(installation.ID).SetProviderState(previousState).Exec(systemCtx)
-
 		return err
 	}
 
 	installation.Status = enums.IntegrationStatusConnected
 	if err := r.SyncWebhooks(systemCtx, installation); err != nil {
-		rollbackCredential()
-		_ = db.Integration.UpdateOneID(installation.ID).
-			SetProviderState(previousState).
-			SetStatus(previousStatus).
-			Exec(systemCtx)
-
 		return err
 	}
 

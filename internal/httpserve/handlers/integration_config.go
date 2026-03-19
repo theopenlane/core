@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
@@ -10,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -87,7 +85,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		}
 	}
 
-	installationRec, created, err := h.resolveOrCreateDefinitionIntegration(requestCtx, caller.OrganizationID, payload.InstallationID, def)
+	installationRec, _, err := h.resolveOrCreateDefinitionIntegration(requestCtx, caller.OrganizationID, payload.InstallationID, def)
 	if err != nil {
 		if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
 			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
@@ -117,21 +115,6 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		installationRec.Config = config
 	}
 
-	var (
-		previousStatus        = installationRec.Status
-		previousCredential    types.CredentialSet
-		hadPreviousCredential bool
-	)
-
-	if !created && credentialProvided {
-		previousCredential, hadPreviousCredential, err = h.IntegrationsRuntime.LoadCredential(requestCtx, installationRec)
-		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationID).Msg("failed to load existing credential before update")
-
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-	}
-
 	if credentialProvided {
 		credential := types.CredentialSet{ProviderData: providerData}
 
@@ -152,11 +135,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
+		if _, _, err := h.IntegrationsRuntime.ResolveAndSaveInstallationMetadata(requestCtx, installationRec, def, credential, nil); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to save installation metadata")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
 		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).
 			SetStatus(enums.IntegrationStatusConnected).
 			Exec(requestCtx); err != nil {
-			h.rollbackConfiguredIntegration(requestCtx, installationRec, previousStatus, previousCredential, hadPreviousCredential, false)
-
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to update integration status")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
@@ -165,10 +151,6 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	if err := h.IntegrationsRuntime.SyncWebhooks(requestCtx, installationRec); err != nil {
-		if credentialProvided {
-			h.rollbackConfiguredIntegration(requestCtx, installationRec, previousStatus, previousCredential, hadPreviousCredential, true)
-		}
-
 		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to sync integration webhooks")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
@@ -178,28 +160,4 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		Provider:       def.Slug,
 		InstallationID: installationID,
 	})
-}
-
-func (h *Handler) rollbackConfiguredIntegration(ctx context.Context, installationRec *ent.Integration, previousStatus enums.IntegrationStatus, previousCredential types.CredentialSet, hadPreviousCredential bool, statusUpdated bool) {
-	if installationRec == nil {
-		return
-	}
-
-	if statusUpdated {
-		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetStatus(previousStatus).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to restore integration status during rollback")
-		}
-	}
-
-	if hadPreviousCredential {
-		if err := h.IntegrationsRuntime.SaveCredential(ctx, installationRec, previousCredential); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to restore credential during integration rollback")
-		}
-
-		return
-	}
-
-	if err := h.IntegrationsRuntime.DeleteCredential(ctx, installationRec.ID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to delete credential during integration rollback")
-	}
 }

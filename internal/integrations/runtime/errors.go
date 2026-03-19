@@ -21,4 +21,6 @@ var (
 	ErrDefinitionNotFound = errors.New("integrations/runtime: definition not found")
 	// ErrOperationNotFound indicates the requested operation is not registered for the definition
 	ErrOperationNotFound = errors.New("integrations/runtime: operation not found")
+	// ErrInstallationMetadataInvalid indicates derived installation metadata failed schema validation
+	ErrInstallationMetadataInvalid = errors.New("integrations/runtime: installation metadata invalid")
 )

@@ -95,13 +95,29 @@ func (h *Handler) lookupGitHubAppIntegrationByProviderInstallationID(ctx context
 	query := h.DBClient.Integration.Query().
 		Where(
 			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
-			integration.SystemInternalIDEQ(providerInstallationID),
+			func(s *sql.Selector) {
+				s.Where(sqljson.ValueEQ(integration.FieldInstallationMetadata, providerInstallationID, sqljson.Path("attributes", "installationId")))
+			},
 		)
 	if ownerID != "" {
 		query.Where(integration.OwnerIDEQ(ownerID))
 	}
 
 	record, err := query.Only(ctx)
+	if err == nil || !ent.IsNotFound(err) {
+		return record, err
+	}
+
+	query = h.DBClient.Integration.Query().
+		Where(
+			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
+			integration.SystemInternalIDEQ(providerInstallationID),
+		)
+	if ownerID != "" {
+		query.Where(integration.OwnerIDEQ(ownerID))
+	}
+
+	record, err = query.Only(ctx)
 	if err == nil || !ent.IsNotFound(err) {
 		return record, err
 	}

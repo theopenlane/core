@@ -9,12 +9,10 @@ import (
 	"net/http"
 	"strings"
 
-	entsql "entgo.io/ent/dialect/sql"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	entintegration "github.com/theopenlane/core/internal/ent/generated/integration"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
@@ -215,20 +213,7 @@ func (h *Handler) resolveOrCreateDefinitionIntegration(ctx context.Context, owne
 		return record, false, nil
 	}
 
-	record, err := h.findLatestDefinitionIntegration(ctx, ownerID, def.ID)
-	if err != nil {
-		return nil, false, err
-	}
-
-	if record != nil {
-		if err := h.refreshDefinitionIntegration(ctx, record, def); err != nil {
-			return nil, false, err
-		}
-
-		return record, false, nil
-	}
-
-	record, err = h.DBClient.Integration.Create().
+	record, err := h.DBClient.Integration.Create().
 		SetOwnerID(ownerID).
 		SetName(def.DisplayName).
 		SetDefinitionID(def.ID).
@@ -241,28 +226,6 @@ func (h *Handler) resolveOrCreateDefinitionIntegration(ctx context.Context, owne
 	}
 
 	return record, true, nil
-}
-
-func (h *Handler) findLatestDefinitionIntegration(ctx context.Context, ownerID, definitionID string) (*ent.Integration, error) {
-	record, err := h.DBClient.Integration.Query().
-		Where(
-			entintegration.OwnerIDEQ(ownerID),
-			entintegration.DefinitionIDEQ(definitionID),
-		).
-		Order(
-			entintegration.ByUpdatedAt(entsql.OrderDesc()),
-			entintegration.ByCreatedAt(entsql.OrderDesc()),
-		).
-		First(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return nil, nil
-		}
-
-		return nil, err
-	}
-
-	return record, nil
 }
 
 func (h *Handler) refreshDefinitionIntegration(ctx context.Context, installation *ent.Integration, def types.Definition) error {

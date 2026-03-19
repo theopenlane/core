@@ -31,6 +31,10 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
+			Installation: &types.InstallationRegistration{
+				Schema:  providerkit.SchemaFrom[InstallationMetadata](),
+				Resolve: ResolveInstallationMetadata,
+			},
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/github/app/install",
 				CallbackPath: "/v1/integrations/github/app/callback",

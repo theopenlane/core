@@ -48,3 +48,9 @@ type UserInput struct {
 	// SecurityOnly limits collection to security-focused data
 	SecurityOnly bool `json:"securityOnly,omitempty" jsonschema:"title=Collect Security Signals Only"`
 }
+
+// InstallationMetadata holds the stable GitHub App installation identity attributes
+type InstallationMetadata struct {
+	// InstallationID is the GitHub App installation identifier
+	InstallationID string `json:"installationId,omitempty" jsonschema:"title=Installation ID"`
+}

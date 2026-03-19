@@ -17,7 +17,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -176,16 +175,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	previousStatus := integrationRecord.Status
-	previousProviderState := integrationRecord.ProviderState
-	previousSystemInternalID := integrationRecord.SystemInternalID
-	previousCredential, hadPreviousCredential, err := h.IntegrationsRuntime.LoadCredential(reqCtx, integrationRecord)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to load github app credential before update")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
 	credential, err := githubapp.MintInstallationCredential(reqCtx, h.IntegrationsConfig.GitHubApp, in.InstallationID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("github app auth completion failed")
@@ -200,6 +189,15 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		}
 	}
 
+	callbackInput, err := json.Marshal(githubapp.InstallationMetadata{
+		InstallationID: in.InstallationID,
+	})
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to marshal github app callback input")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
 	// Run health check with the minted credential before persisting.
 	healthOperation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, githubapp.HealthDefaultOperation.Name())
 	if err != nil {
@@ -208,7 +206,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	if _, err := h.IntegrationsRuntime.ExecuteOperation(reqCtx, integrationRecord, healthOperation, credential, nil); err != nil {
-		h.rollbackGitHubAppIntegration(reqCtx, integrationRecord, previousSystemInternalID, previousProviderState, previousStatus, previousCredential, hadPreviousCredential)
 		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("github app health check failed")
 
 		return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
@@ -216,14 +213,18 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	// Persist the credential.
 	if err := h.IntegrationsRuntime.SaveCredential(reqCtx, integrationRecord, credential); err != nil {
-		h.rollbackGitHubAppIntegration(reqCtx, integrationRecord, previousSystemInternalID, previousProviderState, previousStatus, previousCredential, hadPreviousCredential)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to save github app credential")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
+	if _, _, err := h.IntegrationsRuntime.ResolveAndSaveInstallationMetadata(reqCtx, integrationRecord, def, credential, callbackInput); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to save github app installation metadata")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
 	if err := h.updateGitHubAppIntegrationMetadata(reqCtx, integrationRecord, in.InstallationID, credential.ProviderData); err != nil {
-		h.rollbackGitHubAppIntegration(reqCtx, integrationRecord, previousSystemInternalID, previousProviderState, previousStatus, previousCredential, hadPreviousCredential)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to update github app integration metadata")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -232,7 +233,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	if err := h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
 		SetStatus(enums.IntegrationStatusConnected).
 		Exec(reqCtx); err != nil {
-		h.rollbackGitHubAppIntegration(reqCtx, integrationRecord, previousSystemInternalID, previousProviderState, previousStatus, previousCredential, hadPreviousCredential)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to update github app integration status")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -240,7 +240,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	integrationRecord.Status = enums.IntegrationStatusConnected
 	if err := h.IntegrationsRuntime.SyncWebhooks(reqCtx, integrationRecord); err != nil {
-		h.rollbackGitHubAppIntegration(reqCtx, integrationRecord, previousSystemInternalID, previousProviderState, previousStatus, previousCredential, hadPreviousCredential)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to sync github app webhooks")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -313,37 +312,6 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integr
 	integrationRecord.ProviderState = nextState
 
 	return nil
-}
-
-func (h *Handler) rollbackGitHubAppIntegration(ctx context.Context, integrationRecord *ent.Integration, previousSystemInternalID *string, previousProviderState types.IntegrationProviderState, previousStatus enums.IntegrationStatus, previousCredential types.CredentialSet, hadPreviousCredential bool) {
-	if integrationRecord == nil {
-		return
-	}
-
-	update := h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
-		SetProviderState(previousProviderState).
-		SetStatus(previousStatus)
-	if previousSystemInternalID != nil {
-		update.SetSystemInternalID(*previousSystemInternalID)
-	} else {
-		update.ClearSystemInternalID()
-	}
-
-	if err := update.Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("installation_id", integrationRecord.ID).Msg("failed to restore github app integration during rollback")
-	}
-
-	if hadPreviousCredential {
-		if err := h.IntegrationsRuntime.SaveCredential(ctx, integrationRecord, previousCredential); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("installation_id", integrationRecord.ID).Msg("failed to restore github app credential during rollback")
-		}
-
-		return
-	}
-
-	if err := h.IntegrationsRuntime.DeleteCredential(ctx, integrationRecord.ID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("installation_id", integrationRecord.ID).Msg("failed to delete github app credential during rollback")
-	}
 }
 
 // resolveOpenlaneOrganizationName returns display_name, then name, then ID

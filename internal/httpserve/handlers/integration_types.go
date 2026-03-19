@@ -139,6 +139,8 @@ type DefinitionCatalogEntry struct {
 	OperatorConfig json.RawMessage `json:"operatorConfig,omitempty"`
 	// UserInputSchema is the JSON schema for installation-scoped user input
 	UserInputSchema json.RawMessage `json:"userInputSchema,omitempty"`
+	// InstallationSchema is the JSON schema for persisted installation metadata
+	InstallationSchema json.RawMessage `json:"installationSchema,omitempty"`
 	// Operations lists the operations the definition exposes
 	Operations []DefinitionOperationEntry `json:"operations,omitempty"`
 }

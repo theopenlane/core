@@ -43,6 +43,8 @@ var (
 	ErrAuthCompleteInputInvalid = errors.New("githubapp: auth complete input invalid")
 	// ErrAuthProviderDataEncode indicates provider data could not be serialized
 	ErrAuthProviderDataEncode = errors.New("githubapp: auth provider data encode failed")
+	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded from credential data
+	ErrInstallationMetadataDecode = errors.New("githubapp: installation metadata decode failed")
 	// ErrIngestPayloadEncode indicates a collected GitHub payload could not be serialized for ingest
 	ErrIngestPayloadEncode = errors.New("githubapp: ingest payload encode failed")
 	// ErrWebhookPayloadInvalid indicates the webhook payload could not be decoded
