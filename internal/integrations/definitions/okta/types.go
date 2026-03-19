@@ -12,9 +12,9 @@ var (
 	// OktaClient is the client ref for the Okta API client used by this definition
 	OktaClient = types.NewClientRef[*oktagosdk.APIClient]()
 	// HealthDefaultOperation is the operation ref for the Okta health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// PoliciesCollectOperation is the operation ref for the Okta policies collection operation
-	PoliciesCollectOperation = types.NewOperationRef[PoliciesCollect]("policies.collect")
+	PoliciesCollectOperation = types.NewOperationRef[struct{}]("policies.collect")
 )
 
 // Slug is the unique identifier for the Okta integration

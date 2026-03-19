@@ -11,11 +11,11 @@ var (
 	// TeamsClient is the client ref for the Microsoft Graph API client used by this definition
 	TeamsClient = types.NewClientRef[*providerkit.AuthenticatedClient]()
 	// HealthDefaultOperation is the operation ref for the Microsoft Teams health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// TeamsSampleOperation is the operation ref for the Microsoft Teams sample operation
-	TeamsSampleOperation = types.NewOperationRef[TeamsSample]("teams.sample")
+	TeamsSampleOperation = types.NewOperationRef[struct{}]("teams.sample")
 	// MessageSendOperation is the operation ref for the Microsoft Teams message send operation
-	MessageSendOperation = types.NewOperationRef[MessageSend]("message.send")
+	MessageSendOperation = types.NewOperationRef[MessageOperationInput]("message.send")
 )
 
 // Slug is the unique identifier for the Microsoft Teams integration

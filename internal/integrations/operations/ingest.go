@@ -54,13 +54,8 @@ type mappedIngestRecord struct {
 	Payload json.RawMessage
 }
 
-// ProcessIngestAsync decodes one operation response into payload sets and routes them through the ingest pipeline
-func ProcessIngestAsync(ctx context.Context, ic IngestContext, operation types.OperationRegistration, response json.RawMessage, options IngestOptions) error {
-	var payloadSets []types.IngestPayloadSet
-	if err := json.Unmarshal(response, &payloadSets); err != nil {
-		return fmt.Errorf("%w: %w", ErrIngestPayloadsInvalid, err)
-	}
-
+// ProcessIngestAsync routes typed payload sets through the ingest pipeline
+func ProcessIngestAsync(ctx context.Context, ic IngestContext, operation types.OperationRegistration, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	return EmitPayloadSets(ctx, ic, operation.Name, operation.Ingest, payloadSets, options)
 }
 

@@ -41,7 +41,7 @@ func Builder() definition.Builder {
 					Description: "Validate Audit Manager access via GetAccountStatus; confirms the assumed role can reach Audit Manager and reports enrollment status",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   AuditManagerClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:         AssessmentsListOperation.Name(),
@@ -49,7 +49,7 @@ func Builder() definition.Builder {
 					Topic:        AssessmentsListOperation.Topic(Slug),
 					ClientRef:    AuditManagerClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[AssessmentsConfig](),
-					Handle:       AssessmentsList{}.Handle(Client{}),
+					Handle:       AssessmentsList{}.Handle(),
 				},
 			},
 		}, nil

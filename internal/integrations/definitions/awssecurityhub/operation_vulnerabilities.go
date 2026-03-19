@@ -2,7 +2,6 @@ package awssecurityhub
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
@@ -13,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -40,16 +38,16 @@ type FindingsConfig struct {
 // VulnerabilitiesCollect collects AWS Security Hub findings
 type VulnerabilitiesCollect struct{}
 
-// Handle adapts vulnerabilities collection to the generic operation registration boundary
-func (v VulnerabilitiesCollect) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+// IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
+func (v VulnerabilitiesCollect) IngestHandle() types.IngestHandler {
+	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
+		c, err := SecurityHubClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
-		var cfg FindingsConfig
-		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+		cfg, err := VulnerabilitiesCollectOperation.UnmarshalConfig(request.Config)
+		if err != nil {
 			return nil, ErrOperationConfigInvalid
 		}
 
@@ -58,7 +56,7 @@ func (v VulnerabilitiesCollect) Handle(client Client) types.OperationHandler {
 }
 
 // Run collects Security Hub findings using server-side filters
-func (VulnerabilitiesCollect) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client, cfg FindingsConfig) (json.RawMessage, error) {
+func (VulnerabilitiesCollect) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
 	meta, err := awskit.MetadataFromProviderData(credential.ProviderData, defaultSessionName)
 	if err != nil {
 		return nil, ErrCredentialMetadataInvalid
@@ -117,12 +115,12 @@ collectLoop:
 		nextToken = resp.NextToken
 	}
 
-	return providerkit.EncodeResult([]types.IngestPayloadSet{
+	return []types.IngestPayloadSet{
 		{
 			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
 			Envelopes: envelopes,
 		},
-	}, ErrResultEncode)
+	}, nil
 }
 
 // buildSecurityHubFilters constructs a server-side filter from credential metadata and per-invocation config

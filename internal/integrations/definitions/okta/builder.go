@@ -41,14 +41,14 @@ func Builder() definition.Builder {
 					Description: "Call Okta user API to verify API token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   OktaClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        PoliciesCollectOperation.Name(),
 					Description: "Collect sign-on policy metadata for posture analysis",
 					Topic:       PoliciesCollectOperation.Topic(Slug),
 					ClientRef:   OktaClient.ID(),
-					Handle:      PoliciesCollect{}.Handle(Client{}),
+					Handle:      PoliciesCollect{}.Handle(),
 				},
 			},
 		}, nil

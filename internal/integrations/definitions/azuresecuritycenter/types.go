@@ -8,9 +8,9 @@ var (
 	// SecurityCenterClient is the client ref for the Azure management API client used by this definition
 	SecurityCenterClient = types.NewClientRef[*azurePricingsClient]()
 	// HealthDefaultOperation is the operation ref for the Azure Security Center health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// SecurityPricingOverviewOperation is the operation ref for the Defender pricing overview operation
-	SecurityPricingOverviewOperation = types.NewOperationRef[SecurityPricingOverview]("security.pricing_overview")
+	SecurityPricingOverviewOperation = types.NewOperationRef[struct{}]("security.pricing_overview")
 )
 
 // Slug is the unique identifier for the Azure Security Center integration

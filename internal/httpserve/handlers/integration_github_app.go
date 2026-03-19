@@ -241,8 +241,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	integrationRecord.Status = enums.IntegrationStatusConnected
 	if err := h.IntegrationsRuntime.SyncWebhooks(reqCtx, integrationRecord); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to sync github app webhooks")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	h.queueGitHubVulnerabilityBackfill(reqCtx, orgID, integrationRecord.ID)

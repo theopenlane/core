@@ -1,9 +1,11 @@
 package types
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // DefinitionRef is the durable identity for one registered definition
@@ -56,6 +58,16 @@ func (r ClientRef[T]) ID() ClientID {
 	return r.id
 }
 
+// Cast type-asserts a registered client instance to the typed client value
+func (r ClientRef[T]) Cast(client any) (T, error) {
+	c, ok := client.(T)
+	if !ok {
+		var zero T
+		return zero, ErrClientCastFailed
+	}
+	return c, nil
+}
+
 type operationKey struct{ _ bool }
 
 // OperationRef is a typed handle for one registered operation identity
@@ -80,6 +92,15 @@ func (r OperationRef[T]) Name() string {
 // Topic returns the canonical gala topic for one definition slug and operation
 func (r OperationRef[T]) Topic(slug string) gala.TopicName {
 	return gala.TopicName("integration." + slug + "." + r.name)
+}
+
+// UnmarshalConfig decodes a JSON operation config document into the typed config value
+func (r OperationRef[T]) UnmarshalConfig(raw json.RawMessage) (T, error) {
+	var out T
+	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
+		return out, err
+	}
+	return out, nil
 }
 
 type webhookKey struct{ _ bool }
@@ -127,4 +148,13 @@ func (r WebhookEventRef[T]) Name() string {
 // Topic returns the canonical gala topic for one definition slug and webhook event
 func (r WebhookEventRef[T]) Topic(slug string) gala.TopicName {
 	return gala.TopicName("integration." + slug + ".webhook." + r.name)
+}
+
+// UnmarshalPayload decodes a JSON webhook event payload into the typed payload value
+func (r WebhookEventRef[T]) UnmarshalPayload(raw json.RawMessage) (T, error) {
+	var out T
+	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
+		return out, err
+	}
+	return out, nil
 }

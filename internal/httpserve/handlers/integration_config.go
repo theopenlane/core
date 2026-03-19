@@ -106,7 +106,17 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		config := installationRec.Config
 		config.ClientConfig = userInput
 
-		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(config).Exec(requestCtx); err != nil {
+		update := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(config)
+
+		var inputMap map[string]any
+		if err := json.Unmarshal(userInput, &inputMap); err == nil {
+			if name, ok := inputMap["name"].(string); ok && name != "" {
+				update.SetName(name)
+				installationRec.Name = name
+			}
+		}
+
+		if err := update.Exec(requestCtx); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist integration user input")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)

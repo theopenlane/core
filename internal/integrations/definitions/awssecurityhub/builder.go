@@ -42,7 +42,7 @@ func Builder() definition.Builder {
 					Description: "Validate Security Hub access via DescribeHub; confirms the assumed role can reach the hub in the configured home region",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SecurityHubClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:         VulnerabilitiesCollectOperation.Name(),
@@ -56,7 +56,7 @@ func Builder() definition.Builder {
 							EnsurePayloads: true,
 						},
 					},
-					Handle: VulnerabilitiesCollect{}.Handle(Client{}),
+					IngestHandle: VulnerabilitiesCollect{}.IngestHandle(),
 				},
 			},
 			Mappings: awsSecurityHubMappings(),

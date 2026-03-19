@@ -43,9 +43,9 @@ type SettingsScan struct {
 }
 
 // Handle adapts settings scan to the generic operation registration boundary
-func (s SettingsScan) Handle(client Client) types.OperationHandler {
+func (s SettingsScan) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := SCCClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

@@ -39,9 +39,9 @@ type PoliciesCollect struct {
 }
 
 // Handle adapts policy collection to the generic operation registration boundary
-func (p PoliciesCollect) Handle(client Client) types.OperationHandler {
+func (p PoliciesCollect) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := OktaClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

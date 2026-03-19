@@ -195,6 +195,15 @@ func (r *Registry) indexOperations(operations []types.OperationRegistration, cli
 			return nil, ErrOperationTopicAlreadyRegistered
 		}
 
+		switch {
+		case operation.Handle == nil && operation.IngestHandle == nil:
+			return nil, ErrOperationHandlerRequired
+		case operation.Handle != nil && operation.IngestHandle != nil:
+			return nil, ErrOperationHandlerAmbiguous
+		case operation.IngestHandle != nil && len(operation.Ingest) == 0:
+			return nil, ErrIngestContractsRequired
+		}
+
 		if operation.ClientRef.Valid() {
 			if _, exists := clients[operation.ClientRef]; !exists {
 				return nil, ErrClientNotFound

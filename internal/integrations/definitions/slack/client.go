@@ -20,12 +20,3 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	return slackgo.New(req.Credential.OAuthAccessToken), nil
 }
 
-// FromAny casts a registered client instance to the Slack client type
-func (Client) FromAny(value any) (*slackgo.Client, error) {
-	c, ok := value.(*slackgo.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

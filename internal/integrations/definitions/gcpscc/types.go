@@ -15,11 +15,11 @@ var (
 	// SCCClient is the client ref for the GCP Security Command Center client used by this definition
 	SCCClient = types.NewClientRef[*cloudscc.Client]()
 	// HealthDefaultOperation is the operation ref for the GCP SCC health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// FindingsCollectOperation is the operation ref for the GCP SCC findings collection operation
-	FindingsCollectOperation = types.NewOperationRef[FindingsCollect]("findings.collect")
+	FindingsCollectOperation = types.NewOperationRef[FindingsConfig]("findings.collect")
 	// SettingsScanOperation is the operation ref for the GCP SCC settings scan operation
-	SettingsScanOperation = types.NewOperationRef[SettingsScan]("settings.scan")
+	SettingsScanOperation = types.NewOperationRef[struct{}]("settings.scan")
 )
 
 // Slug is the unique identifier for the GCP Security Command Center integration

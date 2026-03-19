@@ -209,8 +209,8 @@ func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.Webh
 		return nil
 	}
 
-	var envelope githubWebhookEnvelope
-	if err := jsonx.UnmarshalIfPresent(request.Event.Payload, &envelope); err != nil {
+	envelope, err := InstallationCreatedWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	if err != nil {
 		return ErrWebhookPayloadInvalid
 	}
 
@@ -249,26 +249,36 @@ func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.Webh
 
 // Handle ingests one Dependabot alert from the webhook payload
 func (DependabotAlertWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	return ingestGitHubAlert(ctx, request, githubAlertTypeDependabot)
+	envelope, err := DependabotAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	if err != nil {
+		return ErrWebhookPayloadInvalid
+	}
+
+	return ingestGitHubAlert(ctx, request, githubAlertTypeDependabot, envelope)
 }
 
 // Handle ingests one code scanning alert from the webhook payload
 func (CodeScanningAlertWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	return ingestGitHubAlert(ctx, request, githubAlertTypeCodeScanning)
+	envelope, err := CodeScanningAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	if err != nil {
+		return ErrWebhookPayloadInvalid
+	}
+
+	return ingestGitHubAlert(ctx, request, githubAlertTypeCodeScanning, envelope)
 }
 
 // Handle ingests one secret scanning alert from the webhook payload
 func (SecretScanningAlertWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	return ingestGitHubAlert(ctx, request, githubAlertTypeSecretScan)
-}
-
-// ingestGitHubAlert extracts the alert from a webhook payload and routes it for ingest
-func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, variant string) error {
-	var envelope githubWebhookEnvelope
-	if err := jsonx.UnmarshalIfPresent(request.Event.Payload, &envelope); err != nil {
+	envelope, err := SecretScanningAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	if err != nil {
 		return ErrWebhookPayloadInvalid
 	}
 
+	return ingestGitHubAlert(ctx, request, githubAlertTypeSecretScan, envelope)
+}
+
+// ingestGitHubAlert extracts the alert from a webhook payload and routes it for ingest
+func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, variant string, envelope githubWebhookEnvelope) error {
 	resource := githubRepoFromWebhook(envelope.Repository)
 	if resource == "" || len(envelope.Alert) == 0 {
 		return nil

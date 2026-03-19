@@ -12,7 +12,7 @@ var (
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
 	CloudflareClient = types.NewClientRef[*cf.Client]()
 	// HealthDefaultOperation is the operation ref for the Cloudflare health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 )
 
 // Slug is the unique identifier for the Cloudflare integration

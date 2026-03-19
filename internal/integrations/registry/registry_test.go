@@ -90,6 +90,10 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
+	nopHandle := func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
+		return nil, nil
+	}
+
 	first := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first",
@@ -100,8 +104,9 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{
-				Name:  "health.default",
-				Topic: gala.TopicName("integration.shared.topic"),
+				Name:   "health.default",
+				Topic:  gala.TopicName("integration.shared.topic"),
+				Handle: nopHandle,
 			},
 		},
 	}
@@ -115,8 +120,9 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{
-				Name:  "collect.default",
-				Topic: gala.TopicName("integration.shared.topic"),
+				Name:   "collect.default",
+				Topic:  gala.TopicName("integration.shared.topic"),
+				Handle: nopHandle,
 			},
 		},
 	}
@@ -136,6 +142,10 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
+	nopHandle := func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
+		return nil, nil
+	}
+
 	first := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first_same_name",
@@ -146,8 +156,9 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{
-				Name:  "health.default",
-				Topic: gala.TopicName("integration.shared.same_name_topic"),
+				Name:   "health.default",
+				Topic:  gala.TopicName("integration.shared.same_name_topic"),
+				Handle: nopHandle,
 			},
 		},
 	}
@@ -161,8 +172,9 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{
-				Name:  "health.default",
-				Topic: gala.TopicName("integration.shared.same_name_topic"),
+				Name:   "health.default",
+				Topic:  gala.TopicName("integration.shared.same_name_topic"),
+				Handle: nopHandle,
 			},
 		},
 	}
@@ -212,11 +224,17 @@ func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
 				Name:      "first.inspect",
 				Topic:     gala.TopicName("integration.multi_client.first.inspect"),
 				ClientRef: firstClient.ID(),
+				Handle: func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
+					return nil, nil
+				},
 			},
 			{
 				Name:      "second.inspect",
 				Topic:     gala.TopicName("integration.multi_client.second.inspect"),
 				ClientRef: secondClient.ID(),
+				Handle: func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
+					return nil, nil
+				},
 			},
 		},
 	}

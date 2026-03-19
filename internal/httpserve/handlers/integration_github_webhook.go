@@ -70,7 +70,13 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(ctx, openapiCtx, installation, webhook, payload, true)
+	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name)
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", installation.ID).Str("webhook", webhook.Name).Msg("failed to ensure github app webhook")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	return h.handleResolvedIntegrationWebhook(ctx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
 }
 
 func (h *Handler) resolveGitHubAppWebhookInstallation(ctx context.Context, payload []byte) (*ent.Integration, error) {

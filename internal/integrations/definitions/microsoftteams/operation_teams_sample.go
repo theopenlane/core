@@ -23,9 +23,9 @@ type TeamsSample struct {
 }
 
 // Handle adapts teams sample to the generic operation registration boundary
-func (t TeamsSample) Handle(client Client) types.OperationHandler {
+func (t TeamsSample) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := TeamsClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

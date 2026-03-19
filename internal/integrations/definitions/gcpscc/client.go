@@ -43,15 +43,6 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return client, nil
 }
 
-// FromAny casts a registered client instance to the SCC client type
-func (Client) FromAny(value any) (*cloudscc.Client, error) {
-	c, ok := value.(*cloudscc.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}
 
 // metadataFromCredential decodes SCC credential metadata from the credential set
 func metadataFromCredential(credential types.CredentialSet) (CredentialSchema, error) {

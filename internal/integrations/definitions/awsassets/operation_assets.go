@@ -23,9 +23,9 @@ type AssetCollect struct {
 }
 
 // Handle adapts asset collection to the generic operation registration boundary
-func (a AssetCollect) Handle(client Client) types.OperationHandler {
+func (a AssetCollect) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := AWSAssetsClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

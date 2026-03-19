@@ -29,6 +29,12 @@ var (
 	ErrOperationTopicAlreadyRegistered = errors.New("integrations/registry: operation topic already registered")
 	// ErrOperationNotFound indicates the requested operation does not exist
 	ErrOperationNotFound = errors.New("integrations/registry: operation not found")
+	// ErrOperationHandlerRequired indicates an operation registration is missing both Handle and IngestHandle
+	ErrOperationHandlerRequired = errors.New("integrations/registry: operation handler required")
+	// ErrOperationHandlerAmbiguous indicates an operation registration specifies both Handle and IngestHandle
+	ErrOperationHandlerAmbiguous = errors.New("integrations/registry: operation must specify exactly one of Handle or IngestHandle")
+	// ErrIngestContractsRequired indicates an IngestHandle is registered without any Ingest contracts
+	ErrIngestContractsRequired = errors.New("integrations/registry: IngestHandle requires at least one Ingest contract")
 	// ErrWebhookNameRequired indicates a webhook registration is missing its name
 	ErrWebhookNameRequired = errors.New("integrations/registry: webhook name required")
 	// ErrWebhookEventResolverRequired indicates a webhook registration is missing its event resolver

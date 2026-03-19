@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -21,7 +22,9 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// SyncWebhooks ensures the persisted webhook rows match the definition contract for one installation
+// SyncWebhooks ensures the persisted webhook rows match the definition contract for one installation.
+// Rows are scoped by owner and definition slug rather than integration ID so that endpoint identifiers
+// survive integration record replacement during re-authentication.
 func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integration) error {
 	if installation == nil {
 		return ErrInstallationRequired
@@ -35,7 +38,8 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 	db := do.MustInvoke[*ent.Client](r.injector)
 	existing, err := db.IntegrationWebhook.Query().
 		Where(
-			integrationwebhook.IntegrationIDEQ(installation.ID),
+			integrationwebhook.OwnerIDEQ(installation.OwnerID),
+			integrationwebhook.ProviderEQ(installation.DefinitionSlug),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
 		Order(
@@ -52,26 +56,29 @@ func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integratio
 		currentWebhooks[webhook.Name] = struct{}{}
 	}
 
+	// For each webhook name keep one row, preferring the row already bound to this installation.
+	bestByName := make(map[string]*ent.IntegrationWebhook, len(existing))
 	staleIDs := make([]string, 0, len(existing))
-	seenBaseRows := make(map[string]struct{}, len(existing))
-	for _, webhook := range existing {
-		baseKey := webhook.Provider + "\x00" + webhook.Name
-		if _, ok := seenBaseRows[baseKey]; ok {
-			staleIDs = append(staleIDs, webhook.ID)
+
+	for _, row := range existing {
+		if _, ok := currentWebhooks[row.Name]; !ok {
+			staleIDs = append(staleIDs, row.ID)
 			continue
 		}
 
-		if webhook.Provider != installation.DefinitionSlug {
-			staleIDs = append(staleIDs, webhook.ID)
+		prior, seen := bestByName[row.Name]
+		if !seen {
+			bestByName[row.Name] = row
 			continue
 		}
 
-		if _, ok := currentWebhooks[webhook.Name]; !ok {
-			staleIDs = append(staleIDs, webhook.ID)
-			continue
+		// Prefer the row bound to the current installation; otherwise keep the most recent (already first due to ordering).
+		if row.IntegrationID == installation.ID && prior.IntegrationID != installation.ID {
+			staleIDs = append(staleIDs, prior.ID)
+			bestByName[row.Name] = row
+		} else {
+			staleIDs = append(staleIDs, row.ID)
 		}
-
-		seenBaseRows[baseKey] = struct{}{}
 	}
 
 	if len(staleIDs) > 0 {
@@ -253,7 +260,9 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	})
 }
 
-// ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration
+// ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration.
+// When an existing row is found bound to a different integration ID it is rolled forward to the current one,
+// preserving the endpoint_id and secret_token so external callers are not disrupted.
 func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integration, registration types.WebhookRegistration) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
@@ -267,7 +276,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 	db := do.MustInvoke[*ent.Client](r.injector)
 	existing, err := db.IntegrationWebhook.Query().
 		Where(
-			integrationwebhook.IntegrationIDEQ(installation.ID),
+			integrationwebhook.OwnerIDEQ(installation.OwnerID),
 			integrationwebhook.ProviderEQ(installation.DefinitionSlug),
 			integrationwebhook.NameEQ(registration.Name),
 			integrationwebhook.ExternalEventIDIsNil(),
@@ -282,6 +291,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 	}
 
 	if len(existing) == 0 {
+		endpointID := keygen.PrefixedSecret("tolwh")
 		return db.IntegrationWebhook.Create().
 			SetOwnerID(installation.OwnerID).
 			SetIntegrationID(installation.ID).
@@ -289,13 +299,25 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 			SetName(registration.Name).
 			SetAllowedEvents(allowedEvents).
 			SetStatus(status).
+			SetEndpointID(endpointID).
+			SetEndpointURL("/v1/integrations/webhook/" + endpointID).
 			Save(ctx)
 	}
 
-	if len(existing) > 1 {
-		duplicateIDs := lo.Map(existing[1:], func(record *ent.IntegrationWebhook, _ int) string {
-			return record.ID
-		})
+	// Prefer the row already bound to the current installation; otherwise take the most recent.
+	row := existing[0]
+	for _, candidate := range existing[1:] {
+		if candidate.IntegrationID == installation.ID {
+			row = candidate
+			break
+		}
+	}
+
+	// Remove any rows that lost the selection.
+	duplicateIDs := lo.FilterMap(existing, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
+		return candidate.ID, candidate.ID != row.ID
+	})
+	if len(duplicateIDs) > 0 {
 		if _, err := db.IntegrationWebhook.Delete().
 			Where(integrationwebhook.IDIn(duplicateIDs...)).
 			Exec(ctx); err != nil {
@@ -303,8 +325,13 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 		}
 	}
 
-	return db.IntegrationWebhook.UpdateOneID(existing[0].ID).
+	update := db.IntegrationWebhook.UpdateOneID(row.ID).
 		SetAllowedEvents(allowedEvents).
-		SetStatus(status).
-		Save(ctx)
+		SetStatus(status)
+
+	if row.IntegrationID != installation.ID {
+		update.SetIntegrationID(installation.ID)
+	}
+
+	return update.Save(ctx)
 }

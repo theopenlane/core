@@ -22,12 +22,3 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	return providerkit.NewAuthenticatedClient(teamsGraphBaseURL, req.Credential.OAuthAccessToken, nil), nil
 }
 
-// FromAny casts a registered client instance to the authenticated HTTP client type
-func (Client) FromAny(value any) (*providerkit.AuthenticatedClient, error) {
-	c, ok := value.(*providerkit.AuthenticatedClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

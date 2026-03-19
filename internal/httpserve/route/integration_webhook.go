@@ -13,7 +13,7 @@ func registerIntegrationWebhookHandler(router *Router) error {
 	}
 
 	config := Config{
-		Path:        "/integrations/webhook/:integrationID/:webhookName",
+		Path:        "/integrations/webhook/:endpointID",
 		Method:      http.MethodPost,
 		Name:        "IntegrationWebhook",
 		Description: "Handle one installation-scoped integration webhook delivery",

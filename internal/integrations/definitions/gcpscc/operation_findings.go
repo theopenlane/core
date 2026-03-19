@@ -2,7 +2,6 @@ package gcpscc
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -17,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -44,16 +42,16 @@ type FindingsConfig struct {
 // FindingsCollect collects GCP SCC findings for ingest
 type FindingsCollect struct{}
 
-// Handle adapts findings collection to the generic operation registration boundary
-func (f FindingsCollect) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+// IngestHandle adapts findings collection to the ingest operation registration boundary
+func (f FindingsCollect) IngestHandle() types.IngestHandler {
+	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
+		c, err := SCCClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
-		var cfg FindingsConfig
-		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+		cfg, err := FindingsCollectOperation.UnmarshalConfig(request.Config)
+		if err != nil {
 			return nil, ErrOperationConfigInvalid
 		}
 
@@ -62,7 +60,7 @@ func (f FindingsCollect) Handle(client Client) types.OperationHandler {
 }
 
 // Run collects GCP SCC findings from configured sources
-func (FindingsCollect) Run(ctx context.Context, credential types.CredentialSet, c *cloudscc.Client, cfg FindingsConfig) (json.RawMessage, error) {
+func (FindingsCollect) Run(ctx context.Context, credential types.CredentialSet, c *cloudscc.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
 	meta, err := metadataFromCredential(credential)
 	if err != nil {
 		return nil, err
@@ -137,12 +135,12 @@ collectLoop:
 		}
 	}
 
-	return providerkit.EncodeResult([]types.IngestPayloadSet{
+	return []types.IngestPayloadSet{
 		{
 			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
 			Envelopes: envelopes,
 		},
-	}, ErrResultEncode)
+	}, nil
 }
 
 // buildFindingEnvelope serializes a finding into a mapping envelope

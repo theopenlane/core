@@ -27,12 +27,3 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	return cf.NewClient(option.WithAPIToken(cred.APIToken)), nil
 }
 
-// FromAny casts a registered client instance to the Cloudflare client type
-func (Client) FromAny(value any) (*cf.Client, error) {
-	c, ok := value.(*cf.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

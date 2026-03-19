@@ -12,9 +12,9 @@ var (
 	// AuditManagerClient is the client ref for the AWS Audit Manager client used by this definition
 	AuditManagerClient = types.NewClientRef[*auditmanager.Client]()
 	// HealthDefaultOperation is the operation ref for the AWS Audit Manager health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// AssessmentsListOperation is the operation ref for the AWS Audit Manager assessments list operation
-	AssessmentsListOperation = types.NewOperationRef[AssessmentsList]("assessments.list")
+	AssessmentsListOperation = types.NewOperationRef[AssessmentsConfig]("assessments.list")
 )
 
 // Slug is the unique identifier for the AWS Audit Manager integration

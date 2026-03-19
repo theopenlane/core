@@ -52,7 +52,7 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call the configured userinfo endpoint to validate the OIDC token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   OIDCClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        ClaimsInspectOperation.Name(),

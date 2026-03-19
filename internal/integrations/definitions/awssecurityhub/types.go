@@ -12,9 +12,9 @@ var (
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
 	SecurityHubClient = types.NewClientRef[*securityhub.Client]()
 	// HealthDefaultOperation is the operation ref for the AWS Security Hub health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// VulnerabilitiesCollectOperation is the operation ref for the Security Hub vulnerabilities collection operation
-	VulnerabilitiesCollectOperation = types.NewOperationRef[VulnerabilitiesCollect]("vulnerabilities.collect")
+	VulnerabilitiesCollectOperation = types.NewOperationRef[FindingsConfig]("vulnerabilities.collect")
 )
 
 // Slug is the unique identifier for the AWS Security Hub integration

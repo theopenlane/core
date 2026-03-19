@@ -9,7 +9,10 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 
+	"entgo.io/ent/dialect/sql"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -22,7 +25,9 @@ var (
 	errIntegrationWebhookNotConfigured = errors.New("integration webhook not configured")
 )
 
-// IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event
+// IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event.
+// The endpoint is addressed by the stable endpoint_id generated at webhook creation time,
+// which survives integration record replacement so external callers are not disrupted.
 func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	if isRegistrationContext(ctx) {
 		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
@@ -31,21 +36,14 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return err
 	}
 
-	var (
-		integrationID string
-		webhookName   string
-	)
+	var endpointID string
 	if err := echo.PathParamsBinder(ctx).
-		String("integrationID", &integrationID).
-		String("webhookName", &webhookName).
+		String("endpointID", &endpointID).
 		BindError(); err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
-	if integrationID == "" {
-		return h.BadRequest(ctx, rout.MissingField("integrationID"), openapiCtx)
-	}
-	if webhookName == "" {
-		return h.BadRequest(ctx, rout.MissingField("webhookName"), openapiCtx)
+	if endpointID == "" {
+		return h.BadRequest(ctx, rout.MissingField("endpointID"), openapiCtx)
 	}
 
 	req := ctx.Request()
@@ -59,17 +57,32 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	installation, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, "", integrationID, "")
+	persistedWebhook, err := h.DBClient.IntegrationWebhook.Query().
+		Where(
+			func(s *sql.Selector) { s.Where(sql.EQ(s.C("endpoint_id"), endpointID)) },
+			integrationwebhook.ExternalEventIDIsNil(),
+		).
+		Only(requestCtx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		}
+
+		logx.FromContext(requestCtx).Error().Err(err).Str("endpoint_id", endpointID).Msg("failed to resolve integration webhook by endpoint id")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	installation, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, "", persistedWebhook.IntegrationID, "")
 	if err != nil {
 		if errors.Is(err, integrationsruntime.ErrInstallationNotFound) {
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to resolve integration webhook installation")
+		logx.FromContext(requestCtx).Error().Err(err).Str("endpoint_id", endpointID).Msg("failed to resolve installation for webhook endpoint")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	webhook, err := h.IntegrationsRuntime.Registry().Webhook(installation.DefinitionID, webhookName)
+	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(installation.DefinitionID, persistedWebhook.Name)
 	if err != nil {
 		if errors.Is(err, registry.ErrWebhookNotFound) {
 			return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
@@ -78,7 +91,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(ctx, openapiCtx, installation, webhook, payload, false)
+	return h.handleResolvedIntegrationWebhook(ctx, openapiCtx, installation, webhookReg, persistedWebhook, payload, false)
 }
 
 func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
@@ -94,15 +107,9 @@ func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
 	return payload, nil
 }
 
-func (h *Handler) handleResolvedIntegrationWebhook(ctx echo.Context, openapiCtx *OpenAPIContext, installation *ent.Integration, webhook types.WebhookRegistration, payload []byte, skipVerify bool) error {
+func (h *Handler) handleResolvedIntegrationWebhook(ctx echo.Context, openapiCtx *OpenAPIContext, installation *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
 	req := ctx.Request()
 	requestCtx := req.Context()
-
-	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name)
-	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", installation.ID).Str("webhook", webhook.Name).Msg("failed to ensure integration webhook")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
 
 	verifyRequest := types.WebhookVerifyRequest{
 		Integration: installation,

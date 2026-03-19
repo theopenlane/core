@@ -61,14 +61,14 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call auth.test to ensure the Slack token is valid and scoped correctly",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SlackClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        TeamInspectOperation.Name(),
 					Description: "Collect workspace metadata via team.info for posture analysis",
 					Topic:       TeamInspectOperation.Topic(Slug),
 					ClientRef:   SlackClient.ID(),
-					Handle:      TeamInspect{}.Handle(Client{}),
+					Handle:      TeamInspect{}.Handle(),
 				},
 				{
 					Name:         ChannelsListOperation.Name(),
@@ -77,7 +77,7 @@ func Builder(cfg Config) definition.Builder {
 					ClientRef:    SlackClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[ChannelsListOperationInput](),
 					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       ChannelsList{}.Handle(Client{}),
+					Handle:       ChannelsList{}.Handle(),
 				},
 				{
 					Name:         MessageSendOperation.Name(),
@@ -85,7 +85,7 @@ func Builder(cfg Config) definition.Builder {
 					Topic:        MessageSendOperation.Topic(Slug),
 					ClientRef:    SlackClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[MessageOperationInput](),
-					Handle:       MessageSend{}.Handle(Client{}),
+					Handle:       MessageSend{}.Handle(),
 				},
 			},
 		}, nil

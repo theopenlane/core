@@ -29,12 +29,3 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return svc, nil
 }
 
-// FromAny casts a registered client instance to the Admin SDK service type
-func (Client) FromAny(value any) (*admin.Service, error) {
-	svc, ok := value.(*admin.Service)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return svc, nil
-}

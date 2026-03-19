@@ -88,12 +88,3 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	}, nil
 }
 
-// FromAny casts a registered client instance to the Azure pricing client type
-func (Client) FromAny(value any) (*azurePricingsClient, error) {
-	c, ok := value.(*azurePricingsClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

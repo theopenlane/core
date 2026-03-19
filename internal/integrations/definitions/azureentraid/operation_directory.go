@@ -30,9 +30,9 @@ type graphOrganizationResponse struct {
 }
 
 // Handle adapts directory inspect to the generic operation registration boundary
-func (d DirectoryInspect) Handle(client Client) types.OperationHandler {
+func (d DirectoryInspect) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := EntraClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

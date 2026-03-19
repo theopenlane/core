@@ -35,9 +35,9 @@ type SecurityPricingOverview struct {
 }
 
 // Handle adapts the pricing overview to the generic operation registration boundary
-func (s SecurityPricingOverview) Handle(client Client) types.OperationHandler {
+func (s SecurityPricingOverview) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		apc, err := client.FromAny(request.Client)
+		apc, err := SecurityCenterClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

@@ -233,15 +233,13 @@ func (h *Handler) refreshDefinitionIntegration(ctx context.Context, installation
 		return nil
 	}
 
-	if installation.Name == def.DisplayName &&
-		installation.DefinitionID == def.ID &&
+	if installation.DefinitionID == def.ID &&
 		installation.DefinitionSlug == def.Slug &&
 		installation.Family == def.Family {
 		return nil
 	}
 
 	if err := h.DBClient.Integration.UpdateOneID(installation.ID).
-		SetName(def.DisplayName).
 		SetDefinitionID(def.ID).
 		SetDefinitionSlug(def.Slug).
 		SetFamily(def.Family).
@@ -249,7 +247,6 @@ func (h *Handler) refreshDefinitionIntegration(ctx context.Context, installation
 		return err
 	}
 
-	installation.Name = def.DisplayName
 	installation.DefinitionID = def.ID
 	installation.DefinitionSlug = def.Slug
 	installation.Family = def.Family

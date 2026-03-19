@@ -11,9 +11,9 @@ var (
 	// EntraClient is the client ref for the Microsoft Graph API client used by this definition
 	EntraClient = types.NewClientRef[*providerkit.AuthenticatedClient]()
 	// HealthDefaultOperation is the operation ref for the Azure Entra ID health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// DirectoryInspectOperation is the operation ref for the Azure Entra ID directory inspect operation
-	DirectoryInspectOperation = types.NewOperationRef[DirectoryInspect]("directory.inspect")
+	DirectoryInspectOperation = types.NewOperationRef[struct{}]("directory.inspect")
 )
 
 // Slug is the unique identifier for the Azure Entra ID integration

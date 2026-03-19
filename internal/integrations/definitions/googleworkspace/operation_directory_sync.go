@@ -2,7 +2,6 @@ package googleworkspace
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"github.com/samber/lo"
@@ -62,16 +61,16 @@ type directoryMembershipPayload struct {
 // DirectorySync collects Google Workspace directory users for ingest
 type DirectorySync struct{}
 
-// Handle adapts directory sync to the generic operation registration boundary
-func (d DirectorySync) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		svc, err := client.FromAny(request.Client)
+// IngestHandle adapts directory sync to the ingest operation registration boundary
+func (d DirectorySync) IngestHandle() types.IngestHandler {
+	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
+		svc, err := WorkspaceClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
-		var cfg DirectorySyncConfig
-		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+		cfg, err := DirectorySyncOperation.UnmarshalConfig(request.Config)
+		if err != nil {
 			return nil, ErrDirectorySyncConfigInvalid
 		}
 
@@ -80,7 +79,7 @@ func (d DirectorySync) Handle(client Client) types.OperationHandler {
 }
 
 // Run collects Google Workspace directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectorySyncConfig) (json.RawMessage, error) {
+func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectorySyncConfig) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, svc, cfg)
 	if err != nil {
 		return nil, err
@@ -118,7 +117,7 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectoryS
 	}
 
 	if !lo.FromPtrOr(cfg.IncludeGroups, false) {
-		return providerkit.EncodeResult(payloadSets, ErrResultEncode)
+		return payloadSets, nil
 	}
 
 	groups, err := listDirectoryGroups(ctx, svc, cfg)
@@ -180,7 +179,7 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg DirectoryS
 		},
 	)
 
-	return providerkit.EncodeResult(payloadSets, ErrResultEncode)
+	return payloadSets, nil
 }
 
 // resolveDirectorySyncConfig merges stored installation defaults with per-run overrides

@@ -40,12 +40,3 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	return oktagosdk.NewAPIClient(cfg), nil
 }
 
-// FromAny casts a registered client instance to the Okta API client type
-func (Client) FromAny(value any) (*oktagosdk.APIClient, error) {
-	c, ok := value.(*oktagosdk.APIClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

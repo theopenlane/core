@@ -8,23 +8,23 @@ var (
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	GitHubClient = types.NewClientRef[GraphQLClient]()
 	// HealthDefaultOperation is the operation ref for the GitHub App health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// RepositorySyncOperation is the operation ref for the repository sync operation
-	RepositorySyncOperation = types.NewOperationRef[RepositorySync]("repository.sync")
+	RepositorySyncOperation = types.NewOperationRef[struct{}]("repository.sync")
 	// VulnerabilityCollectOperation is the operation ref for the vulnerability collection operation
-	VulnerabilityCollectOperation = types.NewOperationRef[VulnerabilityCollect]("vulnerability.collect")
+	VulnerabilityCollectOperation = types.NewOperationRef[VulnerabilityCollectConfig]("vulnerability.collect")
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events
-	PingWebhookEvent = types.NewWebhookEventRef[PingWebhook]("ping")
+	PingWebhookEvent = types.NewWebhookEventRef[struct{}]("ping")
 	// InstallationCreatedWebhookEvent is the webhook event ref for GitHub installation created events
-	InstallationCreatedWebhookEvent = types.NewWebhookEventRef[InstallationCreatedWebhook]("installation.created")
+	InstallationCreatedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.created")
 	// DependabotAlertWebhookEvent is the webhook event ref for Dependabot alert events
-	DependabotAlertWebhookEvent = types.NewWebhookEventRef[DependabotAlertWebhook]("dependabot_alert")
+	DependabotAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("dependabot_alert")
 	// CodeScanningAlertWebhookEvent is the webhook event ref for code scanning alert events
-	CodeScanningAlertWebhookEvent = types.NewWebhookEventRef[CodeScanningAlertWebhook]("code_scanning_alert")
+	CodeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
-	SecretScanningAlertWebhookEvent = types.NewWebhookEventRef[SecretScanningAlertWebhook]("secret_scanning_alert")
+	SecretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
 )
 
 // Slug is the unique identifier for the GitHub App integration

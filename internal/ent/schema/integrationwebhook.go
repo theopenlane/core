@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/utils/keygen"
 )
 
@@ -72,10 +71,17 @@ func (IntegrationWebhook) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("STATUS"),
 			),
-		field.String("endpoint_url").
-			Comment("destination URL for webhook delivery").
+		field.String("endpoint_id").
+			Comment("stable external identifier for this webhook endpoint; survives integration record replacement").
 			Optional().
-			Validate(validator.ValidateURL()).
+			Nillable().
+			Immutable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+			),
+		field.String("endpoint_url").
+			Comment("path used to receive webhook deliveries for this endpoint").
+			Optional().
 			Nillable().
 			Annotations(
 				entgql.OrderField("endpoint_url"),
@@ -144,6 +150,9 @@ func (IntegrationWebhook) Indexes() []ent.Index {
 		index.Fields("integration_id", "name", "external_event_id").
 			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL AND external_event_id IS NOT NULL")),
+		index.Fields("endpoint_id").
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL AND endpoint_id IS NOT NULL")),
 	}
 }
 

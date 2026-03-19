@@ -330,15 +330,10 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		return false, err
 	}
 
-	definitionValue := installationRecord.DefinitionSlug
-	if definitionValue == "" {
-		definitionValue = installationRecord.DefinitionID
-	}
-
 	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, types.ScopeVars{
 		Payload:            req.ScopePayload,
 		Resource:           req.ScopeResource,
-		Definition:         definitionValue,
+		Definition:         installationRecord.DefinitionID,
 		Operation:          operationName,
 		Config:             operationConfig,
 		InstallationConfig: jsonx.CloneRawMessage(installationRecord.Config.ClientConfig),

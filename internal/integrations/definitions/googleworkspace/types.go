@@ -12,9 +12,9 @@ var (
 	// WorkspaceClient is the client ref for the Google Workspace Admin SDK client used by this definition
 	WorkspaceClient = types.NewClientRef[*admin.Service]()
 	// HealthDefaultOperation is the operation ref for the Google Workspace health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// DirectorySyncOperation is the operation ref for the Google Workspace directory sync operation
-	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
+	DirectorySyncOperation = types.NewOperationRef[DirectorySyncConfig]("directory.sync")
 )
 
 // Slug is the unique identifier for the Google Workspace integration

@@ -8,7 +8,6 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // MessageOperationInput holds per-invocation parameters for the message.send operation
@@ -52,15 +51,15 @@ type channelMessageRequest struct {
 }
 
 // Handle adapts message send to the generic operation registration boundary
-func (m MessageSend) Handle(client Client) types.OperationHandler {
+func (m MessageSend) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := TeamsClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
-		var cfg MessageOperationInput
-		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+		cfg, err := MessageSendOperation.UnmarshalConfig(request.Config)
+		if err != nil {
 			return nil, ErrOperationConfigInvalid
 		}
 

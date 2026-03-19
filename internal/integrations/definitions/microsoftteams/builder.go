@@ -53,14 +53,14 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call Graph /me to verify Teams access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   TeamsClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        TeamsSampleOperation.Name(),
 					Description: "Collect a sample of joined teams for the user context",
 					Topic:       TeamsSampleOperation.Topic(Slug),
 					ClientRef:   TeamsClient.ID(),
-					Handle:      TeamsSample{}.Handle(Client{}),
+					Handle:      TeamsSample{}.Handle(),
 				},
 				{
 					Name:         MessageSendOperation.Name(),
@@ -68,7 +68,7 @@ func Builder(cfg Config) definition.Builder {
 					Topic:        MessageSendOperation.Topic(Slug),
 					ClientRef:    TeamsClient.ID(),
 					ConfigSchema: providerkit.SchemaFrom[MessageOperationInput](),
-					Handle:       MessageSend{}.Handle(Client{}),
+					Handle:       MessageSend{}.Handle(),
 				},
 			},
 		}, nil

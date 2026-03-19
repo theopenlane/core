@@ -23,9 +23,9 @@ type TeamInspect struct {
 }
 
 // Handle adapts team inspect to the generic operation registration boundary
-func (t TeamInspect) Handle(client Client) types.OperationHandler {
+func (t TeamInspect) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := SlackClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

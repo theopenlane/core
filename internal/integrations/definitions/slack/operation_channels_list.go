@@ -8,7 +8,6 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // ChannelsListOperationInput holds per-invocation parameters for channel discovery
@@ -46,15 +45,15 @@ type ChannelsList struct {
 }
 
 // Handle adapts channels list to the generic operation registration boundary
-func (l ChannelsList) Handle(client Client) types.OperationHandler {
+func (l ChannelsList) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := SlackClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
-		var cfg ChannelsListOperationInput
-		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+		cfg, err := ChannelsListOperation.UnmarshalConfig(request.Config)
+		if err != nil {
 			return nil, ErrOperationConfigInvalid
 		}
 

@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // assessmentsPageSize is the number of assessments requested per paginated API call
@@ -58,15 +57,15 @@ type AssessmentsList struct {
 }
 
 // Handle adapts assessments listing to the generic operation registration boundary
-func (a AssessmentsList) Handle(client Client) types.OperationHandler {
+func (a AssessmentsList) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
+		c, err := AuditManagerClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}
 
-		var cfg AssessmentsConfig
-		if err := jsonx.UnmarshalIfPresent(request.Config, &cfg); err != nil {
+		cfg, err := AssessmentsListOperation.UnmarshalConfig(request.Config)
+		if err != nil {
 			return nil, ErrOperationConfigInvalid
 		}
 

@@ -53,14 +53,14 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call Microsoft Graph /organization to verify tenant access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   EntraClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        DirectoryInspectOperation.Name(),
 					Description: "Collect basic tenant metadata via Microsoft Graph",
 					Topic:       DirectoryInspectOperation.Topic(Slug),
 					ClientRef:   EntraClient.ID(),
-					Handle:      DirectoryInspect{}.Handle(Client{}),
+					Handle:      DirectoryInspect{}.Handle(),
 				},
 			},
 		}, nil

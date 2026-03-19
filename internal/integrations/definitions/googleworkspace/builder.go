@@ -62,7 +62,7 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Call Google Admin SDK users.list to verify the workspace token",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   WorkspaceClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:         DirectorySyncOperation.Name(),
@@ -84,7 +84,7 @@ func Builder(cfg Config) definition.Builder {
 							EnsurePayloads: true,
 						},
 					},
-					Handle: DirectorySync{}.Handle(Client{}),
+					IngestHandle: DirectorySync{}.IngestHandle(),
 				},
 			},
 			Mappings: googleWorkspaceMappings(),

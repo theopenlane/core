@@ -39,12 +39,3 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return sts.NewFromConfig(cfg), nil
 }
 
-// FromAny casts a registered client instance to the STS client type
-func (Client) FromAny(value any) (*sts.Client, error) {
-	c, ok := value.(*sts.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

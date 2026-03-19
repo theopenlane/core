@@ -41,7 +41,7 @@ func Builder() definition.Builder {
 					Description: "Verify Cloudflare API token via /user/tokens/verify",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   CloudflareClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 			},
 		}, nil

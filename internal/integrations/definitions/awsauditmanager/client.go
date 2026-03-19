@@ -47,12 +47,3 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return auditmanager.NewFromConfig(cfg), nil
 }
 
-// FromAny casts a registered client instance to the Audit Manager client type
-func (Client) FromAny(value any) (*auditmanager.Client, error) {
-	c, ok := value.(*auditmanager.Client)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return c, nil
-}

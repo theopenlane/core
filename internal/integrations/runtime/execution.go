@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ExecuteOperation runs one integration operation inline without run tracking.
@@ -81,6 +82,12 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return failRun(err, response)
 	}
 
+	if def, ok := r.Registry().Definition(installation.DefinitionID); ok {
+		if _, _, metaErr := r.ResolveAndSaveInstallationMetadata(ctx, installation, def, credential, nil); metaErr != nil {
+			logx.FromContext(ctx).Warn().Err(metaErr).Str("installation_id", installation.ID).Msg("failed to refresh installation metadata after operation")
+		}
+	}
+
 	return operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
 		Status:  enums.IntegrationRunStatusSuccess,
 		Summary: "operation completed",
@@ -109,25 +116,34 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 		}
 	}
 
-	response, err := operation.Handle(ctx, types.OperationRequest{
+	req := types.OperationRequest{
 		Integration: installation,
 		Credential:  credential,
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
-	})
-	if err != nil {
-		return response, err
 	}
 
-	if len(operation.Ingest) > 0 {
+	if operation.IngestHandle != nil {
+		payloadSets, err := operation.IngestHandle(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
 		if err := operations.ProcessIngestAsync(ctx, operations.IngestContext{
 			Registry:     r.Registry(),
 			DB:           do.MustInvoke[*ent.Client](r.injector),
 			Runtime:      do.MustInvoke[*gala.Gala](r.injector),
 			Installation: installation,
-		}, operation, response, ingestOptions); err != nil {
+		}, operation, payloadSets, ingestOptions); err != nil {
 			return nil, err
 		}
+
+		return nil, nil
+	}
+
+	response, err := operation.Handle(ctx, req)
+	if err != nil {
+		return response, err
 	}
 
 	return response, nil

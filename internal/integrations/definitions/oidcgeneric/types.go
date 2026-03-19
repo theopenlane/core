@@ -11,9 +11,9 @@ var (
 	// OIDCClient is the client ref for the OIDC userinfo HTTP client used by this definition
 	OIDCClient = types.NewClientRef[*providerkit.AuthenticatedClient]()
 	// HealthDefaultOperation is the operation ref for the Generic OIDC health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// ClaimsInspectOperation is the operation ref for the OIDC claims inspect operation
-	ClaimsInspectOperation = types.NewOperationRef[ClaimsInspect]("claims.inspect")
+	ClaimsInspectOperation = types.NewOperationRef[struct{}]("claims.inspect")
 )
 
 // Slug is the unique identifier for the Generic OIDC integration

@@ -11,9 +11,9 @@ var (
 	// AWSAssetsClient is the client ref for the AWS STS client used by this definition
 	AWSAssetsClient = types.NewClientRef[*sts.Client]()
 	// HealthDefaultOperation is the operation ref for the AWS Assets health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
 	// AssetCollectOperation is the operation ref for the AWS asset collection operation
-	AssetCollectOperation = types.NewOperationRef[AssetCollect]("asset.collect")
+	AssetCollectOperation = types.NewOperationRef[struct{}]("asset.collect")
 )
 
 // Slug is the unique identifier for the AWS Assets integration

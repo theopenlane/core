@@ -19,8 +19,6 @@ var (
 	ErrIngestDefinitionNotFound = errors.New("integrations/operations: ingest definition not found")
 	// ErrIngestSchemaNotFound indicates the generated ingest schema contract was not found
 	ErrIngestSchemaNotFound = errors.New("integrations/operations: ingest schema not found")
-	// ErrIngestPayloadsInvalid indicates the operation response could not be decoded into ingest payloads
-	ErrIngestPayloadsInvalid = errors.New("integrations/operations: ingest payloads invalid")
 	// ErrIngestMappingNotFound indicates the definition does not provide a mapping for the emitted payload variant
 	ErrIngestMappingNotFound = errors.New("integrations/operations: ingest mapping not found")
 	// ErrIngestFilterFailed indicates the CEL filter evaluation failed

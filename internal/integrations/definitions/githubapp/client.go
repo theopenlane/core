@@ -47,15 +47,6 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 	return newGraphQLClient(httpClient, c.APIURL), nil
 }
 
-// FromAny casts a registered client instance to the GitHub GraphQL client type
-func (Client) FromAny(value any) (GraphQLClient, error) {
-	client, ok := value.(GraphQLClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return client, nil
-}
 
 // newGraphQLClient constructs a GitHub GraphQL client targeting the given API URL
 func newGraphQLClient(httpClient *http.Client, apiURL string) GraphQLClient {

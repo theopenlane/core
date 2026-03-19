@@ -44,14 +44,14 @@ func Builder() definition.Builder {
 					Description: "Validate AWS credentials and installation scope",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   AWSAssetsClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        AssetCollectOperation.Name(),
 					Description: "Collect asset inventory from AWS",
 					Topic:       AssetCollectOperation.Topic(Slug),
 					ClientRef:   AWSAssetsClient.ID(),
-					Handle:      AssetCollect{}.Handle(Client{}),
+					Handle:      AssetCollect{}.Handle(),
 				},
 			},
 			Mappings: []types.MappingRegistration{

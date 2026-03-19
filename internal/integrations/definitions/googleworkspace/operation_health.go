@@ -21,9 +21,9 @@ type HealthCheck struct {
 }
 
 // Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle(client Client) types.OperationHandler {
+func (h HealthCheck) Handle() types.OperationHandler {
 	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		svc, err := client.FromAny(request.Client)
+		svc, err := WorkspaceClient.Cast(request.Client)
 		if err != nil {
 			return nil, err
 		}

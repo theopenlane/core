@@ -41,14 +41,14 @@ func Builder() definition.Builder {
 					Description: "Call Azure Security Center pricings API to verify access",
 					Topic:       HealthDefaultOperation.Topic(Slug),
 					ClientRef:   SecurityCenterClient.ID(),
-					Handle:      HealthCheck{}.Handle(Client{}),
+					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        SecurityPricingOverviewOperation.Name(),
 					Description: "Collect plan and pricing metadata for Microsoft Defender for Cloud",
 					Topic:       SecurityPricingOverviewOperation.Topic(Slug),
 					ClientRef:   SecurityCenterClient.ID(),
-					Handle:      SecurityPricingOverview{}.Handle(Client{}),
+					Handle:      SecurityPricingOverview{}.Handle(),
 				},
 			},
 		}, nil
