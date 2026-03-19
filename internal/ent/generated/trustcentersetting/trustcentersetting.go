@@ -48,6 +48,8 @@ const (
 	FieldFaviconRemoteURL = "favicon_remote_url"
 	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
 	FieldFaviconLocalFileID = "favicon_local_file_id"
+	// FieldHeroImageLocalFileID holds the string denoting the hero_image_local_file_id field in the database.
+	FieldHeroImageLocalFileID = "hero_image_local_file_id"
 	// FieldThemeMode holds the string denoting the theme_mode field in the database.
 	FieldThemeMode = "theme_mode"
 	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
@@ -84,6 +86,8 @@ const (
 	EdgeLogoFile = "logo_file"
 	// EdgeFaviconFile holds the string denoting the favicon_file edge name in mutations.
 	EdgeFaviconFile = "favicon_file"
+	// EdgeHeroImageFile holds the string denoting the hero_image_file edge name in mutations.
+	EdgeHeroImageFile = "hero_image_file"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
@@ -114,6 +118,13 @@ const (
 	FaviconFileInverseTable = "files"
 	// FaviconFileColumn is the table column denoting the favicon_file relation/edge.
 	FaviconFileColumn = "favicon_local_file_id"
+	// HeroImageFileTable is the table that holds the hero_image_file relation/edge.
+	HeroImageFileTable = "trust_center_settings"
+	// HeroImageFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	HeroImageFileInverseTable = "files"
+	// HeroImageFileColumn is the table column denoting the hero_image_file relation/edge.
+	HeroImageFileColumn = "hero_image_local_file_id"
 )
 
 // Columns holds all SQL columns for trustcentersetting fields.
@@ -134,6 +145,7 @@ var Columns = []string{
 	FieldLogoLocalFileID,
 	FieldFaviconRemoteURL,
 	FieldFaviconLocalFileID,
+	FieldHeroImageLocalFileID,
 	FieldThemeMode,
 	FieldPrimaryColor,
 	FieldFont,
@@ -320,6 +332,11 @@ func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
 }
 
+// ByHeroImageLocalFileID orders the results by the hero_image_local_file_id field.
+func ByHeroImageLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeroImageLocalFileID, opts...).ToFunc()
+}
+
 // ByThemeMode orders the results by the theme_mode field.
 func ByThemeMode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldThemeMode, opts...).ToFunc()
@@ -431,6 +448,13 @@ func ByFaviconFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFaviconFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByHeroImageFileField orders the results by hero_image_file field.
+func ByHeroImageFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHeroImageFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -457,6 +481,13 @@ func newFaviconFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FaviconFileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, FaviconFileTable, FaviconFileColumn),
+	)
+}
+func newHeroImageFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HeroImageFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, HeroImageFileTable, HeroImageFileColumn),
 	)
 }
 

@@ -196,6 +196,9 @@ type organization
 
     define identity_holder_creator: [group#member]
     define can_create_identity_holder: can_edit or identity_holder_creator
+
+    define sla_definition_creator: [group#member]
+    define can_create_sla_definition: can_edit or sla_definition_creator
     # additional relations
     define user_in_context: [user]
 
@@ -1088,6 +1091,17 @@ type identity_holder
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
     define parent: [user, service, organization, platform]
+
+type sla_definition
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization]
 
 type system_detail
   relations

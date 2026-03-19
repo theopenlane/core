@@ -293,6 +293,20 @@ func (_c *SubcontrolHistoryCreate) SetNillableImplementationDescription(v *strin
 	return _c
 }
 
+// SetPublicRepresentation sets the "public_representation" field.
+func (_c *SubcontrolHistoryCreate) SetPublicRepresentation(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetPublicRepresentation(v)
+	return _c
+}
+
+// SetNillablePublicRepresentation sets the "public_representation" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillablePublicRepresentation(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetPublicRepresentation(*v)
+	}
+	return _c
+}
+
 // SetSource sets the "source" field.
 func (_c *SubcontrolHistoryCreate) SetSource(v enums.ControlSource) *SubcontrolHistoryCreate {
 	_c.mutation.SetSource(v)
@@ -303,6 +317,20 @@ func (_c *SubcontrolHistoryCreate) SetSource(v enums.ControlSource) *SubcontrolH
 func (_c *SubcontrolHistoryCreate) SetNillableSource(v *enums.ControlSource) *SubcontrolHistoryCreate {
 	if v != nil {
 		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceName sets the "source_name" field.
+func (_c *SubcontrolHistoryCreate) SetSourceName(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSourceName(v)
+	return _c
+}
+
+// SetNillableSourceName sets the "source_name" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableSourceName(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSourceName(*v)
 	}
 	return _c
 }
@@ -836,9 +864,17 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 		_spec.SetField(subcontrolhistory.FieldImplementationDescription, field.TypeString, value)
 		_node.ImplementationDescription = value
 	}
+	if value, ok := _c.mutation.PublicRepresentation(); ok {
+		_spec.SetField(subcontrolhistory.FieldPublicRepresentation, field.TypeString, value)
+		_node.PublicRepresentation = value
+	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceName(); ok {
+		_spec.SetField(subcontrolhistory.FieldSourceName, field.TypeString, value)
+		_node.SourceName = &value
 	}
 	if value, ok := _c.mutation.ReferenceFramework(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)

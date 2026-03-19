@@ -295,7 +295,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.input, nil, nil)
+			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.input, nil, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return

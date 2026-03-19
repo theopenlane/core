@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -144,6 +145,19 @@ func (NotificationTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("VERSION"),
 			),
+		field.Enum("template_context").
+			Comment("runtime data context defining available variable keys for this template").
+			GoType(enums.TemplateContext("")).
+			Optional().
+			Annotations(
+				entgql.OrderField("TEMPLATE_CONTEXT"),
+			),
+		field.JSON("defaults", map[string]any{}).
+			Comment("static variable values merged as base layer at render time; call-site data takes precedence").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 	}
 }
 
@@ -199,7 +213,8 @@ func (n NotificationTemplate) Edges() []ent.Edge {
 // Mixin of the NotificationTemplate.
 func (n NotificationTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags: true,
+		excludeTags:     true,
+		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.NotificationTemplate](n,
 				withOrganizationOwner(true),
@@ -213,6 +228,13 @@ func (n NotificationTemplate) Mixin() []ent.Mixin {
 func (NotificationTemplate) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
+	}
+}
+
+// Hooks of the NotificationTemplate.
+func (NotificationTemplate) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookNotificationTemplateSanitize(),
 	}
 }
 

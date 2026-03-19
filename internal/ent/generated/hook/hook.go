@@ -873,6 +873,18 @@ func (f RiskFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.RiskMutation", m)
 }
 
+// The SLADefinitionFunc type is an adapter to allow the use of ordinary
+// function as SLADefinition mutator.
+type SLADefinitionFunc func(context.Context, *generated.SLADefinitionMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SLADefinitionFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.SLADefinitionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.SLADefinitionMutation", m)
+}
+
 // The ScanFunc type is an adapter to allow the use of ordinary
 // function as Scan mutator.
 type ScanFunc func(context.Context, *generated.ScanMutation) (generated.Value, error)

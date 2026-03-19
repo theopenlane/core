@@ -108,6 +108,26 @@ func (_u *NotificationTemplateUpdate) ClearDeletedBy() *NotificationTemplateUpda
 	return _u
 }
 
+// SetRevision sets the "revision" field.
+func (_u *NotificationTemplateUpdate) SetRevision(v string) *NotificationTemplateUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_u *NotificationTemplateUpdate) SetNillableRevision(v *string) *NotificationTemplateUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
+	}
+	return _u
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (_u *NotificationTemplateUpdate) ClearRevision() *NotificationTemplateUpdate {
+	_u.mutation.ClearRevision()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *NotificationTemplateUpdate) SetInternalNotes(v string) *NotificationTemplateUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -455,6 +475,38 @@ func (_u *NotificationTemplateUpdate) AddVersion(v int) *NotificationTemplateUpd
 	return _u
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_u *NotificationTemplateUpdate) SetTemplateContext(v enums.TemplateContext) *NotificationTemplateUpdate {
+	_u.mutation.SetTemplateContext(v)
+	return _u
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_u *NotificationTemplateUpdate) SetNillableTemplateContext(v *enums.TemplateContext) *NotificationTemplateUpdate {
+	if v != nil {
+		_u.SetTemplateContext(*v)
+	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *NotificationTemplateUpdate) ClearTemplateContext() *NotificationTemplateUpdate {
+	_u.mutation.ClearTemplateContext()
+	return _u
+}
+
+// SetDefaults sets the "defaults" field.
+func (_u *NotificationTemplateUpdate) SetDefaults(v map[string]interface{}) *NotificationTemplateUpdate {
+	_u.mutation.SetDefaults(v)
+	return _u
+}
+
+// ClearDefaults clears the value of the "defaults" field.
+func (_u *NotificationTemplateUpdate) ClearDefaults() *NotificationTemplateUpdate {
+	_u.mutation.ClearDefaults()
+	return _u
+}
+
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_u *NotificationTemplateUpdate) SetIntegration(v *Integration) *NotificationTemplateUpdate {
 	return _u.SetIntegrationID(v.ID)
@@ -573,6 +625,11 @@ func (_u *NotificationTemplateUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *NotificationTemplateUpdate) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
+		if err := notificationtemplate.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.revision": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Key(); ok {
 		if err := notificationtemplate.KeyValidator(v); err != nil {
 			return &ValidationError{Name: "key", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.key": %w`, err)}
@@ -596,6 +653,11 @@ func (_u *NotificationTemplateUpdate) check() error {
 	if v, ok := _u.mutation.TopicPattern(); ok {
 		if err := notificationtemplate.TopicPatternValidator(v); err != nil {
 			return &ValidationError{Name: "topic_pattern", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.topic_pattern": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TemplateContext(); ok {
+		if err := notificationtemplate.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.template_context": %w`, err)}
 		}
 	}
 	return nil
@@ -648,6 +710,12 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(notificationtemplate.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Revision(); ok {
+		_spec.SetField(notificationtemplate.FieldRevision, field.TypeString, value)
+	}
+	if _u.mutation.RevisionCleared() {
+		_spec.ClearField(notificationtemplate.FieldRevision, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(notificationtemplate.FieldSystemOwned, field.TypeBool)
@@ -738,6 +806,18 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.AddedVersion(); ok {
 		_spec.AddField(notificationtemplate.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.TemplateContext(); ok {
+		_spec.SetField(notificationtemplate.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(notificationtemplate.FieldTemplateContext, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.Defaults(); ok {
+		_spec.SetField(notificationtemplate.FieldDefaults, field.TypeJSON, value)
+	}
+	if _u.mutation.DefaultsCleared() {
+		_spec.ClearField(notificationtemplate.FieldDefaults, field.TypeJSON)
 	}
 	if _u.mutation.IntegrationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -973,6 +1053,26 @@ func (_u *NotificationTemplateUpdateOne) SetNillableDeletedBy(v *string) *Notifi
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *NotificationTemplateUpdateOne) ClearDeletedBy() *NotificationTemplateUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetRevision sets the "revision" field.
+func (_u *NotificationTemplateUpdateOne) SetRevision(v string) *NotificationTemplateUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_u *NotificationTemplateUpdateOne) SetNillableRevision(v *string) *NotificationTemplateUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
+	}
+	return _u
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (_u *NotificationTemplateUpdateOne) ClearRevision() *NotificationTemplateUpdateOne {
+	_u.mutation.ClearRevision()
 	return _u
 }
 
@@ -1323,6 +1423,38 @@ func (_u *NotificationTemplateUpdateOne) AddVersion(v int) *NotificationTemplate
 	return _u
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_u *NotificationTemplateUpdateOne) SetTemplateContext(v enums.TemplateContext) *NotificationTemplateUpdateOne {
+	_u.mutation.SetTemplateContext(v)
+	return _u
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_u *NotificationTemplateUpdateOne) SetNillableTemplateContext(v *enums.TemplateContext) *NotificationTemplateUpdateOne {
+	if v != nil {
+		_u.SetTemplateContext(*v)
+	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *NotificationTemplateUpdateOne) ClearTemplateContext() *NotificationTemplateUpdateOne {
+	_u.mutation.ClearTemplateContext()
+	return _u
+}
+
+// SetDefaults sets the "defaults" field.
+func (_u *NotificationTemplateUpdateOne) SetDefaults(v map[string]interface{}) *NotificationTemplateUpdateOne {
+	_u.mutation.SetDefaults(v)
+	return _u
+}
+
+// ClearDefaults clears the value of the "defaults" field.
+func (_u *NotificationTemplateUpdateOne) ClearDefaults() *NotificationTemplateUpdateOne {
+	_u.mutation.ClearDefaults()
+	return _u
+}
+
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_u *NotificationTemplateUpdateOne) SetIntegration(v *Integration) *NotificationTemplateUpdateOne {
 	return _u.SetIntegrationID(v.ID)
@@ -1454,6 +1586,11 @@ func (_u *NotificationTemplateUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *NotificationTemplateUpdateOne) check() error {
+	if v, ok := _u.mutation.Revision(); ok {
+		if err := notificationtemplate.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.revision": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Key(); ok {
 		if err := notificationtemplate.KeyValidator(v); err != nil {
 			return &ValidationError{Name: "key", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.key": %w`, err)}
@@ -1477,6 +1614,11 @@ func (_u *NotificationTemplateUpdateOne) check() error {
 	if v, ok := _u.mutation.TopicPattern(); ok {
 		if err := notificationtemplate.TopicPatternValidator(v); err != nil {
 			return &ValidationError{Name: "topic_pattern", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.topic_pattern": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TemplateContext(); ok {
+		if err := notificationtemplate.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.template_context": %w`, err)}
 		}
 	}
 	return nil
@@ -1546,6 +1688,12 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(notificationtemplate.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Revision(); ok {
+		_spec.SetField(notificationtemplate.FieldRevision, field.TypeString, value)
+	}
+	if _u.mutation.RevisionCleared() {
+		_spec.ClearField(notificationtemplate.FieldRevision, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(notificationtemplate.FieldSystemOwned, field.TypeBool)
@@ -1636,6 +1784,18 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 	}
 	if value, ok := _u.mutation.AddedVersion(); ok {
 		_spec.AddField(notificationtemplate.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.TemplateContext(); ok {
+		_spec.SetField(notificationtemplate.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(notificationtemplate.FieldTemplateContext, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.Defaults(); ok {
+		_spec.SetField(notificationtemplate.FieldDefaults, field.TypeJSON, value)
+	}
+	if _u.mutation.DefaultsCleared() {
+		_spec.ClearField(notificationtemplate.FieldDefaults, field.TypeJSON)
 	}
 	if _u.mutation.IntegrationCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -38,7 +38,6 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -56,6 +55,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
         key: "generate_config"
@@ -76,6 +76,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":construction: create draft config PR"
         key: "draft_pr_automation"
@@ -208,7 +209,6 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_graphapi"
@@ -223,6 +223,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":golangci-lint: lint handlers package :lint-roller:"
         if_changed:
@@ -232,7 +233,6 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_handlers"
@@ -248,6 +248,7 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "CGO_ENABLED=0"
       - label: ":golangci-lint: lint - non-api packages :lint-roller:"
         if_changed:
           include:
@@ -260,7 +261,6 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_non_api"
@@ -275,6 +275,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
   - group: ":test_tube: Tests"
     key: "go_tests"
@@ -283,7 +284,6 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         key: "go_test_graph"
         cancel_on_build_failing: true
         if_changed:
@@ -311,16 +311,15 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "CGO_ENABLED=0"
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - handlers only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         key: "go_test_handlers"
         cancel_on_build_failing: true
         if_changed:
@@ -348,10 +347,10 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "CGO_ENABLED=0"
         artifact_paths: ["coverage-handlers.out", "junit-handlers.xml"]
       - label: ":golang: go test - all except api"
         if_changed:
@@ -363,7 +362,6 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "NYC"
         key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
@@ -385,10 +383,10 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "CGO_ENABLED=0"
         artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
       - label: ":auth0: fga model test"
         if_changed:
@@ -448,6 +446,9 @@ steps:
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         if_changed:
           include:
             - "**.go"
@@ -489,10 +490,12 @@ steps:
                 - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
       - label: ":github: upload reports"
         key: "scan-upload"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         if_changed:
           include:
             - "**.go"
-            - go.{mod,sum}
           exclude:
             - cli/**
         cancel_on_build_failing: true
@@ -581,6 +584,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
                 - GOFLAGS="-buildvcs=false -gcflags=all=-l"
@@ -624,6 +628,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
               command: ["task", "go:build-cli:ci"]
@@ -632,6 +637,9 @@ steps:
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         if_changed:
           - db/**
           - internal/ent/schema/**
@@ -647,6 +655,9 @@ steps:
       - label: ":graphql: lint graphql schema"
         key: "apollo-lint-schema"
         if_changed: "**.graphql"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         skip: "false"
         soft_fail:
           - exit_status: 1
@@ -701,7 +712,6 @@ steps:
         if_changed:
           include:
             - "**.go"
-            - go.{mod,sum}
             - docker/Dockerfile
           exclude:
             - cli/**
@@ -767,6 +777,9 @@ steps:
     steps:
       - label: ":graphql: publish graphql schema"
         key: "apollo-publish-schema"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         skip: false
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         cancel_on_build_failing: true
@@ -784,6 +797,9 @@ steps:
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -797,6 +813,9 @@ steps:
       - label: ":rocket: atlas push"
         if: build.branch == "main" && build.tag == null
         key: "atlas_migrate"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          size: $RUNNER_SMALL
         plugins:
           - theopenlane/atlas#v1.2.1:
               project: core

@@ -27,6 +27,7 @@ type detailsWithJSONMutation interface {
 type descriptionWithJSONMutation interface {
 	Description() (string, bool)
 	DescriptionJSON() ([]interface{}, bool)
+	DescriptionJSONCleared() bool
 	OldDescriptionJSON(ctx context.Context) (v []interface{}, err error)
 	ClearDescriptionJSON()
 }
@@ -216,10 +217,12 @@ func setDescriptionJSONFields(ctx context.Context, mut ent.Mutation) error {
 	if _, ok := docMut.Description(); ok {
 		descJSON, ok := docMut.DescriptionJSON()
 		if !ok || descJSON == nil {
-			if oldJSON, err := docMut.OldDescriptionJSON(ctx); err == nil && oldJSON != nil {
-				// check if old JSON contains any comments
-				if slateparser.ContainsCommentsInTextJSON(oldJSON) {
-					return ErrTextContainsComments
+			if !docMut.DescriptionJSONCleared() {
+				if oldJSON, err := docMut.OldDescriptionJSON(ctx); err == nil && oldJSON != nil {
+					// check if old JSON contains any comments
+					if slateparser.ContainsCommentsInTextJSON(oldJSON) {
+						return ErrTextContainsComments
+					}
 				}
 			}
 

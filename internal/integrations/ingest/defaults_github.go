@@ -45,7 +45,7 @@ func githubBaseEntries(category, externalIDExpr string) []celMapEntry {
 		{key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, expr: "resource"},
 		{key: integrationgenerated.IntegrationMappingVulnerabilitySource, expr: `"github"`},
 		{key: integrationgenerated.IntegrationMappingVulnerabilityCategory, expr: strconv.Quote(category)},
-		{key: integrationgenerated.IntegrationMappingVulnerabilityStatus, expr: "payload.state"},
+		{key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, expr: "payload.state"},
 		{key: integrationgenerated.IntegrationMappingVulnerabilityExternalURI, expr: "payload.html_url"},
 		{key: integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt, expr: "payload.updated_at"},
 		{key: integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt, expr: "payload.created_at"},

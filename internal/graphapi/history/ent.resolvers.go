@@ -1635,6 +1635,38 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 	return res, err
 }
 
+// SLADefinitionHistories is the resolver for the slaDefinitionHistories field.
+func (r *queryResolver) SLADefinitionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SLADefinitionHistoryOrder, where *historygenerated.SLADefinitionHistoryWhereInput) (*historygenerated.SLADefinitionHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.SLADefinitionHistoryOrder{
+			Field:     historygenerated.SLADefinitionHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SLADefinitionHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sladefinitionhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithSLADefinitionHistoryOrder(orderBy),
+		historygenerated.WithSLADefinitionHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sladefinitionhistory"})
+	}
+
+	return res, err
+}
+
 // ScanHistories is the resolver for the scanHistories field.
 func (r *queryResolver) ScanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ScanHistoryOrder, where *historygenerated.ScanHistoryWhereInput) (*historygenerated.ScanHistoryConnection, error) {
 	// set page limit if nothing was set

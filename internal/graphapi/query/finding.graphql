@@ -36,7 +36,7 @@ mutation CreateBulkCSVFinding($input: Upload!) {
       source
       sourceUpdatedAt
       state
-      status
+      findingStatusName
       stepsToReproduce
       tags
       targetDetails
@@ -86,7 +86,7 @@ mutation CreateBulkFinding($input: [CreateFindingInput!]) {
       source
       sourceUpdatedAt
       state
-      status
+      findingStatusName
       stepsToReproduce
       tags
       targetDetails
@@ -136,7 +136,7 @@ mutation CreateFinding($input: CreateFindingInput!) {
       source
       sourceUpdatedAt
       state
-      status
+      findingStatusName
       stepsToReproduce
       tags
       targetDetails
@@ -200,7 +200,7 @@ query GetAllFindings {
         source
         sourceUpdatedAt
         state
-        status
+        findingStatusName
         stepsToReproduce
         tags
         targetDetails
@@ -269,7 +269,7 @@ query GetFindingByID($findingId: ID!) {
     source
     sourceUpdatedAt
     state
-    status
+    findingStatusName
     stepsToReproduce
     tags
     targetDetails
@@ -346,7 +346,7 @@ query GetFindings($first: Int, $last: Int, $where: FindingWhereInput) {
         source
         sourceUpdatedAt
         state
-        status
+        findingStatusName
         stepsToReproduce
         tags
         targetDetails
@@ -416,7 +416,7 @@ mutation UpdateBulkFinding($ids: [ID!]!, $input: UpdateFindingInput!) {
       source
       sourceUpdatedAt
       state
-      status
+      findingStatusName
       stepsToReproduce
       tags
       targetDetails
@@ -467,7 +467,7 @@ mutation UpdateBulkCSVFinding($input: Upload!) {
       source
       sourceUpdatedAt
       state
-      status
+      findingStatusName
       stepsToReproduce
       tags
       targetDetails
@@ -524,7 +524,7 @@ mutation UpdateFinding($updateFindingId: ID!, $input: UpdateFindingInput!) {
       source
       sourceUpdatedAt
       state
-      status
+      findingStatusName
       stepsToReproduce
       tags
       targetDetails

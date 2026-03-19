@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -170,6 +171,26 @@ func IntegrationType(v string) predicate.IntegrationHistory {
 // PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
 func PlatformID(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// DefinitionID applies equality check predicate on the "definition_id" field. It's identical to DefinitionIDEQ.
+func DefinitionID(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldDefinitionID, v))
+}
+
+// DefinitionVersion applies equality check predicate on the "definition_version" field. It's identical to DefinitionVersionEQ.
+func DefinitionVersion(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldDefinitionVersion, v))
+}
+
+// DefinitionSlug applies equality check predicate on the "definition_slug" field. It's identical to DefinitionSlugEQ.
+func DefinitionSlug(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldDefinitionSlug, v))
+}
+
+// Family applies equality check predicate on the "family" field. It's identical to FamilyEQ.
+func Family(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldFamily, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1640,6 +1661,346 @@ func MetadataIsNil() predicate.IntegrationHistory {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// DefinitionIDEQ applies the EQ predicate on the "definition_id" field.
+func DefinitionIDEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldDefinitionID, v))
+}
+
+// DefinitionIDNEQ applies the NEQ predicate on the "definition_id" field.
+func DefinitionIDNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldDefinitionID, v))
+}
+
+// DefinitionIDIn applies the In predicate on the "definition_id" field.
+func DefinitionIDIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldDefinitionID, vs...))
+}
+
+// DefinitionIDNotIn applies the NotIn predicate on the "definition_id" field.
+func DefinitionIDNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldDefinitionID, vs...))
+}
+
+// DefinitionIDGT applies the GT predicate on the "definition_id" field.
+func DefinitionIDGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldDefinitionID, v))
+}
+
+// DefinitionIDGTE applies the GTE predicate on the "definition_id" field.
+func DefinitionIDGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldDefinitionID, v))
+}
+
+// DefinitionIDLT applies the LT predicate on the "definition_id" field.
+func DefinitionIDLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldDefinitionID, v))
+}
+
+// DefinitionIDLTE applies the LTE predicate on the "definition_id" field.
+func DefinitionIDLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldDefinitionID, v))
+}
+
+// DefinitionIDContains applies the Contains predicate on the "definition_id" field.
+func DefinitionIDContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldDefinitionID, v))
+}
+
+// DefinitionIDHasPrefix applies the HasPrefix predicate on the "definition_id" field.
+func DefinitionIDHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldDefinitionID, v))
+}
+
+// DefinitionIDHasSuffix applies the HasSuffix predicate on the "definition_id" field.
+func DefinitionIDHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldDefinitionID, v))
+}
+
+// DefinitionIDIsNil applies the IsNil predicate on the "definition_id" field.
+func DefinitionIDIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldDefinitionID))
+}
+
+// DefinitionIDNotNil applies the NotNil predicate on the "definition_id" field.
+func DefinitionIDNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldDefinitionID))
+}
+
+// DefinitionIDEqualFold applies the EqualFold predicate on the "definition_id" field.
+func DefinitionIDEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldDefinitionID, v))
+}
+
+// DefinitionIDContainsFold applies the ContainsFold predicate on the "definition_id" field.
+func DefinitionIDContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldDefinitionID, v))
+}
+
+// DefinitionVersionEQ applies the EQ predicate on the "definition_version" field.
+func DefinitionVersionEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionNEQ applies the NEQ predicate on the "definition_version" field.
+func DefinitionVersionNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionIn applies the In predicate on the "definition_version" field.
+func DefinitionVersionIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldDefinitionVersion, vs...))
+}
+
+// DefinitionVersionNotIn applies the NotIn predicate on the "definition_version" field.
+func DefinitionVersionNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldDefinitionVersion, vs...))
+}
+
+// DefinitionVersionGT applies the GT predicate on the "definition_version" field.
+func DefinitionVersionGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionGTE applies the GTE predicate on the "definition_version" field.
+func DefinitionVersionGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionLT applies the LT predicate on the "definition_version" field.
+func DefinitionVersionLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionLTE applies the LTE predicate on the "definition_version" field.
+func DefinitionVersionLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionContains applies the Contains predicate on the "definition_version" field.
+func DefinitionVersionContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionHasPrefix applies the HasPrefix predicate on the "definition_version" field.
+func DefinitionVersionHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionHasSuffix applies the HasSuffix predicate on the "definition_version" field.
+func DefinitionVersionHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionIsNil applies the IsNil predicate on the "definition_version" field.
+func DefinitionVersionIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldDefinitionVersion))
+}
+
+// DefinitionVersionNotNil applies the NotNil predicate on the "definition_version" field.
+func DefinitionVersionNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldDefinitionVersion))
+}
+
+// DefinitionVersionEqualFold applies the EqualFold predicate on the "definition_version" field.
+func DefinitionVersionEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldDefinitionVersion, v))
+}
+
+// DefinitionVersionContainsFold applies the ContainsFold predicate on the "definition_version" field.
+func DefinitionVersionContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldDefinitionVersion, v))
+}
+
+// DefinitionSlugEQ applies the EQ predicate on the "definition_slug" field.
+func DefinitionSlugEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugNEQ applies the NEQ predicate on the "definition_slug" field.
+func DefinitionSlugNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugIn applies the In predicate on the "definition_slug" field.
+func DefinitionSlugIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldDefinitionSlug, vs...))
+}
+
+// DefinitionSlugNotIn applies the NotIn predicate on the "definition_slug" field.
+func DefinitionSlugNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldDefinitionSlug, vs...))
+}
+
+// DefinitionSlugGT applies the GT predicate on the "definition_slug" field.
+func DefinitionSlugGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugGTE applies the GTE predicate on the "definition_slug" field.
+func DefinitionSlugGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugLT applies the LT predicate on the "definition_slug" field.
+func DefinitionSlugLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugLTE applies the LTE predicate on the "definition_slug" field.
+func DefinitionSlugLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugContains applies the Contains predicate on the "definition_slug" field.
+func DefinitionSlugContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugHasPrefix applies the HasPrefix predicate on the "definition_slug" field.
+func DefinitionSlugHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugHasSuffix applies the HasSuffix predicate on the "definition_slug" field.
+func DefinitionSlugHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugIsNil applies the IsNil predicate on the "definition_slug" field.
+func DefinitionSlugIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldDefinitionSlug))
+}
+
+// DefinitionSlugNotNil applies the NotNil predicate on the "definition_slug" field.
+func DefinitionSlugNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldDefinitionSlug))
+}
+
+// DefinitionSlugEqualFold applies the EqualFold predicate on the "definition_slug" field.
+func DefinitionSlugEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldDefinitionSlug, v))
+}
+
+// DefinitionSlugContainsFold applies the ContainsFold predicate on the "definition_slug" field.
+func DefinitionSlugContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldDefinitionSlug, v))
+}
+
+// FamilyEQ applies the EQ predicate on the "family" field.
+func FamilyEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldFamily, v))
+}
+
+// FamilyNEQ applies the NEQ predicate on the "family" field.
+func FamilyNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldFamily, v))
+}
+
+// FamilyIn applies the In predicate on the "family" field.
+func FamilyIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldFamily, vs...))
+}
+
+// FamilyNotIn applies the NotIn predicate on the "family" field.
+func FamilyNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldFamily, vs...))
+}
+
+// FamilyGT applies the GT predicate on the "family" field.
+func FamilyGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldFamily, v))
+}
+
+// FamilyGTE applies the GTE predicate on the "family" field.
+func FamilyGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldFamily, v))
+}
+
+// FamilyLT applies the LT predicate on the "family" field.
+func FamilyLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldFamily, v))
+}
+
+// FamilyLTE applies the LTE predicate on the "family" field.
+func FamilyLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldFamily, v))
+}
+
+// FamilyContains applies the Contains predicate on the "family" field.
+func FamilyContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldFamily, v))
+}
+
+// FamilyHasPrefix applies the HasPrefix predicate on the "family" field.
+func FamilyHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldFamily, v))
+}
+
+// FamilyHasSuffix applies the HasSuffix predicate on the "family" field.
+func FamilyHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldFamily, v))
+}
+
+// FamilyIsNil applies the IsNil predicate on the "family" field.
+func FamilyIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldFamily))
+}
+
+// FamilyNotNil applies the NotNil predicate on the "family" field.
+func FamilyNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldFamily))
+}
+
+// FamilyEqualFold applies the EqualFold predicate on the "family" field.
+func FamilyEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldFamily, v))
+}
+
+// FamilyContainsFold applies the ContainsFold predicate on the "family" field.
+func FamilyContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldFamily, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v enums.IntegrationStatus) predicate.IntegrationHistory {
+	vc := v
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldStatus, vc))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v enums.IntegrationStatus) predicate.IntegrationHistory {
+	vc := v
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldStatus, vc))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...enums.IntegrationStatus) predicate.IntegrationHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationHistory(sql.FieldIn(FieldStatus, v...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...enums.IntegrationStatus) predicate.IntegrationHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// ProviderMetadataSnapshotIsNil applies the IsNil predicate on the "provider_metadata_snapshot" field.
+func ProviderMetadataSnapshotIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldProviderMetadataSnapshot))
+}
+
+// ProviderMetadataSnapshotNotNil applies the NotNil predicate on the "provider_metadata_snapshot" field.
+func ProviderMetadataSnapshotNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldProviderMetadataSnapshot))
 }
 
 // And groups predicates with the AND operator between them.

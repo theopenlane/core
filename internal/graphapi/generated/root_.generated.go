@@ -744,6 +744,7 @@ type ComplexityRoot struct {
 		Platforms                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		PublicRepresentation       func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
 		ReferenceFrameworkRevision func(childComplexity int) int
@@ -760,6 +761,7 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		Standard                   func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
@@ -1615,9 +1617,11 @@ type ComplexityRoot struct {
 		Campaigns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
+		Defaults              func(childComplexity int) int
 		Description           func(childComplexity int) int
 		EmailBranding         func(childComplexity int) int
 		EmailBrandingID       func(childComplexity int) int
+		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Format                func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		Integration           func(childComplexity int) int
@@ -1632,9 +1636,11 @@ type ComplexityRoot struct {
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
 		PreheaderTemplate     func(childComplexity int) int
+		Revision              func(childComplexity int) int
 		SubjectTemplate       func(childComplexity int) int
 		SystemInternalID      func(childComplexity int) int
 		SystemOwned           func(childComplexity int) int
+		TemplateContext       func(childComplexity int) int
 		TextTemplate          func(childComplexity int) int
 		Uischema              func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
@@ -2154,6 +2160,9 @@ type ComplexityRoot struct {
 		ExternalURI        func(childComplexity int) int
 		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		FindingClass       func(childComplexity int) int
+		FindingStatus      func(childComplexity int) int
+		FindingStatusID    func(childComplexity int) int
+		FindingStatusName  func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		IdentityHolders    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Impact             func(childComplexity int) int
@@ -2183,6 +2192,7 @@ type ComplexityRoot struct {
 		ScopeID            func(childComplexity int) int
 		ScopeName          func(childComplexity int) int
 		Score              func(childComplexity int) int
+		SecurityLevel      func(childComplexity int) int
 		Severity           func(childComplexity int) int
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
@@ -2681,46 +2691,52 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
-		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DirectoryAccounts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
-		DirectoryGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
-		DirectoryMemberships  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRuns     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
-		EmailTemplates        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
-		Entities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment           func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID                    func(childComplexity int) int
-		IntegrationType       func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Kind                  func(childComplexity int) int
-		Metadata              func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		NotificationTemplates func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Platform              func(childComplexity int) int
-		PlatformID            func(childComplexity int) int
-		Remediations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Scope                 func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Secrets               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Tasks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		Vulnerabilities       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		DefinitionID             func(childComplexity int) int
+		DefinitionSlug           func(childComplexity int) int
+		DefinitionVersion        func(childComplexity int) int
+		Description              func(childComplexity int) int
+		DirectoryAccounts        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRuns        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		EmailTemplates           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
+		Entities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment              func(childComplexity int) int
+		EnvironmentID            func(childComplexity int) int
+		EnvironmentName          func(childComplexity int) int
+		Events                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Family                   func(childComplexity int) int
+		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                       func(childComplexity int) int
+		IntegrationType          func(childComplexity int) int
+		InternalNotes            func(childComplexity int) int
+		Kind                     func(childComplexity int) int
+		Metadata                 func(childComplexity int) int
+		Name                     func(childComplexity int) int
+		NotificationTemplates    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		Owner                    func(childComplexity int) int
+		OwnerID                  func(childComplexity int) int
+		Platform                 func(childComplexity int) int
+		PlatformID               func(childComplexity int) int
+		ProviderMetadataSnapshot func(childComplexity int) int
+		Remediations             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Scope                    func(childComplexity int) int
+		ScopeID                  func(childComplexity int) int
+		ScopeName                func(childComplexity int) int
+		Secrets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Status                   func(childComplexity int) int
+		SystemInternalID         func(childComplexity int) int
+		SystemOwned              func(childComplexity int) int
+		Tags                     func(childComplexity int) int
+		Tasks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
+		Vulnerabilities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	IntegrationConnection struct {
@@ -3293,6 +3309,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
@@ -3356,6 +3373,7 @@ type ComplexityRoot struct {
 		CreateBulkRemediation                func(childComplexity int, input []*generated.CreateRemediationInput) int
 		CreateBulkReview                     func(childComplexity int, input []*generated.CreateReviewInput) int
 		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkSLADefinition              func(childComplexity int, input []*generated.CreateSLADefinitionInput) int
 		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
 		CreateBulkScheduledJob               func(childComplexity int, input []*generated.CreateScheduledJobInput) int
 		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
@@ -3436,6 +3454,7 @@ type ComplexityRoot struct {
 		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
 		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
+		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
@@ -3456,8 +3475,8 @@ type ComplexityRoot struct {
 		CreateTrustCenterFaq                 func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
 		CreateTrustCenterNDARequest          func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
 		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
-		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
+		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
 		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
@@ -3511,6 +3530,7 @@ type ComplexityRoot struct {
 		DeleteBulkRemediation                func(childComplexity int, ids []string) int
 		DeleteBulkReview                     func(childComplexity int, ids []string) int
 		DeleteBulkRisk                       func(childComplexity int, ids []string) int
+		DeleteBulkSLADefinition              func(childComplexity int, ids []string) int
 		DeleteBulkScan                       func(childComplexity int, ids []string) int
 		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
 		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
@@ -3580,6 +3600,7 @@ type ComplexityRoot struct {
 		DeleteRemediation                    func(childComplexity int, id string) int
 		DeleteReview                         func(childComplexity int, id string) int
 		DeleteRisk                           func(childComplexity int, id string) int
+		DeleteSLADefinition                  func(childComplexity int, id string) int
 		DeleteScan                           func(childComplexity int, id string) int
 		DeleteScheduledJob                   func(childComplexity int, id string) int
 		DeleteScheduledJobRun                func(childComplexity int, id string) int
@@ -3664,6 +3685,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
@@ -3712,6 +3734,7 @@ type ComplexityRoot struct {
 		UpdateBulkRemediation                func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
 		UpdateBulkReview                     func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
+		UpdateBulkSLADefinition              func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
 		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
 		UpdateBulkSubcontrol                 func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
@@ -3781,6 +3804,7 @@ type ComplexityRoot struct {
 		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
@@ -3804,8 +3828,8 @@ type ComplexityRoot struct {
 		UpdateTrustCenterNDARequest          func(childComplexity int, id string, input generated.UpdateTrustCenterNDARequestInput) int
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
+		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
 		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
@@ -4031,6 +4055,7 @@ type ComplexityRoot struct {
 		Channel              func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
 		EmailTemplate        func(childComplexity int) int
 		EmailTemplateID      func(childComplexity int) int
@@ -4047,9 +4072,11 @@ type ComplexityRoot struct {
 		Notifications        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NotificationOrder) int
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		Revision             func(childComplexity int) int
 		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
+		TemplateContext      func(childComplexity int) int
 		TitleTemplate        func(childComplexity int) int
 		TopicPattern         func(childComplexity int) int
 		Uischema             func(childComplexity int) int
@@ -4279,6 +4306,7 @@ type ComplexityRoot struct {
 		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		SLADefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) int
 		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ScheduledJobRuns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
@@ -5005,6 +5033,8 @@ type ComplexityRoot struct {
 		Risk                            func(childComplexity int, id string) int
 		RiskSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		SLADefinition                   func(childComplexity int, id string) int
+		SLADefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) int
 		Scan                            func(childComplexity int, id string) int
 		ScanSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
@@ -5364,6 +5394,62 @@ type ComplexityRoot struct {
 		Risk func(childComplexity int) int
 	}
 
+	SLADefinition struct {
+		BlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CreatedAt                      func(childComplexity int) int
+		CreatedBy                      func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
+		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                             func(childComplexity int) int
+		Owner                          func(childComplexity int) int
+		OwnerID                        func(childComplexity int) int
+		SLADays                        func(childComplexity int) int
+		SLADefinitionSeverityLevel     func(childComplexity int) int
+		SLADefinitionSeverityLevelID   func(childComplexity int) int
+		SLADefinitionSeverityLevelName func(childComplexity int) int
+		SecurityLevel                  func(childComplexity int) int
+		Tags                           func(childComplexity int) int
+		UpdatedAt                      func(childComplexity int) int
+		UpdatedBy                      func(childComplexity int) int
+		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+	}
+
+	SLADefinitionBulkCreatePayload struct {
+		SLADefinitions func(childComplexity int) int
+	}
+
+	SLADefinitionBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	SLADefinitionBulkUpdatePayload struct {
+		SLADefinitions func(childComplexity int) int
+		UpdatedIDs     func(childComplexity int) int
+	}
+
+	SLADefinitionConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SLADefinitionCreatePayload struct {
+		SLADefinition func(childComplexity int) int
+	}
+
+	SLADefinitionDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	SLADefinitionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SLADefinitionUpdatePayload struct {
+		SLADefinition func(childComplexity int) int
+	}
+
 	Scan struct {
 		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Assets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
@@ -5714,6 +5800,7 @@ type ComplexityRoot struct {
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
 		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		PublicRepresentation       func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
 		ReferenceFrameworkRevision func(childComplexity int) int
@@ -5724,6 +5811,7 @@ type ComplexityRoot struct {
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
 		SubcontrolKind             func(childComplexity int) int
@@ -6549,6 +6637,8 @@ type ComplexityRoot struct {
 		FaviconRemoteURL         func(childComplexity int) int
 		Font                     func(childComplexity int) int
 		ForegroundColor          func(childComplexity int) int
+		HeroImageFile            func(childComplexity int) int
+		HeroImageLocalFileID     func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		LogoFile                 func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
@@ -6833,71 +6923,75 @@ type ComplexityRoot struct {
 	}
 
 	Vulnerability struct {
-		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Blocking         func(childComplexity int) int
-		Category         func(childComplexity int) int
-		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CveID            func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DiscoveredAt     func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		Exploitability   func(childComplexity int) int
-		ExternalID       func(childComplexity int) int
-		ExternalOwnerID  func(childComplexity int) int
-		ExternalURI      func(childComplexity int) int
-		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		Impacts          func(childComplexity int) int
-		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalNotes    func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Open             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Priority         func(childComplexity int) int
-		Production       func(childComplexity int) int
-		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Public           func(childComplexity int) int
-		PublishedAt      func(childComplexity int) int
-		RawPayload       func(childComplexity int) int
-		References       func(childComplexity int) int
-		RemediationSLA   func(childComplexity int) int
-		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Scope            func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		Score            func(childComplexity int) int
-		Severity         func(childComplexity int) int
-		Source           func(childComplexity int) int
-		SourceUpdatedAt  func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary          func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Validated        func(childComplexity int) int
-		Vector           func(childComplexity int) int
-		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ActionPlans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Blocking                func(childComplexity int) int
+		Category                func(childComplexity int) int
+		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		CveID                   func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DiscoveredAt            func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		DisplayName             func(childComplexity int) int
+		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		Exploitability          func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalOwnerID         func(childComplexity int) int
+		ExternalURI             func(childComplexity int) int
+		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                      func(childComplexity int) int
+		Impact                  func(childComplexity int) int
+		Impacts                 func(childComplexity int) int
+		Integrations            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes           func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Open                    func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Priority                func(childComplexity int) int
+		Production              func(childComplexity int) int
+		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Public                  func(childComplexity int) int
+		PublishedAt             func(childComplexity int) int
+		RawPayload              func(childComplexity int) int
+		References              func(childComplexity int) int
+		RemediationSLA          func(childComplexity int) int
+		Remediations            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                   func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Score                   func(childComplexity int) int
+		SecurityLevel           func(childComplexity int) int
+		Severity                func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceUpdatedAt         func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary                 func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		Validated               func(childComplexity int) int
+		Vector                  func(childComplexity int) int
+		Viewers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		VulnerabilityStatus     func(childComplexity int) int
+		VulnerabilityStatusID   func(childComplexity int) int
+		VulnerabilityStatusName func(childComplexity int) int
 	}
 
 	VulnerabilityBulkCreatePayload struct {
@@ -10957,6 +11051,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "Control.publicRepresentation":
+		if e.ComplexityRoot.Control.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.PublicRepresentation(childComplexity), true
+
 	case "Control.refCode":
 		if e.ComplexityRoot.Control.RefCode == nil {
 			break
@@ -11093,6 +11194,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.Source(childComplexity), true
+
+	case "Control.sourceName":
+		if e.ComplexityRoot.Control.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.SourceName(childComplexity), true
 
 	case "Control.standard":
 		if e.ComplexityRoot.Control.Standard == nil {
@@ -14934,6 +15042,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.CreatedBy(childComplexity), true
 
+	case "EmailTemplate.defaults":
+		if e.ComplexityRoot.EmailTemplate.Defaults == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplate.Defaults(childComplexity), true
+
 	case "EmailTemplate.description":
 		if e.ComplexityRoot.EmailTemplate.Description == nil {
 			break
@@ -14954,6 +15069,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.EmailBrandingID(childComplexity), true
+
+	case "EmailTemplate.files":
+		if e.ComplexityRoot.EmailTemplate.Files == nil {
+			break
+		}
+
+		args, err := ec.field_EmailTemplate_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.EmailTemplate.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "EmailTemplate.format":
 		if e.ComplexityRoot.EmailTemplate.Format == nil {
@@ -15058,6 +15185,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.PreheaderTemplate(childComplexity), true
 
+	case "EmailTemplate.revision":
+		if e.ComplexityRoot.EmailTemplate.Revision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplate.Revision(childComplexity), true
+
 	case "EmailTemplate.subjectTemplate":
 		if e.ComplexityRoot.EmailTemplate.SubjectTemplate == nil {
 			break
@@ -15078,6 +15212,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.SystemOwned(childComplexity), true
+
+	case "EmailTemplate.templateContext":
+		if e.ComplexityRoot.EmailTemplate.TemplateContext == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplate.TemplateContext(childComplexity), true
 
 	case "EmailTemplate.textTemplate":
 		if e.ComplexityRoot.EmailTemplate.TextTemplate == nil {
@@ -17825,6 +17966,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Finding.FindingClass(childComplexity), true
 
+	case "Finding.findingStatus":
+		if e.ComplexityRoot.Finding.FindingStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingStatus(childComplexity), true
+
+	case "Finding.findingStatusID":
+		if e.ComplexityRoot.Finding.FindingStatusID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingStatusID(childComplexity), true
+
+	case "Finding.findingStatusName":
+		if e.ComplexityRoot.Finding.FindingStatusName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingStatusName(childComplexity), true
+
 	case "Finding.id":
 		if e.ComplexityRoot.Finding.ID == nil {
 			break
@@ -18062,6 +18224,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Finding.Score(childComplexity), true
+
+	case "Finding.securityLevel":
+		if e.ComplexityRoot.Finding.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.SecurityLevel(childComplexity), true
 
 	case "Finding.severity":
 		if e.ComplexityRoot.Finding.Severity == nil {
@@ -20601,6 +20770,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Integration.CreatedBy(childComplexity), true
 
+	case "Integration.definitionID":
+		if e.ComplexityRoot.Integration.DefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.DefinitionID(childComplexity), true
+
+	case "Integration.definitionSlug":
+		if e.ComplexityRoot.Integration.DefinitionSlug == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.DefinitionSlug(childComplexity), true
+
+	case "Integration.definitionVersion":
+		if e.ComplexityRoot.Integration.DefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.DefinitionVersion(childComplexity), true
+
 	case "Integration.description":
 		if e.ComplexityRoot.Integration.Description == nil {
 			break
@@ -20713,6 +20903,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Integration.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
 
+	case "Integration.family":
+		if e.ComplexityRoot.Integration.Family == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.Family(childComplexity), true
+
 	case "Integration.files":
 		if e.ComplexityRoot.Integration.Files == nil {
 			break
@@ -20819,6 +21016,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Integration.PlatformID(childComplexity), true
 
+	case "Integration.providerMetadataSnapshot":
+		if e.ComplexityRoot.Integration.ProviderMetadataSnapshot == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.ProviderMetadataSnapshot(childComplexity), true
+
 	case "Integration.remediations":
 		if e.ComplexityRoot.Integration.Remediations == nil {
 			break
@@ -20875,6 +21079,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.Secrets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.HushOrder), args["where"].(*generated.HushWhereInput)), true
+
+	case "Integration.status":
+		if e.ComplexityRoot.Integration.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.Status(childComplexity), true
 
 	case "Integration.systemInternalID":
 		if e.ComplexityRoot.Integration.SystemInternalID == nil {
@@ -23856,6 +24067,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVSLADefinition":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVSLADefinition(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVScan":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVScan == nil {
 			break
@@ -24611,6 +24834,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkRisk(childComplexity, args["input"].([]*generated.CreateRiskInput)), true
+
+	case "Mutation.createBulkSLADefinition":
+		if e.ComplexityRoot.Mutation.CreateBulkSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkSLADefinition(childComplexity, args["input"].([]*generated.CreateSLADefinitionInput)), true
 
 	case "Mutation.createBulkScan":
 		if e.ComplexityRoot.Mutation.CreateBulkScan == nil {
@@ -25572,6 +25807,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateRisk(childComplexity, args["input"].(generated.CreateRiskInput)), true
 
+	case "Mutation.createSLADefinition":
+		if e.ComplexityRoot.Mutation.CreateSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateSLADefinition(childComplexity, args["input"].(generated.CreateSLADefinitionInput)), true
+
 	case "Mutation.createScan":
 		if e.ComplexityRoot.Mutation.CreateScan == nil {
 			break
@@ -25822,7 +26069,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.createTrustCenterSetting":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterSetting == nil {
@@ -25834,7 +26081,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.createTrustCenterSubprocessor":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterSubprocessor == nil {
@@ -26471,6 +26718,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkRisk(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkSLADefinition":
+		if e.ComplexityRoot.Mutation.DeleteBulkSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkSLADefinition(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteBulkScan":
 		if e.ComplexityRoot.Mutation.DeleteBulkScan == nil {
@@ -27299,6 +27558,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteRisk(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteSLADefinition":
+		if e.ComplexityRoot.Mutation.DeleteSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteSLADefinition(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteScan":
 		if e.ComplexityRoot.Mutation.DeleteScan == nil {
@@ -28303,6 +28574,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVSLADefinition":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVSLADefinition(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVScan":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVScan == nil {
 			break
@@ -28878,6 +29161,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkRisk(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRiskInput)), true
+
+	case "Mutation.updateBulkSLADefinition":
+		if e.ComplexityRoot.Mutation.UpdateBulkSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkSLADefinition(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSLADefinitionInput)), true
 
 	case "Mutation.updateBulkScan":
 		if e.ComplexityRoot.Mutation.UpdateBulkScan == nil {
@@ -29707,6 +30002,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateRiskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
+	case "Mutation.updateSLADefinition":
+		if e.ComplexityRoot.Mutation.UpdateSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateSLADefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateSLADefinitionInput)), true
+
 	case "Mutation.updateScan":
 		if e.ComplexityRoot.Mutation.UpdateScan == nil {
 			break
@@ -29993,7 +30300,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterSetting == nil {
@@ -30005,7 +30312,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSubprocessor":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterSubprocessor == nil {
@@ -31126,6 +31433,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplate.CreatedBy(childComplexity), true
 
+	case "NotificationTemplate.defaults":
+		if e.ComplexityRoot.NotificationTemplate.Defaults == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplate.Defaults(childComplexity), true
+
 	case "NotificationTemplate.description":
 		if e.ComplexityRoot.NotificationTemplate.Description == nil {
 			break
@@ -31243,6 +31557,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplate.OwnerID(childComplexity), true
 
+	case "NotificationTemplate.revision":
+		if e.ComplexityRoot.NotificationTemplate.Revision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplate.Revision(childComplexity), true
+
 	case "NotificationTemplate.subjectTemplate":
 		if e.ComplexityRoot.NotificationTemplate.SubjectTemplate == nil {
 			break
@@ -31263,6 +31584,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplate.SystemOwned(childComplexity), true
+
+	case "NotificationTemplate.templateContext":
+		if e.ComplexityRoot.NotificationTemplate.TemplateContext == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplate.TemplateContext(childComplexity), true
 
 	case "NotificationTemplate.titleTemplate":
 		if e.ComplexityRoot.NotificationTemplate.TitleTemplate == nil {
@@ -32712,6 +33040,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Organization.slaDefinitions":
+		if e.ComplexityRoot.Organization.SLADefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_slaDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.SLADefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SLADefinitionOrder), args["where"].(*generated.SLADefinitionWhereInput)), true
 
 	case "Organization.scans":
 		if e.ComplexityRoot.Organization.Scans == nil {
@@ -37796,6 +38136,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Query.slaDefinition":
+		if e.ComplexityRoot.Query.SLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Query_slaDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SLADefinition(childComplexity, args["id"].(string)), true
+
+	case "Query.slaDefinitions":
+		if e.ComplexityRoot.Query.SLADefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_slaDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SLADefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SLADefinitionOrder), args["where"].(*generated.SLADefinitionWhereInput)), true
+
 	case "Query.scan":
 		if e.ComplexityRoot.Query.Scan == nil {
 			break
@@ -40368,6 +40732,224 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskUpdatePayload.Risk(childComplexity), true
 
+	case "SLADefinition.blockedGroups":
+		if e.ComplexityRoot.SLADefinition.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_SLADefinition_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SLADefinition.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "SLADefinition.createdAt":
+		if e.ComplexityRoot.SLADefinition.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.CreatedAt(childComplexity), true
+
+	case "SLADefinition.createdBy":
+		if e.ComplexityRoot.SLADefinition.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.CreatedBy(childComplexity), true
+
+	case "SLADefinition.displayID":
+		if e.ComplexityRoot.SLADefinition.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.DisplayID(childComplexity), true
+
+	case "SLADefinition.editors":
+		if e.ComplexityRoot.SLADefinition.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_SLADefinition_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SLADefinition.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "SLADefinition.id":
+		if e.ComplexityRoot.SLADefinition.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.ID(childComplexity), true
+
+	case "SLADefinition.owner":
+		if e.ComplexityRoot.SLADefinition.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.Owner(childComplexity), true
+
+	case "SLADefinition.ownerID":
+		if e.ComplexityRoot.SLADefinition.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.OwnerID(childComplexity), true
+
+	case "SLADefinition.slaDays":
+		if e.ComplexityRoot.SLADefinition.SLADays == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADays(childComplexity), true
+
+	case "SLADefinition.slaDefinitionSeverityLevel":
+		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevel(childComplexity), true
+
+	case "SLADefinition.slaDefinitionSeverityLevelID":
+		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelID(childComplexity), true
+
+	case "SLADefinition.slaDefinitionSeverityLevelName":
+		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName(childComplexity), true
+
+	case "SLADefinition.securityLevel":
+		if e.ComplexityRoot.SLADefinition.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SecurityLevel(childComplexity), true
+
+	case "SLADefinition.tags":
+		if e.ComplexityRoot.SLADefinition.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.Tags(childComplexity), true
+
+	case "SLADefinition.updatedAt":
+		if e.ComplexityRoot.SLADefinition.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.UpdatedAt(childComplexity), true
+
+	case "SLADefinition.updatedBy":
+		if e.ComplexityRoot.SLADefinition.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.UpdatedBy(childComplexity), true
+
+	case "SLADefinition.viewers":
+		if e.ComplexityRoot.SLADefinition.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_SLADefinition_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SLADefinition.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "SLADefinitionBulkCreatePayload.slaDefinitions":
+		if e.ComplexityRoot.SLADefinitionBulkCreatePayload.SLADefinitions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkCreatePayload.SLADefinitions(childComplexity), true
+
+	case "SLADefinitionBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.SLADefinitionBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "SLADefinitionBulkUpdatePayload.slaDefinitions":
+		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.SLADefinitions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkUpdatePayload.SLADefinitions(childComplexity), true
+
+	case "SLADefinitionBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "SLADefinitionConnection.edges":
+		if e.ComplexityRoot.SLADefinitionConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionConnection.Edges(childComplexity), true
+
+	case "SLADefinitionConnection.pageInfo":
+		if e.ComplexityRoot.SLADefinitionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionConnection.PageInfo(childComplexity), true
+
+	case "SLADefinitionConnection.totalCount":
+		if e.ComplexityRoot.SLADefinitionConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionConnection.TotalCount(childComplexity), true
+
+	case "SLADefinitionCreatePayload.slaDefinition":
+		if e.ComplexityRoot.SLADefinitionCreatePayload.SLADefinition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionCreatePayload.SLADefinition(childComplexity), true
+
+	case "SLADefinitionDeletePayload.deletedID":
+		if e.ComplexityRoot.SLADefinitionDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionDeletePayload.DeletedID(childComplexity), true
+
+	case "SLADefinitionEdge.cursor":
+		if e.ComplexityRoot.SLADefinitionEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionEdge.Cursor(childComplexity), true
+
+	case "SLADefinitionEdge.node":
+		if e.ComplexityRoot.SLADefinitionEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionEdge.Node(childComplexity), true
+
+	case "SLADefinitionUpdatePayload.slaDefinition":
+		if e.ComplexityRoot.SLADefinitionUpdatePayload.SLADefinition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionUpdatePayload.SLADefinition(childComplexity), true
+
 	case "Scan.actionPlans":
 		if e.ComplexityRoot.Scan.ActionPlans == nil {
 			break
@@ -42237,6 +42819,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 
+	case "Subcontrol.publicRepresentation":
+		if e.ComplexityRoot.Subcontrol.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.PublicRepresentation(childComplexity), true
+
 	case "Subcontrol.refCode":
 		if e.ComplexityRoot.Subcontrol.RefCode == nil {
 			break
@@ -42316,6 +42905,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.Source(childComplexity), true
+
+	case "Subcontrol.sourceName":
+		if e.ComplexityRoot.Subcontrol.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.SourceName(childComplexity), true
 
 	case "Subcontrol.status":
 		if e.ComplexityRoot.Subcontrol.Status == nil {
@@ -45864,6 +46460,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterSetting.ForegroundColor(childComplexity), true
 
+	case "TrustCenterSetting.heroImageFile":
+		if e.ComplexityRoot.TrustCenterSetting.HeroImageFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.HeroImageFile(childComplexity), true
+
+	case "TrustCenterSetting.heroImageLocalFileID":
+		if e.ComplexityRoot.TrustCenterSetting.HeroImageLocalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.HeroImageLocalFileID(childComplexity), true
+
 	case "TrustCenterSetting.id":
 		if e.ComplexityRoot.TrustCenterSetting.ID == nil {
 			break
@@ -47573,6 +48183,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Vulnerability.Score(childComplexity), true
 
+	case "Vulnerability.securityLevel":
+		if e.ComplexityRoot.Vulnerability.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.SecurityLevel(childComplexity), true
+
 	case "Vulnerability.severity":
 		if e.ComplexityRoot.Vulnerability.Severity == nil {
 			break
@@ -47692,6 +48309,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Vulnerability.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Vulnerability.vulnerabilityStatus":
+		if e.ComplexityRoot.Vulnerability.VulnerabilityStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilityStatus(childComplexity), true
+
+	case "Vulnerability.vulnerabilityStatusID":
+		if e.ComplexityRoot.Vulnerability.VulnerabilityStatusID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilityStatusID(childComplexity), true
+
+	case "Vulnerability.vulnerabilityStatusName":
+		if e.ComplexityRoot.Vulnerability.VulnerabilityStatusName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilityStatusName(childComplexity), true
 
 	case "VulnerabilityBulkCreatePayload.vulnerabilities":
 		if e.ComplexityRoot.VulnerabilityBulkCreatePayload.Vulnerabilities == nil {
@@ -49891,6 +50529,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateRemediationInput,
 		ec.unmarshalInputCreateReviewInput,
 		ec.unmarshalInputCreateRiskInput,
+		ec.unmarshalInputCreateSLADefinitionInput,
 		ec.unmarshalInputCreateScanInput,
 		ec.unmarshalInputCreateScheduledJobInput,
 		ec.unmarshalInputCreateScheduledJobRunInput,
@@ -50029,6 +50668,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputReviewWhereInput,
 		ec.unmarshalInputRiskOrder,
 		ec.unmarshalInputRiskWhereInput,
+		ec.unmarshalInputSLADefinitionOrder,
+		ec.unmarshalInputSLADefinitionWhereInput,
 		ec.unmarshalInputScanOrder,
 		ec.unmarshalInputScanWhereInput,
 		ec.unmarshalInputScheduledJobOrder,
@@ -50133,6 +50774,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateRemediationInput,
 		ec.unmarshalInputUpdateReviewInput,
 		ec.unmarshalInputUpdateRiskInput,
+		ec.unmarshalInputUpdateSLADefinitionInput,
 		ec.unmarshalInputUpdateScanInput,
 		ec.unmarshalInputUpdateScheduledJobInput,
 		ec.unmarshalInputUpdateScheduledJobRunInput,
@@ -60189,9 +60831,17 @@ type Control implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -62927,6 +63577,24 @@ input ControlWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: ControlControlSource
@@ -62935,6 +63603,24 @@ input ControlWhereInput {
   sourceNotIn: [ControlControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -64194,9 +64880,17 @@ input CreateControlInput {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -64923,6 +65617,10 @@ Input was generated by ent.
 """
 input CreateEmailTemplateInput {
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -64986,6 +65684,14 @@ input CreateEmailTemplateInput {
   template version
   """
   version: Int
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: EmailTemplateTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
   ownerID: ID
   emailBrandingID: ID
   integrationID: ID
@@ -64993,6 +65699,7 @@ input CreateEmailTemplateInput {
   workflowInstanceID: ID
   campaignIDs: [ID!]
   notificationTemplateIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateEntityInput is used for create Entity object.
@@ -65519,9 +66226,17 @@ input CreateFindingInput {
   """
   scopeName: String
   """
+  the status of the finding
+  """
+  findingStatusName: String
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
+  """
+  lifecycle status of the finding
+  """
+  status: String
   """
   the owner of the finding
   """
@@ -65639,10 +66354,6 @@ input CreateFindingInput {
   """
   remediationSLA: Int
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   timestamp when the finding was last observed by the source
   """
   eventTime: DateTime
@@ -65672,6 +66383,7 @@ input CreateFindingInput {
   viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
+  findingStatusID: ID
   integrationIDs: [ID!]
   vulnerabilityIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -66568,6 +67280,10 @@ Input was generated by ent.
 """
 input CreateNotificationTemplateInput {
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -66639,6 +67355,14 @@ input CreateNotificationTemplateInput {
   template version
   """
   version: Int
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: NotificationTemplateTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
   ownerID: ID
   integrationID: ID
   workflowDefinitionID: ID
@@ -66796,6 +67520,7 @@ input CreateOrganizationInput {
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  slaDefinitionIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
@@ -67669,6 +68394,29 @@ input CreateRiskInput {
   discussionIDs: [ID!]
 }
 """
+CreateSLADefinitionInput is used for create SLADefinition object.
+Input was generated by ent.
+"""
+input CreateSLADefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int!
+  ownerID: ID
+  slaDefinitionSeverityLevelID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+}
+"""
 CreateScanInput is used for create Scan object.
 Input was generated by ent.
 """
@@ -67929,9 +68677,17 @@ input CreateSubcontrolInput {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -68589,6 +69345,7 @@ input CreateTrustCenterSettingInput {
   editorIDs: [ID!]
   logoFileID: ID
   faviconFileID: ID
+  heroImageFileID: ID
 }
 """
 CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -68815,9 +69572,17 @@ input CreateVulnerabilityInput {
   """
   scopeName: String
   """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
   """
   external identifier from the integration source for the vulnerability
   """
@@ -68858,10 +69623,6 @@ input CreateVulnerabilityInput {
   priority assigned to the vulnerability
   """
   priority: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   short summary of the vulnerability details
   """
@@ -68936,6 +69697,7 @@ input CreateVulnerabilityInput {
   viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
+  vulnerabilityStatusID: ID
   integrationIDs: [ID!]
   findingIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -74539,6 +75301,10 @@ type EmailTemplate implements Node {
   createdBy: String
   updatedBy: String
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -74610,6 +75376,14 @@ type EmailTemplate implements Node {
   template version
   """
   version: Int!
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: EmailTemplateTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
   """
   email branding configuration to apply for this template
   """
@@ -74693,6 +75467,37 @@ type EmailTemplate implements Node {
     """
     where: NotificationTemplateWhereInput
   ): NotificationTemplateConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -74752,12 +75557,22 @@ Properties by which EmailTemplate connections can be ordered.
 enum EmailTemplateOrderField {
   created_at
   updated_at
+  revision
   KEY
   NAME
   FORMAT
   LOCALE
   ACTIVE
   VERSION
+  TEMPLATE_CONTEXT
+}
+"""
+EmailTemplateTemplateContext is enum for the field template_context
+"""
+enum EmailTemplateTemplateContext @goModel(model: "github.com/theopenlane/core/common/enums.TemplateContext") {
+  CAMPAIGN_RECIPIENT
+  TRANSACTIONAL
+  WORKFLOW_ACTION
 }
 """
 EmailTemplateWhereInput is used for filtering EmailTemplate objects.
@@ -74842,6 +75657,24 @@ input EmailTemplateWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
   owner_id field predicates
   """
@@ -75065,6 +75898,15 @@ input EmailTemplateWhereInput {
   versionLT: Int
   versionLTE: Int
   """
+  template_context field predicates
+  """
+  templateContext: EmailTemplateTemplateContext
+  templateContextNEQ: EmailTemplateTemplateContext
+  templateContextIn: [EmailTemplateTemplateContext!]
+  templateContextNotIn: [EmailTemplateTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
+  """
   email_branding_id field predicates
   """
   emailBrandingID: ID
@@ -75171,6 +76013,11 @@ input EmailTemplateWhereInput {
   """
   hasNotificationTemplates: Boolean
   hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 type Entity implements Node {
   id: ID!
@@ -79047,6 +79894,9 @@ ExportExportFormat is enum for the field format
 """
 enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enums.ExportFormat") {
   CSV
+  MARKDOWN
+  DOCX
+  PDF
 }
 """
 ExportExportMode is enum for the field mode
@@ -80254,9 +81104,25 @@ type Finding implements Node {
   """
   scopeID: ID
   """
+  the status of the finding
+  """
+  findingStatusName: String
+  """
+  the status of the finding
+  """
+  findingStatusID: ID
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
+  """
+  lifecycle status of the finding
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
+  """
+  incoming source severity
+  """
+  securityLevel: FindingSecurityLevel
   """
   the owner of the finding
   """
@@ -80373,10 +81239,6 @@ type Finding implements Node {
   remediation service level agreement in days
   """
   remediationSLA: Int
-  """
-  lifecycle status of the finding
-  """
-  status: String
   """
   timestamp when the finding was last observed by the source
   """
@@ -80497,6 +81359,7 @@ type Finding implements Node {
   ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  findingStatus: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81402,9 +82265,20 @@ enum FindingOrderField {
   created_at
   updated_at
   external_id
+  security_level
   external_owner_id
   category
   severity
+}
+"""
+FindingSecurityLevel is enum for the field security_level
+"""
+enum FindingSecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 FindingWhereInput is used for filtering Finding objects.
@@ -81639,6 +82513,42 @@ input FindingWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  finding_status_name field predicates
+  """
+  findingStatusName: String
+  findingStatusNameNEQ: String
+  findingStatusNameIn: [String!]
+  findingStatusNameNotIn: [String!]
+  findingStatusNameGT: String
+  findingStatusNameGTE: String
+  findingStatusNameLT: String
+  findingStatusNameLTE: String
+  findingStatusNameContains: String
+  findingStatusNameHasPrefix: String
+  findingStatusNameHasSuffix: String
+  findingStatusNameIsNil: Boolean
+  findingStatusNameNotNil: Boolean
+  findingStatusNameEqualFold: String
+  findingStatusNameContainsFold: String
+  """
+  finding_status_id field predicates
+  """
+  findingStatusID: ID
+  findingStatusIDNEQ: ID
+  findingStatusIDIn: [ID!]
+  findingStatusIDNotIn: [ID!]
+  findingStatusIDGT: ID
+  findingStatusIDGTE: ID
+  findingStatusIDLT: ID
+  findingStatusIDLTE: ID
+  findingStatusIDContains: ID
+  findingStatusIDHasPrefix: ID
+  findingStatusIDHasSuffix: ID
+  findingStatusIDIsNil: Boolean
+  findingStatusIDNotNil: Boolean
+  findingStatusIDEqualFold: ID
+  findingStatusIDContainsFold: ID
+  """
   external_id field predicates
   """
   externalID: String
@@ -81656,6 +82566,33 @@ input FindingWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: FindingSecurityLevel
+  securityLevelNEQ: FindingSecurityLevel
+  securityLevelIn: [FindingSecurityLevel!]
+  securityLevelNotIn: [FindingSecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_owner_id field predicates
   """
@@ -82009,24 +82946,6 @@ input FindingWhereInput {
   remediationSLAIsNil: Boolean
   remediationSLANotNil: Boolean
   """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
-  """
   event_time field predicates
   """
   eventTime: DateTime
@@ -82113,6 +83032,11 @@ input FindingWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  finding_status edge predicates
+  """
+  hasFindingStatus: Boolean
+  hasFindingStatusWith: [CustomTypeEnumWhereInput!]
   """
   integrations edge predicates
   """
@@ -86623,6 +87547,30 @@ type Integration implements Node {
   additional metadata about the integration
   """
   metadata: Map
+  """
+  the canonical definition identifier for the installation
+  """
+  definitionID: String
+  """
+  the definition version recorded for this installation
+  """
+  definitionVersion: String
+  """
+  the human-readable definition slug recorded for this installation
+  """
+  definitionSlug: String
+  """
+  the denormalized family label for the installation definition
+  """
+  family: String
+  """
+  the lifecycle status of the installation
+  """
+  status: IntegrationIntegrationStatus!
+  """
+  snapshot of definition metadata captured on the installation
+  """
+  providerMetadataSnapshot: Map
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -87158,6 +88106,16 @@ type IntegrationEdge {
   cursor: Cursor!
 }
 """
+IntegrationIntegrationStatus is enum for the field status
+"""
+enum IntegrationIntegrationStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationStatus") {
+  PENDING
+  CONNECTED
+  ERRORED
+  DISABLED
+  DELETED
+}
+"""
 Ordering options for Integration connections
 """
 input IntegrationOrder {
@@ -87179,6 +88137,11 @@ enum IntegrationOrderField {
   name
   kind
   integration_type
+  definition_id
+  definition_version
+  definition_slug
+  family
+  status
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -87466,6 +88429,85 @@ input IntegrationWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: ID
   platformIDContainsFold: ID
+  """
+  definition_id field predicates
+  """
+  definitionID: String
+  definitionIDNEQ: String
+  definitionIDIn: [String!]
+  definitionIDNotIn: [String!]
+  definitionIDGT: String
+  definitionIDGTE: String
+  definitionIDLT: String
+  definitionIDLTE: String
+  definitionIDContains: String
+  definitionIDHasPrefix: String
+  definitionIDHasSuffix: String
+  definitionIDIsNil: Boolean
+  definitionIDNotNil: Boolean
+  definitionIDEqualFold: String
+  definitionIDContainsFold: String
+  """
+  definition_version field predicates
+  """
+  definitionVersion: String
+  definitionVersionNEQ: String
+  definitionVersionIn: [String!]
+  definitionVersionNotIn: [String!]
+  definitionVersionGT: String
+  definitionVersionGTE: String
+  definitionVersionLT: String
+  definitionVersionLTE: String
+  definitionVersionContains: String
+  definitionVersionHasPrefix: String
+  definitionVersionHasSuffix: String
+  definitionVersionIsNil: Boolean
+  definitionVersionNotNil: Boolean
+  definitionVersionEqualFold: String
+  definitionVersionContainsFold: String
+  """
+  definition_slug field predicates
+  """
+  definitionSlug: String
+  definitionSlugNEQ: String
+  definitionSlugIn: [String!]
+  definitionSlugNotIn: [String!]
+  definitionSlugGT: String
+  definitionSlugGTE: String
+  definitionSlugLT: String
+  definitionSlugLTE: String
+  definitionSlugContains: String
+  definitionSlugHasPrefix: String
+  definitionSlugHasSuffix: String
+  definitionSlugIsNil: Boolean
+  definitionSlugNotNil: Boolean
+  definitionSlugEqualFold: String
+  definitionSlugContainsFold: String
+  """
+  family field predicates
+  """
+  family: String
+  familyNEQ: String
+  familyIn: [String!]
+  familyNotIn: [String!]
+  familyGT: String
+  familyGTE: String
+  familyLT: String
+  familyLTE: String
+  familyContains: String
+  familyHasPrefix: String
+  familyHasSuffix: String
+  familyIsNil: Boolean
+  familyNotNil: Boolean
+  familyEqualFold: String
+  familyContainsFold: String
+  """
+  status field predicates
+  """
+  status: IntegrationIntegrationStatus
+  statusNEQ: IntegrationIntegrationStatus
+  statusIn: [IntegrationIntegrationStatus!]
+  statusNotIn: [IntegrationIntegrationStatus!]
   """
   owner edge predicates
   """
@@ -93249,6 +94291,10 @@ type NotificationTemplate implements Node {
   createdBy: String
   updatedBy: String
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: ID
@@ -93340,6 +94386,14 @@ type NotificationTemplate implements Node {
   template version
   """
   version: Int!
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: NotificationTemplateTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
   owner: Organization
   integration: Integration
   workflowDefinition: WorkflowDefinition
@@ -93438,6 +94492,7 @@ Properties by which NotificationTemplate connections can be ordered.
 enum NotificationTemplateOrderField {
   created_at
   updated_at
+  revision
   KEY
   NAME
   CHANNEL
@@ -93446,6 +94501,15 @@ enum NotificationTemplateOrderField {
   TOPIC_PATTERN
   ACTIVE
   VERSION
+  TEMPLATE_CONTEXT
+}
+"""
+NotificationTemplateTemplateContext is enum for the field template_context
+"""
+enum NotificationTemplateTemplateContext @goModel(model: "github.com/theopenlane/core/common/enums.TemplateContext") {
+  CAMPAIGN_RECIPIENT
+  TRANSACTIONAL
+  WORKFLOW_ACTION
 }
 """
 NotificationTemplateWhereInput is used for filtering NotificationTemplate objects.
@@ -93530,6 +94594,24 @@ input NotificationTemplateWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
   owner_id field predicates
   """
@@ -93811,6 +94893,15 @@ input NotificationTemplateWhereInput {
   versionGTE: Int
   versionLT: Int
   versionLTE: Int
+  """
+  template_context field predicates
+  """
+  templateContext: NotificationTemplateTemplateContext
+  templateContextNEQ: NotificationTemplateTemplateContext
+  templateContextIn: [NotificationTemplateTemplateContext!]
+  templateContextNotIn: [NotificationTemplateTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   owner edge predicates
   """
@@ -96807,6 +97898,37 @@ type Organization implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  slaDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SLADefinitions returned from the connection.
+    """
+    orderBy: [SLADefinitionOrder!]
+
+    """
+    Filtering options for SLADefinitions returned from the connection.
+    """
+    where: SLADefinitionWhereInput
+  ): SLADefinitionConnection!
   subprocessors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98755,6 +99877,11 @@ input OrganizationWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  sla_definitions edge predicates
+  """
+  hasSLADefinitions: Boolean
+  hasSLADefinitionsWith: [SLADefinitionWhereInput!]
   """
   subprocessors edge predicates
   """
@@ -105787,6 +106914,37 @@ type Query {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  slaDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SLADefinitions returned from the connection.
+    """
+    orderBy: [SLADefinitionOrder!]
+
+    """
+    Filtering options for SLADefinitions returned from the connection.
+    """
+    where: SLADefinitionWhereInput
+  ): SLADefinitionConnection!
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -110675,6 +111833,399 @@ input RiskWhereInput {
   """
   tagsHas: String
 }
+type SLADefinition implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelID: ID
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int!
+  """
+  incoming source severity
+  """
+  securityLevel: SLADefinitionSecurityLevel!
+  owner: Organization
+  slaDefinitionSeverityLevel: CustomTypeEnum
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+}
+"""
+A connection to a list of items.
+"""
+type SLADefinitionConnection {
+  """
+  A list of edges.
+  """
+  edges: [SLADefinitionEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SLADefinitionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SLADefinition
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for SLADefinition connections
+"""
+input SLADefinitionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SLADefinitions.
+  """
+  field: SLADefinitionOrderField!
+}
+"""
+Properties by which SLADefinition connections can be ordered.
+"""
+enum SLADefinitionOrderField {
+  created_at
+  updated_at
+  sla_days
+  security_level
+}
+"""
+SLADefinitionSecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionSecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+SLADefinitionWhereInput is used for filtering SLADefinition objects.
+Input was generated by ent.
+"""
+input SLADefinitionWhereInput {
+  not: SLADefinitionWhereInput
+  and: [SLADefinitionWhereInput!]
+  or: [SLADefinitionWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  sla_definition_severity_level_name field predicates
+  """
+  slaDefinitionSeverityLevelName: String
+  slaDefinitionSeverityLevelNameNEQ: String
+  slaDefinitionSeverityLevelNameIn: [String!]
+  slaDefinitionSeverityLevelNameNotIn: [String!]
+  slaDefinitionSeverityLevelNameGT: String
+  slaDefinitionSeverityLevelNameGTE: String
+  slaDefinitionSeverityLevelNameLT: String
+  slaDefinitionSeverityLevelNameLTE: String
+  slaDefinitionSeverityLevelNameContains: String
+  slaDefinitionSeverityLevelNameHasPrefix: String
+  slaDefinitionSeverityLevelNameHasSuffix: String
+  slaDefinitionSeverityLevelNameIsNil: Boolean
+  slaDefinitionSeverityLevelNameNotNil: Boolean
+  slaDefinitionSeverityLevelNameEqualFold: String
+  slaDefinitionSeverityLevelNameContainsFold: String
+  """
+  sla_definition_severity_level_id field predicates
+  """
+  slaDefinitionSeverityLevelID: ID
+  slaDefinitionSeverityLevelIDNEQ: ID
+  slaDefinitionSeverityLevelIDIn: [ID!]
+  slaDefinitionSeverityLevelIDNotIn: [ID!]
+  slaDefinitionSeverityLevelIDGT: ID
+  slaDefinitionSeverityLevelIDGTE: ID
+  slaDefinitionSeverityLevelIDLT: ID
+  slaDefinitionSeverityLevelIDLTE: ID
+  slaDefinitionSeverityLevelIDContains: ID
+  slaDefinitionSeverityLevelIDHasPrefix: ID
+  slaDefinitionSeverityLevelIDHasSuffix: ID
+  slaDefinitionSeverityLevelIDIsNil: Boolean
+  slaDefinitionSeverityLevelIDNotNil: Boolean
+  slaDefinitionSeverityLevelIDEqualFold: ID
+  slaDefinitionSeverityLevelIDContainsFold: ID
+  """
+  sla_days field predicates
+  """
+  slaDays: Int
+  slaDaysNEQ: Int
+  slaDaysIn: [Int!]
+  slaDaysNotIn: [Int!]
+  slaDaysGT: Int
+  slaDaysGTE: Int
+  slaDaysLT: Int
+  slaDaysLTE: Int
+  """
+  security_level field predicates
+  """
+  securityLevel: SLADefinitionSecurityLevel
+  securityLevelNEQ: SLADefinitionSecurityLevel
+  securityLevelIn: [SLADefinitionSecurityLevel!]
+  securityLevelNotIn: [SLADefinitionSecurityLevel!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  sla_definition_severity_level edge predicates
+  """
+  hasSLADefinitionSeverityLevel: Boolean
+  hasSLADefinitionSeverityLevelWith: [CustomTypeEnumWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
 type Scan implements Node {
   id: ID!
   createdAt: Time
@@ -113143,9 +114694,17 @@ type Subcontrol implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -114000,6 +115559,24 @@ input SubcontrolWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: SubcontrolControlSource
@@ -114008,6 +115585,24 @@ input SubcontrolWhereInput {
   sourceNotIn: [SubcontrolControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -120207,6 +121802,10 @@ type TrustCenterSetting implements Node {
   """
   faviconLocalFileID: ID
   """
+  Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+  """
+  heroImageLocalFileID: ID
+  """
   Theme mode for the trust center
   """
   themeMode: TrustCenterSettingTrustCenterThemeMode
@@ -120326,6 +121925,7 @@ type TrustCenterSetting implements Node {
   ): GroupConnection!
   logoFile: File
   faviconFile: File
+  heroImageFile: File
 }
 """
 A connection to a list of items.
@@ -120637,6 +122237,24 @@ input TrustCenterSettingWhereInput {
   faviconLocalFileIDEqualFold: ID
   faviconLocalFileIDContainsFold: ID
   """
+  hero_image_local_file_id field predicates
+  """
+  heroImageLocalFileID: ID
+  heroImageLocalFileIDNEQ: ID
+  heroImageLocalFileIDIn: [ID!]
+  heroImageLocalFileIDNotIn: [ID!]
+  heroImageLocalFileIDGT: ID
+  heroImageLocalFileIDGTE: ID
+  heroImageLocalFileIDLT: ID
+  heroImageLocalFileIDLTE: ID
+  heroImageLocalFileIDContains: ID
+  heroImageLocalFileIDHasPrefix: ID
+  heroImageLocalFileIDHasSuffix: ID
+  heroImageLocalFileIDIsNil: Boolean
+  heroImageLocalFileIDNotNil: Boolean
+  heroImageLocalFileIDEqualFold: ID
+  heroImageLocalFileIDContainsFold: ID
+  """
   theme_mode field predicates
   """
   themeMode: TrustCenterSettingTrustCenterThemeMode
@@ -120868,6 +122486,11 @@ input TrustCenterSettingWhereInput {
   """
   hasFaviconFile: Boolean
   hasFaviconFileWith: [FileWhereInput!]
+  """
+  hero_image_file edge predicates
+  """
+  hasHeroImageFile: Boolean
+  hasHeroImageFileWith: [FileWhereInput!]
 }
 type TrustCenterSubprocessor implements Node {
   id: ID!
@@ -122896,10 +124519,20 @@ input UpdateControlInput {
   implementationDescription: String
   clearImplementationDescription: Boolean
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  clearPublicRepresentation: Boolean
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource @externalReadOnly(source: FRAMEWORK)
   clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
+  clearSourceName: Boolean
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
@@ -123852,6 +125485,11 @@ Input was generated by ent.
 """
 input UpdateEmailTemplateInput {
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  clearRevision: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -123925,6 +125563,16 @@ input UpdateEmailTemplateInput {
   template version
   """
   version: Int
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: EmailTemplateTemplateContext
+  clearTemplateContext: Boolean
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
+  clearDefaults: Boolean
   emailBrandingID: ID
   clearEmailBranding: Boolean
   integrationID: ID
@@ -123939,6 +125587,9 @@ input UpdateEmailTemplateInput {
   addNotificationTemplateIDs: [ID!]
   removeNotificationTemplateIDs: [ID!]
   clearNotificationTemplates: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateEntityInput is used for update Entity object.
@@ -124690,10 +126341,20 @@ input UpdateFindingInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the status of the finding
+  """
+  findingStatusName: String
+  clearFindingStatusName: Boolean
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
   clearExternalID: Boolean
+  """
+  lifecycle status of the finding
+  """
+  status: String
+  clearStatus: Boolean
   """
   the owner of the finding
   """
@@ -124844,11 +126505,6 @@ input UpdateFindingInput {
   remediationSLA: Int
   clearRemediationSLA: Boolean
   """
-  lifecycle status of the finding
-  """
-  status: String
-  clearStatus: Boolean
-  """
   timestamp when the finding was last observed by the source
   """
   eventTime: DateTime
@@ -124891,6 +126547,8 @@ input UpdateFindingInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  findingStatusID: ID
+  clearFindingStatus: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -126127,6 +127785,11 @@ Input was generated by ent.
 """
 input UpdateNotificationTemplateInput {
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  clearRevision: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -126208,6 +127871,16 @@ input UpdateNotificationTemplateInput {
   template version
   """
   version: Int
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: NotificationTemplateTemplateContext
+  clearTemplateContext: Boolean
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
+  clearDefaults: Boolean
   integrationID: ID
   clearIntegration: Boolean
   workflowDefinitionID: ID
@@ -126485,6 +128158,9 @@ input UpdateOrganizationInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addSLADefinitionIDs: [ID!]
+  removeSLADefinitionIDs: [ID!]
+  clearSLADefinitions: Boolean
   addSubprocessorIDs: [ID!]
   removeSubprocessorIDs: [ID!]
   clearSubprocessors: Boolean
@@ -127816,6 +129492,40 @@ input UpdateRiskInput {
   clearDiscussions: Boolean
 }
 """
+UpdateSLADefinitionInput is used for update SLADefinition object.
+Input was generated by ent.
+"""
+input UpdateSLADefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  clearSLADefinitionSeverityLevelName: Boolean
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int
+  ownerID: ID
+  clearOwner: Boolean
+  slaDefinitionSeverityLevelID: ID
+  clearSLADefinitionSeverityLevel: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+}
+"""
 UpdateScanInput is used for update Scan object.
 Input was generated by ent.
 """
@@ -128166,10 +129876,20 @@ input UpdateSubcontrolInput {
   implementationDescription: String
   clearImplementationDescription: Boolean
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  clearPublicRepresentation: Boolean
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource @externalReadOnly(source: FRAMEWORK)
   clearSource: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
+  clearSourceName: Boolean
   """
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
@@ -129088,6 +130808,8 @@ input UpdateTrustCenterSettingInput {
   clearLogoFile: Boolean
   faviconFileID: ID
   clearFaviconFile: Boolean
+  heroImageFileID: ID
+  clearHeroImageFile: Boolean
 }
 """
 UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
@@ -129398,10 +131120,20 @@ input UpdateVulnerabilityInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  clearVulnerabilityStatusName: Boolean
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
   clearExternalOwnerID: Boolean
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String
+  clearStatus: Boolean
   """
   external identifier from the integration source for the vulnerability
   """
@@ -129451,11 +131183,6 @@ input UpdateVulnerabilityInput {
   """
   priority: String
   clearPriority: Boolean
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
-  clearStatus: Boolean
   """
   short summary of the vulnerability details
   """
@@ -129556,6 +131283,8 @@ input UpdateVulnerabilityInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  vulnerabilityStatusID: ID
+  clearVulnerabilityStatus: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -131269,9 +132998,25 @@ type Vulnerability implements Node {
   """
   scopeID: ID
   """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusID: ID
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
+  """
+  lifecycle status of the vulnerability
+  """
+  securityLevel: VulnerabilitySecurityLevel
   """
   external identifier from the integration source for the vulnerability
   """
@@ -131312,10 +133057,6 @@ type Vulnerability implements Node {
   priority assigned to the vulnerability
   """
   priority: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   short summary of the vulnerability details
   """
@@ -131480,6 +133221,7 @@ type Vulnerability implements Node {
   ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  vulnerabilityStatus: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -131996,10 +133738,21 @@ enum VulnerabilityOrderField {
   created_at
   updated_at
   external_owner_id
+  security_level
   external_id
   cve_id
   category
   severity
+}
+"""
+VulnerabilitySecurityLevel is enum for the field security_level
+"""
+enum VulnerabilitySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 VulnerabilityWhereInput is used for filtering Vulnerability objects.
@@ -132234,6 +133987,42 @@ input VulnerabilityWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  vulnerability_status_name field predicates
+  """
+  vulnerabilityStatusName: String
+  vulnerabilityStatusNameNEQ: String
+  vulnerabilityStatusNameIn: [String!]
+  vulnerabilityStatusNameNotIn: [String!]
+  vulnerabilityStatusNameGT: String
+  vulnerabilityStatusNameGTE: String
+  vulnerabilityStatusNameLT: String
+  vulnerabilityStatusNameLTE: String
+  vulnerabilityStatusNameContains: String
+  vulnerabilityStatusNameHasPrefix: String
+  vulnerabilityStatusNameHasSuffix: String
+  vulnerabilityStatusNameIsNil: Boolean
+  vulnerabilityStatusNameNotNil: Boolean
+  vulnerabilityStatusNameEqualFold: String
+  vulnerabilityStatusNameContainsFold: String
+  """
+  vulnerability_status_id field predicates
+  """
+  vulnerabilityStatusID: ID
+  vulnerabilityStatusIDNEQ: ID
+  vulnerabilityStatusIDIn: [ID!]
+  vulnerabilityStatusIDNotIn: [ID!]
+  vulnerabilityStatusIDGT: ID
+  vulnerabilityStatusIDGTE: ID
+  vulnerabilityStatusIDLT: ID
+  vulnerabilityStatusIDLTE: ID
+  vulnerabilityStatusIDContains: ID
+  vulnerabilityStatusIDHasPrefix: ID
+  vulnerabilityStatusIDHasSuffix: ID
+  vulnerabilityStatusIDIsNil: Boolean
+  vulnerabilityStatusIDNotNil: Boolean
+  vulnerabilityStatusIDEqualFold: ID
+  vulnerabilityStatusIDContainsFold: ID
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -132251,6 +134040,33 @@ input VulnerabilityWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: VulnerabilitySecurityLevel
+  securityLevelNEQ: VulnerabilitySecurityLevel
+  securityLevelIn: [VulnerabilitySecurityLevel!]
+  securityLevelNotIn: [VulnerabilitySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_id field predicates
   """
@@ -132414,24 +134230,6 @@ input VulnerabilityWhereInput {
   priorityNotNil: Boolean
   priorityEqualFold: String
   priorityContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   summary field predicates
   """
@@ -132621,6 +134419,11 @@ input VulnerabilityWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  vulnerability_status edge predicates
+  """
+  hasVulnerabilityStatus: Boolean
+  hasVulnerabilityStatusWith: [CustomTypeEnumWhereInput!]
   """
   integrations edge predicates
   """
@@ -143694,6 +145497,165 @@ extend type SearchResults{
 }
 
 `, BuiltIn: false},
+	{Name: "../schema/sladefinition.graphql", Input: `extend type Query {
+    """
+    Look up slaDefinition by ID
+    """
+     slaDefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+    ):  SLADefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new slaDefinition
+    """
+    createSLADefinition(
+        """
+        values of the slaDefinition
+        """
+        input: CreateSLADefinitionInput!
+    ): SLADefinitionCreatePayload!
+    """
+    Create multiple new slaDefinitions
+    """
+    createBulkSLADefinition(
+        """
+        values of the slaDefinition
+        """
+        input: [CreateSLADefinitionInput!]
+    ): SLADefinitionBulkCreatePayload!
+    """
+    Create multiple new slaDefinitions via file upload
+    """
+    createBulkCSVSLADefinition(
+        """
+        csv file containing values of the slaDefinition
+        """
+        input: Upload!
+    ): SLADefinitionBulkCreatePayload!
+    """
+    Update multiple existing slaDefinitions
+    """
+    updateBulkSLADefinition(
+        """
+        IDs of the slaDefinitions to update
+        """
+        ids: [ID!]!
+        """
+        values to update the slaDefinitions with
+        """
+        input: UpdateSLADefinitionInput!
+    ): SLADefinitionBulkUpdatePayload!
+    """
+    Update multiple existing slaDefinitions via file upload
+    """
+    updateBulkCSVSLADefinition(
+        """
+        csv file containing values of the slaDefinition, must include ID column
+        """
+        input: Upload!
+    ): SLADefinitionBulkUpdatePayload!
+    """
+    Update an existing slaDefinition
+    """
+    updateSLADefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+        """
+        New values for the slaDefinition
+        """
+        input: UpdateSLADefinitionInput!
+    ): SLADefinitionUpdatePayload!
+    """
+    Delete an existing slaDefinition
+    """
+    deleteSLADefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+    ): SLADefinitionDeletePayload!
+    """
+    Delete multiple slaDefinitions
+    """
+    deleteBulkSLADefinition(
+        """
+        IDs of the slaDefinitions to delete
+        """
+        ids: [ID!]!
+    ): SLADefinitionBulkDeletePayload!
+}
+
+"""
+Return response for createSLADefinition mutation
+"""
+type SLADefinitionCreatePayload {
+    """
+    Created slaDefinition
+    """
+    slaDefinition: SLADefinition!
+}
+
+"""
+Return response for updateSLADefinition mutation
+"""
+type SLADefinitionUpdatePayload {
+    """
+    Updated slaDefinition
+    """
+    slaDefinition: SLADefinition!
+}
+
+"""
+Return response for deleteSLADefinition mutation
+"""
+type SLADefinitionDeletePayload {
+    """
+    Deleted slaDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSLADefinition mutation
+"""
+type SLADefinitionBulkCreatePayload {
+    """
+    Created slaDefinitions
+    """
+    slaDefinitions: [SLADefinition!]
+}
+
+"""
+Return response for updateBulkSLADefinition mutation
+"""
+type SLADefinitionBulkUpdatePayload {
+    """
+    Updated slaDefinitions
+    """
+    slaDefinitions: [SLADefinition!]
+    """
+    IDs of the updated slaDefinitions
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkSLADefinition mutation
+"""
+type SLADefinitionBulkDeletePayload {
+    """
+    Deleted slaDefinition IDs
+    """
+    deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
 	{Name: "../schema/standard.graphql", Input: `extend type Query {
     """
     Look up standard by ID
@@ -145859,6 +147821,7 @@ type TrustCenterNDARequestBulkDeletePayload {
     input: CreateTrustCenterPreviewSettingInput!
     logoFile: Upload
     faviconFile: Upload
+    heroImageFile: Upload
   ): TrustCenterPreviewSettingCreatePayload!
 }
 
@@ -145928,6 +147891,10 @@ input CreateTrustCenterPreviewSettingInput {
   accent color for the trust center
   """
   accentColor: String
+  """
+  hero image local file ID
+  """
+  heroImageFileID: ID
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {
@@ -145953,6 +147920,7 @@ extend type Mutation{
         input: CreateTrustCenterSettingInput!
         logoFile: Upload
         faviconFile: Upload
+        heroImageFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting by targeting the ID
@@ -145968,6 +147936,7 @@ extend type Mutation{
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
         faviconFile: Upload
+        heroImageFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Update an existing trustCenterSetting preview settings
@@ -145979,6 +147948,7 @@ extend type Mutation{
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
         faviconFile: Upload
+        heroImageFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Publish changes from preview to live environment

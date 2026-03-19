@@ -51,8 +51,10 @@ func HookGroup() ent.Hook {
 				// trim trailing whitespace from the name
 				m.SetName(strings.TrimSpace(name))
 
-				url := gravatar.New(name, nil)
-				m.SetGravatarLogoURL(url)
+				if _, exists := m.GravatarLogoURL(); !exists {
+					url := gravatar.New(name, nil)
+					m.SetGravatarLogoURL(url)
+				}
 
 				// if managed, the user's name ( and thus group name )
 				// may include special characters. this makes sure to clean them

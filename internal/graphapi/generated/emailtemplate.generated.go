@@ -62,6 +62,8 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_EmailTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -98,6 +100,10 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_EmailTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
 			case "emailBrandingID":
 				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
@@ -120,6 +126,8 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
 			case "notificationTemplates":
 				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
+			case "files":
+				return ec.fieldContext_EmailTemplate_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
 		},
@@ -190,6 +198,8 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_EmailTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -226,6 +236,10 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_EmailTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
 			case "emailBrandingID":
 				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
@@ -248,6 +262,8 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
 			case "notificationTemplates":
 				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
+			case "files":
+				return ec.fieldContext_EmailTemplate_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
 		},
@@ -318,6 +334,8 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_EmailTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -354,6 +372,10 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_EmailTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
 			case "emailBrandingID":
 				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
@@ -376,6 +398,8 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
 			case "notificationTemplates":
 				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
+			case "files":
+				return ec.fieldContext_EmailTemplate_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
 		},
@@ -446,6 +470,8 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_EmailTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -482,6 +508,10 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_EmailTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
 			case "emailBrandingID":
 				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
@@ -504,6 +534,8 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
 			case "notificationTemplates":
 				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
+			case "files":
+				return ec.fieldContext_EmailTemplate_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
 		},

@@ -68,6 +68,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
@@ -8292,6 +8293,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateHistoryOrderFieldRevision orders EmailTemplateHistory by revision.
+	EmailTemplateHistoryOrderFieldRevision = &EmailTemplateHistoryOrderField{
+		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: emailtemplatehistory.FieldRevision,
+		toTerm: emailtemplatehistory.ByRevision,
+		toCursor: func(_m *EmailTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
 	// EmailTemplateHistoryOrderFieldKey orders EmailTemplateHistory by key.
 	EmailTemplateHistoryOrderFieldKey = &EmailTemplateHistoryOrderField{
 		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
@@ -8376,6 +8391,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateHistoryOrderFieldTemplateContext orders EmailTemplateHistory by template_context.
+	EmailTemplateHistoryOrderFieldTemplateContext = &EmailTemplateHistoryOrderField{
+		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: emailtemplatehistory.FieldTemplateContext,
+		toTerm: emailtemplatehistory.ByTemplateContext,
+		toCursor: func(_m *EmailTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -8388,6 +8417,8 @@ func (f EmailTemplateHistoryOrderField) String() string {
 		str = "created_at"
 	case EmailTemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EmailTemplateHistoryOrderFieldRevision.column:
+		str = "revision"
 	case EmailTemplateHistoryOrderFieldKey.column:
 		str = "KEY"
 	case EmailTemplateHistoryOrderFieldName.column:
@@ -8400,6 +8431,8 @@ func (f EmailTemplateHistoryOrderField) String() string {
 		str = "ACTIVE"
 	case EmailTemplateHistoryOrderFieldVersion.column:
 		str = "VERSION"
+	case EmailTemplateHistoryOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
 	}
 	return str
 }
@@ -8422,6 +8455,8 @@ func (f *EmailTemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EmailTemplateHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *EmailTemplateHistoryOrderFieldRevision
 	case "KEY":
 		*f = *EmailTemplateHistoryOrderFieldKey
 	case "NAME":
@@ -8434,6 +8469,8 @@ func (f *EmailTemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateHistoryOrderFieldActive
 	case "VERSION":
 		*f = *EmailTemplateHistoryOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *EmailTemplateHistoryOrderFieldTemplateContext
 	default:
 		return fmt.Errorf("%s is not a valid EmailTemplateHistoryOrderField", str)
 	}
@@ -11091,6 +11128,20 @@ var (
 			}
 		},
 	}
+	// FindingHistoryOrderFieldSecurityLevel orders FindingHistory by security_level.
+	FindingHistoryOrderFieldSecurityLevel = &FindingHistoryOrderField{
+		Value: func(_m *FindingHistory) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: findinghistory.FieldSecurityLevel,
+		toTerm: findinghistory.BySecurityLevel,
+		toCursor: func(_m *FindingHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// FindingHistoryOrderFieldExternalOwnerID orders FindingHistory by external_owner_id.
 	FindingHistoryOrderFieldExternalOwnerID = &FindingHistoryOrderField{
 		Value: func(_m *FindingHistory) (ent.Value, error) {
@@ -11147,6 +11198,8 @@ func (f FindingHistoryOrderField) String() string {
 		str = "updated_at"
 	case FindingHistoryOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingHistoryOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case FindingHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case FindingHistoryOrderFieldCategory.column:
@@ -11177,6 +11230,8 @@ func (f *FindingHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingHistoryOrderFieldUpdatedAt
 	case "external_id":
 		*f = *FindingHistoryOrderFieldExternalID
+	case "security_level":
+		*f = *FindingHistoryOrderFieldSecurityLevel
 	case "external_owner_id":
 		*f = *FindingHistoryOrderFieldExternalOwnerID
 	case "category":
@@ -13649,6 +13704,76 @@ var (
 			}
 		},
 	}
+	// IntegrationHistoryOrderFieldDefinitionID orders IntegrationHistory by definition_id.
+	IntegrationHistoryOrderFieldDefinitionID = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.DefinitionID, nil
+		},
+		column: integrationhistory.FieldDefinitionID,
+		toTerm: integrationhistory.ByDefinitionID,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionID,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldDefinitionVersion orders IntegrationHistory by definition_version.
+	IntegrationHistoryOrderFieldDefinitionVersion = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.DefinitionVersion, nil
+		},
+		column: integrationhistory.FieldDefinitionVersion,
+		toTerm: integrationhistory.ByDefinitionVersion,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionVersion,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldDefinitionSlug orders IntegrationHistory by definition_slug.
+	IntegrationHistoryOrderFieldDefinitionSlug = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.DefinitionSlug, nil
+		},
+		column: integrationhistory.FieldDefinitionSlug,
+		toTerm: integrationhistory.ByDefinitionSlug,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionSlug,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldFamily orders IntegrationHistory by family.
+	IntegrationHistoryOrderFieldFamily = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.Family, nil
+		},
+		column: integrationhistory.FieldFamily,
+		toTerm: integrationhistory.ByFamily,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Family,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldStatus orders IntegrationHistory by status.
+	IntegrationHistoryOrderFieldStatus = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: integrationhistory.FieldStatus,
+		toTerm: integrationhistory.ByStatus,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -13667,6 +13792,16 @@ func (f IntegrationHistoryOrderField) String() string {
 		str = "kind"
 	case IntegrationHistoryOrderFieldIntegrationType.column:
 		str = "integration_type"
+	case IntegrationHistoryOrderFieldDefinitionID.column:
+		str = "definition_id"
+	case IntegrationHistoryOrderFieldDefinitionVersion.column:
+		str = "definition_version"
+	case IntegrationHistoryOrderFieldDefinitionSlug.column:
+		str = "definition_slug"
+	case IntegrationHistoryOrderFieldFamily.column:
+		str = "family"
+	case IntegrationHistoryOrderFieldStatus.column:
+		str = "status"
 	}
 	return str
 }
@@ -13695,6 +13830,16 @@ func (f *IntegrationHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationHistoryOrderFieldKind
 	case "integration_type":
 		*f = *IntegrationHistoryOrderFieldIntegrationType
+	case "definition_id":
+		*f = *IntegrationHistoryOrderFieldDefinitionID
+	case "definition_version":
+		*f = *IntegrationHistoryOrderFieldDefinitionVersion
+	case "definition_slug":
+		*f = *IntegrationHistoryOrderFieldDefinitionSlug
+	case "family":
+		*f = *IntegrationHistoryOrderFieldFamily
+	case "status":
+		*f = *IntegrationHistoryOrderFieldStatus
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationHistoryOrderField", str)
 	}
@@ -16569,6 +16714,20 @@ var (
 			}
 		},
 	}
+	// NotificationTemplateHistoryOrderFieldRevision orders NotificationTemplateHistory by revision.
+	NotificationTemplateHistoryOrderFieldRevision = &NotificationTemplateHistoryOrderField{
+		Value: func(_m *NotificationTemplateHistory) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: notificationtemplatehistory.FieldRevision,
+		toTerm: notificationtemplatehistory.ByRevision,
+		toCursor: func(_m *NotificationTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
 	// NotificationTemplateHistoryOrderFieldKey orders NotificationTemplateHistory by key.
 	NotificationTemplateHistoryOrderFieldKey = &NotificationTemplateHistoryOrderField{
 		Value: func(_m *NotificationTemplateHistory) (ent.Value, error) {
@@ -16681,6 +16840,20 @@ var (
 			}
 		},
 	}
+	// NotificationTemplateHistoryOrderFieldTemplateContext orders NotificationTemplateHistory by template_context.
+	NotificationTemplateHistoryOrderFieldTemplateContext = &NotificationTemplateHistoryOrderField{
+		Value: func(_m *NotificationTemplateHistory) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: notificationtemplatehistory.FieldTemplateContext,
+		toTerm: notificationtemplatehistory.ByTemplateContext,
+		toCursor: func(_m *NotificationTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -16693,6 +16866,8 @@ func (f NotificationTemplateHistoryOrderField) String() string {
 		str = "created_at"
 	case NotificationTemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case NotificationTemplateHistoryOrderFieldRevision.column:
+		str = "revision"
 	case NotificationTemplateHistoryOrderFieldKey.column:
 		str = "KEY"
 	case NotificationTemplateHistoryOrderFieldName.column:
@@ -16709,6 +16884,8 @@ func (f NotificationTemplateHistoryOrderField) String() string {
 		str = "ACTIVE"
 	case NotificationTemplateHistoryOrderFieldVersion.column:
 		str = "VERSION"
+	case NotificationTemplateHistoryOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
 	}
 	return str
 }
@@ -16731,6 +16908,8 @@ func (f *NotificationTemplateHistoryOrderField) UnmarshalGQL(v interface{}) erro
 		*f = *NotificationTemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *NotificationTemplateHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *NotificationTemplateHistoryOrderFieldRevision
 	case "KEY":
 		*f = *NotificationTemplateHistoryOrderFieldKey
 	case "NAME":
@@ -16747,6 +16926,8 @@ func (f *NotificationTemplateHistoryOrderField) UnmarshalGQL(v interface{}) erro
 		*f = *NotificationTemplateHistoryOrderFieldActive
 	case "VERSION":
 		*f = *NotificationTemplateHistoryOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *NotificationTemplateHistoryOrderFieldTemplateContext
 	default:
 		return fmt.Errorf("%s is not a valid NotificationTemplateHistoryOrderField", str)
 	}
@@ -21375,6 +21556,374 @@ func (_m *RiskHistory) ToEdge(order *RiskHistoryOrder) *RiskHistoryEdge {
 		order = DefaultRiskHistoryOrder
 	}
 	return &RiskHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// SLADefinitionHistoryEdge is the edge representation of SLADefinitionHistory.
+type SLADefinitionHistoryEdge struct {
+	Node   *SLADefinitionHistory `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// SLADefinitionHistoryConnection is the connection containing edges to SLADefinitionHistory.
+type SLADefinitionHistoryConnection struct {
+	Edges      []*SLADefinitionHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *SLADefinitionHistoryConnection) build(nodes []*SLADefinitionHistory, pager *sladefinitionhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SLADefinitionHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SLADefinitionHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SLADefinitionHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SLADefinitionHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SLADefinitionHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SLADefinitionHistoryPaginateOption enables pagination customization.
+type SLADefinitionHistoryPaginateOption func(*sladefinitionhistoryPager) error
+
+// WithSLADefinitionHistoryOrder configures pagination ordering.
+func WithSLADefinitionHistoryOrder(order *SLADefinitionHistoryOrder) SLADefinitionHistoryPaginateOption {
+	if order == nil {
+		order = DefaultSLADefinitionHistoryOrder
+	}
+	o := *order
+	return func(pager *sladefinitionhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultSLADefinitionHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithSLADefinitionHistoryFilter configures pagination filter.
+func WithSLADefinitionHistoryFilter(filter func(*SLADefinitionHistoryQuery) (*SLADefinitionHistoryQuery, error)) SLADefinitionHistoryPaginateOption {
+	return func(pager *sladefinitionhistoryPager) error {
+		if filter == nil {
+			return errors.New("SLADefinitionHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type sladefinitionhistoryPager struct {
+	reverse bool
+	order   *SLADefinitionHistoryOrder
+	filter  func(*SLADefinitionHistoryQuery) (*SLADefinitionHistoryQuery, error)
+}
+
+func newSLADefinitionHistoryPager(opts []SLADefinitionHistoryPaginateOption, reverse bool) (*sladefinitionhistoryPager, error) {
+	pager := &sladefinitionhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultSLADefinitionHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *sladefinitionhistoryPager) applyFilter(query *SLADefinitionHistoryQuery) (*SLADefinitionHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *sladefinitionhistoryPager) toCursor(_m *SLADefinitionHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *sladefinitionhistoryPager) applyCursors(query *SLADefinitionHistoryQuery, after, before *Cursor) (*SLADefinitionHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultSLADefinitionHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *sladefinitionhistoryPager) applyOrder(query *SLADefinitionHistoryQuery) *SLADefinitionHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultSLADefinitionHistoryOrder.Field {
+		query = query.Order(DefaultSLADefinitionHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *sladefinitionhistoryPager) orderExpr(query *SLADefinitionHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultSLADefinitionHistoryOrder.Field {
+			b.Comma().Ident(DefaultSLADefinitionHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SLADefinitionHistory.
+func (_m *SLADefinitionHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SLADefinitionHistoryPaginateOption,
+) (*SLADefinitionHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSLADefinitionHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &SLADefinitionHistoryConnection{Edges: []*SLADefinitionHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SLADefinitionHistoryOrderFieldHistoryTime orders SLADefinitionHistory by history_time.
+	SLADefinitionHistoryOrderFieldHistoryTime = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: sladefinitionhistory.FieldHistoryTime,
+		toTerm: sladefinitionhistory.ByHistoryTime,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// SLADefinitionHistoryOrderFieldCreatedAt orders SLADefinitionHistory by created_at.
+	SLADefinitionHistoryOrderFieldCreatedAt = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: sladefinitionhistory.FieldCreatedAt,
+		toTerm: sladefinitionhistory.ByCreatedAt,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// SLADefinitionHistoryOrderFieldUpdatedAt orders SLADefinitionHistory by updated_at.
+	SLADefinitionHistoryOrderFieldUpdatedAt = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: sladefinitionhistory.FieldUpdatedAt,
+		toTerm: sladefinitionhistory.ByUpdatedAt,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// SLADefinitionHistoryOrderFieldSLADays orders SLADefinitionHistory by sla_days.
+	SLADefinitionHistoryOrderFieldSLADays = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.SLADays, nil
+		},
+		column: sladefinitionhistory.FieldSLADays,
+		toTerm: sladefinitionhistory.BySLADays,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SLADays,
+			}
+		},
+	}
+	// SLADefinitionHistoryOrderFieldSecurityLevel orders SLADefinitionHistory by security_level.
+	SLADefinitionHistoryOrderFieldSecurityLevel = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: sladefinitionhistory.FieldSecurityLevel,
+		toTerm: sladefinitionhistory.BySecurityLevel,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SLADefinitionHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case SLADefinitionHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case SLADefinitionHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SLADefinitionHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SLADefinitionHistoryOrderFieldSLADays.column:
+		str = "sla_days"
+	case SLADefinitionHistoryOrderFieldSecurityLevel.column:
+		str = "security_level"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SLADefinitionHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SLADefinitionHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SLADefinitionHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *SLADefinitionHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *SLADefinitionHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SLADefinitionHistoryOrderFieldUpdatedAt
+	case "sla_days":
+		*f = *SLADefinitionHistoryOrderFieldSLADays
+	case "security_level":
+		*f = *SLADefinitionHistoryOrderFieldSecurityLevel
+	default:
+		return fmt.Errorf("%s is not a valid SLADefinitionHistoryOrderField", str)
+	}
+	return nil
+}
+
+// SLADefinitionHistoryOrderField defines the ordering field of SLADefinitionHistory.
+type SLADefinitionHistoryOrderField struct {
+	// Value extracts the ordering value from the given SLADefinitionHistory.
+	Value    func(*SLADefinitionHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) sladefinitionhistory.OrderOption
+	toCursor func(*SLADefinitionHistory) Cursor
+}
+
+// SLADefinitionHistoryOrder defines the ordering of SLADefinitionHistory.
+type SLADefinitionHistoryOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *SLADefinitionHistoryOrderField `json:"field"`
+}
+
+// DefaultSLADefinitionHistoryOrder is the default ordering of SLADefinitionHistory.
+var DefaultSLADefinitionHistoryOrder = &SLADefinitionHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: sladefinitionhistory.FieldID,
+		toTerm: sladefinitionhistory.ByID,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts SLADefinitionHistory into SLADefinitionHistoryEdge.
+func (_m *SLADefinitionHistory) ToEdge(order *SLADefinitionHistoryOrder) *SLADefinitionHistoryEdge {
+	if order == nil {
+		order = DefaultSLADefinitionHistoryOrder
+	}
+	return &SLADefinitionHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -28594,6 +29143,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityHistoryOrderFieldSecurityLevel orders VulnerabilityHistory by security_level.
+	VulnerabilityHistoryOrderFieldSecurityLevel = &VulnerabilityHistoryOrderField{
+		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: vulnerabilityhistory.FieldSecurityLevel,
+		toTerm: vulnerabilityhistory.BySecurityLevel,
+		toCursor: func(_m *VulnerabilityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// VulnerabilityHistoryOrderFieldExternalID orders VulnerabilityHistory by external_id.
 	VulnerabilityHistoryOrderFieldExternalID = &VulnerabilityHistoryOrderField{
 		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
@@ -28664,6 +29227,8 @@ func (f VulnerabilityHistoryOrderField) String() string {
 		str = "updated_at"
 	case VulnerabilityHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
+	case VulnerabilityHistoryOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case VulnerabilityHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case VulnerabilityHistoryOrderFieldCveID.column:
@@ -28696,6 +29261,8 @@ func (f *VulnerabilityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityHistoryOrderFieldUpdatedAt
 	case "external_owner_id":
 		*f = *VulnerabilityHistoryOrderFieldExternalOwnerID
+	case "security_level":
+		*f = *VulnerabilityHistoryOrderFieldSecurityLevel
 	case "external_id":
 		*f = *VulnerabilityHistoryOrderFieldExternalID
 	case "cve_id":

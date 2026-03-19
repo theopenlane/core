@@ -110,6 +110,20 @@ func (_c *NotificationTemplateCreate) SetNillableDeletedBy(v *string) *Notificat
 	return _c
 }
 
+// SetRevision sets the "revision" field.
+func (_c *NotificationTemplateCreate) SetRevision(v string) *NotificationTemplateCreate {
+	_c.mutation.SetRevision(v)
+	return _c
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_c *NotificationTemplateCreate) SetNillableRevision(v *string) *NotificationTemplateCreate {
+	if v != nil {
+		_c.SetRevision(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *NotificationTemplateCreate) SetOwnerID(v string) *NotificationTemplateCreate {
 	_c.mutation.SetOwnerID(v)
@@ -368,6 +382,26 @@ func (_c *NotificationTemplateCreate) SetNillableVersion(v *int) *NotificationTe
 	return _c
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_c *NotificationTemplateCreate) SetTemplateContext(v enums.TemplateContext) *NotificationTemplateCreate {
+	_c.mutation.SetTemplateContext(v)
+	return _c
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_c *NotificationTemplateCreate) SetNillableTemplateContext(v *enums.TemplateContext) *NotificationTemplateCreate {
+	if v != nil {
+		_c.SetTemplateContext(*v)
+	}
+	return _c
+}
+
+// SetDefaults sets the "defaults" field.
+func (_c *NotificationTemplateCreate) SetDefaults(v map[string]interface{}) *NotificationTemplateCreate {
+	_c.mutation.SetDefaults(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NotificationTemplateCreate) SetID(v string) *NotificationTemplateCreate {
 	_c.mutation.SetID(v)
@@ -468,6 +502,10 @@ func (_c *NotificationTemplateCreate) defaults() error {
 		v := notificationtemplate.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.Revision(); !ok {
+		v := notificationtemplate.DefaultRevision
+		_c.mutation.SetRevision(v)
+	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := notificationtemplate.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -500,6 +538,11 @@ func (_c *NotificationTemplateCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *NotificationTemplateCreate) check() error {
+	if v, ok := _c.mutation.Revision(); ok {
+		if err := notificationtemplate.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.revision": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := notificationtemplate.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.owner_id": %w`, err)}
@@ -553,6 +596,11 @@ func (_c *NotificationTemplateCreate) check() error {
 	}
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`generated: missing required field "NotificationTemplate.version"`)}
+	}
+	if v, ok := _c.mutation.TemplateContext(); ok {
+		if err := notificationtemplate.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.template_context": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -613,6 +661,10 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(notificationtemplate.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := _c.mutation.Revision(); ok {
+		_spec.SetField(notificationtemplate.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(notificationtemplate.FieldSystemOwned, field.TypeBool, value)
@@ -689,6 +741,14 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(notificationtemplate.FieldVersion, field.TypeInt, value)
 		_node.Version = value
+	}
+	if value, ok := _c.mutation.TemplateContext(); ok {
+		_spec.SetField(notificationtemplate.FieldTemplateContext, field.TypeEnum, value)
+		_node.TemplateContext = value
+	}
+	if value, ok := _c.mutation.Defaults(); ok {
+		_spec.SetField(notificationtemplate.FieldDefaults, field.TypeJSON, value)
+		_node.Defaults = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

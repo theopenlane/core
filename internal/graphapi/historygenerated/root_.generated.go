@@ -383,6 +383,7 @@ type ComplexityRoot struct {
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
+		PublicRepresentation       func(childComplexity int) int
 		Ref                        func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
@@ -393,6 +394,7 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
@@ -789,6 +791,7 @@ type ComplexityRoot struct {
 		BodyTemplate         func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
 		EmailBrandingID      func(childComplexity int) int
 		Format               func(childComplexity int) int
@@ -805,9 +808,11 @@ type ComplexityRoot struct {
 		OwnerID              func(childComplexity int) int
 		PreheaderTemplate    func(childComplexity int) int
 		Ref                  func(childComplexity int) int
+		Revision             func(childComplexity int) int
 		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
+		TemplateContext      func(childComplexity int) int
 		TextTemplate         func(childComplexity int) int
 		Uischema             func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
@@ -1067,6 +1072,8 @@ type ComplexityRoot struct {
 		ExternalOwnerID    func(childComplexity int) int
 		ExternalURI        func(childComplexity int) int
 		FindingClass       func(childComplexity int) int
+		FindingStatusID    func(childComplexity int) int
+		FindingStatusName  func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		Impact             func(childComplexity int) int
@@ -1090,6 +1097,7 @@ type ComplexityRoot struct {
 		ScopeID            func(childComplexity int) int
 		ScopeName          func(childComplexity int) int
 		Score              func(childComplexity int) int
+		SecurityLevel      func(childComplexity int) int
 		Severity           func(childComplexity int) int
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
@@ -1296,29 +1304,35 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		IntegrationType  func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Kind             func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		PlatformID       func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		DefinitionID             func(childComplexity int) int
+		DefinitionSlug           func(childComplexity int) int
+		DefinitionVersion        func(childComplexity int) int
+		Description              func(childComplexity int) int
+		EnvironmentID            func(childComplexity int) int
+		EnvironmentName          func(childComplexity int) int
+		Family                   func(childComplexity int) int
+		HistoryTime              func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		IntegrationType          func(childComplexity int) int
+		InternalNotes            func(childComplexity int) int
+		Kind                     func(childComplexity int) int
+		Metadata                 func(childComplexity int) int
+		Name                     func(childComplexity int) int
+		Operation                func(childComplexity int) int
+		OwnerID                  func(childComplexity int) int
+		PlatformID               func(childComplexity int) int
+		ProviderMetadataSnapshot func(childComplexity int) int
+		Ref                      func(childComplexity int) int
+		ScopeID                  func(childComplexity int) int
+		ScopeName                func(childComplexity int) int
+		Status                   func(childComplexity int) int
+		SystemInternalID         func(childComplexity int) int
+		SystemOwned              func(childComplexity int) int
+		Tags                     func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	IntegrationHistoryConnection struct {
@@ -1590,6 +1604,7 @@ type ComplexityRoot struct {
 		Channel              func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
 		EmailTemplateID      func(childComplexity int) int
 		Format               func(childComplexity int) int
@@ -1605,9 +1620,11 @@ type ComplexityRoot struct {
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		Ref                  func(childComplexity int) int
+		Revision             func(childComplexity int) int
 		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
+		TemplateContext      func(childComplexity int) int
 		TitleTemplate        func(childComplexity int) int
 		TopicPattern         func(childComplexity int) int
 		Uischema             func(childComplexity int) int
@@ -2016,6 +2033,7 @@ type ComplexityRoot struct {
 		RemediationHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RemediationHistoryOrder, where *historygenerated.RemediationHistoryWhereInput) int
 		ReviewHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReviewHistoryOrder, where *historygenerated.ReviewHistoryWhereInput) int
 		RiskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RiskHistoryOrder, where *historygenerated.RiskHistoryWhereInput) int
+		SLADefinitionHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SLADefinitionHistoryOrder, where *historygenerated.SLADefinitionHistoryWhereInput) int
 		ScanHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ScanHistoryOrder, where *historygenerated.ScanHistoryWhereInput) int
 		ScheduledJobHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ScheduledJobHistoryOrder, where *historygenerated.ScheduledJobHistoryWhereInput) int
 		StandardHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.StandardHistoryOrder, where *historygenerated.StandardHistoryWhereInput) int
@@ -2191,6 +2209,35 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	SLADefinitionHistory struct {
+		CreatedAt                      func(childComplexity int) int
+		CreatedBy                      func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
+		HistoryTime                    func(childComplexity int) int
+		ID                             func(childComplexity int) int
+		Operation                      func(childComplexity int) int
+		OwnerID                        func(childComplexity int) int
+		Ref                            func(childComplexity int) int
+		SLADays                        func(childComplexity int) int
+		SLADefinitionSeverityLevelID   func(childComplexity int) int
+		SLADefinitionSeverityLevelName func(childComplexity int) int
+		SecurityLevel                  func(childComplexity int) int
+		Tags                           func(childComplexity int) int
+		UpdatedAt                      func(childComplexity int) int
+		UpdatedBy                      func(childComplexity int) int
+	}
+
+	SLADefinitionHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SLADefinitionHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	ScanHistory struct {
 		AssignedTo            func(childComplexity int) int
 		AssignedToGroupID     func(childComplexity int) int
@@ -2336,6 +2383,7 @@ type ComplexityRoot struct {
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
+		PublicRepresentation       func(childComplexity int) int
 		Ref                        func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
@@ -2344,6 +2392,7 @@ type ComplexityRoot struct {
 		References                 func(childComplexity int) int
 		ResponsiblePartyID         func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
 		SubcontrolKindID           func(childComplexity int) int
@@ -2711,6 +2760,7 @@ type ComplexityRoot struct {
 		FaviconRemoteURL         func(childComplexity int) int
 		Font                     func(childComplexity int) int
 		ForegroundColor          func(childComplexity int) int
+		HeroImageLocalFileID     func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
@@ -2878,53 +2928,56 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityHistory struct {
-		Blocking         func(childComplexity int) int
-		Category         func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CveID            func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DiscoveredAt     func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		Exploitability   func(childComplexity int) int
-		ExternalID       func(childComplexity int) int
-		ExternalOwnerID  func(childComplexity int) int
-		ExternalURI      func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		Impacts          func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Open             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Priority         func(childComplexity int) int
-		Production       func(childComplexity int) int
-		Public           func(childComplexity int) int
-		PublishedAt      func(childComplexity int) int
-		RawPayload       func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		References       func(childComplexity int) int
-		RemediationSLA   func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		Score            func(childComplexity int) int
-		Severity         func(childComplexity int) int
-		Source           func(childComplexity int) int
-		SourceUpdatedAt  func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Validated        func(childComplexity int) int
-		Vector           func(childComplexity int) int
+		Blocking                func(childComplexity int) int
+		Category                func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		CveID                   func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DiscoveredAt            func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		DisplayName             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		Exploitability          func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalOwnerID         func(childComplexity int) int
+		ExternalURI             func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Impact                  func(childComplexity int) int
+		Impacts                 func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Open                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Priority                func(childComplexity int) int
+		Production              func(childComplexity int) int
+		Public                  func(childComplexity int) int
+		PublishedAt             func(childComplexity int) int
+		RawPayload              func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		References              func(childComplexity int) int
+		RemediationSLA          func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Score                   func(childComplexity int) int
+		SecurityLevel           func(childComplexity int) int
+		Severity                func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceUpdatedAt         func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Summary                 func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		Validated               func(childComplexity int) int
+		Vector                  func(childComplexity int) int
+		VulnerabilityStatusID   func(childComplexity int) int
+		VulnerabilityStatusName func(childComplexity int) int
 	}
 
 	VulnerabilityHistoryConnection struct {
@@ -5168,6 +5221,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ControlHistory.OwnerID(childComplexity), true
 
+	case "ControlHistory.publicRepresentation":
+		if e.ComplexityRoot.ControlHistory.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.PublicRepresentation(childComplexity), true
+
 	case "ControlHistory.ref":
 		if e.ComplexityRoot.ControlHistory.Ref == nil {
 			break
@@ -5237,6 +5297,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.Source(childComplexity), true
+
+	case "ControlHistory.sourceName":
+		if e.ComplexityRoot.ControlHistory.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.SourceName(childComplexity), true
 
 	case "ControlHistory.standardID":
 		if e.ComplexityRoot.ControlHistory.StandardID == nil {
@@ -7317,6 +7384,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.CreatedBy(childComplexity), true
 
+	case "EmailTemplateHistory.defaults":
+		if e.ComplexityRoot.EmailTemplateHistory.Defaults == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.Defaults(childComplexity), true
+
 	case "EmailTemplateHistory.description":
 		if e.ComplexityRoot.EmailTemplateHistory.Description == nil {
 			break
@@ -7429,6 +7503,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.Ref(childComplexity), true
 
+	case "EmailTemplateHistory.revision":
+		if e.ComplexityRoot.EmailTemplateHistory.Revision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.Revision(childComplexity), true
+
 	case "EmailTemplateHistory.subjectTemplate":
 		if e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate == nil {
 			break
@@ -7449,6 +7530,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.SystemOwned(childComplexity), true
+
+	case "EmailTemplateHistory.templateContext":
+		if e.ComplexityRoot.EmailTemplateHistory.TemplateContext == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.TemplateContext(childComplexity), true
 
 	case "EmailTemplateHistory.textTemplate":
 		if e.ComplexityRoot.EmailTemplateHistory.TextTemplate == nil {
@@ -8885,6 +8973,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.FindingHistory.FindingClass(childComplexity), true
 
+	case "FindingHistory.findingStatusID":
+		if e.ComplexityRoot.FindingHistory.FindingStatusID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.FindingStatusID(childComplexity), true
+
+	case "FindingHistory.findingStatusName":
+		if e.ComplexityRoot.FindingHistory.FindingStatusName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.FindingStatusName(childComplexity), true
+
 	case "FindingHistory.historyTime":
 		if e.ComplexityRoot.FindingHistory.HistoryTime == nil {
 			break
@@ -9045,6 +9147,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.Score(childComplexity), true
+
+	case "FindingHistory.securityLevel":
+		if e.ComplexityRoot.FindingHistory.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.SecurityLevel(childComplexity), true
 
 	case "FindingHistory.severity":
 		if e.ComplexityRoot.FindingHistory.Severity == nil {
@@ -10124,6 +10233,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IntegrationHistory.CreatedBy(childComplexity), true
 
+	case "IntegrationHistory.definitionID":
+		if e.ComplexityRoot.IntegrationHistory.DefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.DefinitionID(childComplexity), true
+
+	case "IntegrationHistory.definitionSlug":
+		if e.ComplexityRoot.IntegrationHistory.DefinitionSlug == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.DefinitionSlug(childComplexity), true
+
+	case "IntegrationHistory.definitionVersion":
+		if e.ComplexityRoot.IntegrationHistory.DefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.DefinitionVersion(childComplexity), true
+
 	case "IntegrationHistory.description":
 		if e.ComplexityRoot.IntegrationHistory.Description == nil {
 			break
@@ -10144,6 +10274,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.EnvironmentName(childComplexity), true
+
+	case "IntegrationHistory.family":
+		if e.ComplexityRoot.IntegrationHistory.Family == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.Family(childComplexity), true
 
 	case "IntegrationHistory.historyTime":
 		if e.ComplexityRoot.IntegrationHistory.HistoryTime == nil {
@@ -10215,6 +10352,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IntegrationHistory.PlatformID(childComplexity), true
 
+	case "IntegrationHistory.providerMetadataSnapshot":
+		if e.ComplexityRoot.IntegrationHistory.ProviderMetadataSnapshot == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.ProviderMetadataSnapshot(childComplexity), true
+
 	case "IntegrationHistory.ref":
 		if e.ComplexityRoot.IntegrationHistory.Ref == nil {
 			break
@@ -10235,6 +10379,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.ScopeName(childComplexity), true
+
+	case "IntegrationHistory.status":
+		if e.ComplexityRoot.IntegrationHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.Status(childComplexity), true
 
 	case "IntegrationHistory.systemInternalID":
 		if e.ComplexityRoot.IntegrationHistory.SystemInternalID == nil {
@@ -11664,6 +11815,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplateHistory.CreatedBy(childComplexity), true
 
+	case "NotificationTemplateHistory.defaults":
+		if e.ComplexityRoot.NotificationTemplateHistory.Defaults == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.Defaults(childComplexity), true
+
 	case "NotificationTemplateHistory.description":
 		if e.ComplexityRoot.NotificationTemplateHistory.Description == nil {
 			break
@@ -11769,6 +11927,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplateHistory.Ref(childComplexity), true
 
+	case "NotificationTemplateHistory.revision":
+		if e.ComplexityRoot.NotificationTemplateHistory.Revision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.Revision(childComplexity), true
+
 	case "NotificationTemplateHistory.subjectTemplate":
 		if e.ComplexityRoot.NotificationTemplateHistory.SubjectTemplate == nil {
 			break
@@ -11789,6 +11954,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplateHistory.SystemOwned(childComplexity), true
+
+	case "NotificationTemplateHistory.templateContext":
+		if e.ComplexityRoot.NotificationTemplateHistory.TemplateContext == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.TemplateContext(childComplexity), true
 
 	case "NotificationTemplateHistory.titleTemplate":
 		if e.ComplexityRoot.NotificationTemplateHistory.TitleTemplate == nil {
@@ -14318,6 +14490,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.RiskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.RiskHistoryOrder), args["where"].(*historygenerated.RiskHistoryWhereInput)), true
 
+	case "Query.slaDefinitionHistories":
+		if e.ComplexityRoot.Query.SLADefinitionHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_slaDefinitionHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SLADefinitionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SLADefinitionHistoryOrder), args["where"].(*historygenerated.SLADefinitionHistoryWhereInput)), true
+
 	case "Query.scanHistories":
 		if e.ComplexityRoot.Query.ScanHistories == nil {
 			break
@@ -15470,6 +15654,146 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistoryEdge.Node(childComplexity), true
 
+	case "SLADefinitionHistory.createdAt":
+		if e.ComplexityRoot.SLADefinitionHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.CreatedAt(childComplexity), true
+
+	case "SLADefinitionHistory.createdBy":
+		if e.ComplexityRoot.SLADefinitionHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.CreatedBy(childComplexity), true
+
+	case "SLADefinitionHistory.displayID":
+		if e.ComplexityRoot.SLADefinitionHistory.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.DisplayID(childComplexity), true
+
+	case "SLADefinitionHistory.historyTime":
+		if e.ComplexityRoot.SLADefinitionHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.HistoryTime(childComplexity), true
+
+	case "SLADefinitionHistory.id":
+		if e.ComplexityRoot.SLADefinitionHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.ID(childComplexity), true
+
+	case "SLADefinitionHistory.operation":
+		if e.ComplexityRoot.SLADefinitionHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.Operation(childComplexity), true
+
+	case "SLADefinitionHistory.ownerID":
+		if e.ComplexityRoot.SLADefinitionHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.OwnerID(childComplexity), true
+
+	case "SLADefinitionHistory.ref":
+		if e.ComplexityRoot.SLADefinitionHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.Ref(childComplexity), true
+
+	case "SLADefinitionHistory.slaDays":
+		if e.ComplexityRoot.SLADefinitionHistory.SLADays == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.SLADays(childComplexity), true
+
+	case "SLADefinitionHistory.slaDefinitionSeverityLevelID":
+		if e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelID(childComplexity), true
+
+	case "SLADefinitionHistory.slaDefinitionSeverityLevelName":
+		if e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelName(childComplexity), true
+
+	case "SLADefinitionHistory.securityLevel":
+		if e.ComplexityRoot.SLADefinitionHistory.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.SecurityLevel(childComplexity), true
+
+	case "SLADefinitionHistory.tags":
+		if e.ComplexityRoot.SLADefinitionHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.Tags(childComplexity), true
+
+	case "SLADefinitionHistory.updatedAt":
+		if e.ComplexityRoot.SLADefinitionHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.UpdatedAt(childComplexity), true
+
+	case "SLADefinitionHistory.updatedBy":
+		if e.ComplexityRoot.SLADefinitionHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.UpdatedBy(childComplexity), true
+
+	case "SLADefinitionHistoryConnection.edges":
+		if e.ComplexityRoot.SLADefinitionHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistoryConnection.Edges(childComplexity), true
+
+	case "SLADefinitionHistoryConnection.pageInfo":
+		if e.ComplexityRoot.SLADefinitionHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistoryConnection.PageInfo(childComplexity), true
+
+	case "SLADefinitionHistoryConnection.totalCount":
+		if e.ComplexityRoot.SLADefinitionHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistoryConnection.TotalCount(childComplexity), true
+
+	case "SLADefinitionHistoryEdge.cursor":
+		if e.ComplexityRoot.SLADefinitionHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistoryEdge.Cursor(childComplexity), true
+
+	case "SLADefinitionHistoryEdge.node":
+		if e.ComplexityRoot.SLADefinitionHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistoryEdge.Node(childComplexity), true
+
 	case "ScanHistory.assignedTo":
 		if e.ComplexityRoot.ScanHistory.AssignedTo == nil {
 			break
@@ -16289,6 +16613,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubcontrolHistory.OwnerID(childComplexity), true
 
+	case "SubcontrolHistory.publicRepresentation":
+		if e.ComplexityRoot.SubcontrolHistory.PublicRepresentation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.PublicRepresentation(childComplexity), true
+
 	case "SubcontrolHistory.ref":
 		if e.ComplexityRoot.SubcontrolHistory.Ref == nil {
 			break
@@ -16344,6 +16675,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.Source(childComplexity), true
+
+	case "SubcontrolHistory.sourceName":
+		if e.ComplexityRoot.SubcontrolHistory.SourceName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.SourceName(childComplexity), true
 
 	case "SubcontrolHistory.status":
 		if e.ComplexityRoot.SubcontrolHistory.Status == nil {
@@ -18221,6 +18559,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.ForegroundColor(childComplexity), true
 
+	case "TrustCenterSettingHistory.heroImageLocalFileID":
+		if e.ComplexityRoot.TrustCenterSettingHistory.HeroImageLocalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.HeroImageLocalFileID(childComplexity), true
+
 	case "TrustCenterSettingHistory.historyTime":
 		if e.ComplexityRoot.TrustCenterSettingHistory.HistoryTime == nil {
 			break
@@ -19320,6 +19665,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.Score(childComplexity), true
 
+	case "VulnerabilityHistory.securityLevel":
+		if e.ComplexityRoot.VulnerabilityHistory.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.SecurityLevel(childComplexity), true
+
 	case "VulnerabilityHistory.severity":
 		if e.ComplexityRoot.VulnerabilityHistory.Severity == nil {
 			break
@@ -19403,6 +19755,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.Vector(childComplexity), true
+
+	case "VulnerabilityHistory.vulnerabilityStatusID":
+		if e.ComplexityRoot.VulnerabilityHistory.VulnerabilityStatusID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.VulnerabilityStatusID(childComplexity), true
+
+	case "VulnerabilityHistory.vulnerabilityStatusName":
+		if e.ComplexityRoot.VulnerabilityHistory.VulnerabilityStatusName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.VulnerabilityStatusName(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.edges":
 		if e.ComplexityRoot.VulnerabilityHistoryConnection.Edges == nil {
@@ -20709,6 +21075,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputReviewHistoryWhereInput,
 		ec.unmarshalInputRiskHistoryOrder,
 		ec.unmarshalInputRiskHistoryWhereInput,
+		ec.unmarshalInputSLADefinitionHistoryOrder,
+		ec.unmarshalInputSLADefinitionHistoryWhereInput,
 		ec.unmarshalInputScanHistoryOrder,
 		ec.unmarshalInputScanHistoryWhereInput,
 		ec.unmarshalInputScheduledJobHistoryOrder,
@@ -25216,9 +25584,17 @@ type ControlHistory implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlHistoryControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -25728,6 +26104,24 @@ input ControlHistoryWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: ControlHistoryControlSource
@@ -25736,6 +26130,24 @@ input ControlHistoryWhereInput {
   sourceNotIn: [ControlHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -30767,6 +31179,10 @@ type EmailTemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -30838,6 +31254,14 @@ type EmailTemplateHistory implements Node {
   template version
   """
   version: Int!
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: EmailTemplateHistoryTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
   """
   email branding configuration to apply for this template
   """
@@ -30922,12 +31346,22 @@ enum EmailTemplateHistoryOrderField {
   history_time
   created_at
   updated_at
+  revision
   KEY
   NAME
   FORMAT
   LOCALE
   ACTIVE
   VERSION
+  TEMPLATE_CONTEXT
+}
+"""
+EmailTemplateHistoryTemplateContext is enum for the field template_context
+"""
+enum EmailTemplateHistoryTemplateContext @goModel(model: "github.com/theopenlane/core/common/enums.TemplateContext") {
+  CAMPAIGN_RECIPIENT
+  TRANSACTIONAL
+  WORKFLOW_ACTION
 }
 """
 EmailTemplateHistoryWhereInput is used for filtering EmailTemplateHistory objects.
@@ -31048,6 +31482,24 @@ input EmailTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
   owner_id field predicates
   """
@@ -31270,6 +31722,15 @@ input EmailTemplateHistoryWhereInput {
   versionGTE: Int
   versionLT: Int
   versionLTE: Int
+  """
+  template_context field predicates
+  """
+  templateContext: EmailTemplateHistoryTemplateContext
+  templateContextNEQ: EmailTemplateHistoryTemplateContext
+  templateContextIn: [EmailTemplateHistoryTemplateContext!]
+  templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   email_branding_id field predicates
   """
@@ -34386,9 +34847,25 @@ type FindingHistory implements Node {
   """
   scopeID: String
   """
+  the status of the finding
+  """
+  findingStatusName: String
+  """
+  the status of the finding
+  """
+  findingStatusID: String
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
+  """
+  lifecycle status of the finding
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
+  """
+  incoming source severity
+  """
+  securityLevel: FindingHistorySecurityLevel
   """
   the owner of the finding
   """
@@ -34506,10 +34983,6 @@ type FindingHistory implements Node {
   """
   remediationSLA: Int
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   timestamp when the finding was last observed by the source
   """
   eventTime: DateTime
@@ -34593,9 +35066,20 @@ enum FindingHistoryOrderField {
   created_at
   updated_at
   external_id
+  security_level
   external_owner_id
   category
   severity
+}
+"""
+FindingHistorySecurityLevel is enum for the field security_level
+"""
+enum FindingHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 FindingHistoryWhereInput is used for filtering FindingHistory objects.
@@ -34866,6 +35350,42 @@ input FindingHistoryWhereInput {
   scopeIDEqualFold: String
   scopeIDContainsFold: String
   """
+  finding_status_name field predicates
+  """
+  findingStatusName: String
+  findingStatusNameNEQ: String
+  findingStatusNameIn: [String!]
+  findingStatusNameNotIn: [String!]
+  findingStatusNameGT: String
+  findingStatusNameGTE: String
+  findingStatusNameLT: String
+  findingStatusNameLTE: String
+  findingStatusNameContains: String
+  findingStatusNameHasPrefix: String
+  findingStatusNameHasSuffix: String
+  findingStatusNameIsNil: Boolean
+  findingStatusNameNotNil: Boolean
+  findingStatusNameEqualFold: String
+  findingStatusNameContainsFold: String
+  """
+  finding_status_id field predicates
+  """
+  findingStatusID: String
+  findingStatusIDNEQ: String
+  findingStatusIDIn: [String!]
+  findingStatusIDNotIn: [String!]
+  findingStatusIDGT: String
+  findingStatusIDGTE: String
+  findingStatusIDLT: String
+  findingStatusIDLTE: String
+  findingStatusIDContains: String
+  findingStatusIDHasPrefix: String
+  findingStatusIDHasSuffix: String
+  findingStatusIDIsNil: Boolean
+  findingStatusIDNotNil: Boolean
+  findingStatusIDEqualFold: String
+  findingStatusIDContainsFold: String
+  """
   external_id field predicates
   """
   externalID: String
@@ -34883,6 +35403,33 @@ input FindingHistoryWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: FindingHistorySecurityLevel
+  securityLevelNEQ: FindingHistorySecurityLevel
+  securityLevelIn: [FindingHistorySecurityLevel!]
+  securityLevelNotIn: [FindingHistorySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_owner_id field predicates
   """
@@ -35235,24 +35782,6 @@ input FindingHistoryWhereInput {
   remediationSLALTE: Int
   remediationSLAIsNil: Boolean
   remediationSLANotNil: Boolean
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   event_time field predicates
   """
@@ -37487,6 +38016,30 @@ type IntegrationHistory implements Node {
   additional metadata about the integration
   """
   metadata: Map
+  """
+  the canonical definition identifier for the installation
+  """
+  definitionID: String
+  """
+  the definition version recorded for this installation
+  """
+  definitionVersion: String
+  """
+  the human-readable definition slug recorded for this installation
+  """
+  definitionSlug: String
+  """
+  the denormalized family label for the installation definition
+  """
+  family: String
+  """
+  the lifecycle status of the installation
+  """
+  status: IntegrationHistoryIntegrationStatus!
+  """
+  snapshot of definition metadata captured on the installation
+  """
+  providerMetadataSnapshot: Map
 }
 """
 A connection to a list of items.
@@ -37519,6 +38072,16 @@ type IntegrationHistoryEdge {
   cursor: Cursor!
 }
 """
+IntegrationHistoryIntegrationStatus is enum for the field status
+"""
+enum IntegrationHistoryIntegrationStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationStatus") {
+  PENDING
+  CONNECTED
+  ERRORED
+  DISABLED
+  DELETED
+}
+"""
 IntegrationHistoryOpType is enum for the field operation
 """
 enum IntegrationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -37549,6 +38112,11 @@ enum IntegrationHistoryOrderField {
   name
   kind
   integration_type
+  definition_id
+  definition_version
+  definition_slug
+  family
+  status
 }
 """
 IntegrationHistoryWhereInput is used for filtering IntegrationHistory objects.
@@ -37872,6 +38440,85 @@ input IntegrationHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  definition_id field predicates
+  """
+  definitionID: String
+  definitionIDNEQ: String
+  definitionIDIn: [String!]
+  definitionIDNotIn: [String!]
+  definitionIDGT: String
+  definitionIDGTE: String
+  definitionIDLT: String
+  definitionIDLTE: String
+  definitionIDContains: String
+  definitionIDHasPrefix: String
+  definitionIDHasSuffix: String
+  definitionIDIsNil: Boolean
+  definitionIDNotNil: Boolean
+  definitionIDEqualFold: String
+  definitionIDContainsFold: String
+  """
+  definition_version field predicates
+  """
+  definitionVersion: String
+  definitionVersionNEQ: String
+  definitionVersionIn: [String!]
+  definitionVersionNotIn: [String!]
+  definitionVersionGT: String
+  definitionVersionGTE: String
+  definitionVersionLT: String
+  definitionVersionLTE: String
+  definitionVersionContains: String
+  definitionVersionHasPrefix: String
+  definitionVersionHasSuffix: String
+  definitionVersionIsNil: Boolean
+  definitionVersionNotNil: Boolean
+  definitionVersionEqualFold: String
+  definitionVersionContainsFold: String
+  """
+  definition_slug field predicates
+  """
+  definitionSlug: String
+  definitionSlugNEQ: String
+  definitionSlugIn: [String!]
+  definitionSlugNotIn: [String!]
+  definitionSlugGT: String
+  definitionSlugGTE: String
+  definitionSlugLT: String
+  definitionSlugLTE: String
+  definitionSlugContains: String
+  definitionSlugHasPrefix: String
+  definitionSlugHasSuffix: String
+  definitionSlugIsNil: Boolean
+  definitionSlugNotNil: Boolean
+  definitionSlugEqualFold: String
+  definitionSlugContainsFold: String
+  """
+  family field predicates
+  """
+  family: String
+  familyNEQ: String
+  familyIn: [String!]
+  familyNotIn: [String!]
+  familyGT: String
+  familyGTE: String
+  familyLT: String
+  familyLTE: String
+  familyContains: String
+  familyHasPrefix: String
+  familyHasSuffix: String
+  familyIsNil: Boolean
+  familyNotNil: Boolean
+  familyEqualFold: String
+  familyContainsFold: String
+  """
+  status field predicates
+  """
+  status: IntegrationHistoryIntegrationStatus
+  statusNEQ: IntegrationHistoryIntegrationStatus
+  statusIn: [IntegrationHistoryIntegrationStatus!]
+  statusNotIn: [IntegrationHistoryIntegrationStatus!]
 }
 type InternalPolicyHistory implements Node {
   id: ID!
@@ -40826,6 +41473,10 @@ type NotificationTemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -40917,6 +41568,14 @@ type NotificationTemplateHistory implements Node {
   template version
   """
   version: Int!
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: NotificationTemplateHistoryTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
 }
 """
 NotificationTemplateHistoryChannel is enum for the field channel
@@ -40994,6 +41653,7 @@ enum NotificationTemplateHistoryOrderField {
   history_time
   created_at
   updated_at
+  revision
   KEY
   NAME
   CHANNEL
@@ -41002,6 +41662,15 @@ enum NotificationTemplateHistoryOrderField {
   TOPIC_PATTERN
   ACTIVE
   VERSION
+  TEMPLATE_CONTEXT
+}
+"""
+NotificationTemplateHistoryTemplateContext is enum for the field template_context
+"""
+enum NotificationTemplateHistoryTemplateContext @goModel(model: "github.com/theopenlane/core/common/enums.TemplateContext") {
+  CAMPAIGN_RECIPIENT
+  TRANSACTIONAL
+  WORKFLOW_ACTION
 }
 """
 NotificationTemplateHistoryWhereInput is used for filtering NotificationTemplateHistory objects.
@@ -41122,6 +41791,24 @@ input NotificationTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
   owner_id field predicates
   """
@@ -41403,6 +42090,15 @@ input NotificationTemplateHistoryWhereInput {
   versionGTE: Int
   versionLT: Int
   versionLTE: Int
+  """
+  template_context field predicates
+  """
+  templateContext: NotificationTemplateHistoryTemplateContext
+  templateContextNEQ: NotificationTemplateHistoryTemplateContext
+  templateContextIn: [NotificationTemplateHistoryTemplateContext!]
+  templateContextNotIn: [NotificationTemplateHistoryTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
 }
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
@@ -47179,6 +47875,37 @@ type Query {
     """
     where: RiskHistoryWhereInput
   ): RiskHistoryConnection!
+  slaDefinitionHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SLADefinitionHistories returned from the connection.
+    """
+    orderBy: SLADefinitionHistoryOrder
+
+    """
+    Filtering options for SLADefinitionHistories returned from the connection.
+    """
+    where: SLADefinitionHistoryWhereInput
+  ): SLADefinitionHistoryConnection!
   scanHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -50115,6 +50842,323 @@ input RiskHistoryWhereInput {
   delegateIDEqualFold: String
   delegateIDContainsFold: String
 }
+type SLADefinitionHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: SLADefinitionHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelID: String
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int!
+  """
+  incoming source severity
+  """
+  securityLevel: SLADefinitionHistorySecurityLevel!
+}
+"""
+A connection to a list of items.
+"""
+type SLADefinitionHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [SLADefinitionHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SLADefinitionHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SLADefinitionHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+SLADefinitionHistoryOpType is enum for the field operation
+"""
+enum SLADefinitionHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for SLADefinitionHistory connections
+"""
+input SLADefinitionHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SLADefinitionHistories.
+  """
+  field: SLADefinitionHistoryOrderField!
+}
+"""
+Properties by which SLADefinitionHistory connections can be ordered.
+"""
+enum SLADefinitionHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  sla_days
+  security_level
+}
+"""
+SLADefinitionHistorySecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+SLADefinitionHistoryWhereInput is used for filtering SLADefinitionHistory objects.
+Input was generated by ent.
+"""
+input SLADefinitionHistoryWhereInput {
+  not: SLADefinitionHistoryWhereInput
+  and: [SLADefinitionHistoryWhereInput!]
+  or: [SLADefinitionHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: SLADefinitionHistoryOpType
+  operationNEQ: SLADefinitionHistoryOpType
+  operationIn: [SLADefinitionHistoryOpType!]
+  operationNotIn: [SLADefinitionHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  sla_definition_severity_level_name field predicates
+  """
+  slaDefinitionSeverityLevelName: String
+  slaDefinitionSeverityLevelNameNEQ: String
+  slaDefinitionSeverityLevelNameIn: [String!]
+  slaDefinitionSeverityLevelNameNotIn: [String!]
+  slaDefinitionSeverityLevelNameGT: String
+  slaDefinitionSeverityLevelNameGTE: String
+  slaDefinitionSeverityLevelNameLT: String
+  slaDefinitionSeverityLevelNameLTE: String
+  slaDefinitionSeverityLevelNameContains: String
+  slaDefinitionSeverityLevelNameHasPrefix: String
+  slaDefinitionSeverityLevelNameHasSuffix: String
+  slaDefinitionSeverityLevelNameIsNil: Boolean
+  slaDefinitionSeverityLevelNameNotNil: Boolean
+  slaDefinitionSeverityLevelNameEqualFold: String
+  slaDefinitionSeverityLevelNameContainsFold: String
+  """
+  sla_definition_severity_level_id field predicates
+  """
+  slaDefinitionSeverityLevelID: String
+  slaDefinitionSeverityLevelIDNEQ: String
+  slaDefinitionSeverityLevelIDIn: [String!]
+  slaDefinitionSeverityLevelIDNotIn: [String!]
+  slaDefinitionSeverityLevelIDGT: String
+  slaDefinitionSeverityLevelIDGTE: String
+  slaDefinitionSeverityLevelIDLT: String
+  slaDefinitionSeverityLevelIDLTE: String
+  slaDefinitionSeverityLevelIDContains: String
+  slaDefinitionSeverityLevelIDHasPrefix: String
+  slaDefinitionSeverityLevelIDHasSuffix: String
+  slaDefinitionSeverityLevelIDIsNil: Boolean
+  slaDefinitionSeverityLevelIDNotNil: Boolean
+  slaDefinitionSeverityLevelIDEqualFold: String
+  slaDefinitionSeverityLevelIDContainsFold: String
+  """
+  sla_days field predicates
+  """
+  slaDays: Int
+  slaDaysNEQ: Int
+  slaDaysIn: [Int!]
+  slaDaysNotIn: [Int!]
+  slaDaysGT: Int
+  slaDaysGTE: Int
+  slaDaysLT: Int
+  slaDaysLTE: Int
+  """
+  security_level field predicates
+  """
+  securityLevel: SLADefinitionHistorySecurityLevel
+  securityLevelNEQ: SLADefinitionHistorySecurityLevel
+  securityLevelIn: [SLADefinitionHistorySecurityLevel!]
+  securityLevelNotIn: [SLADefinitionHistorySecurityLevel!]
+}
 type ScanHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -51664,9 +52708,17 @@ type SubcontrolHistory implements Node {
   """
   implementationDescription: String
   """
+  a public representation of the control that can be shared with external parties without revealing sensitive information
+  """
+  publicRepresentation: String
+  """
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolHistoryControlSource @externalSource(source: FRAMEWORK)
+  """
+  name of the source of the controls if not directly from a standard
+  """
+  sourceName: String
   """
   the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
@@ -52145,6 +53197,24 @@ input SubcontrolHistoryWhereInput {
   implementationDescriptionEqualFold: String
   implementationDescriptionContainsFold: String
   """
+  public_representation field predicates
+  """
+  publicRepresentation: String
+  publicRepresentationNEQ: String
+  publicRepresentationIn: [String!]
+  publicRepresentationNotIn: [String!]
+  publicRepresentationGT: String
+  publicRepresentationGTE: String
+  publicRepresentationLT: String
+  publicRepresentationLTE: String
+  publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
+  publicRepresentationHasSuffix: String
+  publicRepresentationIsNil: Boolean
+  publicRepresentationNotNil: Boolean
+  publicRepresentationEqualFold: String
+  publicRepresentationContainsFold: String
+  """
   source field predicates
   """
   source: SubcontrolHistoryControlSource
@@ -52153,6 +53223,24 @@ input SubcontrolHistoryWhereInput {
   sourceNotIn: [SubcontrolHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  source_name field predicates
+  """
+  sourceName: String
+  sourceNameNEQ: String
+  sourceNameIn: [String!]
+  sourceNameNotIn: [String!]
+  sourceNameGT: String
+  sourceNameGTE: String
+  sourceNameLT: String
+  sourceNameLTE: String
+  sourceNameContains: String
+  sourceNameHasPrefix: String
+  sourceNameHasSuffix: String
+  sourceNameIsNil: Boolean
+  sourceNameNotNil: Boolean
+  sourceNameEqualFold: String
+  sourceNameContainsFold: String
   """
   reference_framework field predicates
   """
@@ -56386,6 +57474,10 @@ type TrustCenterSettingHistory implements Node {
   """
   faviconLocalFileID: String
   """
+  Image to be used for the trust center top banner, will override brand gradient if set, recommended 1600 × 600 px (8:3 aspect ratio)
+  """
+  heroImageLocalFileID: String
+  """
   Theme mode for the trust center
   """
   themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
@@ -56796,6 +57888,24 @@ input TrustCenterSettingHistoryWhereInput {
   faviconLocalFileIDNotNil: Boolean
   faviconLocalFileIDEqualFold: String
   faviconLocalFileIDContainsFold: String
+  """
+  hero_image_local_file_id field predicates
+  """
+  heroImageLocalFileID: String
+  heroImageLocalFileIDNEQ: String
+  heroImageLocalFileIDIn: [String!]
+  heroImageLocalFileIDNotIn: [String!]
+  heroImageLocalFileIDGT: String
+  heroImageLocalFileIDGTE: String
+  heroImageLocalFileIDLT: String
+  heroImageLocalFileIDLTE: String
+  heroImageLocalFileIDContains: String
+  heroImageLocalFileIDHasPrefix: String
+  heroImageLocalFileIDHasSuffix: String
+  heroImageLocalFileIDIsNil: Boolean
+  heroImageLocalFileIDNotNil: Boolean
+  heroImageLocalFileIDEqualFold: String
+  heroImageLocalFileIDContainsFold: String
   """
   theme_mode field predicates
   """
@@ -58631,9 +59741,25 @@ type VulnerabilityHistory implements Node {
   """
   scopeID: String
   """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusID: String
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  lifecycle status of the vulnerability
+  """
+  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
+  """
+  lifecycle status of the vulnerability
+  """
+  securityLevel: VulnerabilityHistorySecurityLevel
   """
   external identifier from the integration source for the vulnerability
   """
@@ -58674,10 +59800,6 @@ type VulnerabilityHistory implements Node {
   priority assigned to the vulnerability
   """
   priority: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   short summary of the vulnerability details
   """
@@ -58806,10 +59928,21 @@ enum VulnerabilityHistoryOrderField {
   created_at
   updated_at
   external_owner_id
+  security_level
   external_id
   cve_id
   category
   severity
+}
+"""
+VulnerabilityHistorySecurityLevel is enum for the field security_level
+"""
+enum VulnerabilityHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 VulnerabilityHistoryWhereInput is used for filtering VulnerabilityHistory objects.
@@ -59080,6 +60213,42 @@ input VulnerabilityHistoryWhereInput {
   scopeIDEqualFold: String
   scopeIDContainsFold: String
   """
+  vulnerability_status_name field predicates
+  """
+  vulnerabilityStatusName: String
+  vulnerabilityStatusNameNEQ: String
+  vulnerabilityStatusNameIn: [String!]
+  vulnerabilityStatusNameNotIn: [String!]
+  vulnerabilityStatusNameGT: String
+  vulnerabilityStatusNameGTE: String
+  vulnerabilityStatusNameLT: String
+  vulnerabilityStatusNameLTE: String
+  vulnerabilityStatusNameContains: String
+  vulnerabilityStatusNameHasPrefix: String
+  vulnerabilityStatusNameHasSuffix: String
+  vulnerabilityStatusNameIsNil: Boolean
+  vulnerabilityStatusNameNotNil: Boolean
+  vulnerabilityStatusNameEqualFold: String
+  vulnerabilityStatusNameContainsFold: String
+  """
+  vulnerability_status_id field predicates
+  """
+  vulnerabilityStatusID: String
+  vulnerabilityStatusIDNEQ: String
+  vulnerabilityStatusIDIn: [String!]
+  vulnerabilityStatusIDNotIn: [String!]
+  vulnerabilityStatusIDGT: String
+  vulnerabilityStatusIDGTE: String
+  vulnerabilityStatusIDLT: String
+  vulnerabilityStatusIDLTE: String
+  vulnerabilityStatusIDContains: String
+  vulnerabilityStatusIDHasPrefix: String
+  vulnerabilityStatusIDHasSuffix: String
+  vulnerabilityStatusIDIsNil: Boolean
+  vulnerabilityStatusIDNotNil: Boolean
+  vulnerabilityStatusIDEqualFold: String
+  vulnerabilityStatusIDContainsFold: String
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -59097,6 +60266,33 @@ input VulnerabilityHistoryWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: String
+  statusNEQ: String
+  statusIn: [String!]
+  statusNotIn: [String!]
+  statusGT: String
+  statusGTE: String
+  statusLT: String
+  statusLTE: String
+  statusContains: String
+  statusHasPrefix: String
+  statusHasSuffix: String
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  statusEqualFold: String
+  statusContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: VulnerabilityHistorySecurityLevel
+  securityLevelNEQ: VulnerabilityHistorySecurityLevel
+  securityLevelIn: [VulnerabilityHistorySecurityLevel!]
+  securityLevelNotIn: [VulnerabilityHistorySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_id field predicates
   """
@@ -59260,24 +60456,6 @@ input VulnerabilityHistoryWhereInput {
   priorityNotNil: Boolean
   priorityEqualFold: String
   priorityContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   summary field predicates
   """

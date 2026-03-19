@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -57,8 +58,16 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldFindingStatusName holds the string denoting the finding_status_name field in the database.
+	FieldFindingStatusName = "finding_status_name"
+	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
+	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldSecurityLevel holds the string denoting the security_level field in the database.
+	FieldSecurityLevel = "security_level"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
 	FieldExternalOwnerID = "external_owner_id"
 	// FieldSource holds the string denoting the source field in the database.
@@ -117,8 +126,6 @@ const (
 	FieldVector = "vector"
 	// FieldRemediationSLA holds the string denoting the remediation_sla field in the database.
 	FieldRemediationSLA = "remediation_sla"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// FieldEventTime holds the string denoting the event_time field in the database.
 	FieldEventTime = "event_time"
 	// FieldReportedAt holds the string denoting the reported_at field in the database.
@@ -157,7 +164,11 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldFindingStatusName,
+	FieldFindingStatusID,
 	FieldExternalID,
+	FieldStatus,
+	FieldSecurityLevel,
 	FieldExternalOwnerID,
 	FieldSource,
 	FieldResourceName,
@@ -187,7 +198,6 @@ var Columns = []string{
 	FieldTargetDetails,
 	FieldVector,
 	FieldRemediationSLA,
-	FieldStatus,
 	FieldEventTime,
 	FieldReportedAt,
 	FieldSourceUpdatedAt,
@@ -248,6 +258,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("findinghistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultSecurityLevel enums.SecurityLevel = "NONE"
+
+// SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
+func SecurityLevelValidator(sl enums.SecurityLevel) error {
+	switch sl.String() {
+	case "NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("findinghistory: invalid enum value for security_level field: %q", sl)
 	}
 }
 
@@ -349,9 +371,29 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
+// ByFindingStatusName orders the results by the finding_status_name field.
+func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingStatusName, opts...).ToFunc()
+}
+
+// ByFindingStatusID orders the results by the finding_status_id field.
+func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingStatusID, opts...).ToFunc()
+}
+
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// BySecurityLevel orders the results by the security_level field.
+func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityLevel, opts...).ToFunc()
 }
 
 // ByExternalOwnerID orders the results by the external_owner_id field.
@@ -474,11 +516,6 @@ func ByRemediationSLA(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemediationSLA, opts...).ToFunc()
 }
 
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
 // ByEventTime orders the results by the event_time field.
 func ByEventTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEventTime, opts...).ToFunc()
@@ -504,4 +541,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.SecurityLevel must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SecurityLevel)(nil)
+	// enums.SecurityLevel must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SecurityLevel)(nil)
 )

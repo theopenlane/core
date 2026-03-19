@@ -1451,6 +1451,77 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
+func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	(&ControlBuilder{
+		client:     suite.client,
+		StandardID: publicStandard.ID,
+		AllFields:  true,
+		Title:      "Control With Comments",
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	// clone the controls
+	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+
+	clonedControl := resp.CreateControlsByClone.Controls[0]
+
+	// add comment
+	comment := []interface{}{
+		map[string]interface{}{
+			"children": []interface{}{
+				map[string]interface{}{
+					"text": "my first text",
+				},
+				map[string]interface{}{
+					"comment":           true,
+					"comment_random_id": true,
+					"text":              "another sub comment",
+				},
+			},
+			"id":   "b_bwtnb9l8",
+			"type": "p",
+		},
+	}
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+
+	err = suite.client.db.Control.UpdateOneID(clonedControl.ID).
+		SetDescriptionJSON(comment).
+		Exec(dbCtx)
+	assert.NilError(t, err)
+
+	// bump the standard revision to trigger a revision update on the next clone
+	newRevision := "v0.2.0"
+	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
+		Revision: &newRevision,
+	}, nil)
+	assert.NilError(t, err)
+
+	// clone again — this should succeed even though the existing control has comments on description_json
+	resp2, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp2.CreateControlsByClone.Controls, 1))
+
+	newControl := resp2.CreateControlsByClone.Controls[0]
+	assert.Equal(t, newControl.ID, clonedControl.ID)
+	assert.Equal(t, *newControl.ReferenceFrameworkRevision, newRevision)
+
+	queryResp, err := suite.client.api.GetControlByID(testUser1.UserCtx, clonedControl.ID)
+	assert.NilError(t, err)
+	assert.Check(t, queryResp.Control.DescriptionJSON == nil)
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
 func TestMutationUpdateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
@@ -1572,14 +1643,13 @@ func TestMutationUpdateControl(t *testing.T) {
 			ctx:       context.Background(),
 		},
 		{
-			name: "invalid custom control enum for control kind",
+			name: "auto-create custom control enum for control kind",
 			request: testclient.UpdateControlInput{
 				ControlKindName: lo.ToPtr("InvalidKind"),
 			},
-			controlID:   control.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			expectedErr: "value does not exist:",
+			controlID: control.ID,
+			client:    suite.client.apiWithPAT,
+			ctx:       context.Background(),
 		},
 		{
 			name: "update ref code to empty",
@@ -1602,14 +1672,13 @@ func TestMutationUpdateControl(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update not allowed, cannot access another org's custom control kind",
+			name: "update allowed, auto-creates custom control kind in own org",
 			request: testclient.UpdateControlInput{
 				ControlKindName: &kindCustom.Name,
 			},
-			controlID:   controlAnotherOrg.ID,
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: "value does not exist:",
+			controlID: controlAnotherOrg.ID,
+			client:    suite.client.api,
+			ctx:       testUser2.UserCtx,
 		},
 		{
 			name: "update allowed, user added to one of the programs",
