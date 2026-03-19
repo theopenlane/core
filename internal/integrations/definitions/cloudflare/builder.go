@@ -25,14 +25,20 @@ func Builder() definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         cloudflareCredential,
+					Name:        "Cloudflare Credential",
+					Description: "Credential slot used by the Cloudflare client in this definition.",
+					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         CloudflareClient.ID(),
-					Description: "Cloudflare REST API client",
-					Build:       Client{}.Build,
+					Ref:            CloudflareClient.ID(),
+					CredentialRefs: []types.CredentialRef{cloudflareCredential},
+					Description:    "Cloudflare REST API client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

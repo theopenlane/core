@@ -23,4 +23,6 @@ var (
 	ErrDefinitionNotFound = errors.New("integrations/runtime: definition not found")
 	// ErrOperationNotFound indicates the requested operation is not registered for the definition
 	ErrOperationNotFound = errors.New("integrations/runtime: operation not found")
+	// ErrOperationConfigInvalid indicates the operation config payload failed schema validation
+	ErrOperationConfigInvalid = errors.New("integrations/runtime: operation config invalid")
 )

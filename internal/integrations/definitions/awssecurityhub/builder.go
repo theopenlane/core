@@ -26,19 +26,32 @@ func Builder() definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         awsAssumeRoleCredential,
+					Name:        "AWS Assume Role",
+					Description: "Assume-role and collection-scope credential slot shared by the AWS service clients in this definition.",
+					Schema:      providerkit.SchemaFrom[AssumeRoleCredentialSchema](),
+				},
+				{
+					Ref:         awsSourceCredential,
+					Name:        "AWS Source Credential",
+					Description: "Optional static source credential used to assume the configured AWS role when runtime IAM is unavailable.",
+					Schema:      providerkit.SchemaFrom[SourceCredentialSchema](),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         SecurityHubClient.ID(),
-					Description: "AWS Security Hub client",
-					Build:       SecurityHubClientBuilder{}.Build,
+					Ref:            SecurityHubClient.ID(),
+					CredentialRefs: []types.CredentialRef{awsAssumeRoleCredential, awsSourceCredential},
+					Description:    "AWS Security Hub client",
+					Build:          SecurityHubClientBuilder{}.Build,
 				},
 				{
-					Ref:         AuditManagerClient.ID(),
-					Description: "AWS Audit Manager client",
-					Build:       AuditManagerClientBuilder{}.Build,
+					Ref:            AuditManagerClient.ID(),
+					CredentialRefs: []types.CredentialRef{awsAssumeRoleCredential, awsSourceCredential},
+					Description:    "AWS Audit Manager client",
+					Build:          AuditManagerClientBuilder{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

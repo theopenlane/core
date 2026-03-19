@@ -49,13 +49,13 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if err := h.DBClient.Integration.DeleteOneID(integrationID).Exec(userCtx); err != nil {
-		if !ent.IsNotFound(err) {
-			logger.Error().Err(err).Msg("failed to delete integration")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	if err := h.IntegrationsRuntime.DeleteInstallation(userCtx, integrationID); err != nil {
+		if ent.IsNotFound(err) {
+			return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
 		}
 
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
+		logger.Error().Err(err).Msg("failed to delete integration")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	displayName := def.DisplayName

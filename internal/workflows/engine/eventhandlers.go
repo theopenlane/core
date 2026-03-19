@@ -103,6 +103,8 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 }
 
 // HandleWorkflowAssignmentMutationGala reacts to assignment status changes emitted via Gala.
+// It fires CompleteAssignment whenever a non-Pending status is committed, allowing direct
+// GraphQL mutations on assignment status to advance paused approval and review flows.
 func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() {
 		return nil
@@ -121,34 +123,17 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.Handle
 		return nil
 	}
 
+	// Only advance workflows for terminal decision statuses — Pending means no decision was made.
+	if newStatus == enums.WorkflowAssignmentStatusPending {
+		return nil
+	}
+
 	assignmentID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok {
 		return nil
 	}
 
-	// Verify the assignment's current status actually changed to prevent redundant completion calls.
-	// The Gala payload does not carry old values, so query current state.
-	allowCtx := workflows.AllowContext(ctx.Context)
-	orgID, orgErr := auth.GetOrganizationIDFromContext(ctx.Context)
-	if orgErr != nil {
-		return nil
-	}
-
-	assignment, queryErr := l.client.WorkflowAssignment.Query().
-		Where(
-			workflowassignment.IDEQ(assignmentID),
-			workflowassignment.OwnerIDEQ(orgID),
-		).
-		Only(allowCtx)
-	if queryErr != nil {
-		return nil
-	}
-
-	if assignment.Status == newStatus {
-		return nil
-	}
-
-	logx.FromContext(ctx.Context).Info().Str("assignment_id", assignmentID).Str("new_status", newStatus.String()).Msg("workflow assignment status changed")
+	logx.FromContext(ctx.Context).Info().Str("assignment_id", assignmentID).Str("new_status", newStatus.String()).Msg("workflow assignment status changed via mutation")
 
 	return l.engine.CompleteAssignment(ctx.Context, assignmentID, newStatus, nil, nil)
 }

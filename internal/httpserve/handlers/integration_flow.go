@@ -46,6 +46,10 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return err
 	}
 
+	if _, err := resolveCredentialRegistration(def, in.CredentialRef); err != nil {
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
 	if def.Auth == nil || (def.Auth.Start == nil && def.Auth.OAuth == nil) {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
@@ -60,7 +64,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	logger := logx.FromContext(requestCtx).With().Str("definition_id", def.ID).Logger()
 
-	installationRec, _, err := h.resolveOrCreateDefinitionIntegration(requestCtx, caller.OrganizationID, in.InstallationID, def)
+	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.InstallationID, def)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
@@ -76,6 +80,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
 		DefinitionID:   def.ID,
 		InstallationID: installationRec.ID,
+		CredentialRef:  in.CredentialRef,
 	})
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to begin oauth flow")
@@ -196,7 +201,17 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	current, ok, err := h.IntegrationsRuntime.LoadCredential(reqCtx, rec)
+	def, defOk := h.IntegrationsRuntime.Registry().Definition(rec.DefinitionID)
+	if !defOk || def.Auth == nil || def.Auth.Refresh == nil {
+		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
+	}
+
+	credentialRegistration, regErr := resolveCredentialRegistration(def, in.CredentialRef)
+	if regErr != nil {
+		return h.BadRequest(ctx, regErr, openapiCtx)
+	}
+
+	current, ok, err := h.IntegrationsRuntime.LoadCredential(reqCtx, rec, credentialRegistration.Ref)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to load credential")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -206,24 +221,19 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	def, defOk := h.IntegrationsRuntime.Registry().Definition(rec.DefinitionID)
-	if !defOk || def.Auth == nil || def.Auth.Refresh == nil {
-		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
-	}
-
 	refreshed, err := def.Auth.Refresh(reqCtx, current)
 	if err != nil {
 		logger.Error().Err(err).Msg("credential refresh failed")
 		return h.InternalServerError(ctx, fmt.Errorf("failed to refresh token for %s: %w", def.Slug, err), openapiCtx)
 	}
 
-	if err := h.IntegrationsRuntime.SaveInstallationCredential(reqCtx, in.InstallationID, refreshed); err != nil {
-		logger.Error().Err(err).Msg("failed to save refreshed credential")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
 	if refreshed.OAuthAccessToken == "" {
 		return h.BadRequest(ctx, fmt.Errorf("failed to find access token for %s: %w", def.Slug, ErrIntegrationNotFound), openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.SaveInstallationCredential(reqCtx, in.InstallationID, credentialRegistration.Ref, refreshed); err != nil {
+		logger.Error().Err(err).Msg("failed to save refreshed credential")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	resp := IntegrationTokenResponse{

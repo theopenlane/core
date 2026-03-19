@@ -8,9 +8,10 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -162,6 +163,7 @@ func (h *Handler) finalizeIntegrationConnection(
 	openapiCtx *OpenAPIContext,
 	installationRec *ent.Integration,
 	def types.Definition,
+	credentialRegistration types.CredentialRegistration,
 	credential types.CredentialSet,
 	callbackInput json.RawMessage,
 ) error {
@@ -177,12 +179,16 @@ func (h *Handler) finalizeIntegrationConnection(
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if _, err := h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, credential, nil); err != nil {
+	credentialOverrides := types.CredentialBindings{
+		{Ref: credentialRegistration.Ref, Credential: credential},
+	}
+
+	if _, err := h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, credentialOverrides, nil); err != nil {
 		logger.Error().Err(err).Msg("provider health check failed")
 		return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
 	}
 
-	if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credential); err != nil {
+	if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credentialRegistration.Ref, credential); err != nil {
 		logger.Error().Err(err).Msg("failed to save credential")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
@@ -207,16 +213,27 @@ func (h *Handler) finalizeIntegrationConnection(
 		}
 	}
 
-	if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).
-		SetStatus(enums.IntegrationStatusConnected).
-		Exec(requestCtx); err != nil {
+	if err := h.IntegrationsRuntime.MarkConnected(requestCtx, installationRec); err != nil {
 		logger.Error().Err(err).Msg("failed to update integration status")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	installationRec.Status = enums.IntegrationStatusConnected
-
 	return nil
+}
+
+func resolveCredentialRegistration(def types.Definition, credentialRef types.CredentialRef) (types.CredentialRegistration, error) {
+	if !credentialRef.Valid() {
+		return types.CredentialRegistration{}, rout.MissingField("credentialRef")
+	}
+
+	registration, ok := lo.Find(def.CredentialRegistrations, func(registration types.CredentialRegistration) bool {
+		return registration.Ref.String() == credentialRef.String()
+	})
+	if ok {
+		return registration, nil
+	}
+
+	return types.CredentialRegistration{}, ErrInvalidInput
 }
 
 func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBody) error {
@@ -235,53 +252,3 @@ func validateDefinitionUserInput(def types.Definition, input IntegrationConfigBo
 	return nil
 }
 
-func (h *Handler) resolveOrCreateDefinitionIntegration(ctx context.Context, ownerID, installationID string, def types.Definition) (*ent.Integration, bool, error) {
-	if installationID != "" {
-		record, err := h.IntegrationsRuntime.ResolveInstallation(ctx, ownerID, installationID, def.ID)
-		if err != nil {
-			return nil, false, err
-		}
-
-		if err := h.refreshDefinitionIntegration(ctx, record, def); err != nil {
-			return nil, false, err
-		}
-
-		return record, false, nil
-	}
-
-	record, err := h.DBClient.Integration.Create().
-		SetOwnerID(ownerID).
-		SetName(def.DisplayName).
-		SetDefinitionID(def.ID).
-		SetDefinitionSlug(def.Slug).
-		SetFamily(def.Family).
-		SetStatus(enums.IntegrationStatusPending).
-		Save(ctx)
-	if err != nil {
-		return nil, false, err
-	}
-
-	return record, true, nil
-}
-
-func (h *Handler) refreshDefinitionIntegration(ctx context.Context, installation *ent.Integration, def types.Definition) error {
-	if installation.DefinitionID == def.ID &&
-		installation.DefinitionSlug == def.Slug &&
-		installation.Family == def.Family {
-		return nil
-	}
-
-	if err := h.DBClient.Integration.UpdateOneID(installation.ID).
-		SetDefinitionID(def.ID).
-		SetDefinitionSlug(def.Slug).
-		SetFamily(def.Family).
-		Exec(ctx); err != nil {
-		return err
-	}
-
-	installation.DefinitionID = def.ID
-	installation.DefinitionSlug = def.Slug
-	installation.Family = def.Family
-
-	return nil
-}

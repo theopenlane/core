@@ -63,12 +63,24 @@ type integrationProviderExtensionsDocument struct {
 	Category string `json:"category"`
 	// Auth describes the install or auth flow exposed by the definition
 	Auth *types.AuthRegistration `json:"auth,omitempty"`
-	// CredentialsSchema is the provider credentials schema
-	CredentialsSchema json.RawMessage `json:"credentials_schema,omitempty"`
+	// CredentialSchemas lists the provider credential slots
+	CredentialSchemas []integrationCredentialExtensionsDocument `json:"credential_schemas,omitempty"`
 	// UserInputSchema is the installation-scoped provider schema
 	UserInputSchema json.RawMessage `json:"user_input_schema,omitempty"`
 	// Operations lists provider operation descriptors
 	Operations []integrationOperationExtensionsDocument `json:"operations"`
+}
+
+// integrationCredentialExtensionsDocument captures workflow metadata for one provider credential slot
+type integrationCredentialExtensionsDocument struct {
+	// Ref is the durable credential slot identifier
+	Ref types.CredentialRef `json:"ref"`
+	// Name is the user-facing credential slot name
+	Name string `json:"name,omitempty"`
+	// Description describes the credential slot
+	Description string `json:"description,omitempty"`
+	// Schema is the credential collection schema
+	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
 // integrationOperationExtensionsDocument captures workflow metadata for one operation
@@ -129,8 +141,15 @@ func integrationWorkflowProviders(rt *integrationsruntime.Runtime) []integration
 			entry.Auth = def.Auth
 		}
 
-		if def.Credentials != nil {
-			entry.CredentialsSchema = jsonx.CloneRawMessage(def.Credentials.Schema)
+		if len(def.CredentialRegistrations) > 0 {
+			entry.CredentialSchemas = lo.Map(def.CredentialRegistrations, func(credential types.CredentialRegistration, _ int) integrationCredentialExtensionsDocument {
+				return integrationCredentialExtensionsDocument{
+					Ref:         credential.Ref,
+					Name:        credential.Name,
+					Description: credential.Description,
+					Schema:      jsonx.CloneRawMessage(credential.Schema),
+				}
+			})
 		}
 
 		if def.UserInput != nil {

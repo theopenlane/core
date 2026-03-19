@@ -100,13 +100,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 		installLogger := logger.With().Str("installation_id", installationRec.ID).Logger()
 
-		credential, _, err := h.IntegrationsRuntime.LoadCredential(requestCtx, installationRec)
-		if err != nil {
-			installLogger.Error().Err(err).Msg("failed to load credential")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-
-		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, installationRec, operation, credential, configDoc)
+		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, installationRec, operation, nil, configDoc)
 		if err != nil {
 			installLogger.Error().Err(err).Msg("operation execution failed")
 			return h.BadRequest(ctx, err, openapiCtx)

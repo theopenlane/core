@@ -25,14 +25,20 @@ func Builder() definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         oktaCredential,
+					Name:        "Okta Credential",
+					Description: "Credential slot used by the Okta client in this definition.",
+					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         OktaClient.ID(),
-					Description: "Okta API client",
-					Build:       Client{}.Build,
+					Ref:            OktaClient.ID(),
+					CredentialRefs: []types.CredentialRef{oktaCredential},
+					Description:    "Okta API client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

@@ -7,49 +7,49 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// TestCredentialSchemaFromProviderData_ValidData verifies provider data decoding preserves explicit values.
-func TestCredentialSchemaFromProviderData_ValidData(t *testing.T) {
+// TestResolveAssumeRoleCredential_ValidData verifies credential decoding preserves explicit values.
+func TestResolveAssumeRoleCredential_ValidData(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
-		"roleArn":         "arn:aws:iam::123456789012:role/MyRole",
-		"homeRegion":      "us-east-1",
-		"accountId":       "123456789012",
-		"accountScope":    "all",
-		"accessKeyId":     "AKIAIOSFODNN7EXAMPLE",
-		"secretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-		"sessionToken":    "AQoDYXdzEJr",
+		"roleArn":      "arn:aws:iam::123456789012:role/MyRole",
+		"homeRegion":   "us-east-1",
+		"accountId":    "123456789012",
+		"accountScope": "all",
 	})
 	require.NoError(t, err)
 
-	credential, err := credentialSchemaFromProviderData(raw)
+	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+	})
 	require.NoError(t, err)
 
 	assert.Equal(t, "arn:aws:iam::123456789012:role/MyRole", credential.RoleARN)
 	assert.Equal(t, "us-east-1", credential.HomeRegion)
 	assert.Equal(t, "123456789012", credential.AccountID)
 	assert.Equal(t, "all", credential.AccountScope)
-	assert.Equal(t, "AKIAIOSFODNN7EXAMPLE", credential.AccessKeyID)
-	assert.Equal(t, "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", credential.SecretAccessKey)
-	assert.Equal(t, "AQoDYXdzEJr", credential.SessionToken)
 }
 
-// TestCredentialSchemaFromProviderData_DefaultSessionName verifies the default session name is applied.
-func TestCredentialSchemaFromProviderData_DefaultSessionName(t *testing.T) {
+// TestResolveAssumeRoleCredential_DefaultSessionName verifies the default session name is applied.
+func TestResolveAssumeRoleCredential_DefaultSessionName(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":    "arn:aws:iam::123:role/R",
 		"homeRegion": "us-west-2",
 	})
 	require.NoError(t, err)
 
-	credential, err := credentialSchemaFromProviderData(raw)
+	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+	})
 	require.NoError(t, err)
 
 	assert.Equal(t, defaultSessionName, credential.SessionName)
 }
 
-// TestCredentialSchemaFromProviderData_SessionNameFromData verifies provider data can override the session name.
-func TestCredentialSchemaFromProviderData_SessionNameFromData(t *testing.T) {
+// TestResolveAssumeRoleCredential_SessionNameFromData verifies provider data can override the session name.
+func TestResolveAssumeRoleCredential_SessionNameFromData(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":     "arn:aws:iam::123:role/R",
 		"homeRegion":  "us-west-2",
@@ -57,32 +57,35 @@ func TestCredentialSchemaFromProviderData_SessionNameFromData(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	credential, err := credentialSchemaFromProviderData(raw)
+	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+	})
 	require.NoError(t, err)
 
 	assert.Equal(t, "custom-session", credential.SessionName)
 }
 
-// TestCredentialSchemaFromProviderData_DefaultAccountScope verifies account scope defaults to all.
-func TestCredentialSchemaFromProviderData_DefaultAccountScope(t *testing.T) {
+// TestResolveAssumeRoleCredential_DefaultAccountScope verifies account scope defaults to all.
+func TestResolveAssumeRoleCredential_DefaultAccountScope(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"homeRegion": "us-east-1",
 	})
 	require.NoError(t, err)
 
-	credential, err := credentialSchemaFromProviderData(raw)
+	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+	})
 	require.NoError(t, err)
 
 	assert.Equal(t, AccountScopeAll, credential.AccountScope)
 }
 
-// TestCredentialSchemaFromProviderData_EmptyInput verifies empty provider data still yields defaults.
-func TestCredentialSchemaFromProviderData_EmptyInput(t *testing.T) {
-	credential, err := credentialSchemaFromProviderData(nil)
-	require.NoError(t, err)
-
-	assert.Equal(t, AccountScopeAll, credential.AccountScope)
-	assert.Equal(t, defaultSessionName, credential.SessionName)
+// TestResolveAssumeRoleCredential_EmptyInput verifies empty provider data is rejected.
+func TestResolveAssumeRoleCredential_EmptyInput(t *testing.T) {
+	_, err := resolveAssumeRoleCredential(types.CredentialBindings{
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{}},
+	})
+	require.ErrorIs(t, err, ErrCredentialMetadataRequired)
 }
 
 // TestParseDuration_Valid verifies valid durations are parsed.

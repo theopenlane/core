@@ -12,6 +12,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the GCP Security Command Center integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
+	// sccCredential is the credential slot used by the SCC client
+	sccCredential = types.NewCredentialRef(Slug)
 	// SCCClient is the client ref for the GCP Security Command Center client used by this definition
 	SCCClient = types.NewClientRef[*cloudscc.Client]()
 	// HealthDefaultOperation is the operation ref for the GCP SCC health check

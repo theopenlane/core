@@ -43,6 +43,8 @@ type IntegrationConfigPayload struct {
 	// InstallationID is the optional existing installation to update credentials on.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
+	// CredentialRef selects which credential slot is being configured.
+	CredentialRef types.CredentialRef `json:"credentialRef"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
 	Body IntegrationConfigBody `json:"body"`
 	// UserInput holds optional installation-scoped provider configuration.
@@ -133,8 +135,8 @@ type DefinitionCatalogEntry struct {
 	HasAuth bool `json:"hasAuth"`
 	// Auth describes the install or auth flow exposed by the definition
 	Auth *types.AuthRegistration `json:"auth,omitempty"`
-	// CredentialSchema is the JSON schema for credential fields
-	CredentialSchema json.RawMessage `json:"credentialSchema,omitempty"`
+	// CredentialSchemas lists the named credential slots exposed by the definition
+	CredentialSchemas []DefinitionCredentialEntry `json:"credentialSchemas,omitempty"`
 	// OperatorConfig is the JSON schema for operator config
 	OperatorConfig json.RawMessage `json:"operatorConfig,omitempty"`
 	// UserInputSchema is the JSON schema for installation-scoped user input
@@ -153,6 +155,18 @@ type DefinitionOperationEntry struct {
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
 }
 
+// DefinitionCredentialEntry describes one credential slot exposed by a definition.
+type DefinitionCredentialEntry struct {
+	// Ref is the durable credential slot identifier
+	Ref types.CredentialRef `json:"ref"`
+	// Name is the user-facing credential slot name
+	Name string `json:"name,omitempty"`
+	// Description describes the credential slot
+	Description string `json:"description,omitempty"`
+	// Schema is the JSON schema used to collect credentials for the slot
+	Schema json.RawMessage `json:"schema,omitempty"`
+}
+
 // IntegrationProvidersResponse is the response listing available integration definitions.
 type IntegrationProvidersResponse struct {
 	rout.Reply
@@ -167,6 +181,8 @@ type OAuthFlowRequest struct {
 	// InstallationID is the optional existing installation to start the auth flow for.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
+	// CredentialRef selects which auth-managed credential slot is being activated.
+	CredentialRef types.CredentialRef `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput IntegrationConfigBody `json:"userInput,omitempty"`
 }
@@ -189,6 +205,8 @@ var ExampleOAuthFlowRequest = OAuthFlowRequest{
 type RefreshInstallationCredentialRequest struct {
 	// InstallationID is the installation to refresh credentials for.
 	InstallationID string `param:"id" json:"installationId" description:"Installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// CredentialRef selects which auth-managed credential slot should be refreshed.
+	CredentialRef types.CredentialRef `json:"credentialRef"`
 }
 
 // Validate validates the RefreshInstallationCredentialRequest.

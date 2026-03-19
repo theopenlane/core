@@ -29,6 +29,13 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         workspaceCredential,
+					Name:        "Google Workspace Credential",
+					Description: "Auth-managed credential slot used by the Google Workspace client in this definition.",
+				},
+			},
 			Auth: &types.AuthRegistration{
 				StartPath:    types.DefaultAuthStartPath,
 				CallbackPath: types.DefaultAuthCompletePath,
@@ -51,9 +58,10 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         WorkspaceClient.ID(),
-					Description: "Google Workspace Admin SDK client",
-					Build:       Client{}.Build,
+					Ref:            WorkspaceClient.ID(),
+					CredentialRefs: []types.CredentialRef{workspaceCredential},
+					Description:    "Google Workspace Admin SDK client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

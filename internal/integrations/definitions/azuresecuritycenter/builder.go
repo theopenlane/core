@@ -26,14 +26,20 @@ func Builder() definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         securityCenterCredential,
+					Name:        "Azure Security Center Credential",
+					Description: "Credential slot used by the Azure Security Center client in this definition.",
+					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         SecurityCenterClient.ID(),
-					Description: "Azure Security Center assessments and sub-assessments client",
-					Build:       Client{}.Build,
+					Ref:            SecurityCenterClient.ID(),
+					CredentialRefs: []types.CredentialRef{securityCenterCredential},
+					Description:    "Azure Security Center assessments and sub-assessments client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

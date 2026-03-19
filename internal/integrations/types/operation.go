@@ -24,8 +24,10 @@ type IngestContract struct {
 type OperationRequest struct {
 	// Integration is the target installation record
 	Integration *generated.Integration
-	// Credential is the installation-scoped credential bundle
+	// Credential is the primary credential bundle for convenience when the operation uses one slot
 	Credential CredentialSet
+	// Credentials lists all resolved credential bundles for the operation by slot ref
+	Credentials CredentialBindings
 	// Client is the built client instance for this operation when one is registered
 	Client any
 	// Config is the operation-specific configuration payload

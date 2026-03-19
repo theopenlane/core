@@ -3,7 +3,6 @@ package engine
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"maps"
 	"strings"
@@ -17,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -401,19 +399,7 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 
 	installation, err := e.integrationRuntime.ResolveInstallation(workflows.AllowContext(ctx), ownerID, installationID, def.ID)
 	if err != nil {
-		switch {
-		case errors.Is(err, integrationsruntime.ErrInstallationRequired),
-			errors.Is(err, integrationsruntime.ErrDefinitionIDRequired):
-			return notificationExecutionTarget{}, ErrInstallationRequired
-		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
-			return notificationExecutionTarget{}, ErrInstallationIDRequired
-		case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
-			return notificationExecutionTarget{}, ErrInstallationNotFound
-		case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
-			return notificationExecutionTarget{}, ErrInstallationDefinitionMismatch
-		default:
-			return notificationExecutionTarget{}, err
-		}
+		return notificationExecutionTarget{}, err
 	}
 
 	return notificationExecutionTarget{

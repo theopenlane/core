@@ -35,14 +35,14 @@ func (v VulnerabilitiesCollect) IngestHandle() types.IngestHandler {
 		VulnerabilitiesCollectOperation,
 		ErrOperationConfigInvalid,
 		func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-			return v.Run(ctx, request.Credential, client, cfg)
+			return v.Run(ctx, request.Credentials, client, cfg)
 		},
 	)
 }
 
 // Run collects Security Hub findings using credential-defined collection scope
-func (VulnerabilitiesCollect) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-	awsCredential, err := credentialSchemaFromSet(credential)
+func (VulnerabilitiesCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+	awsCredential, err := resolveAssumeRoleCredential(credentials)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ collectLoop:
 
 // buildSecurityHubFilters constructs a server-side filter from credential metadata
 // so account and region scope stay tied to integration setup.
-func buildSecurityHubFilters(credential CredentialSchema) *securityhubtypes.AwsSecurityFindingFilters {
+func buildSecurityHubFilters(credential AssumeRoleCredentialSchema) *securityhubtypes.AwsSecurityFindingFilters {
 	var filters securityhubtypes.AwsSecurityFindingFilters
 
 	if credential.AccountScope == AccountScopeSpecific {

@@ -61,12 +61,18 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	var providerData json.RawMessage
+	var credentialRegistration types.CredentialRegistration
 	if credentialProvided {
-		if def.Credentials == nil || len(def.Credentials.Schema) == 0 {
-			return h.BadRequest(ctx, rout.MissingField("credentialsSchema"), openapiCtx)
+		credentialRegistration, err = resolveCredentialRegistration(def, payload.CredentialRef)
+		if err != nil {
+			return h.BadRequest(ctx, err, openapiCtx)
 		}
 
-		credentialValidation, err := jsonx.ValidateSchema(def.Credentials.Schema, credentialInput)
+		if len(credentialRegistration.Schema) == 0 {
+			return h.BadRequest(ctx, rout.MissingField("credentialSchemas"), openapiCtx)
+		}
+
+		credentialValidation, err := jsonx.ValidateSchema(credentialRegistration.Schema, credentialInput)
 		if err != nil {
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
@@ -78,7 +84,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		providerData = jsonx.CloneRawMessage(credentialInput)
 	}
 
-	installationRec, _, err := h.resolveOrCreateDefinitionIntegration(requestCtx, caller.OrganizationID, payload.InstallationID, def)
+	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.InstallationID, def)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
@@ -96,9 +102,24 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	if credentialProvided {
 		credential := types.CredentialSet{ProviderData: providerData}
 
-		if err := h.finalizeIntegrationConnection(ctx, openapiCtx, installationRec, def, credential, nil); err != nil {
+		if len(def.CredentialRegistrations) > 1 {
+			if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credentialRegistration.Ref, credential); err != nil {
+				logger.Error().Err(err).Str("credential_ref", credentialRegistration.Ref.String()).Msg("failed to save credential")
+				return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+			}
+
+			healthOperation, healthErr := h.IntegrationsRuntime.Registry().Operation(def.ID, types.HealthDefaultOperation)
+			if healthErr == nil {
+				if _, healthErr = h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, nil, nil); healthErr == nil {
+					_ = h.IntegrationsRuntime.MarkConnected(requestCtx, installationRec)
+				} else {
+					logger.Info().Err(healthErr).Str("credential_ref", credentialRegistration.Ref.String()).Msg("credential slot saved; integration remains pending until all required credentials are configured")
+				}
+			}
+		} else if err := h.finalizeIntegrationConnection(ctx, openapiCtx, installationRec, def, credentialRegistration, credential, nil); err != nil {
 			return err
 		}
+
 	}
 
 	if err := h.IntegrationsRuntime.SyncWebhooks(requestCtx, installationRec, ""); err != nil {

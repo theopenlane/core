@@ -37,6 +37,7 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPI
 // buildDefinitionCatalogEntry constructs one catalog entry from an integration definition
 func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 	spec := def.DefinitionSpec
+
 	entry := DefinitionCatalogEntry{
 		ID:          spec.ID,
 		Slug:        spec.Slug,
@@ -57,8 +58,15 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 		entry.Auth = def.Auth
 	}
 
-	if def.Credentials != nil {
-		entry.CredentialSchema = jsonx.CloneRawMessage(def.Credentials.Schema)
+	if len(def.CredentialRegistrations) > 0 {
+		entry.CredentialSchemas = lo.Map(def.CredentialRegistrations, func(credential types.CredentialRegistration, _ int) DefinitionCredentialEntry {
+			return DefinitionCredentialEntry{
+				Ref:         credential.Ref,
+				Name:        credential.Name,
+				Description: credential.Description,
+				Schema:      jsonx.CloneRawMessage(credential.Schema),
+			}
+		})
 	}
 
 	if def.OperatorConfig != nil {

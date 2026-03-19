@@ -19,12 +19,24 @@ import (
 )
 
 // ExecuteOperation runs one integration operation inline without run tracking.
-func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credential types.CredentialSet, config json.RawMessage) (json.RawMessage, error) {
+// When the operation declares a ConfigSchema and a config payload is provided, the payload
+// is validated against the schema before execution.
+func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentialOverrides types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
 	if installation == nil {
 		return nil, ErrInstallationRequired
 	}
 
-	return r.executeResolvedOperation(ctx, installation, operation, credential, config, false, operations.IngestOptions{
+	if len(operation.ConfigSchema) > 0 && len(config) > 0 {
+		validation, err := jsonx.ValidateSchema(operation.ConfigSchema, config)
+		if err != nil {
+			return nil, err
+		}
+		if !validation.Valid() {
+			return nil, ErrOperationConfigInvalid
+		}
+	}
+
+	return r.executeResolvedOperation(ctx, installation, operation, credentialOverrides, config, false, operations.IngestOptions{
 		Source: integrationgenerated.IntegrationIngestSourceOperation,
 	})
 }
@@ -61,6 +73,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 	if envelope.WorkflowMeta != nil {
 		ingestOptions.Source = integrationgenerated.IntegrationIngestSourceWorkflow
+		ingestOptions.WorkflowMeta = envelope.WorkflowMeta
 	}
 
 	installation, err := db.Integration.Get(ctx, envelope.InstallationID)
@@ -73,15 +86,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return failRun(err, nil)
 	}
 
-	credential, found, err := r.LoadCredential(ctx, installation)
-	if err != nil {
-		return failRun(err, nil)
-	}
-	if !found {
-		credential = types.CredentialSet{}
-	}
-
-	response, err := r.executeResolvedOperation(ctx, installation, operation, credential, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
+	response, err := r.executeResolvedOperation(ctx, installation, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
 	if err != nil {
 		return failRun(err, response)
 	}
@@ -96,27 +101,39 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 }
 
 // executeResolvedOperation executes the given operation with the input integration and registered Operation
-func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credential types.CredentialSet, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, error) {
+func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentialOverrides types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, error) {
 	var (
-		client any
-		err    error
+		client       any
+		err          error
+		credentials  types.CredentialBindings
+		registration types.ClientRegistration
 	)
 
 	if operation.ClientRef.Valid() {
-		registration, err := r.Registry().Client(installation.DefinitionID, operation.ClientRef)
+		registration, err = r.Registry().Client(installation.DefinitionID, operation.ClientRef)
 		if err != nil {
 			return nil, err
 		}
 
-		client, err = do.MustInvoke[*keystore.Store](r.injector).BuildClient(ctx, installation, registration, credential, config, clientForce)
+		credentials, err = r.LoadCredentials(ctx, installation, registration.CredentialRefs)
 		if err != nil {
 			return nil, err
 		}
+
+		credentials = mergeCredentials(credentials, credentialOverrides)
+
+		client, err = do.MustInvoke[*keystore.Store](r.injector).BuildClient(ctx, installation, registration, credentials, config, clientForce)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		credentials = mergeCredentials(nil, credentialOverrides)
 	}
 
 	req := types.OperationRequest{
 		Integration: installation,
-		Credential:  credential,
+		Credential:  singleCredential(credentials, registration.CredentialRefs),
+		Credentials: credentials,
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
 	}
@@ -145,4 +162,46 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 	}
 
 	return response, nil
+}
+
+func mergeCredentials(current, overrides types.CredentialBindings) types.CredentialBindings {
+	if len(current) == 0 && len(overrides) == 0 {
+		return nil
+	}
+
+	merged := make(types.CredentialBindings, 0, len(current)+len(overrides))
+	for _, binding := range current {
+		merged = append(merged, binding)
+	}
+
+	for _, override := range overrides {
+		replaced := false
+		for index := range merged {
+			if merged[index].Ref.String() == override.Ref.String() {
+				merged[index] = override
+				replaced = true
+				break
+			}
+		}
+
+		if !replaced {
+			merged = append(merged, override)
+		}
+	}
+
+	return merged
+}
+
+func singleCredential(credentials types.CredentialBindings, refs []types.CredentialRef) types.CredentialSet {
+	if len(refs) != 1 {
+		return types.CredentialSet{}
+	}
+
+	for _, ref := range refs {
+		if credential, ok := credentials.Resolve(ref); ok {
+			return credential
+		}
+	}
+
+	return types.CredentialSet{}
 }

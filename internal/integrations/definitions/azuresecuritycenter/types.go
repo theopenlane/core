@@ -5,6 +5,8 @@ import "github.com/theopenlane/core/internal/integrations/types"
 var (
 	// DefinitionID is the stable identifier for the Azure Security Center integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
+	// securityCenterCredential is the credential slot used by the Azure Security Center client
+	securityCenterCredential = types.NewCredentialRef(Slug)
 	// SecurityCenterClient is the client ref for the Azure Security Center client used by this definition
 	SecurityCenterClient = types.NewClientRef[*azureSecurityClient]()
 	// HealthDefaultOperation is the operation ref for the Azure Security Center health check

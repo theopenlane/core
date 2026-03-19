@@ -145,19 +145,7 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 
 	installationRecord, err := e.integrationRuntime.ResolveInstallation(allowCtx, orgID, req.InstallationID, req.DefinitionID)
 	if err != nil {
-		switch {
-		case errors.Is(err, integrationsruntime.ErrInstallationRequired),
-			errors.Is(err, integrationsruntime.ErrDefinitionIDRequired):
-			return IntegrationQueueResult{}, ErrInstallationRequired
-		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
-			return IntegrationQueueResult{}, ErrInstallationIDRequired
-		case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
-			return IntegrationQueueResult{}, ErrInstallationNotFound
-		case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
-			return IntegrationQueueResult{}, ErrInstallationDefinitionMismatch
-		default:
-			return IntegrationQueueResult{}, err
-		}
+		return IntegrationQueueResult{}, err
 	}
 
 	scopeAllowed, err := evaluateInstallationScope(allowCtx, e.scopeEvaluator, req, installationRecord, req.Operation, req.Config)
@@ -182,14 +170,7 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 		WorkflowMeta:   req.WorkflowMeta,
 	})
 	if err != nil {
-		switch {
-		case errors.Is(err, integrationsruntime.ErrDefinitionNotFound):
-			return IntegrationQueueResult{}, ErrIntegrationDefinitionNotFound
-		case errors.Is(err, integrationsruntime.ErrOperationNotFound):
-			return IntegrationQueueResult{}, ErrIntegrationOperationNotFound
-		default:
-			return IntegrationQueueResult{}, err
-		}
+		return IntegrationQueueResult{}, err
 	}
 
 	return IntegrationQueueResult{

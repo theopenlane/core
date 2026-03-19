@@ -64,7 +64,10 @@ func (l *WorkflowListeners) getExecutedNotifications(instance *generated.Workflo
 	return executed
 }
 
-// trackExecutedNotifications updates the instance context with newly executed notification keys
+// trackExecutedNotifications updates the instance context with newly executed notification keys.
+// It re-reads the current context from the database before merging to reduce the window
+// where concurrent assignment completions could each pass the in-memory dedup guard and
+// both drop their key from the persisted state.
 func (l *WorkflowListeners) trackExecutedNotifications(scope *observability.Scope, instance *generated.WorkflowInstance, keys []string) {
 	ctx := scope.Context()
 	allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
@@ -75,7 +78,14 @@ func (l *WorkflowListeners) trackExecutedNotifications(scope *observability.Scop
 		return
 	}
 
-	newData, err := mergeNotificationExecutionState(instance.Context.Data, keys)
+	// Re-read the current instance context so the merge is based on the latest committed state
+	// rather than the stale in-memory snapshot captured at listener entry.
+	current, err := l.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.IDEQ(instance.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+		).
+		Only(allowCtx)
 	if err != nil {
 		observability.WarnListener(ctx, observability.OpHandleAssignmentCompleted, "assignment_state_change", observability.Fields{
 			workflowevent.FieldWorkflowInstanceID: instance.ID,
@@ -83,7 +93,15 @@ func (l *WorkflowListeners) trackExecutedNotifications(scope *observability.Scop
 		return
 	}
 
-	newContext := instance.Context
+	newData, err := mergeNotificationExecutionState(current.Context.Data, keys)
+	if err != nil {
+		observability.WarnListener(ctx, observability.OpHandleAssignmentCompleted, "assignment_state_change", observability.Fields{
+			workflowevent.FieldWorkflowInstanceID: instance.ID,
+		}, err)
+		return
+	}
+
+	newContext := current.Context
 	newContext.Data = newData
 
 	if err := l.client.WorkflowInstance.Update().

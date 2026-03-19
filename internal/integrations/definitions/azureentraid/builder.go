@@ -28,19 +28,45 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         entraTenantCredential,
+					Name:        "Azure Entra ID Credential",
+					Description: "Credential slot shared by the Azure Entra ID clients in this definition.",
+				},
+			},
+			Auth: &types.AuthRegistration{
+				StartPath:    types.DefaultAuthStartPath,
+				CallbackPath: types.DefaultAuthCompletePath,
+				OAuth: &types.OAuthPublicConfig{
+					ClientID:    cfg.ClientID,
+					AuthURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+					TokenURL:    "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+					RedirectURI: cfg.RedirectURL,
+					Scopes: []string{
+						"openid",
+						"profile",
+						"offline_access",
+						graphScope,
+					},
+					AuthParams: map[string]string{
+						"prompt": "admin_consent",
+					},
+				},
+				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         EntraCredential.ID(),
-					Description: "Azure client credentials token credential for auth verification",
-					Build:       CredentialClient{cfg: cfg}.Build,
+					Ref:            EntraCredential.ID(),
+					CredentialRefs: []types.CredentialRef{entraTenantCredential},
+					Description:    "Azure client credentials token credential for auth verification",
+					Build:          CredentialClient{cfg: cfg}.Build,
 				},
 				{
-					Ref:         EntraClient.ID(),
-					Description: "Microsoft Graph service client for directory operations",
-					Build:       GraphClient{cfg: cfg}.Build,
+					Ref:            EntraClient.ID(),
+					CredentialRefs: []types.CredentialRef{entraTenantCredential},
+					Description:    "Microsoft Graph service client for directory operations",
+					Build:          GraphClient{cfg: cfg}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

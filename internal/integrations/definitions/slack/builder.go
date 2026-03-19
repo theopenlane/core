@@ -28,6 +28,13 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         slackCredential,
+					Name:        "Slack Credential",
+					Description: "Auth-managed credential slot used by the Slack client in this definition.",
+				},
+			},
 			Auth: &types.AuthRegistration{
 				StartPath:    types.DefaultAuthStartPath,
 				CallbackPath: types.DefaultAuthCompletePath,
@@ -50,9 +57,10 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         SlackClient.ID(),
-					Description: "Slack Web API client",
-					Build:       Client{}.Build,
+					Ref:            SlackClient.ID(),
+					CredentialRefs: []types.CredentialRef{slackCredential},
+					Description:    "Slack Web API client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

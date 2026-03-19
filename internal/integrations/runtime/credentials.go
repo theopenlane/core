@@ -2,7 +2,9 @@ package runtime
 
 import (
 	"context"
+
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -23,7 +25,7 @@ func (r *Runtime) CompleteAuth(ctx context.Context, req keymaker.CompleteRequest
 }
 
 // PersistAuthCompletion saves one completed auth result, including provider state and credentials.
-func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID string, definition types.Definition, result types.AuthCompleteResult) error {
+func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error {
 	if installationID == "" {
 		return ErrInstallationIDRequired
 	}
@@ -31,6 +33,10 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	db := do.MustInvoke[*ent.Client](r.injector)
 	store := do.MustInvoke[*keystore.Store](r.injector)
+	credentialRegistration, err := resolveCredentialRegistration(definition, credentialRef)
+	if err != nil {
+		return err
+	}
 
 	installation, err := db.Integration.Get(systemCtx, installationID)
 	if err != nil {
@@ -58,7 +64,7 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 		}
 	}
 
-	if err := store.SaveCredential(systemCtx, installation, result.Credential); err != nil {
+	if err := store.SaveCredential(systemCtx, installation, credentialRegistration.Ref, result.Credential); err != nil {
 		return err
 	}
 
@@ -76,26 +82,46 @@ func (r *Runtime) PersistAuthCompletion(ctx context.Context, installationID stri
 	return nil
 }
 
-// LoadCredential resolves persisted credentials for one installation
-func (r *Runtime) LoadCredential(ctx context.Context, installation *ent.Integration) (types.CredentialSet, bool, error) {
-	return do.MustInvoke[*keystore.Store](r.injector).LoadCredential(ctx, installation)
+// LoadCredential resolves one persisted credential slot for one installation.
+func (r *Runtime) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef) (types.CredentialSet, bool, error) {
+	return do.MustInvoke[*keystore.Store](r.injector).LoadCredential(ctx, installation, credentialRef)
 }
 
-// SaveCredential persists credentials for one installation and evicts cached clients for that installation
-func (r *Runtime) SaveCredential(ctx context.Context, installation *ent.Integration, credential types.CredentialSet) error {
+// LoadCredentials resolves the requested credential slots for one installation.
+func (r *Runtime) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialRef) (types.CredentialBindings, error) {
+	return do.MustInvoke[*keystore.Store](r.injector).LoadCredentials(ctx, installation, credentialRefs)
+}
+
+// SaveCredential persists one credential slot for one installation and evicts cached clients for that installation.
+func (r *Runtime) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef, credential types.CredentialSet) error {
 	if installation == nil {
 		return ErrInstallationRequired
 	}
 
-	return do.MustInvoke[*keystore.Store](r.injector).SaveCredential(ctx, installation, credential)
+	return do.MustInvoke[*keystore.Store](r.injector).SaveCredential(ctx, installation, credentialRef, credential)
 }
 
-// SaveInstallationCredential persists credentials for one installation identifier and evicts cached clients
-func (r *Runtime) SaveInstallationCredential(ctx context.Context, installationID string, credential types.CredentialSet) error {
-	return do.MustInvoke[*keystore.Store](r.injector).SaveInstallationCredential(ctx, installationID, credential)
+// SaveInstallationCredential persists one credential slot for one installation identifier and evicts cached clients.
+func (r *Runtime) SaveInstallationCredential(ctx context.Context, installationID string, credentialRef types.CredentialRef, credential types.CredentialSet) error {
+	return do.MustInvoke[*keystore.Store](r.injector).SaveInstallationCredential(ctx, installationID, credentialRef, credential)
 }
 
 // DeleteCredential removes credentials for one installation identifier and evicts cached clients
 func (r *Runtime) DeleteCredential(ctx context.Context, installationID string) error {
 	return do.MustInvoke[*keystore.Store](r.injector).DeleteCredential(ctx, installationID)
+}
+
+func resolveCredentialRegistration(definition types.Definition, credentialRef types.CredentialRef) (types.CredentialRegistration, error) {
+	if !credentialRef.Valid() {
+		return types.CredentialRegistration{}, ErrCredentialNotFound
+	}
+
+	registration, ok := lo.Find(definition.CredentialRegistrations, func(registration types.CredentialRegistration) bool {
+		return registration.Ref.String() == credentialRef.String()
+	})
+	if ok {
+		return registration, nil
+	}
+
+	return types.CredentialRegistration{}, ErrCredentialNotFound
 }

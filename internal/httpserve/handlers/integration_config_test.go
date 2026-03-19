@@ -68,7 +68,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		).
 		OnlyX(testUser.UserCtx)
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored)
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialRef("config_test"))
 	require.NoError(t, err)
 	require.True(t, ok)
 	assert.Contains(t, string(credential.ProviderData), "projectId")
@@ -203,7 +203,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Equal(t, first.InstallationID, second.InstallationID)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored)
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialRef("config_test"))
 	require.NoError(t, err)
 	require.True(t, ok)
 
@@ -242,7 +242,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored)
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialRef("config_test"))
 	require.NoError(t, err)
 	require.True(t, ok)
 
@@ -353,18 +353,27 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 
 	require.Equal(t, http.StatusBadRequest, rec.Code)
 
-	count, err := suite.db.Integration.Query().
+	// A PENDING installation row must be created even when the health check fails.
+	// The credential must not be stored and the status must not advance to CONNECTED.
+	records, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(testUser.OrganizationID),
 			integration.DefinitionIDEQ(configTestProviderID),
 		).
-		Count(testUser.UserCtx)
+		All(testUser.UserCtx)
 	require.NoError(t, err)
-	assert.Zero(t, count)
+	require.Len(t, records, 1, "expected one PENDING installation row after failed setup")
+	assert.Equal(t, enums.IntegrationStatusPending, records[0].Status)
+
+	_, credOk, credErr := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, records[0], types.NewCredentialRef("config_test"))
+	require.NoError(t, credErr)
+	assert.False(t, credOk, "credential must not be stored after a failed health check")
 }
 
 func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) definition.Builder {
 	return definition.Builder(func() (types.Definition, error) {
+		configTestCredential := types.NewCredentialRef("config_test")
+
 		healthHandler := func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 			if failHealth {
 				return nil, errors.New("health failed")
@@ -384,8 +393,13 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) def
 			UserInput: &types.UserInputRegistration{
 				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: json.RawMessage(`{"type":"object","required":["projectId","serviceAccountEmail"],"properties":{"projectId":{"type":"string"},"serviceAccountEmail":{"type":"string"}}}`),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         configTestCredential,
+					Name:        "Config Test Credential",
+					Description: "Credential slot used by the config test definition.",
+					Schema:      json.RawMessage(`{"type":"object","required":["projectId","serviceAccountEmail"],"properties":{"projectId":{"type":"string"},"serviceAccountEmail":{"type":"string"}}}`),
+				},
 			},
 			Operations: []types.OperationRegistration{
 				{

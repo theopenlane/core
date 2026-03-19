@@ -18,6 +18,7 @@ import (
 	openmodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const disconnectTestDefinitionID = "def_test_github"
@@ -98,7 +99,7 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 		ProviderData: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	require.NoError(t, suite.h.IntegrationsRuntime.SaveCredential(ctx, rec, credential))
+	require.NoError(t, suite.h.IntegrationsRuntime.SaveCredential(ctx, rec, types.NewCredentialRef("gcp_scc_test"), credential))
 
 	return rec.ID
 }

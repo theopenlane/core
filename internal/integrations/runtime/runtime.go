@@ -136,7 +136,7 @@ func New(config Config) (*Runtime, error) {
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(
 			rt.Definition,
-			rt.persistKeymakerAuthCompletion,
+			rt.PersistAuthCompletion,
 			rt.lookupKeymakerInstallation,
 			do.MustInvoke[keymaker.AuthStateStore](i),
 			0,

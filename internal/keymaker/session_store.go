@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"sync"
 	"time"
+
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const defaultAuthStateStoreMaxEntries = 4096
@@ -16,6 +18,8 @@ type AuthState struct {
 	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
+	// CredentialRef identifies which credential slot the auth result should persist into.
+	CredentialRef types.CredentialRef
 	// CallbackState holds the opaque state payload returned by the definition's AuthStartFunc
 	CallbackState json.RawMessage
 	// CreatedAt records when the session was initiated

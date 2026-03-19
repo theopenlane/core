@@ -109,6 +109,8 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 	}
 
 	return definition.Builder(func() (types.Definition, error) {
+		gcpSCCTestCredential := types.NewCredentialRef("gcp_scc_test")
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -123,8 +125,13 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: json.RawMessage(userInputSchema),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: json.RawMessage(schema),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         gcpSCCTestCredential,
+					Name:        "GCP SCC Test Credential",
+					Description: "Credential slot used by the GCP SCC test definition.",
+					Schema:      json.RawMessage(schema),
+				},
 			},
 			Operations: []types.OperationRegistration{
 				{

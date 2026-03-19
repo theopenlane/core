@@ -368,6 +368,7 @@ func (r *fakeDefinitionResolver) Definition(id string) (types.Definition, bool) 
 
 type installationSave struct {
 	installationID string
+	credentialRef  types.CredentialRef
 	definitionID   string
 	result         types.AuthCompleteResult
 }
@@ -390,9 +391,10 @@ type fakeInstallationWriter struct {
 	err   error
 }
 
-func (f *fakeInstallationWriter) PersistAuthResult(_ context.Context, installationID string, definition types.Definition, result types.AuthCompleteResult) error {
+func (f *fakeInstallationWriter) PersistAuthResult(_ context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error {
 	f.saves = append(f.saves, installationSave{
 		installationID: installationID,
+		credentialRef:  credentialRef,
 		definitionID:   definition.ID,
 		result:         result,
 	})

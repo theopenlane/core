@@ -23,7 +23,7 @@ const defaultSessionTTL = 15 * time.Minute
 type DefinitionLookupFunc func(id string) (types.Definition, bool)
 
 // PersistAuthResultFunc persists auth completion payloads produced during definition auth activation.
-type PersistAuthResultFunc func(ctx context.Context, installationID string, definition types.Definition, result types.AuthCompleteResult) error
+type PersistAuthResultFunc func(ctx context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error
 
 // InstallationRecord captures the installation fields required by auth validation.
 type InstallationRecord struct {
@@ -73,6 +73,8 @@ type BeginRequest struct {
 	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
+	// CredentialRef identifies which credential slot the completed auth result should persist into.
+	CredentialRef types.CredentialRef
 	// State optionally supplies a custom CSRF token; one is generated if empty
 	State string
 	// Input carries optional definition-specific input to the auth start function
@@ -103,6 +105,8 @@ type CompleteResult struct {
 	DefinitionID string
 	// InstallationID identifies the installation record containing the credential
 	InstallationID string
+	// CredentialRef identifies which credential slot received the persisted credential.
+	CredentialRef types.CredentialRef
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
 }
@@ -147,6 +151,7 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		State:          stateToken,
 		DefinitionID:   req.DefinitionID,
 		InstallationID: req.InstallationID,
+		CredentialRef:  req.CredentialRef,
 		CallbackState:  jsonx.CloneRawMessage(result.State),
 		CreatedAt:      s.now(),
 	}
@@ -197,13 +202,14 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, fmt.Errorf("keymaker: complete definition auth: %w", err)
 	}
 
-	if err := s.persistAuthResult(ctx, authState.InstallationID, def, completeResult); err != nil {
+	if err := s.persistAuthResult(ctx, authState.InstallationID, authState.CredentialRef, def, completeResult); err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: persist definition auth result: %w", err)
 	}
 
 	return CompleteResult{
 		DefinitionID:   authState.DefinitionID,
 		InstallationID: authState.InstallationID,
+		CredentialRef:  authState.CredentialRef,
 		Credential:     completeResult.Credential,
 	}, nil
 }

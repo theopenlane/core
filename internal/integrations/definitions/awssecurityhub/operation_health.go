@@ -27,14 +27,14 @@ func (h HealthCheck) Handle() types.OperationHandler {
 	return providerkit.OperationWithClientRequest(
 		SecurityHubClient,
 		func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) (json.RawMessage, error) {
-			return h.Run(ctx, request.Credential, client)
+			return h.Run(ctx, request.Credentials, client)
 		},
 	)
 }
 
 // Run validates Security Hub access by calling DescribeHub
-func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *securityhub.Client) (json.RawMessage, error) {
-	awsCredential, err := credentialSchemaFromSet(credential)
+func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *securityhub.Client) (json.RawMessage, error) {
+	awsCredential, err := resolveAssumeRoleCredential(credentials)
 	if err != nil {
 		return nil, err
 	}

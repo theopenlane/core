@@ -37,44 +37,24 @@ var (
 	ErrWebhookPayloadExpressionFailed = errors.New("webhook payload expression failed")
 	// ErrWebhookPayloadExpressionInvalid is returned when webhook payload CEL does not produce a JSON object
 	ErrWebhookPayloadExpressionInvalid = errors.New("webhook payload expression invalid")
-	// ErrIntegrationFailed is returned when an integration operation fails
-	ErrIntegrationFailed = errors.New("integration operation failed")
 	// ErrExecutorNotAvailable is returned when the executor is not available
 	ErrExecutorNotAvailable = errors.New("executor is nil")
-	// ErrIntegrationStoreRequired is returned when an integration installation store dependency is missing
-	ErrIntegrationStoreRequired = errors.New("integration installation store required")
 	// ErrIntegrationRegistryRequired is returned when an integration registry dependency is missing
 	ErrIntegrationRegistryRequired = errors.New("integration registry required")
 	// ErrIntegrationOperationsRequired is returned when integration dispatcher is not configured
 	ErrIntegrationOperationsRequired = errors.New("integration dispatcher required")
-	// ErrIntegrationDefinitionNotFound is returned when an integration definition is not found in the registry
-	ErrIntegrationDefinitionNotFound = errors.New("integration definition not found")
-	// ErrIntegrationOperationNotFound is returned when an integration operation is not found in the registry
-	ErrIntegrationOperationNotFound = errors.New("integration operation not found")
-	// ErrIntegrationOperationCriteriaRequired indicates operation name is required
+// ErrIntegrationOperationCriteriaRequired indicates operation name is required
 	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation name required")
 	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation
 	ErrIntegrationScopeConditionFalse = errors.New("integration scope condition false")
 	// ErrIntegrationActionQueued indicates the integration action was queued for async processing
 	ErrIntegrationActionQueued = errors.New("integration action queued")
-	// ErrInstallationRequired indicates the integration action requires an installation ID or definition ID
-	ErrInstallationRequired = errors.New("integration action requires installation_id or definition_id")
-	// ErrInstallationIDRequired indicates the integration action must specify installation_id when definition_id is ambiguous
-	ErrInstallationIDRequired = errors.New("integration action requires installation_id when multiple installations exist for definition_id")
-	// ErrInstallationNotFound indicates no matching installation record was found
-	ErrInstallationNotFound = errors.New("installation not found")
-	// ErrInstallationDefinitionMismatch indicates the requested definition does not match the resolved installation
-	ErrInstallationDefinitionMismatch = errors.New("installation definition mismatch")
 	// ErrObjectNil is returned when the workflow object is nil
 	ErrObjectNil = errors.New("object is nil")
-	// ErrProposalChangesModified is returned when proposal changes are modified after approval
-	ErrProposalChangesModified = errors.New("proposal changes modified after approval")
 	// ErrUnmarshalParams is returned when action params cannot be unmarshaled
 	ErrUnmarshalParams = errors.New("failed to unmarshal action params")
 	// ErrMarshalPayload is returned when a payload cannot be marshaled
 	ErrMarshalPayload = errors.New("failed to marshal payload")
-	// ErrIntegrationProviderRequired is returned when integration action is missing provider
-	ErrIntegrationProviderRequired = errors.New("integration action requires provider")
 	// ErrIntegrationOwnerRequired is returned when integration action is missing owner
 	ErrIntegrationOwnerRequired = errors.New("integration action requires instance owner_id")
 	// ErrAssignmentCreationFailed is returned when workflow assignment creation fails

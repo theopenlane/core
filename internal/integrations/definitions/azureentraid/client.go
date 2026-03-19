@@ -72,8 +72,30 @@ func credentialFromRequest(req types.ClientBuildRequest) (CredentialSchema, erro
 	}
 
 	if meta.TenantID == "" {
+		meta.TenantID = tenantIDFromClaims(req.Credential.Claims)
+	}
+
+	if meta.TenantID == "" {
 		return CredentialSchema{}, ErrCredentialMetadataRequired
 	}
 
 	return meta, nil
+}
+
+func tenantIDFromClaims(claims map[string]any) string {
+	if claims == nil {
+		return ""
+	}
+
+	value, ok := claims["tid"]
+	if !ok {
+		return ""
+	}
+
+	tenantID, ok := value.(string)
+	if !ok {
+		return ""
+	}
+
+	return tenantID
 }

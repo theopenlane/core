@@ -10,6 +10,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Azure Entra ID integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// entraTenantCredential is the credential slot shared by the Entra clients in this definition
+	entraTenantCredential = types.NewCredentialRef(Slug)
 	// EntraCredential is the client ref for the Azure token credential used by the health check
 	EntraCredential = types.NewClientRef[azcore.TokenCredential]()
 	// EntraClient is the client ref for the Microsoft Graph service client used by directory operations

@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Google Workspace integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
+	// workspaceCredential is the auth-managed credential slot used by the Workspace client
+	workspaceCredential = types.NewCredentialRef(Slug)
 	// WorkspaceClient is the client ref for the Google Workspace Admin SDK client used by this definition
 	WorkspaceClient = types.NewClientRef[*admin.Service]()
 	// HealthDefaultOperation is the operation ref for the Google Workspace health check

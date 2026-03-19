@@ -31,6 +31,13 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         GitHubAppCredential,
+					Name:        "GitHub App Credential",
+					Description: "Auth-managed credential slot used by the GitHub App client in this definition.",
+				},
+			},
 			Installation: Installation.Registration(),
 			Auth: &types.AuthRegistration{
 				StartPath:    "/v1/integrations/github/app/install",
@@ -38,9 +45,10 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         GitHubClient.ID(),
-					Description: "GitHub GraphQL client",
-					Build:       Client{APIURL: cfg.APIURL}.Build,
+					Ref:            GitHubClient.ID(),
+					CredentialRefs: []types.CredentialRef{GitHubAppCredential},
+					Description:    "GitHub GraphQL client",
+					Build:          Client{APIURL: cfg.APIURL}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -66,8 +74,8 @@ func Builder(cfg Config) definition.Builder {
 					ConfigSchema: providerkit.SchemaFrom[VulnerabilityCollectConfig](),
 					Ingest: []types.IngestContract{
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-								},
+							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+						},
 					},
 					IngestHandle: VulnerabilityCollect{}.IngestHandle(),
 				},
@@ -94,8 +102,8 @@ func Builder(cfg Config) definition.Builder {
 							Topic: DependabotAlertWebhookEvent.Topic(Slug),
 							Ingest: []types.IngestContract{
 								{
-									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-												},
+									Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+								},
 							},
 							Handle: DependabotAlertWebhook{}.Handle,
 						},
@@ -104,8 +112,8 @@ func Builder(cfg Config) definition.Builder {
 							Topic: CodeScanningAlertWebhookEvent.Topic(Slug),
 							Ingest: []types.IngestContract{
 								{
-									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-												},
+									Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+								},
 							},
 							Handle: CodeScanningAlertWebhook{}.Handle,
 						},
@@ -114,8 +122,8 @@ func Builder(cfg Config) definition.Builder {
 							Topic: SecretScanningAlertWebhookEvent.Topic(Slug),
 							Ingest: []types.IngestContract{
 								{
-									Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
-												},
+									Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+								},
 							},
 							Handle: SecretScanningAlertWebhook{}.Handle,
 						},

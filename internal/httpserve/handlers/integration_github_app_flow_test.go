@@ -17,6 +17,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
@@ -199,6 +200,83 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	var installationMeta githubapp.InstallationMetadata
 	require.NoError(t, jsonx.UnmarshalIfPresent(integrationRecord.InstallationMetadata.Attributes, &installationMeta))
 	require.Equal(t, "12345678", installationMeta.InstallationID)
+}
+
+// TestGitHubAppInstallCallback_FailedTokenMintKeepsInstallationPending verifies that when
+// GitHub App token minting fails the installation row is left in PENDING status and no
+// credential is persisted, matching the intended model: failed setup does not promote status
+// to CONNECTED and does not overwrite any credential slot.
+func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_FailedTokenMintKeepsInstallationPending() {
+	t := suite.T()
+
+	installOp := suite.createImpersonationOperation("StartGitHubAppInstallTokenFail", "Start GitHub App install flow")
+	suite.registerRouteOnce(http.MethodPost, githubAppInstallPath, installOp, suite.h.StartGitHubAppInstallation)
+
+	callbackOp := suite.createImpersonationOperation("HandleGitHubAppInstallCallbackTokenFail", "Handle GitHub App install callback")
+	suite.registerRouteOnce(http.MethodGet, githubAppCallbackPath, callbackOp, suite.h.GitHubAppInstallCallback)
+
+	mockGitHubAPI := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer mockGitHubAPI.Close()
+
+	privateKey := testRSAPrivateKeyPEM(t)
+	cfg := githubapp.Config{
+		APIURL:        mockGitHubAPI.URL,
+		AppID:         "123",
+		AppSlug:       "openlane",
+		PrivateKey:    privateKey,
+		WebhookSecret: "secret",
+	}
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, cfg)
+	defer restore()
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	installReq := httptest.NewRequest(http.MethodPost, githubAppInstallPath, bytes.NewReader([]byte(`{}`)))
+	installReq.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	installRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(installRec, installReq.WithContext(user.UserCtx))
+	require.Equal(t, http.StatusOK, installRec.Code)
+
+	var installResp openapi.GitHubAppInstallResponse
+	require.NoError(t, json.Unmarshal(installRec.Body.Bytes(), &installResp))
+	require.NotEmpty(t, installResp.State)
+
+	cookies := cookieMap(installRec.Result().Cookies())
+	require.Contains(t, cookies, "githubapp_state")
+
+	callbackReq := httptest.NewRequest(http.MethodGet, githubAppCallbackPath, nil)
+	query := callbackReq.URL.Query()
+	query.Set("installation_id", "99999")
+	query.Set("state", installResp.State)
+	callbackReq.URL.RawQuery = query.Encode()
+	for _, name := range []string{"githubapp_state", "githubapp_org_id", "githubapp_user_id"} {
+		callbackReq.AddCookie(cookies[name])
+	}
+
+	callbackRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, callbackRec.Code)
+
+	// A PENDING installation row must be created even when token minting fails.
+	// The credential must not be stored and the status must not advance to CONNECTED.
+	records, err := suite.db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(user.OrganizationID),
+			integration.DefinitionIDEQ(githubAppDefinitionID),
+		).
+		All(user.UserCtx)
+	require.NoError(t, err)
+	require.Len(t, records, 1, "expected one PENDING installation row after failed token mint")
+	assert.Equal(t, enums.IntegrationStatusPending, records[0].Status)
+
+	_, credOk, credErr := suite.h.IntegrationsRuntime.LoadCredential(user.UserCtx, records[0], githubapp.GitHubAppCredential)
+	require.NoError(t, credErr)
+	assert.False(t, credOk, "credential must not be stored after failed token mint")
 }
 
 func testRSAPrivateKeyPEM(t *testing.T) string {

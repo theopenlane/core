@@ -141,7 +141,9 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrOperatorConfigSchemaRequired
 	}
 
-	if def.Credentials != nil && len(def.Credentials.Schema) == 0 {
+	if def.Auth == nil && lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
+		return len(credential.Schema) == 0
+	}) {
 		return ErrCredentialSchemaRequired
 	}
 
@@ -154,7 +156,12 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 
 // compileDefinition builds the indexed client, operation, and webhook event maps for one definition
 func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, error) {
-	clients, err := indexClients(def.Clients)
+	credentialNames, err := indexCredentialNames(def.CredentialRegistrations)
+	if err != nil {
+		return definitionEntry{}, err
+	}
+
+	clients, err := indexClients(def.Clients, credentialNames)
 	if err != nil {
 		return definitionEntry{}, err
 	}
@@ -178,8 +185,26 @@ func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, err
 	}, nil
 }
 
-// indexClients indexes client registrations by client ref and rejects duplicate or invalid entries
-func indexClients(clients []types.ClientRegistration) (map[types.ClientID]types.ClientRegistration, error) {
+// indexCredentialNames builds a set of declared credential ref names for a definition.
+// Returns an error if any two registrations share the same name.
+func indexCredentialNames(registrations []types.CredentialRegistration) (map[string]struct{}, error) {
+	index := make(map[string]struct{}, len(registrations))
+	for _, reg := range registrations {
+		name := reg.Ref.String()
+		if _, exists := index[name]; exists {
+			return nil, ErrCredentialRefDuplicate
+		}
+
+		index[name] = struct{}{}
+	}
+
+	return index, nil
+}
+
+// indexClients indexes client registrations by client ref and rejects duplicate or invalid entries.
+// credentialNames is the set of declared credential ref names for the definition; every ref listed
+// in ClientRegistration.CredentialRefs must appear in this set.
+func indexClients(clients []types.ClientRegistration, credentialNames map[string]struct{}) (map[types.ClientID]types.ClientRegistration, error) {
 	clientIndex := make(map[types.ClientID]types.ClientRegistration, len(clients))
 	for _, client := range clients {
 		if !client.Ref.Valid() {
@@ -188,6 +213,12 @@ func indexClients(clients []types.ClientRegistration) (map[types.ClientID]types.
 
 		if _, exists := clientIndex[client.Ref]; exists {
 			return nil, ErrClientAlreadyRegistered
+		}
+
+		for _, ref := range client.CredentialRefs {
+			if _, declared := credentialNames[ref.String()]; !declared {
+				return nil, ErrCredentialRefNotDeclared
+			}
 		}
 
 		clientIndex[client.Ref] = client

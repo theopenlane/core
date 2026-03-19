@@ -49,6 +49,10 @@ var (
 	ErrOperatorConfigSchemaRequired = errors.New("integrations/registry: operator config schema required")
 	// ErrCredentialSchemaRequired indicates a definition has a credentials block with no schema
 	ErrCredentialSchemaRequired = errors.New("integrations/registry: credential schema required")
+	// ErrCredentialRefDuplicate indicates a definition registers two credential slots with the same name
+	ErrCredentialRefDuplicate = errors.New("integrations/registry: duplicate credential ref name")
+	// ErrCredentialRefNotDeclared indicates a client references a credential ref not declared by the definition
+	ErrCredentialRefNotDeclared = errors.New("integrations/registry: client credential ref not declared by definition")
 	// ErrUserInputSchemaRequired indicates a definition has a user input block with no schema
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
 )

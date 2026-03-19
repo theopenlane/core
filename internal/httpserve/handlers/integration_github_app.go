@@ -133,6 +133,22 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
+	callbackCaller, callerOk := auth.CallerFromContext(reqCtx)
+	if !callerOk || callbackCaller == nil {
+		logger.Error().Msg("github app callback has no authenticated user")
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
+	}
+
+	if callbackCaller.OrganizationID != orgID {
+		logger.Error().Str("caller_org_id", callbackCaller.OrganizationID).Str("expected_org_id", orgID).Msg("github app callback organization mismatch")
+		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
+	}
+
+	if callbackCaller.SubjectID != userCookie.Value {
+		logger.Error().Str("caller_user_id", callbackCaller.SubjectID).Str("cookie_user_id", userCookie.Value).Msg("github app callback user mismatch")
+		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
+	}
+
 	integrationRecord, err := h.lookupGitHubAppIntegrationByProviderInstallationID(reqCtx, orgID, in.InstallationID)
 	if err != nil {
 		if !ent.IsNotFound(err) {
@@ -140,14 +156,11 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
-		integrationRecord, _, err = h.resolveOrCreateDefinitionIntegration(reqCtx, orgID, "", def)
+		integrationRecord, _, err = h.IntegrationsRuntime.EnsureInstallation(reqCtx, orgID, "", def)
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to resolve github app integration")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
-	} else if err := h.refreshDefinitionIntegration(reqCtx, integrationRecord, def); err != nil {
-		logger.Error().Err(err).Str("integration_record_id", integrationRecord.ID).Msg("failed to refresh github app definition metadata")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	credential, err := githubapp.MintInstallationCredential(reqCtx, h.IntegrationsConfig.GitHubApp, in.InstallationID)
@@ -164,7 +177,12 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.finalizeIntegrationConnection(ctx, openapiCtx, integrationRecord, def, credential, callbackInput); err != nil {
+	credentialRegistration, err := resolveCredentialRegistration(def, githubapp.GitHubAppCredential)
+	if err != nil {
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
+	if err := h.finalizeIntegrationConnection(ctx, openapiCtx, integrationRecord, def, credentialRegistration, credential, callbackInput); err != nil {
 		return err
 	}
 

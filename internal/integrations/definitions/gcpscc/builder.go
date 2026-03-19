@@ -26,14 +26,20 @@ func Builder() definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         sccCredential,
+					Name:        "GCP SCC Credential",
+					Description: "Credential slot used by the GCP Security Command Center client in this definition.",
+					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         SCCClient.ID(),
-					Description: "Google Cloud Security Command Center v2 client",
-					Build:       Client{}.Build,
+					Ref:            SCCClient.ID(),
+					CredentialRefs: []types.CredentialRef{sccCredential},
+					Description:    "Google Cloud Security Command Center v2 client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Cloudflare integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	// cloudflareCredential is the credential slot used by the Cloudflare client
+	cloudflareCredential = types.NewCredentialRef(Slug)
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
 	CloudflareClient = types.NewClientRef[*cf.Client]()
 	// HealthDefaultOperation is the operation ref for the Cloudflare health check

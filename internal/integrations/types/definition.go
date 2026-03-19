@@ -40,8 +40,8 @@ type Definition struct {
 	UserInput *UserInputRegistration `json:"userInput,omitempty"`
 	// Installation describes installation-scoped identity metadata for the definition
 	Installation *InstallationRegistration `json:"installation,omitempty"`
-	// Credentials describes how the definition accepts credentials
-	Credentials *CredentialRegistration `json:"credentials,omitempty"`
+	// CredentialRegistrations describes the credential slots exposed by the definition
+	CredentialRegistrations []CredentialRegistration `json:"credentialRegistrations,omitempty"`
 	// Auth describes the definition's auth flow when it has one
 	Auth *AuthRegistration `json:"auth,omitempty"`
 	// Clients lists the clients the definition can build

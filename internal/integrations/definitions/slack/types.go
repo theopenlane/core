@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Slack integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
+	// slackCredential is the auth-managed credential slot used by the Slack client
+	slackCredential = types.NewCredentialRef(Slug)
 	// SlackClient is the client ref for the Slack Web API client used by this definition
 	SlackClient = types.NewClientRef[*slackgo.Client]()
 	// HealthDefaultOperation is the operation ref for the Slack health check

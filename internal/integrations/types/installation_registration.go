@@ -11,7 +11,7 @@ import (
 type InstallationRequest struct {
 	// Installation is the target installation record
 	Installation *generated.Integration
-	// Credential is the installation-scoped credential bundle
+	// Credential is the primary credential bundle for convenience when one slot is used
 	Credential CredentialSet
 	// Config is the installation-scoped configuration payload
 	Config IntegrationConfig

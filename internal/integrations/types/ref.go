@@ -9,6 +9,15 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// keyID produces a distinct pointer, giving every package-level ref variable a unique
+// in-process identity without requiring per-type backing structs
+type keyID struct{ _ bool }
+
+// =========
+// Definitions
+// This is the only entity in here that uses plain string because it's string identity is the canonical ID and we store it as a key used to perform lookups
+// =========
+
 // DefinitionRef is the durable identity for one registered definition
 type DefinitionRef struct {
 	id string
@@ -24,12 +33,60 @@ func (r DefinitionRef) ID() string {
 	return r.id
 }
 
-// clientKey is an unexported zero-size struct used as a unique generic type parameter to prevent ClientID aliasing
-type clientKey struct{ _ bool }
+// =========
+// Credentials
+// =========
+
+// CredentialRef is the durable identity for one credential slot used by a definition
+type CredentialRef struct {
+	key  *keyID `json:"-" yaml:"-"`
+	name string
+}
+
+// NewCredentialRef creates a credential slot identity handle with a stable name for persistence
+func NewCredentialRef(name string) CredentialRef {
+	return CredentialRef{key: new(keyID), name: name}
+}
+
+// Valid reports whether the credential identity was initialized
+func (r CredentialRef) Valid() bool {
+	return r.key != nil
+}
+
+// String returns the stable credential name used for persistence and equality comparisons
+func (r CredentialRef) String() string {
+	return r.name
+}
+
+// MarshalJSON encodes the credential ref as its stable name string
+func (r CredentialRef) MarshalJSON() ([]byte, error) {
+	return json.Marshal(r.name)
+}
+
+// UnmarshalJSON decodes a credential ref from its stable name string
+func (r *CredentialRef) UnmarshalJSON(data []byte) error {
+	var name string
+	if err := json.Unmarshal(data, &name); err != nil {
+		return err
+	}
+
+	if name == "" {
+		*r = CredentialRef{}
+		return nil
+	}
+
+	*r = NewCredentialRef(name)
+
+	return nil
+}
+
+// =========
+// Clients
+// =========
 
 // ClientID is the opaque in-process identity for one registered client
 type ClientID struct {
-	key *clientKey `json:"-" yaml:"-"`
+	key *keyID `json:"-" yaml:"-"`
 }
 
 // Valid reports whether the client identity was initialized
@@ -50,7 +107,7 @@ type ClientRef[T any] struct {
 // NewClientRef creates a typed client identity handle
 func NewClientRef[T any]() ClientRef[T] {
 	return ClientRef[T]{
-		id: ClientID{key: new(clientKey)},
+		id: ClientID{key: new(keyID)},
 	}
 }
 
@@ -69,18 +126,20 @@ func (r ClientRef[T]) Cast(client any) (T, error) {
 	return c, nil
 }
 
-type operationKey struct{ _ bool }
+// =========
+// OperationRef
+// =========
 
 // OperationRef is a typed handle for one registered operation identity
 type OperationRef[T any] struct {
-	key  *operationKey `json:"-" yaml:"-"`
+	key  *keyID `json:"-" yaml:"-"`
 	name string
 }
 
 // NewOperationRef creates a typed operation identity handle
 func NewOperationRef[T any](name string) OperationRef[T] {
 	return OperationRef[T]{
-		key:  new(operationKey),
+		key:  new(keyID),
 		name: name,
 	}
 }
@@ -104,18 +163,20 @@ func (r OperationRef[T]) UnmarshalConfig(raw json.RawMessage) (T, error) {
 	return out, nil
 }
 
-type webhookKey struct{ _ bool }
+// =========
+// Webhooks
+// =========
 
 // WebhookRef is a handle for one registered webhook contract identity
 type WebhookRef struct {
-	key  *webhookKey `json:"-" yaml:"-"`
+	key  *keyID `json:"-" yaml:"-"`
 	name string
 }
 
 // NewWebhookRef creates a webhook contract identity handle
 func NewWebhookRef(name string) WebhookRef {
 	return WebhookRef{
-		key:  new(webhookKey),
+		key:  new(keyID),
 		name: name,
 	}
 }
@@ -125,21 +186,22 @@ func (r WebhookRef) Name() string {
 	return r.name
 }
 
-type installationKey struct{ _ bool }
+// =========
+// Installations
+// =========
 
 // InstallationRef is a typed handle for one definition's installation metadata derivation
 type InstallationRef[T any] struct {
-	key *installationKey
+	key *keyID
 	fn  func(ctx context.Context, req InstallationRequest) (T, bool, error)
 }
 
 // NewInstallationRef creates a typed installation metadata handle
 func NewInstallationRef[T any](fn func(ctx context.Context, req InstallationRequest) (T, bool, error)) InstallationRef[T] {
-	return InstallationRef[T]{key: new(installationKey), fn: fn}
+	return InstallationRef[T]{key: new(keyID), fn: fn}
 }
 
-// Resolve derives and marshals installation metadata for one installation.
-// Returns false with a nil error when the provider function signals no metadata was produced.
+// Resolve derives and marshals installation metadata for one installation
 func (r InstallationRef[T]) Resolve(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error) {
 	typed, ok, err := r.fn(ctx, req)
 	if err != nil || !ok {
@@ -159,18 +221,20 @@ func (r InstallationRef[T]) Registration() *InstallationRegistration {
 	return &InstallationRegistration{Resolve: r.Resolve}
 }
 
-type webhookEventKey struct{ _ bool }
+// =========
+// Webhooks
+// =========
 
 // WebhookEventRef is a typed handle for one registered webhook event identity
 type WebhookEventRef[T any] struct {
-	key  *webhookEventKey `json:"-" yaml:"-"`
+	key  *keyID `json:"-" yaml:"-"`
 	name string
 }
 
 // NewWebhookEventRef creates a typed webhook event identity handle
 func NewWebhookEventRef[T any](name string) WebhookEventRef[T] {
 	return WebhookEventRef[T]{
-		key:  new(webhookEventKey),
+		key:  new(keyID),
 		name: name,
 	}
 }

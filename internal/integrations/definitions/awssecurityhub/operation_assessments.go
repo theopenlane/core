@@ -66,14 +66,14 @@ func (a AssessmentsList) Handle() types.OperationHandler {
 		AssessmentsListOperation,
 		ErrOperationConfigInvalid,
 		func(ctx context.Context, request types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) (json.RawMessage, error) {
-			return a.Run(ctx, request.Credential, client, cfg)
+			return a.Run(ctx, request.Credentials, client, cfg)
 		},
 	)
 }
 
 // Run paginates through all Audit Manager assessments.
-func (AssessmentsList) Run(ctx context.Context, credential types.CredentialSet, c *auditmanager.Client, cfg AssessmentsConfig) (json.RawMessage, error) {
-	awsCredential, err := credentialSchemaFromSet(credential)
+func (AssessmentsList) Run(ctx context.Context, credentials types.CredentialBindings, c *auditmanager.Client, cfg AssessmentsConfig) (json.RawMessage, error) {
+	awsCredential, err := resolveAssumeRoleCredential(credentials)
 	if err != nil {
 		return nil, err
 	}

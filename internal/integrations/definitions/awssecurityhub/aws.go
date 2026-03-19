@@ -23,26 +23,48 @@ const (
 	defaultSessionName = "openlane-aws"
 )
 
-// credentialSchemaFromSet decodes one persisted credential set into the typed AWS credential schema.
-func credentialSchemaFromSet(credential types.CredentialSet) (CredentialSchema, error) {
+func decodeCredential[T any](credential types.CredentialSet) (T, error) {
+	var decoded T
 	if len(credential.ProviderData) == 0 {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
+		return decoded, ErrCredentialMetadataRequired
 	}
 
-	return credentialSchemaFromProviderData(credential.ProviderData)
-}
-
-// credentialSchemaFromProviderData decodes persisted AWS provider data into the typed schema and applies defaults.
-func credentialSchemaFromProviderData(raw []byte) (CredentialSchema, error) {
-	var credential CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(raw, &credential); err != nil {
-		return CredentialSchema{}, ErrCredentialMetadataInvalid
+	if err := jsonx.UnmarshalIfPresent(credential.ProviderData, &decoded); err != nil {
+		return decoded, ErrCredentialMetadataInvalid
 	}
 
-	return credential.applyDefaults(), nil
+	return decoded, nil
 }
 
-func (c CredentialSchema) applyDefaults() CredentialSchema {
+func resolveAssumeRoleCredential(bindings types.CredentialBindings) (AssumeRoleCredentialSchema, error) {
+	credential, ok := bindings.Resolve(awsAssumeRoleCredential)
+	if !ok {
+		return AssumeRoleCredentialSchema{}, ErrCredentialMetadataRequired
+	}
+
+	decoded, err := decodeCredential[AssumeRoleCredentialSchema](credential)
+	if err != nil {
+		return AssumeRoleCredentialSchema{}, err
+	}
+
+	return decoded.applyDefaults(), nil
+}
+
+func resolveSourceCredential(bindings types.CredentialBindings) (*SourceCredentialSchema, error) {
+	credential, ok := bindings.Resolve(awsSourceCredential)
+	if !ok {
+		return nil, nil
+	}
+
+	decoded, err := decodeCredential[SourceCredentialSchema](credential)
+	if err != nil {
+		return nil, err
+	}
+
+	return &decoded, nil
+}
+
+func (c AssumeRoleCredentialSchema) applyDefaults() AssumeRoleCredentialSchema {
 	if c.AccountScope == "" {
 		c.AccountScope = AccountScopeAll
 	}
@@ -54,13 +76,13 @@ func (c CredentialSchema) applyDefaults() CredentialSchema {
 	return c
 }
 
-func buildAWSConfig(ctx context.Context, credential CredentialSchema) (awssdk.Config, error) {
+func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredentialSchema, sourceCredential *SourceCredentialSchema) (awssdk.Config, error) {
 	opts := []func(*config.LoadOptions) error{
-		config.WithRegion(credential.HomeRegion),
+		config.WithRegion(assumeRoleCredential.HomeRegion),
 	}
 
-	if credential.AccessKeyID != "" && credential.SecretAccessKey != "" {
-		provider := credentials.NewStaticCredentialsProvider(credential.AccessKeyID, credential.SecretAccessKey, credential.SessionToken)
+	if sourceCredential != nil && sourceCredential.AccessKeyID != "" && sourceCredential.SecretAccessKey != "" {
+		provider := credentials.NewStaticCredentialsProvider(sourceCredential.AccessKeyID, sourceCredential.SecretAccessKey, sourceCredential.SessionToken)
 		opts = append(opts, config.WithCredentialsProvider(provider))
 	}
 
@@ -69,17 +91,13 @@ func buildAWSConfig(ctx context.Context, credential CredentialSchema) (awssdk.Co
 		return cfg, ErrAWSConfigBuildFailed
 	}
 
-	if credential.RoleARN == "" {
-		return cfg, nil
-	}
-
 	stsClient := sts.NewFromConfig(cfg)
-	provider := stscreds.NewAssumeRoleProvider(stsClient, credential.RoleARN, func(options *stscreds.AssumeRoleOptions) {
-		options.RoleSessionName = credential.SessionName
-		if credential.ExternalID != "" {
-			options.ExternalID = awssdk.String(credential.ExternalID)
+	provider := stscreds.NewAssumeRoleProvider(stsClient, assumeRoleCredential.RoleARN, func(options *stscreds.AssumeRoleOptions) {
+		options.RoleSessionName = assumeRoleCredential.SessionName
+		if assumeRoleCredential.ExternalID != "" {
+			options.ExternalID = awssdk.String(assumeRoleCredential.ExternalID)
 		}
-		if duration := parseDuration(credential.SessionDuration); duration > 0 {
+		if duration := parseDuration(assumeRoleCredential.SessionDuration); duration > 0 {
 			options.Duration = duration
 		}
 	})
@@ -89,20 +107,25 @@ func buildAWSConfig(ctx context.Context, credential CredentialSchema) (awssdk.Co
 }
 
 func buildAWSServiceClient[T any](ctx context.Context, req types.ClientBuildRequest, build func(awssdk.Config) *T) (*T, error) {
-	credential, err := credentialSchemaFromSet(req.Credential)
+	assumeRoleCredential, err := resolveAssumeRoleCredential(req.Credentials)
 	if err != nil {
 		return nil, err
 	}
 
-	if credential.RoleARN == "" {
+	if assumeRoleCredential.RoleARN == "" {
 		return nil, ErrRoleARNMissing
 	}
 
-	if credential.HomeRegion == "" {
+	if assumeRoleCredential.HomeRegion == "" {
 		return nil, ErrRegionMissing
 	}
 
-	cfg, err := buildAWSConfig(ctx, credential)
+	sourceCredential, err := resolveSourceCredential(req.Credentials)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg, err := buildAWSConfig(ctx, assumeRoleCredential, sourceCredential)
 	if err != nil {
 		return nil, err
 	}

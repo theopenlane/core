@@ -28,6 +28,13 @@ func Builder(cfg Config) definition.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         teamsCredential,
+					Name:        "Microsoft Teams Credential",
+					Description: "Auth-managed credential slot used by the Microsoft Teams client in this definition.",
+				},
+			},
 			Auth: &types.AuthRegistration{
 				StartPath:    types.DefaultAuthStartPath,
 				CallbackPath: types.DefaultAuthCompletePath,
@@ -46,9 +53,10 @@ func Builder(cfg Config) definition.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:         TeamsClient.ID(),
-					Description: "Microsoft Graph API client",
-					Build:       Client{}.Build,
+					Ref:            TeamsClient.ID(),
+					CredentialRefs: []types.CredentialRef{teamsCredential},
+					Description:    "Microsoft Graph API client",
+					Build:          Client{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

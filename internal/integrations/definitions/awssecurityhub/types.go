@@ -10,6 +10,10 @@ import (
 var (
 	// DefinitionID is the stable identifier for the AWS Security Hub integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	// awsAssumeRoleCredential is the assume-role credential slot shared by the AWS service clients in this definition
+	awsAssumeRoleCredential = types.NewCredentialRef(Slug + ".assume_role")
+	// awsSourceCredential is the optional static source credential slot used to assume the configured AWS role
+	awsSourceCredential = types.NewCredentialRef(Slug + ".source")
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
 	SecurityHubClient = types.NewClientRef[*securityhub.Client]()
 	// AuditManagerClient is the client ref for the AWS Audit Manager client used by this definition
@@ -31,9 +35,8 @@ type UserInput struct {
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
 }
 
-// CredentialSchema holds the AWS assume-role and optional static source credential inputs
-// shared by the AWS service clients exposed from this definition.
-type CredentialSchema struct {
+// AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs shared by the service clients.
+type AssumeRoleCredentialSchema struct {
 	// RoleARN is the cross-account IAM role ARN Openlane should assume in the tenant environment
 	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
 	// ExternalID is the external ID required in the tenant role trust policy
@@ -52,10 +55,14 @@ type CredentialSchema struct {
 	SessionName string `json:"sessionName,omitempty"     jsonschema:"title=Session Name,description=Optional STS session name override."`
 	// SessionDuration is an optional STS session duration override
 	SessionDuration string `json:"sessionDuration,omitempty" jsonschema:"title=Session Duration,description=Optional STS session duration (e.g. 1h)."`
+}
+
+// SourceCredentialSchema holds the optional static source credential used to assume the configured AWS role.
+type SourceCredentialSchema struct {
 	// AccessKeyID is an optional static source credential when runtime IAM is unavailable
-	AccessKeyID string `json:"accessKeyId,omitempty"     jsonschema:"title=Access Key ID,description=Optional static source credential when runtime IAM is unavailable."`
+	AccessKeyID string `json:"accessKeyId"     jsonschema:"required,title=Access Key ID,description=Static source credential used when runtime IAM is unavailable."`
 	// SecretAccessKey is the AWS secret access key for static credentials
-	SecretAccessKey string `json:"secretAccessKey,omitempty" jsonschema:"title=Secret Access Key"`
+	SecretAccessKey string `json:"secretAccessKey" jsonschema:"required,title=Secret Access Key"`
 	// SessionToken is the AWS session token for static credentials
 	SessionToken string `json:"sessionToken,omitempty"    jsonschema:"title=Session Token"`
 }

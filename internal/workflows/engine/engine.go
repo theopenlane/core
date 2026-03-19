@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/cel-go/cel"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -37,8 +36,6 @@ type WorkflowEngine struct {
 	observer *observability.Observer
 	// config is the workflow configuration
 	config *workflows.Config
-	// env is the CEL environment for expression evaluation
-	env *cel.Env
 	// celEvaluator handles CEL expression compilation and evaluation
 	celEvaluator *CELEvaluator
 	// proposalManager handles workflow proposal operations
@@ -77,7 +74,6 @@ func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, c
 		gala:            runtime,
 		observer:        observability.New(),
 		config:          config,
-		env:             env,
 		celEvaluator:    celEvaluator,
 		proposalManager: proposalManager,
 	}, nil
