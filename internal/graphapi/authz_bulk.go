@@ -13,7 +13,7 @@ import (
 )
 
 // filterAuthorizedIDs checks which IDs the caller has access to for the given relation
-// and returns only the authorized IDs. 
+// and returns only the authorized IDs.
 func (r *mutationResolver) filterAuthorizedIDs(ctx context.Context, ids []string, objectType fgax.Kind, relation string) []string {
 	if len(ids) == 0 {
 		return ids
