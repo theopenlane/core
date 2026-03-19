@@ -18,8 +18,6 @@ import (
 // this does not test the actual notification sending logic
 // as that is covered in unit tests for the notification service
 func TestNotificationCreated(t *testing.T) {
-	t.Parallel()
-
 	testCases := []struct {
 		name        string
 		testUser    testUserDetails

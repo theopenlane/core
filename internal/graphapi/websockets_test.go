@@ -8,8 +8,6 @@ import (
 )
 
 func TestCheckOrigin(t *testing.T) {
-	t.Parallel()
-
 	allowedOrigins := map[string]struct{}{
 		"https://allowed.com":      {},
 		"https://*.vercel.app":     {},
@@ -74,8 +72,6 @@ func TestCheckOrigin(t *testing.T) {
 }
 
 func TestCheckOriginAllowAll(t *testing.T) {
-	t.Parallel()
-
 	allowedOrigins := map[string]struct{}{
 		"*": {},
 	}

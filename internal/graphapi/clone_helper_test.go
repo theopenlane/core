@@ -9,8 +9,6 @@ import (
 )
 
 func TestGetControlIDFromRefCode(t *testing.T) {
-	t.Parallel()
-
 	t.Run("match by control refCode", func(t *testing.T) {
 		controls := []*generated.Control{
 			{

@@ -24,8 +24,6 @@ import (
 
 // TestStripOperation validates operation prefix stripping behavior.
 func TestStripOperation(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		name     string
 		input    string
@@ -83,8 +81,6 @@ func TestStripOperation(t *testing.T) {
 
 // TestRetrieveObjectDetails verifies upload object metadata extraction.
 func TestRetrieveObjectDetails(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		name        string
 		fieldName   string
@@ -189,8 +185,6 @@ func TestRetrieveObjectDetails(t *testing.T) {
 
 // TestTemplateKindFromVariables ensures template kind is parsed from variables.
 func TestTemplateKindFromVariables(t *testing.T) {
-	t.Parallel()
-
 	variables := map[string]any{
 		"input": map[string]any{
 			"kind": enums.TemplateKindTrustCenterNda.String(),
@@ -204,8 +198,6 @@ func TestTemplateKindFromVariables(t *testing.T) {
 
 // TestRetrieveObjectDetailsTemplateKindFromInput ensures template kind metadata is applied from input.
 func TestRetrieveObjectDetailsTemplateKindFromInput(t *testing.T) {
-	t.Parallel()
-
 	rctx := &graphql.FieldContext{
 		Field: graphql.CollectedField{
 			Field: &ast.Field{
@@ -242,8 +234,6 @@ func TestRetrieveObjectDetailsTemplateKindFromInput(t *testing.T) {
 
 // TestRetrieveObjectDetailsTemplateKindFromFieldName ensures template kind fallback by field name.
 func TestRetrieveObjectDetailsTemplateKindFromFieldName(t *testing.T) {
-	t.Parallel()
-
 	rctx := &graphql.FieldContext{
 		Field: graphql.CollectedField{
 			Field: &ast.Field{
@@ -274,8 +264,6 @@ func TestRetrieveObjectDetailsTemplateKindFromFieldName(t *testing.T) {
 
 // TestGetOrgOwnerFromInput validates owner ID extraction from inputs.
 func TestGetOrgOwnerFromInput(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		name        string
 		input       any
@@ -334,8 +322,6 @@ func TestGetOrgOwnerFromInput(t *testing.T) {
 
 // TestGetBulkUploadOwnerInput validates owner ID resolution for bulk uploads.
 func TestGetBulkUploadOwnerInput(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		name        string
 		input       []*generated.CreateProcedureInput // used as an example, should work with any type
@@ -407,8 +393,6 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 
 // TestNormalizeCSVEnumInputs ensures CSV enum normalization behavior.
 func TestNormalizeCSVEnumInputs(t *testing.T) {
-	t.Parallel()
-
 	type csvEnumInput struct {
 		Status *enums.TaskStatus
 		Role   enums.Role
@@ -454,8 +438,6 @@ func TestNormalizeCSVEnumInputs(t *testing.T) {
 
 // TestNormalizeCSVDateTimePointers ensures zero DateTime pointers are cleared.
 func TestNormalizeCSVDateTimePointers(t *testing.T) {
-	t.Parallel()
-
 	type csvDateTimeInput struct {
 		Due       *models.DateTime
 		Completed *models.DateTime
@@ -485,8 +467,6 @@ func TestNormalizeCSVDateTimePointers(t *testing.T) {
 
 // TestWrapCSVUnmarshalErrorAddsHeader verifies CSV error wrapping adds headers.
 func TestWrapCSVUnmarshalErrorAddsHeader(t *testing.T) {
-	t.Parallel()
-
 	type csvRow struct {
 		Tags []string
 	}
@@ -506,8 +486,6 @@ func TestWrapCSVUnmarshalErrorAddsHeader(t *testing.T) {
 
 // TestIsEmpty validates empty-value detection across types.
 func TestIsEmpty(t *testing.T) {
-	t.Parallel()
-
 	tests := []struct {
 		name     string
 		input    any
@@ -590,8 +568,6 @@ func TestIsEmpty(t *testing.T) {
 
 // TestSetOrganizationForUploads verifies org selection rules for uploads.
 func TestSetOrganizationForUploads(t *testing.T) {
-	t.Parallel()
-
 	primaryOrg := ulids.New().String()
 	secondaryOrg := ulids.New().String()
 
@@ -685,8 +661,6 @@ type csvListRow struct {
 
 // TestUnmarshalBulkDataListParsingMixedDelimiters ensures mixed delimiters are handled.
 func TestUnmarshalBulkDataListParsingMixedDelimiters(t *testing.T) {
-	t.Parallel()
-
 	csvData := "Tags,Names\n\"foo,bar\",alpha|beta\n"
 	upload := graphql.Upload{
 		File:        strings.NewReader(csvData),
@@ -705,8 +679,6 @@ func TestUnmarshalBulkDataListParsingMixedDelimiters(t *testing.T) {
 
 // TestUnmarshalBulkDataListParsing validates basic list parsing.
 func TestUnmarshalBulkDataListParsing(t *testing.T) {
-	t.Parallel()
-
 	type csvRow struct {
 		Tags []string
 	}
@@ -727,8 +699,6 @@ func TestUnmarshalBulkDataListParsing(t *testing.T) {
 
 // TestUnmarshalBulkDataInvalidJSONMap verifies JSON map validation errors.
 func TestUnmarshalBulkDataInvalidJSONMap(t *testing.T) {
-	t.Parallel()
-
 	type csvRow struct {
 		Metadata map[string]any
 	}
@@ -747,8 +717,6 @@ func TestUnmarshalBulkDataInvalidJSONMap(t *testing.T) {
 }
 
 func TestInsensitiveHeaders(t *testing.T) {
-	t.Parallel()
-
 	type csvRow struct {
 		StatusPageURL string `csv:"StatusPageURL"`
 		DisplayName   string `csv:"DisplayName"`
@@ -782,7 +750,6 @@ func TestInsensitiveHeaders(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
 
 			csvData := tc.header + "\nhttps://theopenlane.io,Marketing site\n"
 			upload := graphql.Upload{
@@ -803,8 +770,6 @@ func TestInsensitiveHeaders(t *testing.T) {
 
 // TestGetOrgOwnerFromInputWrapped verifies wrapped Input owner extraction.
 func TestGetOrgOwnerFromInputWrapped(t *testing.T) {
-	t.Parallel()
-
 	type ownerInput struct {
 		OwnerID *string `json:"ownerID"`
 	}

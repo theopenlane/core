@@ -26,8 +26,6 @@ import (
 )
 
 func TestQueryOrganization(t *testing.T) {
-	t.Parallel()
-
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	orgUser := suite.userBuilder(context.Background(), t)
@@ -118,8 +116,6 @@ func TestQueryOrganization(t *testing.T) {
 }
 
 func TestQueryOrganizations(t *testing.T) {
-	t.Parallel()
-
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	orgUser := suite.userBuilder(context.Background(), t)
@@ -158,7 +154,6 @@ func TestQueryOrganizations(t *testing.T) {
 }
 
 func TestMutationCreateOrganization(t *testing.T) {
-	t.Parallel()
 
 	// create another user for this test
 	// so it doesn't interfere with the other tests
@@ -534,8 +529,6 @@ func TestMutationCreateOrganization(t *testing.T) {
 }
 
 func TestMutationUpdateOrganization(t *testing.T) {
-	t.Parallel()
-
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	orgUser := suite.userBuilder(context.Background(), t)
@@ -946,8 +939,6 @@ func TestMutationDeleteOrganization(t *testing.T) {
 }
 
 func TestMutationOrganizationCascadeDelete(t *testing.T) {
-	t.Parallel()
-
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	orgUser := suite.userBuilder(context.Background(), t)
