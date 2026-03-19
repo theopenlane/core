@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -42,6 +41,60 @@ func newOrganizationContextKey(e string) *map[string]any {
 	return &map[string]any{
 		"email_domain": domain,
 	}
+}
+
+// selfAccessTypes is the set of object types that use object FGA access checks
+// this is auto-generated from entfga schema annotations. This is useful for bulk
+// operations so we know what schemas we can operate fga batch checks on
+var selfAccessTypes = map[string]bool{
+	"action_plan":              true,
+	"assessment":               true,
+	"assessment_response":      true,
+	"asset":                    true,
+	"campaign":                 true,
+	"campaign_target":          true,
+	"control":                  true,
+	"control_implementation":   true,
+	"control_objective":        true,
+	"discussion":               true,
+	"document_data":            true,
+	"entity":                   true,
+	"evidence":                 true,
+	"file":                     true,
+	"finding":                  true,
+	"finding_control":          true,
+	"group":                    true,
+	"identity_holder":          true,
+	"internal_policy":          true,
+	"job_template":             true,
+	"mapped_control":           true,
+	"narrative":                true,
+	"note":                     true,
+	"organization":             true,
+	"platform":                 true,
+	"procedure":                true,
+	"program":                  true,
+	"remediation":              true,
+	"review":                   true,
+	"risk":                     true,
+	"subcontrol":               true,
+	"subprocessor":             true,
+	"system_detail":            true,
+	"task":                     true,
+	"template":                 true,
+	"trust_center":             true,
+	"trust_center_nda_request": true,
+	"vulnerability":            true,
+	"workflow_assignment":      true,
+	"workflow_definition":      true,
+	"workflow_event":           true,
+	"workflow_instance":        true,
+	"workflow_object_ref":      true,
+}
+
+// IsSelfAccessType returns true if the object type uses per-object FGA access checks
+func IsSelfAccessType(objectType string) bool {
+	return selfAccessTypes[objectType]
 }
 
 func (q *ActionPlanQuery) CheckAccess(ctx context.Context) error {
@@ -7087,30 +7140,14 @@ func (q *TrustCenterNDARequestQuery) CheckAccess(ctx context.Context) error {
 	whereArg := gCtx.Args["where"]
 	if whereArg != nil {
 		where, ok := whereArg.(*TrustCenterNDARequestWhereInput)
-		if ok && where != nil && where.TrustCenterID != nil {
-			objectID = *where.TrustCenterID
+		if ok && where != nil && where.ID != nil {
+			objectID = *where.ID
 		}
 	}
 
 	// if that doesn't work, check for the id in the request args
 	if objectID == "" {
-		objectID, _ = gCtx.Args["trustcenterid"].(string)
-	}
-
-	// if we still don't have an object id, run the query and grab the object ID
-	// from the result
-	// this happens on join tables where we have the join ID (for updates and deletes)
-	// and not the actual object id
-	if objectID == "" {
-		// allow this query to run
-		reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		ob, err := q.Clone().Only(reqCtx)
-		if err != nil {
-			return privacy.Allowf("nil request, bypassing auth check")
-		}
-
-		objectID = ob.TrustCenterID
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
@@ -7121,7 +7158,7 @@ func (q *TrustCenterNDARequestQuery) CheckAccess(ctx context.Context) error {
 	// check if the user has access to the object requested
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
-		ObjectType:  "trust_center",
+		ObjectType:  "trust_center_nda_request",
 		SubjectType: caller.SubjectType(),
 		SubjectID:   caller.SubjectID,
 		ObjectID:    objectID,
@@ -7147,33 +7184,9 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForEdit(ctx context.Context) 
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	// get the input from the context
-	gInput := gCtx.Args["input"]
-
-	// check if the input is a CreateTrustCenterNDARequestInput
-	input, ok := gInput.(CreateTrustCenterNDARequestInput)
-	if ok {
-		objectID = *input.TrustCenterID
-
-	}
-
 	// check the id from the args
 	if objectID == "" {
-		objectID, _ = gCtx.Args["trustcenterid"].(string)
-	}
-	// if this is still empty, we need to query the object to get the object id
-	// this happens on join tables where we have the join ID (for updates and deletes)
-	if objectID == "" {
-		id, ok := gCtx.Args["id"].(string)
-		if ok {
-			// allow this query to run
-			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			ob, err := m.Client().TrustCenterNDARequest.Query().Where(trustcenterndarequest.ID(id)).Only(reqCtx)
-			if err != nil {
-				return privacy.Skipf("nil request, skipping auth check")
-			}
-			objectID = ob.TrustCenterID
-		}
+		objectID, _ = gCtx.Args["id"].(string)
 	}
 
 	// request is for a list objects, will get filtered in interceptors
@@ -7189,7 +7202,7 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForEdit(ctx context.Context) 
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
-		ObjectType:  "trust_center",
+		ObjectType:  "trust_center_nda_request",
 		ObjectID:    objectID,
 		SubjectType: caller.SubjectType(),
 		SubjectID:   caller.SubjectID,
@@ -7232,7 +7245,7 @@ func (m *TrustCenterNDARequestMutation) CheckAccessForDelete(ctx context.Context
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
-		ObjectType:  "trust_center",
+		ObjectType:  "trust_center_nda_request",
 		ObjectID:    objectID,
 		SubjectType: caller.SubjectType(),
 		SubjectID:   caller.SubjectID,

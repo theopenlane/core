@@ -848,6 +848,14 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
+	ndaRequest3, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.Email(),
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+
 	testCases := []struct {
 		name        string
 		idToDelete  string
@@ -856,7 +864,7 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:        "view only user cannot delete",
+			name:        "member cannot delete",
 			idToDelete:  ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -870,10 +878,16 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:       "happy path - delete nda request",
+			name:       "admin can delete",
 			idToDelete: ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
 			client:     suite.client.api,
 			ctx:        adminUser.UserCtx,
+		},
+		{
+			name:       "owner can delete",
+			idToDelete: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
@@ -905,7 +919,7 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: ndaRequest3.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
@@ -1149,5 +1163,39 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: protectedDoc.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: ndaTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationBulkDeleteTrustCenterNDARequest(t *testing.T) {
+	cleanupTrustCenterData(t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	_ = (&TemplateBuilder{
+		client:        suite.client,
+		Kind:          enums.TemplateKindTrustCenterNda,
+		TrustCenterID: trustCenter.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	count := 5
+	// members cannot bulk delete anymore
+	expectedDeletedItems := 0
+
+	ids := make([]string, 0, count)
+	for range count {
+		resp, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.NilError(t, err)
+
+		ids = append(ids, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	}
+
+	resp, err := suite.client.api.DeleteBulkTrustCenterNDARequest(viewOnlyUser.UserCtx, ids)
+	assert.NilError(t, err)
+	assert.Equal(t, expectedDeletedItems, len(resp.DeleteBulkTrustCenterNDARequest.DeletedIDs))
+
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

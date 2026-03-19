@@ -181,7 +181,7 @@ func (TrustCenterNDARequest) Policy() ent.Policy {
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
-			entfga.CheckEditAccess[*generated.TrustCenterNDARequestMutation](),
+			entfga.CheckEditAndDeleteAccess[*generated.TrustCenterNDARequestMutation](),
 		),
 	)
 }
@@ -200,7 +200,6 @@ func (TrustCenterNDARequest) Indexes() []ent.Index {
 // Annotations of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SettingsChecks("trust_center"),
 		entfga.SelfAccessChecks(),
 	}
 }
