@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	gh "github.com/google/go-github/v83/github"
+	gh "github.com/google/go-github/v84/github"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
