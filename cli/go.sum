@@ -133,6 +133,7 @@ github.com/lestrrat-go/jwx/v3 v3.0.13/go.mod h1:2m0PV1A9tM4b/jVLMx8rh6rBl7F6WGb3
 github.com/lestrrat-go/option/v2 v2.0.0 h1:XxrcaJESE1fokHy3FpaQ/cXW8ZsIdWcdFzzLOcID3Ss=
 github.com/lestrrat-go/option/v2 v2.0.0/go.mod h1:oSySsmzMoR0iRzCDCaUfsCzxQHUEuhOViQObyy7S6Vg=
 github.com/mailru/easyjson v0.9.2 h1:dX8U45hQsZpxd80nLvDGihsQ/OxlvTkVUXH2r/8cb2M=
+github.com/mailru/easyjson v0.9.2/go.mod h1:1+xMtQp2MRNVL/V1bOzuP3aP8VNwRW55fQUto+XFtTU=
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
 github.com/mattn/go-colorable v0.1.14/go.mod h1:6LmQG8QLFO4G5z1gPvYEzlUgJ2wF+stgPZH1UqBm1s8=
@@ -205,8 +206,8 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.11.30 h1:8J7zhd0aq1G0PcrblLJDMfpsaTrTlM9gBOVVf4M0AHc=
-github.com/theopenlane/core v1.11.30/go.mod h1:TebePZD2K104xdMoTf2Hm2eBlFnp3n63MrnQGp1277c=
+github.com/theopenlane/core v1.12.1 h1:tC1uUQ2M7xlKYBA8KypYrPhVWWibj5AsX9BuHLhgIe0=
+github.com/theopenlane/core v1.12.1/go.mod h1:LM+qXVuts0chY5RnhiftPZwDVegsWjODexc5ygl+B7s=
 github.com/theopenlane/core/common v1.0.13 h1:i1H97mS5fvxuESiRSUwSwMBTyy9ldZxKxypGmlYZehE=
 github.com/theopenlane/core/common v1.0.13/go.mod h1:mycZOGMyAviZtCw7z4uatlNgcZSg72fxyZIf9mSCDyQ=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
@@ -216,6 +217,7 @@ github.com/theopenlane/go-client v0.8.6/go.mod h1:UHsLWglidz3HnJj0aeJeCylkpoVYoW
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.27.4 h1:+doqHqFPVsBOkqCczK3O4PvCbsYvPQGGmnFm9jSxge4=
+github.com/theopenlane/iam v0.27.4/go.mod h1:IHiEXHkoQ41GUfmS2Hh+loKTXzx6bWO0RQUU4+kNROM=
 github.com/theopenlane/utils v0.7.0 h1:tSN9PBC8Ywn2As3TDW/1TAfWsVsodrccec40oAhiZgo=
 github.com/theopenlane/utils v0.7.0/go.mod h1:7U9CDoVzCAFWw/JygR5ZhCKGwhHBnuJpK3Jgh1m59+w=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
