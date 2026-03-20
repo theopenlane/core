@@ -406,6 +406,9 @@ steps:
           size: $RUNNER_SMALL
         key: "fga_test"
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - fga
           - docker#v5.13.0:
               image: openfga/cli:v0.5.1
               propagate-environment: true
