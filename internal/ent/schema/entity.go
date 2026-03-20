@@ -295,7 +295,13 @@ func (e Entity) Mixin() []ent.Mixin {
 // Edges of the Entity
 func (e Entity) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(e, Contact{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Contact{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Contact{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(e, DocumentData{}),
 		defaultEdgeToWithPagination(e, Note{}),
 		defaultEdgeToWithPagination(e, File{}),

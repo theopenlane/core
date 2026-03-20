@@ -83,11 +83,9 @@ type Task struct {
 	// The values are being populated by the TaskQuery when eager-loading is set.
 	Edges                  TaskEdges `json:"edges"`
 	custom_type_enum_tasks *string
-	finding_tasks          *string
 	integration_tasks      *string
 	remediation_tasks      *string
 	review_tasks           *string
-	vulnerability_tasks    *string
 	selectValues           sql.SelectValues
 }
 
@@ -137,15 +135,19 @@ type TaskEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
 	// Parent holds the value of the parent edge.
 	Parent *Task `json:"parent,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [26]map[string]int
 
 	namedComments               map[string][]*Note
 	namedGroups                 map[string][]*Group
@@ -163,6 +165,8 @@ type TaskEdges struct {
 	namedActionPlans            map[string][]*ActionPlan
 	namedEvidence               map[string][]*Evidence
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
+	namedVulnerabilities        map[string][]*Vulnerability
+	namedFindings               map[string][]*Finding
 	namedTasks                  map[string][]*Task
 }
 
@@ -376,12 +380,30 @@ func (e TaskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
 }
 
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[22] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[23] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
 // ParentOrErr returns the Parent value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TaskEdges) ParentOrErr() (*Task, error) {
 	if e.Parent != nil {
 		return e.Parent, nil
-	} else if e.loadedTypes[22] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: task.Label}
 	}
 	return nil, &NotLoadedError{edge: "parent"}
@@ -390,7 +412,7 @@ func (e TaskEdges) ParentOrErr() (*Task, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[25] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -413,15 +435,11 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case task.ForeignKeys[0]: // custom_type_enum_tasks
 			values[i] = new(sql.NullString)
-		case task.ForeignKeys[1]: // finding_tasks
+		case task.ForeignKeys[1]: // integration_tasks
 			values[i] = new(sql.NullString)
-		case task.ForeignKeys[2]: // integration_tasks
+		case task.ForeignKeys[2]: // remediation_tasks
 			values[i] = new(sql.NullString)
-		case task.ForeignKeys[3]: // remediation_tasks
-			values[i] = new(sql.NullString)
-		case task.ForeignKeys[4]: // review_tasks
-			values[i] = new(sql.NullString)
-		case task.ForeignKeys[5]: // vulnerability_tasks
+		case task.ForeignKeys[3]: // review_tasks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -631,38 +649,24 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 			}
 		case task.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_tasks", values[i])
-			} else if value.Valid {
-				_m.finding_tasks = new(string)
-				*_m.finding_tasks = value.String
-			}
-		case task.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field integration_tasks", values[i])
 			} else if value.Valid {
 				_m.integration_tasks = new(string)
 				*_m.integration_tasks = value.String
 			}
-		case task.ForeignKeys[3]:
+		case task.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_tasks", values[i])
 			} else if value.Valid {
 				_m.remediation_tasks = new(string)
 				*_m.remediation_tasks = value.String
 			}
-		case task.ForeignKeys[4]:
+		case task.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_tasks", values[i])
 			} else if value.Valid {
 				_m.review_tasks = new(string)
 				*_m.review_tasks = value.String
-			}
-		case task.ForeignKeys[5]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_tasks", values[i])
-			} else if value.Valid {
-				_m.vulnerability_tasks = new(string)
-				*_m.vulnerability_tasks = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -785,6 +789,16 @@ func (_m *Task) QueryEvidence() *EvidenceQuery {
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Task entity.
 func (_m *Task) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewTaskClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Task entity.
+func (_m *Task) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewTaskClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryFindings queries the "findings" edge of the Task entity.
+func (_m *Task) QueryFindings() *FindingQuery {
+	return NewTaskClient(_m.config).QueryFindings(_m)
 }
 
 // QueryParent queries the "parent" edge of the Task entity.
@@ -1296,6 +1310,54 @@ func (_m *Task) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObj
 		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
 	} else {
 		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
 	}
 }
 

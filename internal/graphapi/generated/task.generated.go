@@ -150,6 +150,10 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Task_vulnerabilities(ctx, field)
+			case "findings":
+				return ec.fieldContext_Task_findings(ctx, field)
 			case "parent":
 				return ec.fieldContext_Task_parent(ctx, field)
 			case "tasks":
@@ -312,6 +316,10 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Task_vulnerabilities(ctx, field)
+			case "findings":
+				return ec.fieldContext_Task_findings(ctx, field)
 			case "parent":
 				return ec.fieldContext_Task_parent(ctx, field)
 			case "tasks":
@@ -474,6 +482,10 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Task_vulnerabilities(ctx, field)
+			case "findings":
+				return ec.fieldContext_Task_findings(ctx, field)
 			case "parent":
 				return ec.fieldContext_Task_parent(ctx, field)
 			case "tasks":
@@ -636,6 +648,10 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_Task_vulnerabilities(ctx, field)
+			case "findings":
+				return ec.fieldContext_Task_findings(ctx, field)
 			case "parent":
 				return ec.fieldContext_Task_parent(ctx, field)
 			case "tasks":

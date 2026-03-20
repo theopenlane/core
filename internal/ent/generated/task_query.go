@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -33,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -68,6 +70,8 @@ type TaskQuery struct {
 	withActionPlans                 *ActionPlanQuery
 	withEvidence                    *EvidenceQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
+	withVulnerabilities             *VulnerabilityQuery
+	withFindings                    *FindingQuery
 	withParent                      *TaskQuery
 	withTasks                       *TaskQuery
 	withFKs                         bool
@@ -89,6 +93,8 @@ type TaskQuery struct {
 	withNamedActionPlans            map[string]*ActionPlanQuery
 	withNamedEvidence               map[string]*EvidenceQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
+	withNamedVulnerabilities        map[string]*VulnerabilityQuery
+	withNamedFindings               map[string]*FindingQuery
 	withNamedTasks                  map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -676,6 +682,56 @@ func (_q *TaskQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return query
 }
 
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *TaskQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.VulnerabilitiesTable, task.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityTasks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *TaskQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.FindingsTable, task.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingTasks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryParent chains the current query on the "parent" edge.
 func (_q *TaskQuery) QueryParent() *TaskQuery {
 	query := (&TaskClient{config: _q.config}).Query()
@@ -940,6 +996,8 @@ func (_q *TaskQuery) Clone() *TaskQuery {
 		withActionPlans:            _q.withActionPlans.Clone(),
 		withEvidence:               _q.withEvidence.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
+		withVulnerabilities:        _q.withVulnerabilities.Clone(),
+		withFindings:               _q.withFindings.Clone(),
 		withParent:                 _q.withParent.Clone(),
 		withTasks:                  _q.withTasks.Clone(),
 		// clone intermediate query.
@@ -1191,6 +1249,28 @@ func (_q *TaskQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery
 	return _q
 }
 
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *TaskQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithFindings(opts ...func(*FindingQuery)) *TaskQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
 // WithParent tells the query-builder to eager-load the nodes that are connected to
 // the "parent" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *TaskQuery) WithParent(opts ...func(*TaskQuery)) *TaskQuery {
@@ -1298,7 +1378,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		nodes       = []*Task{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withTaskKind != nil,
 			_q.withEnvironment != nil,
@@ -1321,6 +1401,8 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			_q.withActionPlans != nil,
 			_q.withEvidence != nil,
 			_q.withWorkflowObjectRefs != nil,
+			_q.withVulnerabilities != nil,
+			_q.withFindings != nil,
 			_q.withParent != nil,
 			_q.withTasks != nil,
 		}
@@ -1503,6 +1585,20 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Task) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *Task, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Task) { n.Edges.Findings = []*Finding{} },
+			func(n *Task, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withParent; query != nil {
 		if err := _q.loadParent(ctx, query, nodes, nil,
 			func(n *Task, e *Task) { n.Edges.Parent = e }); err != nil {
@@ -1625,6 +1721,20 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Task) { n.appendNamedWorkflowObjectRefs(name) },
 			func(n *Task, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Task) { n.appendNamedVulnerabilities(name) },
+			func(n *Task, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Task) { n.appendNamedFindings(name) },
+			func(n *Task, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2747,6 +2857,130 @@ func (_q *TaskQuery) loadWorkflowObjectRefs(ctx context.Context, query *Workflow
 	}
 	return nil
 }
+func (_q *TaskQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Task, init func(*Task), assign func(*Task, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Task)
+	nids := make(map[string]map[*Task]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(task.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.VulnerabilityTasks)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(task.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(task.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(task.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Task]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *TaskQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*Task, init func(*Task), assign func(*Task, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Task)
+	nids := make(map[string]map[*Task]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(task.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingTasks)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(task.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(task.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(task.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Task]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *TaskQuery) loadParent(ctx context.Context, query *TaskQuery, nodes []*Task, init func(*Task), assign func(*Task, *Task)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
@@ -3154,6 +3388,34 @@ func (_q *TaskQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*Work
 		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
 	}
 	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *TaskQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *TaskQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
 	return _q
 }
 

@@ -308,7 +308,20 @@ func (t Task) Edges() []ent.Edge {
 			name:       "workflow_object_refs",
 			ref:        "task",
 		}),
-
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
 		edge.From("parent", Task.Type).
 			Field("parent_task_id").
 			Ref("tasks").
