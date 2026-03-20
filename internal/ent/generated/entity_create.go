@@ -817,6 +817,20 @@ func (_c *EntityCreate) SetVendorMetadata(v map[string]interface{}) *EntityCreat
 	return _c
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *EntityCreate) SetLogoFileID(v string) *EntityCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableLogoFileID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *EntityCreate) SetExternalID(v string) *EntityCreate {
 	_c.mutation.SetExternalID(v)

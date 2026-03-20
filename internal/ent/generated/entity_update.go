@@ -1146,6 +1146,26 @@ func (_u *EntityUpdate) ClearVendorMetadata() *EntityUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityUpdate) SetLogoFileID(v string) *EntityUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableLogoFileID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityUpdate) ClearLogoFileID() *EntityUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *EntityUpdate) SetExternalID(v string) *EntityUpdate {
 	_u.mutation.SetExternalID(v)
@@ -4874,6 +4894,26 @@ func (_u *EntityUpdateOne) SetVendorMetadata(v map[string]interface{}) *EntityUp
 // ClearVendorMetadata clears the value of the "vendor_metadata" field.
 func (_u *EntityUpdateOne) ClearVendorMetadata() *EntityUpdateOne {
 	_u.mutation.ClearVendorMetadata()
+	return _u
+}
+
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityUpdateOne) SetLogoFileID(v string) *EntityUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableLogoFileID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityUpdateOne) ClearLogoFileID() *EntityUpdateOne {
+	_u.mutation.ClearLogoFileID()
 	return _u
 }
 

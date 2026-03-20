@@ -950,6 +950,7 @@ var (
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
 		{Name: "vendor_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 	}

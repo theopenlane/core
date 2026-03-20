@@ -334,6 +334,11 @@ func ContractRenewalAt(v models.DateTime) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldContractRenewalAt, v))
 }
 
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldLogoFileID, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldExternalID, v))
@@ -3757,6 +3762,81 @@ func VendorMetadataIsNil() predicate.EntityHistory {
 // VendorMetadataNotNil applies the NotNil predicate on the "vendor_metadata" field.
 func VendorMetadataNotNil() predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldNotNull(FieldVendorMetadata))
+}
+
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldLogoFileID, v))
+}
+
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldLogoFileID, v))
+}
+
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldLogoFileID, v))
+}
+
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldLogoFileID))
+}
+
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldLogoFileID))
+}
+
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldLogoFileID, v))
+}
+
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldLogoFileID, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

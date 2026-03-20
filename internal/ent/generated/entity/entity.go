@@ -136,6 +136,8 @@ const (
 	FieldContractRenewalAt = "contract_renewal_at"
 	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
 	FieldVendorMetadata = "vendor_metadata"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
@@ -466,6 +468,7 @@ var Columns = []string{
 	FieldNextReviewAt,
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
+	FieldLogoFileID,
 	FieldExternalID,
 	FieldObservedAt,
 }
@@ -892,6 +895,11 @@ func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
 // ByContractRenewalAt orders the results by the contract_renewal_at field.
 func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
+}
+
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.

@@ -144,6 +144,8 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contract_renewal_at,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]interface{} `json:"vendor_metadata,omitempty"`
+	// URL of the logo
+	LogoFileID *string `json:"logo_file_id,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID string `json:"external_id,omitempty"`
 	// time when this entity was last observed by the source integration
@@ -582,7 +584,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldExternalID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoFileID, entity.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -994,6 +996,13 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.VendorMetadata); err != nil {
 					return fmt.Errorf("unmarshal field vendor_metadata: %w", err)
 				}
+			}
+		case entity.FieldLogoFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
+			} else if value.Valid {
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
 			}
 		case entity.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1445,6 +1454,11 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("vendor_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.VendorMetadata))
+	builder.WriteString(", ")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

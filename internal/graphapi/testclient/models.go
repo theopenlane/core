@@ -13525,6 +13525,8 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
+	// URL of the logo
+	LogoFileID *string `json:"logoFileID,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
 	// time when this entity was last observed by the source integration
@@ -14532,6 +14534,22 @@ type EntityWhereInput struct {
 	ContractRenewalAtLte    *models.DateTime   `json:"contractRenewalAtLTE,omitempty"`
 	ContractRenewalAtIsNil  *bool              `json:"contractRenewalAtIsNil,omitempty"`
 	ContractRenewalAtNotNil *bool              `json:"contractRenewalAtNotNil,omitempty"`
+	// logo_file_id field predicates
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIdgt           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIdgte          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIdlt           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIdlte          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        *bool    `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`

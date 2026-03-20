@@ -21909,6 +21909,10 @@ type Entity implements Node {
   """
   vendorMetadata: Map
   """
+  URL of the logo
+  """
+  logoFileID: ID
+  """
   stable identifier assigned by the source system, used for integration ingest deduplication
   """
   externalID: String
@@ -23712,6 +23716,24 @@ input EntityWhereInput {
   contractRenewalAtLTE: DateTime
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
   """
   external_id field predicates
   """

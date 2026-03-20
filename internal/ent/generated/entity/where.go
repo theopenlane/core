@@ -324,6 +324,11 @@ func ContractRenewalAt(v models.DateTime) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldContractRenewalAt, v))
 }
 
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldExternalID, v))
@@ -3612,6 +3617,81 @@ func VendorMetadataIsNil() predicate.Entity {
 // VendorMetadataNotNil applies the NotNil predicate on the "vendor_metadata" field.
 func VendorMetadataNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldVendorMetadata))
+}
+
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldLogoFileID, v))
+}
+
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldLogoFileID, v))
+}
+
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldLogoFileID, v))
+}
+
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldLogoFileID))
+}
+
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldLogoFileID))
+}
+
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldLogoFileID, v))
+}
+
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldLogoFileID, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

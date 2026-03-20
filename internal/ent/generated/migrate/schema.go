@@ -2219,50 +2219,56 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_entity_types_entities",
+				Symbol:     "entities_files_logo_file",
 				Columns:    []*schema.Column{EntitiesColumns[61]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_entity_types_entities",
+				Columns:    []*schema.Column{EntitiesColumns[62]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_findings_entities",
-				Columns:    []*schema.Column{EntitiesColumns[62]},
+				Columns:    []*schema.Column{EntitiesColumns[63]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_organizations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[63]},
+				Columns:    []*schema.Column{EntitiesColumns[64]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_remediations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[64]},
+				Columns:    []*schema.Column{EntitiesColumns[65]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_reviews_entities",
-				Columns:    []*schema.Column{EntitiesColumns[65]},
+				Columns:    []*schema.Column{EntitiesColumns[66]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[66]},
+				Columns:    []*schema.Column{EntitiesColumns[67]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_scans_entities",
-				Columns:    []*schema.Column{EntitiesColumns[67]},
+				Columns:    []*schema.Column{EntitiesColumns[68]},
 				RefColumns: []*schema.Column{ScansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_vulnerabilities_entities",
-				Columns:    []*schema.Column{EntitiesColumns[68]},
+				Columns:    []*schema.Column{EntitiesColumns[69]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2271,7 +2277,7 @@ var (
 			{
 				Name:    "entity_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[63]},
+				Columns: []*schema.Column{EntitiesColumns[64]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2279,7 +2285,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[19], EntitiesColumns[63]},
+				Columns: []*schema.Column{EntitiesColumns[19], EntitiesColumns[64]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

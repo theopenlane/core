@@ -204,6 +204,10 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
+	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
+		return err
+	}
+
 	if so.Config.Settings.Workflows.Enabled {
 		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
 			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
@@ -284,10 +288,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithAuth(),
 		serveropts.WithIntegrationsRuntime(dbClient),
 	)
-
-	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
-		return err
-	}
 
 	// add session manager
 	so.AddServerOptions(

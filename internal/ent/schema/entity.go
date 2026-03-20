@@ -263,6 +263,13 @@ func (Entity) Fields() []ent.Field {
 		field.JSON("vendor_metadata", map[string]any{}).
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
 			Optional(),
+		field.String("logo_file_id").
+			Comment("URL of the logo").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 		field.String("external_id").
 			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
 			Optional().

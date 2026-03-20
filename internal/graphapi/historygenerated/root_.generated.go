@@ -32190,6 +32190,10 @@ type EntityHistory implements Node {
   """
   vendorMetadata: Map
   """
+  URL of the logo
+  """
+  logoFileID: String
+  """
   stable identifier assigned by the source system, used for integration ingest deduplication
   """
   externalID: String
@@ -33117,6 +33121,24 @@ input EntityHistoryWhereInput {
   contractRenewalAtLTE: DateTime
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
   """
   external_id field predicates
   """

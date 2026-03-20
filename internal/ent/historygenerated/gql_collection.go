@@ -4600,6 +4600,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldVendorMetadata)
 				fieldSeen[entityhistory.FieldVendorMetadata] = struct{}{}
 			}
+		case "logoFileID":
+			if _, ok := fieldSeen[entityhistory.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldLogoFileID)
+				fieldSeen[entityhistory.FieldLogoFileID] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[entityhistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldExternalID)
