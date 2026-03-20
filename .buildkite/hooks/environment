@@ -4,6 +4,9 @@ set -euo pipefail
 
 echo "🌍 Setting up dynamic environment..."
 
+# setup clone vars
+export BUILDKITE_GIT_CLONE_FLAGS="--depth 1 --single-branch"
+
 # Set Go environment variables
 export GOPROXY=https://proxy.golang.org,direct
 export GOSUMDB=sum.golang.org
