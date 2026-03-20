@@ -3832,11 +3832,11 @@ func HasTasks() predicate.Finding {
 	return predicate.Finding(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.FindingTasks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3847,7 +3847,7 @@ func HasTasksWith(preds ...predicate.Task) predicate.Finding {
 		step := newTasksStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.FindingTasks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -7031,7 +7031,6 @@ var (
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_url", Type: field.TypeJSON, Nullable: true},
 		{Name: "custom_type_enum_tasks", Type: field.TypeString, Nullable: true},
-		{Name: "finding_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "integration_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_tasks", Type: field.TypeString, Nullable: true},
@@ -7042,7 +7041,6 @@ var (
 		{Name: "parent_task_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
-		{Name: "vulnerability_tasks", Type: field.TypeString, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
 	TasksTable = &schema.Table{
@@ -7057,75 +7055,63 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_findings_tasks",
-				Columns:    []*schema.Column{TasksColumns[23]},
-				RefColumns: []*schema.Column{FindingsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "tasks_integrations_tasks",
-				Columns:    []*schema.Column{TasksColumns[24]},
+				Columns:    []*schema.Column{TasksColumns[23]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_organizations_tasks",
-				Columns:    []*schema.Column{TasksColumns[25]},
+				Columns:    []*schema.Column{TasksColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_remediations_tasks",
-				Columns:    []*schema.Column{TasksColumns[26]},
+				Columns:    []*schema.Column{TasksColumns[25]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_reviews_tasks",
-				Columns:    []*schema.Column{TasksColumns[27]},
+				Columns:    []*schema.Column{TasksColumns[26]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_custom_type_enums_task_kind",
-				Columns:    []*schema.Column{TasksColumns[28]},
+				Columns:    []*schema.Column{TasksColumns[27]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_custom_type_enums_environment",
-				Columns:    []*schema.Column{TasksColumns[29]},
+				Columns:    []*schema.Column{TasksColumns[28]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_custom_type_enums_scope",
-				Columns:    []*schema.Column{TasksColumns[30]},
+				Columns:    []*schema.Column{TasksColumns[29]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_tasks_tasks",
-				Columns:    []*schema.Column{TasksColumns[31]},
+				Columns:    []*schema.Column{TasksColumns[30]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[32]},
+				Columns:    []*schema.Column{TasksColumns[31]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[33]},
+				Columns:    []*schema.Column{TasksColumns[32]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "tasks_vulnerabilities_tasks",
-				Columns:    []*schema.Column{TasksColumns[34]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -7133,12 +7119,12 @@ var (
 			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[7], TasksColumns[25]},
+				Columns: []*schema.Column{TasksColumns[7], TasksColumns[24]},
 			},
 			{
 				Name:    "task_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TasksColumns[25]},
+				Columns: []*schema.Column{TasksColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -10030,6 +10016,31 @@ var (
 				Symbol:     "finding_action_plans_action_plan_id",
 				Columns:    []*schema.Column{FindingActionPlansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// FindingTasksColumns holds the columns for the "finding_tasks" table.
+	FindingTasksColumns = []*schema.Column{
+		{Name: "finding_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// FindingTasksTable holds the schema information for the "finding_tasks" table.
+	FindingTasksTable = &schema.Table{
+		Name:       "finding_tasks",
+		Columns:    FindingTasksColumns,
+		PrimaryKey: []*schema.Column{FindingTasksColumns[0], FindingTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "finding_tasks_finding_id",
+				Columns:    []*schema.Column{FindingTasksColumns[0]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "finding_tasks_task_id",
+				Columns:    []*schema.Column{FindingTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -12934,6 +12945,31 @@ var (
 			},
 		},
 	}
+	// VulnerabilityTasksColumns holds the columns for the "vulnerability_tasks" table.
+	VulnerabilityTasksColumns = []*schema.Column{
+		{Name: "vulnerability_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// VulnerabilityTasksTable holds the schema information for the "vulnerability_tasks" table.
+	VulnerabilityTasksTable = &schema.Table{
+		Name:       "vulnerability_tasks",
+		Columns:    VulnerabilityTasksColumns,
+		PrimaryKey: []*schema.Column{VulnerabilityTasksColumns[0], VulnerabilityTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vulnerability_tasks_vulnerability_id",
+				Columns:    []*schema.Column{VulnerabilityTasksColumns[0]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "vulnerability_tasks_task_id",
+				Columns:    []*schema.Column{VulnerabilityTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		APITokensTable,
@@ -13093,6 +13129,7 @@ var (
 		FileEventsTable,
 		FileSecretsTable,
 		FindingActionPlansTable,
+		FindingTasksTable,
 		FindingDirectoryAccountsTable,
 		FindingIdentityHoldersTable,
 		GroupEventsTable,
@@ -13209,6 +13246,7 @@ var (
 		UserEventsTable,
 		VulnerabilityActionPlansTable,
 		VulnerabilityScansTable,
+		VulnerabilityTasksTable,
 	}
 )
 
@@ -13652,18 +13690,16 @@ func init() {
 	TagDefinitionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TagDefinitionsTable.ForeignKeys[1].RefTable = WorkflowDefinitionsTable
 	TasksTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[1].RefTable = FindingsTable
-	TasksTable.ForeignKeys[2].RefTable = IntegrationsTable
-	TasksTable.ForeignKeys[3].RefTable = OrganizationsTable
-	TasksTable.ForeignKeys[4].RefTable = RemediationsTable
-	TasksTable.ForeignKeys[5].RefTable = ReviewsTable
+	TasksTable.ForeignKeys[1].RefTable = IntegrationsTable
+	TasksTable.ForeignKeys[2].RefTable = OrganizationsTable
+	TasksTable.ForeignKeys[3].RefTable = RemediationsTable
+	TasksTable.ForeignKeys[4].RefTable = ReviewsTable
+	TasksTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
 	TasksTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
 	TasksTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[9].RefTable = TasksTable
+	TasksTable.ForeignKeys[8].RefTable = TasksTable
+	TasksTable.ForeignKeys[9].RefTable = UsersTable
 	TasksTable.ForeignKeys[10].RefTable = UsersTable
-	TasksTable.ForeignKeys[11].RefTable = UsersTable
-	TasksTable.ForeignKeys[12].RefTable = VulnerabilitiesTable
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TemplatesTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	TemplatesTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
@@ -13873,6 +13909,8 @@ func init() {
 	FileSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	FindingActionPlansTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	FindingTasksTable.ForeignKeys[0].RefTable = FindingsTable
+	FindingTasksTable.ForeignKeys[1].RefTable = TasksTable
 	FindingDirectoryAccountsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingDirectoryAccountsTable.ForeignKeys[1].RefTable = DirectoryAccountsTable
 	FindingIdentityHoldersTable.ForeignKeys[0].RefTable = FindingsTable
@@ -14105,4 +14143,6 @@ func init() {
 	VulnerabilityActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	VulnerabilityScansTable.ForeignKeys[0].RefTable = VulnerabilitiesTable
 	VulnerabilityScansTable.ForeignKeys[1].RefTable = ScansTable
+	VulnerabilityTasksTable.ForeignKeys[0].RefTable = VulnerabilitiesTable
+	VulnerabilityTasksTable.ForeignKeys[1].RefTable = TasksTable
 }

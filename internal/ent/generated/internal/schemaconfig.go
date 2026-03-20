@@ -92,6 +92,7 @@ type SchemaConfig struct {
 	Finding                            string // Finding table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
+	FindingTasks                       string // Finding-tasks->Task table.
 	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
 	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
 	FindingControl                     string // FindingControl table.
@@ -277,6 +278,7 @@ type SchemaConfig struct {
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
 	VulnerabilityScans                 string // Vulnerability-scans->Scan table.
+	VulnerabilityTasks                 string // Vulnerability-tasks->Task table.
 	Webauthn                           string // Webauthn table.
 	WorkflowAssignment                 string // WorkflowAssignment table.
 	WorkflowAssignmentTarget           string // WorkflowAssignmentTarget table.

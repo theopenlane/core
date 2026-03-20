@@ -11725,11 +11725,11 @@ func (c *FindingClient) QueryTasks(_m *Finding) *TaskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, id),
 			sqlgraph.To(task.Table, task.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.TasksTable, finding.TasksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.TasksTable, finding.TasksPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.FindingTasks
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -30005,6 +30005,44 @@ func (c *TaskClient) QueryWorkflowObjectRefs(_m *Task) *WorkflowObjectRefQuery {
 	return query
 }
 
+// QueryVulnerabilities queries the vulnerabilities edge of a Task.
+func (c *TaskClient) QueryVulnerabilities(_m *Task) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.VulnerabilitiesTable, task.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a Task.
+func (c *TaskClient) QueryFindings(_m *Task) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.FindingsTable, task.FindingsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryParent queries the parent edge of a Task.
 func (c *TaskClient) QueryParent(_m *Task) *TaskQuery {
 	query := (&TaskClient{config: c.config}).Query()
@@ -33953,11 +33991,11 @@ func (c *VulnerabilityClient) QueryTasks(_m *Vulnerability) *TaskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
 			sqlgraph.To(task.Table, task.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.TasksTable, vulnerability.TasksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, vulnerability.TasksTable, vulnerability.TasksPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.VulnerabilityTasks
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

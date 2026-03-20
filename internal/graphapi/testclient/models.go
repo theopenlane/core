@@ -8565,6 +8565,8 @@ type CreateTaskInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
 	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
+	VulnerabilityIDs         []string `json:"vulnerabilityIDs,omitempty"`
+	FindingIDs               []string `json:"findingIDs,omitempty"`
 	ParentID                 *string  `json:"parentID,omitempty"`
 	TaskIDs                  []string `json:"taskIDs,omitempty"`
 }
@@ -34070,6 +34072,8 @@ type Task struct {
 	ActionPlans            *ActionPlanConnection            `json:"actionPlans"`
 	Evidence               *EvidenceConnection              `json:"evidence"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	Vulnerabilities        *VulnerabilityConnection         `json:"vulnerabilities"`
+	Findings               *FindingConnection               `json:"findings"`
 	Parent                 *Task                            `json:"parent,omitempty"`
 	Tasks                  []*Task                          `json:"tasks,omitempty"`
 }
@@ -34543,6 +34547,12 @@ type TaskWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// vulnerabilities edge predicates
+	HasVulnerabilities     *bool                      `json:"hasVulnerabilities,omitempty"`
+	HasVulnerabilitiesWith []*VulnerabilityWhereInput `json:"hasVulnerabilitiesWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool             `json:"hasParent,omitempty"`
 	HasParentWith []*TaskWhereInput `json:"hasParentWith,omitempty"`
@@ -42859,6 +42869,12 @@ type UpdateTaskInput struct {
 	AddWorkflowObjectRefIDs        []string         `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs     []string         `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs        *bool            `json:"clearWorkflowObjectRefs,omitempty"`
+	AddVulnerabilityIDs            []string         `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs         []string         `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities           *bool            `json:"clearVulnerabilities,omitempty"`
+	AddFindingIDs                  []string         `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs               []string         `json:"removeFindingIDs,omitempty"`
+	ClearFindings                  *bool            `json:"clearFindings,omitempty"`
 	ParentID                       *string          `json:"parentID,omitempty"`
 	ClearParent                    *bool            `json:"clearParent,omitempty"`
 	AddTaskIDs                     []string         `json:"addTaskIDs,omitempty"`

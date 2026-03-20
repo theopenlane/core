@@ -1000,8 +1000,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "contacts": {
 	ObjectType:      "contact",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "documents": {
 	ObjectType:      "document",
 	SkipEditCheck:   false,
@@ -3754,6 +3754,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "vulnerabilities": {
+	ObjectType:      "vulnerability",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "findings": {
+	ObjectType:      "finding",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "parent": {
 	ObjectType:      "task",
 	SkipEditCheck:   true,

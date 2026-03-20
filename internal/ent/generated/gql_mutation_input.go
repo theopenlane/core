@@ -23978,6 +23978,8 @@ type CreateTaskInput struct {
 	ActionPlanIDs            []string
 	EvidenceIDs              []string
 	WorkflowObjectRefIDs     []string
+	VulnerabilityIDs         []string
+	FindingIDs               []string
 	ParentID                 *string
 	TaskIDs                  []string
 }
@@ -24087,6 +24089,12 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
 	}
@@ -24187,6 +24195,12 @@ type UpdateTaskInput struct {
 	ClearWorkflowObjectRefs        bool
 	AddWorkflowObjectRefIDs        []string
 	RemoveWorkflowObjectRefIDs     []string
+	ClearVulnerabilities           bool
+	AddVulnerabilityIDs            []string
+	RemoveVulnerabilityIDs         []string
+	ClearFindings                  bool
+	AddFindingIDs                  []string
+	RemoveFindingIDs               []string
 	ClearParent                    bool
 	ParentID                       *string
 	ClearTasks                     bool
@@ -24447,6 +24461,24 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearParent {
 		m.ClearParent()

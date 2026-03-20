@@ -7718,10 +7718,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"tasks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.TasksTable,
-			Columns: []string{finding.TasksColumn},
+			Columns: finding.TasksPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -14748,6 +14748,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.VulnerabilitiesTable,
+			Columns: task.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Task",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.FindingsTable,
+			Columns: task.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Task",
+		"Finding",
+	)
+	graph.MustAddE(
 		"parent",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -16130,10 +16154,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"tasks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.TasksTable,
-			Columns: []string{vulnerability.TasksColumn},
+			Columns: vulnerability.TasksPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -42420,6 +42444,34 @@ func (f *TaskFilter) WhereHasWorkflowObjectRefs() {
 // WhereHasWorkflowObjectRefsWith applies a predicate to check if query has an edge workflow_object_refs with a given conditions (other predicates).
 func (f *TaskFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) {
 	f.Where(entql.HasEdgeWith("workflow_object_refs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *TaskFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *TaskFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
