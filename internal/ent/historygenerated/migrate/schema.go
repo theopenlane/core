@@ -945,6 +945,7 @@ var (
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
 		{Name: "vendor_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// EntityHistoryTable holds the schema information for the "entity_history" table.
 	EntityHistoryTable = &schema.Table{

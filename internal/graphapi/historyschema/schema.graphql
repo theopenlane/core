@@ -10765,6 +10765,10 @@ type EntityHistory implements Node {
 	vendor metadata such as additional enrichment info, company size, public, etc.
 	"""
 	vendorMetadata: Map
+	"""
+	The logo file id for the entity
+	"""
+	logoFileID: String
 }
 """
 A connection to a list of items.
@@ -11682,6 +11686,24 @@ input EntityHistoryWhereInput {
 	contractRenewalAtLTE: DateTime
 	contractRenewalAtIsNil: Boolean
 	contractRenewalAtNotNil: Boolean
+	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: String
+	logoFileIDNEQ: String
+	logoFileIDIn: [String!]
+	logoFileIDNotIn: [String!]
+	logoFileIDGT: String
+	logoFileIDGTE: String
+	logoFileIDLT: String
+	logoFileIDLTE: String
+	logoFileIDContains: String
+	logoFileIDHasPrefix: String
+	logoFileIDHasSuffix: String
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: String
+	logoFileIDContainsFold: String
 }
 type EntityTypeHistory implements Node {
 	id: ID!

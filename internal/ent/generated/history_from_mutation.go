@@ -7390,6 +7390,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetVendorMetadata(vendorMetadata)
 	}
 
+	if logoFileID, exists := m.LogoFileID(); exists {
+		create = create.SetNillableLogoFileID(&logoFileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7775,6 +7779,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVendorMetadata(entity.VendorMetadata)
 		}
 
+		if logoFileID, exists := m.LogoFileID(); exists {
+			create = create.SetNillableLogoFileID(&logoFileID)
+		} else {
+			create = create.SetNillableLogoFileID(entity.LogoFileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7869,6 +7879,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableNextReviewAt(entity.NextReviewAt).
 			SetNillableContractRenewalAt(entity.ContractRenewalAt).
 			SetVendorMetadata(entity.VendorMetadata).
+			SetNillableLogoFileID(entity.LogoFileID).
 			Save(ctx)
 		if err != nil {
 			return err

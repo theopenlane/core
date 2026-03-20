@@ -865,6 +865,7 @@ type ComplexityRoot struct {
 		LastReviewedAt                        func(childComplexity int) int
 		LinkedAssetIds                        func(childComplexity int) int
 		Links                                 func(childComplexity int) int
+		LogoFileID                            func(childComplexity int) int
 		MfaEnforced                           func(childComplexity int) int
 		MfaSupported                          func(childComplexity int) int
 		Name                                  func(childComplexity int) int
@@ -7838,6 +7839,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.Links(childComplexity), true
+
+	case "EntityHistory.logoFileID":
+		if e.ComplexityRoot.EntityHistory.LogoFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.LogoFileID(childComplexity), true
 
 	case "EntityHistory.mfaEnforced":
 		if e.ComplexityRoot.EntityHistory.MfaEnforced == nil {
@@ -32025,6 +32033,10 @@ type EntityHistory implements Node {
   vendor metadata such as additional enrichment info, company size, public, etc.
   """
   vendorMetadata: Map
+  """
+  The logo file id for the entity
+  """
+  logoFileID: String
 }
 """
 A connection to a list of items.
@@ -32942,6 +32954,24 @@ input EntityHistoryWhereInput {
   contractRenewalAtLTE: DateTime
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
 }
 type EntityTypeHistory implements Node {
   id: ID!

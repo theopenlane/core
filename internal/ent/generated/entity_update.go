@@ -1146,6 +1146,26 @@ func (_u *EntityUpdate) ClearVendorMetadata() *EntityUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityUpdate) SetLogoFileID(v string) *EntityUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableLogoFileID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityUpdate) ClearLogoFileID() *EntityUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EntityUpdate) AddBlockedGroupIDs(ids ...string) *EntityUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1494,6 +1514,11 @@ func (_u *EntityUpdate) AddSourcePlatforms(v ...*Platform) *EntityUpdate {
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdate) SetEntityType(v *EntityType) *EntityUpdate {
 	return _u.SetEntityTypeID(v.ID)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_u *EntityUpdate) SetLogoFile(v *File) *EntityUpdate {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the EntityMutation object of the builder.
@@ -1978,6 +2003,12 @@ func (_u *EntityUpdate) RemoveSourcePlatforms(v ...*Platform) *EntityUpdate {
 // ClearEntityType clears the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdate) ClearEntityType() *EntityUpdate {
 	_u.mutation.ClearEntityType()
+	return _u
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (_u *EntityUpdate) ClearLogoFile() *EntityUpdate {
+	_u.mutation.ClearLogoFile()
 	return _u
 }
 
@@ -3664,6 +3695,37 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Entity
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -4783,6 +4845,26 @@ func (_u *EntityUpdateOne) ClearVendorMetadata() *EntityUpdateOne {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityUpdateOne) SetLogoFileID(v string) *EntityUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableLogoFileID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityUpdateOne) ClearLogoFileID() *EntityUpdateOne {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EntityUpdateOne) AddBlockedGroupIDs(ids ...string) *EntityUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -5131,6 +5213,11 @@ func (_u *EntityUpdateOne) AddSourcePlatforms(v ...*Platform) *EntityUpdateOne {
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdateOne) SetEntityType(v *EntityType) *EntityUpdateOne {
 	return _u.SetEntityTypeID(v.ID)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_u *EntityUpdateOne) SetLogoFile(v *File) *EntityUpdateOne {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the EntityMutation object of the builder.
@@ -5615,6 +5702,12 @@ func (_u *EntityUpdateOne) RemoveSourcePlatforms(v ...*Platform) *EntityUpdateOn
 // ClearEntityType clears the "entity_type" edge to the EntityType entity.
 func (_u *EntityUpdateOne) ClearEntityType() *EntityUpdateOne {
 	_u.mutation.ClearEntityType()
+	return _u
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (_u *EntityUpdateOne) ClearLogoFile() *EntityUpdateOne {
+	_u.mutation.ClearLogoFile()
 	return _u
 }
 
@@ -7323,6 +7416,37 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Entity

@@ -19712,6 +19712,21 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, entity.FieldEntityTypeID)
 				fieldSeen[entity.FieldEntityTypeID] = struct{}{}
 			}
+
+		case "logoFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withLogoFile = query
+			if _, ok := fieldSeen[entity.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldLogoFileID)
+				fieldSeen[entity.FieldLogoFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[entity.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, entity.FieldCreatedAt)
@@ -19996,6 +20011,11 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[entity.FieldVendorMetadata]; !ok {
 				selectedFields = append(selectedFields, entity.FieldVendorMetadata)
 				fieldSeen[entity.FieldVendorMetadata] = struct{}{}
+			}
+		case "logoFileID":
+			if _, ok := fieldSeen[entity.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldLogoFileID)
+				fieldSeen[entity.FieldLogoFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

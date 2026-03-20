@@ -1131,6 +1131,26 @@ func (_u *EntityHistoryUpdate) ClearVendorMetadata() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityHistoryUpdate) SetLogoFileID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableLogoFileID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityHistoryUpdate) ClearLogoFileID() *EntityHistoryUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdate) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -1589,6 +1609,12 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+	}
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -2709,6 +2735,26 @@ func (_u *EntityHistoryUpdateOne) ClearVendorMetadata() *EntityHistoryUpdateOne 
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityHistoryUpdateOne) SetLogoFileID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableLogoFileID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityHistoryUpdateOne) ClearLogoFileID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdateOne) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -3197,6 +3243,12 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+	}
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

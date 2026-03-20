@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -33,6 +34,60 @@ func HookEntityFiles() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+// HookEntityApprovedForUse sets approved_for_use based on the entity status.
+func HookEntityApprovedForUse() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.EntityFunc(func(ctx context.Context, m *generated.EntityMutation) (generated.Value, error) {
+			status, _ := m.Status()
+
+			m.SetApprovedForUse(status == enums.EntityStatusApproved)
+
+			return next.Mutate(ctx, m)
+		})
+	},
+		hook.And(
+			hook.HasFields("status"),
+			hook.HasOp(ent.OpCreate|ent.OpUpdateOne),
+		),
+	)
+}
+
+// HookEntityLogoFile runs on entity mutations to check for an uploaded logo file
+func HookEntityLogoFile() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.EntityFunc(func(ctx context.Context, m *generated.EntityMutation) (generated.Value, error) {
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				var err error
+
+				ctx, err = checkEntityLogoFile(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+func checkEntityLogoFile(ctx context.Context, m *generated.EntityMutation) (context.Context, error) {
+	logoKey := "logoFile"
+
+	logoFiles, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
+	if len(logoFiles) == 0 {
+		return ctx, nil
+	}
+
+	if len(logoFiles) > 1 {
+		return ctx, ErrTooManyLogoFiles
+	}
+
+	m.SetLogoFileID(logoFiles[0].ID)
+
+	return pkgobjects.ProcessFilesForMutation(ctx, m, logoKey)
 }
 
 // HookEntityCreate runs on entity mutations to set default values that are not provided

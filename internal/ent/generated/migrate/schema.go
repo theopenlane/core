@@ -2141,6 +2141,7 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "finding_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2217,50 +2218,56 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_entity_types_entities",
+				Symbol:     "entities_files_logo_file",
 				Columns:    []*schema.Column{EntitiesColumns[59]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_entity_types_entities",
+				Columns:    []*schema.Column{EntitiesColumns[60]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_findings_entities",
-				Columns:    []*schema.Column{EntitiesColumns[60]},
+				Columns:    []*schema.Column{EntitiesColumns[61]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_organizations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[61]},
+				Columns:    []*schema.Column{EntitiesColumns[62]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_remediations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[62]},
+				Columns:    []*schema.Column{EntitiesColumns[63]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_reviews_entities",
-				Columns:    []*schema.Column{EntitiesColumns[63]},
+				Columns:    []*schema.Column{EntitiesColumns[64]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[64]},
+				Columns:    []*schema.Column{EntitiesColumns[65]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_scans_entities",
-				Columns:    []*schema.Column{EntitiesColumns[65]},
+				Columns:    []*schema.Column{EntitiesColumns[66]},
 				RefColumns: []*schema.Column{ScansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_vulnerabilities_entities",
-				Columns:    []*schema.Column{EntitiesColumns[66]},
+				Columns:    []*schema.Column{EntitiesColumns[67]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2269,7 +2276,7 @@ var (
 			{
 				Name:    "entity_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[61]},
+				Columns: []*schema.Column{EntitiesColumns[62]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2277,7 +2284,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[19], EntitiesColumns[61]},
+				Columns: []*schema.Column{EntitiesColumns[19], EntitiesColumns[62]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -13330,14 +13337,15 @@ func init() {
 	EntitiesTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[9].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[10].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[11].RefTable = FindingsTable
-	EntitiesTable.ForeignKeys[12].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[13].RefTable = RemediationsTable
-	EntitiesTable.ForeignKeys[14].RefTable = ReviewsTable
-	EntitiesTable.ForeignKeys[15].RefTable = RisksTable
-	EntitiesTable.ForeignKeys[16].RefTable = ScansTable
-	EntitiesTable.ForeignKeys[17].RefTable = VulnerabilitiesTable
+	EntitiesTable.ForeignKeys[10].RefTable = FilesTable
+	EntitiesTable.ForeignKeys[11].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[12].RefTable = FindingsTable
+	EntitiesTable.ForeignKeys[13].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[14].RefTable = RemediationsTable
+	EntitiesTable.ForeignKeys[15].RefTable = ReviewsTable
+	EntitiesTable.ForeignKeys[16].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[17].RefTable = ScansTable
+	EntitiesTable.ForeignKeys[18].RefTable = VulnerabilitiesTable
 	EntityTypesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
 	EventsTable.ForeignKeys[1].RefTable = ExportsTable

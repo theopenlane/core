@@ -262,6 +262,13 @@ func (Entity) Fields() []ent.Field {
 		field.JSON("vendor_metadata", map[string]any{}).
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
 			Optional(),
+		field.String("logo_file_id").
+			Comment("The logo file id for the entity").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 	}
 }
 
@@ -335,6 +342,12 @@ func (e Entity) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: e,
+			name:       "logo_file",
+			t:          File.Type,
+			field:      "logo_file_id",
+		}),
 	}
 }
 
@@ -353,6 +366,8 @@ func (Entity) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEntityCreate(),
 		hooks.HookEntityFiles(),
+		hooks.HookEntityApprovedForUse(),
+		hooks.HookEntityLogoFile(),
 	}
 }
 

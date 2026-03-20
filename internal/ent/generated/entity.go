@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -143,6 +144,8 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contract_renewal_at,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]interface{} `json:"vendor_metadata,omitempty"`
+	// The logo file id for the entity
+	LogoFileID *string `json:"logo_file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntityQuery when eager-loading is set.
 	Edges                  EntityEdges `json:"edges"`
@@ -220,11 +223,13 @@ type EntityEdges struct {
 	SourcePlatforms []*Platform `json:"source_platforms,omitempty"`
 	// EntityType holds the value of the entity_type edge.
 	EntityType *EntityType `json:"entity_type,omitempty"`
+	// LogoFile holds the value of the logo_file edge.
+	LogoFile *File `json:"logo_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [31]bool
+	loadedTypes [32]bool
 	// totalCount holds the count of the edges above.
-	totalCount [31]map[string]int
+	totalCount [32]map[string]int
 
 	namedBlockedGroups           map[string][]*Group
 	namedEditors                 map[string][]*Group
@@ -549,6 +554,17 @@ func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	return nil, &NotLoadedError{edge: "entity_type"}
 }
 
+// LogoFileOrErr returns the LogoFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) LogoFileOrErr() (*File, error) {
+	if e.LogoFile != nil {
+		return e.LogoFile, nil
+	} else if e.loadedTypes[31] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "logo_file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Entity) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -564,7 +580,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -977,6 +993,13 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field vendor_metadata: %w", err)
 				}
 			}
+		case entity.FieldLogoFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
+			} else if value.Valid {
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
+			}
 		case entity.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_type_entities", values[i])
@@ -1194,6 +1217,11 @@ func (_m *Entity) QueryEntityType() *EntityTypeQuery {
 	return NewEntityClient(_m.config).QueryEntityType(_m)
 }
 
+// QueryLogoFile queries the "logo_file" edge of the Entity entity.
+func (_m *Entity) QueryLogoFile() *FileQuery {
+	return NewEntityClient(_m.config).QueryLogoFile(_m)
+}
+
 // Update returns a builder for updating this Entity.
 // Note that you need to call Entity.Unwrap() before calling this method if this Entity
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -1409,6 +1437,11 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("vendor_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.VendorMetadata))
+	builder.WriteString(", ")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

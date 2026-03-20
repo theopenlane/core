@@ -817,6 +817,20 @@ func (_c *EntityCreate) SetVendorMetadata(v map[string]interface{}) *EntityCreat
 	return _c
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *EntityCreate) SetLogoFileID(v string) *EntityCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableLogoFileID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EntityCreate) SetID(v string) *EntityCreate {
 	_c.mutation.SetID(v)
@@ -1184,6 +1198,11 @@ func (_c *EntityCreate) AddSourcePlatforms(v ...*Platform) *EntityCreate {
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_c *EntityCreate) SetEntityType(v *EntityType) *EntityCreate {
 	return _c.SetEntityTypeID(v.ID)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_c *EntityCreate) SetLogoFile(v *File) *EntityCreate {
+	return _c.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the EntityMutation object of the builder.
@@ -2109,6 +2128,24 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.EntityTypeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.LogoFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

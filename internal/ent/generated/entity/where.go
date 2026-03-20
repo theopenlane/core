@@ -324,6 +324,11 @@ func ContractRenewalAt(v models.DateTime) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldContractRenewalAt, v))
 }
 
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldCreatedAt, v))
@@ -3604,6 +3609,81 @@ func VendorMetadataNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldVendorMetadata))
 }
 
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldLogoFileID, v))
+}
+
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldLogoFileID, v))
+}
+
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldLogoFileID, v))
+}
+
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldLogoFileID))
+}
+
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldLogoFileID))
+}
+
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldLogoFileID, v))
+}
+
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldLogoFileID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
@@ -4494,6 +4574,35 @@ func HasEntityTypeWith(preds ...predicate.EntityType) predicate.Entity {
 		step := newEntityTypeStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EntityType
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
+func HasLogoFile() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLogoFileWith applies the HasEdge predicate on the "logo_file" edge with a given conditions (other predicates).
+func HasLogoFileWith(preds ...predicate.File) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newLogoFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Entity
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
