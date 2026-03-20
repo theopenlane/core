@@ -109,6 +109,9 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - .buildkite
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -127,6 +130,10 @@ steps:
         depends_on: "generate_config"
         if: build.branch == "main"
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - .buildkite
+                - config
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -147,6 +154,9 @@ steps:
         depends_on: "helm_automation"
         if: build.branch == "main"
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - .buildkite
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -458,6 +468,7 @@ steps:
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
+          - thedyrt/skip-checkout#v0.1.1: ~
           - artifacts#v1.9.4:
               download: "coverage-handlers.out"
               step: "go_test_handlers"
@@ -502,6 +513,7 @@ steps:
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
+          - thedyrt/skip-checkout#v0.1.1: ~
           - artifacts#v1.9.4:
               download: "coverage-no-api.out"
               step: "go_test_no_api"
@@ -646,6 +658,9 @@ steps:
         soft_fail:
           - exit_status: 1
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - db
           - theopenlane/atlas#v1.2.1:
               project: core
               atlas-env: dev
@@ -691,6 +706,9 @@ steps:
           fi
         artifact_paths: linter-result.txt
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - internal/graphapi
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -785,6 +803,9 @@ steps:
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - internal/graphapi
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -801,6 +822,9 @@ steps:
           queue: $SMALL_RUNNER_QUEUE
           size: $RUNNER_SMALL
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - internal/graphapi
           - cluster-secrets#v1.0.0:
               variables:
                 APOLLO_KEY: APOLLO_HISTORY_KEY
@@ -817,6 +841,9 @@ steps:
           queue: $SMALL_RUNNER_QUEUE
           size: $RUNNER_SMALL
         plugins:
+          - sparse-checkout#v1.5.0:
+              paths:
+                - db
           - theopenlane/atlas#v1.2.1:
               project: core
               dir: "file://db/migrations"
