@@ -34,9 +34,14 @@ echo "📊 Checking disk space..."
 if disk_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$disk_usage" ]] && [[ "$disk_usage" =~ ^[0-9]+$ ]]; then
     echo "📊 Current disk usage: ${disk_usage}%"
 
-    if [[ $disk_usage -gt 90 ]]; then
+    if [[ $disk_usage -gt 80 ]]; then
         echo "🚨 CRITICAL: Disk usage is ${disk_usage}% - build may fail due to lack of space!"
-        echo "🧹 Running emergency Docker cleanup..."
+        echo "🧹 Running emergency go and docker cleanup..."
+
+        if command -v go >/dev/null 2>&1; then
+            echo "🧹 Running Go build cache cleanup..."
+            go clean -cache >/dev/null 2>&1 || true
+        fi
 
         if command -v docker >/dev/null 2>&1; then
             # Emergency cleanup - remove stopped containers and dangling images only
@@ -58,7 +63,7 @@ if disk_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | s
                 echo "⚠️  Could not determine disk usage after cleanup"
             fi
         fi
-    elif [[ $disk_usage -gt 80 ]]; then
+    elif [[ $disk_usage -gt 70 ]]; then
         echo "⚠️  WARNING: Disk usage is ${disk_usage}% - cleanup recommended"
     fi
 else
