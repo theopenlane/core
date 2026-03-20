@@ -24,6 +24,7 @@ type IntegrationMappingSchema struct {
 	AllowedKeys  map[string]struct{}
 	RequiredKeys []string
 	UpsertKeys   []string
+	StockPersist bool
 }
 
 // IntegrationIngestSource identifies how a typed ingest request entered the ingest pipeline
@@ -61,6 +62,7 @@ const (
 	IntegrationMappingSchemaDirectoryGroup      = "DirectoryGroup"
 	IntegrationMappingSchemaDirectoryMembership = "DirectoryMembership"
 	IntegrationMappingSchemaEntity              = "Entity"
+	IntegrationMappingSchemaFinding             = "Finding"
 	IntegrationMappingSchemaRisk                = "Risk"
 	IntegrationMappingSchemaVulnerability       = "Vulnerability"
 )
@@ -129,6 +131,17 @@ type IntegrationIngestEntityRequested struct {
 // IntegrationIngestEntityRequestedTopic is the typed Gala topic for Entity ingest requests
 var IntegrationIngestEntityRequestedTopic = gala.Topic[IntegrationIngestEntityRequested]{
 	Name: "integration.ingest.entity.requested",
+}
+
+// IntegrationIngestFindingRequested is the typed second-stage ingest contract for Finding records
+type IntegrationIngestFindingRequested struct {
+	Metadata IntegrationIngestMetadata    `json:"metadata"`
+	Input    generated.CreateFindingInput `json:"input"`
+}
+
+// IntegrationIngestFindingRequestedTopic is the typed Gala topic for Finding ingest requests
+var IntegrationIngestFindingRequestedTopic = gala.Topic[IntegrationIngestFindingRequested]{
+	Name: "integration.ingest.finding.requested",
 }
 
 // IntegrationIngestRiskRequested is the typed second-stage ingest contract for Risk records
@@ -342,6 +355,57 @@ const (
 	IntegrationMappingEntityTerminationNoticeDays                 = "terminationNoticeDays"
 	IntegrationMappingEntityTier                                  = "tier"
 	IntegrationMappingEntityVendorMetadata                        = "vendorMetadata"
+)
+
+// Integration mapping keys for Finding.
+const (
+	IntegrationMappingFindingAssessmentID       = "assessmentID"
+	IntegrationMappingFindingBlocksProduction   = "blocksProduction"
+	IntegrationMappingFindingCategories         = "categories"
+	IntegrationMappingFindingCategory           = "category"
+	IntegrationMappingFindingDescription        = "description"
+	IntegrationMappingFindingDisplayName        = "displayName"
+	IntegrationMappingFindingEnvironmentID      = "environmentID"
+	IntegrationMappingFindingEnvironmentName    = "environmentName"
+	IntegrationMappingFindingEventTime          = "eventTime"
+	IntegrationMappingFindingExploitability     = "exploitability"
+	IntegrationMappingFindingExternalID         = "externalID"
+	IntegrationMappingFindingExternalOwnerID    = "externalOwnerID"
+	IntegrationMappingFindingExternalURI        = "externalURI"
+	IntegrationMappingFindingFindingClass       = "findingClass"
+	IntegrationMappingFindingFindingStatusID    = "findingStatusID"
+	IntegrationMappingFindingFindingStatusName  = "findingStatusName"
+	IntegrationMappingFindingImpact             = "impact"
+	IntegrationMappingFindingInternalNotes      = "internalNotes"
+	IntegrationMappingFindingMetadata           = "metadata"
+	IntegrationMappingFindingNumericSeverity    = "numericSeverity"
+	IntegrationMappingFindingOpen               = "open"
+	IntegrationMappingFindingOwnerID            = "ownerID"
+	IntegrationMappingFindingPriority           = "priority"
+	IntegrationMappingFindingProduction         = "production"
+	IntegrationMappingFindingPublic             = "public"
+	IntegrationMappingFindingRawPayload         = "rawPayload"
+	IntegrationMappingFindingRecommendation     = "recommendation"
+	IntegrationMappingFindingRecommendedActions = "recommendedActions"
+	IntegrationMappingFindingReferences         = "references"
+	IntegrationMappingFindingRemediationSLA     = "remediationSLA"
+	IntegrationMappingFindingReportedAt         = "reportedAt"
+	IntegrationMappingFindingResourceName       = "resourceName"
+	IntegrationMappingFindingScopeID            = "scopeID"
+	IntegrationMappingFindingScopeName          = "scopeName"
+	IntegrationMappingFindingScore              = "score"
+	IntegrationMappingFindingSeverity           = "severity"
+	IntegrationMappingFindingSource             = "source"
+	IntegrationMappingFindingSourceUpdatedAt    = "sourceUpdatedAt"
+	IntegrationMappingFindingState              = "state"
+	IntegrationMappingFindingStatus             = "status"
+	IntegrationMappingFindingStepsToReproduce   = "stepsToReproduce"
+	IntegrationMappingFindingSystemInternalID   = "systemInternalID"
+	IntegrationMappingFindingTags               = "tags"
+	IntegrationMappingFindingTargetDetails      = "targetDetails"
+	IntegrationMappingFindingTargets            = "targets"
+	IntegrationMappingFindingValidated          = "validated"
+	IntegrationMappingFindingVector             = "vector"
 )
 
 // Integration mapping keys for Risk.
@@ -832,6 +896,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		UpsertKeys: []string{
 			"sourceIdentifier",
 		},
+		StockPersist: true,
 	},
 	"Contact": {
 		Name: "Contact",
@@ -956,6 +1021,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"email",
 			"externalID",
 		},
+		StockPersist: true,
 	},
 	"DirectoryAccount": {
 		Name: "DirectoryAccount",
@@ -1276,6 +1342,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID",
 			"integrationID",
 		},
+		StockPersist: true,
 	},
 	"DirectoryGroup": {
 		Name: "DirectoryGroup",
@@ -1486,6 +1553,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"directorySyncRunID",
 			"integrationID",
 		},
+		StockPersist: true,
 	},
 	"DirectoryMembership": {
 		Name: "DirectoryMembership",
@@ -1666,6 +1734,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"directorySyncRunID",
 			"integrationID",
 		},
+		StockPersist: true,
 	},
 	"Entity": {
 		Name: "Entity",
@@ -2188,6 +2257,489 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID",
 			"name",
 		},
+		StockPersist: true,
+	},
+	"Finding": {
+		Name: "Finding",
+		Fields: []IntegrationMappingField{
+			{
+				InputKey:  "assessmentID",
+				GoField:   "AssessmentID",
+				EntField:  "assessment_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "blocksProduction",
+				GoField:   "BlocksProduction",
+				EntField:  "blocks_production",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "categories",
+				GoField:   "Categories",
+				EntField:  "categories",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "category",
+				GoField:   "Category",
+				EntField:  "category",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "description",
+				GoField:   "Description",
+				EntField:  "description",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "displayName",
+				GoField:   "DisplayName",
+				EntField:  "display_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "environmentID",
+				GoField:   "EnvironmentID",
+				EntField:  "environment_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "environmentName",
+				GoField:   "EnvironmentName",
+				EntField:  "environment_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "eventTime",
+				GoField:   "EventTime",
+				EntField:  "event_time",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "exploitability",
+				GoField:   "Exploitability",
+				EntField:  "exploitability",
+				Type:      "float64",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalID",
+				GoField:   "ExternalID",
+				EntField:  "external_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: true,
+				LookupKey: true,
+			},
+			{
+				InputKey:  "externalOwnerID",
+				GoField:   "ExternalOwnerID",
+				EntField:  "external_owner_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalURI",
+				GoField:   "ExternalURI",
+				EntField:  "external_uri",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "findingClass",
+				GoField:   "FindingClass",
+				EntField:  "finding_class",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "findingStatusID",
+				GoField:   "FindingStatusID",
+				EntField:  "finding_status_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "findingStatusName",
+				GoField:   "FindingStatusName",
+				EntField:  "finding_status_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "impact",
+				GoField:   "Impact",
+				EntField:  "impact",
+				Type:      "float64",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "internalNotes",
+				GoField:   "InternalNotes",
+				EntField:  "internal_notes",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "metadata",
+				GoField:   "Metadata",
+				EntField:  "metadata",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "numericSeverity",
+				GoField:   "NumericSeverity",
+				EntField:  "numeric_severity",
+				Type:      "float64",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "open",
+				GoField:   "Open",
+				EntField:  "open",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "ownerID",
+				GoField:   "OwnerID",
+				EntField:  "owner_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "priority",
+				GoField:   "Priority",
+				EntField:  "priority",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "production",
+				GoField:   "Production",
+				EntField:  "production",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "public",
+				GoField:   "Public",
+				EntField:  "public",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "rawPayload",
+				GoField:   "RawPayload",
+				EntField:  "raw_payload",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "recommendation",
+				GoField:   "Recommendation",
+				EntField:  "recommendation",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "recommendedActions",
+				GoField:   "RecommendedActions",
+				EntField:  "recommended_actions",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "references",
+				GoField:   "References",
+				EntField:  "references",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "remediationSLA",
+				GoField:   "RemediationSLA",
+				EntField:  "remediation_sla",
+				Type:      "int",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "reportedAt",
+				GoField:   "ReportedAt",
+				EntField:  "reported_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "resourceName",
+				GoField:   "ResourceName",
+				EntField:  "resource_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "scopeID",
+				GoField:   "ScopeID",
+				EntField:  "scope_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "scopeName",
+				GoField:   "ScopeName",
+				EntField:  "scope_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "score",
+				GoField:   "Score",
+				EntField:  "score",
+				Type:      "float64",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "severity",
+				GoField:   "Severity",
+				EntField:  "severity",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "source",
+				GoField:   "Source",
+				EntField:  "source",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "sourceUpdatedAt",
+				GoField:   "SourceUpdatedAt",
+				EntField:  "source_updated_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "state",
+				GoField:   "State",
+				EntField:  "state",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "status",
+				GoField:   "Status",
+				EntField:  "status",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "stepsToReproduce",
+				GoField:   "StepsToReproduce",
+				EntField:  "steps_to_reproduce",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "systemInternalID",
+				GoField:   "SystemInternalID",
+				EntField:  "system_internal_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "tags",
+				GoField:   "Tags",
+				EntField:  "tags",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "targetDetails",
+				GoField:   "TargetDetails",
+				EntField:  "target_details",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "targets",
+				GoField:   "Targets",
+				EntField:  "targets",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "validated",
+				GoField:   "Validated",
+				EntField:  "validated",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "vector",
+				GoField:   "Vector",
+				EntField:  "vector",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+		},
+		AllowedKeys: map[string]struct{}{
+			"assessmentID":       {},
+			"blocksProduction":   {},
+			"categories":         {},
+			"category":           {},
+			"description":        {},
+			"displayName":        {},
+			"environmentID":      {},
+			"environmentName":    {},
+			"eventTime":          {},
+			"exploitability":     {},
+			"externalID":         {},
+			"externalOwnerID":    {},
+			"externalURI":        {},
+			"findingClass":       {},
+			"findingStatusID":    {},
+			"findingStatusName":  {},
+			"impact":             {},
+			"internalNotes":      {},
+			"metadata":           {},
+			"numericSeverity":    {},
+			"open":               {},
+			"ownerID":            {},
+			"priority":           {},
+			"production":         {},
+			"public":             {},
+			"rawPayload":         {},
+			"recommendation":     {},
+			"recommendedActions": {},
+			"references":         {},
+			"remediationSLA":     {},
+			"reportedAt":         {},
+			"resourceName":       {},
+			"scopeID":            {},
+			"scopeName":          {},
+			"score":              {},
+			"severity":           {},
+			"source":             {},
+			"sourceUpdatedAt":    {},
+			"state":              {},
+			"status":             {},
+			"stepsToReproduce":   {},
+			"systemInternalID":   {},
+			"tags":               {},
+			"targetDetails":      {},
+			"targets":            {},
+			"validated":          {},
+			"vector":             {},
+		},
+		RequiredKeys: []string{},
+		UpsertKeys: []string{
+			"externalID",
+		},
+		StockPersist: true,
 	},
 	"Risk": {
 		Name: "Risk",
@@ -2452,6 +3004,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID",
 			"name",
 		},
+		StockPersist: true,
 	},
 	"Vulnerability": {
 		Name: "Vulnerability",
@@ -2856,6 +3409,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"cveID",
 			"externalID",
 		},
+		StockPersist: true,
 	},
 }
 
@@ -2931,6 +3485,18 @@ func PrepareDirectoryMembershipInput(input generated.CreateDirectoryMembershipIn
 // PrepareEntityInput stamps integration-scoped values onto a CreateEntityInput before persistence.
 // Fields are only overwritten when the input value is already zero/nil.
 func PrepareEntityInput(input generated.CreateEntityInput, integration *generated.Integration) generated.CreateEntityInput {
+	if integration == nil {
+		return input
+	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
+	return input
+}
+
+// PrepareFindingInput stamps integration-scoped values onto a CreateFindingInput before persistence.
+// Fields are only overwritten when the input value is already zero/nil.
+func PrepareFindingInput(input generated.CreateFindingInput, integration *generated.Integration) generated.CreateFindingInput {
 	if integration == nil {
 		return input
 	}

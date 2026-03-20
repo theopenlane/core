@@ -41,6 +41,7 @@ var ingestSchemaOrder = []string{
 	integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
 	integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
 	integrationgenerated.IntegrationMappingSchemaEntity,
+	integrationgenerated.IntegrationMappingSchemaFinding,
 	integrationgenerated.IntegrationMappingSchemaRisk,
 	integrationgenerated.IntegrationMappingSchemaVulnerability,
 }
@@ -130,6 +131,20 @@ var schemaRegistrations = map[string]schemaRegistration{
 			return payload.Metadata.IntegrationID, payload.Input
 		},
 		persistEntityInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaFinding: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestFindingRequestedTopic,
+		prepareFindingInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateFindingInput) integrationgenerated.IntegrationIngestFindingRequested {
+			return integrationgenerated.IntegrationIngestFindingRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestFindingRequested) (string, ent.CreateFindingInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistFindingInput,
 	),
 	integrationgenerated.IntegrationMappingSchemaRisk: buildSchemaRegistration(
 		integrationgenerated.IntegrationIngestRiskRequestedTopic,
@@ -323,11 +338,11 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 	}
 
 	if options.WorkflowMeta != nil {
-		metadata.WorkflowInstanceID = options.WorkflowMeta.InstanceID
-		metadata.WorkflowActionKey = options.WorkflowMeta.ActionKey
+		metadata.WorkflowInstanceID  = options.WorkflowMeta.InstanceID
+		metadata.WorkflowActionKey   = options.WorkflowMeta.ActionKey
 		metadata.WorkflowActionIndex = options.WorkflowMeta.ActionIndex
-		metadata.WorkflowObjectID = options.WorkflowMeta.ObjectID
-		metadata.WorkflowObjectType = string(options.WorkflowMeta.ObjectType)
+		metadata.WorkflowObjectID    = options.WorkflowMeta.ObjectID
+		metadata.WorkflowObjectType  = string(options.WorkflowMeta.ObjectType)
 	}
 
 	return metadata
@@ -362,6 +377,7 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 
 // prepareAssetInput applies integration-scoped defaults before emit or sync persistence.
 func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
+
 	input = integrationgenerated.PrepareAssetInput(input, integration)
 
 	return input
@@ -369,7 +385,9 @@ func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integratio
 
 // prepareContactInput applies integration-scoped defaults before emit or sync persistence.
 func prepareContactInput(_ context.Context, input ent.CreateContactInput, integration *ent.Integration) ent.CreateContactInput {
+
 	input = integrationgenerated.PrepareContactInput(input, integration)
+
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
@@ -379,11 +397,15 @@ func prepareContactInput(_ context.Context, input ent.CreateContactInput, integr
 
 // prepareDirectoryAccountInput applies integration-scoped defaults before emit or sync persistence.
 func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectoryAccountInput, integration *ent.Integration) ent.CreateDirectoryAccountInput {
+
 	input = integrationgenerated.PrepareDirectoryAccountInput(input, integration)
+
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
+
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
+
 	if input.DirectorySyncRunID == nil && dirSyncRunID != "" {
 		input.DirectorySyncRunID = &dirSyncRunID
 	}
@@ -393,11 +415,15 @@ func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectory
 
 // prepareDirectoryGroupInput applies integration-scoped defaults before emit or sync persistence.
 func prepareDirectoryGroupInput(ctx context.Context, input ent.CreateDirectoryGroupInput, integration *ent.Integration) ent.CreateDirectoryGroupInput {
+
 	input = integrationgenerated.PrepareDirectoryGroupInput(input, integration)
+
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
+
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
+
 	if input.DirectorySyncRunID == "" && dirSyncRunID != "" {
 		input.DirectorySyncRunID = dirSyncRunID
 	}
@@ -407,11 +433,15 @@ func prepareDirectoryGroupInput(ctx context.Context, input ent.CreateDirectoryGr
 
 // prepareDirectoryMembershipInput applies integration-scoped defaults before emit or sync persistence.
 func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirectoryMembershipInput, integration *ent.Integration) ent.CreateDirectoryMembershipInput {
+
 	input = integrationgenerated.PrepareDirectoryMembershipInput(input, integration)
+
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
 	}
+
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
+
 	if input.DirectorySyncRunID == "" && dirSyncRunID != "" {
 		input.DirectorySyncRunID = dirSyncRunID
 	}
@@ -421,13 +451,23 @@ func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirect
 
 // prepareEntityInput applies integration-scoped defaults before emit or sync persistence.
 func prepareEntityInput(_ context.Context, input ent.CreateEntityInput, integration *ent.Integration) ent.CreateEntityInput {
+
 	input = integrationgenerated.PrepareEntityInput(input, integration)
+
+	return input
+}
+
+// prepareFindingInput applies integration-scoped defaults before emit or sync persistence.
+func prepareFindingInput(_ context.Context, input ent.CreateFindingInput, integration *ent.Integration) ent.CreateFindingInput {
+
+	input = integrationgenerated.PrepareFindingInput(input, integration)
 
 	return input
 }
 
 // prepareRiskInput applies integration-scoped defaults before emit or sync persistence.
 func prepareRiskInput(_ context.Context, input ent.CreateRiskInput, integration *ent.Integration) ent.CreateRiskInput {
+
 	input = integrationgenerated.PrepareRiskInput(input, integration)
 
 	return input
@@ -435,6 +475,7 @@ func prepareRiskInput(_ context.Context, input ent.CreateRiskInput, integration 
 
 // prepareVulnerabilityInput applies integration-scoped defaults before emit or sync persistence.
 func prepareVulnerabilityInput(_ context.Context, input ent.CreateVulnerabilityInput, integration *ent.Integration) ent.CreateVulnerabilityInput {
+
 	input = integrationgenerated.PrepareVulnerabilityInput(input, integration)
 
 	return input
