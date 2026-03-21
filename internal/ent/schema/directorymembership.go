@@ -190,6 +190,8 @@ func (m DirectoryMembership) Policy() ent.Policy {
 func (DirectoryMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }

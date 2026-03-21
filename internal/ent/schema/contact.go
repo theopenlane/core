@@ -147,5 +147,9 @@ func (Contact) Modules() []models.OrgModule {
 
 // Annotations of the Contact
 func (c Contact) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
+	}
 }
