@@ -299,7 +299,7 @@ func (e Entity) Edges() []ent.Edge {
 			fromSchema: e,
 			edgeSchema: Contact{},
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Contact{}.Name()),
+				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
 		defaultEdgeToWithPagination(e, DocumentData{}),

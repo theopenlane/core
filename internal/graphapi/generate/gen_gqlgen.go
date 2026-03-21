@@ -33,6 +33,7 @@ var (
 	mainInputPaths = []string{
 		"internal/graphapi/schema",
 		"internal/ent/generated",
+		"common/enums/",
 		graphapiGenDir,
 	}
 
