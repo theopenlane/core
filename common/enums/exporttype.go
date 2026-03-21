@@ -8,6 +8,8 @@ type ExportType string
 var (
 	// ExportTypeAsset indicates the asset.
 	ExportTypeAsset ExportType = "ASSET"
+	// ExportTypeContact indicates the contact.
+	ExportTypeContact ExportType = "CONTACT"
 	// ExportTypeControl indicates the control.
 	ExportTypeControl ExportType = "CONTROL"
 	// ExportTypeDirectoryMembership indicates the directorymembership.
@@ -50,6 +52,7 @@ var (
 
 var exportTypeValues = []ExportType{
 	ExportTypeAsset,
+	ExportTypeContact,
 	ExportTypeControl,
 	ExportTypeDirectoryMembership,
 	ExportTypeEntity,
