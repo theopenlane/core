@@ -109,7 +109,7 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - .buildkite
           - docker#v5.13.0:
@@ -130,7 +130,7 @@ steps:
         depends_on: "generate_config"
         if: build.branch == "main"
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - .buildkite
                 - config
@@ -154,7 +154,7 @@ steps:
         depends_on: "helm_automation"
         if: build.branch == "main"
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - .buildkite
           - docker#v5.13.0:
@@ -406,7 +406,7 @@ steps:
           size: $RUNNER_SMALL
         key: "fga_test"
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - fga
           - docker#v5.13.0:
@@ -661,7 +661,7 @@ steps:
         soft_fail:
           - exit_status: 1
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - db
           - theopenlane/atlas#v1.2.1:
@@ -709,7 +709,7 @@ steps:
           fi
         artifact_paths: linter-result.txt
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - internal/graphapi
           - docker#v5.13.0:
@@ -806,7 +806,7 @@ steps:
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - internal/graphapi
           - docker#v5.13.0:
@@ -825,7 +825,7 @@ steps:
           queue: $SMALL_RUNNER_QUEUE
           size: $RUNNER_SMALL
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - internal/graphapi
           - cluster-secrets#v1.0.0:
@@ -844,7 +844,7 @@ steps:
           queue: $SMALL_RUNNER_QUEUE
           size: $RUNNER_SMALL
         plugins:
-          - sparse-checkout#v1.5.0:
+          - sparse-checkout#v1.6.0:
               paths:
                 - db
           - theopenlane/atlas#v1.2.1:
