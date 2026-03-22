@@ -181,13 +181,11 @@ const (
 	// ScansInverseTable is the table name for the Scan entity.
 	// It exists in this package in order to avoid circular dependency with the "scan" package.
 	ScansInverseTable = "scans"
-	// FindingsTable is the table that holds the findings relation/edge.
-	FindingsTable = "findings"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "remediation_findings"
 	// FindingsInverseTable is the table name for the Finding entity.
 	// It exists in this package in order to avoid circular dependency with the "finding" package.
 	FindingsInverseTable = "findings"
-	// FindingsColumn is the table column denoting the findings relation/edge.
-	FindingsColumn = "remediation_findings"
 	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge.
 	VulnerabilitiesTable = "vulnerabilities"
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
@@ -313,7 +311,6 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "remediations"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"finding_remediations",
 	"review_remediations",
 	"vulnerability_remediations",
 }
@@ -325,6 +322,9 @@ var (
 	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
 	// primary key for the scans relation (M2M).
 	ScansPrimaryKey = []string{"scan_id", "remediation_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"remediation_id", "finding_id"}
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"remediation_id", "action_plan_id"}
@@ -880,7 +880,7 @@ func newFindingsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newVulnerabilitiesStep() *sqlgraph.Step {

@@ -94,7 +94,6 @@ type Remediation struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RemediationQuery when eager-loading is set.
 	Edges                      RemediationEdges `json:"edges"`
-	finding_remediations       *string
 	review_remediations        *string
 	vulnerability_remediations *string
 	selectValues               sql.SelectValues
@@ -380,11 +379,9 @@ func (*Remediation) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case remediation.FieldCreatedAt, remediation.FieldUpdatedAt, remediation.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case remediation.ForeignKeys[0]: // finding_remediations
+		case remediation.ForeignKeys[0]: // review_remediations
 			values[i] = new(sql.NullString)
-		case remediation.ForeignKeys[1]: // review_remediations
-			values[i] = new(sql.NullString)
-		case remediation.ForeignKeys[2]: // vulnerability_remediations
+		case remediation.ForeignKeys[1]: // vulnerability_remediations
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -628,19 +625,12 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 			}
 		case remediation.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_remediations", values[i])
-			} else if value.Valid {
-				_m.finding_remediations = new(string)
-				*_m.finding_remediations = value.String
-			}
-		case remediation.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_remediations", values[i])
 			} else if value.Valid {
 				_m.review_remediations = new(string)
 				*_m.review_remediations = value.String
 			}
-		case remediation.ForeignKeys[2]:
+		case remediation.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_remediations", values[i])
 			} else if value.Valid {

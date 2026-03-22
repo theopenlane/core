@@ -2704,8 +2704,6 @@ var (
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "finding_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "remediation_findings", Type: field.TypeString, Nullable: true},
-		{Name: "review_findings", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_findings", Type: field.TypeString, Nullable: true},
 	}
 	// FindingsTable holds the schema information for the "findings" table.
@@ -2739,20 +2737,8 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_remediations_findings",
-				Columns:    []*schema.Column{FindingsColumns[57]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "findings_reviews_findings",
-				Columns:    []*schema.Column{FindingsColumns[58]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "findings_vulnerabilities_findings",
-				Columns:    []*schema.Column{FindingsColumns[59]},
+				Columns:    []*schema.Column{FindingsColumns[57]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5829,7 +5815,6 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "external_uri", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "finding_remediations", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
@@ -5843,38 +5828,32 @@ var (
 		PrimaryKey: []*schema.Column{RemediationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "remediations_findings_remediations",
-				Columns:    []*schema.Column{RemediationsColumns[33]},
-				RefColumns: []*schema.Column{FindingsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "remediations_organizations_remediations",
-				Columns:    []*schema.Column{RemediationsColumns[34]},
+				Columns:    []*schema.Column{RemediationsColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "remediations_custom_type_enums_environment",
-				Columns:    []*schema.Column{RemediationsColumns[35]},
+				Columns:    []*schema.Column{RemediationsColumns[34]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "remediations_custom_type_enums_scope",
-				Columns:    []*schema.Column{RemediationsColumns[36]},
+				Columns:    []*schema.Column{RemediationsColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "remediations_reviews_remediations",
-				Columns:    []*schema.Column{RemediationsColumns[37]},
+				Columns:    []*schema.Column{RemediationsColumns[36]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "remediations_vulnerabilities_remediations",
-				Columns:    []*schema.Column{RemediationsColumns[38]},
+				Columns:    []*schema.Column{RemediationsColumns[37]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5883,12 +5862,12 @@ var (
 			{
 				Name:    "remediation_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RemediationsColumns[7], RemediationsColumns[34]},
+				Columns: []*schema.Column{RemediationsColumns[7], RemediationsColumns[33]},
 			},
 			{
 				Name:    "remediation_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RemediationsColumns[34]},
+				Columns: []*schema.Column{RemediationsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5896,7 +5875,7 @@ var (
 			{
 				Name:    "remediation_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RemediationsColumns[14], RemediationsColumns[15], RemediationsColumns[34]},
+				Columns: []*schema.Column{RemediationsColumns[14], RemediationsColumns[15], RemediationsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5935,7 +5914,6 @@ var (
 		{Name: "external_uri", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
-		{Name: "finding_reviews", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_reviews", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
@@ -5950,44 +5928,38 @@ var (
 		PrimaryKey: []*schema.Column{ReviewsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "reviews_findings_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[30]},
-				RefColumns: []*schema.Column{FindingsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "reviews_organizations_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[31]},
+				Columns:    []*schema.Column{ReviewsColumns[30]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_remediations_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[32]},
+				Columns:    []*schema.Column{ReviewsColumns[31]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_custom_type_enums_environment",
-				Columns:    []*schema.Column{ReviewsColumns[33]},
+				Columns:    []*schema.Column{ReviewsColumns[32]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_custom_type_enums_scope",
-				Columns:    []*schema.Column{ReviewsColumns[34]},
+				Columns:    []*schema.Column{ReviewsColumns[33]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_users_reviewer",
-				Columns:    []*schema.Column{ReviewsColumns[35]},
+				Columns:    []*schema.Column{ReviewsColumns[34]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_vulnerabilities_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[36]},
+				Columns:    []*schema.Column{ReviewsColumns[35]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5996,7 +5968,7 @@ var (
 			{
 				Name:    "review_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ReviewsColumns[31]},
+				Columns: []*schema.Column{ReviewsColumns[30]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6004,7 +5976,7 @@ var (
 			{
 				Name:    "review_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ReviewsColumns[13], ReviewsColumns[14], ReviewsColumns[31]},
+				Columns: []*schema.Column{ReviewsColumns[13], ReviewsColumns[14], ReviewsColumns[30]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -12170,6 +12142,31 @@ var (
 			},
 		},
 	}
+	// RemediationFindingsColumns holds the columns for the "remediation_findings" table.
+	RemediationFindingsColumns = []*schema.Column{
+		{Name: "remediation_id", Type: field.TypeString},
+		{Name: "finding_id", Type: field.TypeString},
+	}
+	// RemediationFindingsTable holds the schema information for the "remediation_findings" table.
+	RemediationFindingsTable = &schema.Table{
+		Name:       "remediation_findings",
+		Columns:    RemediationFindingsColumns,
+		PrimaryKey: []*schema.Column{RemediationFindingsColumns[0], RemediationFindingsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "remediation_findings_remediation_id",
+				Columns:    []*schema.Column{RemediationFindingsColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "remediation_findings_finding_id",
+				Columns:    []*schema.Column{RemediationFindingsColumns[1]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RemediationActionPlansColumns holds the columns for the "remediation_action_plans" table.
 	RemediationActionPlansColumns = []*schema.Column{
 		{Name: "remediation_id", Type: field.TypeString},
@@ -12216,6 +12213,31 @@ var (
 				Symbol:     "remediation_controls_control_id",
 				Columns:    []*schema.Column{RemediationControlsColumns[1]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ReviewFindingsColumns holds the columns for the "review_findings" table.
+	ReviewFindingsColumns = []*schema.Column{
+		{Name: "review_id", Type: field.TypeString},
+		{Name: "finding_id", Type: field.TypeString},
+	}
+	// ReviewFindingsTable holds the schema information for the "review_findings" table.
+	ReviewFindingsTable = &schema.Table{
+		Name:       "review_findings",
+		Columns:    ReviewFindingsColumns,
+		PrimaryKey: []*schema.Column{ReviewFindingsColumns[0], ReviewFindingsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "review_findings_review_id",
+				Columns:    []*schema.Column{ReviewFindingsColumns[0]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "review_findings_finding_id",
+				Columns:    []*schema.Column{ReviewFindingsColumns[1]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -13215,8 +13237,10 @@ var (
 		ProgramEvidenceTable,
 		ProgramNarrativesTable,
 		ProgramActionPlansTable,
+		RemediationFindingsTable,
 		RemediationActionPlansTable,
 		RemediationControlsTable,
+		ReviewFindingsTable,
 		ReviewActionPlansTable,
 		ReviewControlsTable,
 		RiskBlockedGroupsTable,
@@ -13406,9 +13430,7 @@ func init() {
 	FindingsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	FindingsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	FindingsTable.ForeignKeys[3].RefTable = OrganizationsTable
-	FindingsTable.ForeignKeys[4].RefTable = RemediationsTable
-	FindingsTable.ForeignKeys[5].RefTable = ReviewsTable
-	FindingsTable.ForeignKeys[6].RefTable = VulnerabilitiesTable
+	FindingsTable.ForeignKeys[4].RefTable = VulnerabilitiesTable
 	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
@@ -13617,19 +13639,17 @@ func init() {
 	ProgramMembershipsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	ProgramMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
-	RemediationsTable.ForeignKeys[0].RefTable = FindingsTable
-	RemediationsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	RemediationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	RemediationsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	RemediationsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	RemediationsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
-	RemediationsTable.ForeignKeys[4].RefTable = ReviewsTable
-	RemediationsTable.ForeignKeys[5].RefTable = VulnerabilitiesTable
-	ReviewsTable.ForeignKeys[0].RefTable = FindingsTable
-	ReviewsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ReviewsTable.ForeignKeys[2].RefTable = RemediationsTable
+	RemediationsTable.ForeignKeys[3].RefTable = ReviewsTable
+	RemediationsTable.ForeignKeys[4].RefTable = VulnerabilitiesTable
+	ReviewsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ReviewsTable.ForeignKeys[1].RefTable = RemediationsTable
+	ReviewsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	ReviewsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
-	ReviewsTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
-	ReviewsTable.ForeignKeys[5].RefTable = UsersTable
-	ReviewsTable.ForeignKeys[6].RefTable = VulnerabilitiesTable
+	ReviewsTable.ForeignKeys[4].RefTable = UsersTable
+	ReviewsTable.ForeignKeys[5].RefTable = VulnerabilitiesTable
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
@@ -14081,10 +14101,14 @@ func init() {
 	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProgramActionPlansTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	RemediationFindingsTable.ForeignKeys[0].RefTable = RemediationsTable
+	RemediationFindingsTable.ForeignKeys[1].RefTable = FindingsTable
 	RemediationActionPlansTable.ForeignKeys[0].RefTable = RemediationsTable
 	RemediationActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	RemediationControlsTable.ForeignKeys[0].RefTable = RemediationsTable
 	RemediationControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	ReviewFindingsTable.ForeignKeys[0].RefTable = ReviewsTable
+	ReviewFindingsTable.ForeignKeys[1].RefTable = FindingsTable
 	ReviewActionPlansTable.ForeignKeys[0].RefTable = ReviewsTable
 	ReviewActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	ReviewControlsTable.ForeignKeys[0].RefTable = ReviewsTable

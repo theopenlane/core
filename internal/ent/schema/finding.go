@@ -230,12 +230,12 @@ func (f Finding) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(f, Task{}),
 		defaultEdgeToWithPagination(f, DirectoryAccount{}),
 		defaultEdgeToWithPagination(f, IdentityHolder{}),
-		edgeToWithPagination(&edgeDefinition{
+		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: f,
 			edgeSchema: Remediation{},
 			comment:    "remediation efforts tracked against the finding",
 		}),
-		edgeToWithPagination(&edgeDefinition{
+		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: f,
 			edgeSchema: Review{},
 			comment:    "reviews performed for this finding",

@@ -1830,16 +1830,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   finding.RemediationsTable,
-			Columns: []string{finding.RemediationsColumn},
+			Columns: finding.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Remediation
+		edge.Schema = _c.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1847,16 +1847,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   finding.ReviewsTable,
-			Columns: []string{finding.ReviewsColumn},
+			Columns: finding.ReviewsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Review
+		edge.Schema = _c.schemaConfig.ReviewFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

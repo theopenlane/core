@@ -217,9 +217,11 @@ type SchemaConfig struct {
 	ProgramActionPlans                 string // Program-action_plans->ActionPlan table.
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
+	RemediationFindings                string // Remediation-findings->Finding table.
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
 	RemediationControls                string // Remediation-controls->Control table.
 	Review                             string // Review table.
+	ReviewFindings                     string // Review-findings->Finding table.
 	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
 	ReviewControls                     string // Review-controls->Control table.
 	Risk                               string // Risk table.

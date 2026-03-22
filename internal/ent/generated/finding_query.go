@@ -650,11 +650,11 @@ func (_q *FindingQuery) QueryRemediations() *RemediationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(remediation.Table, remediation.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.RemediationsTable, finding.RemediationsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, finding.RemediationsTable, finding.RemediationsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -675,11 +675,11 @@ func (_q *FindingQuery) QueryReviews() *ReviewQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(review.Table, review.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.ReviewsTable, finding.ReviewsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, finding.ReviewsTable, finding.ReviewsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2580,64 +2580,126 @@ func (_q *FindingQuery) loadIdentityHolders(ctx context.Context, query *Identity
 	return nil
 }
 func (_q *FindingQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Remediation)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Remediation(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.RemediationsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.RemediationFindings)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(finding.RemediationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(finding.RemediationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.RemediationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_remediations
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_remediations" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_remediations" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Review)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Review(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.ReviewsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.ReviewsTable)
+		joinT.Schema(_q.schemaConfig.ReviewFindings)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(finding.ReviewsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(finding.ReviewsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.ReviewsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_reviews
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_reviews" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_reviews" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

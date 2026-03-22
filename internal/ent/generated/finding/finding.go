@@ -312,20 +312,16 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
-	// RemediationsTable is the table that holds the remediations relation/edge.
-	RemediationsTable = "remediations"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "remediation_findings"
 	// RemediationsInverseTable is the table name for the Remediation entity.
 	// It exists in this package in order to avoid circular dependency with the "remediation" package.
 	RemediationsInverseTable = "remediations"
-	// RemediationsColumn is the table column denoting the remediations relation/edge.
-	RemediationsColumn = "finding_remediations"
-	// ReviewsTable is the table that holds the reviews relation/edge.
-	ReviewsTable = "reviews"
+	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
+	ReviewsTable = "review_findings"
 	// ReviewsInverseTable is the table name for the Review entity.
 	// It exists in this package in order to avoid circular dependency with the "review" package.
 	ReviewsInverseTable = "reviews"
-	// ReviewsColumn is the table column denoting the reviews relation/edge.
-	ReviewsColumn = "finding_reviews"
 	// CommentsTable is the table that holds the comments relation/edge.
 	CommentsTable = "notes"
 	// CommentsInverseTable is the table name for the Note entity.
@@ -420,8 +416,6 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "findings"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"remediation_findings",
-	"review_findings",
 	"vulnerability_findings",
 }
 
@@ -444,6 +438,12 @@ var (
 	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
 	// primary key for the identity_holders relation (M2M).
 	IdentityHoldersPrimaryKey = []string{"finding_id", "identity_holder_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"remediation_id", "finding_id"}
+	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
+	// primary key for the reviews relation (M2M).
+	ReviewsPrimaryKey = []string{"review_id", "finding_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -1237,14 +1237,14 @@ func newRemediationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RemediationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RemediationsTable, RemediationsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newReviewsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ReviewsTable, ReviewsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
 	)
 }
 func newCommentsStep() *sqlgraph.Step {

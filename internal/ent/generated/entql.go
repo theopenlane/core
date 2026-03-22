@@ -7754,10 +7754,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"remediations",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   finding.RemediationsTable,
-			Columns: []string{finding.RemediationsColumn},
+			Columns: finding.RemediationsPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -7766,10 +7766,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"reviews",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   finding.ReviewsTable,
-			Columns: []string{finding.ReviewsColumn},
+			Columns: finding.ReviewsPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -12914,10 +12914,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"findings",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -13154,10 +13154,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"findings",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.FindingsTable,
-			Columns: []string{review.FindingsColumn},
+			Columns: review.FindingsPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",

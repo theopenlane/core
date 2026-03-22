@@ -1850,30 +1850,30 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.FindingsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
+		edge.Schema = _u.schemaConfig.RemediationFindings
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
+		edge.Schema = _u.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1881,16 +1881,16 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
+		edge.Schema = _u.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4326,30 +4326,30 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if _u.mutation.FindingsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
+		edge.Schema = _u.schemaConfig.RemediationFindings
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
+		edge.Schema = _u.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4357,16 +4357,16 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
+		edge.Schema = _u.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

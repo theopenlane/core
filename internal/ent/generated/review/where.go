@@ -2436,11 +2436,11 @@ func HasFindings() predicate.Review {
 	return predicate.Review(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, FindingsTable, FindingsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.ReviewFindings
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2451,7 +2451,7 @@ func HasFindingsWith(preds ...predicate.Finding) predicate.Review {
 		step := newFindingsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.ReviewFindings
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

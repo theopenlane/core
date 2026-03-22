@@ -91,7 +91,6 @@ type Review struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ReviewQuery when eager-loading is set.
 	Edges                 ReviewEdges `json:"edges"`
-	finding_reviews       *string
 	remediation_reviews   *string
 	vulnerability_reviews *string
 	selectValues          sql.SelectValues
@@ -378,11 +377,9 @@ func (*Review) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case review.FieldCreatedAt, review.FieldUpdatedAt, review.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case review.ForeignKeys[0]: // finding_reviews
+		case review.ForeignKeys[0]: // remediation_reviews
 			values[i] = new(sql.NullString)
-		case review.ForeignKeys[1]: // remediation_reviews
-			values[i] = new(sql.NullString)
-		case review.ForeignKeys[2]: // vulnerability_reviews
+		case review.ForeignKeys[1]: // vulnerability_reviews
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -616,19 +613,12 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 			}
 		case review.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_reviews", values[i])
-			} else if value.Valid {
-				_m.finding_reviews = new(string)
-				*_m.finding_reviews = value.String
-			}
-		case review.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_reviews", values[i])
 			} else if value.Valid {
 				_m.remediation_reviews = new(string)
 				*_m.remediation_reviews = value.String
 			}
-		case review.ForeignKeys[2]:
+		case review.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_reviews", values[i])
 			} else if value.Valid {

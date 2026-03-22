@@ -11782,11 +11782,11 @@ func (c *FindingClient) QueryRemediations(_m *Finding) *RemediationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, id),
 			sqlgraph.To(remediation.Table, remediation.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.RemediationsTable, finding.RemediationsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, finding.RemediationsTable, finding.RemediationsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationFindings
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -11801,11 +11801,11 @@ func (c *FindingClient) QueryReviews(_m *Finding) *ReviewQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, id),
 			sqlgraph.To(review.Table, review.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.ReviewsTable, finding.ReviewsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, finding.ReviewsTable, finding.ReviewsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewFindings
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -25216,11 +25216,11 @@ func (c *RemediationClient) QueryFindings(_m *Remediation) *FindingQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(remediation.Table, remediation.FieldID, id),
 			sqlgraph.To(finding.Table, finding.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, remediation.FindingsTable, remediation.FindingsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, remediation.FindingsTable, remediation.FindingsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.RemediationFindings
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -25731,11 +25731,11 @@ func (c *ReviewClient) QueryFindings(_m *Review) *FindingQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, id),
 			sqlgraph.To(finding.Table, finding.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.FindingsTable, review.FindingsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.FindingsTable, review.FindingsPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.ReviewFindings
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
