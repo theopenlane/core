@@ -21,7 +21,7 @@ require (
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.12.5
+	github.com/theopenlane/core v1.13.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.23.0
 	github.com/theopenlane/httpsling v0.3.0
@@ -70,7 +70,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
-	github.com/jackc/pgx/v5 v5.9.0 // indirect
+	github.com/jackc/pgx/v5 v5.9.1 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/knadh/koanf/maps v0.1.2 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
