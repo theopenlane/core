@@ -53,7 +53,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/invopop/jsonschema v0.13.0
 	github.com/invopop/yaml v0.3.1
-	github.com/jackc/pgx/v5 v5.9.0
+	github.com/jackc/pgx/v5 v5.9.1
 	github.com/knadh/koanf/parsers/yaml v1.1.0
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
 	github.com/knadh/koanf/providers/file v1.2.1
@@ -88,7 +88,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.4.1
-	github.com/theopenlane/core/common v1.0.13
+	github.com/theopenlane/core/common v1.0.14
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
@@ -96,7 +96,7 @@ require (
 	github.com/theopenlane/go-client v0.8.6
 	github.com/theopenlane/gqlgen-plugins v0.14.6
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.27.4
+	github.com/theopenlane/iam v0.27.5
 	github.com/theopenlane/newman v0.2.2
 	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.7.0
@@ -127,7 +127,6 @@ require (
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
-	github.com/google/go-github/v83 v83.0.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
@@ -315,7 +314,7 @@ require (
 	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20260122164422-25e22cb1875b // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251202173232-1e8bf16f1dce // indirect
-	github.com/openfga/openfga v1.12.0 // indirect
+	github.com/openfga/openfga v1.12.1 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
