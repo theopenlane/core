@@ -25639,13 +25639,17 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"finding_remediations"`
+							NodeID string `sql:"finding_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(finding.RemediationsColumn), ids...))
+							joinT := sql.Table(finding.RemediationsTable)
+							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(finding.RemediationsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(finding.RemediationsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(finding.RemediationsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(finding.RemediationsPrimaryKey[1]))
 						})
-						if err := query.GroupBy(finding.RemediationsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -25690,7 +25694,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(finding.RemediationsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(finding.RemediationsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -25728,13 +25732,17 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"finding_reviews"`
+							NodeID string `sql:"finding_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(finding.ReviewsColumn), ids...))
+							joinT := sql.Table(finding.ReviewsTable)
+							s.Join(joinT).On(s.C(review.FieldID), joinT.C(finding.ReviewsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(finding.ReviewsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(finding.ReviewsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(finding.ReviewsPrimaryKey[1]))
 						})
-						if err := query.GroupBy(finding.ReviewsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -25779,7 +25787,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(finding.ReviewsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(finding.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -59190,13 +59198,17 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"remediation_findings"`
+							NodeID string `sql:"remediation_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(remediation.FindingsColumn), ids...))
+							joinT := sql.Table(remediation.FindingsTable)
+							s.Join(joinT).On(s.C(finding.FieldID), joinT.C(remediation.FindingsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(remediation.FindingsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(remediation.FindingsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(remediation.FindingsPrimaryKey[0]))
 						})
-						if err := query.GroupBy(remediation.FindingsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -59241,7 +59253,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(remediation.FindingsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(remediation.FindingsPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -61015,13 +61027,17 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"review_findings"`
+							NodeID string `sql:"review_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(review.FindingsColumn), ids...))
+							joinT := sql.Table(review.FindingsTable)
+							s.Join(joinT).On(s.C(finding.FieldID), joinT.C(review.FindingsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(review.FindingsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(review.FindingsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(review.FindingsPrimaryKey[0]))
 						})
-						if err := query.GroupBy(review.FindingsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -61066,7 +61082,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(review.FindingsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(review.FindingsPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {

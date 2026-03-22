@@ -137,22 +137,71 @@ func (r Review) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			comment:    "integration that produced the review",
 		}),
-		defaultEdgeToWithPagination(r, Finding{}),
-		defaultEdgeToWithPagination(r, Vulnerability{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, ActionPlan{}),
-		defaultEdgeToWithPagination(r, Remediation{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Remediation{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Remediation{}.Name()),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: r,
 			edgeSchema: Control{},
 			annotations: []schema.Annotation{
 				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				accessmap.EdgeViewCheck(Control{}.Name()),
 			},
 		}),
-		defaultEdgeToWithPagination(r, Subcontrol{}),
-		defaultEdgeToWithPagination(r, Risk{}),
-		defaultEdgeToWithPagination(r, Program{}),
-		defaultEdgeToWithPagination(r, Asset{}),
-		defaultEdgeToWithPagination(r, Entity{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Risk{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Program{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Program{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Asset{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Asset{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Entity{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Entity{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Task{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,

@@ -1193,16 +1193,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Finding
+		edge.Schema = _c.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

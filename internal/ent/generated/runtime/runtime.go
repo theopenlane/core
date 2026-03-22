@@ -6388,19 +6388,22 @@ func init() {
 
 	scan.Hooks[4] = scanMixinHooks5[0]
 
-	scan.Hooks[5] = scanMixinHooks6[0]
+	scan.Hooks[5] = scanMixinHooks5[1]
 
-	scan.Hooks[6] = scanMixinHooks6[1]
+	scan.Hooks[6] = scanMixinHooks6[0]
 
-	scan.Hooks[7] = scanMixinHooks6[2]
+	scan.Hooks[7] = scanMixinHooks6[1]
 
-	scan.Hooks[8] = scanMixinHooks8[0]
+	scan.Hooks[8] = scanMixinHooks6[2]
 
-	scan.Hooks[9] = scanMixinHooks9[0]
+	scan.Hooks[9] = scanMixinHooks8[0]
+
+	scan.Hooks[10] = scanMixinHooks9[0]
 	scanMixinInters1 := scanMixin[1].Interceptors()
 	scanMixinInters5 := scanMixin[5].Interceptors()
 	scan.Interceptors[0] = scanMixinInters1[0]
 	scan.Interceptors[1] = scanMixinInters5[0]
+	scan.Interceptors[2] = scanMixinInters5[1]
 	scanMixinFields0 := scanMixin[0].Fields()
 	_ = scanMixinFields0
 	scanMixinFields2 := scanMixin[2].Fields()

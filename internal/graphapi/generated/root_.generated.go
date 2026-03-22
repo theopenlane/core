@@ -112311,7 +112311,7 @@ type Scan implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -129747,8 +129747,6 @@ input UpdateScanInput {
   the status of the scan, e.g., processing, completed, failed
   """
   status: ScanScanStatus
-  ownerID: ID
-  clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

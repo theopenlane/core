@@ -30421,7 +30421,7 @@ type Scan struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy *string `json:"reviewedBy,omitempty"`
@@ -42310,8 +42310,6 @@ type UpdateScanInput struct {
 	ClearVulnerabilityIds  *bool    `json:"clearVulnerabilityIds,omitempty"`
 	// the status of the scan, e.g., processing, completed, failed
 	Status                   *enums.ScanStatus `json:"status,omitempty"`
-	OwnerID                  *string           `json:"ownerID,omitempty"`
-	ClearOwner               *bool             `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs       []string          `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs    []string          `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups       *bool             `json:"clearBlockedGroups,omitempty"`

@@ -126,26 +126,6 @@ func (_u *ScanHistoryUpdate) ClearTags() *ScanHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *ScanHistoryUpdate) SetOwnerID(v string) *ScanHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ScanHistoryUpdate) SetNillableOwnerID(v *string) *ScanHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ScanHistoryUpdate) ClearOwnerID() *ScanHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *ScanHistoryUpdate) SetReviewedBy(v string) *ScanHistoryUpdate {
 	_u.mutation.SetReviewedBy(v)
@@ -687,9 +667,6 @@ func (_u *ScanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scanhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(scanhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scanhistory.FieldOwnerID, field.TypeString)
 	}
@@ -932,26 +909,6 @@ func (_u *ScanHistoryUpdateOne) AppendTags(v []string) *ScanHistoryUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *ScanHistoryUpdateOne) ClearTags() *ScanHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ScanHistoryUpdateOne) SetOwnerID(v string) *ScanHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ScanHistoryUpdateOne) SetNillableOwnerID(v *string) *ScanHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ScanHistoryUpdateOne) ClearOwnerID() *ScanHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -1525,9 +1482,6 @@ func (_u *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHistory
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scanhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(scanhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scanhistory.FieldOwnerID, field.TypeString)
