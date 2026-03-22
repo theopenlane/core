@@ -254,6 +254,11 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "SubcontrolRefCodes",
+      "targetField": "SubcontrolIDs",
+      "isSlice": true
     }
   ],
   "Review": [

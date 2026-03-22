@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -46,6 +47,9 @@ var CSVLookupRegistry = map[string]CSVLookupEntry{
 	"Platform:name": {
 		Lookup: LookupPlatformByName,
 		Create: CreatePlatformByName,
+	},
+	"Subcontrol:ref_code": {
+		Lookup: LookupSubcontrolByRefCode,
 	},
 	"Template:name": {
 		Lookup: LookupTemplateByName,
@@ -329,6 +333,51 @@ func CreatePlatformByName(ctx context.Context, client *generated.Client, orgID s
 	resolved := make(map[string]string, len(created))
 	for _, r := range created {
 		key := normalizeCSVKey(r.Name)
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupSubcontrolByRefCode resolves Subcontrol ref_code values to IDs.
+func LookupSubcontrolByRefCode(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Subcontrol, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, subcontrol.RefCodeEqualFold(v))
+	}
+	records, err := client.Subcontrol.Query().
+		Where(subcontrol.OwnerID(orgID), subcontrol.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.RefCode)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("ref_code '%s' matched multiple Subcontrol records; use SubcontrolID directly or add additional columns to scope the lookup", r.RefCode)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -1095,6 +1144,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				SourceColumn:    "ControlRefCodes",
 				TargetField:     "ControlIDs",
 				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SubcontrolRefCodes",
+				TargetField:     "SubcontrolIDs",
+				TargetEntity:    "Subcontrol",
 				MatchField:      "ref_code",
 				IsSlice:         true,
 				CreateIfMissing: false,
@@ -2507,6 +2564,7 @@ func (ProgramMembershipCSVUpdateInput) CSVInputWrapper() {}
 type RemediationCSVInput struct {
 	Input generated.CreateRemediationInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RemediationCSVInput for CSV header preprocessing.
@@ -2518,6 +2576,7 @@ type RemediationCSVUpdateInput struct {
 	ID string `csv:"ID"`
 	Input generated.UpdateRemediationInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RemediationCSVUpdateInput for CSV header preprocessing.

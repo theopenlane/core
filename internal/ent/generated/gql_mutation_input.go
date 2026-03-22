@@ -21768,8 +21768,6 @@ type UpdateScanInput struct {
 	VulnerabilityIds         []string
 	AppendVulnerabilityIds   []string
 	Status                   *enums.ScanStatus
-	ClearOwner               bool
-	OwnerID                  *string
 	ClearBlockedGroups       bool
 	AddBlockedGroupIDs       []string
 	RemoveBlockedGroupIDs    []string
@@ -21911,12 +21909,6 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

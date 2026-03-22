@@ -9,10 +9,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // Scan holds the schema definition for scan records used for domain, vulnerability, or provider scans.
@@ -124,8 +126,17 @@ func (Scan) Fields() []ent.Field {
 func (s Scan) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(s),
-			newGroupPermissionsMixin(),
+			newObjectOwnedMixin[generated.Scan](s,
+				withParents(
+					Organization{},
+					Control{},
+					Subcontrol{},
+					Risk{},
+					Asset{},
+					Entity{},
+				),
+				withOrganizationOwner(true),
+			), newGroupPermissionsMixin(),
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(s, withEnumFieldName("scope"), withGlobalEnum()),
@@ -183,6 +194,8 @@ func (s Scan) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.ScanMutation](),
 		),
 	)
 }
@@ -197,5 +210,7 @@ func (Scan) Modules() []models.OrgModule {
 
 // Annotations of the Scan
 func (Scan) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }
