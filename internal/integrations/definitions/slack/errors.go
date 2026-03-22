@@ -27,4 +27,8 @@ var (
 	ErrUsersFetchFailed = errors.New("slack: users fetch failed")
 	// ErrPayloadEncode indicates a collected Slack payload could not be serialized for ingest
 	ErrPayloadEncode = errors.New("slack: ingest payload encode failed")
+	// ErrCredentialEncode indicates the credential could not be serialized
+	ErrCredentialEncode = errors.New("slack: credential encode failed")
+	// ErrCredentialDecode indicates the credential could not be deserialized
+	ErrCredentialDecode = errors.New("slack: credential decode failed")
 )

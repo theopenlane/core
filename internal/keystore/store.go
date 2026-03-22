@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -59,10 +58,7 @@ func NewStore(db *ent.Client) (*Store, error) {
 
 // LoadCredential resolves one persisted credential slot for one installation record.
 func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef) (types.CredentialSet, bool, error) {
-	if installation == nil {
-		return types.CredentialSet{}, false, ErrCredentialNotFound
-	}
-	if !credentialRef.Valid() {
+	if credentialRef == (types.CredentialRef{}) {
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
@@ -79,10 +75,6 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 
 // LoadCredentials resolves the requested credential slots for one installation record.
 func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialRef) (types.CredentialBindings, error) {
-	if installation == nil {
-		return nil, ErrCredentialNotFound
-	}
-
 	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, credentialRefs)
 	if err != nil {
 		return nil, err
@@ -106,10 +98,7 @@ func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integrati
 
 // SaveCredential upserts one credential slot for one installation record.
 func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef, credential types.CredentialSet) error {
-	if installation == nil {
-		return ErrInstallationIDRequired
-	}
-	if !credentialRef.Valid() {
+	if credentialRef == (types.CredentialRef{}) {
 		return ErrCredentialNotFound
 	}
 
@@ -149,7 +138,7 @@ func (s *Store) SaveInstallationCredential(ctx context.Context, installationID s
 	if installationID == "" {
 		return ErrInstallationIDRequired
 	}
-	if !credentialRef.Valid() {
+	if credentialRef == (types.CredentialRef{}) {
 		return ErrCredentialNotFound
 	}
 
@@ -189,10 +178,6 @@ func (s *Store) DeleteCredential(ctx context.Context, installationID string) err
 
 // BuildClient resolves one named client for an installation using explicit credential bundles.
 func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, registration types.ClientRegistration, credentials types.CredentialBindings, config json.RawMessage, force bool) (any, error) {
-	if installation == nil {
-		return nil, ErrInstallationIDRequired
-	}
-
 	cacheKey := clientCacheKey{
 		installationID: installation.ID,
 		clientID:       registration.Ref,
@@ -270,16 +255,9 @@ func singleCredential(credentials types.CredentialBindings, refs []types.Credent
 }
 
 func cloneCredentialSet(credential types.CredentialSet) types.CredentialSet {
-	clone := credential
-	clone.ProviderData = jsonx.CloneRawMessage(credential.ProviderData)
-	clone.Claims = mapx.DeepCloneMapAny(credential.Claims)
-
-	if credential.OAuthExpiry != nil {
-		expiry := *credential.OAuthExpiry
-		clone.OAuthExpiry = &expiry
+	return types.CredentialSet{
+		Data: jsonx.CloneRawMessage(credential.Data),
 	}
-
-	return clone
 }
 
 func cloneCredentialBindings(credentials types.CredentialBindings) types.CredentialBindings {
@@ -319,7 +297,7 @@ func (s *Store) activeCredentialRecords(ctx context.Context, installationID stri
 	if len(credentialRefs) > 0 {
 		secretNames := make([]string, 0, len(credentialRefs))
 		for _, ref := range credentialRefs {
-			if !ref.Valid() {
+			if ref == (types.CredentialRef{}) {
 				continue
 			}
 

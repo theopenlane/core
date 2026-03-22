@@ -1,6 +1,7 @@
 package openapi
 
 import (
+	"encoding/json"
 	"errors"
 	"mime/multipart"
 	"net/mail"
@@ -2149,12 +2150,16 @@ type ListIntegrationsResponse struct {
 
 // DeleteIntegrationResponse is the response for deleting an integration
 type DeleteIntegrationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is a user-facing summary of the disconnect action
 	Message string `json:"message"`
-	// DeletedID is the deletedId value.
+	// DeletedID is the installation record ID that was removed
 	DeletedID string `json:"deletedId,omitempty"`
+	// RedirectURL is a provider URL the user should visit to complete external teardown
+	RedirectURL string `json:"redirectUrl,omitempty"`
+	// Details is an opaque provider-specific payload describing teardown actions taken or required
+	Details json.RawMessage `json:"details,omitempty"`
 }
 
 // GetIntegrationTokenRequest is the request for getting integration tokens
@@ -2290,31 +2295,6 @@ func (r *OAuthFlowResponse) ExampleResponse() any {
 	}
 }
 
-// OAuthCallbackRequest represents the OAuth callback data
-type OAuthCallbackRequest struct {
-	// Provider is the provider value.
-	Provider string `json:"provider,omitempty" query:"provider" description:"OAuth provider (extracted from state)"`
-	// Code is the code value.
-	Code string `json:"code" query:"code" description:"OAuth authorization code"`
-	// State is the state value.
-	State string `json:"state" query:"state" description:"OAuth state parameter"`
-}
-
-// Validate ensures the required fields are set on the OAuthCallbackRequest
-func (r *OAuthCallbackRequest) Validate() error {
-	r.Provider = strings.TrimSpace(strings.ToLower(r.Provider))
-	r.Code = strings.TrimSpace(r.Code)
-
-	switch {
-	case r.Code == "":
-		return rout.NewMissingRequiredFieldError("code")
-	case r.State == "":
-		return rout.NewMissingRequiredFieldError("state")
-	}
-
-	return nil
-}
-
 // ExampleStartImpersonationRequest is an example request for OpenAPI documentation
 var ExampleStartImpersonationRequest = StartImpersonationRequest{
 	TargetUserID: exampleULID("user_alt"),
@@ -2344,42 +2324,6 @@ var ExampleEndImpersonationReply = EndImpersonationReply{
 	Message: "Impersonation session ended successfully",
 }
 
-// OAuthCallbackResponse contains the result of OAuth callback processing
-type OAuthCallbackResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Success is the success value.
-	Success bool `json:"success" description:"Whether the OAuth callback was processed successfully"`
-	// Integration is the integration value.
-	Integration any `json:"integration,omitempty" description:"The created/updated integration object"`
-	// Message is the message value.
-	Message string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
-}
-
-// ExampleResponse returns an example OAuthCallbackResponse for OpenAPI documentation
-func (r *OAuthCallbackResponse) ExampleResponse() any {
-	return OAuthCallbackResponse{
-		Reply:       rout.Reply{Success: true},
-		Success:     true,
-		Integration: map[string]any{"id": exampleULID("integration"), "provider": "github", "status": "connected"},
-		Message:     "Successfully connected GitHub integration",
-	}
-}
-
-// ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation
-var ExampleOAuthFlowRequest = OAuthFlowRequest{
-	Provider:    "github",
-	RedirectURI: "https://app.example.com/integrations",
-	Scopes:      []string{"repo", "gist"},
-}
-
-// ExampleOAuthCallbackRequest is an example OAuth callback request for OpenAPI documentation
-var ExampleOAuthCallbackRequest = OAuthCallbackRequest{
-	Provider: "github",
-	Code:     "4/0AQlEz8xY...",
-	State:    "eyJvcmdJRCI6IjAxSE...",
-}
-
 // ExampleOAuthFlowResponse is an example OAuth flow response for OpenAPI documentation
 var ExampleOAuthFlowResponse = OAuthFlowResponse{
 	Reply:         rout.Reply{Success: true},
@@ -2387,88 +2331,6 @@ var ExampleOAuthFlowResponse = OAuthFlowResponse{
 	State:         "eyJvcmdJRCI6IjAxSE...",
 	Message:       "",
 	RequiresLogin: false,
-}
-
-// ExampleOAuthCallbackResponse is an example OAuth callback response for OpenAPI documentation
-var ExampleOAuthCallbackResponse = OAuthCallbackResponse{
-	Reply:   rout.Reply{Success: true},
-	Success: true,
-	Message: "Successfully connected GitHub integration",
-}
-
-// =========
-// GITHUB APP INTEGRATION REQUESTS/RESPONSES
-// =========
-
-// GitHubAppInstallRequest represents the GitHub App installation start request.
-type GitHubAppInstallRequest struct{}
-
-// Validate ensures the GitHubAppInstallRequest is valid.
-func (r *GitHubAppInstallRequest) Validate() error {
-	return nil
-}
-
-// GitHubAppInstallResponse contains the GitHub App installation URL and state.
-type GitHubAppInstallResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// InstallURL is the installUrl value.
-	InstallURL string `json:"installUrl" description:"URL to initiate the GitHub App installation" example:"https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE..."`
-	// State is the state value.
-	State string `json:"state,omitempty" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
-	// Message is the message value.
-	Message string `json:"message,omitempty" description:"Optional message"`
-}
-
-// ExampleResponse returns an example GitHubAppInstallResponse.
-func (r *GitHubAppInstallResponse) ExampleResponse() any {
-	return GitHubAppInstallResponse{
-		Reply:      rout.Reply{Success: true},
-		InstallURL: "https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...",
-		State:      "eyJvcmdJRCI6IjAxSE...",
-		Message:    "",
-	}
-}
-
-// GitHubAppInstallCallbackRequest represents query params for the GitHub App callback.
-type GitHubAppInstallCallbackRequest struct {
-	// InstallationID is the installation_id value.
-	InstallationID string `json:"installation_id" query:"installation_id" description:"GitHub App installation ID" example:"12345678"`
-	// SetupAction is the setup_action value.
-	SetupAction string `json:"setup_action,omitempty" query:"setup_action" description:"GitHub setup action" example:"install"`
-	// State is the state value.
-	State string `json:"state" query:"state" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
-}
-
-// Validate ensures required callback fields are set.
-func (r *GitHubAppInstallCallbackRequest) Validate() error {
-	r.InstallationID = strings.TrimSpace(r.InstallationID)
-	r.SetupAction = strings.TrimSpace(r.SetupAction)
-
-	switch {
-	case r.InstallationID == "":
-		return rout.NewMissingRequiredFieldError("installation_id")
-	case r.State == "":
-		return rout.NewMissingRequiredFieldError("state")
-	}
-
-	return nil
-}
-
-// GitHubAppInstallCallbackResponse contains the callback result.
-type GitHubAppInstallCallbackResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Message is the message value.
-	Message string `json:"message,omitempty" description:"Success or error message"`
-}
-
-// ExampleResponse returns an example GitHubAppInstallCallbackResponse.
-func (r *GitHubAppInstallCallbackResponse) ExampleResponse() any {
-	return GitHubAppInstallCallbackResponse{
-		Reply:   rout.Reply{Success: true},
-		Message: "GitHub App integration connected",
-	}
 }
 
 // GitHubAppWebhookResponse acknowledges GitHub App webhooks.
@@ -2490,29 +2352,6 @@ func (r *GitHubAppWebhookResponse) ExampleResponse() any {
 			"total":   1,
 		},
 	}
-}
-
-// ExampleGitHubAppInstallRequest is an example GitHub App install request.
-var ExampleGitHubAppInstallRequest = GitHubAppInstallRequest{}
-
-// ExampleGitHubAppInstallResponse is an example GitHub App install response.
-var ExampleGitHubAppInstallResponse = GitHubAppInstallResponse{
-	Reply:      rout.Reply{Success: true},
-	InstallURL: "https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...",
-	State:      "eyJvcmdJRCI6IjAxSE...",
-}
-
-// ExampleGitHubAppInstallCallbackRequest is an example GitHub App callback request.
-var ExampleGitHubAppInstallCallbackRequest = GitHubAppInstallCallbackRequest{
-	InstallationID: "12345678",
-	SetupAction:    "install",
-	State:          "eyJvcmdJRCI6IjAxSE...",
-}
-
-// ExampleGitHubAppInstallCallbackResponse is an example GitHub App callback response.
-var ExampleGitHubAppInstallCallbackResponse = GitHubAppInstallCallbackResponse{
-	Reply:   rout.Reply{Success: true},
-	Message: "GitHub App integration connected",
 }
 
 // =========

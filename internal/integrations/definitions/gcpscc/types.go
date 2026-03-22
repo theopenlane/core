@@ -12,6 +12,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the GCP Security Command Center integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
+	// Installation is the typed installation metadata handle for the GCP Security Command Center definition
+	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 	// sccCredential is the credential slot used by the SCC client
 	sccCredential = types.NewCredentialRef(Slug)
 	// SCCClient is the client ref for the GCP Security Command Center client used by this definition
@@ -85,4 +87,22 @@ func normalizeServiceAccountKey(value string) string {
 	}
 
 	return trimmed
+}
+
+// InstallationMetadata holds the stable GCP organization and service account identity for one installation
+type InstallationMetadata struct {
+	// OrganizationID is the GCP organization identifier when collection is organization-scoped
+	OrganizationID string `json:"organizationId,omitempty" jsonschema:"title=Organization ID"`
+	// ProjectID is the primary GCP project identifier used for quota or fallback parent resolution
+	ProjectID string `json:"projectId,omitempty" jsonschema:"title=Project ID"`
+	// ProjectScope indicates whether collection targets all or specific projects
+	ProjectScope string `json:"projectScope,omitempty" jsonschema:"title=Project Scope"`
+	// ProjectIDs lists the explicitly selected GCP projects when project scope is specific
+	ProjectIDs []string `json:"projectIds,omitempty" jsonschema:"title=Project IDs"`
+	// SourceID is the default SCC source identifier used for this installation
+	SourceID string `json:"sourceId,omitempty" jsonschema:"title=SCC Source ID"`
+	// SourceIDs lists the SCC source identifiers configured for collection
+	SourceIDs []string `json:"sourceIds,omitempty" jsonschema:"title=SCC Source IDs"`
+	// ServiceAccountEmail is the service account email extracted from the configured key when available
+	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty" jsonschema:"title=Service Account Email"`
 }

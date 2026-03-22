@@ -1,6 +1,10 @@
 package githubapp
 
-import "github.com/theopenlane/core/internal/integrations/types"
+import (
+	"time"
+
+	"github.com/theopenlane/core/internal/integrations/types"
+)
 
 var (
 	// DefinitionID is the stable identifier for the GitHub App integration definition
@@ -23,6 +27,8 @@ var (
 	PingWebhookEvent = types.NewWebhookEventRef[struct{}]("ping")
 	// InstallationCreatedWebhookEvent is the webhook event ref for GitHub installation created events
 	InstallationCreatedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.created")
+	// InstallationDeletedWebhookEvent is the webhook event ref for GitHub installation deleted events
+	InstallationDeletedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.deleted")
 	// DependabotAlertWebhookEvent is the webhook event ref for Dependabot alert events
 	DependabotAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("dependabot_alert")
 	// CodeScanningAlertWebhookEvent is the webhook event ref for code scanning alert events
@@ -44,6 +50,18 @@ const (
 	// githubAlertTypeSecretScan is the variant name for secret scanning alert payloads
 	githubAlertTypeSecretScan = "secret_scanning"
 )
+
+// githubAppCredential is the credential payload stored in CredentialSet.Data
+type githubAppCredential struct {
+	// AppID is the GitHub App identifier used to mint installation tokens
+	AppID int64 `json:"appId"`
+	// InstallationID is the installation selected for this credential
+	InstallationID int64 `json:"installationId"`
+	// AccessToken is the current installation access token
+	AccessToken string `json:"accessToken"`
+	// Expiry is the token expiry timestamp when available
+	Expiry *time.Time `json:"expiry,omitempty"`
+}
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {

@@ -8,24 +8,18 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// GitHubAppWebhookHandler verifies and dispatches one inbound GitHub App webhook delivery.
+// GitHubAppWebhookHandler verifies and dispatches one inbound GitHub App webhook delivery
 func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	if isRegistrationContext(ctx) {
-		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
-	}
-	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
-		return err
-	}
-
 	req := ctx.Request()
 	requestCtx := req.Context()
 
@@ -39,39 +33,38 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	// GitHub signs deliveries at the app webhook level, so verify before resolving the local installation.
+	// GitHub signs deliveries at the app webhook level using the operator-configured secret,
+	// so verify the signature before resolving any local state
 	if webhook.Verify != nil {
-		if err := webhook.Verify(requestCtx, types.WebhookVerifyRequest{
-			Request: req,
-			Payload: payload,
-		}); err != nil {
+		if err := webhook.Verify(types.WebhookVerifyRequest{Request: req, Payload: payload}); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Msg("webhook verification failed")
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 	}
 
-	installation, err := h.resolveGitHubAppWebhookInstallation(requestCtx, payload)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			logx.FromContext(requestCtx).Warn().Err(err).Msg("ignoring github app webhook for unknown installation")
-			return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
-		}
+	// GitHub App webhook deliveries are unauthenticated — set privacy bypass and a synthetic caller
+	// so that ent queries succeed against privacy-policy-protected tables
+	webhookCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
 
-		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to resolve github app webhook installation")
+	installation, err := h.resolveGitHubAppWebhookInstallation(webhookCtx, payload)
+	if err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve github app webhook installation")
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	logger := logx.FromContext(requestCtx).With().
-		Str("integration_id", installation.ID).
-		Str("webhook", webhook.Name).
-		Logger()
+	webhookCtx = logx.WithFields(webhookCtx, logx.LogFields{
+		"integration_id": installation.ID,
+		"webhook":        webhook.Name,
+	})
 
-	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name, "")
+	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(webhookCtx, installation, webhook.Name, "")
 	if err != nil {
-		logger.Error().Err(err).Msg("failed to ensure webhook")
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to ensure webhook")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(ctx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
+	return h.handleResolvedIntegrationWebhook(ctx, webhookCtx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
 }
 
 func (h *Handler) resolveGitHubAppWebhookInstallation(ctx context.Context, payload []byte) (*ent.Integration, error) {

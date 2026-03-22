@@ -7,7 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	intr "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -61,8 +61,8 @@ type integrationProviderExtensionsDocument struct {
 	DisplayName string `json:"display_name"`
 	// Category is the provider category
 	Category string `json:"category"`
-	// Auth describes the install or auth flow exposed by the definition
-	Auth *types.AuthRegistration `json:"auth,omitempty"`
+	// HasAuth indicates whether the definition exposes an auth flow
+	HasAuth bool `json:"has_auth,omitempty"`
 	// CredentialSchemas lists the provider credential slots
 	CredentialSchemas []integrationCredentialExtensionsDocument `json:"credential_schemas,omitempty"`
 	// UserInputSchema is the installation-scoped provider schema
@@ -94,7 +94,7 @@ type integrationOperationExtensionsDocument struct {
 }
 
 // workflowMetadataExtensions builds extensible workflow metadata payloads for non-object schema surfaces
-func workflowMetadataExtensions(rt *integrationsruntime.Runtime) map[string]any {
+func workflowMetadataExtensions(rt *intr.Runtime) map[string]any {
 	doc := workflowMetadataExtensionsDocument{
 		Integrations: integrationWorkflowExtensionsDocument{
 			ActionContract: integrationActionContractDocument{
@@ -117,7 +117,7 @@ func workflowMetadataExtensions(rt *integrationsruntime.Runtime) map[string]any 
 }
 
 // integrationWorkflowProviders builds provider metadata for integration workflow extensions
-func integrationWorkflowProviders(rt *integrationsruntime.Runtime) []integrationProviderExtensionsDocument {
+func integrationWorkflowProviders(rt *intr.Runtime) []integrationProviderExtensionsDocument {
 	if rt == nil {
 		return []integrationProviderExtensionsDocument{}
 	}
@@ -137,8 +137,10 @@ func integrationWorkflowProviders(rt *integrationsruntime.Runtime) []integration
 			Category:    spec.Category,
 		}
 
-		if def.Auth != nil && (def.Auth.StartPath != "" || def.Auth.CallbackPath != "" || def.Auth.OAuth != nil) {
-			entry.Auth = def.Auth
+		if lo.ContainsBy(def.Connections, func(connection types.ConnectionRegistration) bool {
+			return connection.Auth != nil && connection.Auth.Start != nil
+		}) {
+			entry.HasAuth = true
 		}
 
 		if len(def.CredentialRegistrations) > 0 {

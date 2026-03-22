@@ -6,15 +6,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/samber/do/v2"
-
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -44,7 +40,7 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integr
 // HandleOperation executes one queued operation envelope through the runtime-managed dependencies.
 func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
 	startedAt := time.Now()
-	db := do.MustInvoke[*ent.Client](r.injector)
+	db := r.DB()
 
 	failRun := func(execErr error, response json.RawMessage) error {
 		result := operations.RunResult{
@@ -122,7 +118,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 
 		credentials = mergeCredentials(credentials, credentialOverrides)
 
-		client, err = do.MustInvoke[*keystore.Store](r.injector).BuildClient(ctx, installation, registration, credentials, config, clientForce)
+		client, err = r.Keystore().BuildClient(ctx, installation, registration, credentials, config, clientForce)
 		if err != nil {
 			return nil, err
 		}
@@ -146,8 +142,8 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 
 		if err := operations.EmitPayloadSets(ctx, operations.IngestContext{
 			Registry:     r.Registry(),
-			DB:           do.MustInvoke[*ent.Client](r.injector),
-			Runtime:      do.MustInvoke[*gala.Gala](r.injector),
+			DB:           r.DB(),
+			Runtime:      r.Gala(),
 			Installation: installation,
 		}, operation.Name, operation.Ingest, payloadSets, ingestOptions); err != nil {
 			return nil, err

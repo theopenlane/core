@@ -64,38 +64,16 @@ func (c GraphClient) Build(_ context.Context, req types.ClientBuildRequest) (any
 	return msgraphsdk.NewGraphServiceClient(adapter), nil
 }
 
-// credentialFromRequest decodes and validates the installation credential schema
-func credentialFromRequest(req types.ClientBuildRequest) (CredentialSchema, error) {
-	var meta CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &meta); err != nil {
-		return CredentialSchema{}, ErrMetadataDecode
+// credentialFromRequest decodes and validates the installation credential data
+func credentialFromRequest(req types.ClientBuildRequest) (entraIDCred, error) {
+	var cred entraIDCred
+	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+		return entraIDCred{}, ErrCredentialDecode
 	}
 
-	if meta.TenantID == "" {
-		meta.TenantID = tenantIDFromClaims(req.Credential.Claims)
+	if cred.TenantID == "" {
+		return entraIDCred{}, ErrCredentialMetadataRequired
 	}
 
-	if meta.TenantID == "" {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	return meta, nil
-}
-
-func tenantIDFromClaims(claims map[string]any) string {
-	if claims == nil {
-		return ""
-	}
-
-	value, ok := claims["tid"]
-	if !ok {
-		return ""
-	}
-
-	tenantID, ok := value.(string)
-	if !ok {
-		return ""
-	}
-
-	return tenantID
+	return cred, nil
 }

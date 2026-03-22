@@ -59,13 +59,16 @@ type WebhookHandleRequest struct {
 	Ingest func(context.Context, []IngestPayloadSet) error
 	// DispatchOperation queues one integration operation for this installation.
 	DispatchOperation func(context.Context, string, json.RawMessage) error
+	// CleanupInstallation removes the installation and persisted credentials when a provider event
+	// represents authoritative external teardown (for example, a GitHub App uninstall webhook).
+	CleanupInstallation func(context.Context) error
 }
 
 // WebhookVerifyFunc verifies authenticity of one inbound webhook request
-type WebhookVerifyFunc func(ctx context.Context, request WebhookVerifyRequest) error
+type WebhookVerifyFunc func(request WebhookVerifyRequest) error
 
 // WebhookEventFunc resolves one inbound webhook request into a registered event
-type WebhookEventFunc func(ctx context.Context, request WebhookEventRequest) (WebhookReceivedEvent, error)
+type WebhookEventFunc func(request WebhookEventRequest) (WebhookReceivedEvent, error)
 
 // WebhookHandleFunc processes one normalized webhook event
 type WebhookHandleFunc func(ctx context.Context, request WebhookHandleRequest) error

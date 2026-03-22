@@ -150,6 +150,14 @@ var (
 	ErrLoginFailed = errors.New("login failed, please check your credentials and try again")
 	// ErrUnableToVerifyToken is returned when unable to verify a token
 	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
+	// errIntegrationWebhookNotConfigured is returned when the webhook registration is missing
+	errIntegrationWebhookNotConfigured = errors.New("integration webhook not configured")
+	// errIntegrationWebhookSecretMissing is returned when the persisted webhook has no secret token
+	errIntegrationWebhookSecretMissing = errors.New("integration webhook secret is missing")
+	// errIntegrationWebhookSignatureMissing is returned when the signature header is absent
+	errIntegrationWebhookSignatureMissing = errors.New("integration webhook signature header missing")
+	// errIntegrationWebhookSignatureMismatch is returned when the HMAC signature does not match
+	errIntegrationWebhookSignatureMismatch = errors.New("integration webhook signature mismatch")
 	// ErrResendWebhookDisabled is returned when resend webhook is not enabled
 	ErrResendWebhookDisabled = errors.New("resend webhook is not enabled")
 	// ErrResendWebhookMissingID is returned when resend webhook is missing svix-id header

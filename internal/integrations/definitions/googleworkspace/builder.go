@@ -2,6 +2,7 @@ package googleworkspace
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -36,25 +37,55 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Auth-managed credential slot used by the Google Workspace client in this definition.",
 				},
 			},
-			Auth: &types.AuthRegistration{
-				StartPath:    types.DefaultAuthStartPath,
-				CallbackPath: types.DefaultAuthCompletePath,
-				OAuth: &types.OAuthPublicConfig{
-					ClientID:    cfg.ClientID,
-					AuthURL:     "https://accounts.google.com/o/oauth2/v2/auth",
-					TokenURL:    "https://oauth2.googleapis.com/token",
-					RedirectURI: cfg.RedirectURL,
-					Scopes: []string{
-						"https://www.googleapis.com/auth/admin.directory.user.readonly",
-						"https://www.googleapis.com/auth/admin.directory.group.readonly",
-						"https://www.googleapis.com/auth/apps.groups.migration",
-					},
-					AuthParams: map[string]string{
-						"access_type": "offline",
-						"prompt":      "consent",
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       workspaceCredential,
+					Name:                "Google Workspace OAuth",
+					Description:         "Authenticate with Google Workspace using delegated OAuth access.",
+					CredentialRefs:      []types.CredentialRef{workspaceCredential},
+					ClientRefs:          []types.ClientID{WorkspaceClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
+						CredentialRef: workspaceCredential,
+						Config: auth.OAuthConfig{
+							ClientID:     cfg.ClientID,
+							ClientSecret: cfg.ClientSecret,
+							AuthURL:      "https://accounts.google.com/o/oauth2/v2/auth",
+							TokenURL:     "https://oauth2.googleapis.com/token",
+							RedirectURL:  cfg.RedirectURL,
+							Scopes: []string{
+								"https://www.googleapis.com/auth/admin.directory.user.readonly",
+								"https://www.googleapis.com/auth/admin.directory.group.readonly",
+								"https://www.googleapis.com/auth/apps.groups.migration",
+							},
+							AuthParams: map[string]string{
+								"access_type": "offline",
+								"prompt":      "consent",
+							},
+						},
+						Material: func(material auth.OAuthMaterial) (googleWorkspaceCred, error) {
+							return googleWorkspaceCred{
+								AccessToken:  material.AccessToken,
+								RefreshToken: material.RefreshToken,
+								Expiry:       material.Expiry,
+							}, nil
+						},
+						TokenView: func(cred googleWorkspaceCred) (*types.TokenView, error) {
+							return &types.TokenView{
+								AccessToken: cred.AccessToken,
+								ExpiresAt:   cred.Expiry,
+							}, nil
+						},
+						EncodeCredentialError: ErrCredentialEncode,
+						DecodeCredentialError: ErrCredentialDecode,
+					}),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: workspaceCredential,
+						Name:          "Disconnect Google Workspace OAuth",
+						Description:   "Remove the persisted Google Workspace OAuth credential and disconnect this installation from Openlane.",
 					},
 				},
-				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{

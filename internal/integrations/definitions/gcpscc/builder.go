@@ -34,6 +34,22 @@ func Builder() definition.Builder {
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
 				},
 			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       sccCredential,
+					Name:                "GCP Service Account",
+					Description:         "Configure Security Command Center access using a service account credential payload.",
+					CredentialRefs:      []types.CredentialRef{sccCredential},
+					ClientRefs:          []types.ClientID{SCCClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: sccCredential,
+						Name:          "Disconnect GCP Service Account",
+						Description:   "Remove the persisted GCP Security Command Center credential and disconnect this installation from Openlane.",
+					},
+				},
+			},
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            SCCClient.ID(),

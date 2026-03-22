@@ -14,7 +14,6 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/common/models"
 	openmodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/definition"
@@ -95,11 +94,12 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 		Save(ctx)
 	require.NoError(t, err)
 
-	credential := models.CredentialSet{
-		ProviderData: json.RawMessage(`{"token":"secret"}`),
+	credential := types.CredentialSet{
+		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	require.NoError(t, suite.h.IntegrationsRuntime.SaveCredential(ctx, rec, types.NewCredentialRef("gcp_scc_test"), credential))
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, githubTestCredentialRef, &credential, nil)
+	require.NoError(t, err)
 
 	return rec.ID
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
-	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 
@@ -25,7 +24,7 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 		return nil, err
 	}
 
-	clientOpts, err := clientOptions(ctx, meta, req.Credential.OAuthAccessToken)
+	clientOpts, err := clientOptions(ctx, meta)
 	if err != nil {
 		return nil, err
 	}
@@ -46,12 +45,12 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 
 // metadataFromCredential decodes SCC credential metadata from the credential set
 func metadataFromCredential(credential types.CredentialSet) (CredentialSchema, error) {
-	if len(credential.ProviderData) == 0 {
+	if len(credential.Data) == 0 {
 		return CredentialSchema{}, ErrCredentialMetadataRequired
 	}
 
 	var meta CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(credential.ProviderData, &meta); err != nil {
+	if err := jsonx.UnmarshalIfPresent(credential.Data, &meta); err != nil {
 		return CredentialSchema{}, ErrMetadataDecode
 	}
 
@@ -59,23 +58,17 @@ func metadataFromCredential(credential types.CredentialSet) (CredentialSchema, e
 }
 
 // clientOptions builds client options based on available credentials
-func clientOptions(ctx context.Context, meta CredentialSchema, oauthToken string) ([]option.ClientOption, error) {
-	if meta.ServiceAccountKey != "" {
-		creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes)
-		if err != nil {
-			return nil, err
-		}
-
-		return []option.ClientOption{option.WithCredentials(creds)}, nil
+func clientOptions(ctx context.Context, meta CredentialSchema) ([]option.ClientOption, error) {
+	if meta.ServiceAccountKey == "" {
+		return nil, ErrServiceAccountKeyInvalid
 	}
 
-	if oauthToken != "" {
-		token := &oauth2.Token{AccessToken: oauthToken}
-
-		return []option.ClientOption{option.WithTokenSource(oauth2.StaticTokenSource(token))}, nil
+	creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, ErrAccessTokenMissing
+	return []option.ClientOption{option.WithCredentials(creds)}, nil
 }
 
 // serviceAccountCredentials parses and validates a service account key

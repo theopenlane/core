@@ -38,10 +38,18 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Auth-managed credential slot used by the GitHub App client in this definition.",
 				},
 			},
-			Installation: Installation.Registration(),
-			Auth: &types.AuthRegistration{
-				StartPath:    "/v1/integrations/github/app/install",
-				CallbackPath: "/v1/integrations/github/app/callback",
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       GitHubAppCredential,
+					Name:                "GitHub App Installation",
+					Description:         "Install the Openlane GitHub App into a GitHub organization or repository owner account.",
+					CredentialRefs:      []types.CredentialRef{GitHubAppCredential},
+					ClientRefs:          []types.ClientID{GitHubClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Auth:                appInstallAuthRegistration(cfg),
+					Disconnect:          appInstallDisconnectRegistration(cfg),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
@@ -108,6 +116,11 @@ func Builder(cfg Config) definition.Builder {
 							Name:   InstallationCreatedWebhookEvent.Name(),
 							Topic:  InstallationCreatedWebhookEvent.Topic(Slug),
 							Handle: InstallationCreatedWebhook{}.Handle,
+						},
+						{
+							Name:   InstallationDeletedWebhookEvent.Name(),
+							Topic:  InstallationDeletedWebhookEvent.Topic(Slug),
+							Handle: InstallationDeletedWebhook{}.Handle,
 						},
 						{
 							Name:  DependabotAlertWebhookEvent.Name(),

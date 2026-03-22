@@ -384,8 +384,10 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	return h
 }
 
-// testOAuthDefinitionID is the canonical ID for the test OAuth definition.
-const testOAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
+// testAuthDefinitionID is the canonical ID for the test OAuth definition.
+const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
+
+var testAuthCredentialRef = types.NewCredentialRef("test_oauth")
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition.
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Context) {
@@ -413,20 +415,47 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 func buildTestOAuthDefinition() (types.Definition, error) {
 	return types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:          testOAuthDefinitionID,
+			ID:          testAuthDefinitionID,
 			Slug:        "test-oauth",
 			DisplayName: "Test OAuth",
 			Active:      true,
 		},
-		Auth: &types.AuthRegistration{
-			Start:    testOAuthStart,
-			Complete: testOAuthComplete,
-			Refresh:  testOAuthRefresh,
+		CredentialRegistrations: []types.CredentialRegistration{
+			{
+				Ref:         testAuthCredentialRef,
+				Name:        "Test OAuth Credential",
+				Description: "Auth-managed credential slot used by the test OAuth definition.",
+			},
+		},
+		Connections: []types.ConnectionRegistration{
+			{
+				CredentialRef:  testAuthCredentialRef,
+				Name:           "Test OAuth",
+				Description:    "Authenticate the test definition using the OAuth callback fixture.",
+				CredentialRefs: []types.CredentialRef{testAuthCredentialRef},
+				Auth: &types.AuthRegistration{
+					CredentialRef: testAuthCredentialRef,
+					Start:         testAuthStart,
+					Complete:      testAuthComplete,
+					Refresh:       testAuthRefresh,
+					TokenView:     testAuthTokenView,
+				},
+				Disconnect: &types.DisconnectRegistration{
+					CredentialRef: testAuthCredentialRef,
+					Name:          "Disconnect Test OAuth",
+					Description:   "Remove the persisted test OAuth credential and disconnect this installation.",
+				},
+			},
 		},
 	}, nil
 }
 
-func testOAuthStart(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+type testCallbackPayload struct {
+	State string `json:"state"`
+	Code  string `json:"code,omitempty"`
+}
+
+func testAuthStart(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 	oauthState := ulids.New().String()
 	stateBytes, _ := json.Marshal(map[string]string{"state": oauthState})
 
@@ -436,40 +465,69 @@ func testOAuthStart(_ context.Context, _ json.RawMessage) (types.AuthStartResult
 	}, nil
 }
 
-type testCallbackPayload struct {
-	State string `json:"state"`
-}
-
-func testOAuthComplete(_ context.Context, callbackState json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
+func testAuthComplete(_ context.Context, callbackState json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
 	var cs, inp testCallbackPayload
 	json.Unmarshal(callbackState, &cs) //nolint:errcheck
-	json.Unmarshal(input, &inp)        //nolint:errcheck
+	inp = testCallbackPayload{
+		State: input.First("state"),
+		Code:  input.First("code"),
+	}
+
+	if inp.Code == "" {
+		return types.AuthCompleteResult{}, errors.New("missing oauth code")
+	}
 
 	if cs.State != inp.State {
 		return types.AuthCompleteResult{}, errors.New("oauth state mismatch")
 	}
 
-	expiry := time.Now().Add(time.Hour)
+	tokenData, _ := json.Marshal(map[string]string{
+		"access_token":  "test-access-token",
+		"refresh_token": "test-refresh-token",
+	})
 
 	return types.AuthCompleteResult{
 		Credential: types.CredentialSet{
-			OAuthAccessToken:  "test-access-token",
-			OAuthRefreshToken: "test-refresh-token",
-			OAuthExpiry:       &expiry,
+			Data: tokenData,
 		},
 	}, nil
 }
 
-func testOAuthRefresh(_ context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
-	if credential.OAuthAccessToken == "" {
-		return types.CredentialSet{}, errors.New("missing access token")
+func testAuthRefresh(_ context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
+	if len(credential.Data) == 0 {
+		return types.CredentialSet{}, errors.New("missing credential data")
 	}
 
 	expiry := time.Now().Add(2 * time.Hour)
-	credential.OAuthAccessToken = "refreshed-access-token"
-	credential.OAuthExpiry = &expiry
 
-	return credential, nil
+	refreshedData, _ := json.Marshal(map[string]any{
+		"access_token":  "refreshed-access-token",
+		"refresh_token": "test-refresh-token",
+		"expiry":        expiry,
+	})
+
+	return types.CredentialSet{Data: refreshedData}, nil
+}
+
+func testAuthTokenView(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
+	var parsed map[string]any
+	if err := json.Unmarshal(credential.Data, &parsed); err != nil {
+		return nil, err
+	}
+
+	tv := &types.TokenView{}
+	if at, ok := parsed["access_token"].(string); ok {
+		tv.AccessToken = at
+	}
+
+	if expiryStr, ok := parsed["expiry"].(string); ok {
+		expiry, err := time.Parse(time.RFC3339Nano, expiryStr)
+		if err == nil {
+			tv.ExpiresAt = &expiry
+		}
+	}
+
+	return tv, nil
 }
 
 // mockStripeClient creates a new stripe client with mock backend

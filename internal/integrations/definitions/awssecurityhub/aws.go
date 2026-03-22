@@ -25,11 +25,11 @@ const (
 
 func decodeCredential[T any](credential types.CredentialSet) (T, error) {
 	var decoded T
-	if len(credential.ProviderData) == 0 {
+	if len(credential.Data) == 0 {
 		return decoded, ErrCredentialMetadataRequired
 	}
 
-	if err := jsonx.UnmarshalIfPresent(credential.ProviderData, &decoded); err != nil {
+	if err := jsonx.UnmarshalIfPresent(credential.Data, &decoded); err != nil {
 		return decoded, ErrCredentialMetadataInvalid
 	}
 

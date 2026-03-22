@@ -19,6 +19,8 @@ var (
 	ErrClientAlreadyRegistered = errors.New("integrations/registry: client already registered")
 	// ErrClientNotFound indicates the requested client does not exist
 	ErrClientNotFound = errors.New("integrations/registry: client not found")
+	// ErrConnectionNotFound indicates the requested connection does not exist
+	ErrConnectionNotFound = errors.New("integrations/registry: connection not found")
 	// ErrOperationNameRequired indicates an operation registration is missing its name
 	ErrOperationNameRequired = errors.New("integrations/registry: operation name required")
 	// ErrOperationTopicRequired indicates an operation registration is missing its topic
@@ -53,6 +55,18 @@ var (
 	ErrCredentialRefDuplicate = errors.New("integrations/registry: duplicate credential ref name")
 	// ErrCredentialRefNotDeclared indicates a client references a credential ref not declared by the definition
 	ErrCredentialRefNotDeclared = errors.New("integrations/registry: client credential ref not declared by definition")
+	// ErrConnectionRefDuplicate indicates a definition registers two connection modes with the same name
+	ErrConnectionRefDuplicate = errors.New("integrations/registry: duplicate connection ref name")
+	// ErrConnectionCredentialRefNotDeclared indicates a connection references a credential ref not declared by the definition
+	ErrConnectionCredentialRefNotDeclared = errors.New("integrations/registry: connection credential ref not declared by definition")
+	// ErrConnectionClientRefNotDeclared indicates a connection references a client ref not declared by the definition
+	ErrConnectionClientRefNotDeclared = errors.New("integrations/registry: connection client ref not declared by definition")
+	// ErrConnectionValidationOperationNotDeclared indicates a connection validation operation does not exist on the definition
+	ErrConnectionValidationOperationNotDeclared = errors.New("integrations/registry: connection validation operation not declared by definition")
+	// ErrConnectionAuthCredentialRefNotDeclared indicates a connection auth registration references an undeclared credential ref
+	ErrConnectionAuthCredentialRefNotDeclared = errors.New("integrations/registry: connection auth credential ref not declared by connection")
+	// ErrConnectionDisconnectCredentialRefNotDeclared indicates a connection disconnect registration references an undeclared credential ref
+	ErrConnectionDisconnectCredentialRefNotDeclared = errors.New("integrations/registry: connection disconnect credential ref not declared by connection")
 	// ErrUserInputSchemaRequired indicates a definition has a user input block with no schema
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
 )

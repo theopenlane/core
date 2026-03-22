@@ -20,6 +20,7 @@ type Registry struct {
 // definitionEntry captures the indexed details for one registered definition
 type definitionEntry struct {
 	definition    types.Definition
+	connections   map[string]types.ConnectionRegistration
 	clients       map[types.ClientID]types.ClientRegistration
 	operations    map[string]types.OperationRegistration
 	webhooks      map[string]types.WebhookRegistration
@@ -90,6 +91,13 @@ func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegis
 	}, ErrClientNotFound)
 }
 
+// Connection returns one connection registration for a definition
+func (r *Registry) Connection(id string, ref types.CredentialRef) (types.ConnectionRegistration, error) {
+	return lookupInEntry(r, id, ref.String(), func(e definitionEntry) map[string]types.ConnectionRegistration {
+		return e.connections
+	}, ErrConnectionNotFound)
+}
+
 // Operation returns one operation registration for a definition
 func (r *Registry) Operation(id string, name string) (types.OperationRegistration, error) {
 	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.OperationRegistration {
@@ -141,8 +149,16 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrOperatorConfigSchemaRequired
 	}
 
-	if def.Auth == nil && lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
-		return len(credential.Schema) == 0
+	authCredentialNames := make(map[string]struct{}, len(def.Connections))
+	for _, connection := range def.Connections {
+		if connection.Auth != nil && connection.Auth.CredentialRef != (types.CredentialRef{}) {
+			authCredentialNames[connection.Auth.CredentialRef.String()] = struct{}{}
+		}
+	}
+
+	if lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
+		_, authManaged := authCredentialNames[credential.Ref.String()]
+		return len(credential.Schema) == 0 && !authManaged
 	}) {
 		return ErrCredentialSchemaRequired
 	}
@@ -171,6 +187,11 @@ func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, err
 		return definitionEntry{}, err
 	}
 
+	connections, err := indexConnections(def.Connections, credentialNames, clients, operations)
+	if err != nil {
+		return definitionEntry{}, err
+	}
+
 	webhooks, webhookEvents, err := r.indexWebhooks(def.Webhooks)
 	if err != nil {
 		return definitionEntry{}, err
@@ -178,6 +199,7 @@ func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, err
 
 	return definitionEntry{
 		definition:    def,
+		connections:   connections,
 		clients:       clients,
 		operations:    operations,
 		webhooks:      webhooks,
@@ -225,6 +247,93 @@ func indexClients(clients []types.ClientRegistration, credentialNames map[string
 	}
 
 	return clientIndex, nil
+}
+
+// indexConnections indexes connection registrations while enforcing credential, client, and validation constraints
+func indexConnections(connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration, operations map[string]types.OperationRegistration) (map[string]types.ConnectionRegistration, error) {
+	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
+
+	for _, connection := range connections {
+		if connection.CredentialRef == (types.CredentialRef{}) {
+			return nil, ErrConnectionNotFound
+		}
+
+		name := connection.CredentialRef.String()
+		if _, exists := connectionIndex[name]; exists {
+			return nil, ErrConnectionRefDuplicate
+		}
+
+		if _, declared := credentialNames[connection.CredentialRef.String()]; !declared {
+			return nil, ErrConnectionCredentialRefNotDeclared
+		}
+
+		for _, ref := range connection.CredentialRefs {
+			if _, declared := credentialNames[ref.String()]; !declared {
+				return nil, ErrConnectionCredentialRefNotDeclared
+			}
+		}
+
+		selectorDeclared := false
+		for _, ref := range connection.CredentialRefs {
+			if ref.String() == connection.CredentialRef.String() {
+				selectorDeclared = true
+				break
+			}
+		}
+		if !selectorDeclared {
+			return nil, ErrConnectionCredentialRefNotDeclared
+		}
+
+		for _, clientRef := range connection.ClientRefs {
+			if _, declared := clients[clientRef]; !declared {
+				return nil, ErrConnectionClientRefNotDeclared
+			}
+		}
+
+		if connection.ValidationOperation != "" {
+			if _, ok := operations[connection.ValidationOperation]; !ok {
+				return nil, ErrConnectionValidationOperationNotDeclared
+			}
+		}
+
+		if connection.Auth != nil {
+			if connection.Auth.CredentialRef == (types.CredentialRef{}) {
+				return nil, ErrConnectionAuthCredentialRefNotDeclared
+			}
+
+			authCredentialDeclared := false
+			for _, ref := range connection.CredentialRefs {
+				if ref.String() == connection.Auth.CredentialRef.String() {
+					authCredentialDeclared = true
+					break
+				}
+			}
+			if !authCredentialDeclared {
+				return nil, ErrConnectionAuthCredentialRefNotDeclared
+			}
+		}
+
+		if connection.Disconnect != nil {
+			if connection.Disconnect.CredentialRef == (types.CredentialRef{}) {
+				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
+			}
+
+			disconnectCredentialDeclared := false
+			for _, ref := range connection.CredentialRefs {
+				if ref.String() == connection.Disconnect.CredentialRef.String() {
+					disconnectCredentialDeclared = true
+					break
+				}
+			}
+			if !disconnectCredentialDeclared {
+				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
+			}
+		}
+
+		connectionIndex[name] = connection
+	}
+
+	return connectionIndex, nil
 }
 
 // indexOperations indexes operations by name while enforcing topic and client reference constraints

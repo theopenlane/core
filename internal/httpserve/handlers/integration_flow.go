@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	"encoding/base64"
-	"encoding/json"
-	"errors"
+	"maps"
 	"net/http"
+	"slices"
 
 	echo "github.com/theopenlane/echox"
 
@@ -13,24 +12,17 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-var (
-	oauthStateCookieName  = "oauth_state"
-	oauthOrgIDCookieName  = "oauth_org_id"
-	oauthUserIDCookieName = "oauth_user_id"
-)
-
-// StartOAuthFlow initiates the OAuth flow for an integration definition.
-func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleOAuthFlowRequest, openapi.OAuthFlowResponse{}, openapiCtx.Registry)
+// StartIntegrationAuth initiates the auth flow for an integration definition
+func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationAuthStartRequest, openapi.OAuthFlowResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
-	}
-	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
-		return err
 	}
 
 	requestCtx := ctx.Request().Context()
@@ -40,38 +32,29 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, err := h.resolveActiveDefinition(ctx, in.DefinitionID, openapiCtx)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(in.DefinitionID)
+	if !ok || !def.Active {
+		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+	}
+
+	connection, err := def.ConnectionRegistration(in.CredentialRef)
 	if err != nil {
-		return err
-	}
-
-	if _, err := resolveCredentialRegistration(def, in.CredentialRef); err != nil {
-		return h.BadRequest(ctx, err, openapiCtx)
-	}
-
-	if def.Auth == nil || (def.Auth.Start == nil && def.Auth.OAuth == nil) {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	if err := validateDefinitionUserInput(def, in.UserInput); err != nil {
-		if errors.Is(err, ErrInvalidInput) {
-			return h.InvalidInput(ctx, err, openapiCtx)
-		}
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	if connection.Auth == nil || connection.Auth.Start == nil {
+		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
-
-	logger := logx.FromContext(requestCtx).With().Str("definition_id", def.ID).Logger()
 
 	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.InstallationID, def)
 	if err != nil {
-		logger.Error().Err(err).Msg("failed to resolve installation")
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	if len(in.UserInput) > 0 {
-		if err := h.persistInstallationUserInput(requestCtx, installationRec, in.UserInput); err != nil {
-			logger.Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist user input")
+	if !jsonx.IsEmptyRawMessage(in.UserInput) {
+		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialRef{}, nil, nil); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile user input")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 	}
@@ -82,15 +65,14 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		CredentialRef:  in.CredentialRef,
 	})
 	if err != nil {
-		logger.Error().Err(err).Msg("failed to begin oauth flow")
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to begin auth flow")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	cfg := h.getOauthCookieConfig()
+	cfg := *h.SessionConfig.CookieConfig
 	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
-		oauthOrgIDCookieName:  caller.OrganizationID,
-		oauthUserIDCookieName: caller.SubjectID,
-		oauthStateCookieName:  begin.State,
+		"state":           begin.State,
+		"organization_id": caller.OrganizationID,
 	})
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
@@ -101,83 +83,75 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	})
 }
 
-// oauthCallbackInput is the JSON payload passed to keymaker.CompleteAuth as the opaque callback input.
-type oauthCallbackInput struct {
-	Code  string `json:"code"`
-	State string `json:"state"`
-}
-
-// HandleOAuthCallback processes the OAuth callback and persists the resulting credential.
-func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.OAuthCallbackRequest{}, openapi.ExampleOAuthCallbackResponse, openapiCtx.Registry)
-	if err != nil {
-		return h.InvalidInput(ctx, err, openapiCtx)
-	}
-
+// HandleIntegrationAuthCallback processes the auth callback and delegates credential persistence to keymaker
+func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	if isRegistrationContext(ctx) {
 		return nil
-	}
-	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
-		return err
 	}
 
 	reqCtx := ctx.Request().Context()
 
-	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
-	if err != nil || stateCookie.Value == "" {
-		logx.FromContext(reqCtx).Error().Err(err).Str("state_fingerprint", stateFingerprint(in.State)).Msg("oauth state cookie not found")
+	callbackInput := normalizeIntegrationAuthCallbackInput(ctx.Request())
+	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("state cookie not found")
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
-	orgCookie, err := sessions.GetCookie(ctx.Request(), oauthOrgIDCookieName)
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_org_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("organization_id cookie not found")
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
 	}
 
-	userCookie, err := sessions.GetCookie(ctx.Request(), oauthUserIDCookieName)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_user_id cookie")
-		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
-	}
-
-	callbackCaller, callbackOk := auth.CallerFromContext(reqCtx)
-	if !callbackOk || callbackCaller == nil {
+	caller, callerOk := auth.CallerFromContext(reqCtx)
+	if !callerOk || caller == nil {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	if err := validateOAuthCallbackIdentity(callbackCaller, orgCookie.Value, userCookie.Value); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("oauth callback identity mismatch")
-		return h.BadRequest(ctx, err, openapiCtx)
-	}
-
-	callbackInput, err := json.Marshal(oauthCallbackInput{Code: in.Code, State: in.State})
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to marshal oauth callback input")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	if caller.OrganizationID != orgCookie.Value {
+		logx.FromContext(reqCtx).Error().Msg("callback organization mismatch")
+		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
 	if _, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
-		State: stateCookie.Value,
-		Input: callbackInput,
+		State:    stateCookie.Value,
+		Callback: callbackInput,
 	}); err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	cfg := h.getOauthCookieConfig()
-	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
+	cfg := *h.SessionConfig.CookieConfig
+	sessions.RemoveCookies(ctx.Response().Writer, cfg, "state", "organization_id")
 
 	return h.Success(ctx, rout.Reply{Success: true})
 }
 
-// RefreshIntegrationTokenHandler handles requests to refresh an installation's OAuth credential.
+// normalizeIntegrationAuthCallbackInput snapshots query params from the callback request
+func normalizeIntegrationAuthCallbackInput(req *http.Request) types.AuthCallbackInput {
+	params := req.URL.Query()
+	input := types.AuthCallbackInput{
+		Query: make([]types.AuthCallbackValue, 0, len(params)),
+	}
+
+	for _, key := range slices.Sorted(maps.Keys(params)) {
+		values := params[key]
+		copied := make([]string, len(values))
+		copy(copied, values)
+		input.Query = append(input.Query, types.AuthCallbackValue{
+			Name:   key,
+			Values: copied,
+		})
+	}
+
+	return input
+}
+
+// RefreshIntegrationTokenHandler handles requests to refresh an installation's auth credential
 func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, RefreshInstallationCredentialRequest{}, IntegrationTokenResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
-	}
-	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
-		return err
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -187,90 +161,58 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	logger := logx.FromContext(reqCtx).With().Str("installation_id", in.InstallationID).Logger()
-
 	rec, err := h.IntegrationsRuntime.ResolveInstallation(reqCtx, caller.OrganizationID, in.InstallationID, "")
 	if err != nil {
-		logger.Error().Err(err).Msg("failed to resolve installation")
+		logx.FromContext(reqCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	def, defOk := h.IntegrationsRuntime.Registry().Definition(rec.DefinitionID)
-	if !defOk || def.Auth == nil || def.Auth.Refresh == nil {
+	def, ok := h.IntegrationsRuntime.Registry().Definition(rec.DefinitionID)
+	if !ok {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	credentialRegistration, regErr := resolveCredentialRegistration(def, in.CredentialRef)
-	if regErr != nil {
-		return h.BadRequest(ctx, regErr, openapiCtx)
+	connection, err := h.IntegrationsRuntime.ResolvePersistedConnection(rec)
+	if err != nil || connection.Auth == nil || connection.Auth.Refresh == nil {
+		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	current, ok, err := h.IntegrationsRuntime.LoadCredential(reqCtx, rec, credentialRegistration.Ref)
+	current, credOk, err := h.IntegrationsRuntime.LoadCredential(reqCtx, rec, connection.Auth.CredentialRef)
 	if err != nil {
-		logger.Error().Err(err).Msg("failed to load credential")
+		logx.FromContext(reqCtx).Error().Err(err).Interface("request", in).Msg("failed to load credential")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if !ok {
+	if !credOk {
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	refreshed, err := def.Auth.Refresh(reqCtx, current)
+	refreshed, err := connection.Auth.Refresh(reqCtx, current)
 	if err != nil {
-		logger.Error().Err(err).Msg("credential refresh failed")
+		logx.FromContext(reqCtx).Error().Err(err).Interface("request", in).Msg("credential refresh failed")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if refreshed.OAuthAccessToken == "" {
-		logger.Error().Str("definition_slug", def.Slug).Msg("refreshed credential missing access token")
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+	if err := h.IntegrationsRuntime.Reconcile(reqCtx, rec, nil, connection.Auth.CredentialRef, &refreshed, nil); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile refreshed credential")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.IntegrationsRuntime.SaveInstallationCredential(reqCtx, in.InstallationID, credentialRegistration.Ref, refreshed); err != nil {
-		logger.Error().Err(err).Msg("failed to save refreshed credential")
+	tokenView, err := connection.Auth.TokenView(reqCtx, refreshed)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Interface("request", in).Msg("failed to get token view")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	resp := IntegrationTokenResponse{
-		Reply:       rout.Reply{Success: true},
-		Provider:    def.Slug,
-		AccessToken: refreshed.OAuthAccessToken,
+		Reply:    rout.Reply{Success: true},
+		Provider: def.Slug,
 	}
 
-	if refreshed.OAuthExpiry != nil && !refreshed.OAuthExpiry.IsZero() {
-		expiry := refreshed.OAuthExpiry.UTC()
-		resp.ExpiresAt = &expiry
+	if tokenView != nil {
+		resp.AccessToken = tokenView.AccessToken
+		resp.ExpiresAt = tokenView.ExpiresAt
 	}
 
 	return h.Success(ctx, resp)
-}
-
-// generateOAuthState creates a secure state parameter containing org ID and provider.
-// Used by v1 flows (GitHub App, etc.) that manage their own state encoding.
-func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
-	randomPart, err := auth.GenerateOAuthState(stateLength)
-	if err != nil {
-		return "", err
-	}
-
-	stateData := orgID + ":" + provider + ":" + randomPart
-
-	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
-}
-
-// getOauthCookieConfig returns the cookie configuration for OAuth cookies.
-func (h *Handler) getOauthCookieConfig() sessions.CookieConfig {
-	secure := !h.IsTest && !h.IsDev
-
-	sameSite := http.SameSiteNoneMode
-	if !secure {
-		sameSite = http.SameSiteLaxMode
-	}
-
-	return sessions.CookieConfig{
-		Path:     "/",
-		HTTPOnly: true,
-		Secure:   secure,
-		SameSite: sameSite,
-	}
 }

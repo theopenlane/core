@@ -34,6 +34,22 @@ func Builder() definition.Builder {
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
 				},
 			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       cloudflareCredential,
+					Name:                "Cloudflare API Token",
+					Description:         "Configure Cloudflare access using an API token scoped to the account and zones you want Openlane to inspect.",
+					CredentialRefs:      []types.CredentialRef{cloudflareCredential},
+					ClientRefs:          []types.ClientID{CloudflareClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: cloudflareCredential,
+						Name:          "Disconnect Cloudflare API Token",
+						Description:   "Remove the persisted Cloudflare API token and disconnect this installation from Openlane.",
+					},
+				},
+			},
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            CloudflareClient.ID(),

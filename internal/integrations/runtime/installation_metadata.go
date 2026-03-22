@@ -7,9 +7,19 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// SaveInstallationMetadata persists installation metadata for one installation
-func SaveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
+// saveInstallationMetadata persists installation metadata for one installation
+func saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
 	if len(metadata.Attributes) == 0 {
+		if len(installation.InstallationMetadata.Attributes) == 0 {
+			return nil
+		}
+
+		if err := ent.FromContext(ctx).Integration.UpdateOneID(installation.ID).ClearInstallationMetadata().Exec(ctx); err != nil {
+			return err
+		}
+
+		installation.InstallationMetadata = types.IntegrationInstallationMetadata{}
+
 		return nil
 	}
 

@@ -38,12 +38,10 @@ type Definition struct {
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition
 	UserInput *UserInputRegistration `json:"userInput,omitempty"`
-	// Installation describes installation-scoped identity metadata for the definition
-	Installation *InstallationRegistration `json:"installation,omitempty"`
 	// CredentialRegistrations describes the credential slots exposed by the definition
 	CredentialRegistrations []CredentialRegistration `json:"credentialRegistrations,omitempty"`
-	// Auth describes the definition's auth flow when it has one
-	Auth *AuthRegistration `json:"auth,omitempty"`
+	// Connections describes the connection modes exposed by the definition
+	Connections []ConnectionRegistration `json:"connections,omitempty"`
 	// Clients lists the clients the definition can build
 	Clients []ClientRegistration `json:"clients,omitempty"`
 	// Operations lists the operations the definition exposes
@@ -64,24 +62,4 @@ type OperatorConfigRegistration struct {
 type UserInputRegistration struct {
 	// Schema is the JSON schema used to collect installation-scoped user input
 	Schema json.RawMessage `json:"schema,omitempty"`
-}
-
-// AuthRegistration describes how one definition starts and completes auth
-type AuthRegistration struct {
-	// StartPath is the API path used to initiate the auth or install flow
-	StartPath string `json:"startPath,omitempty"`
-	// CallbackPath is the API path used to complete the auth or install flow
-	CallbackPath string `json:"callbackPath,omitempty"`
-	// OAuth holds the public OAuth configuration when the definition uses OAuth-style auth
-	OAuth *OAuthPublicConfig `json:"oauth,omitempty"`
-	// ClientSecret holds the operator-owned client secret for generic OAuth execution
-	ClientSecret string `json:"-"`
-	// DiscoveryURL holds the OIDC discovery issuer URL for generic OAuth execution
-	DiscoveryURL string `json:"-"`
-	// Start initializes an auth flow
-	Start AuthStartFunc `json:"-"`
-	// Complete finalizes an auth flow
-	Complete AuthCompleteFunc `json:"-"`
-	// Refresh exchanges an existing credential for a refreshed one
-	Refresh AuthRefreshFunc `json:"-"`
 }

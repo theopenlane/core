@@ -15,6 +15,7 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -25,24 +26,23 @@ import (
 )
 
 const (
-	integrationStartPath    = "/v1/integrations/oauth/start"
-	integrationCallbackPath = "/v1/integrations/oauth/callback"
+	integrationStartPath    = "/v1/integrations/auth/start"
+	integrationCallbackPath = "/v1/integrations/auth/callback"
 	integrationRefreshPath  = "/v1/integrations/test-oauth/refresh"
-	stateCookieName         = "oauth_state"
-	orgCookieName           = "oauth_org_id"
-	userCookieName          = "oauth_user_id"
+	stateCookieName         = "state"
+	orgCookieName           = "organization_id"
 )
 
 func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 	t := suite.T()
 
 	op := suite.createImpersonationOperation("StartIntegrationOAuth", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, resp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 
 	assert.Equal(t, http.StatusOK, startRec.Code)
 	assert.True(t, resp.Success)
@@ -56,23 +56,18 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 	cookies := cookieMap(startRec.Result().Cookies())
 	require.Contains(t, cookies, stateCookieName)
 	require.Contains(t, cookies, orgCookieName)
-	require.Contains(t, cookies, userCookieName)
-
-	assert.Equal(t, http.SameSiteLaxMode, cookies[stateCookieName].SameSite)
-	assert.Equal(t, http.SameSiteLaxMode, cookies[orgCookieName].SameSite)
-	assert.Equal(t, http.SameSiteLaxMode, cookies[userCookieName].SameSite)
 }
 
 func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	t := suite.T()
 
 	op := suite.createImpersonationOperation("StartIntegrationOAuthInvalid", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.OAuthFlowRequest{DefinitionID: "def_invalid_000000000000000000"})
+	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: "def_invalid_000000000000000000", CredentialRef: testAuthCredentialRef})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -88,9 +83,9 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 	t := suite.T()
 
 	op := suite.createImpersonationOperation("StartIntegrationOAuthUnauthorized", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
 
-	body, err := json.Marshal(handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID, CredentialRef: testAuthCredentialRef})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -106,15 +101,15 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthCallback", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthCallback", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	// OAuth state is embedded in the auth URL, not the session key (startResp.State)
@@ -129,7 +124,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	query.Set("state", oauthState)
 	callbackReq.URL.RawQuery = query.Encode()
 
-	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+	for _, name := range []string{stateCookieName, orgCookieName} {
 		callbackReq.AddCookie(cookies[name])
 	}
 
@@ -147,15 +142,15 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthStateMismatch", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthStateMismatch", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -169,21 +164,21 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	query.Set("state", oauthState+"-tampered")
 	callbackReq.URL.RawQuery = query.Encode()
 
-	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+	for _, name := range []string{stateCookieName, orgCookieName} {
 		callbackReq.AddCookie(cookies[name])
 	}
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 	t := suite.T()
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingCookies", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -199,10 +194,10 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() 
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRedirect", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{definition.Builder(buildTestOAuthDefinition)})
 	defer restore()
@@ -210,7 +205,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -224,7 +219,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() 
 	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
-	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
 	}
 
@@ -242,12 +237,12 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	t := suite.T()
 
 	op := suite.createImpersonationOperation("StartIntegrationOAuthMissingProvider", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.OAuthFlowRequest{DefinitionID: ""})
+	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: ""})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -263,7 +258,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingState() {
 	t := suite.T()
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingState", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -279,15 +274,15 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthMissingCode", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingCode", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -299,7 +294,37 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
-	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+	for _, name := range []string{stateCookieName, orgCookieName} {
+		req.AddCookie(cookies[name])
+	}
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
+
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
+	t := suite.T()
+
+	startOp := suite.createImpersonationOperation("StartIntegrationOAuthMissingProviderState", "Start integration OAuth flow")
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
+
+	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthMissingProviderState", "Handle integration OAuth callback")
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
+	cookies := cookieMap(startRec.Result().Cookies())
+
+	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
+	query := req.URL.Query()
+	query.Set("code", "test-code")
+	req.URL.RawQuery = query.Encode()
+
+	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
 	}
 
@@ -313,15 +338,15 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthInvalidOrg", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthInvalidOrg", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -336,7 +361,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
-	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
 	}
 
@@ -350,10 +375,10 @@ func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_Success() {
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRefreshSuccess", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRefreshSuccess", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	refreshOp := suite.createImpersonationOperation("RefreshIntegrationTokenSuccess", "Refresh integration token")
 	suite.registerRouteOnce(http.MethodPost, integrationRefreshPath, refreshOp, suite.h.RefreshIntegrationTokenHandler)
@@ -386,10 +411,10 @@ func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_RejectsCrossOr
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRefreshCrossOrg", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRefreshCrossOrg", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
 	refreshOp := suite.createImpersonationOperation("RefreshIntegrationTokenCrossOrg", "Refresh integration token")
 	suite.registerRouteOnce(http.MethodPost, integrationRefreshPath, refreshOp, suite.h.RefreshIntegrationTokenHandler)
@@ -412,8 +437,12 @@ func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_RejectsCrossOr
 	assert.Equal(t, http.StatusNotFound, rec.Code)
 }
 
-func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context, request handlers.OAuthFlowRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
+func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Context, request handlers.IntegrationAuthStartRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
 	t.Helper()
+
+	if request.CredentialRef == (types.CredentialRef{}) {
+		request.CredentialRef = testAuthCredentialRef
+	}
 
 	body, err := json.Marshal(request)
 	require.NoError(t, err)
@@ -437,7 +466,7 @@ func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context,
 func (suite *HandlerTestSuite) completeOAuthInstallation(t *testing.T, ctx context.Context) string {
 	t.Helper()
 
-	startRec, startResp := suite.startOAuthFlow(t, ctx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	startRec, startResp := suite.startIntegrationAuth(t, ctx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
@@ -451,7 +480,7 @@ func (suite *HandlerTestSuite) completeOAuthInstallation(t *testing.T, ctx conte
 	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
-	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
 	}
 
@@ -465,7 +494,7 @@ func (suite *HandlerTestSuite) completeOAuthInstallation(t *testing.T, ctx conte
 	record := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(orgID),
-			integration.DefinitionIDEQ(testOAuthDefinitionID),
+			integration.DefinitionIDEQ(testAuthDefinitionID),
 		).
 		OnlyX(ctx)
 

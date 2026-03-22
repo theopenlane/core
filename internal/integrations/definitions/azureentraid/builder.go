@@ -2,6 +2,7 @@ package azureentraid
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -36,25 +37,70 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Credential slot shared by the Azure Entra ID clients in this definition.",
 				},
 			},
-			Auth: &types.AuthRegistration{
-				StartPath:    types.DefaultAuthStartPath,
-				CallbackPath: types.DefaultAuthCompletePath,
-				OAuth: &types.OAuthPublicConfig{
-					ClientID:    cfg.ClientID,
-					AuthURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-					TokenURL:    "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-					RedirectURI: cfg.RedirectURL,
-					Scopes: []string{
-						"openid",
-						"profile",
-						"offline_access",
-						graphScope,
-					},
-					AuthParams: map[string]string{
-						"prompt": "admin_consent",
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       entraTenantCredential,
+					Name:                "Azure Entra ID OAuth",
+					Description:         "Authenticate with Microsoft Graph using delegated tenant admin consent.",
+					CredentialRefs:      []types.CredentialRef{entraTenantCredential},
+					ClientRefs:          []types.ClientID{EntraCredential.ID(), EntraClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[entraIDCred]{
+						CredentialRef: entraTenantCredential,
+						Config: auth.OAuthConfig{
+							ClientID:     cfg.ClientID,
+							ClientSecret: cfg.ClientSecret,
+							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+							TokenURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+							RedirectURL:  cfg.RedirectURL,
+							Scopes: []string{
+								"openid",
+								"profile",
+								"offline_access",
+								graphScope,
+							},
+							AuthParams: map[string]string{
+								"prompt": "admin_consent",
+							},
+						},
+						Material: func(material auth.OAuthMaterial) (entraIDCred, error) {
+							if material.Claims == nil {
+								return entraIDCred{}, ErrTenantIDNotFound
+							}
+
+							value, ok := material.Claims["tid"]
+							if !ok {
+								return entraIDCred{}, ErrTenantIDNotFound
+							}
+
+							tenantID, ok := value.(string)
+							if !ok || tenantID == "" {
+								return entraIDCred{}, ErrTenantIDNotFound
+							}
+
+							return entraIDCred{
+								AccessToken:  material.AccessToken,
+								RefreshToken: material.RefreshToken,
+								Expiry:       material.Expiry,
+								TenantID:     tenantID,
+							}, nil
+						},
+						TokenView: func(cred entraIDCred) (*types.TokenView, error) {
+							return &types.TokenView{
+								AccessToken: cred.AccessToken,
+								ExpiresAt:   cred.Expiry,
+							}, nil
+						},
+						EncodeCredentialError: ErrCredentialEncode,
+						DecodeCredentialError: ErrCredentialDecode,
+					}),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: entraTenantCredential,
+						Name:          "Disconnect Azure Entra ID OAuth",
+						Description:   "Remove the persisted Azure Entra ID OAuth credential and disconnect this installation from Openlane.",
 					},
 				},
-				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{

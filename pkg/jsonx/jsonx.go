@@ -226,6 +226,7 @@ func ToRawMessage(value any) (json.RawMessage, error) {
 	if err := RoundTrip(value, &raw); err != nil {
 		return nil, err
 	}
+
 	if IsEmptyRawMessage(raw) {
 		return nil, nil
 	}

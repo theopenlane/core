@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
@@ -42,7 +43,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	assert.True(t, resp.Success)
 	require.Len(t, resp.Providers, 2)
 
-	providers := map[string]handlers.DefinitionCatalogEntry{}
+	providers := map[string]types.Definition{}
 	for _, provider := range resp.Providers {
 		providers[provider.Slug] = provider
 	}
@@ -52,9 +53,9 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	assert.Equal(t, configTestProviderID, gcpscc.ID)
 	assert.True(t, gcpscc.Active)
 	assert.True(t, gcpscc.Visible)
-	assert.Len(t, gcpscc.CredentialSchemas, 1)
-	assert.NotNil(t, gcpscc.CredentialSchemas[0].Schema)
-	assert.NotNil(t, gcpscc.UserInputSchema)
+	assert.Len(t, gcpscc.CredentialRegistrations, 1)
+	assert.NotNil(t, gcpscc.CredentialRegistrations[0].Schema)
+	assert.NotNil(t, gcpscc.UserInput)
 	assert.Len(t, gcpscc.Operations, 1)
 	assert.Equal(t, "health.default", gcpscc.Operations[0].Name)
 

@@ -4,26 +4,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// stateTokenEntropyBytes is the number of random bytes used for CSRF state token generation
-const stateTokenEntropyBytes = 16
-
-// defaultSessionTTL is the duration that auth sessions remain valid if no custom TTL is configured
-const defaultSessionTTL = 15 * time.Minute
-
-// DefinitionLookupFunc resolves definitions for auth flow dispatch.
+// DefinitionLookupFunc resolves definitions for auth flow dispatch
 type DefinitionLookupFunc func(id string) (types.Definition, bool)
 
-// PersistAuthResultFunc persists auth completion payloads produced during definition auth activation.
-type PersistAuthResultFunc func(ctx context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error
+// AuthCompleteHookFunc is the callback invoked after a definition auth flow completes successfully
+type AuthCompleteHookFunc func(ctx context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error
 
 // InstallationRecord captures the installation fields required by auth validation.
 type InstallationRecord struct {
@@ -39,31 +31,21 @@ type InstallationLookupFunc func(ctx context.Context, installationID string) (In
 type Service struct {
 	// definitionLookup resolves definition instances by ID
 	definitionLookup DefinitionLookupFunc
-	// persistAuthResult persists completion output after activation
-	persistAuthResult PersistAuthResultFunc
+	// onAuthComplete is the callback invoked after activation completes
+	onAuthComplete AuthCompleteHookFunc
 	// installationLookup resolves and validates installation records referenced by auth flows
 	installationLookup InstallationLookupFunc
 	// authStates stores temporary authorization state until callback completion
 	authStates AuthStateStore
-	// sessionTTL controls the lifetime of pending auth sessions
-	sessionTTL time.Duration
-	// now returns the current time, overridable for testing
-	now func() time.Time
 }
 
 // NewService constructs a Service from the supplied dependencies
-func NewService(definitionLookup DefinitionLookupFunc, persistAuthResult PersistAuthResultFunc, installationLookup InstallationLookupFunc, authStates AuthStateStore, sessionTTL time.Duration) *Service {
-	if sessionTTL <= 0 {
-		sessionTTL = defaultSessionTTL
-	}
-
+func NewService(definitionLookup DefinitionLookupFunc, onAuthComplete AuthCompleteHookFunc, installationLookup InstallationLookupFunc, authStates AuthStateStore) *Service {
 	return &Service{
 		definitionLookup:   definitionLookup,
-		persistAuthResult:  persistAuthResult,
+		onAuthComplete:     onAuthComplete,
 		installationLookup: installationLookup,
 		authStates:         authStates,
-		sessionTTL:         sessionTTL,
-		now:                time.Now,
 	}
 }
 
@@ -73,10 +55,8 @@ type BeginRequest struct {
 	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
-	// CredentialRef identifies which credential slot the completed auth result should persist into.
+	// CredentialRef identifies which credential-schema-selected connection mode should be activated
 	CredentialRef types.CredentialRef
-	// State optionally supplies a custom CSRF token; one is generated if empty
-	State string
 	// Input carries optional definition-specific input to the auth start function
 	Input json.RawMessage
 }
@@ -95,8 +75,8 @@ type BeginResponse struct {
 type CompleteRequest struct {
 	// State is the CSRF token that identifies the session
 	State string
-	// Input carries opaque callback data (typically the authorization code and provider state)
-	Input json.RawMessage
+	// Callback carries the generic callback payload captured from the provider redirect
+	Callback types.AuthCallbackInput
 }
 
 // CompleteResult reports the persisted credential and related identifiers
@@ -105,7 +85,7 @@ type CompleteResult struct {
 	DefinitionID string
 	// InstallationID identifies the installation record containing the credential
 	InstallationID string
-	// CredentialRef identifies which credential slot received the persisted credential.
+	// CredentialRef identifies which credential slot received the persisted credential
 	CredentialRef types.CredentialRef
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
@@ -126,7 +106,12 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		return BeginResponse{}, ErrDefinitionNotFound
 	}
 
-	if def.Auth == nil || (def.Auth.Start == nil && def.Auth.OAuth == nil) {
+	connection, err := def.ConnectionRegistration(req.CredentialRef)
+	if err != nil {
+		return BeginResponse{}, ErrConnectionNotFound
+	}
+
+	if connection.Auth == nil || connection.Auth.Start == nil {
 		return BeginResponse{}, ErrDefinitionAuthRequired
 	}
 
@@ -134,29 +119,23 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		return BeginResponse{}, err
 	}
 
-	result, err := s.beginDefinitionAuth(ctx, def, jsonx.CloneRawMessage(req.Input))
+	result, err := connection.Auth.Start(ctx, jsonx.CloneRawMessage(req.Input))
 	if err != nil {
 		return BeginResponse{}, fmt.Errorf("keymaker: begin definition auth: %w", err)
 	}
 
-	stateToken := req.State
-	if stateToken == "" {
-		stateToken, err = auth.GenerateOAuthState(stateTokenEntropyBytes)
-		if err != nil {
-			return BeginResponse{}, fmt.Errorf("keymaker: generate state token: %w", err)
-		}
+	state, err := auth.GenerateOAuthState(0)
+	if err != nil {
+		return BeginResponse{}, fmt.Errorf("keymaker: generate session state: %w", err)
 	}
 
 	authState := AuthState{
-		State:          stateToken,
+		State:          state,
 		DefinitionID:   req.DefinitionID,
 		InstallationID: req.InstallationID,
 		CredentialRef:  req.CredentialRef,
 		CallbackState:  jsonx.CloneRawMessage(result.State),
-		CreatedAt:      s.now(),
 	}
-
-	authState.ExpiresAt = authState.CreatedAt.Add(s.sessionTTL)
 
 	if err := s.authStates.Save(authState); err != nil {
 		return BeginResponse{}, fmt.Errorf("keymaker: save definition auth session: %w", err)
@@ -164,7 +143,7 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 
 	return BeginResponse{
 		DefinitionID: req.DefinitionID,
-		State:        stateToken,
+		State:        state,
 		AuthURL:      result.URL,
 	}, nil
 }
@@ -180,16 +159,17 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, err
 	}
 
-	if s.now().After(authState.ExpiresAt) {
-		return CompleteResult{}, ErrAuthStateExpired
-	}
-
 	def, ok := s.definitionLookup(authState.DefinitionID)
 	if !ok {
 		return CompleteResult{}, ErrDefinitionNotFound
 	}
 
-	if def.Auth == nil || (def.Auth.Complete == nil && def.Auth.OAuth == nil) {
+	connection, err := def.ConnectionRegistration(authState.CredentialRef)
+	if err != nil {
+		return CompleteResult{}, ErrConnectionNotFound
+	}
+
+	if connection.Auth == nil || connection.Auth.Complete == nil {
 		return CompleteResult{}, ErrDefinitionAuthRequired
 	}
 
@@ -197,19 +177,19 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, err
 	}
 
-	completeResult, err := s.completeDefinitionAuth(ctx, def, jsonx.CloneRawMessage(authState.CallbackState), jsonx.CloneRawMessage(req.Input))
+	completeResult, err := connection.Auth.Complete(ctx, jsonx.CloneRawMessage(authState.CallbackState), req.Callback)
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: complete definition auth: %w", err)
 	}
 
-	if err := s.persistAuthResult(ctx, authState.InstallationID, authState.CredentialRef, def, completeResult); err != nil {
-		return CompleteResult{}, fmt.Errorf("keymaker: persist definition auth result: %w", err)
+	if err := s.onAuthComplete(ctx, authState.InstallationID, authState.CredentialRef, def, completeResult); err != nil {
+		return CompleteResult{}, fmt.Errorf("keymaker: auth complete hook: %w", err)
 	}
 
 	return CompleteResult{
 		DefinitionID:   authState.DefinitionID,
 		InstallationID: authState.InstallationID,
-		CredentialRef:  authState.CredentialRef,
+		CredentialRef:  connection.Auth.CredentialRef,
 		Credential:     completeResult.Credential,
 	}, nil
 }
@@ -234,40 +214,4 @@ func (s *Service) validateInstallation(ctx context.Context, installationID strin
 	}
 
 	return nil
-}
-
-func (s *Service) beginDefinitionAuth(ctx context.Context, def types.Definition, input json.RawMessage) (types.AuthStartResult, error) {
-	if def.Auth.Start != nil {
-		return def.Auth.Start(ctx, input)
-	}
-
-	return providerkit.StartOAuthFlow(ctx, providerkit.OAuthFlowConfig{
-		ClientID:     def.Auth.OAuth.ClientID,
-		ClientSecret: def.Auth.ClientSecret,
-		AuthURL:      def.Auth.OAuth.AuthURL,
-		TokenURL:     def.Auth.OAuth.TokenURL,
-		DiscoveryURL: def.Auth.DiscoveryURL,
-		RedirectURL:  def.Auth.OAuth.RedirectURI,
-		Scopes:       def.Auth.OAuth.Scopes,
-		AuthParams:   def.Auth.OAuth.AuthParams,
-		TokenParams:  def.Auth.OAuth.TokenParams,
-	})
-}
-
-func (s *Service) completeDefinitionAuth(ctx context.Context, def types.Definition, state json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
-	if def.Auth.Complete != nil {
-		return def.Auth.Complete(ctx, state, input)
-	}
-
-	return providerkit.CompleteOAuthFlow(ctx, providerkit.OAuthFlowConfig{
-		ClientID:     def.Auth.OAuth.ClientID,
-		ClientSecret: def.Auth.ClientSecret,
-		AuthURL:      def.Auth.OAuth.AuthURL,
-		TokenURL:     def.Auth.OAuth.TokenURL,
-		DiscoveryURL: def.Auth.DiscoveryURL,
-		RedirectURL:  def.Auth.OAuth.RedirectURI,
-		Scopes:       def.Auth.OAuth.Scopes,
-		AuthParams:   def.Auth.OAuth.AuthParams,
-		TokenParams:  def.Auth.OAuth.TokenParams,
-	}, state, input)
 }

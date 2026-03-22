@@ -34,6 +34,22 @@ func Builder() definition.Builder {
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
 				},
 			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       oktaCredential,
+					Name:                "Okta API Token",
+					Description:         "Configure Okta tenant access using an API token issued for the target organization.",
+					CredentialRefs:      []types.CredentialRef{oktaCredential},
+					ClientRefs:          []types.ClientID{OktaClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: oktaCredential,
+						Name:          "Disconnect Okta API Token",
+						Description:   "Remove the persisted Okta API token and disconnect this installation from Openlane.",
+					},
+				},
+			},
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            OktaClient.ID(),

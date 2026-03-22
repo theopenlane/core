@@ -18,6 +18,7 @@ import (
 const githubAppSlug = githubapp.Slug
 
 var githubAppDefinitionID = githubapp.DefinitionID.ID()
+var githubTestCredentialRef = types.NewCredentialRef("github_test")
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
 // built from the given definition builders. Returns a restore function.
@@ -133,6 +134,20 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 					Schema:      json.RawMessage(schema),
 				},
 			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       gcpSCCTestCredential,
+					Name:                "GCP SCC Test Connection",
+					Description:         "Connect the GCP SCC test definition using the configured credential payload.",
+					CredentialRefs:      []types.CredentialRef{gcpSCCTestCredential},
+					ValidationOperation: "health.default",
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: gcpSCCTestCredential,
+						Name:          "Disconnect GCP SCC Test Connection",
+						Description:   "Remove the persisted GCP SCC test credential and disconnect this installation.",
+					},
+				},
+			},
 			Operations: []types.OperationRegistration{
 				{
 					Name:        "health.default",
@@ -159,6 +174,27 @@ func githubTestDefinitionBuilder(definitionID string) definition.Builder {
 				DisplayName: "GitHub",
 				Active:      true,
 				Visible:     true,
+			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         githubTestCredentialRef,
+					Name:        "GitHub Test Credential",
+					Description: "Credential slot used by the GitHub disconnect test definition.",
+					Schema:      json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
+				},
+			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:  githubTestCredentialRef,
+					Name:           "GitHub Test Connection",
+					Description:    "Test connection used for handler disconnect flows.",
+					CredentialRefs: []types.CredentialRef{githubTestCredentialRef},
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: githubTestCredentialRef,
+						Name:          "Disconnect GitHub Test Connection",
+						Description:   "Remove the persisted GitHub test credential and disconnect this installation.",
+					},
+				},
 			},
 		}, nil
 	})

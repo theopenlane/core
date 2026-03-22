@@ -48,11 +48,6 @@ func NewCredentialRef(name string) CredentialRef {
 	return CredentialRef{key: new(keyID), name: name}
 }
 
-// Valid reports whether the credential identity was initialized
-func (r CredentialRef) Valid() bool {
-	return r.key != nil
-}
-
 // String returns the stable credential name used for persistence and equality comparisons
 func (r CredentialRef) String() string {
 	return r.name
@@ -216,7 +211,7 @@ func (r InstallationRef[T]) Resolve(ctx context.Context, req InstallationRequest
 	return IntegrationInstallationMetadata{Attributes: raw}, true, nil
 }
 
-// Registration adapts the typed ref to the InstallationRegistration contract for use in a definition builder
+// Registration adapts the typed ref to the InstallationRegistration contract for use in a connection builder
 func (r InstallationRef[T]) Registration() *InstallationRegistration {
 	return &InstallationRegistration{Resolve: r.Resolve}
 }

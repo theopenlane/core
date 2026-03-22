@@ -3,8 +3,6 @@ package runtime
 import (
 	"context"
 
-	"github.com/samber/do/v2"
-
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -13,7 +11,7 @@ import (
 
 // ResolveInstallation resolves one installation by explicit ID or by owner plus definition
 func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installationID string, definitionID string) (*ent.Integration, error) {
-	db := do.MustInvoke[*ent.Client](r.injector)
+	db := r.DB()
 	if installationID != "" {
 		query := db.Integration.Query().Where(integration.IDEQ(installationID))
 		if ownerID != "" {
@@ -57,7 +55,7 @@ func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installation
 // Pending one when none exists. When an explicit installationID is given the record must already exist.
 // The boolean return value indicates whether a new record was created
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, installationID string, def types.Definition) (*ent.Integration, bool, error) {
-	db := do.MustInvoke[*ent.Client](r.injector)
+	db := r.DB()
 
 	if installationID != "" {
 		record, err := r.ResolveInstallation(ctx, ownerID, installationID, def.ID)
@@ -92,24 +90,9 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, installationI
 	return record, true, nil
 }
 
-// MarkConnected updates the installation's status to Connected in the database and on the in-memory record
-func (r *Runtime) MarkConnected(ctx context.Context, installation *ent.Integration) error {
-	db := do.MustInvoke[*ent.Client](r.injector)
-
-	if err := db.Integration.UpdateOneID(installation.ID).
-		SetStatus(enums.IntegrationStatusConnected).
-		Exec(ctx); err != nil {
-		return err
-	}
-
-	installation.Status = enums.IntegrationStatusConnected
-
-	return nil
-}
-
 // DeleteInstallation permanently removes the installation record by ID
 func (r *Runtime) DeleteInstallation(ctx context.Context, installationID string) error {
-	db := do.MustInvoke[*ent.Client](r.injector)
+	db := r.DB()
 
 	return db.Integration.DeleteOneID(installationID).Exec(ctx)
 }

@@ -37,7 +37,7 @@ type Client struct{}
 // Build constructs an Azure Security Center client using client credentials
 func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
 	var cred CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(req.Credential.ProviderData, &cred); err != nil {
+	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
 		return nil, ErrCredentialInvalid
 	}
 

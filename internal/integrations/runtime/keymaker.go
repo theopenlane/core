@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"context"
+	"errors"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/keymaker"
@@ -20,7 +21,12 @@ func resolveKeymakerInstallation(ctx context.Context, installationID string, res
 
 	record, err := resolve(ctx, "", installationID, "")
 	if err != nil {
-		return keymaker.InstallationRecord{}, err
+		switch {
+		case errors.Is(err, ErrInstallationNotFound):
+			return keymaker.InstallationRecord{}, keymaker.ErrInstallationNotFound
+		default:
+			return keymaker.InstallationRecord{}, err
+		}
 	}
 
 	return keymaker.InstallationRecord{

@@ -15,8 +15,6 @@ var (
 	ErrSourceIDRequired = errors.New("gcpscc: source ID required")
 	// ErrServiceAccountKeyInvalid indicates the service account key JSON is invalid
 	ErrServiceAccountKeyInvalid = errors.New("gcpscc: service account key invalid")
-	// ErrAccessTokenMissing indicates no access token or service account key is available
-	ErrAccessTokenMissing = errors.New("gcpscc: no access token or service account key")
 	// ErrSecurityCenterClientCreate indicates the SCC client could not be created
 	ErrSecurityCenterClientCreate = errors.New("gcpscc: security center client creation failed")
 	// ErrOperationConfigInvalid indicates operation config could not be decoded

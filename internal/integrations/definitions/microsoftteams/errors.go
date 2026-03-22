@@ -17,4 +17,8 @@ var (
 	ErrChannelMessageSendFailed = errors.New("microsoftteams: channel message send failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("microsoftteams: result encode failed")
+	// ErrCredentialEncode indicates the credential could not be serialized
+	ErrCredentialEncode = errors.New("microsoftteams: credential encode failed")
+	// ErrCredentialDecode indicates the credential could not be deserialized
+	ErrCredentialDecode = errors.New("microsoftteams: credential decode failed")
 )

@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Okta integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
+	// Installation is the typed installation metadata handle for the Okta definition
+	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 	// oktaCredential is the credential slot used by the Okta client
 	oktaCredential = types.NewCredentialRef(Slug)
 	// OktaClient is the client ref for the Okta API client used by this definition
@@ -40,4 +42,10 @@ type CredentialSchema struct {
 	OrgURL string `json:"orgUrl"   jsonschema:"required,title=Org URL"`
 	// APIToken is the Okta API token with permissions to read tenant and policy metadata
 	APIToken string `json:"apiToken" jsonschema:"required,title=API Token"`
+}
+
+// InstallationMetadata holds the stable Okta tenant identity for one installation
+type InstallationMetadata struct {
+	// OrgURL is the Okta organization URL configured for this installation
+	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
 }

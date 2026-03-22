@@ -8,6 +8,7 @@ import (
 	"google.golang.org/api/option"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Client builds Google Workspace Admin SDK clients for one installation
@@ -15,11 +16,16 @@ type Client struct{}
 
 // Build constructs the Google Workspace Admin SDK client for one installation
 func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	if req.Credential.OAuthAccessToken == "" {
+	var cred googleWorkspaceCred
+	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+		return nil, ErrCredentialDecode
+	}
+
+	if cred.AccessToken == "" {
 		return nil, ErrOAuthTokenMissing
 	}
 
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: req.Credential.OAuthAccessToken})
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: cred.AccessToken})
 
 	svc, err := admin.NewService(ctx, option.WithTokenSource(ts))
 	if err != nil {

@@ -34,6 +34,22 @@ func Builder() definition.Builder {
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
 				},
 			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       securityCenterCredential,
+					Name:                "Azure Service Principal",
+					Description:         "Configure Microsoft Defender for Cloud access using an Azure service principal credential.",
+					CredentialRefs:      []types.CredentialRef{securityCenterCredential},
+					ClientRefs:          []types.ClientID{SecurityCenterClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: securityCenterCredential,
+						Name:          "Disconnect Azure Service Principal",
+						Description:   "Remove the persisted Azure service principal credential and disconnect this Microsoft Defender for Cloud installation from Openlane.",
+					},
+				},
+			},
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            SecurityCenterClient.ID(),

@@ -1,14 +1,15 @@
-package providerkit
+package auth
 
 import (
 	"context"
 	"encoding/json"
 	"maps"
 	"slices"
+	"time"
 
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/iam/auth"
+	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
@@ -16,8 +17,8 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// OAuthFlowConfig describes OAuth2 or OIDC endpoint configuration for a definition's auth flow
-type OAuthFlowConfig struct {
+// OAuthConfig describes OAuth2 or OIDC endpoint configuration for an integration auth flow
+type OAuthConfig struct {
 	// ClientID is the OAuth application client identifier
 	ClientID string
 	// ClientSecret is the OAuth application client secret
@@ -39,29 +40,32 @@ type OAuthFlowConfig struct {
 	TokenParams map[string]string
 }
 
+// OAuthMaterial holds the credential material produced by a completed OAuth flow
+type OAuthMaterial struct {
+	// AccessToken is the OAuth2 access token
+	AccessToken string
+	// RefreshToken is the OAuth2 refresh token, if provided
+	RefreshToken string
+	// Expiry is the access token expiration time, if known
+	Expiry *time.Time
+	// Claims holds decoded OIDC ID token claims, if present
+	Claims map[string]any
+}
+
 // oauthStartState carries the CSRF state value stored between start and complete
 type oauthStartState struct {
 	// State is the random CSRF token embedded in the OAuth authorization URL
 	State string `json:"state"`
 }
 
-// OAuthCallbackInput carries the standard OAuth2 callback parameters from the provider redirect
-type OAuthCallbackInput struct {
-	// Code is the authorization code returned by the provider
-	Code string `json:"code"`
-	// State is the CSRF state value echoed back by the provider for verification
-	State string `json:"state"`
-}
-
-// StartOAuthFlow builds an authorization URL for the given config and returns an AuthStartResult.
-// For OIDC providers, set DiscoveryURL; the context is used for the discovery HTTP request.
-func StartOAuthFlow(ctx context.Context, cfg OAuthFlowConfig) (types.AuthStartResult, error) {
+// StartOAuth builds an authorization URL for the given config and returns an AuthStartResult
+func StartOAuth(ctx context.Context, cfg OAuthConfig) (types.AuthStartResult, error) {
 	rparty, err := buildRelyingParty(ctx, cfg)
 	if err != nil {
 		return types.AuthStartResult{}, err
 	}
 
-	csrfState, err := auth.GenerateOAuthState(0)
+	csrfState, err := iamauth.GenerateOAuthState(0)
 	if err != nil {
 		return types.AuthStartResult{}, ErrOAuthStateGeneration
 	}
@@ -79,49 +83,42 @@ func StartOAuthFlow(ctx context.Context, cfg OAuthFlowConfig) (types.AuthStartRe
 	}, nil
 }
 
-// CompleteOAuthFlow exchanges an authorization code for a credential set.
-// state is the AuthStartResult.State returned by StartOAuthFlow.
-// input should be a JSON-encoded OAuthCallbackInput from the provider's redirect.
-func CompleteOAuthFlow(ctx context.Context, cfg OAuthFlowConfig, state json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
+// CompleteOAuth exchanges an authorization code for OAuth credential material
+func CompleteOAuth(ctx context.Context, cfg OAuthConfig, state json.RawMessage, input types.AuthCallbackInput) (OAuthMaterial, error) {
 	var startState oauthStartState
 	if err := jsonx.UnmarshalIfPresent(state, &startState); err != nil {
-		return types.AuthCompleteResult{}, ErrOAuthStateInvalid
+		return OAuthMaterial{}, ErrOAuthStateInvalid
 	}
 
-	var callback OAuthCallbackInput
-	if err := jsonx.UnmarshalIfPresent(input, &callback); err != nil {
-		return types.AuthCompleteResult{}, ErrOAuthCallbackInputInvalid
+	code := input.First("code")
+	callbackState := input.First("state")
+	if code == "" {
+		return OAuthMaterial{}, ErrOAuthCodeMissing
 	}
 
-	if callback.Code == "" {
-		return types.AuthCompleteResult{}, ErrOAuthCodeMissing
+	if startState.State != "" && callbackState == "" {
+		return OAuthMaterial{}, ErrOAuthStateMissing
 	}
 
-	if startState.State != "" && callback.State != "" && startState.State != callback.State {
-		return types.AuthCompleteResult{}, ErrOAuthStateMismatch
+	if startState.State != "" && callbackState != "" && startState.State != callbackState {
+		return OAuthMaterial{}, ErrOAuthStateMismatch
 	}
 
 	rparty, err := buildRelyingParty(ctx, cfg)
 	if err != nil {
-		return types.AuthCompleteResult{}, err
+		return OAuthMaterial{}, err
 	}
 
-	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, callback.Code, rparty, buildCodeExchangeOpts(cfg.TokenParams)...)
+	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, code, rparty, buildCodeExchangeOpts(cfg.TokenParams)...)
 	if err != nil {
-		return types.AuthCompleteResult{}, ErrOAuthCodeExchange
+		return OAuthMaterial{}, ErrOAuthCodeExchange
 	}
 
-	credential, err := buildOAuthCredential(tokens.Token, tokens.IDTokenClaims)
-	if err != nil {
-		return types.AuthCompleteResult{}, err
-	}
-
-	return types.AuthCompleteResult{Credential: credential}, nil
+	return buildOAuthMaterial(tokens.Token, tokens.IDTokenClaims)
 }
 
-// buildRelyingParty constructs a Zitadel relying party from the given OAuthFlowConfig.
-// When DiscoveryURL is set, OIDC endpoint discovery is used.
-func buildRelyingParty(ctx context.Context, cfg OAuthFlowConfig) (rp.RelyingParty, error) {
+// buildRelyingParty constructs a Zitadel relying party from the given OAuthConfig
+func buildRelyingParty(ctx context.Context, cfg OAuthConfig) (rp.RelyingParty, error) {
 	if cfg.DiscoveryURL != "" {
 		rparty, err := rp.NewRelyingPartyOIDC(ctx, cfg.DiscoveryURL, cfg.ClientID, cfg.ClientSecret, cfg.RedirectURL, cfg.Scopes)
 		if err != nil {
@@ -150,31 +147,30 @@ func buildRelyingParty(ctx context.Context, cfg OAuthFlowConfig) (rp.RelyingPart
 	return rparty, nil
 }
 
-// buildOAuthCredential constructs a CredentialSet from an oauth2 token and optional OIDC claims
-func buildOAuthCredential(token *oauth2.Token, claims *oidc.IDTokenClaims) (types.CredentialSet, error) {
-	cs := types.CredentialSet{}
+// buildOAuthMaterial constructs an OAuthMaterial from an oauth2 token and optional OIDC claims
+func buildOAuthMaterial(token *oauth2.Token, claims *oidc.IDTokenClaims) (OAuthMaterial, error) {
+	mat := OAuthMaterial{}
 
 	if token != nil {
-		cs.OAuthAccessToken = token.AccessToken
-		cs.OAuthRefreshToken = token.RefreshToken
-		cs.OAuthTokenType = token.TokenType
+		mat.AccessToken = token.AccessToken
+		mat.RefreshToken = token.RefreshToken
 
 		if !token.Expiry.IsZero() {
 			exp := token.Expiry.UTC()
-			cs.OAuthExpiry = &exp
+			mat.Expiry = &exp
 		}
 	}
 
 	if claims != nil {
 		claimsMap, err := jsonx.ToMap(claims)
 		if err != nil {
-			return types.CredentialSet{}, ErrOAuthClaimsEncode
+			return OAuthMaterial{}, ErrOAuthClaimsEncode
 		}
 
-		cs.Claims = claimsMap
+		mat.Claims = claimsMap
 	}
 
-	return cs, nil
+	return mat, nil
 }
 
 // buildAuthURLOpts converts extra auth parameters into rp.AuthURLOpt values

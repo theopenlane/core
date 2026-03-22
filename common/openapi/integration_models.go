@@ -6,26 +6,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 )
 
-// OAuthPublicConfig holds the public OAuth configuration for a definition
-type OAuthPublicConfig struct {
-	// ClientID is the OAuth client ID
-	ClientID string `json:"clientId,omitempty"`
-	// AuthURL is the OAuth authorization endpoint URL
-	AuthURL string `json:"authUrl,omitempty"`
-	// TokenURL is the OAuth token endpoint URL
-	TokenURL string `json:"tokenUrl,omitempty"`
-	// RedirectURI is the OAuth redirect URI
-	RedirectURI string `json:"redirectUri,omitempty"`
-	// Scopes is the list of OAuth scopes
-	Scopes []string `json:"scopes,omitempty"`
-	// UsePKCE indicates if PKCE is used
-	UsePKCE bool `json:"usePkce,omitempty"`
-	// AuthParams are additional parameters for the auth request
-	AuthParams map[string]string `json:"authParams,omitempty"`
-	// TokenParams are additional parameters for the token request
-	TokenParams map[string]string `json:"tokenParams,omitempty"`
-}
-
 // IntegrationProviderMetadata is a snapshot of definition metadata captured on installation
 type IntegrationProviderMetadata struct {
 	// Name is the provider's unique name
@@ -52,8 +32,6 @@ type IntegrationProviderMetadata struct {
 	LogoURL string `json:"logoUrl,omitempty"`
 	// DocsURL is the URL to the provider documentation
 	DocsURL string `json:"docsUrl,omitempty"`
-	// OAuth holds the public OAuth configuration
-	OAuth *OAuthPublicConfig `json:"oauth,omitempty"`
 	// EnvironmentCredentials is the environment credentials JSON
 	EnvironmentCredentials json.RawMessage `json:"environmentCredentials,omitempty"`
 	// CredentialsSchema is the credentials schema JSON

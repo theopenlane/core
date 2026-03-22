@@ -40,6 +40,22 @@ func Builder() definition.Builder {
 					Schema:      providerkit.SchemaFrom[SourceCredentialSchema](),
 				},
 			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       awsAssumeRoleCredential,
+					Name:                "AWS Assume Role",
+					Description:         "Configure AWS Security Hub and Audit Manager access using a cross-account IAM role and optional source credentials for STS.",
+					CredentialRefs:      []types.CredentialRef{awsAssumeRoleCredential, awsSourceCredential},
+					ClientRefs:          []types.ClientID{SecurityHubClient.ID(), AuditManagerClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: awsAssumeRoleCredential,
+						Name:          "Disconnect AWS Assume Role",
+						Description:   "Remove the persisted AWS assume-role configuration and optional source credential used by this installation.",
+					},
+				},
+			},
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            SecurityHubClient.ID(),

@@ -3,7 +3,6 @@ package openapi
 import (
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/utils/rout"
@@ -95,122 +94,6 @@ func TestOAuthFlowRequest_Validate(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestOAuthCallbackRequest_Validate(t *testing.T) {
-	tests := []struct {
-		name    string
-		request OAuthCallbackRequest
-		wantErr bool
-		errMsg  string
-	}{
-		{
-			name: "valid request",
-			request: OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "4/0AQlEz8xY...",
-				State:    "eyJvcmdJRCI6IjAxSE...",
-			},
-			wantErr: false,
-		},
-		{
-			name: "empty provider",
-			request: OAuthCallbackRequest{
-				Provider: "",
-				Code:     "4/0AQlEz8xY...",
-				State:    "eyJvcmdJRCI6IjAxSE...",
-			},
-			wantErr: false,
-		},
-		{
-			name: "empty code",
-			request: OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "",
-				State:    "eyJvcmdJRCI6IjAxSE...",
-			},
-			wantErr: true,
-			errMsg:  "code is required",
-		},
-		{
-			name: "empty state",
-			request: OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "4/0AQlEz8xY...",
-				State:    "",
-			},
-			wantErr: true,
-			errMsg:  "state is required",
-		},
-		{
-			name: "whitespace only provider",
-			request: OAuthCallbackRequest{
-				Provider: "   ",
-				Code:     "4/0AQlEz8xY...",
-				State:    "eyJvcmdJRCI6IjAxSE...",
-			},
-			wantErr: false,
-		},
-		{
-			name: "whitespace only code",
-			request: OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "   ",
-				State:    "eyJvcmdJRCI6IjAxSE...",
-			},
-			wantErr: true,
-			errMsg:  "code is required",
-		},
-		{
-			name: "whitespace only state",
-			request: OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "4/0AQlEz8xY...",
-				State:    "   ",
-			},
-			wantErr: false,
-		},
-		{
-			name: "case insensitive provider",
-			request: OAuthCallbackRequest{
-				Provider: "SLACK",
-				Code:     "xoxp-1234567890",
-				State:    "eyJvcmdJRCI6IjAxSE...",
-			},
-			wantErr: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := tt.request.Validate()
-
-			if tt.wantErr {
-				assert.Error(t, err)
-				if tt.errMsg != "" {
-					assert.Contains(t, err.Error(), tt.errMsg)
-				}
-			} else {
-				assert.NoError(t, err)
-				// Check that provider is normalized to lowercase
-				assert.Equal(t, tt.request.Provider, strings.ToLower(tt.request.Provider))
-			}
-		})
-	}
-}
-
-// Helper functions
-
-func timePtr(t time.Time) *time.Time {
-	return &t
-}
-
-func timeInFuture(seconds int) time.Time {
-	return time.Now().Add(time.Duration(seconds) * time.Second)
-}
-
-func timeInPast(seconds int) time.Time {
-	return time.Now().Add(-time.Duration(seconds) * time.Second)
 }
 
 // Test validation helper functions

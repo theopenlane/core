@@ -278,7 +278,7 @@ func TestRegistryRejectsDuplicateWebhookEventTopicWithinDefinition(t *testing.T)
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
 				Name: "default",
-				Event: func(context.Context, integrationtypes.WebhookEventRequest) (integrationtypes.WebhookReceivedEvent, error) {
+				Event: func(integrationtypes.WebhookEventRequest) (integrationtypes.WebhookReceivedEvent, error) {
 					return integrationtypes.WebhookReceivedEvent{Name: "created"}, nil
 				},
 				Events: []integrationtypes.WebhookEventRegistration{

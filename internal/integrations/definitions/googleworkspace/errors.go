@@ -21,4 +21,8 @@ var (
 	ErrPayloadEncode = errors.New("googleworkspace: payload encode failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("googleworkspace: result encode failed")
+	// ErrCredentialEncode indicates the credential could not be serialized
+	ErrCredentialEncode = errors.New("googleworkspace: credential encode failed")
+	// ErrCredentialDecode indicates the credential could not be deserialized
+	ErrCredentialDecode = errors.New("googleworkspace: credential decode failed")
 )

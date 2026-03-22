@@ -34,8 +34,8 @@ func convertEchoPathToOpenAPI(echoPath string) string {
 // addPathParametersFromPattern extracts path parameters from Echo-style path and adds them to OpenAPI operation
 func (r *Router) addPathParametersFromPattern(path string, operation *openapi3.Operation) {
 	// Extract parameter names from Echo-style path (e.g., :id, :name)
-	parts := strings.Split(path, "/")
-	for _, part := range parts {
+	parts := strings.SplitSeq(path, "/")
+	for part := range parts {
 		if strings.HasPrefix(part, ":") {
 			paramName := part[1:] // Remove the : prefix
 
@@ -622,10 +622,8 @@ func RegisterRoutes(router *Router) error {
 		registerWebauthnAuthVerificationHandler,
 		registerUserInfoHandler,
 		registerOAuthRegisterHandler,
-		registerIntegrationOAuthStartHandler,
-		registerIntegrationOAuthCallbackHandler,
-		registerGitHubAppInstallHandler,
-		registerGitHubAppCallbackHandler,
+		registerIntegrationAuthStartHandler,
+		registerIntegrationAuthCallbackHandler,
 		registerGitHubAppWebhookHandler,
 		registerRefreshIntegrationTokenHandler,
 		registerIntegrationProvidersHandler,

@@ -2,9 +2,13 @@ package githubapp
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/hex"
+	"encoding/json"
 	"encoding/pem"
+	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -23,77 +27,230 @@ const (
 	defaultJWTExpiry = 9 * time.Minute
 	// jwtIssuedAtBackdateSeconds is the amount of time to backdate the JWT iat claim to account for clock skew
 	jwtIssuedAtBackdateSeconds = 30 * time.Second
+	// stateTokenBytes is the number of random bytes used for CSRF state tokens
+	stateTokenBytes = 16
+	// installURLTemplate is the GitHub App installation URL pattern
+	installURLTemplate = "https://github.com/apps/%s/installations/new"
 )
 
-// App executes the GitHub App install flow and webhook verification logic
-type App struct {
-	// Config holds the operator-supplied GitHub App settings
-	Config Config
+type disconnectDetails struct {
+	InstallationID string `json:"installationId,omitempty"`
 }
 
-// ProviderData is the provider-specific data stored in the credential ProviderData field
-type ProviderData struct {
-	// AppID is the GitHub App identifier used to mint installation tokens
-	AppID string `json:"appId"`
-	// InstallationID is the installation selected for this credential
-	InstallationID string `json:"installationId"`
+// statePayload is the opaque state token round-tripped through the auth flow
+type statePayload struct {
+	// Token is the CSRF state token
+	Token string `json:"token"`
 }
 
-// MintInstallationCredential exchanges one installation ID for a GitHub App installation token.
-func MintInstallationCredential(ctx context.Context, cfg Config, installationID string) (types.CredentialSet, error) {
-	if installationID == "" {
+func appInstallAuthRegistration(cfg Config) *types.AuthRegistration {
+	return &types.AuthRegistration{
+		CredentialRef: GitHubAppCredential,
+		Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+			return startAppInstall(cfg)
+		},
+		Complete: func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+			return completeAppInstall(ctx, cfg, state, input)
+		},
+		Refresh: func(ctx context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
+			return refreshAppInstall(ctx, cfg, credential)
+		},
+		TokenView: func(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
+			var cred githubAppCredential
+			if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
+				return nil, ErrCredentialDecode
+			}
+
+			return &types.TokenView{
+				AccessToken: cred.AccessToken,
+				ExpiresAt:   cred.Expiry,
+			}, nil
+		},
+	}
+}
+
+func appInstallDisconnectRegistration(_ Config) *types.DisconnectRegistration {
+	return &types.DisconnectRegistration{
+		CredentialRef: GitHubAppCredential,
+		Name:          "Disconnect GitHub App Installation",
+		Description:   "Open the GitHub installation settings page and uninstall the Openlane GitHub App. Openlane will remove the installation after GitHub sends the uninstall webhook.",
+		Disconnect: func(_ context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
+			installationID, err := disconnectInstallationID(req)
+			if err != nil {
+				return types.DisconnectResult{}, err
+			}
+
+			details, err := jsonx.ToRawMessage(disconnectDetails{
+				InstallationID: strconv.FormatInt(installationID, 10),
+			})
+			if err != nil {
+				return types.DisconnectResult{}, ErrInstallationMetadataEncode
+			}
+
+			return types.DisconnectResult{
+				RedirectURL:      fmt.Sprintf("https://github.com/settings/installations/%d", installationID),
+				Message:          "Uninstall the Openlane GitHub App in GitHub to finish disconnecting this integration.",
+				Details:          details,
+				SkipLocalCleanup: true,
+			}, nil
+		},
+	}
+}
+
+func startAppInstall(cfg Config) (types.AuthStartResult, error) {
+	if cfg.AppSlug == "" {
+		return types.AuthStartResult{}, ErrAppSlugMissing
+	}
+
+	stateToken, err := generateStateToken()
+	if err != nil {
+		return types.AuthStartResult{}, err
+	}
+
+	stateJSON, err := jsonx.ToRawMessage(statePayload{Token: stateToken})
+	if err != nil {
+		return types.AuthStartResult{}, ErrAuthStateEncode
+	}
+
+	installURL := fmt.Sprintf(installURLTemplate, url.PathEscape(cfg.AppSlug)) + "?state=" + url.QueryEscape(stateToken)
+
+	return types.AuthStartResult{
+		URL:   installURL,
+		State: stateJSON,
+	}, nil
+}
+
+func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+	var savedState statePayload
+	if err := jsonx.UnmarshalIfPresent(state, &savedState); err != nil {
+		return types.AuthCompleteResult{}, ErrAuthStateDecode
+	}
+
+	callbackState := input.First("state")
+	if savedState.Token != "" && callbackState != "" && savedState.Token != callbackState {
+		return types.AuthCompleteResult{}, ErrAuthStateMismatch
+	}
+
+	raw := input.First("installation_id")
+	if raw == "" {
+		return types.AuthCompleteResult{}, ErrInstallationIDMissing
+	}
+
+	installationID, err := strconv.ParseInt(raw, 10, 64)
+	if err != nil || installationID == 0 {
+		return types.AuthCompleteResult{}, ErrInstallationIDMissing
+	}
+
+	cred, err := mintCredential(ctx, cfg, installationID)
+	if err != nil {
+		return types.AuthCompleteResult{}, err
+	}
+
+	installInput, err := jsonx.ToRawMessage(InstallationMetadata{
+		InstallationID: strconv.FormatInt(installationID, 10),
+	})
+	if err != nil {
+		return types.AuthCompleteResult{}, ErrInstallationMetadataEncode
+	}
+
+	return types.AuthCompleteResult{
+		Credential:        cred,
+		InstallationInput: installInput,
+	}, nil
+}
+
+func refreshAppInstall(ctx context.Context, cfg Config, credential types.CredentialSet) (types.CredentialSet, error) {
+	var cred githubAppCredential
+	if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
+		return types.CredentialSet{}, ErrCredentialDecode
+	}
+
+	if cred.InstallationID == 0 {
 		return types.CredentialSet{}, ErrInstallationIDMissing
 	}
 
-	a := App{Config: cfg}
+	return mintCredential(ctx, cfg, cred.InstallationID)
+}
 
-	if a.Config.AppID == "" {
+func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
+	if req.Credential != nil {
+		var cred githubAppCredential
+		if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+			return 0, ErrCredentialDecode
+		}
+
+		if cred.InstallationID != 0 {
+			return cred.InstallationID, nil
+		}
+	}
+
+	var metadata InstallationMetadata
+	if err := jsonx.UnmarshalIfPresent(req.Installation.InstallationMetadata.Attributes, &metadata); err != nil {
+		return 0, ErrInstallationMetadataDecode
+	}
+
+	if metadata.InstallationID == "" {
+		return 0, ErrInstallationIDMissing
+	}
+
+	installationID, err := strconv.ParseInt(metadata.InstallationID, 10, 64)
+	if err != nil || installationID == 0 {
+		return 0, ErrInstallationIDMissing
+	}
+
+	return installationID, nil
+}
+
+// mintCredential mints an installation token and marshals it into a CredentialSet
+func mintCredential(ctx context.Context, cfg Config, installationID int64) (types.CredentialSet, error) {
+	if cfg.AppID == "" {
 		return types.CredentialSet{}, ErrAppIDMissing
 	}
 
-	jwtToken, err := a.appJWT(a.Config.PrivateKey)
+	jwtToken, err := appJWT(cfg)
 	if err != nil {
 		return types.CredentialSet{}, err
 	}
 
-	installationToken, err := a.installationToken(ctx, installationID, jwtToken)
+	token, err := installationToken(ctx, cfg, installationID, jwtToken)
 	if err != nil {
 		return types.CredentialSet{}, err
 	}
 
-	providerData, err := jsonx.ToRawMessage(ProviderData{
-		AppID:          a.Config.AppID,
+	appIDInt, err := strconv.ParseInt(cfg.AppID, 10, 64)
+	if err != nil {
+		return types.CredentialSet{}, ErrAppIDMissing
+	}
+
+	cred := githubAppCredential{
+		AppID:          appIDInt,
 		InstallationID: installationID,
-	})
+		AccessToken:    token.AccessToken,
+	}
+
+	if !token.Expiry.IsZero() {
+		expiry := token.Expiry.UTC()
+		cred.Expiry = &expiry
+	}
+
+	data, err := jsonx.ToRawMessage(cred)
 	if err != nil {
-		return types.CredentialSet{}, ErrAuthProviderDataEncode
+		return types.CredentialSet{}, ErrCredentialEncode
 	}
 
-	credential := types.CredentialSet{
-		OAuthAccessToken:  installationToken.AccessToken,
-		OAuthRefreshToken: installationToken.RefreshToken,
-		OAuthTokenType:    installationToken.TokenType,
-		ProviderData:      providerData,
-	}
-
-	if !installationToken.Expiry.IsZero() {
-		expiry := installationToken.Expiry.UTC()
-		credential.OAuthExpiry = &expiry
-	}
-
-	return credential, nil
+	return types.CredentialSet{Data: data}, nil
 }
 
 // appJWT signs a short-lived JWT for GitHub App authentication
-func (a App) appJWT(privateKey string) (string, error) {
-	key, err := parseRSAPrivateKey(privateKey)
+func appJWT(cfg Config) (string, error) {
+	key, err := parseRSAPrivateKey(cfg.PrivateKey)
 	if err != nil {
 		return "", err
 	}
 
 	now := time.Now()
 	claims := jwt.RegisteredClaims{
-		Issuer:    a.Config.AppID,
+		Issuer:    cfg.AppID,
 		IssuedAt:  jwt.NewNumericDate(now.Add(-jwtIssuedAtBackdateSeconds)),
 		ExpiresAt: jwt.NewNumericDate(now.Add(defaultJWTExpiry)),
 	}
@@ -132,18 +289,13 @@ func parseRSAPrivateKey(privateKey string) (*rsa.PrivateKey, error) {
 }
 
 // installationToken exchanges an app JWT for an installation access token
-func (a App) installationToken(ctx context.Context, installationID string, jwtToken string) (*oauth2.Token, error) {
-	if installationID == "" {
+func installationToken(ctx context.Context, cfg Config, installationID int64, jwtToken string) (*oauth2.Token, error) {
+	if installationID == 0 {
 		return nil, ErrInstallationIDMissing
 	}
 
-	installationIDInt, err := strconv.ParseInt(installationID, 10, 64)
-	if err != nil {
-		return nil, ErrInstallationTokenRequestFailed
-	}
-
-	client := a.installationTokenClient(ctx, jwtToken)
-	installationToken, _, err := client.Apps.CreateInstallationToken(ctx, installationIDInt, &gh.InstallationTokenOptions{})
+	client := installationTokenClient(ctx, cfg, jwtToken)
+	installationToken, _, err := client.Apps.CreateInstallationToken(ctx, installationID, &gh.InstallationTokenOptions{})
 	if err != nil {
 		return nil, ErrInstallationTokenRequestFailed
 	}
@@ -166,21 +318,21 @@ func (a App) installationToken(ctx context.Context, installationID string, jwtTo
 }
 
 // installationTokenClient builds the GitHub API client used for installation token requests
-func (a App) installationTokenClient(ctx context.Context, jwtToken string) *gh.Client {
+func installationTokenClient(ctx context.Context, cfg Config, jwtToken string) *gh.Client {
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: jwtToken})
 	httpClient := oauth2.NewClient(ctx, source)
 	client := gh.NewClient(httpClient)
 
-	if a.Config.APIURL == "" {
+	if cfg.APIURL == "" {
 		return client
 	}
 
-	apiURL, err := url.Parse(strings.TrimRight(a.Config.APIURL, "/") + "/api/v3/")
+	apiURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/v3/")
 	if err != nil {
 		return client
 	}
 
-	uploadURL, err := url.Parse(strings.TrimRight(a.Config.APIURL, "/") + "/api/uploads/")
+	uploadURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/uploads/")
 	if err != nil {
 		return client
 	}
@@ -189,4 +341,14 @@ func (a App) installationTokenClient(ctx context.Context, jwtToken string) *gh.C
 	client.UploadURL = uploadURL
 
 	return client
+}
+
+// generateStateToken produces a cryptographically random hex string for CSRF state
+func generateStateToken() (string, error) {
+	b := make([]byte, stateTokenBytes)
+	if _, err := rand.Read(b); err != nil {
+		return "", ErrAuthStateGenerate
+	}
+
+	return hex.EncodeToString(b), nil
 }

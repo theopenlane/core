@@ -10,6 +10,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the AWS Security Hub integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	// Installation is the typed installation metadata handle for the AWS Security Hub definition
+	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 	// awsAssumeRoleCredential is the assume-role credential slot shared by the AWS service clients in this definition
 	awsAssumeRoleCredential = types.NewCredentialRef(Slug + ".assume_role")
 	// awsSourceCredential is the optional static source credential slot used to assume the configured AWS role
@@ -65,4 +67,22 @@ type SourceCredentialSchema struct {
 	SecretAccessKey string `json:"secretAccessKey" jsonschema:"required,title=Secret Access Key"`
 	// SessionToken is the AWS session token for static credentials
 	SessionToken string `json:"sessionToken,omitempty"    jsonschema:"title=Session Token"`
+}
+
+// InstallationMetadata holds the non-secret AWS connection attributes persisted for one installation
+type InstallationMetadata struct {
+	// RoleARN is the cross-account IAM role ARN Openlane assumes for this installation
+	RoleARN string `json:"roleArn,omitempty" jsonschema:"title=IAM Role ARN"`
+	// HomeRegion is the AWS region used for Security Hub aggregation and API calls
+	HomeRegion string `json:"homeRegion,omitempty" jsonschema:"title=Home Region"`
+	// AccountID is the primary AWS account identifier when supplied during setup
+	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID"`
+	// AccountScope indicates whether collection targets all delegated accounts or a specific set
+	AccountScope string `json:"accountScope,omitempty" jsonschema:"title=Account Scope"`
+	// AccountIDs lists the explicitly selected AWS account identifiers when account scope is specific
+	AccountIDs []string `json:"accountIds,omitempty" jsonschema:"title=Account IDs"`
+	// LinkedRegions limits collection to the listed AWS source regions when configured
+	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
+	// UsesSourceCredential reports whether a static source credential is persisted alongside the assume-role configuration
+	UsesSourceCredential bool `json:"usesSourceCredential,omitempty" jsonschema:"title=Uses Source Credential"`
 }

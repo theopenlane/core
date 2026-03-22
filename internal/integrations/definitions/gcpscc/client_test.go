@@ -21,7 +21,7 @@ func TestMetadataFromCredential(t *testing.T) {
 		})
 		require.NoError(t, err)
 
-		meta, err := metadataFromCredential(types.CredentialSet{ProviderData: raw})
+		meta, err := metadataFromCredential(types.CredentialSet{Data: raw})
 		require.NoError(t, err)
 
 		assert.Equal(t, "project-123", meta.ProjectID)
@@ -32,7 +32,7 @@ func TestMetadataFromCredential(t *testing.T) {
 	})
 
 	t.Run("returns decode error for invalid provider data", func(t *testing.T) {
-		_, err := metadataFromCredential(types.CredentialSet{ProviderData: []byte(`{`)})
+		_, err := metadataFromCredential(types.CredentialSet{Data: []byte(`{`)})
 		require.ErrorIs(t, err, ErrMetadataDecode)
 	})
 }

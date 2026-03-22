@@ -9,22 +9,6 @@ var (
 	ErrMapExprEval = errors.New("map expression evaluation failed")
 	// ErrHTTPRequestFailed indicates an HTTP request returned a non-2xx status
 	ErrHTTPRequestFailed = errors.New("providerkit: http request failed")
-	// ErrOAuthRelyingPartyInit indicates Zitadel relying party construction failed
-	ErrOAuthRelyingPartyInit = errors.New("providerkit: oauth relying party initialization failed")
-	// ErrOAuthStateGeneration indicates random CSRF state generation failed
-	ErrOAuthStateGeneration = errors.New("providerkit: oauth state generation failed")
-	// ErrOAuthStateInvalid indicates the stored oauth start state could not be decoded
-	ErrOAuthStateInvalid = errors.New("providerkit: oauth state invalid")
-	// ErrOAuthStateMismatch indicates the callback state does not match the stored CSRF state
-	ErrOAuthStateMismatch = errors.New("providerkit: oauth state mismatch")
-	// ErrOAuthCodeMissing indicates the authorization code is absent from the callback input
-	ErrOAuthCodeMissing = errors.New("providerkit: oauth callback code missing")
-	// ErrOAuthCallbackInputInvalid indicates the callback input could not be decoded
-	ErrOAuthCallbackInputInvalid = errors.New("providerkit: oauth callback input invalid")
-	// ErrOAuthCodeExchange indicates the authorization code exchange failed
-	ErrOAuthCodeExchange = errors.New("providerkit: oauth code exchange failed")
-	// ErrOAuthClaimsEncode indicates OIDC claims could not be serialized to a map
-	ErrOAuthClaimsEncode = errors.New("providerkit: oauth claims encoding failed")
 )
 
 // HTTPRequestError captures metadata for failed HTTP requests

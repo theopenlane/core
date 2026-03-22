@@ -10,18 +10,14 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// DisconnectIntegration removes the stored integration configuration and secrets for a provider.
+// DisconnectIntegration executes the definition-driven teardown flow for one installed integration
 func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleDisconnectIntegrationRequest, models.DeleteIntegrationResponse{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
-	}
-	if err := h.requireIntegrationsRuntime(ctx, openapi); err != nil {
-		return err
 	}
 
 	userCtx := ctx.Request().Context()
@@ -38,30 +34,27 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 
 	record, err := h.IntegrationsRuntime.ResolveInstallation(userCtx, caller.OrganizationID, in.IntegrationID, def.ID)
 	if err != nil {
-		logx.FromContext(userCtx).Error().Err(err).Str("integration_id", in.IntegrationID).Msg("failed to resolve installation")
+		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
 	}
 
-	integrationID := record.ID
-	logger := logx.FromContext(userCtx).With().Str("integration_id", integrationID).Logger()
-
-	if err := h.IntegrationsRuntime.DeleteCredential(userCtx, integrationID); err != nil {
-		logger.Error().Err(err).Msg("failed to delete credential")
+	result, err := h.IntegrationsRuntime.Disconnect(userCtx, record)
+	if err != nil {
+		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("disconnect failed")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if err := h.IntegrationsRuntime.DeleteInstallation(userCtx, integrationID); err != nil {
-		if ent.IsNotFound(err) {
-			return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
-		}
-
-		logger.Error().Err(err).Msg("failed to delete integration")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	resp := models.DeleteIntegrationResponse{
+		Reply:   rout.Reply{Success: true},
+		Message: lo.CoalesceOrEmpty(result.Message, fmt.Sprintf("%s integration disconnected", lo.CoalesceOrEmpty(def.DisplayName, def.Slug))),
 	}
 
-	return h.Success(ctx, models.DeleteIntegrationResponse{
-		Reply:     rout.Reply{Success: true},
-		Message:   fmt.Sprintf("%s integration disconnected", lo.CoalesceOrEmpty(def.DisplayName, def.Slug)),
-		DeletedID: integrationID,
-	})
+	resp.RedirectURL = result.RedirectURL
+	resp.Details = result.Details
+
+	if !result.SkipLocalCleanup {
+		resp.DeletedID = record.ID
+	}
+
+	return h.Success(ctx, resp)
 }

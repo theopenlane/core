@@ -20,9 +20,9 @@ func HookEvidenceFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EvidenceFunc(func(ctx context.Context, m *generated.EvidenceMutation) (generated.Value, error) {
 			if !isDeleteOp(ctx, m) {
-				// validate creation date:
-				// - defaults to now on create if not provided
-				// - must not be in the future if provided
+				// validate creation date if only
+				// - it is a create operation
+				// - it was provided in an update operation
 				creationDate, ok := m.CreationDate()
 				op := m.Op()
 
@@ -34,13 +34,8 @@ func HookEvidenceFiles() ent.Hook {
 					return nil, ErrFutureTimeNotAllowed
 				}
 
-				renewalDate, renewalOk := m.RenewalDate()
-				if err := validateTimeNotInPast(renewalDate, renewalOk); err != nil {
+				if err := validateTimeNotInPast(m.RenewalDate()); err != nil {
 					return nil, err
-				}
-
-				if op == ent.OpCreate && !renewalOk {
-					m.SetRenewalDate(time.Now().Add(365 * 24 * time.Hour))
 				}
 
 				hasURL := checkEvidenceHasURL(ctx, m)

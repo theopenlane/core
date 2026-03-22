@@ -2,6 +2,7 @@ package githubapp
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -26,7 +27,7 @@ func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	defer server.Close()
 
 	clientValue, err := Client{APIURL: server.URL}.Build(context.Background(), types.ClientBuildRequest{
-		Credential: types.CredentialSet{OAuthAccessToken: "token"},
+		Credential: types.CredentialSet{Data: json.RawMessage(`{"appId":1,"installationId":2,"accessToken":"token"}`)},
 	})
 	require.NoError(t, err)
 

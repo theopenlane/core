@@ -25,4 +25,10 @@ var (
 	ErrMembersFetchFailed = errors.New("azureentraid: group members fetch failed")
 	// ErrPayloadEncode indicates an ingest envelope payload could not be serialized
 	ErrPayloadEncode = errors.New("azureentraid: payload encode failed")
+	// ErrTenantIDNotFound indicates the tenant ID claim was not found in OAuth material
+	ErrTenantIDNotFound = errors.New("azureentraid: tenant id not found in claims")
+	// ErrCredentialEncode indicates the credential could not be serialized
+	ErrCredentialEncode = errors.New("azureentraid: credential encode failed")
+	// ErrCredentialDecode indicates the credential could not be deserialized
+	ErrCredentialDecode = errors.New("azureentraid: credential decode failed")
 )

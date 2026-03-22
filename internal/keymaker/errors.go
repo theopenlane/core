@@ -9,6 +9,8 @@ var (
 	ErrDefinitionNotFound = errors.New("keymaker: definition not found")
 	// ErrDefinitionAuthRequired indicates the definition does not have an auth registration
 	ErrDefinitionAuthRequired = errors.New("keymaker: definition has no auth registration")
+	// ErrConnectionNotFound indicates the requested connection does not exist on the definition
+	ErrConnectionNotFound = errors.New("keymaker: connection not found")
 	// ErrInstallationIDRequired indicates the caller did not provide an installation identifier
 	ErrInstallationIDRequired = errors.New("keymaker: installation id required")
 	// ErrInstallationNotFound indicates the referenced installation does not exist

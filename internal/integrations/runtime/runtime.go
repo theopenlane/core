@@ -45,6 +45,26 @@ type Runtime struct {
 	injector do.Injector
 }
 
+// DB returns the Ent client from the injector
+func (r *Runtime) DB() *ent.Client {
+	return do.MustInvoke[*ent.Client](r.injector)
+}
+
+// Keystore returns the credential store from the injector
+func (r *Runtime) Keystore() *keystore.Store {
+	return do.MustInvoke[*keystore.Store](r.injector)
+}
+
+// Gala returns the event runtime from the injector
+func (r *Runtime) Gala() *gala.Gala {
+	return do.MustInvoke[*gala.Gala](r.injector)
+}
+
+// Keymaker returns the auth flow service from the injector
+func (r *Runtime) Keymaker() *keymaker.Service {
+	return do.MustInvoke[*keymaker.Service](r.injector)
+}
+
 // Registry returns the definition registry
 func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
@@ -52,17 +72,17 @@ func (r *Runtime) Registry() *registry.Registry {
 
 // Catalog returns all registered definition specs in stable id order
 func (r *Runtime) Catalog() []types.DefinitionSpec {
-	return do.MustInvoke[*registry.Registry](r.injector).Catalog()
+	return r.Registry().Catalog()
 }
 
 // Definition returns one definition by canonical identifier
 func (r *Runtime) Definition(id string) (types.Definition, bool) {
-	return do.MustInvoke[*registry.Registry](r.injector).Definition(id)
+	return r.Registry().Definition(id)
 }
 
 // Dispatch enqueues one integration operation through the runtime-managed dispatcher
 func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) (operations.DispatchResult, error) {
-	result, err := operations.Dispatch(ctx, do.MustInvoke[*registry.Registry](r.injector), do.MustInvoke[*ent.Client](r.injector), do.MustInvoke[*gala.Gala](r.injector), req)
+	result, err := operations.Dispatch(ctx, r.Registry(), r.DB(), r.Gala(), req)
 	if err != nil {
 		return operations.DispatchResult{}, normalizeDispatchError(err)
 	}
@@ -136,10 +156,20 @@ func New(config Config) (*Runtime, error) {
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(
 			rt.Definition,
-			rt.PersistAuthCompletion,
+			func(ctx context.Context, installationID string, credentialRef types.CredentialRef, def types.Definition, result types.AuthCompleteResult) error {
+				installation, err := rt.ResolveInstallation(ctx, "", installationID, def.ID)
+				if err != nil {
+					return err
+				}
+
+				if connection, err := def.ConnectionRegistration(credentialRef); err != nil {
+					return err
+				} else {
+					return rt.Reconcile(ctx, installation, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput)
+				}
+			},
 			rt.lookupKeymakerInstallation,
 			do.MustInvoke[keymaker.AuthStateStore](i),
-			0,
 		), nil
 	})
 
@@ -152,8 +182,8 @@ func New(config Config) (*Runtime, error) {
 	}
 
 	if err := operations.RegisterRuntimeListeners(
-		do.MustInvoke[*gala.Gala](injector),
-		do.MustInvoke[*registry.Registry](injector),
+		rt.Gala(),
+		rt.Registry(),
 		lo.Ternary(!config.SkipExecutorListeners, rt.HandleOperation, nil),
 		rt.HandleWebhookEvent,
 	); err != nil {

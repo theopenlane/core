@@ -6,43 +6,43 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
-// registerIntegrationOAuthStartHandler registers the OAuth start handler for integrations
-func registerIntegrationOAuthStartHandler(router *Router) error {
+// registerIntegrationAuthStartHandler registers the auth start handler for integrations
+func registerIntegrationAuthStartHandler(router *Router) error {
 	if !integrationsEnabled(router) {
 		return nil
 	}
 
 	config := Config{
-		Path:        "/integrations/oauth/start",
+		Path:        "/integrations/auth/start",
 		Method:      http.MethodPost,
-		Name:        "StartIntegrationOAuth",
-		Description: "Start OAuth flow for integration",
+		Name:        "StartIntegrationAuth",
+		Description: "Start auth flow for integration",
 		Tags:        []string{"integrations"},
-		OperationID: "StartIntegrationOAuth",
+		OperationID: "StartIntegrationAuth",
 		Security:    handlers.AllSecurityRequirements(),
 		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.StartOAuthFlow,
+		Handler:     router.Handler.StartIntegrationAuth,
 	}
 
 	return router.AddV1HandlerRoute(config)
 }
 
-// registerIntegrationOAuthCallbackHandler registers the OAuth callback handler for integrations
-func registerIntegrationOAuthCallbackHandler(router *Router) error {
+// registerIntegrationAuthCallbackHandler registers the auth callback handler for integrations
+func registerIntegrationAuthCallbackHandler(router *Router) error {
 	if !integrationsEnabled(router) {
 		return nil
 	}
 
 	config := Config{
-		Path:        "/integrations/oauth/callback",
+		Path:        "/integrations/auth/callback",
 		Method:      http.MethodGet,
-		Name:        "IntegrationOAuthCallback",
-		Description: "Handle OAuth callback for integration",
+		Name:        "IntegrationAuthCallback",
+		Description: "Handle auth callback for integration",
 		Tags:        []string{"integrations"},
-		OperationID: "IntegrationOAuthCallback",
+		OperationID: "IntegrationAuthCallback",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
-		Handler:     router.Handler.HandleOAuthCallback,
+		Handler:     router.Handler.HandleIntegrationAuthCallback,
 	}
 
 	return router.AddV1HandlerRoute(config)

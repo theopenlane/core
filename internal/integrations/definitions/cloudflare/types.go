@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Cloudflare integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	// Installation is the typed installation metadata handle for the Cloudflare definition
+	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 	// cloudflareCredential is the credential slot used by the Cloudflare client
 	cloudflareCredential = types.NewCredentialRef(Slug)
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
@@ -34,4 +36,10 @@ type UserInput struct {
 type CredentialSchema struct {
 	// APIToken is the Cloudflare API token with permissions to read account and zone metadata
 	APIToken string `json:"apiToken"          jsonschema:"required,title=API Token"`
+}
+
+// InstallationMetadata holds the stable Cloudflare account identity for one installation
+type InstallationMetadata struct {
+	// AccountID is the Cloudflare account identifier used for account-scoped collection
+	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID"`
 }

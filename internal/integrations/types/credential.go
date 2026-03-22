@@ -3,6 +3,8 @@ package types
 import (
 	"encoding/json"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/models"
 )
 
@@ -42,4 +44,16 @@ type CredentialRegistration struct {
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
+}
+
+// CredentialRegistration returns the credential registration for the given ref
+func (d Definition) CredentialRegistration(ref CredentialRef) (CredentialRegistration, error) {
+	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
+		return r.Ref.String() == ref.String()
+	})
+	if !found {
+		return CredentialRegistration{}, ErrCredentialRefNotFound
+	}
+
+	return reg, nil
 }

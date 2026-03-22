@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -25,11 +26,20 @@ const (
 	githubWebhookDeliveryHeader = "X-GitHub-Delivery"
 )
 
+// App executes the GitHub App webhook verification logic
+type App struct {
+	// Config holds the operator-supplied GitHub App settings
+	Config Config
+}
+
 // PingWebhook marks a GitHub App webhook endpoint as verified
 type PingWebhook struct{}
 
 // InstallationCreatedWebhook sends the GitHub App installation notification
 type InstallationCreatedWebhook struct{}
+
+// InstallationDeletedWebhook removes a disconnected GitHub App installation after the uninstall webhook arrives
+type InstallationDeletedWebhook struct{}
 
 // DependabotAlertWebhook ingests one Dependabot alert from the webhook payload
 type DependabotAlertWebhook struct{}
@@ -94,12 +104,10 @@ type githubWebhookVerificationMetadata struct {
 	GitHubWebhookVerifiedAt time.Time `json:"githubWebhookVerifiedAt"`
 }
 
-// Verify validates the HMAC-SHA256 signature on an inbound GitHub webhook request
-func (a App) Verify(ctx context.Context, request types.WebhookVerifyRequest) error {
-	if err := ctx.Err(); err != nil {
-		return err
-	}
-
+// Verify validates the HMAC-SHA256 signature on an inbound GitHub webhook request.
+// Follows the GitHub webhook verification pattern: the X-Hub-Signature-256 header
+// contains "sha256=<hex-encoded HMAC-SHA256>" computed using the app webhook secret
+func (a App) Verify(request types.WebhookVerifyRequest) error {
 	if a.Config.WebhookSecret == "" {
 		return ErrWebhookSecretMissing
 	}
@@ -109,10 +117,20 @@ func (a App) Verify(ctx context.Context, request types.WebhookVerifyRequest) err
 		return ErrWebhookSignatureMissing
 	}
 
+	sigHex, found := strings.CutPrefix(signature, "sha256=")
+	if !found {
+		return ErrWebhookSignatureMismatch
+	}
+
+	sigBytes, err := hex.DecodeString(sigHex)
+	if err != nil {
+		return ErrWebhookSignatureMismatch
+	}
+
 	mac := hmac.New(sha256.New, []byte(a.Config.WebhookSecret))
-	_, _ = mac.Write(request.Payload)
-	expected := "sha256=" + hex.EncodeToString(mac.Sum(nil))
-	if !hmac.Equal([]byte(signature), []byte(expected)) {
+	mac.Write(request.Payload)
+
+	if !hmac.Equal(sigBytes, mac.Sum(nil)) {
 		return ErrWebhookSignatureMismatch
 	}
 
@@ -120,11 +138,7 @@ func (a App) Verify(ctx context.Context, request types.WebhookVerifyRequest) err
 }
 
 // Event resolves the inbound webhook payload into one registered GitHub webhook event
-func (App) Event(ctx context.Context, request types.WebhookEventRequest) (types.WebhookReceivedEvent, error) {
-	if err := ctx.Err(); err != nil {
-		return types.WebhookReceivedEvent{}, err
-	}
-
+func (App) Event(request types.WebhookEventRequest) (types.WebhookReceivedEvent, error) {
 	eventType := request.Request.Header.Get(githubWebhookEventHeader)
 	if eventType == "" {
 		return types.WebhookReceivedEvent{}, ErrWebhookEventMissing
@@ -142,6 +156,8 @@ func (App) Event(ctx context.Context, request types.WebhookEventRequest) (types.
 	case "installation":
 		if envelope.Action == "created" {
 			name = InstallationCreatedWebhookEvent.Name()
+		} else if envelope.Action == "deleted" {
+			name = InstallationDeletedWebhookEvent.Name()
 		}
 	case "dependabot_alert":
 		name = DependabotAlertWebhookEvent.Name()
@@ -226,6 +242,15 @@ func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.Webh
 	}
 
 	return nil
+}
+
+// Handle removes the Openlane installation after GitHub confirms the app was uninstalled
+func (InstallationDeletedWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
+	if request.CleanupInstallation == nil {
+		return nil
+	}
+
+	return request.CleanupInstallation(ctx)
 }
 
 // Handle ingests one Dependabot alert from the webhook payload

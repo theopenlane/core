@@ -1,6 +1,7 @@
 package microsoftteams
 
 import (
+	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -35,21 +36,51 @@ func Builder(cfg Config) definition.Builder {
 					Description: "Auth-managed credential slot used by the Microsoft Teams client in this definition.",
 				},
 			},
-			Auth: &types.AuthRegistration{
-				StartPath:    types.DefaultAuthStartPath,
-				CallbackPath: types.DefaultAuthCompletePath,
-				OAuth: &types.OAuthPublicConfig{
-					ClientID:    cfg.ClientID,
-					AuthURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-					TokenURL:    "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-					RedirectURI: cfg.RedirectURL,
-					Scopes: []string{
-						"https://graph.microsoft.com/User.Read",
-						"https://graph.microsoft.com/ChannelMessage.Send",
-						"offline_access",
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       teamsCredential,
+					Name:                "Microsoft Teams OAuth",
+					Description:         "Authenticate with Microsoft Graph to send Teams channel messages.",
+					CredentialRefs:      []types.CredentialRef{teamsCredential},
+					ClientRefs:          []types.ClientID{TeamsClient.ID()},
+					ValidationOperation: HealthDefaultOperation.Name(),
+					Installation:        Installation.Registration(),
+					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
+						CredentialRef: teamsCredential,
+						Config: auth.OAuthConfig{
+							ClientID:     cfg.ClientID,
+							ClientSecret: cfg.ClientSecret,
+							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+							TokenURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+							RedirectURL:  cfg.RedirectURL,
+							Scopes: []string{
+								"https://graph.microsoft.com/User.Read",
+								"https://graph.microsoft.com/ChannelMessage.Send",
+								"offline_access",
+							},
+						},
+						Material: func(material auth.OAuthMaterial) (teamsCred, error) {
+							return teamsCred{
+								AccessToken:  material.AccessToken,
+								RefreshToken: material.RefreshToken,
+								Expiry:       material.Expiry,
+							}, nil
+						},
+						TokenView: func(cred teamsCred) (*types.TokenView, error) {
+							return &types.TokenView{
+								AccessToken: cred.AccessToken,
+								ExpiresAt:   cred.Expiry,
+							}, nil
+						},
+						EncodeCredentialError: ErrCredentialEncode,
+						DecodeCredentialError: ErrCredentialDecode,
+					}),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: teamsCredential,
+						Name:          "Disconnect Microsoft Teams OAuth",
+						Description:   "Remove the persisted Microsoft Teams OAuth credential and disconnect this installation from Openlane.",
 					},
 				},
-				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{

@@ -22,7 +22,7 @@ func TestResolveAssumeRoleCredential_ValidData(t *testing.T) {
 	require.NoError(t, err)
 
 	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
-		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{Data: raw}},
 	})
 	require.NoError(t, err)
 
@@ -41,7 +41,7 @@ func TestResolveAssumeRoleCredential_DefaultSessionName(t *testing.T) {
 	require.NoError(t, err)
 
 	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
-		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{Data: raw}},
 	})
 	require.NoError(t, err)
 
@@ -58,7 +58,7 @@ func TestResolveAssumeRoleCredential_SessionNameFromData(t *testing.T) {
 	require.NoError(t, err)
 
 	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
-		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{Data: raw}},
 	})
 	require.NoError(t, err)
 
@@ -73,7 +73,7 @@ func TestResolveAssumeRoleCredential_DefaultAccountScope(t *testing.T) {
 	require.NoError(t, err)
 
 	credential, err := resolveAssumeRoleCredential(types.CredentialBindings{
-		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{ProviderData: raw}},
+		{Ref: awsAssumeRoleCredential, Credential: types.CredentialSet{Data: raw}},
 	})
 	require.NoError(t, err)
 

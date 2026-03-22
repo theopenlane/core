@@ -19,10 +19,18 @@ var (
 	ErrInstallationDefinitionMismatch = errors.New("integrations/runtime: installation definition mismatch")
 	// ErrCredentialNotFound indicates no credential could be resolved for the installation
 	ErrCredentialNotFound = errors.New("integrations/runtime: credential not found")
+	// ErrConnectionRequired indicates the installation operation requires a credential-selected connection
+	ErrConnectionRequired = errors.New("integrations/runtime: connection required")
+	// ErrConnectionNotFound indicates the requested connection could not be resolved for the definition
+	ErrConnectionNotFound = errors.New("integrations/runtime: connection not found")
 	// ErrDefinitionNotFound indicates the requested integration definition is not registered
 	ErrDefinitionNotFound = errors.New("integrations/runtime: definition not found")
 	// ErrOperationNotFound indicates the requested operation is not registered for the definition
 	ErrOperationNotFound = errors.New("integrations/runtime: operation not found")
 	// ErrOperationConfigInvalid indicates the operation config payload failed schema validation
 	ErrOperationConfigInvalid = errors.New("integrations/runtime: operation config invalid")
+	// ErrUserInputInvalid indicates the user input payload failed schema validation
+	ErrUserInputInvalid = errors.New("integrations/runtime: user input invalid")
+	// ErrCredentialInvalid indicates the credential payload failed schema validation
+	ErrCredentialInvalid = errors.New("integrations/runtime: credential invalid")
 )

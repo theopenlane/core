@@ -1,6 +1,8 @@
 package azureentraid
 
 import (
+	"time"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
@@ -10,6 +12,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Azure Entra ID integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// Installation is the typed installation metadata handle for the Azure Entra ID definition
+	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 	// entraTenantCredential is the credential slot shared by the Entra clients in this definition
 	entraTenantCredential = types.NewCredentialRef(Slug)
 	// EntraCredential is the client ref for the Azure token credential used by the health check
@@ -37,8 +41,26 @@ type UserInput struct {
 	IncludeGuestUsers bool `json:"includeGuestUsers,omitempty" jsonschema:"title=Include Guest Users"`
 }
 
+// entraIDCred holds the provider-owned credential material for an Azure Entra ID installation
+type entraIDCred struct {
+	// AccessToken is the OAuth2 access token
+	AccessToken string `json:"accessToken"`
+	// RefreshToken is the OAuth2 refresh token
+	RefreshToken string `json:"refreshToken,omitempty"`
+	// Expiry is the token expiration time
+	Expiry *time.Time `json:"expiry,omitempty"`
+	// TenantID is the Azure AD tenant identifier extracted from OIDC claims
+	TenantID string `json:"tenantId"`
+}
+
 // CredentialSchema holds the per-installation credential for one Entra ID tenant
 type CredentialSchema struct {
 	// TenantID is the Azure Active Directory tenant identifier for this installation
 	TenantID string `json:"tenantId" jsonschema:"required,title=Tenant ID"`
+}
+
+// InstallationMetadata holds the stable Azure Entra tenant identity for one installation
+type InstallationMetadata struct {
+	// TenantID is the Azure Active Directory tenant identifier selected during setup
+	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
 }

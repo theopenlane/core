@@ -10,6 +10,7 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // teamsGraphScope is the Microsoft Graph scope used for Teams operations
@@ -20,12 +21,17 @@ type Client struct{}
 
 // Build constructs the Microsoft Graph service client from the installation OAuth access token
 func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	if req.Credential.OAuthAccessToken == "" {
+	var tc teamsCred
+	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &tc); err != nil {
+		return nil, ErrCredentialDecode
+	}
+
+	if tc.AccessToken == "" {
 		return nil, ErrOAuthTokenMissing
 	}
 
 	cred := &staticTokenCredential{
-		token:  req.Credential.OAuthAccessToken,
+		token:  tc.AccessToken,
 		expiry: time.Now().Add(time.Hour),
 	}
 

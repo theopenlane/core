@@ -5,8 +5,12 @@ import "errors"
 var (
 	// ErrAPIRequest indicates a GitHub API request failed
 	ErrAPIRequest = errors.New("githubapp: api request failed")
-	// ErrOAuthTokenMissing indicates the OAuth access token is not present in the credential
-	ErrOAuthTokenMissing = errors.New("githubapp: oauth token missing")
+	// ErrAccessTokenMissing indicates the access token is not present in the credential
+	ErrAccessTokenMissing = errors.New("githubapp: access token missing")
+	// ErrCredentialDecode indicates the credential data could not be decoded
+	ErrCredentialDecode = errors.New("githubapp: credential decode failed")
+	// ErrCredentialEncode indicates the credential data could not be encoded
+	ErrCredentialEncode = errors.New("githubapp: credential encode failed")
 	// ErrAppIDMissing indicates the GitHub App ID is missing from operator config
 	ErrAppIDMissing = errors.New("githubapp: app id missing")
 	// ErrInstallationIDMissing indicates the GitHub App installation ID is missing
@@ -41,8 +45,16 @@ var (
 	ErrAuthStartInputInvalid = errors.New("githubapp: auth start input invalid")
 	// ErrAuthCompleteInputInvalid indicates auth completion input could not be decoded
 	ErrAuthCompleteInputInvalid = errors.New("githubapp: auth complete input invalid")
-	// ErrAuthProviderDataEncode indicates provider data could not be serialized
-	ErrAuthProviderDataEncode = errors.New("githubapp: auth provider data encode failed")
+	// ErrAuthStateEncode indicates auth state could not be serialized
+	ErrAuthStateEncode = errors.New("githubapp: auth state encode failed")
+	// ErrAuthStateDecode indicates auth state could not be decoded
+	ErrAuthStateDecode = errors.New("githubapp: auth state decode failed")
+	// ErrAuthStateMismatch indicates the callback state did not match the saved auth state
+	ErrAuthStateMismatch = errors.New("githubapp: auth state mismatch")
+	// ErrAuthStateGenerate indicates the CSRF state token could not be generated
+	ErrAuthStateGenerate = errors.New("githubapp: auth state generate failed")
+	// ErrInstallationMetadataEncode indicates installation metadata could not be encoded
+	ErrInstallationMetadataEncode = errors.New("githubapp: installation metadata encode failed")
 	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded from credential data
 	ErrInstallationMetadataDecode = errors.New("githubapp: installation metadata decode failed")
 	// ErrIngestPayloadEncode indicates a collected GitHub payload could not be serialized for ingest

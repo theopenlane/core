@@ -6,7 +6,6 @@ import (
 	"maps"
 	"time"
 
-	"github.com/samber/do/v2"
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/keygen"
 
@@ -14,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -21,31 +21,17 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// resolveDefinitionForInstallation resolves the definition for one installation, returning sentinels for nil installation or missing definition
-func (r *Runtime) resolveDefinitionForInstallation(installation *ent.Integration) (types.Definition, error) {
-	if installation == nil {
-		return types.Definition{}, ErrInstallationRequired
-	}
-
-	def, ok := r.Registry().Definition(installation.DefinitionID)
-	if !ok {
-		return types.Definition{}, registry.ErrDefinitionNotFound
-	}
-
-	return def, nil
-}
-
-// SyncWebhooks ensures the persisted webhook rows match the definition contract for one installation.
+// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one installation.
 // previousIntegrationID is non-empty when the caller has just created a new integration record to
 // replace an existing one; it is used by ensureWebhook to roll forward existing endpoint rows to the
-// new integration ID so that externally configured webhook URLs remain valid.
-func (r *Runtime) SyncWebhooks(ctx context.Context, installation *ent.Integration, previousIntegrationID string) error {
+// new integration ID so that externally configured webhook URLs remain valid
+func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, installation *ent.Integration, previousIntegrationID string) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
 		return err
 	}
 
-	db := do.MustInvoke[*ent.Client](r.injector)
+	db := r.DB()
 	existing, err := db.IntegrationWebhook.Query().
 		Where(
 			integrationwebhook.IntegrationIDEQ(installation.ID),
@@ -88,7 +74,7 @@ func (r *Runtime) PrepareWebhookDelivery(ctx context.Context, webhook *ent.Integ
 		return false, nil
 	}
 
-	createErr := do.MustInvoke[*ent.Client](r.injector).IntegrationWebhook.Create().
+	createErr := r.DB().IntegrationWebhook.Create().
 		SetOwnerID(webhook.OwnerID).
 		SetIntegrationID(webhook.IntegrationID).
 		SetProvider(webhook.Provider).
@@ -112,7 +98,7 @@ func (r *Runtime) FinalizeWebhookDelivery(ctx context.Context, webhook *ent.Inte
 		return nil
 	}
 
-	update := do.MustInvoke[*ent.Client](r.injector).IntegrationWebhook.UpdateOneID(webhook.ID).
+	update := r.DB().IntegrationWebhook.UpdateOneID(webhook.ID).
 		SetLastDeliveryAt(time.Now().UTC()).
 		SetLastDeliveryStatus(status).
 		SetStatus(enums.IntegrationWebhookStatusActive)
@@ -134,7 +120,7 @@ func (r *Runtime) FinalizeWebhookDelivery(ctx context.Context, webhook *ent.Inte
 // ResolveWebhookByEndpoint returns the persisted inbound webhook row for the given endpoint ID.
 // Only primary webhook rows (not delivery idempotency rows) are returned.
 func (r *Runtime) ResolveWebhookByEndpoint(ctx context.Context, endpointID string) (*ent.IntegrationWebhook, error) {
-	return do.MustInvoke[*ent.Client](r.injector).IntegrationWebhook.Query().
+	return r.DB().IntegrationWebhook.Query().
 		Where(
 			integrationwebhook.EndpointIDEQ(endpointID),
 			integrationwebhook.ExternalEventIDIsNil(),
@@ -172,7 +158,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, installation *ent.In
 		return err
 	}
 
-	receipt := do.MustInvoke[*gala.Gala](r.injector).EmitWithHeaders(ctx, registration.Topic, operations.WebhookEnvelope{
+	receipt := r.Gala().EmitWithHeaders(ctx, registration.Topic, operations.WebhookEnvelope{
 		IntegrationID: installation.ID,
 		DefinitionID:  installation.DefinitionID,
 		Webhook:       webhookName,
@@ -213,7 +199,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	return registration.Handle(ctx, types.WebhookHandleRequest{
 		Integration: installation,
 		Webhook:     webhook,
-		DB:          do.MustInvoke[*ent.Client](r.injector),
+		DB:          r.DB(),
 		Event: types.WebhookReceivedEvent{
 			Name:       envelope.Event,
 			DeliveryID: envelope.DeliveryID,
@@ -225,8 +211,8 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 				ingestCtx,
 				operations.IngestContext{
 					Registry:     r.Registry(),
-					DB:           do.MustInvoke[*ent.Client](r.injector),
-					Runtime:      do.MustInvoke[*gala.Gala](r.injector),
+					DB:           r.DB(),
+					Runtime:      r.Gala(),
 					Installation: installation,
 				},
 				envelope.Webhook,
@@ -250,6 +236,15 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 
 			return dispatchErr
 		},
+		CleanupInstallation: func(cleanupCtx context.Context) error {
+			systemCtx := privacy.DecisionContext(cleanupCtx, privacy.Allow)
+
+			if err := r.Keystore().DeleteCredential(systemCtx, installation.ID); err != nil {
+				return err
+			}
+
+			return r.DB().Integration.DeleteOneID(installation.ID).Exec(systemCtx)
+		},
 	})
 }
 
@@ -267,7 +262,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 		status = enums.IntegrationWebhookStatusActive
 	}
 
-	db := do.MustInvoke[*ent.Client](r.injector)
+	db := r.DB()
 
 	rows, err := db.IntegrationWebhook.Query().
 		Where(

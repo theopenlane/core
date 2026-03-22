@@ -11,35 +11,31 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+var keymakerTestCredentialRef = types.NewCredentialRef("test_auth")
+
 func TestService_BeginAndComplete(t *testing.T) {
 	ctx := context.Background()
 
 	definitionID := "github-oauth"
 	installationID := "install-1"
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: definitionID, Slug: "github-oauth"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{
-					URL:   "https://github.com/login/oauth/authorize",
-					State: json.RawMessage(`{"csrf":"abc123"}`),
-				}, nil
-			},
-			Complete: func(_ context.Context, _ json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
-				return types.AuthCompleteResult{
-					Credential: types.CredentialSet{OAuthAccessToken: "token-xyz"},
-				}, nil
-			},
+	def := authTestDefinition(definitionID, "github-oauth", &fakeAuthFlow{
+		startResult: types.AuthStartResult{
+			URL:   "https://github.com/login/oauth/authorize",
+			State: json.RawMessage(`{"csrf":"abc123"}`),
 		},
-	}
+		completeResult: types.AuthCompleteResult{
+			Credential: types.CredentialSet{Data: json.RawMessage(`{"accessToken":"token-xyz"}`)},
+		},
+	})
 
 	writer := &fakeInstallationWriter{}
-	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, writer.PersistAuthResult, matchingInstallationResolver(installationID, definitionID).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, writer.PersistAuthResult, matchingInstallationResolver(installationID, definitionID).ResolveInstallation, NewInMemoryAuthStateStore())
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{
 		DefinitionID:   definitionID,
 		InstallationID: installationID,
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if err != nil {
 		t.Fatalf("BeginAuth error: %v", err)
@@ -50,7 +46,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	}
 
 	if begin.State == "" {
-		t.Fatal("expected non-empty state token")
+		t.Fatalf("expected generated state token")
 	}
 
 	if begin.DefinitionID != definitionID {
@@ -58,15 +54,15 @@ func TestService_BeginAndComplete(t *testing.T) {
 	}
 
 	result, err := svc.CompleteAuth(ctx, CompleteRequest{
-		State: begin.State,
-		Input: json.RawMessage(`{"code":"code-123"}`),
+		State:    begin.State,
+		Callback: types.AuthCallbackInput{},
 	})
 	if err != nil {
 		t.Fatalf("CompleteAuth error: %v", err)
 	}
 
-	if result.Credential.OAuthAccessToken != "token-xyz" {
-		t.Fatalf("expected credential token, got %q", result.Credential.OAuthAccessToken)
+	if string(result.Credential.Data) != `{"accessToken":"token-xyz"}` {
+		t.Fatalf("expected credential data, got %q", string(result.Credential.Data))
 	}
 
 	if result.InstallationID != installationID {
@@ -86,7 +82,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 	t.Parallel()
 
-	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore())
 
 	_, err := svc.BeginAuth(context.Background(), BeginRequest{InstallationID: "i"})
 	if !errors.Is(err, ErrDefinitionIDRequired) {
@@ -97,16 +93,25 @@ func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 	if !errors.Is(err, ErrInstallationIDRequired) {
 		t.Fatalf("expected ErrInstallationIDRequired, got %v", err)
 	}
+
+	def := authTestDefinition("d", "d", &fakeAuthFlow{startResult: types.AuthStartResult{URL: "https://example.com"}})
+	svc = NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i", "d").ResolveInstallation, NewInMemoryAuthStateStore())
+
+	_, err = svc.BeginAuth(context.Background(), BeginRequest{DefinitionID: "d", InstallationID: "i"})
+	if !errors.Is(err, ErrConnectionNotFound) {
+		t.Fatalf("expected ErrConnectionNotFound, got %v", err)
+	}
 }
 
 func TestService_BeginAuthDefinitionNotFound(t *testing.T) {
 	t.Parallel()
 
-	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore())
 
 	_, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "missing",
 		InstallationID: "install-1",
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if !errors.Is(err, ErrDefinitionNotFound) {
 		t.Fatalf("expected ErrDefinitionNotFound, got %v", err)
@@ -118,70 +123,67 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth"},
+		Connections: []types.ConnectionRegistration{
+			{
+				CredentialRef:  keymakerTestCredentialRef,
+				CredentialRefs: []types.CredentialRef{keymakerTestCredentialRef},
+			},
+		},
 	}
 
-	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i", "no-auth").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i", "no-auth").ResolveInstallation, NewInMemoryAuthStateStore())
 
 	_, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "no-auth",
 		InstallationID: "i",
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if !errors.Is(err, ErrDefinitionAuthRequired) {
 		t.Fatalf("expected ErrDefinitionAuthRequired, got %v", err)
 	}
 }
 
-func TestService_BeginAuthUsesCustomStateToken(t *testing.T) {
+func TestService_BeginAuthGeneratesSessionStateToken(t *testing.T) {
 	t.Parallel()
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{URL: "https://example.com"}, nil
-			},
-		},
-	}
+	def := authTestDefinition("d1", "d1", &fakeAuthFlow{
+		startResult: types.AuthStartResult{URL: "https://example.com"},
+	})
 
-	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i1", "d1").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i1", "d1").ResolveInstallation, NewInMemoryAuthStateStore())
 
 	begin, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "d1",
 		InstallationID: "i1",
-		State:          "custom-csrf-token",
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if err != nil {
 		t.Fatalf("BeginAuth error: %v", err)
 	}
 
-	if begin.State != "custom-csrf-token" {
-		t.Fatalf("expected custom state token, got %q", begin.State)
+	if begin.State == "" {
+		t.Fatalf("expected generated state token")
 	}
 }
 
 func TestService_BeginAuthInstallationDefinitionMismatch(t *testing.T) {
 	t.Parallel()
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{URL: "https://example.com"}, nil
-			},
-		},
-	}
+	def := authTestDefinition("d1", "d1", &fakeAuthFlow{
+		startResult: types.AuthStartResult{URL: "https://example.com"},
+	})
 
 	svc := NewService(
 		(&fakeDefinitionResolver{def: def}).Definition,
 		(&fakeInstallationWriter{}).PersistAuthResult,
 		matchingInstallationResolver("i1", "other-definition").ResolveInstallation,
 		NewInMemoryAuthStateStore(),
-		0,
 	)
 
 	_, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "d1",
 		InstallationID: "i1",
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if !errors.Is(err, ErrInstallationDefinitionMismatch) {
 		t.Fatalf("expected ErrInstallationDefinitionMismatch, got %v", err)
@@ -194,36 +196,31 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 	now := time.Now()
 	clock := func() time.Time { return now }
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "slack", Slug: "slack"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{URL: "https://slack.com/oauth"}, nil
-			},
-			Complete: func(_ context.Context, _ json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
-				return types.AuthCompleteResult{}, nil
-			},
-		},
-	}
+	def := authTestDefinition("slack", "slack", &fakeAuthFlow{
+		startResult:    types.AuthStartResult{URL: "https://slack.com/oauth"},
+		completeResult: types.AuthCompleteResult{},
+	})
+
+	store := NewInMemoryAuthStateStore()
+	store.now = clock
 
 	svc := NewService(
 		(&fakeDefinitionResolver{def: def}).Definition,
 		(&fakeInstallationWriter{}).PersistAuthResult,
 		matchingInstallationResolver("install-2", "slack").ResolveInstallation,
-		NewInMemoryAuthStateStore(),
-		time.Minute,
+		store,
 	)
-	svc.now = clock
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{
 		DefinitionID:   "slack",
 		InstallationID: "install-2",
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if err != nil {
 		t.Fatalf("BeginAuth error: %v", err)
 	}
 
-	now = now.Add(2 * time.Minute)
+	now = now.Add(defaultSessionTTL + time.Minute)
 
 	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State})
 	if !errors.Is(err, ErrAuthStateExpired) {
@@ -234,7 +231,7 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 func TestService_CompleteAuthStateTokenRequired(t *testing.T) {
 	t.Parallel()
 
-	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore())
 
 	_, err := svc.CompleteAuth(context.Background(), CompleteRequest{})
 	if !errors.Is(err, ErrAuthStateTokenRequired) {
@@ -247,31 +244,25 @@ func TestService_CompleteAuthSaveError(t *testing.T) {
 
 	ctx := context.Background()
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "okta", Slug: "okta"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{URL: "https://okta.com"}, nil
-			},
-			Complete: func(_ context.Context, _ json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
-				return types.AuthCompleteResult{Credential: types.CredentialSet{}}, nil
-			},
-		},
-	}
+	def := authTestDefinition("okta", "okta", &fakeAuthFlow{
+		startResult:    types.AuthStartResult{URL: "https://okta.com"},
+		completeResult: types.AuthCompleteResult{Credential: types.CredentialSet{}},
+	})
 
 	writer := &fakeInstallationWriter{err: errors.New("db unavailable")}
-	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, writer.PersistAuthResult, matchingInstallationResolver("install-3", "okta").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, writer.PersistAuthResult, matchingInstallationResolver("install-3", "okta").ResolveInstallation, NewInMemoryAuthStateStore())
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{
 		DefinitionID:   "okta",
 		InstallationID: "install-3",
+		CredentialRef:  keymakerTestCredentialRef,
 	})
 	if err != nil {
 		t.Fatalf("BeginAuth error: %v", err)
 	}
 
 	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State})
-	if err == nil || !strings.Contains(err.Error(), "keymaker: persist definition auth result") {
+	if err == nil || !strings.Contains(err.Error(), "keymaker: auth complete hook") {
 		t.Fatalf("expected wrapped save error, got %v", err)
 	}
 }
@@ -283,30 +274,27 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 
 	var receivedCallbackState json.RawMessage
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{
-					URL:   "https://login.microsoftonline.com",
-					State: json.RawMessage(`{"nonce":"n1","tenant":"t1"}`),
-				}, nil
-			},
-			Complete: func(_ context.Context, state json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
-				receivedCallbackState = state
-				return types.AuthCompleteResult{Credential: types.CredentialSet{OAuthAccessToken: "az-token"}}, nil
-			},
+	def := authTestDefinition("az", "az", &fakeAuthFlow{
+		startResult: types.AuthStartResult{
+			URL:   "https://login.microsoftonline.com",
+			State: json.RawMessage(`{"nonce":"n1","tenant":"t1"}`),
 		},
-	}
+		completeResult: types.AuthCompleteResult{
+			Credential: types.CredentialSet{Data: json.RawMessage(`{"accessToken":"az-token"}`)},
+		},
+		onComplete: func(state json.RawMessage) {
+			receivedCallbackState = state
+		},
+	})
 
-	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i1", "az").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i1", "az").ResolveInstallation, NewInMemoryAuthStateStore())
 
-	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1"})
+	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1", CredentialRef: keymakerTestCredentialRef})
 	if err != nil {
 		t.Fatalf("BeginAuth error: %v", err)
 	}
 
-	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State, Input: json.RawMessage(`{"code":"c1"}`)})
+	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State, Callback: types.AuthCallbackInput{}})
 	if err != nil {
 		t.Fatalf("CompleteAuth error: %v", err)
 	}
@@ -327,30 +315,68 @@ func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
 	ctx := context.Background()
 	installations := matchingInstallationResolver("i1", "az")
 
-	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az"},
-		Auth: &types.AuthRegistration{
-			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-				return types.AuthStartResult{URL: "https://login.microsoftonline.com"}, nil
-			},
-			Complete: func(_ context.Context, state json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
-				return types.AuthCompleteResult{Credential: types.CredentialSet{OAuthAccessToken: string(state)}}, nil
-			},
-		},
-	}
+	def := authTestDefinition("az", "az", &fakeAuthFlow{
+		startResult:    types.AuthStartResult{URL: "https://login.microsoftonline.com"},
+		completeResult: types.AuthCompleteResult{Credential: types.CredentialSet{Data: json.RawMessage(`{"accessToken":"az-token"}`)}},
+	})
 
-	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, installations.ResolveInstallation, NewInMemoryAuthStateStore(), 0)
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, installations.ResolveInstallation, NewInMemoryAuthStateStore())
 
-	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1"})
+	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1", CredentialRef: keymakerTestCredentialRef})
 	if err != nil {
 		t.Fatalf("BeginAuth error: %v", err)
 	}
 
 	installations.installation.DefinitionID = "changed"
 
-	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State, Input: json.RawMessage(`{"code":"c1"}`)})
+	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State, Callback: types.AuthCallbackInput{}})
 	if !errors.Is(err, ErrInstallationDefinitionMismatch) {
 		t.Fatalf("expected ErrInstallationDefinitionMismatch, got %v", err)
+	}
+}
+
+// fakeAuthFlow holds configurable auth behavior for testing
+type fakeAuthFlow struct {
+	startResult    types.AuthStartResult
+	startErr       error
+	completeResult types.AuthCompleteResult
+	completeErr    error
+	onComplete     func(state json.RawMessage)
+}
+
+func authTestDefinition(definitionID string, slug string, flow *fakeAuthFlow) types.Definition {
+	return types.Definition{
+		DefinitionSpec: types.DefinitionSpec{ID: definitionID, Slug: slug},
+		Connections: []types.ConnectionRegistration{
+			{
+				CredentialRef:  keymakerTestCredentialRef,
+				CredentialRefs: []types.CredentialRef{keymakerTestCredentialRef},
+				Auth:           flow.registration(keymakerTestCredentialRef),
+			},
+		},
+	}
+}
+
+// registration returns an AuthRegistration wired to the fake's configured behavior
+func (f *fakeAuthFlow) registration(credentialRef types.CredentialRef) *types.AuthRegistration {
+	return &types.AuthRegistration{
+		CredentialRef: credentialRef,
+		Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+			return f.startResult, f.startErr
+		},
+		Complete: func(_ context.Context, state json.RawMessage, _ types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+			if f.onComplete != nil {
+				f.onComplete(state)
+			}
+
+			return f.completeResult, f.completeErr
+		},
+		Refresh: func(_ context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
+			return credential, nil
+		},
+		TokenView: func(_ context.Context, _ types.CredentialSet) (*types.TokenView, error) {
+			return nil, nil
+		},
 	}
 }
 

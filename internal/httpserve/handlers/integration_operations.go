@@ -9,10 +9,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationstypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -28,41 +26,33 @@ type integrationOperationQueueDetails struct {
 }
 
 // RunIntegrationOperation queues provider operations for async execution.
-// Health checks are executed inline to return immediate validation status to callers.
+// Health checks are executed inline to return immediate validation status to callers
 func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationOperationPayload, IntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
-	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
-		return err
-	}
 
 	requestCtx := ctx.Request().Context()
+
 	caller, ok := auth.CallerFromContext(requestCtx)
 	if !ok || caller == nil {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, err := h.resolveActiveDefinition(ctx, req.DefinitionID, openapiCtx)
-	if err != nil {
-		return err
+	def, ok := h.IntegrationsRuntime.Registry().Definition(req.DefinitionID)
+	if !ok || !def.Active {
+		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
 	operationName := req.Body.Operation
 	if operationName == "" {
 		return h.BadRequest(ctx, rout.MissingField("operation"), openapiCtx)
 	}
-	integrationID := req.IntegrationID
-
-	logger := logx.FromContext(requestCtx).With().
-		Str("definition_id", def.ID).
-		Str("operation", operationName).
-		Logger()
 
 	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
 	if err != nil {
-		logger.Error().Err(err).Msg("operation not found")
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation not found")
 		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 	}
 
@@ -72,37 +62,23 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	if inlineExecution {
 		if err := operations.ValidateConfig(operation.ConfigSchema, configDoc); err != nil {
-			logger.Error().Err(err).Msg("invalid operation config")
+			logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
 			return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 		}
 	}
 
-	var installationRec *ent.Integration
+	integrationID := req.IntegrationID
 
-	if integrationID != "" {
-		installationRec, err = h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
-		if err != nil {
-			logger.Error().Err(err).Str("integration_id", integrationID).Msg("failed to resolve installation")
-			return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
-		}
-
-		integrationID = installationRec.ID
+	installationRec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
 	if inlineExecution {
-		if installationRec == nil {
-			installationRec, err = h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, "", def.ID)
-			if err != nil {
-				logger.Error().Err(err).Msg("failed to resolve installation")
-				return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
-			}
-		}
-
-		installLogger := logger.With().Str("installation_id", installationRec.ID).Logger()
-
 		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, installationRec, operation, nil, configDoc)
 		if err != nil {
-			installLogger.Error().Err(err).Msg("operation execution failed")
+			logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 
@@ -121,45 +97,14 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		})
 	}
 
-	var result engine.IntegrationQueueResult
-
-	if h.WorkflowEngine != nil {
-		result, err = h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
-			OrgID:          caller.OrganizationID,
-			DefinitionID:   def.ID,
-			InstallationID: integrationID,
-			Operation:      operationName,
-			Config:         configDoc,
-			RunType:        enums.IntegrationRunTypeManual,
-		})
-	} else {
-		var dispatchRec *ent.Integration
-
-		dispatchRec, err = h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
-		if err != nil {
-			logger.Error().Err(err).Str("integration_id", integrationID).Msg("failed to resolve installation for dispatch")
-			return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
-		}
-
-		dispatchResult, dispatchErr := h.IntegrationsRuntime.Dispatch(queueCtx, operations.DispatchRequest{
-			InstallationID: dispatchRec.ID,
-			Operation:      operationName,
-			Config:         configDoc,
-			RunType:        enums.IntegrationRunTypeManual,
-		})
-		if dispatchErr != nil {
-			err = dispatchErr
-		} else {
-			result = engine.IntegrationQueueResult{
-				RunID:   dispatchResult.RunID,
-				EventID: dispatchResult.EventID,
-				Status:  dispatchResult.Status,
-			}
-		}
-	}
-
+	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, operations.DispatchRequest{
+		InstallationID: installationRec.ID,
+		Operation:      operationName,
+		Config:         configDoc,
+		RunType:        enums.IntegrationRunTypeManual,
+	})
 	if err != nil {
-		logger.Error().Err(err).Str("integration_id", integrationID).Msg("failed to queue operation")
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to queue operation")
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bytes"
 	"encoding/json"
 	"time"
 
@@ -9,13 +8,6 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
-
-// isNullOrEmptyJSON reports whether v is absent, null, or an empty JSON object.
-func isNullOrEmptyJSON(v json.RawMessage) bool {
-	trimmed := bytes.TrimSpace(v)
-
-	return len(trimmed) == 0 || bytes.Equal(trimmed, []byte("null")) || bytes.Equal(trimmed, []byte("{}"))
-}
 
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
 type IntegrationConfigPayload struct {
@@ -86,108 +78,60 @@ type IntegrationOperationResponse struct {
 	Details json.RawMessage `json:"details,omitempty"`
 }
 
-// DefinitionCatalogEntry is the API response shape for one registered integration definition.
-type DefinitionCatalogEntry struct {
-	// ID is the canonical definition identifier
-	ID string `json:"id"`
-	// Slug is the human-readable definition alias
-	Slug string `json:"slug"`
-	// Family is the optional grouping label
-	Family string `json:"family,omitempty"`
-	// DisplayName is the UI-facing name
-	DisplayName string `json:"displayName"`
-	// Description is the user-facing description
-	Description string `json:"description,omitempty"`
-	// Category is the catalog category
-	Category string `json:"category,omitempty"`
-	// DocsURL links to documentation
-	DocsURL string `json:"docsUrl,omitempty"`
-	// LogoURL links to a catalog logo asset
-	LogoURL string `json:"logoUrl,omitempty"`
-	// Tags are optional catalog labels
-	Tags []string `json:"tags,omitempty"`
-	// Labels stores arbitrary metadata
-	Labels map[string]string `json:"labels,omitempty"`
-	// Active indicates whether the definition is enabled
-	Active bool `json:"active"`
-	// Visible indicates whether the definition is visible in catalog surfaces
-	Visible bool `json:"visible"`
-	// HasAuth indicates whether the definition exposes an auth flow
-	HasAuth bool `json:"hasAuth"`
-	// Auth describes the install or auth flow exposed by the definition
-	Auth *types.AuthRegistration `json:"auth,omitempty"`
-	// CredentialSchemas lists the named credential slots exposed by the definition
-	CredentialSchemas []DefinitionCredentialEntry `json:"credentialSchemas,omitempty"`
-	// OperatorConfig is the JSON schema for operator config
-	OperatorConfig json.RawMessage `json:"operatorConfig,omitempty"`
-	// UserInputSchema is the JSON schema for installation-scoped user input
-	UserInputSchema json.RawMessage `json:"userInputSchema,omitempty"`
-	// Operations lists the operations the definition exposes
-	Operations []DefinitionOperationEntry `json:"operations,omitempty"`
-}
-
-// DefinitionOperationEntry describes one operation exposed by a definition.
-type DefinitionOperationEntry struct {
-	// Name is the operation identifier
-	Name string `json:"name"`
-	// Description is the operation description
-	Description string `json:"description,omitempty"`
-	// ConfigSchema is the JSON schema for operation config
-	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
-}
-
-// DefinitionCredentialEntry describes one credential slot exposed by a definition.
-type DefinitionCredentialEntry struct {
-	// Ref is the durable credential slot identifier
-	Ref types.CredentialRef `json:"ref"`
-	// Name is the user-facing credential slot name
-	Name string `json:"name,omitempty"`
-	// Description describes the credential slot
-	Description string `json:"description,omitempty"`
-	// Schema is the JSON schema used to collect credentials for the slot
-	Schema json.RawMessage `json:"schema,omitempty"`
-}
-
-// IntegrationProvidersResponse is the response listing available integration definitions.
+// IntegrationProvidersResponse is the response listing available integration definitions
 type IntegrationProvidersResponse struct {
 	rout.Reply
-	// Providers is the list of available integration definitions.
-	Providers []DefinitionCatalogEntry `json:"providers"`
+	// Providers is the list of available integration definitions
+	Providers []types.Definition `json:"providers"`
 }
 
-// OAuthFlowRequest is the request type for starting an OAuth auth flow.
-type OAuthFlowRequest struct {
+// IntegrationAuthStartRequest is the request type for starting an integration auth flow
+type IntegrationAuthStartRequest struct {
 	// DefinitionID is the canonical integration definition identifier.
 	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
 	// InstallationID is the optional existing installation to start the auth flow for.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
-	// CredentialRef selects which auth-managed credential slot is being activated.
+	// CredentialRef selects which credential-schema-defined connection is being activated.
 	CredentialRef types.CredentialRef `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`
 }
 
-// Validate validates the OAuthFlowRequest.
-func (r *OAuthFlowRequest) Validate() error {
+// Validate validates the IntegrationConfigPayload
+func (r *IntegrationConfigPayload) Validate() error {
 	if r.DefinitionID == "" {
 		return rout.NewMissingRequiredFieldError("definitionId")
+	}
+	if r.CredentialRef == (types.CredentialRef{}) {
+		return rout.NewMissingRequiredFieldError("credentialRef")
 	}
 
 	return nil
 }
 
-// ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation.
-var ExampleOAuthFlowRequest = OAuthFlowRequest{
-	DefinitionID: "def_01K0SLACK000000000000000001",
+// Validate validates the IntegrationAuthStartRequest
+func (r *IntegrationAuthStartRequest) Validate() error {
+	if r.DefinitionID == "" {
+		return rout.NewMissingRequiredFieldError("definitionId")
+	}
+	if r.CredentialRef == (types.CredentialRef{}) {
+		return rout.NewMissingRequiredFieldError("credentialRef")
+	}
+
+	return nil
 }
 
-// RefreshInstallationCredentialRequest is the request for refreshing an installation's OAuth tokens.
+// ExampleIntegrationAuthStartRequest is an example auth start request for OpenAPI documentation
+var ExampleIntegrationAuthStartRequest = IntegrationAuthStartRequest{
+	DefinitionID:  "def_01K0SLACK000000000000000001",
+	CredentialRef: types.NewCredentialRef("slack"),
+}
+
+// RefreshInstallationCredentialRequest is the request for refreshing an installation's auth tokens.
 type RefreshInstallationCredentialRequest struct {
 	// InstallationID is the installation to refresh credentials for.
 	InstallationID string `param:"id" json:"installationId" description:"Installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-	// CredentialRef selects which auth-managed credential slot should be refreshed.
-	CredentialRef types.CredentialRef `json:"credentialRef"`
 }
 
 // Validate validates the RefreshInstallationCredentialRequest.
@@ -201,8 +145,9 @@ func (r *RefreshInstallationCredentialRequest) Validate() error {
 
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	DefinitionID: "def_01K0GWKSP000000000000000001",
-	Body:         json.RawMessage(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
+	DefinitionID:  "def_01K0GWKSP000000000000000001",
+	CredentialRef: types.NewCredentialRef("gcp_scc"),
+	Body:          json.RawMessage(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
 // ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.
