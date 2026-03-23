@@ -93,10 +93,8 @@ type Remediation struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RemediationQuery when eager-loading is set.
-	Edges                      RemediationEdges `json:"edges"`
-	review_remediations        *string
-	vulnerability_remediations *string
-	selectValues               sql.SelectValues
+	Edges        RemediationEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // RemediationEdges holds the relations/edges for other nodes in the graph.
@@ -379,10 +377,6 @@ func (*Remediation) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case remediation.FieldCreatedAt, remediation.FieldUpdatedAt, remediation.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case remediation.ForeignKeys[0]: // review_remediations
-			values[i] = new(sql.NullString)
-		case remediation.ForeignKeys[1]: // vulnerability_remediations
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -622,20 +616,6 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
-			}
-		case remediation.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field review_remediations", values[i])
-			} else if value.Valid {
-				_m.review_remediations = new(string)
-				*_m.review_remediations = value.String
-			}
-		case remediation.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_remediations", values[i])
-			} else if value.Valid {
-				_m.vulnerability_remediations = new(string)
-				*_m.vulnerability_remediations = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

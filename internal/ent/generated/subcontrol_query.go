@@ -29,7 +29,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -59,6 +62,9 @@ type SubcontrolQuery struct {
 	withControlOwner                *GroupQuery
 	withDelegate                    *GroupQuery
 	withResponsibleParty            *EntityQuery
+	withReviews                     *ReviewQuery
+	withRemediations                *RemediationQuery
+	withScans                       *ScanQuery
 	withOwner                       *OrganizationQuery
 	withSubcontrolKind              *CustomTypeEnumQuery
 	withControl                     *ControlQuery
@@ -80,6 +86,9 @@ type SubcontrolQuery struct {
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
 	withNamedComments               map[string]*NoteQuery
 	withNamedDiscussions            map[string]*DiscussionQuery
+	withNamedReviews                map[string]*ReviewQuery
+	withNamedRemediations           map[string]*RemediationQuery
+	withNamedScans                  map[string]*ScanQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToSubcontrols    map[string]*MappedControlQuery
@@ -440,6 +449,81 @@ func (_q *SubcontrolQuery) QueryResponsibleParty() *EntityQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *SubcontrolQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ReviewsTable, subcontrol.ReviewsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewSubcontrols
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRemediations chains the current query on the "remediations" edge.
+func (_q *SubcontrolQuery) QueryRemediations() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.RemediationsTable, subcontrol.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationSubcontrols
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (_q *SubcontrolQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ScansTable, subcontrol.ScansPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.SubcontrolScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -851,6 +935,9 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withControlOwner:           _q.withControlOwner.Clone(),
 		withDelegate:               _q.withDelegate.Clone(),
 		withResponsibleParty:       _q.withResponsibleParty.Clone(),
+		withReviews:                _q.withReviews.Clone(),
+		withRemediations:           _q.withRemediations.Clone(),
+		withScans:                  _q.withScans.Clone(),
 		withOwner:                  _q.withOwner.Clone(),
 		withSubcontrolKind:         _q.withSubcontrolKind.Clone(),
 		withControl:                _q.withControl.Clone(),
@@ -1006,6 +1093,39 @@ func (_q *SubcontrolQuery) WithResponsibleParty(opts ...func(*EntityQuery)) *Sub
 		opt(query)
 	}
 	_q.withResponsibleParty = query
+	return _q
+}
+
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithReviews(opts ...func(*ReviewQuery)) *SubcontrolQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
+	return _q
+}
+
+// WithRemediations tells the query-builder to eager-load the nodes that are connected to
+// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithRemediations(opts ...func(*RemediationQuery)) *SubcontrolQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediations = query
+	return _q
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithScans(opts ...func(*ScanQuery)) *SubcontrolQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScans = query
 	return _q
 }
 
@@ -1182,7 +1302,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [21]bool{
+		loadedTypes = [24]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1196,6 +1316,9 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withControlOwner != nil,
 			_q.withDelegate != nil,
 			_q.withResponsibleParty != nil,
+			_q.withReviews != nil,
+			_q.withRemediations != nil,
+			_q.withScans != nil,
 			_q.withOwner != nil,
 			_q.withSubcontrolKind != nil,
 			_q.withControl != nil,
@@ -1319,6 +1442,27 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if query := _q.withResponsibleParty; query != nil {
 		if err := _q.loadResponsibleParty(ctx, query, nodes, nil,
 			func(n *Subcontrol, e *Entity) { n.Edges.ResponsibleParty = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Reviews = []*Review{} },
+			func(n *Subcontrol, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRemediations; query != nil {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Remediations = []*Remediation{} },
+			func(n *Subcontrol, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScans; query != nil {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Scans = []*Scan{} },
+			func(n *Subcontrol, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1450,6 +1594,27 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadDiscussions(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedDiscussions(name) },
 			func(n *Subcontrol, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedReviews(name) },
+			func(n *Subcontrol, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRemediations {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedRemediations(name) },
+			func(n *Subcontrol, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedScans {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedScans(name) },
+			func(n *Subcontrol, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2082,6 +2247,192 @@ func (_q *SubcontrolQuery) loadResponsibleParty(ctx context.Context, query *Enti
 	}
 	return nil
 }
+func (_q *SubcontrolQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Review)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.ReviewsTable)
+		joinT.Schema(_q.schemaConfig.ReviewSubcontrols)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(subcontrol.ReviewsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subcontrol.ReviewsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.ReviewsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SubcontrolQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Remediation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.RemediationSubcontrols)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(subcontrol.RemediationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subcontrol.RemediationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.RemediationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SubcontrolQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Scan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.ScansTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolScans)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(subcontrol.ScansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.ScansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.ScansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *SubcontrolQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subcontrol)
@@ -2702,6 +3053,48 @@ func (_q *SubcontrolQuery) WithNamedDiscussions(name string, opts ...func(*Discu
 		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
 	}
 	_q.withNamedDiscussions[name] = query
+	return _q
+}
+
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *SubcontrolQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
+	return _q
+}
+
+// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *SubcontrolQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRemediations == nil {
+		_q.withNamedRemediations = make(map[string]*RemediationQuery)
+	}
+	_q.withNamedRemediations[name] = query
+	return _q
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *SubcontrolQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedScans == nil {
+		_q.withNamedScans = make(map[string]*ScanQuery)
+	}
+	_q.withNamedScans[name] = query
 	return _q
 }
 

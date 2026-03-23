@@ -861,6 +861,51 @@ func (_c *ControlCreate) SetResponsibleParty(v *Entity) *ControlCreate {
 	return _c.SetResponsiblePartyID(v.ID)
 }
 
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *ControlCreate) AddReviewIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *ControlCreate) AddReviews(v ...*Review) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *ControlCreate) AddRemediationIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *ControlCreate) AddRemediations(v ...*Remediation) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_c *ControlCreate) AddScanIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_c *ControlCreate) AddScans(v ...*Scan) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddScanIDs(ids...)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *ControlCreate) SetOwner(v *Organization) *ControlCreate {
 	return _c.SetOwnerID(v.ID)
@@ -961,21 +1006,6 @@ func (_c *ControlCreate) AddAssets(v ...*Asset) *ControlCreate {
 	return _c.AddAssetIDs(ids...)
 }
 
-// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (_c *ControlCreate) AddScanIDs(ids ...string) *ControlCreate {
-	_c.mutation.AddScanIDs(ids...)
-	return _c
-}
-
-// AddScans adds the "scans" edges to the Scan entity.
-func (_c *ControlCreate) AddScans(v ...*Scan) *ControlCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScanIDs(ids...)
-}
-
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (_c *ControlCreate) AddEntityIDs(ids ...string) *ControlCreate {
 	_c.mutation.AddEntityIDs(ids...)
@@ -1019,36 +1049,6 @@ func (_c *ControlCreate) AddCampaigns(v ...*Campaign) *ControlCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddCampaignIDs(ids...)
-}
-
-// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
-func (_c *ControlCreate) AddRemediationIDs(ids ...string) *ControlCreate {
-	_c.mutation.AddRemediationIDs(ids...)
-	return _c
-}
-
-// AddRemediations adds the "remediations" edges to the Remediation entity.
-func (_c *ControlCreate) AddRemediations(v ...*Remediation) *ControlCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddRemediationIDs(ids...)
-}
-
-// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
-func (_c *ControlCreate) AddReviewIDs(ids ...string) *ControlCreate {
-	_c.mutation.AddReviewIDs(ids...)
-	return _c
-}
-
-// AddReviews adds the "reviews" edges to the Review entity.
-func (_c *ControlCreate) AddReviews(v ...*Review) *ControlCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddReviewIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -1752,6 +1752,57 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_node.ResponsiblePartyID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ReviewControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.RemediationControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1927,23 +1978,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.ControlScans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1990,40 +2024,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ControlCampaigns
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.RemediationControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

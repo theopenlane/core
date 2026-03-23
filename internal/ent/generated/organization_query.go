@@ -9391,7 +9391,6 @@ func (_q *OrganizationQuery) loadRemediations(ctx context.Context, query *Remedi
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(remediation.FieldOwnerID)
 	}
@@ -9422,7 +9421,6 @@ func (_q *OrganizationQuery) loadFindings(ctx context.Context, query *FindingQue
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(finding.FieldOwnerID)
 	}
@@ -9453,7 +9451,6 @@ func (_q *OrganizationQuery) loadReviews(ctx context.Context, query *ReviewQuery
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(review.FieldOwnerID)
 	}
@@ -9484,7 +9481,6 @@ func (_q *OrganizationQuery) loadVulnerabilities(ctx context.Context, query *Vul
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(vulnerability.FieldOwnerID)
 	}

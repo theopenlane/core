@@ -5497,6 +5497,7 @@ type ComplexityRoot struct {
 		ScopeID               func(childComplexity int) int
 		ScopeName             func(childComplexity int) int
 		Status                func(childComplexity int) int
+		Subcontrols           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                  func(childComplexity int) int
 		Target                func(childComplexity int) int
 		Tasks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -5808,9 +5809,12 @@ type ComplexityRoot struct {
 		ReferenceFrameworkRevision func(childComplexity int) int
 		ReferenceID                func(childComplexity int) int
 		References                 func(childComplexity int) int
+		Remediations               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		ResponsibleParty           func(childComplexity int) int
 		ResponsiblePartyID         func(childComplexity int) int
+		Reviews                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                     func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
@@ -41326,6 +41330,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Scan.Status(childComplexity), true
 
+	case "Scan.subcontrols":
+		if e.ComplexityRoot.Scan.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Scan.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
 	case "Scan.tags":
 		if e.ComplexityRoot.Scan.Tags == nil {
 			break
@@ -42879,6 +42895,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.References(childComplexity), true
 
+	case "Subcontrol.remediations":
+		if e.ComplexityRoot.Subcontrol.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subcontrol.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
 	case "Subcontrol.responsibleParty":
 		if e.ComplexityRoot.Subcontrol.ResponsibleParty == nil {
 			break
@@ -42893,6 +42921,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.ResponsiblePartyID(childComplexity), true
 
+	case "Subcontrol.reviews":
+		if e.ComplexityRoot.Subcontrol.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subcontrol.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
 	case "Subcontrol.risks":
 		if e.ComplexityRoot.Subcontrol.Risks == nil {
 			break
@@ -42904,6 +42944,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Subcontrol.scans":
+		if e.ComplexityRoot.Subcontrol.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subcontrol.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
 
 	case "Subcontrol.scheduledJobs":
 		if e.ComplexityRoot.Subcontrol.ScheduledJobs == nil {
@@ -61330,6 +61382,99 @@ type Control implements Node {
   the entity who is responsible for the control implementation when it is a third party
   """
   responsibleParty: Entity
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   owner: Organization
   blockedGroups(
     """
@@ -61490,37 +61635,6 @@ type Control implements Node {
     """
     where: AssetWhereInput
   ): AssetConnection!
-  scans(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Scans returned from the connection.
-    """
-    orderBy: [ScanOrder!]
-
-    """
-    Filtering options for Scans returned from the connection.
-    """
-    where: ScanWhereInput
-  ): ScanConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -61614,68 +61728,6 @@ type Control implements Node {
     """
     where: CampaignWhereInput
   ): CampaignConnection!
-  remediations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Remediations returned from the connection.
-    """
-    orderBy: [RemediationOrder!]
-
-    """
-    Filtering options for Remediations returned from the connection.
-    """
-    where: RemediationWhereInput
-  ): RemediationConnection!
-  reviews(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Reviews returned from the connection.
-    """
-    orderBy: [ReviewOrder!]
-
-    """
-    Filtering options for Reviews returned from the connection.
-    """
-    where: ReviewWhereInput
-  ): ReviewConnection!
   findings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -64081,6 +64133,21 @@ input ControlWhereInput {
   hasResponsibleParty: Boolean
   hasResponsiblePartyWith: [EntityWhereInput!]
   """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -64131,11 +64198,6 @@ input ControlWhereInput {
   hasAssets: Boolean
   hasAssetsWith: [AssetWhereInput!]
   """
-  scans edge predicates
-  """
-  hasScans: Boolean
-  hasScansWith: [ScanWhereInput!]
-  """
   entities edge predicates
   """
   hasEntities: Boolean
@@ -64150,16 +64212,6 @@ input ControlWhereInput {
   """
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
-  """
-  remediations edge predicates
-  """
-  hasRemediations: Boolean
-  hasRemediationsWith: [RemediationWhereInput!]
-  """
-  reviews edge predicates
-  """
-  hasReviews: Boolean
-  hasReviewsWith: [ReviewWhereInput!]
   """
   findings edge predicates
   """
@@ -65034,6 +65086,9 @@ input CreateControlInput {
   controlOwnerID: ID
   delegateID: ID
   responsiblePartyID: ID
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
+  scanIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -65044,12 +65099,9 @@ input CreateControlInput {
   programIDs: [ID!]
   platformIDs: [ID!]
   assetIDs: [ID!]
-  scanIDs: [ID!]
   entityIDs: [ID!]
   identityHolderIDs: [ID!]
   campaignIDs: [ID!]
-  remediationIDs: [ID!]
-  reviewIDs: [ID!]
   findingIDs: [ID!]
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
@@ -68540,6 +68592,7 @@ input CreateScanInput {
   platformIDs: [ID!]
   vulnerabilityIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   generatedByPlatformID: ID
   performedByUserID: ID
   performedByGroupID: ID
@@ -68820,6 +68873,9 @@ input CreateSubcontrolInput {
   controlOwnerID: ID
   delegateID: ID
   responsiblePartyID: ID
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
+  scanIDs: [ID!]
   ownerID: ID
   subcontrolKindID: ID
   controlID: ID!
@@ -112812,6 +112868,37 @@ type Scan implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   generatedByPlatform: Platform
   performedByUser: User
   performedByGroup: Group
@@ -113397,6 +113484,11 @@ input ScanWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   generated_by_platform edge predicates
   """
@@ -115201,6 +115293,99 @@ type Subcontrol implements Node {
   the entity who is responsible for the control implementation when it is a third party
   """
   responsibleParty: Entity
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   owner: Organization
   subcontrolKind: CustomTypeEnum
   control: Control!
@@ -116004,6 +116189,21 @@ input SubcontrolWhereInput {
   """
   hasResponsibleParty: Boolean
   hasResponsiblePartyWith: [EntityWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
   """
   owner edge predicates
   """
@@ -124828,6 +125028,15 @@ input UpdateControlInput {
   clearDelegate: Boolean
   responsiblePartyID: ID
   clearResponsibleParty: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -124851,9 +125060,6 @@ input UpdateControlInput {
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
-  addScanIDs: [ID!]
-  removeScanIDs: [ID!]
-  clearScans: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
@@ -124863,12 +125069,6 @@ input UpdateControlInput {
   addCampaignIDs: [ID!]
   removeCampaignIDs: [ID!]
   clearCampaigns: Boolean
-  addRemediationIDs: [ID!]
-  removeRemediationIDs: [ID!]
-  clearRemediations: Boolean
-  addReviewIDs: [ID!]
-  removeReviewIDs: [ID!]
-  clearReviews: Boolean
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
@@ -129798,6 +129998,9 @@ input UpdateScanInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   generatedByPlatformID: ID
   clearGeneratedByPlatform: Boolean
   performedByUserID: ID
@@ -130170,6 +130373,15 @@ input UpdateSubcontrolInput {
   clearDelegate: Boolean
   responsiblePartyID: ID
   clearResponsibleParty: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   subcontrolKindID: ID
   clearSubcontrolKind: Boolean
   controlID: ID

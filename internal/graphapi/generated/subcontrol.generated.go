@@ -170,6 +170,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			case "responsibleParty":
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Subcontrol_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Subcontrol_remediations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Subcontrol_scans(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "subcontrolKind":
@@ -368,6 +374,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			case "responsibleParty":
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Subcontrol_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Subcontrol_remediations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Subcontrol_scans(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "subcontrolKind":
@@ -566,6 +578,12 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			case "responsibleParty":
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Subcontrol_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Subcontrol_remediations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Subcontrol_scans(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "subcontrolKind":
@@ -764,6 +782,12 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_delegate(ctx, field)
 			case "responsibleParty":
 				return ec.fieldContext_Subcontrol_responsibleParty(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Subcontrol_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Subcontrol_remediations(ctx, field)
+			case "scans":
+				return ec.fieldContext_Subcontrol_scans(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subcontrol_owner(ctx, field)
 			case "subcontrolKind":

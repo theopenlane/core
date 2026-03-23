@@ -150,6 +150,8 @@ func (ec *executionContext) fieldContext_ScanBulkCreatePayload_scans(_ context.C
 				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
 			case "controls":
 				return ec.fieldContext_Scan_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Scan_subcontrols(ctx, field)
 			case "generatedByPlatform":
 				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
 			case "performedByUser":
@@ -314,6 +316,8 @@ func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_scans(_ context.C
 				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
 			case "controls":
 				return ec.fieldContext_Scan_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Scan_subcontrols(ctx, field)
 			case "generatedByPlatform":
 				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
 			case "performedByUser":
@@ -478,6 +482,8 @@ func (ec *executionContext) fieldContext_ScanCreatePayload_scan(_ context.Contex
 				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
 			case "controls":
 				return ec.fieldContext_Scan_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Scan_subcontrols(ctx, field)
 			case "generatedByPlatform":
 				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
 			case "performedByUser":
@@ -642,6 +648,8 @@ func (ec *executionContext) fieldContext_ScanUpdatePayload_scan(_ context.Contex
 				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
 			case "controls":
 				return ec.fieldContext_Scan_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Scan_subcontrols(ctx, field)
 			case "generatedByPlatform":
 				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
 			case "performedByUser":
