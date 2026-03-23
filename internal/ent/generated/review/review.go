@@ -177,37 +177,31 @@ const (
 	// FindingsInverseTable is the table name for the Finding entity.
 	// It exists in this package in order to avoid circular dependency with the "finding" package.
 	FindingsInverseTable = "findings"
-	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge.
-	VulnerabilitiesTable = "vulnerabilities"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "review_vulnerabilities"
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
 	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
 	VulnerabilitiesInverseTable = "vulnerabilities"
-	// VulnerabilitiesColumn is the table column denoting the vulnerabilities relation/edge.
-	VulnerabilitiesColumn = "review_vulnerabilities"
 	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
 	ActionPlansTable = "review_action_plans"
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
-	// RemediationsTable is the table that holds the remediations relation/edge.
-	RemediationsTable = "remediations"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "review_remediations"
 	// RemediationsInverseTable is the table name for the Remediation entity.
 	// It exists in this package in order to avoid circular dependency with the "remediation" package.
 	RemediationsInverseTable = "remediations"
-	// RemediationsColumn is the table column denoting the remediations relation/edge.
-	RemediationsColumn = "review_remediations"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "review_controls"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
-	SubcontrolsTable = "subcontrols"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "review_subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
-	SubcontrolsColumn = "review_subcontrols"
 	// RisksTable is the table that holds the risks relation/edge.
 	RisksTable = "risks"
 	// RisksInverseTable is the table name for the Risk entity.
@@ -304,13 +298,6 @@ var Columns = []string{
 	FieldRawPayload,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "reviews"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"remediation_reviews",
-	"vulnerability_reviews",
-}
-
 var (
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
@@ -318,23 +305,27 @@ var (
 	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
 	// primary key for the findings relation (M2M).
 	FindingsPrimaryKey = []string{"review_id", "finding_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"review_id", "vulnerability_id"}
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"review_id", "action_plan_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"review_id", "remediation_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"review_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"review_id", "subcontrol_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -853,7 +844,7 @@ func newVulnerabilitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 	)
 }
 func newActionPlansStep() *sqlgraph.Step {
@@ -867,7 +858,7 @@ func newRemediationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RemediationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RemediationsTable, RemediationsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
@@ -881,7 +872,7 @@ func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newRisksStep() *sqlgraph.Step {

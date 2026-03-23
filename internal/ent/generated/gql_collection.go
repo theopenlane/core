@@ -7865,6 +7865,285 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				fieldSeen[control.FieldResponsiblePartyID] = struct{}{}
 			}
 
+		case "reviews":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ReviewClient{config: _q.config}).Query()
+			)
+			args := newReviewPaginateArgs(fieldArgs(ctx, new(ReviewWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newReviewPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"control_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(control.ReviewsTable)
+							s.Join(joinT).On(s.C(review.FieldID), joinT.C(control.ReviewsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(control.ReviewsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(control.ReviewsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(control.ReviewsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Reviews)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, reviewImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(control.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedReviews(alias, func(wq *ReviewQuery) {
+				*wq = *query
+			})
+
+		case "remediations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RemediationClient{config: _q.config}).Query()
+			)
+			args := newRemediationPaginateArgs(fieldArgs(ctx, new(RemediationWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newRemediationPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"control_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(control.RemediationsTable)
+							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(control.RemediationsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(control.RemediationsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(control.RemediationsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(control.RemediationsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Remediations)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, remediationImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(control.RemediationsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedRemediations(alias, func(wq *RemediationQuery) {
+				*wq = *query
+			})
+
+		case "scans":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ScanClient{config: _q.config}).Query()
+			)
+			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newScanPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"control_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(control.ScansTable)
+							s.Join(joinT).On(s.C(scan.FieldID), joinT.C(control.ScansPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(control.ScansPrimaryKey[0]), ids...))
+							s.Select(joinT.C(control.ScansPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(control.ScansPrimaryKey[0]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[15][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Scans)
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[15][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, scanImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(control.ScansPrimaryKey[0], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedScans(alias, func(wq *ScanQuery) {
+				*wq = *query
+			})
+
 		case "owner":
 			var (
 				alias = field.Alias
@@ -7927,10 +8206,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[17] == nil {
+								nodes[i].Edges.totalCount[17] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[17][alias] = n
 						}
 						return nil
 					})
@@ -7938,10 +8217,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[17] == nil {
+								nodes[i].Edges.totalCount[17] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[17][alias] = n
 						}
 						return nil
 					})
@@ -8020,10 +8299,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[15] == nil {
-								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							if nodes[i].Edges.totalCount[18] == nil {
+								nodes[i].Edges.totalCount[18] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[15][alias] = n
+							nodes[i].Edges.totalCount[18][alias] = n
 						}
 						return nil
 					})
@@ -8031,10 +8310,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
-							if nodes[i].Edges.totalCount[15] == nil {
-								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							if nodes[i].Edges.totalCount[18] == nil {
+								nodes[i].Edges.totalCount[18] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[15][alias] = n
+							nodes[i].Edges.totalCount[18][alias] = n
 						}
 						return nil
 					})
@@ -8173,10 +8452,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[20] == nil {
-								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[20][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -8184,10 +8463,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Programs)
-							if nodes[i].Edges.totalCount[20] == nil {
-								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[20][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -8266,10 +8545,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[24][alias] = n
 						}
 						return nil
 					})
@@ -8277,10 +8556,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Platforms)
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[24][alias] = n
 						}
 						return nil
 					})
@@ -8359,10 +8638,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[22] == nil {
-								nodes[i].Edges.totalCount[22] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[22][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -8370,10 +8649,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Assets)
-							if nodes[i].Edges.totalCount[22] == nil {
-								nodes[i].Edges.totalCount[22] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[22][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -8402,99 +8681,6 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				query = pager.applyOrder(query)
 			}
 			_q.WithNamedAssets(alias, func(wq *AssetQuery) {
-				*wq = *query
-			})
-
-		case "scans":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ScanClient{config: _q.config}).Query()
-			)
-			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newScanPager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
-				return err
-			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"control_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(control.ScansTable)
-							s.Join(joinT).On(s.C(scan.FieldID), joinT.C(control.ScansPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(control.ScansPrimaryKey[0]), ids...))
-							s.Select(joinT.C(control.ScansPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(control.ScansPrimaryKey[0]))
-						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[23] == nil {
-								nodes[i].Edges.totalCount[23] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[23][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Scans)
-							if nodes[i].Edges.totalCount[23] == nil {
-								nodes[i].Edges.totalCount[23] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[23][alias] = n
-						}
-						return nil
-					})
-				}
-			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, scanImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(control.ScansPrimaryKey[0], limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedScans(alias, func(wq *ScanQuery) {
 				*wq = *query
 			})
 
@@ -8545,10 +8731,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[26][alias] = n
 						}
 						return nil
 					})
@@ -8556,10 +8742,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[26] == nil {
+								nodes[i].Edges.totalCount[26] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[26][alias] = n
 						}
 						return nil
 					})
@@ -8638,10 +8824,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[25] == nil {
-								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							if nodes[i].Edges.totalCount[27] == nil {
+								nodes[i].Edges.totalCount[27] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[25][alias] = n
+							nodes[i].Edges.totalCount[27][alias] = n
 						}
 						return nil
 					})
@@ -8649,10 +8835,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.IdentityHolders)
-							if nodes[i].Edges.totalCount[25] == nil {
-								nodes[i].Edges.totalCount[25] = make(map[string]int)
+							if nodes[i].Edges.totalCount[27] == nil {
+								nodes[i].Edges.totalCount[27] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[25][alias] = n
+							nodes[i].Edges.totalCount[27][alias] = n
 						}
 						return nil
 					})
@@ -8731,10 +8917,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[26] == nil {
-								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							if nodes[i].Edges.totalCount[28] == nil {
+								nodes[i].Edges.totalCount[28] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[26][alias] = n
+							nodes[i].Edges.totalCount[28][alias] = n
 						}
 						return nil
 					})
@@ -8742,10 +8928,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Campaigns)
-							if nodes[i].Edges.totalCount[26] == nil {
-								nodes[i].Edges.totalCount[26] = make(map[string]int)
+							if nodes[i].Edges.totalCount[28] == nil {
+								nodes[i].Edges.totalCount[28] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[26][alias] = n
+							nodes[i].Edges.totalCount[28][alias] = n
 						}
 						return nil
 					})
@@ -8774,192 +8960,6 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				query = pager.applyOrder(query)
 			}
 			_q.WithNamedCampaigns(alias, func(wq *CampaignQuery) {
-				*wq = *query
-			})
-
-		case "remediations":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&RemediationClient{config: _q.config}).Query()
-			)
-			args := newRemediationPaginateArgs(fieldArgs(ctx, new(RemediationWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newRemediationPager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
-				return err
-			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"control_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(control.RemediationsTable)
-							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(control.RemediationsPrimaryKey[0]))
-							s.Where(sql.InValues(joinT.C(control.RemediationsPrimaryKey[1]), ids...))
-							s.Select(joinT.C(control.RemediationsPrimaryKey[1]), sql.Count("*"))
-							s.GroupBy(joinT.C(control.RemediationsPrimaryKey[1]))
-						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[27] == nil {
-								nodes[i].Edges.totalCount[27] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[27][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Remediations)
-							if nodes[i].Edges.totalCount[27] == nil {
-								nodes[i].Edges.totalCount[27] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[27][alias] = n
-						}
-						return nil
-					})
-				}
-			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, remediationImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(control.RemediationsPrimaryKey[1], limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedRemediations(alias, func(wq *RemediationQuery) {
-				*wq = *query
-			})
-
-		case "reviews":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ReviewClient{config: _q.config}).Query()
-			)
-			args := newReviewPaginateArgs(fieldArgs(ctx, new(ReviewWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newReviewPager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
-				return err
-			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"control_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(control.ReviewsTable)
-							s.Join(joinT).On(s.C(review.FieldID), joinT.C(control.ReviewsPrimaryKey[0]))
-							s.Where(sql.InValues(joinT.C(control.ReviewsPrimaryKey[1]), ids...))
-							s.Select(joinT.C(control.ReviewsPrimaryKey[1]), sql.Count("*"))
-							s.GroupBy(joinT.C(control.ReviewsPrimaryKey[1]))
-						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[28] == nil {
-								nodes[i].Edges.totalCount[28] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[28][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Reviews)
-							if nodes[i].Edges.totalCount[28] == nil {
-								nodes[i].Edges.totalCount[28] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[28][alias] = n
-						}
-						return nil
-					})
-				}
-			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, reviewImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(control.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedReviews(alias, func(wq *ReviewQuery) {
 				*wq = *query
 			})
 
@@ -24551,13 +24551,17 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"finding_vulnerabilities"`
+							NodeID string `sql:"finding_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(finding.VulnerabilitiesColumn), ids...))
+							joinT := sql.Table(finding.VulnerabilitiesTable)
+							s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(finding.VulnerabilitiesPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(finding.VulnerabilitiesPrimaryKey[0]), ids...))
+							s.Select(joinT.C(finding.VulnerabilitiesPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(finding.VulnerabilitiesPrimaryKey[0]))
 						})
-						if err := query.GroupBy(finding.VulnerabilitiesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -24602,7 +24606,7 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(finding.VulnerabilitiesColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(finding.VulnerabilitiesPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -59291,13 +59295,17 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"remediation_vulnerabilities"`
+							NodeID string `sql:"remediation_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(remediation.VulnerabilitiesColumn), ids...))
+							joinT := sql.Table(remediation.VulnerabilitiesTable)
+							s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(remediation.VulnerabilitiesPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(remediation.VulnerabilitiesPrimaryKey[0]), ids...))
+							s.Select(joinT.C(remediation.VulnerabilitiesPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(remediation.VulnerabilitiesPrimaryKey[0]))
 						})
-						if err := query.GroupBy(remediation.VulnerabilitiesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -59342,7 +59350,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(remediation.VulnerabilitiesColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(remediation.VulnerabilitiesPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -59655,13 +59663,17 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"remediation_subcontrols"`
+							NodeID string `sql:"remediation_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(remediation.SubcontrolsColumn), ids...))
+							joinT := sql.Table(remediation.SubcontrolsTable)
+							s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(remediation.SubcontrolsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(remediation.SubcontrolsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(remediation.SubcontrolsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(remediation.SubcontrolsPrimaryKey[0]))
 						})
-						if err := query.GroupBy(remediation.SubcontrolsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -59706,7 +59718,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(remediation.SubcontrolsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(remediation.SubcontrolsPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -60100,13 +60112,17 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"remediation_reviews"`
+							NodeID string `sql:"remediation_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(remediation.ReviewsColumn), ids...))
+							joinT := sql.Table(remediation.ReviewsTable)
+							s.Join(joinT).On(s.C(review.FieldID), joinT.C(remediation.ReviewsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(remediation.ReviewsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(remediation.ReviewsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(remediation.ReviewsPrimaryKey[1]))
 						})
-						if err := query.GroupBy(remediation.ReviewsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -60151,7 +60167,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(remediation.ReviewsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(remediation.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -61120,13 +61136,17 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"review_vulnerabilities"`
+							NodeID string `sql:"review_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(review.VulnerabilitiesColumn), ids...))
+							joinT := sql.Table(review.VulnerabilitiesTable)
+							s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(review.VulnerabilitiesPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(review.VulnerabilitiesPrimaryKey[0]), ids...))
+							s.Select(joinT.C(review.VulnerabilitiesPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(review.VulnerabilitiesPrimaryKey[0]))
 						})
-						if err := query.GroupBy(review.VulnerabilitiesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -61171,7 +61191,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(review.VulnerabilitiesColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(review.VulnerabilitiesPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -61302,13 +61322,17 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"review_remediations"`
+							NodeID string `sql:"review_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(review.RemediationsColumn), ids...))
+							joinT := sql.Table(review.RemediationsTable)
+							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(review.RemediationsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(review.RemediationsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(review.RemediationsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(review.RemediationsPrimaryKey[0]))
 						})
-						if err := query.GroupBy(review.RemediationsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -61353,7 +61377,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(review.RemediationsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(review.RemediationsPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -61484,13 +61508,17 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"review_subcontrols"`
+							NodeID string `sql:"review_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(review.SubcontrolsColumn), ids...))
+							joinT := sql.Table(review.SubcontrolsTable)
+							s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(review.SubcontrolsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(review.SubcontrolsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(review.SubcontrolsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(review.SubcontrolsPrimaryKey[0]))
 						})
-						if err := query.GroupBy(review.SubcontrolsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -61535,7 +61563,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(review.SubcontrolsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(review.SubcontrolsPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -65988,6 +66016,99 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				*wq = *query
 			})
 
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: _q.config}).Query()
+			)
+			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newSubcontrolPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Scan) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"scan_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(scan.SubcontrolsTable)
+							s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(scan.SubcontrolsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(scan.SubcontrolsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(scan.SubcontrolsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(scan.SubcontrolsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[20][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Scan) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Subcontrols)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[20][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(scan.SubcontrolsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+
 		case "generatedByPlatform":
 			var (
 				alias = field.Alias
@@ -68383,6 +68504,285 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				fieldSeen[subcontrol.FieldResponsiblePartyID] = struct{}{}
 			}
 
+		case "reviews":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ReviewClient{config: _q.config}).Query()
+			)
+			args := newReviewPaginateArgs(fieldArgs(ctx, new(ReviewWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newReviewPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"subcontrol_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(subcontrol.ReviewsTable)
+							s.Join(joinT).On(s.C(review.FieldID), joinT.C(subcontrol.ReviewsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(subcontrol.ReviewsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(subcontrol.ReviewsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(subcontrol.ReviewsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Reviews)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, reviewImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(subcontrol.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedReviews(alias, func(wq *ReviewQuery) {
+				*wq = *query
+			})
+
+		case "remediations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RemediationClient{config: _q.config}).Query()
+			)
+			args := newRemediationPaginateArgs(fieldArgs(ctx, new(RemediationWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newRemediationPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"subcontrol_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(subcontrol.RemediationsTable)
+							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(subcontrol.RemediationsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(subcontrol.RemediationsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(subcontrol.RemediationsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(subcontrol.RemediationsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Remediations)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, remediationImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(subcontrol.RemediationsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedRemediations(alias, func(wq *RemediationQuery) {
+				*wq = *query
+			})
+
+		case "scans":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ScanClient{config: _q.config}).Query()
+			)
+			args := newScanPaginateArgs(fieldArgs(ctx, new(ScanWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newScanPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"subcontrol_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(subcontrol.ScansTable)
+							s.Join(joinT).On(s.C(scan.FieldID), joinT.C(subcontrol.ScansPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(subcontrol.ScansPrimaryKey[0]), ids...))
+							s.Select(joinT.C(subcontrol.ScansPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(subcontrol.ScansPrimaryKey[0]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[15][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Scans)
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[15][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, scanImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(subcontrol.ScansPrimaryKey[0], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedScans(alias, func(wq *ScanQuery) {
+				*wq = *query
+			})
+
 		case "owner":
 			var (
 				alias = field.Alias
@@ -68475,10 +68875,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[16] == nil {
-								nodes[i].Edges.totalCount[16] = make(map[string]int)
+							if nodes[i].Edges.totalCount[19] == nil {
+								nodes[i].Edges.totalCount[19] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[16][alias] = n
+							nodes[i].Edges.totalCount[19][alias] = n
 						}
 						return nil
 					})
@@ -68486,10 +68886,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlImplementations)
-							if nodes[i].Edges.totalCount[16] == nil {
-								nodes[i].Edges.totalCount[16] = make(map[string]int)
+							if nodes[i].Edges.totalCount[19] == nil {
+								nodes[i].Edges.totalCount[19] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[16][alias] = n
+							nodes[i].Edges.totalCount[19][alias] = n
 						}
 						return nil
 					})
@@ -68568,10 +68968,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[17] == nil {
-								nodes[i].Edges.totalCount[17] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[17][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -68579,10 +68979,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ScheduledJobs)
-							if nodes[i].Edges.totalCount[17] == nil {
-								nodes[i].Edges.totalCount[17] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[17][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -68657,10 +69057,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[18] == nil {
-								nodes[i].Edges.totalCount[18] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[18][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -68668,10 +69068,10 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[18] == nil {
-								nodes[i].Edges.totalCount[18] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[18][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -79750,13 +80150,17 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"vulnerability_findings"`
+							NodeID string `sql:"vulnerability_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(vulnerability.FindingsColumn), ids...))
+							joinT := sql.Table(vulnerability.FindingsTable)
+							s.Join(joinT).On(s.C(finding.FieldID), joinT.C(vulnerability.FindingsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(vulnerability.FindingsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(vulnerability.FindingsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(vulnerability.FindingsPrimaryKey[1]))
 						})
-						if err := query.GroupBy(vulnerability.FindingsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -79801,7 +80205,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(vulnerability.FindingsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(vulnerability.FindingsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -80652,13 +81056,17 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"vulnerability_remediations"`
+							NodeID string `sql:"vulnerability_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(vulnerability.RemediationsColumn), ids...))
+							joinT := sql.Table(vulnerability.RemediationsTable)
+							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(vulnerability.RemediationsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(vulnerability.RemediationsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(vulnerability.RemediationsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(vulnerability.RemediationsPrimaryKey[1]))
 						})
-						if err := query.GroupBy(vulnerability.RemediationsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -80703,7 +81111,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(vulnerability.RemediationsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(vulnerability.RemediationsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -80741,13 +81149,17 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"vulnerability_reviews"`
+							NodeID string `sql:"vulnerability_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(vulnerability.ReviewsColumn), ids...))
+							joinT := sql.Table(vulnerability.ReviewsTable)
+							s.Join(joinT).On(s.C(review.FieldID), joinT.C(vulnerability.ReviewsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(vulnerability.ReviewsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(vulnerability.ReviewsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(vulnerability.ReviewsPrimaryKey[1]))
 						})
-						if err := query.GroupBy(vulnerability.ReviewsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -80792,7 +81204,7 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(vulnerability.ReviewsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(vulnerability.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {

@@ -1619,16 +1619,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Vulnerability
+		edge.Schema = _c.schemaConfig.FindingVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

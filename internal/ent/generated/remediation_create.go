@@ -1210,16 +1210,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.VulnerabilitiesTable,
-			Columns: []string{remediation.VulnerabilitiesColumn},
+			Columns: remediation.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Vulnerability
+		edge.Schema = _c.schemaConfig.RemediationVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1278,16 +1278,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.SubcontrolsTable,
-			Columns: []string{remediation.SubcontrolsColumn},
+			Columns: remediation.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subcontrol
+		edge.Schema = _c.schemaConfig.RemediationSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1363,16 +1363,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   remediation.ReviewsTable,
-			Columns: []string{remediation.ReviewsColumn},
+			Columns: remediation.ReviewsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Review
+		edge.Schema = _c.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

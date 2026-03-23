@@ -1789,30 +1789,30 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1820,16 +1820,16 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1885,30 +1885,30 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.RemediationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
+		edge.Schema = _u.schemaConfig.ReviewRemediations
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
+		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1916,16 +1916,16 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
+		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1981,30 +1981,30 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2012,16 +2012,16 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4187,30 +4187,30 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if _u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4218,16 +4218,16 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4283,30 +4283,30 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if _u.mutation.RemediationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
+		edge.Schema = _u.schemaConfig.ReviewRemediations
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
+		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4314,16 +4314,16 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
+		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4379,30 +4379,30 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if _u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4410,16 +4410,16 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
+		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -162,6 +162,17 @@ func (m ControlMixin) Edges() []ent.Edge {
 				entx.FieldWorkflowEligible(),
 			},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Review{},
+			comment:    "reviews performed for this control",
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Remediation{},
+			comment:    "remediations performed for this control",
+		}),
+		defaultEdgeToWithPagination(c, Scan{}),
 	}
 }
 

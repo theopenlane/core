@@ -167,6 +167,12 @@ type ControlEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// the entity who is responsible for the control implementation when it is a third party
 	ResponsibleParty *Entity `json:"responsible_party,omitempty"`
+	// reviews performed for this control
+	Reviews []*Review `json:"reviews,omitempty"`
+	// remediations performed for this control
+	Remediations []*Remediation `json:"remediations,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -187,18 +193,12 @@ type ControlEdges struct {
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// Assets holds the value of the assets edge.
 	Assets []*Asset `json:"assets,omitempty"`
-	// Scans holds the value of the scans edge.
-	Scans []*Scan `json:"scans,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
-	// Remediations holds the value of the remediations edge.
-	Remediations []*Remediation `json:"remediations,omitempty"`
-	// Reviews holds the value of the reviews edge.
-	Reviews []*Review `json:"reviews,omitempty"`
 	// Findings holds the value of the findings edge.
 	Findings []*Finding `json:"findings,omitempty"`
 	// the implementation(s) of the control
@@ -231,17 +231,17 @@ type ControlEdges struct {
 	namedInternalPolicies       map[string][]*InternalPolicy
 	namedComments               map[string][]*Note
 	namedDiscussions            map[string][]*Discussion
+	namedReviews                map[string][]*Review
+	namedRemediations           map[string][]*Remediation
+	namedScans                  map[string][]*Scan
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
 	namedPrograms               map[string][]*Program
 	namedPlatforms              map[string][]*Platform
 	namedAssets                 map[string][]*Asset
-	namedScans                  map[string][]*Scan
 	namedEntities               map[string][]*Entity
 	namedIdentityHolders        map[string][]*IdentityHolder
 	namedCampaigns              map[string][]*Campaign
-	namedRemediations           map[string][]*Remediation
-	namedReviews                map[string][]*Review
 	namedFindings               map[string][]*Finding
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
@@ -375,12 +375,39 @@ func (e ControlEdges) ResponsiblePartyOrErr() (*Entity, error) {
 	return nil, &NotLoadedError{edge: "responsible_party"}
 }
 
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[13] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[14] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[15] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ControlEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[13] {
+	} else if e.loadedTypes[16] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -389,7 +416,7 @@ func (e ControlEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -398,7 +425,7 @@ func (e ControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[18] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -409,7 +436,7 @@ func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
 func (e ControlEdges) ControlKindOrErr() (*CustomTypeEnum, error) {
 	if e.ControlKind != nil {
 		return e.ControlKind, nil
-	} else if e.loadedTypes[16] {
+	} else if e.loadedTypes[19] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "control_kind"}
@@ -420,7 +447,7 @@ func (e ControlEdges) ControlKindOrErr() (*CustomTypeEnum, error) {
 func (e ControlEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[20] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -431,7 +458,7 @@ func (e ControlEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e ControlEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[18] {
+	} else if e.loadedTypes[21] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -442,7 +469,7 @@ func (e ControlEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e ControlEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[19] {
+	} else if e.loadedTypes[22] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -451,7 +478,7 @@ func (e ControlEdges) StandardOrErr() (*Standard, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[23] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -460,7 +487,7 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[24] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -469,25 +496,16 @@ func (e ControlEdges) PlatformsOrErr() ([]*Platform, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[25] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
 }
 
-// ScansOrErr returns the Scans value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[23] {
-		return e.Scans, nil
-	}
-	return nil, &NotLoadedError{edge: "scans"}
-}
-
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[26] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -496,7 +514,7 @@ func (e ControlEdges) EntitiesOrErr() ([]*Entity, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[27] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -505,28 +523,10 @@ func (e ControlEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[28] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
-}
-
-// RemediationsOrErr returns the Remediations value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[27] {
-		return e.Remediations, nil
-	}
-	return nil, &NotLoadedError{edge: "remediations"}
-}
-
-// ReviewsOrErr returns the Reviews value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[28] {
-		return e.Reviews, nil
-	}
-	return nil, &NotLoadedError{edge: "reviews"}
 }
 
 // FindingsOrErr returns the Findings value or an error if the edge
@@ -1080,6 +1080,21 @@ func (_m *Control) QueryResponsibleParty() *EntityQuery {
 	return NewControlClient(_m.config).QueryResponsibleParty(_m)
 }
 
+// QueryReviews queries the "reviews" edge of the Control entity.
+func (_m *Control) QueryReviews() *ReviewQuery {
+	return NewControlClient(_m.config).QueryReviews(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the Control entity.
+func (_m *Control) QueryRemediations() *RemediationQuery {
+	return NewControlClient(_m.config).QueryRemediations(_m)
+}
+
+// QueryScans queries the "scans" edge of the Control entity.
+func (_m *Control) QueryScans() *ScanQuery {
+	return NewControlClient(_m.config).QueryScans(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Control entity.
 func (_m *Control) QueryOwner() *OrganizationQuery {
 	return NewControlClient(_m.config).QueryOwner(_m)
@@ -1130,11 +1145,6 @@ func (_m *Control) QueryAssets() *AssetQuery {
 	return NewControlClient(_m.config).QueryAssets(_m)
 }
 
-// QueryScans queries the "scans" edge of the Control entity.
-func (_m *Control) QueryScans() *ScanQuery {
-	return NewControlClient(_m.config).QueryScans(_m)
-}
-
 // QueryEntities queries the "entities" edge of the Control entity.
 func (_m *Control) QueryEntities() *EntityQuery {
 	return NewControlClient(_m.config).QueryEntities(_m)
@@ -1148,16 +1158,6 @@ func (_m *Control) QueryIdentityHolders() *IdentityHolderQuery {
 // QueryCampaigns queries the "campaigns" edge of the Control entity.
 func (_m *Control) QueryCampaigns() *CampaignQuery {
 	return NewControlClient(_m.config).QueryCampaigns(_m)
-}
-
-// QueryRemediations queries the "remediations" edge of the Control entity.
-func (_m *Control) QueryRemediations() *RemediationQuery {
-	return NewControlClient(_m.config).QueryRemediations(_m)
-}
-
-// QueryReviews queries the "reviews" edge of the Control entity.
-func (_m *Control) QueryReviews() *ReviewQuery {
-	return NewControlClient(_m.config).QueryReviews(_m)
 }
 
 // QueryFindings queries the "findings" edge of the Control entity.
@@ -1639,6 +1639,78 @@ func (_m *Control) appendNamedDiscussions(name string, edges ...*Discussion) {
 	}
 }
 
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedScans[name] = []*Scan{}
+	} else {
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
+	}
+}
+
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Control) NamedBlockedGroups(name string) ([]*Group, error) {
@@ -1759,30 +1831,6 @@ func (_m *Control) appendNamedAssets(name string, edges ...*Asset) {
 	}
 }
 
-// NamedScans returns the Scans named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Control) NamedScans(name string) ([]*Scan, error) {
-	if _m.Edges.namedScans == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedScans[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Control) appendNamedScans(name string, edges ...*Scan) {
-	if _m.Edges.namedScans == nil {
-		_m.Edges.namedScans = make(map[string][]*Scan)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedScans[name] = []*Scan{}
-	} else {
-		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
-	}
-}
-
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Control) NamedEntities(name string) ([]*Entity, error) {
@@ -1852,54 +1900,6 @@ func (_m *Control) appendNamedCampaigns(name string, edges ...*Campaign) {
 		_m.Edges.namedCampaigns[name] = []*Campaign{}
 	} else {
 		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
-	}
-}
-
-// NamedRemediations returns the Remediations named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Control) NamedRemediations(name string) ([]*Remediation, error) {
-	if _m.Edges.namedRemediations == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedRemediations[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Control) appendNamedRemediations(name string, edges ...*Remediation) {
-	if _m.Edges.namedRemediations == nil {
-		_m.Edges.namedRemediations = make(map[string][]*Remediation)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedRemediations[name] = []*Remediation{}
-	} else {
-		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
-	}
-}
-
-// NamedReviews returns the Reviews named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Control) NamedReviews(name string) ([]*Review, error) {
-	if _m.Edges.namedReviews == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedReviews[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Control) appendNamedReviews(name string, edges ...*Review) {
-	if _m.Edges.namedReviews == nil {
-		_m.Edges.namedReviews = make(map[string][]*Review)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedReviews[name] = []*Review{}
-	} else {
-		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
 	}
 }
 

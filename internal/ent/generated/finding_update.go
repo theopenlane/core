@@ -2592,30 +2592,30 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.FindingVulnerabilities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.FindingVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2623,16 +2623,16 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.FindingVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6066,30 +6066,30 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.FindingVulnerabilities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.FindingVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6097,16 +6097,16 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
+		edge.Schema = _u.schemaConfig.FindingVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

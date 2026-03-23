@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
@@ -774,6 +775,21 @@ func (_u *ScanUpdate) AddControls(v ...*Control) *ScanUpdate {
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *ScanUpdate) AddSubcontrolIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdate) AddSubcontrols(v ...*Subcontrol) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdate) SetGeneratedByPlatform(v *Platform) *ScanUpdate {
 	return _u.SetGeneratedByPlatformID(v.ID)
@@ -1101,6 +1117,27 @@ func (_u *ScanUpdate) RemoveControls(v ...*Control) *ScanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdate) ClearSubcontrols() *ScanUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *ScanUpdate) RemoveSubcontrolIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *ScanUpdate) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
@@ -2131,6 +2168,54 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.GeneratedByPlatformCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2975,6 +3060,21 @@ func (_u *ScanUpdateOne) AddControls(v ...*Control) *ScanUpdateOne {
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *ScanUpdateOne) AddSubcontrolIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdateOne) AddSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdateOne) SetGeneratedByPlatform(v *Platform) *ScanUpdateOne {
 	return _u.SetGeneratedByPlatformID(v.ID)
@@ -3302,6 +3402,27 @@ func (_u *ScanUpdateOne) RemoveControls(v ...*Control) *ScanUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdateOne) ClearSubcontrols() *ScanUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *ScanUpdateOne) RemoveSubcontrolIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *ScanUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
@@ -4357,6 +4478,54 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

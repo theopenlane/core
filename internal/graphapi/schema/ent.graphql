@@ -6706,6 +6706,99 @@ type Control implements Node {
   the entity who is responsible for the control implementation when it is a third party
   """
   responsibleParty: Entity
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   owner: Organization
   blockedGroups(
     """
@@ -6866,37 +6959,6 @@ type Control implements Node {
     """
     where: AssetWhereInput
   ): AssetConnection!
-  scans(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Scans returned from the connection.
-    """
-    orderBy: [ScanOrder!]
-
-    """
-    Filtering options for Scans returned from the connection.
-    """
-    where: ScanWhereInput
-  ): ScanConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -6990,68 +7052,6 @@ type Control implements Node {
     """
     where: CampaignWhereInput
   ): CampaignConnection!
-  remediations(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Remediations returned from the connection.
-    """
-    orderBy: [RemediationOrder!]
-
-    """
-    Filtering options for Remediations returned from the connection.
-    """
-    where: RemediationWhereInput
-  ): RemediationConnection!
-  reviews(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Reviews returned from the connection.
-    """
-    orderBy: [ReviewOrder!]
-
-    """
-    Filtering options for Reviews returned from the connection.
-    """
-    where: ReviewWhereInput
-  ): ReviewConnection!
   findings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -9457,6 +9457,21 @@ input ControlWhereInput {
   hasResponsibleParty: Boolean
   hasResponsiblePartyWith: [EntityWhereInput!]
   """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -9507,11 +9522,6 @@ input ControlWhereInput {
   hasAssets: Boolean
   hasAssetsWith: [AssetWhereInput!]
   """
-  scans edge predicates
-  """
-  hasScans: Boolean
-  hasScansWith: [ScanWhereInput!]
-  """
   entities edge predicates
   """
   hasEntities: Boolean
@@ -9526,16 +9536,6 @@ input ControlWhereInput {
   """
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
-  """
-  remediations edge predicates
-  """
-  hasRemediations: Boolean
-  hasRemediationsWith: [RemediationWhereInput!]
-  """
-  reviews edge predicates
-  """
-  hasReviews: Boolean
-  hasReviewsWith: [ReviewWhereInput!]
   """
   findings edge predicates
   """
@@ -10410,6 +10410,9 @@ input CreateControlInput {
   controlOwnerID: ID
   delegateID: ID
   responsiblePartyID: ID
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
+  scanIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -10420,12 +10423,9 @@ input CreateControlInput {
   programIDs: [ID!]
   platformIDs: [ID!]
   assetIDs: [ID!]
-  scanIDs: [ID!]
   entityIDs: [ID!]
   identityHolderIDs: [ID!]
   campaignIDs: [ID!]
-  remediationIDs: [ID!]
-  reviewIDs: [ID!]
   findingIDs: [ID!]
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
@@ -13916,6 +13916,7 @@ input CreateScanInput {
   platformIDs: [ID!]
   vulnerabilityIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   generatedByPlatformID: ID
   performedByUserID: ID
   performedByGroupID: ID
@@ -14196,6 +14197,9 @@ input CreateSubcontrolInput {
   controlOwnerID: ID
   delegateID: ID
   responsiblePartyID: ID
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
+  scanIDs: [ID!]
   ownerID: ID
   subcontrolKindID: ID
   controlID: ID!
@@ -58188,6 +58192,37 @@ type Scan implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   generatedByPlatform: Platform
   performedByUser: User
   performedByGroup: Group
@@ -58773,6 +58808,11 @@ input ScanWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   generated_by_platform edge predicates
   """
@@ -60577,6 +60617,99 @@ type Subcontrol implements Node {
   the entity who is responsible for the control implementation when it is a third party
   """
   responsibleParty: Entity
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   owner: Organization
   subcontrolKind: CustomTypeEnum
   control: Control!
@@ -61380,6 +61513,21 @@ input SubcontrolWhereInput {
   """
   hasResponsibleParty: Boolean
   hasResponsiblePartyWith: [EntityWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
   """
   owner edge predicates
   """
@@ -70204,6 +70352,15 @@ input UpdateControlInput {
   clearDelegate: Boolean
   responsiblePartyID: ID
   clearResponsibleParty: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -70227,9 +70384,6 @@ input UpdateControlInput {
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
-  addScanIDs: [ID!]
-  removeScanIDs: [ID!]
-  clearScans: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
@@ -70239,12 +70393,6 @@ input UpdateControlInput {
   addCampaignIDs: [ID!]
   removeCampaignIDs: [ID!]
   clearCampaigns: Boolean
-  addRemediationIDs: [ID!]
-  removeRemediationIDs: [ID!]
-  clearRemediations: Boolean
-  addReviewIDs: [ID!]
-  removeReviewIDs: [ID!]
-  clearReviews: Boolean
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
@@ -75174,6 +75322,9 @@ input UpdateScanInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   generatedByPlatformID: ID
   clearGeneratedByPlatform: Boolean
   performedByUserID: ID
@@ -75546,6 +75697,15 @@ input UpdateSubcontrolInput {
   clearDelegate: Boolean
   responsiblePartyID: ID
   clearResponsibleParty: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   subcontrolKindID: ID
   clearSubcontrolKind: Boolean
   controlID: ID

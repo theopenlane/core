@@ -4980,6 +4980,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Control",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Control",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"scans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+		},
+		"Control",
+		"Scan",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5100,18 +5136,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Asset",
 	)
 	graph.MustAddE(
-		"scans",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-		},
-		"Control",
-		"Scan",
-	)
-	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5146,30 +5170,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Control",
 		"Campaign",
-	)
-	graph.MustAddE(
-		"remediations",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-		},
-		"Control",
-		"Remediation",
-	)
-	graph.MustAddE(
-		"reviews",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-		},
-		"Control",
-		"Review",
 	)
 	graph.MustAddE(
 		"findings",
@@ -7610,10 +7610,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"vulnerabilities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -12926,10 +12926,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"vulnerabilities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.VulnerabilitiesTable,
-			Columns: []string{remediation.VulnerabilitiesColumn},
+			Columns: remediation.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -12974,10 +12974,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.SubcontrolsTable,
-			Columns: []string{remediation.SubcontrolsColumn},
+			Columns: remediation.SubcontrolsPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -13034,10 +13034,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"reviews",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   remediation.ReviewsTable,
-			Columns: []string{remediation.ReviewsColumn},
+			Columns: remediation.ReviewsPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -13166,10 +13166,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"vulnerabilities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.VulnerabilitiesTable,
-			Columns: []string{review.VulnerabilitiesColumn},
+			Columns: review.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -13190,10 +13190,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"remediations",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RemediationsTable,
-			Columns: []string{review.RemediationsColumn},
+			Columns: review.RemediationsPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -13214,10 +13214,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.SubcontrolsTable,
-			Columns: []string{review.SubcontrolsColumn},
+			Columns: review.SubcontrolsPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -13896,6 +13896,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"Scan",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"generated_by_platform",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -14254,6 +14266,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"Entity",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.ReviewsTable,
+			Columns: subcontrol.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.RemediationsTable,
+			Columns: subcontrol.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"scans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.ScansTable,
+			Columns: subcontrol.ScansPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Scan",
 	)
 	graph.MustAddE(
 		"owner",
@@ -16046,10 +16094,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"findings",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   vulnerability.FindingsTable,
-			Columns: []string{vulnerability.FindingsColumn},
+			Columns: vulnerability.FindingsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -16166,10 +16214,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"remediations",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   vulnerability.RemediationsTable,
-			Columns: []string{vulnerability.RemediationsColumn},
+			Columns: vulnerability.RemediationsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -16178,10 +16226,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"reviews",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   vulnerability.ReviewsTable,
-			Columns: []string{vulnerability.ReviewsColumn},
+			Columns: vulnerability.ReviewsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -20099,6 +20147,48 @@ func (f *ControlFilter) WhereHasResponsiblePartyWith(preds ...predicate.Entity) 
 	})))
 }
 
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *ControlFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *ControlFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasScans applies a predicate to check if query has an edge scans.
+func (f *ControlFilter) WhereHasScans() {
+	f.Where(entql.HasEdge("scans"))
+}
+
+// WhereHasScansWith applies a predicate to check if query has an edge scans with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasScansWith(preds ...predicate.Scan) {
+	f.Where(entql.HasEdgeWith("scans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ControlFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -20239,20 +20329,6 @@ func (f *ControlFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
 	})))
 }
 
-// WhereHasScans applies a predicate to check if query has an edge scans.
-func (f *ControlFilter) WhereHasScans() {
-	f.Where(entql.HasEdge("scans"))
-}
-
-// WhereHasScansWith applies a predicate to check if query has an edge scans with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasScansWith(preds ...predicate.Scan) {
-	f.Where(entql.HasEdgeWith("scans", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasEntities applies a predicate to check if query has an edge entities.
 func (f *ControlFilter) WhereHasEntities() {
 	f.Where(entql.HasEdge("entities"))
@@ -20289,34 +20365,6 @@ func (f *ControlFilter) WhereHasCampaigns() {
 // WhereHasCampaignsWith applies a predicate to check if query has an edge campaigns with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasCampaignsWith(preds ...predicate.Campaign) {
 	f.Where(entql.HasEdgeWith("campaigns", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasRemediations applies a predicate to check if query has an edge remediations.
-func (f *ControlFilter) WhereHasRemediations() {
-	f.Where(entql.HasEdge("remediations"))
-}
-
-// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
-	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasReviews applies a predicate to check if query has an edge reviews.
-func (f *ControlFilter) WhereHasReviews() {
-	f.Where(entql.HasEdge("reviews"))
-}
-
-// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasReviewsWith(preds ...predicate.Review) {
-	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -40026,6 +40074,20 @@ func (f *ScanFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *ScanFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *ScanFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasGeneratedByPlatform applies a predicate to check if query has an edge generated_by_platform.
 func (f *ScanFilter) WhereHasGeneratedByPlatform() {
 	f.Where(entql.HasEdge("generated_by_platform"))
@@ -41090,6 +41152,48 @@ func (f *SubcontrolFilter) WhereHasResponsibleParty() {
 // WhereHasResponsiblePartyWith applies a predicate to check if query has an edge responsible_party with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasResponsiblePartyWith(preds ...predicate.Entity) {
 	f.Where(entql.HasEdgeWith("responsible_party", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *SubcontrolFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *SubcontrolFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasScans applies a predicate to check if query has an edge scans.
+func (f *SubcontrolFilter) WhereHasScans() {
+	f.Where(entql.HasEdge("scans"))
+}
+
+// WhereHasScansWith applies a predicate to check if query has an edge scans with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasScansWith(preds ...predicate.Scan) {
+	f.Where(entql.HasEdgeWith("scans", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
