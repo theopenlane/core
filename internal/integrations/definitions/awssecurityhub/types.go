@@ -11,11 +11,11 @@ var (
 	// DefinitionID is the stable identifier for the AWS Security Hub integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
 	// Installation is the typed installation metadata handle for the AWS Security Hub definition
-	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// awsAssumeRoleCredential is the assume-role credential slot shared by the AWS service clients in this definition
-	awsAssumeRoleCredential = types.NewCredentialRef(Slug + ".assume_role")
+	awsAssumeRoleCredential = types.NewCredentialRef[AssumeRoleCredentialSchema](Slug + ".assume_role")
 	// awsSourceCredential is the optional static source credential slot used to assume the configured AWS role
-	awsSourceCredential = types.NewCredentialRef(Slug + ".source")
+	awsSourceCredential = types.NewCredentialRef[SourceCredentialSchema](Slug + ".source")
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
 	SecurityHubClient = types.NewClientRef[*securityhub.Client]()
 	// AuditManagerClient is the client ref for the AWS Audit Manager client used by this definition

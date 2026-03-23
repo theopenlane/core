@@ -21,7 +21,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(TeamsClient, h.Run)
+	return providerkit.WithClient(TeamsClient, h.Run)
 }
 
 // Run executes the Microsoft Teams health check via Microsoft Graph

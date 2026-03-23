@@ -16,7 +16,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(SecurityCenterClient, h.Run)
+	return providerkit.WithClient(SecurityCenterClient, h.Run)
 }
 
 // Run verifies access by fetching the first page of security assessments

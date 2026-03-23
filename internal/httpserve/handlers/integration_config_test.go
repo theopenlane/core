@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -28,7 +28,7 @@ import (
 
 const configTestProviderID = "def_test_gcpscc"
 
-var configTestCredentialRef = types.NewCredentialRef("config_test")
+var configTestCredentialRef = types.NewCredentialSlotID("config_test")
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
@@ -37,7 +37,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	op.OperationID = "ConfigureIntegrationProviderSuccess"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -71,7 +71,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		).
 		OnlyX(testUser.UserCtx)
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialRef("config_test"))
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
 	require.NoError(t, err)
 	require.True(t, ok)
 	assert.Contains(t, string(credential.Data), "projectId")
@@ -85,7 +85,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 	op.OperationID = "ConfigureIntegrationProviderByID"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -112,7 +112,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	op.OperationID = "ConfigureIntegrationProviderInvalid"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -139,7 +139,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectP
 	op.OperationID = "ConfigureIntegrationProviderRejectsNonObjectPayload"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -166,7 +166,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	op.OperationID = "ConfigureIntegrationProviderUnauthorized"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
@@ -190,7 +190,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	op.OperationID = "ConfigureIntegrationProviderUpdate"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -212,7 +212,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Equal(t, first.InstallationID, second.InstallationID)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialRef("config_test"))
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
 	require.NoError(t, err)
 	require.True(t, ok)
 
@@ -228,7 +228,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	op.OperationID = "ConfigureIntegrationProviderUpdateUserInputOnly"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -252,7 +252,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
 
-	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialRef("config_test"))
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
 	require.NoError(t, err)
 	require.True(t, ok)
 
@@ -271,7 +271,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 	op.OperationID = "ConfigureIntegrationProviderUserInputOnly"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{userInputOnlyTestDefinitionBuilder(definitionID, "oidc-generic")})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{userInputOnlyTestDefinitionBuilder(definitionID, "oidc-generic")})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -310,7 +310,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 	op.OperationID = "ConfigureIntegrationProviderMismatch"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{
 		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
 		configTestDefinitionBuilder("def_test_other", "other", false),
 	})
@@ -347,7 +347,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	op.OperationID = "ConfigureIntegrationProviderHealthFailure"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", true)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", true)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -378,13 +378,13 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	require.Len(t, records, 1, "expected one PENDING installation row after failed setup")
 	assert.Equal(t, enums.IntegrationStatusPending, records[0].Status)
 
-	_, credOk, credErr := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, records[0], types.NewCredentialRef("config_test"))
+	_, credOk, credErr := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, records[0], types.NewCredentialSlotID("config_test"))
 	require.NoError(t, credErr)
 	assert.False(t, credOk, "credential must not be stored after a failed health check")
 }
 
-func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		healthHandler := func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 			if failHealth {
 				return nil, errors.New("health failed")
@@ -417,7 +417,7 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) def
 					CredentialRef:       configTestCredentialRef,
 					Name:                "Config Test Connection",
 					Description:         "Connect the config test definition using the configured credential payload.",
-					CredentialRefs:      []types.CredentialRef{configTestCredentialRef},
+					CredentialRefs:      []types.CredentialSlotID{configTestCredentialRef},
 					ValidationOperation: "health.default",
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: configTestCredentialRef,
@@ -438,8 +438,8 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) def
 	})
 }
 
-func userInputOnlyTestDefinitionBuilder(definitionID, slug string) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func userInputOnlyTestDefinitionBuilder(definitionID, slug string) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,

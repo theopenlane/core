@@ -83,7 +83,7 @@ type AuthTokenViewFunc func(ctx context.Context, credential CredentialSet) (*Tok
 // AuthRegistration describes how one connection mode starts and completes auth
 type AuthRegistration struct {
 	// CredentialRef identifies which credential slot receives the auth result
-	CredentialRef CredentialRef `json:"credentialRef"`
+	CredentialRef CredentialSlotID `json:"credentialRef"`
 	// Start initiates the auth flow
 	Start AuthStartFunc `json:"-"`
 	// Complete finalizes the auth flow and returns the resulting credential

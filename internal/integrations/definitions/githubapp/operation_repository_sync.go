@@ -44,7 +44,7 @@ type repositoryNode struct {
 
 // Handle adapts repository sync to the generic operation registration boundary
 func (r RepositorySync) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(GitHubClient, r.Run)
+	return providerkit.WithClient(GitHubClient, r.Run)
 }
 
 // Run enumerates repositories accessible to the installation

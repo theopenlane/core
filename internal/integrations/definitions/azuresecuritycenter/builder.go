@@ -2,14 +2,14 @@ package azuresecuritycenter
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the Azure Security Center definition builder
-func Builder() definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder() registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -28,7 +28,7 @@ func Builder() definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         securityCenterCredential,
+					Ref:         securityCenterCredential.ID(),
 					Name:        "Azure Security Center Credential",
 					Description: "Credential slot used by the Azure Security Center client in this definition.",
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
@@ -36,15 +36,15 @@ func Builder() definition.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       securityCenterCredential,
+					CredentialRef:       securityCenterCredential.ID(),
 					Name:                "Azure Service Principal",
 					Description:         "Configure Microsoft Defender for Cloud access using an Azure service principal credential.",
-					CredentialRefs:      []types.CredentialRef{securityCenterCredential},
+					CredentialRefs:      []types.CredentialSlotID{securityCenterCredential.ID()},
 					ClientRefs:          []types.ClientID{SecurityCenterClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: securityCenterCredential,
+						CredentialRef: securityCenterCredential.ID(),
 						Name:          "Disconnect Azure Service Principal",
 						Description:   "Remove the persisted Azure service principal credential and disconnect this Microsoft Defender for Cloud installation from Openlane.",
 					},
@@ -53,7 +53,7 @@ func Builder() definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            SecurityCenterClient.ID(),
-					CredentialRefs: []types.CredentialRef{securityCenterCredential},
+					CredentialRefs: []types.CredentialSlotID{securityCenterCredential.ID()},
 					Description:    "Azure Security Center assessments and sub-assessments client",
 					Build:          Client{}.Build,
 				},

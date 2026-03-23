@@ -19,7 +19,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(EntraCredential, h.Run)
+	return providerkit.WithClient(EntraCredential, h.Run)
 }
 
 // Run executes the Azure Entra ID health check by verifying token acquisition

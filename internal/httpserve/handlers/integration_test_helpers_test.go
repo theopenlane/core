@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
@@ -18,11 +18,11 @@ import (
 const githubAppSlug = githubapp.Slug
 
 var githubAppDefinitionID = githubapp.DefinitionID.ID()
-var githubTestCredentialRef = types.NewCredentialRef("github_test")
+var githubTestCredentialRef = types.NewCredentialSlotID("github_test")
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
 // built from the given definition builders. Returns a restore function.
-func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []definition.Builder) func() {
+func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []registry.Builder) func() {
 	t.Helper()
 
 	original := suite.h.IntegrationsRuntime
@@ -58,7 +58,7 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []de
 // configured with the GitHub App definition built from cfg. Returns a restore function.
 func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config) func() {
 	t.Helper()
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubapp.Builder(cfg)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubapp.Builder(cfg)})
 	suite.h.IntegrationsConfig.GitHubApp = cfg
 
 	return restore
@@ -67,7 +67,7 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 // gcpSCCTestDefinitionBuilder returns a test definition for GCP SCC-style credential config tests.
 // The definition uses definitionID as both Spec.ID and Spec.Slug so registry lookups and DB
 // queries using the same string work correctly.
-func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
+func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
 	schema, err := json.Marshal(map[string]any{
 		"type": "object",
 		"required": []string{
@@ -109,8 +109,8 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 		panic(err)
 	}
 
-	return definition.Builder(func() (types.Definition, error) {
-		gcpSCCTestCredential := types.NewCredentialRef("gcp_scc_test")
+	return registry.Builder(func() (types.Definition, error) {
+		gcpSCCTestCredential := types.NewCredentialSlotID("gcp_scc_test")
 
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -139,7 +139,7 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 					CredentialRef:       gcpSCCTestCredential,
 					Name:                "GCP SCC Test Connection",
 					Description:         "Connect the GCP SCC test definition using the configured credential payload.",
-					CredentialRefs:      []types.CredentialRef{gcpSCCTestCredential},
+					CredentialRefs:      []types.CredentialSlotID{gcpSCCTestCredential},
 					ValidationOperation: "health.default",
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: gcpSCCTestCredential,
@@ -165,8 +165,8 @@ func gcpSCCTestDefinitionBuilder(definitionID string) definition.Builder {
 // githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests.
 // The definition has no credentials schema or auth flow; it only needs to be present in
 // the registry so the handler can resolve the provider by ID.
-func githubTestDefinitionBuilder(definitionID string) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func githubTestDefinitionBuilder(definitionID string) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -188,7 +188,7 @@ func githubTestDefinitionBuilder(definitionID string) definition.Builder {
 					CredentialRef:  githubTestCredentialRef,
 					Name:           "GitHub Test Connection",
 					Description:    "Test connection used for handler disconnect flows.",
-					CredentialRefs: []types.CredentialRef{githubTestCredentialRef},
+					CredentialRefs: []types.CredentialSlotID{githubTestCredentialRef},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: githubTestCredentialRef,
 						Name:          "Disconnect GitHub Test Connection",

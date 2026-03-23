@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
@@ -17,7 +18,7 @@ type IntegrationConfigPayload struct {
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
 	// CredentialRef selects which credential slot is being configured.
-	CredentialRef types.CredentialRef `json:"credentialRef"`
+	CredentialRef types.CredentialSlotID `json:"credentialRef"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
 	Body json.RawMessage `json:"body"`
 	// UserInput holds optional installation-scoped provider configuration.
@@ -93,7 +94,7 @@ type IntegrationAuthStartRequest struct {
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
 	// CredentialRef selects which credential-schema-defined connection is being activated.
-	CredentialRef types.CredentialRef `json:"credentialRef"`
+	CredentialRef types.CredentialSlotID `json:"credentialRef"`
 	// UserInput holds optional installation-scoped provider configuration.
 	UserInput json.RawMessage `json:"userInput,omitempty"`
 }
@@ -103,7 +104,8 @@ func (r *IntegrationConfigPayload) Validate() error {
 	if r.DefinitionID == "" {
 		return rout.NewMissingRequiredFieldError("definitionId")
 	}
-	if r.CredentialRef == (types.CredentialRef{}) {
+
+	if !jsonx.IsEmptyRawMessage(r.Body) && r.CredentialRef == (types.CredentialSlotID{}) {
 		return rout.NewMissingRequiredFieldError("credentialRef")
 	}
 
@@ -115,7 +117,7 @@ func (r *IntegrationAuthStartRequest) Validate() error {
 	if r.DefinitionID == "" {
 		return rout.NewMissingRequiredFieldError("definitionId")
 	}
-	if r.CredentialRef == (types.CredentialRef{}) {
+	if r.CredentialRef == (types.CredentialSlotID{}) {
 		return rout.NewMissingRequiredFieldError("credentialRef")
 	}
 
@@ -125,7 +127,7 @@ func (r *IntegrationAuthStartRequest) Validate() error {
 // ExampleIntegrationAuthStartRequest is an example auth start request for OpenAPI documentation
 var ExampleIntegrationAuthStartRequest = IntegrationAuthStartRequest{
 	DefinitionID:  "def_01K0SLACK000000000000000001",
-	CredentialRef: types.NewCredentialRef("slack"),
+	CredentialRef: types.NewCredentialSlotID("slack"),
 }
 
 // RefreshInstallationCredentialRequest is the request for refreshing an installation's auth tokens.
@@ -146,7 +148,7 @@ func (r *RefreshInstallationCredentialRequest) Validate() error {
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 	DefinitionID:  "def_01K0GWKSP000000000000000001",
-	CredentialRef: types.NewCredentialRef("gcp_scc"),
+	CredentialRef: types.NewCredentialSlotID("gcp_scc"),
 	Body:          json.RawMessage(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 

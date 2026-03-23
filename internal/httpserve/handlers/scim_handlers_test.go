@@ -17,8 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/internal/integrations/definition"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -373,7 +373,7 @@ func (suite *HandlerTestSuite) TestSCIMDirectoryUserHandlerCreateUsesRuntimeInge
 		email: ulids.New().String() + "@example.com",
 	})
 
-	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()})
+	restore := suite.withDefinitionRuntime(suite.T(), []registry.Builder{definitionscim.Builder()})
 	defer restore()
 
 	createCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
@@ -438,7 +438,7 @@ func (suite *HandlerTestSuite) TestSCIMDirectoryGroupHandlerCreateUsesRuntimeIng
 		email: ulids.New().String() + "@example.com",
 	})
 
-	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()})
+	restore := suite.withDefinitionRuntime(suite.T(), []registry.Builder{definitionscim.Builder()})
 	defer restore()
 
 	createCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)

@@ -3,13 +3,13 @@ package types
 // ConnectionRegistration describes one connection mode for a definition
 type ConnectionRegistration struct {
 	// CredentialRef is the user-facing credential schema that selects this connection mode
-	CredentialRef CredentialRef `json:"credentialRef"`
+	CredentialRef CredentialSlotID `json:"credentialRef"`
 	// Name is the user-facing connection mode name
 	Name string `json:"name,omitempty"`
 	// Description explains what the connection mode does
 	Description string `json:"description,omitempty"`
 	// CredentialRefs lists the credential slots used by this connection mode
-	CredentialRefs []CredentialRef `json:"credentialRefs,omitempty"`
+	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
 	// ClientRefs lists the clients initialized by this connection mode
 	ClientRefs []ClientID `json:"-"`
 	// ValidationOperation names the operation used to validate credentials before persistence
@@ -22,8 +22,8 @@ type ConnectionRegistration struct {
 	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
 }
 
-// ConnectionRegistration returns the connection registration for the given credential ref
-func (d Definition) ConnectionRegistration(ref CredentialRef) (ConnectionRegistration, error) {
+// ConnectionRegistration returns the connection registration for the given credential slot
+func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
 	for _, reg := range d.Connections {
 		if reg.CredentialRef.String() == ref.String() {
 			return reg, nil

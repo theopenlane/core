@@ -14,7 +14,7 @@ var (
 	// Installation is the typed installation metadata handle for the Slack definition
 	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the Slack client
-	slackCredential = types.NewCredentialRef(Slug)
+	slackCredential = types.NewCredentialRef[slackCred](Slug)
 	// SlackClient is the client ref for the Slack Web API client used by this definition
 	SlackClient = types.NewClientRef[*slackgo.Client]()
 	// HealthDefaultOperation is the operation ref for the Slack health check

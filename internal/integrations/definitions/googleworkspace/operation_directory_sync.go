@@ -45,7 +45,7 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.IngestWithClientRequest(
+	return providerkit.WithClientRequest(
 		WorkspaceClient,
 		func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
 			var cfg UserInput

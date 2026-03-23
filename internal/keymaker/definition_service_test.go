@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-var keymakerTestCredentialRef = types.NewCredentialRef("test_auth")
+var keymakerTestCredentialRef = types.NewCredentialSlotID("test_auth")
 
 func TestService_BeginAndComplete(t *testing.T) {
 	ctx := context.Background()
@@ -126,7 +126,7 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 		Connections: []types.ConnectionRegistration{
 			{
 				CredentialRef:  keymakerTestCredentialRef,
-				CredentialRefs: []types.CredentialRef{keymakerTestCredentialRef},
+				CredentialRefs: []types.CredentialSlotID{keymakerTestCredentialRef},
 			},
 		},
 	}
@@ -350,7 +350,7 @@ func authTestDefinition(definitionID string, slug string, flow *fakeAuthFlow) ty
 		Connections: []types.ConnectionRegistration{
 			{
 				CredentialRef:  keymakerTestCredentialRef,
-				CredentialRefs: []types.CredentialRef{keymakerTestCredentialRef},
+				CredentialRefs: []types.CredentialSlotID{keymakerTestCredentialRef},
 				Auth:           flow.registration(keymakerTestCredentialRef),
 			},
 		},
@@ -358,7 +358,7 @@ func authTestDefinition(definitionID string, slug string, flow *fakeAuthFlow) ty
 }
 
 // registration returns an AuthRegistration wired to the fake's configured behavior
-func (f *fakeAuthFlow) registration(credentialRef types.CredentialRef) *types.AuthRegistration {
+func (f *fakeAuthFlow) registration(credentialRef types.CredentialSlotID) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: credentialRef,
 		Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
@@ -394,7 +394,7 @@ func (r *fakeDefinitionResolver) Definition(id string) (types.Definition, bool) 
 
 type installationSave struct {
 	installationID string
-	credentialRef  types.CredentialRef
+	credentialRef  types.CredentialSlotID
 	definitionID   string
 	result         types.AuthCompleteResult
 }
@@ -417,7 +417,7 @@ type fakeInstallationWriter struct {
 	err   error
 }
 
-func (f *fakeInstallationWriter) PersistAuthResult(_ context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error {
+func (f *fakeInstallationWriter) PersistAuthResult(_ context.Context, installationID string, credentialRef types.CredentialSlotID, definition types.Definition, result types.AuthCompleteResult) error {
 	f.saves = append(f.saves, installationSave{
 		installationID: installationID,
 		credentialRef:  credentialRef,

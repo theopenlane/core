@@ -10,9 +10,9 @@ var (
 	// DefinitionID is the stable identifier for the Okta integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
 	// Installation is the typed installation metadata handle for the Okta definition
-	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oktaCredential is the credential slot used by the Okta client
-	oktaCredential = types.NewCredentialRef(Slug)
+	oktaCredential = types.NewCredentialRef[CredentialSchema](Slug)
 	// OktaClient is the client ref for the Okta API client used by this definition
 	OktaClient = types.NewClientRef[*oktagosdk.APIClient]()
 	// HealthDefaultOperation is the operation ref for the Okta health check

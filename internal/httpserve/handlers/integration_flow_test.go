@@ -14,7 +14,7 @@ import (
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -199,7 +199,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{definition.Builder(buildTestOAuthDefinition)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{registry.Builder(buildTestOAuthDefinition)})
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -434,13 +434,13 @@ func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_RejectsCrossOr
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(otherUser.UserCtx))
 
-	assert.Equal(t, http.StatusNotFound, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Context, request handlers.IntegrationAuthStartRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
 	t.Helper()
 
-	if request.CredentialRef == (types.CredentialRef{}) {
+	if request.CredentialRef == (types.CredentialSlotID{}) {
 		request.CredentialRef = testAuthCredentialRef
 	}
 

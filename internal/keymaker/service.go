@@ -15,7 +15,7 @@ import (
 type DefinitionLookupFunc func(id string) (types.Definition, bool)
 
 // AuthCompleteHookFunc is the callback invoked after a definition auth flow completes successfully
-type AuthCompleteHookFunc func(ctx context.Context, installationID string, credentialRef types.CredentialRef, definition types.Definition, result types.AuthCompleteResult) error
+type AuthCompleteHookFunc func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, definition types.Definition, result types.AuthCompleteResult) error
 
 // InstallationRecord captures the installation fields required by auth validation.
 type InstallationRecord struct {
@@ -56,7 +56,7 @@ type BeginRequest struct {
 	// InstallationID identifies the installation record being activated
 	InstallationID string
 	// CredentialRef identifies which credential-schema-selected connection mode should be activated
-	CredentialRef types.CredentialRef
+	CredentialRef types.CredentialSlotID
 	// Input carries optional definition-specific input to the auth start function
 	Input json.RawMessage
 }
@@ -86,7 +86,7 @@ type CompleteResult struct {
 	// InstallationID identifies the installation record containing the credential
 	InstallationID string
 	// CredentialRef identifies which credential slot received the persisted credential
-	CredentialRef types.CredentialRef
+	CredentialRef types.CredentialSlotID
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
 }

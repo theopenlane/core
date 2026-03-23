@@ -22,7 +22,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(OktaClient, h.Run)
+	return providerkit.WithClient(OktaClient, h.Run)
 }
 
 // Run executes the Okta health check

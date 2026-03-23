@@ -20,6 +20,10 @@ import (
 
 // GitHubAppWebhookHandler verifies and dispatches one inbound GitHub App webhook delivery
 func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	req := ctx.Request()
 	requestCtx := req.Context()
 
@@ -52,6 +56,10 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve github app webhook installation")
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
+
+	// Now that we know which installation this delivery belongs to, set the org-scoped
+	// synthetic caller so ent hooks can resolve the organization context
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(installation.OwnerID))
 
 	webhookCtx = logx.WithFields(webhookCtx, logx.LogFields{
 		"integration_id": installation.ID,

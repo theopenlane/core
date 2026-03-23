@@ -74,7 +74,7 @@ type integrationProviderExtensionsDocument struct {
 // integrationCredentialExtensionsDocument captures workflow metadata for one provider credential slot
 type integrationCredentialExtensionsDocument struct {
 	// Ref is the durable credential slot identifier
-	Ref types.CredentialRef `json:"ref"`
+	Ref types.CredentialSlotID `json:"ref"`
 	// Name is the user-facing credential slot name
 	Name string `json:"name,omitempty"`
 	// Description describes the credential slot

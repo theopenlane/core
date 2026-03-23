@@ -90,9 +90,3 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, installationI
 	return record, true, nil
 }
 
-// DeleteInstallation permanently removes the installation record by ID
-func (r *Runtime) DeleteInstallation(ctx context.Context, installationID string) error {
-	db := r.DB()
-
-	return db.Integration.DeleteOneID(installationID).Exec(ctx)
-}

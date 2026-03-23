@@ -10,7 +10,7 @@ var (
 	// DefinitionID is the stable identifier for the GitHub App integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
 	// GitHubAppCredential is the auth-managed credential slot used by the GitHub client
-	GitHubAppCredential = types.NewCredentialRef(Slug)
+	GitHubAppCredential = types.NewCredentialRef[githubAppCredential](Slug)
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	GitHubClient = types.NewClientRef[GraphQLClient]()
 	// HealthDefaultOperation is the operation ref for the GitHub App health check
@@ -36,7 +36,7 @@ var (
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	SecretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
 	// Installation is the typed installation metadata handle for the GitHub App definition
-	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 )
 
 // Slug is the unique identifier for the GitHub App integration

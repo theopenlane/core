@@ -4,26 +4,24 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // resolveInstallationMetadata derives AWS connection metadata from the persisted assume-role configuration
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-	assumeRoleCredential, ok := req.Credentials.Resolve(awsAssumeRoleCredential)
-	if !ok {
-		return InstallationMetadata{}, false, nil
+	assumeRole, ok, err := awsAssumeRoleCredential.Resolve(req.Credentials)
+	if err != nil {
+		return InstallationMetadata{}, false, ErrCredentialMetadataInvalid
 	}
 
-	var assumeRole AssumeRoleCredentialSchema
-	if err := jsonx.UnmarshalIfPresent(assumeRoleCredential.Data, &assumeRole); err != nil {
-		return InstallationMetadata{}, false, ErrCredentialMetadataInvalid
+	if !ok {
+		return InstallationMetadata{}, false, nil
 	}
 
 	if assumeRole.RoleARN == "" && assumeRole.HomeRegion == "" && assumeRole.AccountID == "" {
 		return InstallationMetadata{}, false, nil
 	}
 
-	_, hasSourceCredential := req.Credentials.Resolve(awsSourceCredential)
+	_, hasSourceCredential, _ := awsSourceCredential.Resolve(req.Credentials)
 
 	return InstallationMetadata{
 		RoleARN:              assumeRole.RoleARN,

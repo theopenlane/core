@@ -87,7 +87,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1001"})
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
@@ -97,7 +97,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
-	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
+	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":1001}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
@@ -107,6 +107,9 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusOK, rec.Code)
+
+	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
+	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	require.NoError(t, err)
@@ -128,7 +131,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1004"})
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
@@ -138,7 +141,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
-	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
+	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":1004}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("wrong-secret", payload))
@@ -172,7 +175,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		Exec(user.UserCtx)
 	require.NoError(t, err)
 
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1002"})
 	_, err = suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
@@ -190,7 +193,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		slacknotify.SetConfig(slacknotify.SlackConfig{})
 	})
 
-	payload := []byte(`{"action":"created","installation":{"id":456,"account":{"login":"acme-github-org","type":"Organization"}}}`)
+	payload := []byte(`{"action":"created","installation":{"id":1002,"account":{"login":"acme-github-org","type":"Organization"}}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "installation")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
@@ -200,6 +203,9 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusOK, rec.Code)
+
+	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
+	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
 	bodies := recorder.Bodies()
 	require.Len(t, bodies, 1)
@@ -226,7 +232,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
+	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1003"})
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
@@ -236,7 +242,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
-	payload := []byte(`{"action":"created","installation":{"id":456},"repository":{"full_name":"acme/repo"},"alert":{"number":1}}`)
+	payload := []byte(`{"action":"created","installation":{"id":1003},"repository":{"full_name":"acme/repo"},"alert":{"number":1}}`)
 	deliveryID := "delivery-dup-1"
 
 	firstReq := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))

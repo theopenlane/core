@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -23,42 +22,27 @@ const (
 	defaultSessionName = "openlane-aws"
 )
 
-func decodeCredential[T any](credential types.CredentialSet) (T, error) {
-	var decoded T
-	if len(credential.Data) == 0 {
-		return decoded, ErrCredentialMetadataRequired
-	}
-
-	if err := jsonx.UnmarshalIfPresent(credential.Data, &decoded); err != nil {
-		return decoded, ErrCredentialMetadataInvalid
-	}
-
-	return decoded, nil
-}
-
 func resolveAssumeRoleCredential(bindings types.CredentialBindings) (AssumeRoleCredentialSchema, error) {
-	credential, ok := bindings.Resolve(awsAssumeRoleCredential)
+	decoded, ok, err := awsAssumeRoleCredential.Resolve(bindings)
+	if err != nil {
+		return AssumeRoleCredentialSchema{}, ErrCredentialMetadataInvalid
+	}
+
 	if !ok {
 		return AssumeRoleCredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	decoded, err := decodeCredential[AssumeRoleCredentialSchema](credential)
-	if err != nil {
-		return AssumeRoleCredentialSchema{}, err
 	}
 
 	return decoded.applyDefaults(), nil
 }
 
 func resolveSourceCredential(bindings types.CredentialBindings) (*SourceCredentialSchema, error) {
-	credential, ok := bindings.Resolve(awsSourceCredential)
-	if !ok {
-		return nil, nil
-	}
-
-	decoded, err := decodeCredential[SourceCredentialSchema](credential)
+	decoded, ok, err := awsSourceCredential.Resolve(bindings)
 	if err != nil {
 		return nil, err
+	}
+
+	if !ok {
+		return nil, nil
 	}
 
 	return &decoded, nil

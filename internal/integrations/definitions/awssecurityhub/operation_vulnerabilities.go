@@ -30,7 +30,7 @@ type VulnerabilitiesCollect struct{}
 
 // IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
 func (v VulnerabilitiesCollect) IngestHandle() types.IngestHandler {
-	return providerkit.IngestWithClientRequestConfig(
+	return providerkit.WithClientRequestConfig(
 		SecurityHubClient,
 		VulnerabilitiesCollectOperation,
 		ErrOperationConfigInvalid,

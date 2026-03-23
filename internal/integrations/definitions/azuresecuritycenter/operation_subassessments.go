@@ -66,7 +66,7 @@ type SubAssessmentsCollect struct{}
 
 // IngestHandle adapts sub-assessments collection to the ingest operation registration boundary
 func (s SubAssessmentsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.IngestWithClientRequest(
+	return providerkit.WithClientRequest(
 		SecurityCenterClient,
 		func(ctx context.Context, _ types.OperationRequest, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
 			return s.Run(ctx, client)

@@ -3,14 +3,14 @@ package azureentraid
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the Azure EntraID definition builder with the supplied operator config applied
-func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder(cfg Config) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -32,17 +32,17 @@ func Builder(cfg Config) definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         entraTenantCredential,
+					Ref:         entraTenantCredential.ID(),
 					Name:        "Azure Entra ID Credential",
 					Description: "Credential slot shared by the Azure Entra ID clients in this definition.",
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       entraTenantCredential,
+					CredentialRef:       entraTenantCredential.ID(),
 					Name:                "Azure Entra ID OAuth",
 					Description:         "Authenticate with Microsoft Graph using delegated tenant admin consent.",
-					CredentialRefs:      []types.CredentialRef{entraTenantCredential},
+					CredentialRefs:      []types.CredentialSlotID{entraTenantCredential.ID()},
 					ClientRefs:          []types.ClientID{EntraCredential.ID(), EntraClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
@@ -96,7 +96,7 @@ func Builder(cfg Config) definition.Builder {
 						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: entraTenantCredential,
+						CredentialRef: entraTenantCredential.ID(),
 						Name:          "Disconnect Azure Entra ID OAuth",
 						Description:   "Remove the persisted Azure Entra ID OAuth credential and disconnect this installation from Openlane.",
 					},
@@ -105,13 +105,13 @@ func Builder(cfg Config) definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            EntraCredential.ID(),
-					CredentialRefs: []types.CredentialRef{entraTenantCredential},
+					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
 					Description:    "Azure client credentials token credential for auth verification",
 					Build:          CredentialClient{cfg: cfg}.Build,
 				},
 				{
 					Ref:            EntraClient.ID(),
-					CredentialRefs: []types.CredentialRef{entraTenantCredential},
+					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
 					Description:    "Microsoft Graph service client for directory operations",
 					Build:          GraphClient{cfg: cfg}.Build,
 				},

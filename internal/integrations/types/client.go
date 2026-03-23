@@ -27,7 +27,7 @@ type ClientRegistration struct {
 	// Ref is the internal client identity used for operation/runtime lookup
 	Ref ClientID `json:"-"`
 	// CredentialRefs identifies which durable credential slots this client may use
-	CredentialRefs []CredentialRef `json:"credentialRefs,omitempty"`
+	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
 	// Description describes what the client is used for
 	Description string `json:"description,omitempty"`
 	// ConfigSchema is the JSON schema for client-specific configuration

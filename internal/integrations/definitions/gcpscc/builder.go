@@ -2,14 +2,14 @@ package gcpscc
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the GCP SCC definition builder
-func Builder() definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder() registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -28,7 +28,7 @@ func Builder() definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         sccCredential,
+					Ref:         sccCredential.ID(),
 					Name:        "GCP SCC Credential",
 					Description: "Credential slot used by the GCP Security Command Center client in this definition.",
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
@@ -36,15 +36,15 @@ func Builder() definition.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       sccCredential,
+					CredentialRef:       sccCredential.ID(),
 					Name:                "GCP Service Account",
 					Description:         "Configure Security Command Center access using a service account credential payload.",
-					CredentialRefs:      []types.CredentialRef{sccCredential},
+					CredentialRefs:      []types.CredentialSlotID{sccCredential.ID()},
 					ClientRefs:          []types.ClientID{SCCClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: sccCredential,
+						CredentialRef: sccCredential.ID(),
 						Name:          "Disconnect GCP Service Account",
 						Description:   "Remove the persisted GCP Security Command Center credential and disconnect this installation from Openlane.",
 					},
@@ -53,7 +53,7 @@ func Builder() definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            SCCClient.ID(),
-					CredentialRefs: []types.CredentialRef{sccCredential},
+					CredentialRefs: []types.CredentialSlotID{sccCredential.ID()},
 					Description:    "Google Cloud Security Command Center v2 client",
 					Build:          Client{}.Build,
 				},

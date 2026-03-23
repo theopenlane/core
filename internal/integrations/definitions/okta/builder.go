@@ -2,14 +2,14 @@ package okta
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the Okta definition builder
-func Builder() definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder() registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -28,7 +28,7 @@ func Builder() definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         oktaCredential,
+					Ref:         oktaCredential.ID(),
 					Name:        "Okta Credential",
 					Description: "Credential slot used by the Okta client in this definition.",
 					Schema:      providerkit.SchemaFrom[CredentialSchema](),
@@ -36,15 +36,15 @@ func Builder() definition.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       oktaCredential,
+					CredentialRef:       oktaCredential.ID(),
 					Name:                "Okta API Token",
 					Description:         "Configure Okta tenant access using an API token issued for the target organization.",
-					CredentialRefs:      []types.CredentialRef{oktaCredential},
+					CredentialRefs:      []types.CredentialSlotID{oktaCredential.ID()},
 					ClientRefs:          []types.ClientID{OktaClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oktaCredential,
+						CredentialRef: oktaCredential.ID(),
 						Name:          "Disconnect Okta API Token",
 						Description:   "Remove the persisted Okta API token and disconnect this installation from Openlane.",
 					},
@@ -53,7 +53,7 @@ func Builder() definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            OktaClient.ID(),
-					CredentialRefs: []types.CredentialRef{oktaCredential},
+					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
 					Description:    "Okta API client",
 					Build:          Client{}.Build,
 				},

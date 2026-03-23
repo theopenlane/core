@@ -1,0 +1,402 @@
+//go:build test
+
+package handlers_test
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/echox/middleware/echocontext"
+
+	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
+)
+
+const (
+	operationTestDefinitionID = "def_test_operation"
+	operationTestPath         = "/v1/integrations/:definitionID/operations"
+)
+
+var operationTestCredentialRef = types.NewCredentialSlotID("op_test")
+
+func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          definitionID,
+				Slug:        definitionID,
+				DisplayName: "Operation Test",
+				Active:      true,
+				Visible:     true,
+			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:    operationTestCredentialRef,
+					Name:   "Op Test Credential",
+					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
+				},
+			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:  operationTestCredentialRef,
+					Name:           "Op Test Connection",
+					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef},
+				},
+			},
+			Operations: []types.OperationRegistration{
+				{
+					Name:        "health.default",
+					Description: "Validate the test credential",
+					Topic:       gala.TopicName("integration." + definitionID + ".health.default"),
+					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+						return json.RawMessage(`{"ok":true}`), nil
+					},
+				},
+				{
+					Name:        "sync.repos",
+					Description: "Sync repositories",
+					Topic:       gala.TopicName("integration." + definitionID + ".sync.repos"),
+					Policy:      types.ExecutionPolicy{Inline: inlineNonHealth},
+					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+						return json.RawMessage(`{"synced":true}`), nil
+					},
+				},
+				{
+					Name:         "validated.op",
+					Description:  "Operation with config schema",
+					Topic:        gala.TopicName("integration." + definitionID + ".validated.op"),
+					ConfigSchema: json.RawMessage(`{"type":"object","required":["target"],"properties":{"target":{"type":"string"}}}`),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+						return json.RawMessage(`{"validated":true}`), nil
+					},
+				},
+			},
+		}, nil
+	})
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationHealthCheckInline"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID:  operationTestDefinitionID,
+		IntegrationID: integrationID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "health.default",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationOperationResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.True(t, resp.Success)
+	assert.Equal(t, "ok", resp.Status)
+	assert.Equal(t, "health.default", resp.Operation)
+	assert.Contains(t, resp.Summary, "Health check")
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationInlinePolicy"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, true)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID:  operationTestDefinitionID,
+		IntegrationID: integrationID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "sync.repos",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationOperationResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.True(t, resp.Success)
+	assert.Equal(t, "ok", resp.Status)
+	assert.Equal(t, "sync.repos", resp.Operation)
+	assert.Contains(t, resp.Summary, "Integration operation completed")
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationQueuedAsync"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID:  operationTestDefinitionID,
+		IntegrationID: integrationID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "sync.repos",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationOperationResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.True(t, resp.Success)
+	assert.Equal(t, "queued", resp.Status)
+	assert.Equal(t, "sync.repos", resp.Operation)
+	assert.Contains(t, resp.Summary, "queued")
+	assert.NotEmpty(t, resp.Details)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationUnauthorized"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID: operationTestDefinitionID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "health.default",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusUnauthorized, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationInvalidProvider"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID: "def_nonexistent",
+		Body: handlers.IntegrationOperationBody{
+			Operation: "health.default",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/def_nonexistent/operations", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationMissingName"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID: operationTestDefinitionID,
+		Body:         handlers.IntegrationOperationBody{},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationUnknown"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID: operationTestDefinitionID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "nonexistent.op",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationInvalidConfig"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID:  operationTestDefinitionID,
+		IntegrationID: integrationID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "validated.op",
+			Config:    json.RawMessage(`{"missing":"target_field"}`),
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/v1/integrations/%s/operations?integration_id=%s", operationTestDefinitionID, integrationID), bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "RunIntegrationOperationInstallNotFound"
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+		DefinitionID: operationTestDefinitionID,
+		Body: handlers.IntegrationOperationBody{
+			Operation: "health.default",
+		},
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
+	t.Helper()
+
+	rec, err := suite.db.Integration.Create().
+		SetOwnerID(orgID).
+		SetName(definitionID).
+		SetDefinitionID(definitionID).
+		Save(ctx)
+	require.NoError(t, err)
+
+	credential := types.CredentialSet{
+		Data: json.RawMessage(`{"token":"test-token"}`),
+	}
+
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef, &credential, nil)
+	require.NoError(t, err)
+
+	return rec.ID
+}

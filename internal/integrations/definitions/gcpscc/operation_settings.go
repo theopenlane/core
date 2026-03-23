@@ -44,7 +44,7 @@ type SettingsScan struct {
 
 // Handle adapts settings scan to the generic operation registration boundary
 func (s SettingsScan) Handle() types.OperationHandler {
-	return providerkit.OperationWithClientRequest(
+	return providerkit.WithClientRequest(
 		SCCClient,
 		func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client) (json.RawMessage, error) {
 			return s.Run(ctx, request.Credential, client)

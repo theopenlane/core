@@ -39,7 +39,7 @@ type MessageSend struct {
 
 // Handle adapts message send to the generic operation registration boundary
 func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.OperationWithClientConfig(TeamsClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
+	return providerkit.WithClientConfig(TeamsClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Microsoft Teams channel message via Microsoft Graph

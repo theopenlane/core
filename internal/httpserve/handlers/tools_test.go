@@ -37,7 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
@@ -387,7 +387,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 // testAuthDefinitionID is the canonical ID for the test OAuth definition.
 const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
-var testAuthCredentialRef = types.NewCredentialRef("test_oauth")
+var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition.
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Context) {
@@ -404,7 +404,7 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		Keystore:              credStore,
-		DefinitionBuilders:    []definition.Builder{definition.Builder(buildTestOAuthDefinition)},
+		DefinitionBuilders:    []registry.Builder{registry.Builder(buildTestOAuthDefinition)},
 		SkipExecutorListeners: true,
 	})
 	assert.NoError(suite.T(), err)
@@ -432,7 +432,7 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 				CredentialRef:  testAuthCredentialRef,
 				Name:           "Test OAuth",
 				Description:    "Authenticate the test definition using the OAuth callback fixture.",
-				CredentialRefs: []types.CredentialRef{testAuthCredentialRef},
+				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef},
 				Auth: &types.AuthRegistration{
 					CredentialRef: testAuthCredentialRef,
 					Start:         testAuthStart,

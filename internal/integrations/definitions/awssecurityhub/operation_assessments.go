@@ -61,7 +61,7 @@ type AssessmentsList struct {
 
 // Handle adapts assessments listing to the generic operation registration boundary.
 func (a AssessmentsList) Handle() types.OperationHandler {
-	return providerkit.OperationWithClientRequestConfig(
+	return providerkit.WithClientRequestConfig(
 		AuditManagerClient,
 		AssessmentsListOperation,
 		ErrOperationConfigInvalid,

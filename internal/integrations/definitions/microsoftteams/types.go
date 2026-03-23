@@ -12,9 +12,9 @@ var (
 	// DefinitionID is the stable identifier for the Microsoft Teams integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
 	// Installation is the typed installation metadata handle for the Microsoft Teams definition
-	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// teamsCredential is the auth-managed credential slot used by the Teams client
-	teamsCredential = types.NewCredentialRef(Slug)
+	teamsCredential = types.NewCredentialRef[teamsCred](Slug)
 	// TeamsClient is the client ref for the Microsoft Graph service client used by this definition
 	TeamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
 	// HealthDefaultOperation is the operation ref for the Microsoft Teams health check

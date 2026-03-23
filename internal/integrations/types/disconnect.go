@@ -40,7 +40,7 @@ type DisconnectFunc func(ctx context.Context, request DisconnectRequest) (Discon
 // DisconnectRegistration describes how one definition handles installation teardown
 type DisconnectRegistration struct {
 	// CredentialRef identifies which credential slot this disconnect flow is bound to
-	CredentialRef CredentialRef `json:"credentialRef,omitempty"`
+	CredentialRef CredentialSlotID `json:"credentialRef,omitempty"`
 	// Name is the user-facing disconnect flow name
 	Name string `json:"name,omitempty"`
 	// Description is the user-facing explanation of what disconnect does for this provider

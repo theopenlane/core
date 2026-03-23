@@ -20,6 +20,10 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	userCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(userCtx)

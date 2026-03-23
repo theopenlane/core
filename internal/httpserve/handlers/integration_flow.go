@@ -25,6 +25,10 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)
@@ -53,7 +57,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 	}
 
 	if !jsonx.IsEmptyRawMessage(in.UserInput) {
-		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialRef{}, nil, nil); err != nil {
+		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialSlotID{}, nil, nil); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile user input")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
@@ -152,6 +156,10 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, RefreshInstallationCredentialRequest{}, IntegrationTokenResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
+	}
+
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	reqCtx := ctx.Request().Context()

@@ -2,14 +2,14 @@ package microsoftteams
 
 import (
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the Microsoft Teams definition builder with the supplied operator config applied
-func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder(cfg Config) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -31,17 +31,17 @@ func Builder(cfg Config) definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         teamsCredential,
+					Ref:         teamsCredential.ID(),
 					Name:        "Microsoft Teams Credential",
 					Description: "Auth-managed credential slot used by the Microsoft Teams client in this definition.",
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       teamsCredential,
+					CredentialRef:       teamsCredential.ID(),
 					Name:                "Microsoft Teams OAuth",
 					Description:         "Authenticate with Microsoft Graph to send Teams channel messages.",
-					CredentialRefs:      []types.CredentialRef{teamsCredential},
+					CredentialRefs:      []types.CredentialSlotID{teamsCredential.ID()},
 					ClientRefs:          []types.ClientID{TeamsClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
@@ -76,7 +76,7 @@ func Builder(cfg Config) definition.Builder {
 						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: teamsCredential,
+						CredentialRef: teamsCredential.ID(),
 						Name:          "Disconnect Microsoft Teams OAuth",
 						Description:   "Remove the persisted Microsoft Teams OAuth credential and disconnect this installation from Openlane.",
 					},
@@ -85,7 +85,7 @@ func Builder(cfg Config) definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            TeamsClient.ID(),
-					CredentialRefs: []types.CredentialRef{teamsCredential},
+					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
 					Description:    "Microsoft Graph API client",
 					Build:          Client{}.Build,
 				},

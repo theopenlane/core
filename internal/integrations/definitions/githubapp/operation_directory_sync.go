@@ -52,7 +52,7 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.IngestWithClientRequest(
+	return providerkit.WithClientRequest(
 		GitHubClient,
 		func(ctx context.Context, _ types.OperationRequest, client GraphQLClient) ([]types.IngestPayloadSet, error) {
 			return d.Run(ctx, client)

@@ -22,13 +22,9 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integr
 		return nil, ErrInstallationRequired
 	}
 
-	if len(operation.ConfigSchema) > 0 && len(config) > 0 {
-		validation, err := jsonx.ValidateSchema(operation.ConfigSchema, config)
-		if err != nil {
+	if len(config) > 0 {
+		if err := validatePayload(operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
 			return nil, err
-		}
-		if !validation.Valid() {
-			return nil, ErrOperationConfigInvalid
 		}
 	}
 
@@ -188,7 +184,7 @@ func mergeCredentials(current, overrides types.CredentialBindings) types.Credent
 	return merged
 }
 
-func singleCredential(credentials types.CredentialBindings, refs []types.CredentialRef) types.CredentialSet {
+func singleCredential(credentials types.CredentialBindings, refs []types.CredentialSlotID) types.CredentialSet {
 	if len(refs) != 1 {
 		return types.CredentialSet{}
 	}

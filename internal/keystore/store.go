@@ -57,8 +57,8 @@ func NewStore(db *ent.Client) (*Store, error) {
 }
 
 // LoadCredential resolves one persisted credential slot for one installation record.
-func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef) (types.CredentialSet, bool, error) {
-	if credentialRef == (types.CredentialRef{}) {
+func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
+	if credentialRef == (types.CredentialSlotID{}) {
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
@@ -74,7 +74,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 }
 
 // LoadCredentials resolves the requested credential slots for one installation record.
-func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialRef) (types.CredentialBindings, error) {
+func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
 	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, credentialRefs)
 	if err != nil {
 		return nil, err
@@ -97,8 +97,8 @@ func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integrati
 }
 
 // SaveCredential upserts one credential slot for one installation record.
-func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef, credential types.CredentialSet) error {
-	if credentialRef == (types.CredentialRef{}) {
+func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
+	if credentialRef == (types.CredentialSlotID{}) {
 		return ErrCredentialNotFound
 	}
 
@@ -134,11 +134,11 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 }
 
 // SaveInstallationCredential loads the installation record by ID and upserts one credential slot.
-func (s *Store) SaveInstallationCredential(ctx context.Context, installationID string, credentialRef types.CredentialRef, credential types.CredentialSet) error {
+func (s *Store) SaveInstallationCredential(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
 	if installationID == "" {
 		return ErrInstallationIDRequired
 	}
-	if credentialRef == (types.CredentialRef{}) {
+	if credentialRef == (types.CredentialSlotID{}) {
 		return ErrCredentialNotFound
 	}
 
@@ -240,7 +240,7 @@ func clientCacheDigest(credentials types.CredentialBindings, config json.RawMess
 		Hex()
 }
 
-func singleCredential(credentials types.CredentialBindings, refs []types.CredentialRef) types.CredentialSet {
+func singleCredential(credentials types.CredentialBindings, refs []types.CredentialSlotID) types.CredentialSet {
 	if len(refs) != 1 {
 		return types.CredentialSet{}
 	}
@@ -276,8 +276,8 @@ func cloneCredentialBindings(credentials types.CredentialBindings) types.Credent
 	return cloned
 }
 
-func (s *Store) activeCredentialRecord(ctx context.Context, installationID string, credentialRef types.CredentialRef) (*ent.Hush, bool, error) {
-	records, err := s.activeCredentialRecords(ctx, installationID, []types.CredentialRef{credentialRef})
+func (s *Store) activeCredentialRecord(ctx context.Context, installationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
+	records, err := s.activeCredentialRecords(ctx, installationID, []types.CredentialSlotID{credentialRef})
 	if err != nil {
 		return nil, false, err
 	}
@@ -290,14 +290,14 @@ func (s *Store) activeCredentialRecord(ctx context.Context, installationID strin
 	return record, true, nil
 }
 
-func (s *Store) activeCredentialRecords(ctx context.Context, installationID string, credentialRefs []types.CredentialRef) (map[string]*ent.Hush, error) {
+func (s *Store) activeCredentialRecords(ctx context.Context, installationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
 	query := s.db.Hush.Query().
 		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installationID)))
 
 	if len(credentialRefs) > 0 {
 		secretNames := make([]string, 0, len(credentialRefs))
 		for _, ref := range credentialRefs {
-			if ref == (types.CredentialRef{}) {
+			if ref == (types.CredentialSlotID{}) {
 				continue
 			}
 

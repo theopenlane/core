@@ -8,6 +8,10 @@ import (
 
 // ListIntegrationProviders returns declarative metadata about available third-party integration definitions
 func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	return h.Success(ctx, IntegrationProvidersResponse{
 		Reply:     rout.Reply{Success: true},
 		Providers: h.IntegrationsRuntime.Registry().Definitions(),

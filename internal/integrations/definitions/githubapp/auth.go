@@ -45,7 +45,7 @@ type statePayload struct {
 
 func appInstallAuthRegistration(cfg Config) *types.AuthRegistration {
 	return &types.AuthRegistration{
-		CredentialRef: GitHubAppCredential,
+		CredentialRef: GitHubAppCredential.ID(),
 		Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			return startAppInstall(cfg)
 		},
@@ -71,7 +71,7 @@ func appInstallAuthRegistration(cfg Config) *types.AuthRegistration {
 
 func appInstallDisconnectRegistration(_ Config) *types.DisconnectRegistration {
 	return &types.DisconnectRegistration{
-		CredentialRef: GitHubAppCredential,
+		CredentialRef: GitHubAppCredential.ID(),
 		Name:          "Disconnect GitHub App Installation",
 		Description:   "Open the GitHub installation settings page and uninstall the Openlane GitHub App. Openlane will remove the installation after GitHub sends the uninstall webhook.",
 		Disconnect: func(_ context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {

@@ -12,7 +12,7 @@ var (
 	// Installation is the typed installation metadata handle for the Cloudflare definition
 	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
 	// cloudflareCredential is the credential slot used by the Cloudflare client
-	cloudflareCredential = types.NewCredentialRef(Slug)
+	cloudflareCredential = types.NewCredentialRef[CredentialSchema](Slug)
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
 	CloudflareClient = types.NewClientRef[*cf.Client]()
 	// HealthDefaultOperation is the operation ref for the Cloudflare health check

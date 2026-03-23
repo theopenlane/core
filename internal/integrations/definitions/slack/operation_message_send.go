@@ -46,7 +46,7 @@ type MessageDelivery struct {
 
 // Handle adapts message send to the generic operation registration boundary
 func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.OperationWithClientConfig(SlackClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
+	return providerkit.WithClientConfig(SlackClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Slack message via chat.postMessage

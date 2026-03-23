@@ -9,7 +9,7 @@ import (
 // DefinitionProviderState stores installation-scoped state for one definition
 type DefinitionProviderState struct {
 	// CredentialRef identifies which credential-schema-selected connection mode is active for the installation
-	CredentialRef CredentialRef `json:"credentialRef"`
+	CredentialRef CredentialSlotID `json:"credentialRef"`
 }
 
 // ProviderState returns the persisted provider state for this definition

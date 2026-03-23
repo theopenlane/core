@@ -22,7 +22,7 @@ type AuthState struct {
 	// InstallationID identifies the installation record being activated
 	InstallationID string
 	// CredentialRef identifies which credential-schema-selected connection mode is being activated
-	CredentialRef types.CredentialRef
+	CredentialRef types.CredentialSlotID
 	// CallbackState holds the opaque state payload returned by the definition's AuthStartFunc
 	CallbackState json.RawMessage
 	// CreatedAt records when the session was initiated

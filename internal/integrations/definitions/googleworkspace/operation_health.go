@@ -22,7 +22,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(WorkspaceClient, h.Run)
+	return providerkit.WithClient(WorkspaceClient, h.Run)
 }
 
 // Run executes the health check using the Google Admin SDK

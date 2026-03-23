@@ -21,7 +21,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClientRequest(
+	return providerkit.WithClientRequest(
 		SCCClient,
 		func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client) (json.RawMessage, error) {
 			return h.Run(ctx, request.Credential, client)

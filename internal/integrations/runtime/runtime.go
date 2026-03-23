@@ -9,7 +9,6 @@ import (
 	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -28,7 +27,7 @@ type Config struct {
 	// Registry overrides the default empty definition registry when provided
 	Registry *registry.Registry
 	// DefinitionBuilders override the built-in catalog when provided
-	DefinitionBuilders []definition.Builder
+	DefinitionBuilders []registry.Builder
 	// Keystore provides credential persistence and installation-scoped client pooling
 	Keystore *keystore.Store
 	// RedisClient provides the shared Redis client used for ephemeral integration auth state
@@ -146,7 +145,7 @@ func New(config Config) (*Runtime, error) {
 		}
 
 		if len(builders) > 0 {
-			if err := definition.RegisterAll(registryInstance, builders...); err != nil {
+			if err := registryInstance.RegisterAll(builders...); err != nil {
 				return nil, err
 			}
 		}
@@ -156,7 +155,7 @@ func New(config Config) (*Runtime, error) {
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(
 			rt.Definition,
-			func(ctx context.Context, installationID string, credentialRef types.CredentialRef, def types.Definition, result types.AuthCompleteResult) error {
+			func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
 				installation, err := rt.ResolveInstallation(ctx, "", installationID, def.ID)
 				if err != nil {
 					return err

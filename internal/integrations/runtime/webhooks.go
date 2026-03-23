@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -117,8 +117,7 @@ func (r *Runtime) FinalizeWebhookDelivery(ctx context.Context, webhook *ent.Inte
 	return update.Exec(ctx)
 }
 
-// ResolveWebhookByEndpoint returns the persisted inbound webhook row for the given endpoint ID.
-// Only primary webhook rows (not delivery idempotency rows) are returned.
+// ResolveWebhookByEndpoint returns the persisted inbound webhook row for the given endpoint ID
 func (r *Runtime) ResolveWebhookByEndpoint(ctx context.Context, endpointID string) (*ent.IntegrationWebhook, error) {
 	return r.DB().IntegrationWebhook.Query().
 		Where(
@@ -128,9 +127,7 @@ func (r *Runtime) ResolveWebhookByEndpoint(ctx context.Context, endpointID strin
 		Only(ctx)
 }
 
-// EnsureWebhook returns the persisted webhook row for one installation and definition webhook.
-// previousIntegrationID is non-empty when the caller knows the installation was just re-created
-// under a new ID and wants existing webhook rows rolled forward to preserve externally configured URLs.
+// EnsureWebhook returns the persisted webhook row for one installation and definition webhook
 func (r *Runtime) EnsureWebhook(ctx context.Context, installation *ent.Integration, webhookName string, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -237,21 +234,12 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 			return dispatchErr
 		},
 		CleanupInstallation: func(cleanupCtx context.Context) error {
-			systemCtx := privacy.DecisionContext(cleanupCtx, privacy.Allow)
-
-			if err := r.Keystore().DeleteCredential(systemCtx, installation.ID); err != nil {
-				return err
-			}
-
-			return r.DB().Integration.DeleteOneID(installation.ID).Exec(systemCtx)
+			return r.cleanupInstallation(privacy.DecisionContext(cleanupCtx, privacy.Allow), installation.ID)
 		},
 	})
 }
 
-// ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration.
-// previousIntegrationID is non-empty when the caller has just created a new integration record; if no
-// row exists under the current installation ID the function falls back to the previous ID and rolls the
-// row forward, preserving endpoint_id and secret_token so externally configured URLs remain valid.
+// ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration
 func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
@@ -264,28 +252,20 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 
 	db := r.DB()
 
+	integrationIDs := []string{installation.ID}
+	if previousIntegrationID != "" {
+		integrationIDs = append(integrationIDs, previousIntegrationID)
+	}
+
 	rows, err := db.IntegrationWebhook.Query().
 		Where(
-			integrationwebhook.IntegrationIDEQ(installation.ID),
+			integrationwebhook.IntegrationIDIn(integrationIDs...),
 			integrationwebhook.NameEQ(registration.Name),
 			integrationwebhook.ExternalEventIDIsNil(),
 		).
 		All(ctx)
 	if err != nil {
 		return nil, err
-	}
-
-	if len(rows) == 0 && previousIntegrationID != "" {
-		rows, err = db.IntegrationWebhook.Query().
-			Where(
-				integrationwebhook.IntegrationIDEQ(previousIntegrationID),
-				integrationwebhook.NameEQ(registration.Name),
-				integrationwebhook.ExternalEventIDIsNil(),
-			).
-			All(ctx)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	if len(rows) == 0 {
@@ -304,7 +284,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 
 	row := rows[0]
 
-	// Remove duplicates that should not exist.
+	// Remove duplicates that should not exist
 	duplicateIDs := lo.FilterMap(rows, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
 		return candidate.ID, candidate.ID != row.ID
 	})

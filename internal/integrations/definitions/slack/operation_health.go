@@ -22,7 +22,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(SlackClient, h.Run)
+	return providerkit.WithClient(SlackClient, h.Run)
 }
 
 // Run executes the Slack auth.test health check

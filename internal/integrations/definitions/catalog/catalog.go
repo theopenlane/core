@@ -1,7 +1,7 @@
 package catalog
 
 import (
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/definitions/azuresecuritycenter"
@@ -16,8 +16,8 @@ import (
 )
 
 // Builders returns the built-in reference definition builders
-func Builders(cfg Config) []definition.Builder {
-	return []definition.Builder{
+func Builders(cfg Config) []registry.Builder {
+	return []registry.Builder{
 		githubapp.Builder(cfg.GitHubApp),
 		awssecurityhub.Builder(),
 		scim.Builder(),

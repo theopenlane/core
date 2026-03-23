@@ -8,13 +8,15 @@ import (
 )
 
 // saveInstallationMetadata persists installation metadata for one installation
-func saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
+func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
+	db := r.DB()
+
 	if len(metadata.Attributes) == 0 {
 		if len(installation.InstallationMetadata.Attributes) == 0 {
 			return nil
 		}
 
-		if err := ent.FromContext(ctx).Integration.UpdateOneID(installation.ID).ClearInstallationMetadata().Exec(ctx); err != nil {
+		if err := db.Integration.UpdateOneID(installation.ID).ClearInstallationMetadata().Exec(ctx); err != nil {
 			return err
 		}
 
@@ -23,7 +25,7 @@ func saveInstallationMetadata(ctx context.Context, installation *ent.Integration
 		return nil
 	}
 
-	if err := ent.FromContext(ctx).Integration.UpdateOneID(installation.ID).SetInstallationMetadata(metadata).Exec(ctx); err != nil {
+	if err := db.Integration.UpdateOneID(installation.ID).SetInstallationMetadata(metadata).Exec(ctx); err != nil {
 		return err
 	}
 

@@ -3,14 +3,14 @@ package googleworkspace
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the Google Workspace definition builder with the supplied operator config applied
-func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder(cfg Config) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -32,17 +32,17 @@ func Builder(cfg Config) definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         workspaceCredential,
+					Ref:         workspaceCredential.ID(),
 					Name:        "Google Workspace Credential",
 					Description: "Auth-managed credential slot used by the Google Workspace client in this definition.",
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       workspaceCredential,
+					CredentialRef:       workspaceCredential.ID(),
 					Name:                "Google Workspace OAuth",
 					Description:         "Authenticate with Google Workspace using delegated OAuth access.",
-					CredentialRefs:      []types.CredentialRef{workspaceCredential},
+					CredentialRefs:      []types.CredentialSlotID{workspaceCredential.ID()},
 					ClientRefs:          []types.ClientID{WorkspaceClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
@@ -81,7 +81,7 @@ func Builder(cfg Config) definition.Builder {
 						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: workspaceCredential,
+						CredentialRef: workspaceCredential.ID(),
 						Name:          "Disconnect Google Workspace OAuth",
 						Description:   "Remove the persisted Google Workspace OAuth credential and disconnect this installation from Openlane.",
 					},
@@ -90,7 +90,7 @@ func Builder(cfg Config) definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            WorkspaceClient.ID(),
-					CredentialRefs: []types.CredentialRef{workspaceCredential},
+					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
 					Description:    "Google Workspace Admin SDK client",
 					Build:          Client{}.Build,
 				},

@@ -25,18 +25,27 @@ func (r *Runtime) CompleteAuth(ctx context.Context, req keymaker.CompleteRequest
 }
 
 // LoadCredential resolves one persisted credential slot for one installation
-func (r *Runtime) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialRef) (types.CredentialSet, bool, error) {
+func (r *Runtime) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
 	return r.Keystore().LoadCredential(ctx, installation, credentialRef)
 }
 
 // LoadCredentials resolves the requested credential slots for one installation
-func (r *Runtime) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialRef) (types.CredentialBindings, error) {
+func (r *Runtime) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
 	return r.Keystore().LoadCredentials(ctx, installation, credentialRefs)
 }
 
 // DeleteCredential removes credentials for one installation identifier and evicts cached clients
 func (r *Runtime) DeleteCredential(ctx context.Context, installationID string) error {
 	return r.Keystore().DeleteCredential(ctx, installationID)
+}
+
+// cleanupInstallation removes credentials and the installation record for one installation
+func (r *Runtime) cleanupInstallation(ctx context.Context, installationID string) error {
+	if err := r.Keystore().DeleteCredential(ctx, installationID); err != nil {
+		return err
+	}
+
+	return r.DB().Integration.DeleteOneID(installationID).Exec(ctx)
 }
 
 // Disconnect executes the teardown flow for one installation
@@ -80,11 +89,7 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 		}
 	}
 
-	if err := r.Keystore().DeleteCredential(ctx, installation.ID); err != nil {
-		return types.DisconnectResult{}, err
-	}
-
-	if err := r.DB().Integration.DeleteOneID(installation.ID).Exec(ctx); err != nil {
+	if err := r.cleanupInstallation(ctx, installation.ID); err != nil {
 		return types.DisconnectResult{}, err
 	}
 
@@ -96,7 +101,7 @@ func (r *Runtime) Reconcile(
 	ctx context.Context,
 	installation *ent.Integration,
 	userInput json.RawMessage,
-	credentialRef types.CredentialRef,
+	credentialRef types.CredentialSlotID,
 	credential *types.CredentialSet,
 	installationInput json.RawMessage,
 ) error {
@@ -122,14 +127,9 @@ func (r *Runtime) Reconcile(
 
 // reconcileUserInput validates and persists user input for one installation
 func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Integration, def types.Definition, userInput json.RawMessage) error {
-	if def.UserInput != nil && len(def.UserInput.Schema) > 0 {
-		result, err := jsonx.ValidateSchema(def.UserInput.Schema, userInput)
-		if err != nil {
-			return fmt.Errorf("reconcile: validate user input schema: %w", err)
-		}
-
-		if !result.Valid() {
-			return ErrUserInputInvalid
+	if def.UserInput != nil {
+		if err := validatePayload(def.UserInput.Schema, userInput, ErrUserInputInvalid); err != nil {
+			return err
 		}
 	}
 
@@ -156,7 +156,7 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		return err
 	}
 
-	if state.CredentialRef == (types.CredentialRef{}) {
+	if state.CredentialRef == (types.CredentialSlotID{}) {
 		return nil
 	}
 
@@ -180,7 +180,7 @@ func (r *Runtime) reconcileCredential(
 	ctx context.Context,
 	installation *ent.Integration,
 	def types.Definition,
-	credentialRef types.CredentialRef,
+	credentialRef types.CredentialSlotID,
 	credential types.CredentialSet,
 	installationInput json.RawMessage,
 ) error {
@@ -196,15 +196,8 @@ func (r *Runtime) reconcileCredential(
 		return err
 	}
 
-	if len(registration.Schema) > 0 {
-		result, err := jsonx.ValidateSchema(registration.Schema, credential.Data)
-		if err != nil {
-			return fmt.Errorf("reconcile: validate credential schema: %w", err)
-		}
-
-		if !result.Valid() {
-			return ErrCredentialInvalid
-		}
+	if err := validatePayload(registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
+		return err
 	}
 
 	bindings, err := r.candidateCredentials(ctx, installation, connection, credentialRef, credential)
@@ -250,6 +243,7 @@ func (r *Runtime) reconcileCredential(
 	return r.reconcileInstallationWebhooks(systemCtx, installation, "")
 }
 
+// reconcileConnectionInstallationMetadata updates installation metadata for a connection
 func (r *Runtime) reconcileConnectionInstallationMetadata(
 	ctx context.Context,
 	installation *ent.Integration,
@@ -275,24 +269,40 @@ func (r *Runtime) reconcileConnectionInstallationMetadata(
 	}
 
 	if !ok {
-		return saveInstallationMetadata(ctx, installation, types.IntegrationInstallationMetadata{})
+		return r.saveInstallationMetadata(ctx, installation, types.IntegrationInstallationMetadata{})
 	}
 
-	return saveInstallationMetadata(ctx, installation, metadata)
+	return r.saveInstallationMetadata(ctx, installation, metadata)
 }
 
-func (r *Runtime) resolvePersistedConnection(def types.Definition, installation *ent.Integration) (types.ConnectionRegistration, error) {
+// resolveConnectionFromState resolves the connection persisted in provider state for an installation.
+// Returns the connection, whether state was found, and any error
+func (r *Runtime) resolveConnectionFromState(def types.Definition, installation *ent.Integration) (types.ConnectionRegistration, bool, error) {
 	state, err := def.ProviderState(installation.ProviderState)
+	if err != nil {
+		return types.ConnectionRegistration{}, false, err
+	}
+
+	if state.CredentialRef == (types.CredentialSlotID{}) {
+		return types.ConnectionRegistration{}, false, nil
+	}
+
+	connection, err := def.ConnectionRegistration(state.CredentialRef)
+	if err != nil {
+		return types.ConnectionRegistration{}, false, ErrConnectionNotFound
+	}
+
+	return connection, true, nil
+}
+
+// resolvePersistedConnection resolves the persisted connection for an installation
+func (r *Runtime) resolvePersistedConnection(def types.Definition, installation *ent.Integration) (types.ConnectionRegistration, error) {
+	connection, found, err := r.resolveConnectionFromState(def, installation)
 	if err != nil {
 		return types.ConnectionRegistration{}, err
 	}
 
-	if state.CredentialRef != (types.CredentialRef{}) {
-		connection, err := def.ConnectionRegistration(state.CredentialRef)
-		if err != nil {
-			return types.ConnectionRegistration{}, ErrConnectionNotFound
-		}
-
+	if found {
 		return connection, nil
 	}
 
@@ -303,18 +313,14 @@ func (r *Runtime) resolvePersistedConnection(def types.Definition, installation 
 	return types.ConnectionRegistration{}, ErrConnectionRequired
 }
 
-func (r *Runtime) resolveConnectionForCredential(def types.Definition, installation *ent.Integration, credentialRef types.CredentialRef) (types.ConnectionRegistration, error) {
-	state, err := def.ProviderState(installation.ProviderState)
+// resolveConnectionForCredential resolves the connection for a given credential reference
+func (r *Runtime) resolveConnectionForCredential(def types.Definition, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.ConnectionRegistration, error) {
+	connection, found, err := r.resolveConnectionFromState(def, installation)
 	if err != nil {
 		return types.ConnectionRegistration{}, err
 	}
 
-	if state.CredentialRef != (types.CredentialRef{}) {
-		connection, err := def.ConnectionRegistration(state.CredentialRef)
-		if err != nil {
-			return types.ConnectionRegistration{}, ErrConnectionNotFound
-		}
-
+	if found {
 		credentialDeclared := false
 		for _, ref := range connection.CredentialRefs {
 			if ref.String() == credentialRef.String() {
@@ -322,6 +328,7 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 				break
 			}
 		}
+
 		if !credentialDeclared {
 			return types.ConnectionRegistration{}, ErrConnectionNotFound
 		}
@@ -329,11 +336,11 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 		return connection, nil
 	}
 
-	if credentialRef == (types.CredentialRef{}) {
+	if credentialRef == (types.CredentialSlotID{}) {
 		return types.ConnectionRegistration{}, ErrConnectionRequired
 	}
 
-	connection, err := def.ConnectionRegistration(credentialRef)
+	connection, err = def.ConnectionRegistration(credentialRef)
 	if err != nil {
 		return types.ConnectionRegistration{}, ErrConnectionNotFound
 	}
@@ -341,7 +348,8 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 	return connection, nil
 }
 
-func (r *Runtime) candidateCredentials(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, credentialRef types.CredentialRef, credential types.CredentialSet) (types.CredentialBindings, error) {
+// candidateCredentials returns credential bindings with a candidate credential override
+func (r *Runtime) candidateCredentials(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, credentialRef types.CredentialSlotID, credential types.CredentialSet) (types.CredentialBindings, error) {
 	current, err := r.connectionCredentials(ctx, installation, connection)
 	if err != nil {
 		return nil, err
@@ -355,6 +363,7 @@ func (r *Runtime) candidateCredentials(ctx context.Context, installation *ent.In
 	return mergeCredentials(current, override), nil
 }
 
+// connectionCredentials loads all credentials for a connection
 func (r *Runtime) connectionCredentials(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration) (types.CredentialBindings, error) {
 	if len(connection.CredentialRefs) == 0 {
 		return nil, nil
@@ -363,7 +372,8 @@ func (r *Runtime) connectionCredentials(ctx context.Context, installation *ent.I
 	return r.LoadCredentials(ctx, installation, connection.CredentialRefs)
 }
 
-func (r *Runtime) persistConnectionState(ctx context.Context, installation *ent.Integration, def types.Definition, credentialRef types.CredentialRef) error {
+// persistConnectionState updates the provider state for an installation with a new credential reference
+func (r *Runtime) persistConnectionState(ctx context.Context, installation *ent.Integration, def types.Definition, credentialRef types.CredentialSlotID) error {
 	next, err := def.WithProviderState(installation.ProviderState, types.DefinitionProviderState{
 		CredentialRef: credentialRef,
 	})

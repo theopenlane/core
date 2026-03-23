@@ -19,8 +19,8 @@ var (
 	ErrClientAlreadyRegistered = errors.New("integrations/registry: client already registered")
 	// ErrClientNotFound indicates the requested client does not exist
 	ErrClientNotFound = errors.New("integrations/registry: client not found")
-	// ErrConnectionNotFound indicates the requested connection does not exist
-	ErrConnectionNotFound = errors.New("integrations/registry: connection not found")
+	// ErrConnectionCredentialRefRequired indicates a connection registration is missing its credential ref
+	ErrConnectionCredentialRefRequired = errors.New("integrations/registry: connection credential ref required")
 	// ErrOperationNameRequired indicates an operation registration is missing its name
 	ErrOperationNameRequired = errors.New("integrations/registry: operation name required")
 	// ErrOperationTopicRequired indicates an operation registration is missing its topic
@@ -69,4 +69,6 @@ var (
 	ErrConnectionDisconnectCredentialRefNotDeclared = errors.New("integrations/registry: connection disconnect credential ref not declared by connection")
 	// ErrUserInputSchemaRequired indicates a definition has a user input block with no schema
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
+	// ErrBuilderNil indicates a builder dependency was nil
+	ErrBuilderNil = errors.New("integrations/registry: builder is nil")
 )

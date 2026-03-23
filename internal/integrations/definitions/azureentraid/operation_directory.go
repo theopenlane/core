@@ -33,7 +33,7 @@ type verifiedDomain struct {
 
 // Handle adapts directory inspect to the generic operation registration boundary
 func (d DirectoryInspect) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(EntraClient, d.Run)
+	return providerkit.WithClient(EntraClient, d.Run)
 }
 
 // Run collects Azure Entra ID tenant metadata via Microsoft Graph

@@ -1,17 +1,23 @@
 package registry
 
 import (
-	"cmp"
-	"slices"
+	"sync"
 
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
-// Registry is the in-memory index of registered definitions
+// Builder builds one manifest-backed definition
+type Builder func() (types.Definition, error)
+
+// Registry is the in-memory index of registered definitions.
+// All registrations must complete before concurrent reads begin;
+// after that point all query methods are safe for concurrent use
 type Registry struct {
+	mu                   sync.RWMutex
 	definitions          map[string]definitionEntry
 	operationsByTopic    map[gala.TopicName]types.OperationRegistration
 	webhookEventsByTopic map[gala.TopicName]types.WebhookEventRegistration
@@ -38,6 +44,9 @@ func New() *Registry {
 
 // Register adds one definition to the registry
 func (r *Registry) Register(def types.Definition) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
 	if err := r.validateDefinition(def); err != nil {
 		return err
 	}
@@ -61,8 +70,31 @@ func (r *Registry) Register(def types.Definition) error {
 	return nil
 }
 
+// RegisterAll builds and registers every supplied definition builder in order
+func (r *Registry) RegisterAll(builders ...Builder) error {
+	for _, builder := range builders {
+		if builder == nil {
+			return ErrBuilderNil
+		}
+
+		def, err := builder()
+		if err != nil {
+			return err
+		}
+
+		if err := r.Register(def); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // Definition returns one definition by canonical identifier
 func (r *Registry) Definition(id string) (types.Definition, bool) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
 	entry, ok := r.definitions[id]
 	if !ok {
 		return types.Definition{}, false
@@ -73,33 +105,27 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 
 // Definitions returns all registered definitions in stable id order
 func (r *Registry) Definitions() []types.Definition {
-	out := lo.MapToSlice(r.definitions, func(_ string, entry definitionEntry) types.Definition {
-		return entry.definition
-	})
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	slices.SortFunc(out, func(a, b types.Definition) int {
-		return cmp.Compare(a.ID, b.ID)
-	})
-
-	return out
+	return mapx.SortedProjection(r.definitions, func(e definitionEntry) types.Definition { return e.definition }, func(d types.Definition) string { return d.ID })
 }
 
 // Client returns one client registration for a definition
 func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegistration, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
 	return lookupInEntry(r, id, clientID, func(e definitionEntry) map[types.ClientID]types.ClientRegistration {
 		return e.clients
 	}, ErrClientNotFound)
 }
 
-// Connection returns one connection registration for a definition
-func (r *Registry) Connection(id string, ref types.CredentialRef) (types.ConnectionRegistration, error) {
-	return lookupInEntry(r, id, ref.String(), func(e definitionEntry) map[string]types.ConnectionRegistration {
-		return e.connections
-	}, ErrConnectionNotFound)
-}
-
 // Operation returns one operation registration for a definition
 func (r *Registry) Operation(id string, name string) (types.OperationRegistration, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
 	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.OperationRegistration {
 		return e.operations
 	}, ErrOperationNotFound)
@@ -107,6 +133,9 @@ func (r *Registry) Operation(id string, name string) (types.OperationRegistratio
 
 // Webhook returns one webhook registration for a definition
 func (r *Registry) Webhook(id string, name string) (types.WebhookRegistration, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
 	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.WebhookRegistration {
 		return e.webhooks
 	}, ErrWebhookNotFound)
@@ -114,15 +143,10 @@ func (r *Registry) Webhook(id string, name string) (types.WebhookRegistration, e
 
 // Catalog returns all definition specs in stable id order
 func (r *Registry) Catalog() []types.DefinitionSpec {
-	out := lo.MapToSlice(r.definitions, func(_ string, entry definitionEntry) types.DefinitionSpec {
-		return entry.definition.DefinitionSpec
-	})
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	slices.SortFunc(out, func(a, b types.DefinitionSpec) int {
-		return cmp.Compare(a.ID, b.ID)
-	})
-
-	return out
+	return mapx.SortedProjection(r.definitions, func(e definitionEntry) types.DefinitionSpec { return e.definition.DefinitionSpec }, func(s types.DefinitionSpec) string { return s.ID })
 }
 
 // validateDefinition checks the top-level definition identity fields before registration
@@ -151,7 +175,7 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 
 	authCredentialNames := make(map[string]struct{}, len(def.Connections))
 	for _, connection := range def.Connections {
-		if connection.Auth != nil && connection.Auth.CredentialRef != (types.CredentialRef{}) {
+		if connection.Auth != nil && connection.Auth.CredentialRef != (types.CredentialSlotID{}) {
 			authCredentialNames[connection.Auth.CredentialRef.String()] = struct{}{}
 		}
 	}
@@ -249,13 +273,20 @@ func indexClients(clients []types.ClientRegistration, credentialNames map[string
 	return clientIndex, nil
 }
 
+// credentialRefDeclared reports whether target appears in refs by string comparison
+func credentialRefDeclared(refs []types.CredentialSlotID, target types.CredentialSlotID) bool {
+	return lo.ContainsBy(refs, func(ref types.CredentialSlotID) bool {
+		return ref.String() == target.String()
+	})
+}
+
 // indexConnections indexes connection registrations while enforcing credential, client, and validation constraints
 func indexConnections(connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration, operations map[string]types.OperationRegistration) (map[string]types.ConnectionRegistration, error) {
 	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
 
 	for _, connection := range connections {
-		if connection.CredentialRef == (types.CredentialRef{}) {
-			return nil, ErrConnectionNotFound
+		if connection.CredentialRef == (types.CredentialSlotID{}) {
+			return nil, ErrConnectionCredentialRefRequired
 		}
 
 		name := connection.CredentialRef.String()
@@ -267,21 +298,14 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 			return nil, ErrConnectionCredentialRefNotDeclared
 		}
 
+		if !credentialRefDeclared(connection.CredentialRefs, connection.CredentialRef) {
+			connection.CredentialRefs = append(connection.CredentialRefs, connection.CredentialRef)
+		}
+
 		for _, ref := range connection.CredentialRefs {
 			if _, declared := credentialNames[ref.String()]; !declared {
 				return nil, ErrConnectionCredentialRefNotDeclared
 			}
-		}
-
-		selectorDeclared := false
-		for _, ref := range connection.CredentialRefs {
-			if ref.String() == connection.CredentialRef.String() {
-				selectorDeclared = true
-				break
-			}
-		}
-		if !selectorDeclared {
-			return nil, ErrConnectionCredentialRefNotDeclared
 		}
 
 		for _, clientRef := range connection.ClientRefs {
@@ -297,35 +321,21 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 		}
 
 		if connection.Auth != nil {
-			if connection.Auth.CredentialRef == (types.CredentialRef{}) {
+			if connection.Auth.CredentialRef == (types.CredentialSlotID{}) {
 				return nil, ErrConnectionAuthCredentialRefNotDeclared
 			}
 
-			authCredentialDeclared := false
-			for _, ref := range connection.CredentialRefs {
-				if ref.String() == connection.Auth.CredentialRef.String() {
-					authCredentialDeclared = true
-					break
-				}
-			}
-			if !authCredentialDeclared {
+			if !credentialRefDeclared(connection.CredentialRefs, connection.Auth.CredentialRef) {
 				return nil, ErrConnectionAuthCredentialRefNotDeclared
 			}
 		}
 
 		if connection.Disconnect != nil {
-			if connection.Disconnect.CredentialRef == (types.CredentialRef{}) {
+			if connection.Disconnect.CredentialRef == (types.CredentialSlotID{}) {
 				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
 			}
 
-			disconnectCredentialDeclared := false
-			for _, ref := range connection.CredentialRefs {
-				if ref.String() == connection.Disconnect.CredentialRef.String() {
-					disconnectCredentialDeclared = true
-					break
-				}
-			}
-			if !disconnectCredentialDeclared {
+			if !credentialRefDeclared(connection.CredentialRefs, connection.Disconnect.CredentialRef) {
 				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
 			}
 		}
@@ -440,17 +450,17 @@ func (r *Registry) indexWebhooks(webhooks []types.WebhookRegistration) (map[stri
 
 // Listeners returns all operation registrations in stable topic order
 func (r *Registry) Listeners() []types.OperationRegistration {
-	out := lo.Values(r.operationsByTopic)
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	slices.SortFunc(out, func(a, b types.OperationRegistration) int {
-		return cmp.Compare(a.Topic, b.Topic)
-	})
-
-	return out
+	return mapx.SortedValues(r.operationsByTopic, func(o types.OperationRegistration) gala.TopicName { return o.Topic })
 }
 
 // WebhookEvent returns one webhook event registration for a definition
 func (r *Registry) WebhookEvent(id string, webhookName string, eventName string) (types.WebhookEventRegistration, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
 	entry, ok := r.definitions[id]
 	if !ok {
 		return types.WebhookEventRegistration{}, ErrDefinitionNotFound
@@ -471,16 +481,14 @@ func (r *Registry) WebhookEvent(id string, webhookName string, eventName string)
 
 // WebhookListeners returns all webhook event registrations in stable topic order
 func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
-	out := lo.Values(r.webhookEventsByTopic)
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	slices.SortFunc(out, func(a, b types.WebhookEventRegistration) int {
-		return cmp.Compare(a.Topic, b.Topic)
-	})
-
-	return out
+	return mapx.SortedValues(r.webhookEventsByTopic, func(e types.WebhookEventRegistration) gala.TopicName { return e.Topic })
 }
 
-// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap
+// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap.
+// Callers must hold r.mu.RLock
 func lookupInEntry[K comparable, V any](r *Registry, id string, key K, getMap func(definitionEntry) map[K]V, notFoundErr error) (V, error) {
 	entry, ok := r.definitions[id]
 	if !ok {

@@ -6,9 +6,9 @@ var (
 	// DefinitionID is the stable identifier for the Azure Security Center integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
 	// Installation is the typed installation metadata handle for the Azure Security Center definition
-	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// securityCenterCredential is the credential slot used by the Azure Security Center client
-	securityCenterCredential = types.NewCredentialRef(Slug)
+	securityCenterCredential = types.NewCredentialRef[CredentialSchema](Slug)
 	// SecurityCenterClient is the client ref for the Azure Security Center client used by this definition
 	SecurityCenterClient = types.NewClientRef[*azureSecurityClient]()
 	// HealthDefaultOperation is the operation ref for the Azure Security Center health check

@@ -2,14 +2,14 @@ package githubapp
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the GitHub App definition builder with the supplied operator config applied
-func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder(cfg Config) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		app := App{Config: cfg}
 
 		return types.Definition{
@@ -33,17 +33,17 @@ func Builder(cfg Config) definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         GitHubAppCredential,
+					Ref:         GitHubAppCredential.ID(),
 					Name:        "GitHub App Credential",
 					Description: "Auth-managed credential slot used by the GitHub App client in this definition.",
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       GitHubAppCredential,
+					CredentialRef:       GitHubAppCredential.ID(),
 					Name:                "GitHub App Installation",
 					Description:         "Install the Openlane GitHub App into a GitHub organization or repository owner account.",
-					CredentialRefs:      []types.CredentialRef{GitHubAppCredential},
+					CredentialRefs:      []types.CredentialSlotID{GitHubAppCredential.ID()},
 					ClientRefs:          []types.ClientID{GitHubClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
@@ -54,7 +54,7 @@ func Builder(cfg Config) definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            GitHubClient.ID(),
-					CredentialRefs: []types.CredentialRef{GitHubAppCredential},
+					CredentialRefs: []types.CredentialSlotID{GitHubAppCredential.ID()},
 					Description:    "GitHub GraphQL client",
 					Build:          Client{APIURL: cfg.APIURL}.Build,
 				},

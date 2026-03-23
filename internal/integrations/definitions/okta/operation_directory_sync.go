@@ -34,7 +34,7 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.IngestWithClientRequest(
+	return providerkit.WithClientRequest(
 		OktaClient,
 		func(ctx context.Context, request types.OperationRequest, c *oktagosdk.APIClient) ([]types.IngestPayloadSet, error) {
 			var cfg UserInput

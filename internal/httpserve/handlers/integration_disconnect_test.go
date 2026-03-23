@@ -16,7 +16,7 @@ import (
 
 	openmodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 	op.OperationID = "DisconnectIntegration"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -68,7 +68,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 	op.OperationID = "DisconnectIntegrationNotFound"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -80,7 +80,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusNotFound, rec.Code)
+	require.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 // createTestIntegration creates an integration record in the DB and saves a test credential.
@@ -145,7 +145,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationWithExplicitID() {
 	op.OperationID = "DisconnectIntegrationWithID"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -174,7 +174,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFoundWithID() {
 	op.OperationID = "DisconnectIntegrationNotFoundWithID"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:definitionID", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -188,5 +188,5 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFoundWithID() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusNotFound, rec.Code)
+	require.Equal(t, http.StatusBadRequest, rec.Code)
 }

@@ -38,7 +38,7 @@ type FindingsCollect struct{}
 
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.IngestWithClientRequestConfig(
+	return providerkit.WithClientRequestConfig(
 		SCCClient,
 		FindingsCollectOperation,
 		ErrOperationConfigInvalid,

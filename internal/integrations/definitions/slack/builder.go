@@ -3,14 +3,14 @@ package slack
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns the Slack definition builder with the supplied operator config applied
-func Builder(cfg Config) definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
+func Builder(cfg Config) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
@@ -32,17 +32,17 @@ func Builder(cfg Config) definition.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         slackCredential,
+					Ref:         slackCredential.ID(),
 					Name:        "Slack Credential",
 					Description: "Auth-managed credential slot used by the Slack client in this definition.",
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       slackCredential,
+					CredentialRef:       slackCredential.ID(),
 					Name:                "Slack OAuth",
 					Description:         "Authenticate with Slack using an installed bot token.",
-					CredentialRefs:      []types.CredentialRef{slackCredential},
+					CredentialRefs:      []types.CredentialSlotID{slackCredential.ID()},
 					ClientRefs:          []types.ClientID{SlackClient.ID()},
 					ValidationOperation: HealthDefaultOperation.Name(),
 					Installation:        Installation.Registration(),
@@ -83,7 +83,7 @@ func Builder(cfg Config) definition.Builder {
 						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: slackCredential,
+						CredentialRef: slackCredential.ID(),
 						Name:          "Disconnect Slack OAuth",
 						Description:   "Remove the persisted Slack OAuth credential and disconnect this workspace installation from Openlane.",
 					},
@@ -92,7 +92,7 @@ func Builder(cfg Config) definition.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            SlackClient.ID(),
-					CredentialRefs: []types.CredentialRef{slackCredential},
+					CredentialRefs: []types.CredentialSlotID{slackCredential.ID()},
 					Description:    "Slack Web API client",
 					Build:          Client{}.Build,
 				},

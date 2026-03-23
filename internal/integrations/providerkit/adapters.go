@@ -2,109 +2,50 @@ package providerkit
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// OperationWithClient adapts a typed client-backed function to an operation handler.
-func OperationWithClient[C any](
-	ref types.ClientRef[C],
-	run func(context.Context, C) (json.RawMessage, error),
-) types.OperationHandler {
-	return OperationWithClientRequest(ref, func(ctx context.Context, _ types.OperationRequest, client C) (json.RawMessage, error) {
+// WithClient adapts a typed client-backed function to a request handler
+func WithClient[C, R any](ref types.ClientRef[C], run func(context.Context, C) (R, error)) func(context.Context, types.OperationRequest) (R, error) {
+	return WithClientRequest(ref, func(ctx context.Context, _ types.OperationRequest, client C) (R, error) {
 		return run(ctx, client)
 	})
 }
 
-// OperationWithClientRequest adapts a typed client-backed function that also needs the full operation request.
-func OperationWithClientRequest[C any](
-	ref types.ClientRef[C],
-	run func(context.Context, types.OperationRequest, C) (json.RawMessage, error),
-) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+// WithClientRequest adapts a typed client-backed function that also needs the full operation request
+func WithClientRequest[C, R any](ref types.ClientRef[C], run func(context.Context, types.OperationRequest, C) (R, error)) func(context.Context, types.OperationRequest) (R, error) {
+	return func(ctx context.Context, request types.OperationRequest) (R, error) {
 		client, err := ref.Cast(request.Client)
 		if err != nil {
-			return nil, err
+			var zero R
+			return zero, err
 		}
 
 		return run(ctx, request, client)
 	}
 }
 
-// OperationWithClientConfig adapts a typed client-backed function that also decodes typed config.
-func OperationWithClientConfig[C any, Config any](
-	ref types.ClientRef[C],
-	op types.OperationRef[Config],
-	configErr error,
-	run func(context.Context, C, Config) (json.RawMessage, error),
-) types.OperationHandler {
-	return OperationWithClientRequestConfig(ref, op, configErr, func(ctx context.Context, _ types.OperationRequest, client C, cfg Config) (json.RawMessage, error) {
+// WithClientConfig adapts a typed client-backed function that also decodes typed config
+func WithClientConfig[C, Config, R any](ref types.ClientRef[C], op types.OperationRef[Config], configErr error, run func(context.Context, C, Config) (R, error)) func(context.Context, types.OperationRequest) (R, error) {
+	return WithClientRequestConfig(ref, op, configErr, func(ctx context.Context, _ types.OperationRequest, client C, cfg Config) (R, error) {
 		return run(ctx, client, cfg)
 	})
 }
 
-// OperationWithClientRequestConfig adapts a typed client-backed function that needs the full request and typed config.
-func OperationWithClientRequestConfig[C any, Config any](
-	ref types.ClientRef[C],
-	op types.OperationRef[Config],
-	configErr error,
-	run func(context.Context, types.OperationRequest, C, Config) (json.RawMessage, error),
-) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
+// WithClientRequestConfig adapts a typed client-backed function that needs the full request and typed config
+func WithClientRequestConfig[C, Config, R any](ref types.ClientRef[C], op types.OperationRef[Config], configErr error, run func(context.Context, types.OperationRequest, C, Config) (R, error)) func(context.Context, types.OperationRequest) (R, error) {
+	return func(ctx context.Context, request types.OperationRequest) (R, error) {
 		client, err := ref.Cast(request.Client)
 		if err != nil {
-			return nil, err
+			var zero R
+			return zero, err
 		}
 
 		cfg, err := op.UnmarshalConfig(request.Config)
 		if err != nil {
-			if configErr != nil {
-				return nil, configErr
-			}
-
-			return nil, err
-		}
-
-		return run(ctx, request, client, cfg)
-	}
-}
-
-// IngestWithClientRequest adapts a typed client-backed function that emits ingest payload sets.
-func IngestWithClientRequest[C any](
-	ref types.ClientRef[C],
-	run func(context.Context, types.OperationRequest, C) ([]types.IngestPayloadSet, error),
-) types.IngestHandler {
-	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
-		client, err := ref.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return run(ctx, request, client)
-	}
-}
-
-// IngestWithClientRequestConfig adapts a typed client-backed function that emits ingest payload sets and decodes typed config.
-func IngestWithClientRequestConfig[C any, Config any](
-	ref types.ClientRef[C],
-	op types.OperationRef[Config],
-	configErr error,
-	run func(context.Context, types.OperationRequest, C, Config) ([]types.IngestPayloadSet, error),
-) types.IngestHandler {
-	return func(ctx context.Context, request types.OperationRequest) ([]types.IngestPayloadSet, error) {
-		client, err := ref.Cast(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		cfg, err := op.UnmarshalConfig(request.Config)
-		if err != nil {
-			if configErr != nil {
-				return nil, configErr
-			}
-
-			return nil, err
+			var zero R
+			return zero, configErr
 		}
 
 		return run(ctx, request, client, cfg)

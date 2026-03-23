@@ -46,7 +46,7 @@ type ChannelsList struct {
 
 // Handle adapts channels list to the generic operation registration boundary
 func (l ChannelsList) Handle() types.OperationHandler {
-	return providerkit.OperationWithClientConfig(SlackClient, ChannelsListOperation, ErrOperationConfigInvalid, l.Run)
+	return providerkit.WithClientConfig(SlackClient, ChannelsListOperation, ErrOperationConfigInvalid, l.Run)
 }
 
 // Run lists Slack conversations that can be used as message destinations

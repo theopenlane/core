@@ -11,7 +11,7 @@ import (
 // OAuthRegistrationOptions describes how one definition maps shared OAuth mechanics to its local credential type
 type OAuthRegistrationOptions[T any] struct {
 	// CredentialRef identifies which credential slot receives the completed OAuth credential
-	CredentialRef types.CredentialRef
+	CredentialRef types.CredentialRef[T]
 	// Config describes the provider OAuth endpoints and request parameters
 	Config OAuthConfig
 	// Material maps shared OAuth material to the definition-local credential payload
@@ -29,7 +29,7 @@ type OAuthRegistrationOptions[T any] struct {
 // OAuthRegistration adapts the shared OAuth transport flow to one definition-local auth registration
 func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegistration {
 	return &types.AuthRegistration{
-		CredentialRef: opts.CredentialRef,
+		CredentialRef: opts.CredentialRef.ID(),
 		Start: func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			return StartOAuth(ctx, opts.Config)
 		},

@@ -24,7 +24,7 @@ type TeamInspect struct {
 
 // Handle adapts team inspect to the generic operation registration boundary
 func (t TeamInspect) Handle() types.OperationHandler {
-	return providerkit.OperationWithClient(SlackClient, t.Run)
+	return providerkit.WithClient(SlackClient, t.Run)
 }
 
 // Run collects Slack workspace metadata via team.info

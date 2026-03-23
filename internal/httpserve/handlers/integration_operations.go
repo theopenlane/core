@@ -33,6 +33,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)

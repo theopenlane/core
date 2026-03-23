@@ -9,16 +9,10 @@ var (
 	ErrDefinitionIDRequired = errors.New("integrations/runtime: definition id required")
 	// ErrInstallationRequired indicates the installation record dependency is missing
 	ErrInstallationRequired = errors.New("integrations/runtime: installation required")
-	// ErrInstallationIDRequired indicates installation resolution requires an installation id when no explicit id is given
-	ErrInstallationIDRequired = errors.New("integrations/runtime: installation id required")
-	// ErrInstallationAmbiguous indicates multiple installations matched the resolution query
-	ErrInstallationAmbiguous = errors.New("integrations/runtime: installation ambiguous")
 	// ErrInstallationNotFound indicates no matching installation could be resolved
 	ErrInstallationNotFound = errors.New("integrations/runtime: installation not found")
 	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
 	ErrInstallationDefinitionMismatch = errors.New("integrations/runtime: installation definition mismatch")
-	// ErrCredentialNotFound indicates no credential could be resolved for the installation
-	ErrCredentialNotFound = errors.New("integrations/runtime: credential not found")
 	// ErrConnectionRequired indicates the installation operation requires a credential-selected connection
 	ErrConnectionRequired = errors.New("integrations/runtime: connection required")
 	// ErrConnectionNotFound indicates the requested connection could not be resolved for the definition
