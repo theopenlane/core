@@ -1211,6 +1211,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "file_category": {
+	ObjectType:      "file_category",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "organization": {
 	ObjectType:      "organization",
 	SkipEditCheck:   false,

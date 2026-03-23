@@ -2078,6 +2078,9 @@ type ComplexityRoot struct {
 		EnvironmentName        func(childComplexity int) int
 		Events                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence               func(childComplexity int) int
+		FileCategory           func(childComplexity int) int
+		FileCategoryID         func(childComplexity int) int
+		FileCategoryName       func(childComplexity int) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                     func(childComplexity int) int
 		IdentityHolder         func(childComplexity int) int
@@ -17409,6 +17412,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.File.Evidence(childComplexity), true
+
+	case "File.fileCategory":
+		if e.ComplexityRoot.File.FileCategory == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.FileCategory(childComplexity), true
+
+	case "File.fileCategoryID":
+		if e.ComplexityRoot.File.FileCategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.FileCategoryID(childComplexity), true
+
+	case "File.fileCategoryName":
+		if e.ComplexityRoot.File.FileCategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.FileCategoryName(childComplexity), true
 
 	case "File.groups":
 		if e.ComplexityRoot.File.Groups == nil {
@@ -66128,6 +66152,10 @@ input CreateFileInput {
   """
   scopeName: String
   """
+  the category of the file
+  """
+  fileCategoryName: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -66191,6 +66219,7 @@ input CreateFileInput {
   lastAccessedAt: Time
   environmentID: ID
   scopeID: ID
+  fileCategoryID: ID
   organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
@@ -80278,6 +80307,14 @@ type File implements Node {
   """
   scopeID: ID
   """
+  the category of the file
+  """
+  fileCategoryName: String
+  """
+  the category of the file
+  """
+  fileCategoryID: ID
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -80309,7 +80346,7 @@ type File implements Node {
   """
   the category type of the file, if any (e.g. evidence, invoice, etc.)
   """
-  categoryType: String
+  categoryType: String @deprecated(reason: "use category_status_name instead")
   """
   the full URI of the file
   """
@@ -80341,6 +80378,7 @@ type File implements Node {
   lastAccessedAt: Time
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  fileCategory: CustomTypeEnum
   organization: [Organization!]
   groups(
     """
@@ -80760,6 +80798,42 @@ input FileWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  file_category_name field predicates
+  """
+  fileCategoryName: String
+  fileCategoryNameNEQ: String
+  fileCategoryNameIn: [String!]
+  fileCategoryNameNotIn: [String!]
+  fileCategoryNameGT: String
+  fileCategoryNameGTE: String
+  fileCategoryNameLT: String
+  fileCategoryNameLTE: String
+  fileCategoryNameContains: String
+  fileCategoryNameHasPrefix: String
+  fileCategoryNameHasSuffix: String
+  fileCategoryNameIsNil: Boolean
+  fileCategoryNameNotNil: Boolean
+  fileCategoryNameEqualFold: String
+  fileCategoryNameContainsFold: String
+  """
+  file_category_id field predicates
+  """
+  fileCategoryID: ID
+  fileCategoryIDNEQ: ID
+  fileCategoryIDIn: [ID!]
+  fileCategoryIDNotIn: [ID!]
+  fileCategoryIDGT: ID
+  fileCategoryIDGTE: ID
+  fileCategoryIDLT: ID
+  fileCategoryIDLTE: ID
+  fileCategoryIDContains: ID
+  fileCategoryIDHasPrefix: ID
+  fileCategoryIDHasSuffix: ID
+  fileCategoryIDIsNil: Boolean
+  fileCategoryIDNotNil: Boolean
+  fileCategoryIDEqualFold: ID
+  fileCategoryIDContainsFold: ID
+  """
   provided_file_name field predicates
   """
   providedFileName: String
@@ -81036,6 +81110,11 @@ input FileWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  file_category edge predicates
+  """
+  hasFileCategory: Boolean
+  hasFileCategoryWith: [CustomTypeEnumWhereInput!]
   """
   organization edge predicates
   """
@@ -126287,6 +126366,11 @@ input UpdateFileInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the category of the file
+  """
+  fileCategoryName: String
+  clearFileCategoryName: Boolean
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String
@@ -126366,6 +126450,8 @@ input UpdateFileInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  fileCategoryID: ID
+  clearFileCategory: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganization: Boolean

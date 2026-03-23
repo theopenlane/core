@@ -985,6 +985,8 @@ type ComplexityRoot struct {
 		DetectedMimeType      func(childComplexity int) int
 		EnvironmentID         func(childComplexity int) int
 		EnvironmentName       func(childComplexity int) int
+		FileCategoryID        func(childComplexity int) int
+		FileCategoryName      func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		InternalNotes         func(childComplexity int) int
@@ -8490,6 +8492,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.EnvironmentName(childComplexity), true
+
+	case "FileHistory.fileCategoryID":
+		if e.ComplexityRoot.FileHistory.FileCategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.FileCategoryID(childComplexity), true
+
+	case "FileHistory.fileCategoryName":
+		if e.ComplexityRoot.FileHistory.FileCategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.FileCategoryName(childComplexity), true
 
 	case "FileHistory.historyTime":
 		if e.ComplexityRoot.FileHistory.HistoryTime == nil {
@@ -33843,6 +33859,14 @@ type FileHistory implements Node {
   """
   scopeID: String
   """
+  the category of the file
+  """
+  fileCategoryName: String
+  """
+  the category of the file
+  """
+  fileCategoryID: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -33874,7 +33898,7 @@ type FileHistory implements Node {
   """
   the category type of the file, if any (e.g. evidence, invoice, etc.)
   """
-  categoryType: String
+  categoryType: String @deprecated(reason: "use category_status_name instead")
   """
   the full URI of the file
   """
@@ -34199,6 +34223,42 @@ input FileHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  file_category_name field predicates
+  """
+  fileCategoryName: String
+  fileCategoryNameNEQ: String
+  fileCategoryNameIn: [String!]
+  fileCategoryNameNotIn: [String!]
+  fileCategoryNameGT: String
+  fileCategoryNameGTE: String
+  fileCategoryNameLT: String
+  fileCategoryNameLTE: String
+  fileCategoryNameContains: String
+  fileCategoryNameHasPrefix: String
+  fileCategoryNameHasSuffix: String
+  fileCategoryNameIsNil: Boolean
+  fileCategoryNameNotNil: Boolean
+  fileCategoryNameEqualFold: String
+  fileCategoryNameContainsFold: String
+  """
+  file_category_id field predicates
+  """
+  fileCategoryID: String
+  fileCategoryIDNEQ: String
+  fileCategoryIDIn: [String!]
+  fileCategoryIDNotIn: [String!]
+  fileCategoryIDGT: String
+  fileCategoryIDGTE: String
+  fileCategoryIDLT: String
+  fileCategoryIDLTE: String
+  fileCategoryIDContains: String
+  fileCategoryIDHasPrefix: String
+  fileCategoryIDHasSuffix: String
+  fileCategoryIDIsNil: Boolean
+  fileCategoryIDNotNil: Boolean
+  fileCategoryIDEqualFold: String
+  fileCategoryIDContainsFold: String
   """
   provided_file_name field predicates
   """

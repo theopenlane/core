@@ -245,6 +245,34 @@ func (_c *FileHistoryCreate) SetNillableScopeID(v *string) *FileHistoryCreate {
 	return _c
 }
 
+// SetFileCategoryName sets the "file_category_name" field.
+func (_c *FileHistoryCreate) SetFileCategoryName(v string) *FileHistoryCreate {
+	_c.mutation.SetFileCategoryName(v)
+	return _c
+}
+
+// SetNillableFileCategoryName sets the "file_category_name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableFileCategoryName(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetFileCategoryName(*v)
+	}
+	return _c
+}
+
+// SetFileCategoryID sets the "file_category_id" field.
+func (_c *FileHistoryCreate) SetFileCategoryID(v string) *FileHistoryCreate {
+	_c.mutation.SetFileCategoryID(v)
+	return _c
+}
+
+// SetNillableFileCategoryID sets the "file_category_id" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableFileCategoryID(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetFileCategoryID(*v)
+	}
+	return _c
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_c *FileHistoryCreate) SetProvidedFileName(v string) *FileHistoryCreate {
 	_c.mutation.SetProvidedFileName(v)
@@ -672,6 +700,14 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(filehistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.FileCategoryName(); ok {
+		_spec.SetField(filehistory.FieldFileCategoryName, field.TypeString, value)
+		_node.FileCategoryName = value
+	}
+	if value, ok := _c.mutation.FileCategoryID(); ok {
+		_spec.SetField(filehistory.FieldFileCategoryID, field.TypeString, value)
+		_node.FileCategoryID = value
 	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

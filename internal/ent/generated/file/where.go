@@ -132,6 +132,16 @@ func ScopeID(v string) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldScopeID, v))
 }
 
+// FileCategoryName applies equality check predicate on the "file_category_name" field. It's identical to FileCategoryNameEQ.
+func FileCategoryName(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldFileCategoryName, v))
+}
+
+// FileCategoryID applies equality check predicate on the "file_category_id" field. It's identical to FileCategoryIDEQ.
+func FileCategoryID(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldFileCategoryID, v))
+}
+
 // ProvidedFileName applies equality check predicate on the "provided_file_name" field. It's identical to ProvidedFileNameEQ.
 func ProvidedFileName(v string) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldProvidedFileName, v))
@@ -1070,6 +1080,156 @@ func ScopeIDEqualFold(v string) predicate.File {
 // ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
 func ScopeIDContainsFold(v string) predicate.File {
 	return predicate.File(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// FileCategoryNameEQ applies the EQ predicate on the "file_category_name" field.
+func FileCategoryNameEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameNEQ applies the NEQ predicate on the "file_category_name" field.
+func FileCategoryNameNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameIn applies the In predicate on the "file_category_name" field.
+func FileCategoryNameIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldFileCategoryName, vs...))
+}
+
+// FileCategoryNameNotIn applies the NotIn predicate on the "file_category_name" field.
+func FileCategoryNameNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldFileCategoryName, vs...))
+}
+
+// FileCategoryNameGT applies the GT predicate on the "file_category_name" field.
+func FileCategoryNameGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameGTE applies the GTE predicate on the "file_category_name" field.
+func FileCategoryNameGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameLT applies the LT predicate on the "file_category_name" field.
+func FileCategoryNameLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameLTE applies the LTE predicate on the "file_category_name" field.
+func FileCategoryNameLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameContains applies the Contains predicate on the "file_category_name" field.
+func FileCategoryNameContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameHasPrefix applies the HasPrefix predicate on the "file_category_name" field.
+func FileCategoryNameHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameHasSuffix applies the HasSuffix predicate on the "file_category_name" field.
+func FileCategoryNameHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameIsNil applies the IsNil predicate on the "file_category_name" field.
+func FileCategoryNameIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldFileCategoryName))
+}
+
+// FileCategoryNameNotNil applies the NotNil predicate on the "file_category_name" field.
+func FileCategoryNameNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldFileCategoryName))
+}
+
+// FileCategoryNameEqualFold applies the EqualFold predicate on the "file_category_name" field.
+func FileCategoryNameEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldFileCategoryName, v))
+}
+
+// FileCategoryNameContainsFold applies the ContainsFold predicate on the "file_category_name" field.
+func FileCategoryNameContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldFileCategoryName, v))
+}
+
+// FileCategoryIDEQ applies the EQ predicate on the "file_category_id" field.
+func FileCategoryIDEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDNEQ applies the NEQ predicate on the "file_category_id" field.
+func FileCategoryIDNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDIn applies the In predicate on the "file_category_id" field.
+func FileCategoryIDIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldFileCategoryID, vs...))
+}
+
+// FileCategoryIDNotIn applies the NotIn predicate on the "file_category_id" field.
+func FileCategoryIDNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldFileCategoryID, vs...))
+}
+
+// FileCategoryIDGT applies the GT predicate on the "file_category_id" field.
+func FileCategoryIDGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDGTE applies the GTE predicate on the "file_category_id" field.
+func FileCategoryIDGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDLT applies the LT predicate on the "file_category_id" field.
+func FileCategoryIDLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDLTE applies the LTE predicate on the "file_category_id" field.
+func FileCategoryIDLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDContains applies the Contains predicate on the "file_category_id" field.
+func FileCategoryIDContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDHasPrefix applies the HasPrefix predicate on the "file_category_id" field.
+func FileCategoryIDHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDHasSuffix applies the HasSuffix predicate on the "file_category_id" field.
+func FileCategoryIDHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDIsNil applies the IsNil predicate on the "file_category_id" field.
+func FileCategoryIDIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldFileCategoryID))
+}
+
+// FileCategoryIDNotNil applies the NotNil predicate on the "file_category_id" field.
+func FileCategoryIDNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldFileCategoryID))
+}
+
+// FileCategoryIDEqualFold applies the EqualFold predicate on the "file_category_id" field.
+func FileCategoryIDEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldFileCategoryID, v))
+}
+
+// FileCategoryIDContainsFold applies the ContainsFold predicate on the "file_category_id" field.
+func FileCategoryIDContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldFileCategoryID, v))
 }
 
 // ProvidedFileNameEQ applies the EQ predicate on the "provided_file_name" field.
@@ -2274,6 +2434,35 @@ func HasScope() predicate.File {
 func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := newScopeStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFileCategory applies the HasEdge predicate on the "file_category" edge.
+func HasFileCategory() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FileCategoryTable, FileCategoryColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFileCategoryWith applies the HasEdge predicate on the "file_category" edge with a given conditions (other predicates).
+func HasFileCategoryWith(preds ...predicate.CustomTypeEnum) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newFileCategoryStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.File

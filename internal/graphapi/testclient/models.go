@@ -6695,6 +6695,8 @@ type CreateFileInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the file
 	ScopeName *string `json:"scopeName,omitempty"`
+	// the category of the file
+	FileCategoryName *string `json:"fileCategoryName,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -6729,6 +6731,7 @@ type CreateFileInput struct {
 	LastAccessedAt            *time.Time `json:"lastAccessedAt,omitempty"`
 	EnvironmentID             *string    `json:"environmentID,omitempty"`
 	ScopeID                   *string    `json:"scopeID,omitempty"`
+	FileCategoryID            *string    `json:"fileCategoryID,omitempty"`
 	OrganizationIDs           []string   `json:"organizationIDs,omitempty"`
 	GroupIDs                  []string   `json:"groupIDs,omitempty"`
 	ContactIDs                []string   `json:"contactIDs,omitempty"`
@@ -15553,6 +15556,10 @@ type File struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the file
 	ScopeID *string `json:"scopeID,omitempty"`
+	// the category of the file
+	FileCategoryName *string `json:"fileCategoryName,omitempty"`
+	// the category of the file
+	FileCategoryID *string `json:"fileCategoryID,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -15587,6 +15594,7 @@ type File struct {
 	LastAccessedAt         *time.Time                   `json:"lastAccessedAt,omitempty"`
 	Environment            *CustomTypeEnum              `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum              `json:"scope,omitempty"`
+	FileCategory           *CustomTypeEnum              `json:"fileCategory,omitempty"`
 	Organization           []*Organization              `json:"organization,omitempty"`
 	Groups                 *GroupConnection             `json:"groups"`
 	Contact                []*Contact                   `json:"contact,omitempty"`
@@ -15815,6 +15823,38 @@ type FileWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// file_category_name field predicates
+	FileCategoryName             *string  `json:"fileCategoryName,omitempty"`
+	FileCategoryNameNeq          *string  `json:"fileCategoryNameNEQ,omitempty"`
+	FileCategoryNameIn           []string `json:"fileCategoryNameIn,omitempty"`
+	FileCategoryNameNotIn        []string `json:"fileCategoryNameNotIn,omitempty"`
+	FileCategoryNameGt           *string  `json:"fileCategoryNameGT,omitempty"`
+	FileCategoryNameGte          *string  `json:"fileCategoryNameGTE,omitempty"`
+	FileCategoryNameLt           *string  `json:"fileCategoryNameLT,omitempty"`
+	FileCategoryNameLte          *string  `json:"fileCategoryNameLTE,omitempty"`
+	FileCategoryNameContains     *string  `json:"fileCategoryNameContains,omitempty"`
+	FileCategoryNameHasPrefix    *string  `json:"fileCategoryNameHasPrefix,omitempty"`
+	FileCategoryNameHasSuffix    *string  `json:"fileCategoryNameHasSuffix,omitempty"`
+	FileCategoryNameIsNil        *bool    `json:"fileCategoryNameIsNil,omitempty"`
+	FileCategoryNameNotNil       *bool    `json:"fileCategoryNameNotNil,omitempty"`
+	FileCategoryNameEqualFold    *string  `json:"fileCategoryNameEqualFold,omitempty"`
+	FileCategoryNameContainsFold *string  `json:"fileCategoryNameContainsFold,omitempty"`
+	// file_category_id field predicates
+	FileCategoryID             *string  `json:"fileCategoryID,omitempty"`
+	FileCategoryIdneq          *string  `json:"fileCategoryIDNEQ,omitempty"`
+	FileCategoryIDIn           []string `json:"fileCategoryIDIn,omitempty"`
+	FileCategoryIDNotIn        []string `json:"fileCategoryIDNotIn,omitempty"`
+	FileCategoryIdgt           *string  `json:"fileCategoryIDGT,omitempty"`
+	FileCategoryIdgte          *string  `json:"fileCategoryIDGTE,omitempty"`
+	FileCategoryIdlt           *string  `json:"fileCategoryIDLT,omitempty"`
+	FileCategoryIdlte          *string  `json:"fileCategoryIDLTE,omitempty"`
+	FileCategoryIDContains     *string  `json:"fileCategoryIDContains,omitempty"`
+	FileCategoryIDHasPrefix    *string  `json:"fileCategoryIDHasPrefix,omitempty"`
+	FileCategoryIDHasSuffix    *string  `json:"fileCategoryIDHasSuffix,omitempty"`
+	FileCategoryIDIsNil        *bool    `json:"fileCategoryIDIsNil,omitempty"`
+	FileCategoryIDNotNil       *bool    `json:"fileCategoryIDNotNil,omitempty"`
+	FileCategoryIDEqualFold    *string  `json:"fileCategoryIDEqualFold,omitempty"`
+	FileCategoryIDContainsFold *string  `json:"fileCategoryIDContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -16056,6 +16096,9 @@ type FileWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
+	// file_category edge predicates
+	HasFileCategory     *bool                       `json:"hasFileCategory,omitempty"`
+	HasFileCategoryWith []*CustomTypeEnumWhereInput `json:"hasFileCategoryWith,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -39665,6 +39708,9 @@ type UpdateFileInput struct {
 	// the scope of the file
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// the category of the file
+	FileCategoryName      *string `json:"fileCategoryName,omitempty"`
+	ClearFileCategoryName *bool   `json:"clearFileCategoryName,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName *string `json:"providedFileName,omitempty"`
 	// the extension of the file provided
@@ -39715,6 +39761,8 @@ type UpdateFileInput struct {
 	ClearEnvironment                *bool      `json:"clearEnvironment,omitempty"`
 	ScopeID                         *string    `json:"scopeID,omitempty"`
 	ClearScope                      *bool      `json:"clearScope,omitempty"`
+	FileCategoryID                  *string    `json:"fileCategoryID,omitempty"`
+	ClearFileCategory               *bool      `json:"clearFileCategory,omitempty"`
 	AddOrganizationIDs              []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs           []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganization               *bool      `json:"clearOrganization,omitempty"`

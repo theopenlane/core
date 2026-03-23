@@ -43,6 +43,10 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldFileCategoryName holds the string denoting the file_category_name field in the database.
+	FieldFileCategoryName = "file_category_name"
+	// FieldFileCategoryID holds the string denoting the file_category_id field in the database.
+	FieldFileCategoryID = "file_category_id"
 	// FieldProvidedFileName holds the string denoting the provided_file_name field in the database.
 	FieldProvidedFileName = "provided_file_name"
 	// FieldProvidedFileExtension holds the string denoting the provided_file_extension field in the database.
@@ -83,6 +87,8 @@ const (
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
 	EdgeScope = "scope"
+	// EdgeFileCategory holds the string denoting the file_category edge name in mutations.
+	EdgeFileCategory = "file_category"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
@@ -135,6 +141,13 @@ const (
 	ScopeInverseTable = "custom_type_enums"
 	// ScopeColumn is the table column denoting the scope relation/edge.
 	ScopeColumn = "scope_id"
+	// FileCategoryTable is the table that holds the file_category relation/edge.
+	FileCategoryTable = "files"
+	// FileCategoryInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	FileCategoryInverseTable = "custom_type_enums"
+	// FileCategoryColumn is the table column denoting the file_category relation/edge.
+	FileCategoryColumn = "file_category_id"
 	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
 	OrganizationTable = "organization_files"
 	// OrganizationInverseTable is the table name for the Organization entity.
@@ -252,6 +265,8 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldFileCategoryName,
+	FieldFileCategoryID,
 	FieldProvidedFileName,
 	FieldProvidedFileExtension,
 	FieldProvidedFileSize,
@@ -351,7 +366,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -445,6 +460,16 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
+// ByFileCategoryName orders the results by the file_category_name field.
+func ByFileCategoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileCategoryName, opts...).ToFunc()
+}
+
+// ByFileCategoryID orders the results by the file_category_id field.
+func ByFileCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileCategoryID, opts...).ToFunc()
+}
+
 // ByProvidedFileName orders the results by the provided_file_name field.
 func ByProvidedFileName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProvidedFileName, opts...).ToFunc()
@@ -536,6 +561,13 @@ func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFileCategoryField orders the results by file_category field.
+func ByFileCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileCategoryStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -802,6 +834,13 @@ func newScopeStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScopeInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
+func newFileCategoryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileCategoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FileCategoryTable, FileCategoryColumn),
 	)
 }
 func newOrganizationStep() *sqlgraph.Step {

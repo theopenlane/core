@@ -2837,6 +2837,7 @@ func init() {
 	fileMixinHooks6 := fileMixin[6].Hooks()
 	fileMixinHooks7 := fileMixin[7].Hooks()
 	fileMixinHooks8 := fileMixin[8].Hooks()
+	fileMixinHooks9 := fileMixin[9].Hooks()
 	fileHooks := schema.File{}.Hooks()
 
 	file.Hooks[1] = fileMixinHooks0[0]
@@ -2851,7 +2852,9 @@ func init() {
 
 	file.Hooks[6] = fileMixinHooks8[0]
 
-	file.Hooks[7] = fileHooks[0]
+	file.Hooks[7] = fileMixinHooks9[0]
+
+	file.Hooks[8] = fileHooks[0]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters5 := fileMixin[5].Interceptors()
 	fileInters := schema.File{}.Interceptors()

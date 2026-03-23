@@ -4577,6 +4577,14 @@ func (_m *File) Scope(ctx context.Context) (*CustomTypeEnum, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *File) FileCategory(ctx context.Context) (*CustomTypeEnum, error) {
+	result, err := _m.Edges.FileCategoryOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFileCategory().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *File) Organization(ctx context.Context) (result []*Organization, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = _m.NamedOrganization(graphql.GetFieldContext(ctx).Field.Alias)
@@ -4597,7 +4605,7 @@ func (_m *File) Groups(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
 	if nodes, err := _m.NamedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -4738,7 +4746,7 @@ func (_m *File) Events(
 		WithEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
 	if nodes, err := _m.NamedEvents(alias); err == nil || hasTotalCount {
 		pager, err := newEventPager(opts, last != nil)
 		if err != nil {
@@ -4759,7 +4767,7 @@ func (_m *File) Integrations(
 		WithIntegrationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[15][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[16][alias]
 	if nodes, err := _m.NamedIntegrations(alias); err == nil || hasTotalCount {
 		pager, err := newIntegrationPager(opts, last != nil)
 		if err != nil {
@@ -4780,7 +4788,7 @@ func (_m *File) Secrets(
 		WithHushFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[16][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[17][alias]
 	if nodes, err := _m.NamedSecrets(alias); err == nil || hasTotalCount {
 		pager, err := newHushPager(opts, last != nil)
 		if err != nil {
@@ -4801,7 +4809,7 @@ func (_m *File) TrustCenterEntities(
 		WithTrustCenterEntityFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[17][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[18][alias]
 	if nodes, err := _m.NamedTrustCenterEntities(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterEntityPager(opts, last != nil)
 		if err != nil {

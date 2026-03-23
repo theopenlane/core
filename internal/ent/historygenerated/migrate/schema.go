@@ -1056,6 +1056,8 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_category_name", Type: field.TypeString, Nullable: true},
+		{Name: "file_category_id", Type: field.TypeString, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
 		{Name: "provided_file_extension", Type: field.TypeString},
 		{Name: "provided_file_size", Type: field.TypeInt64, Nullable: true},

@@ -65,6 +65,11 @@ func (File) Fields() []ent.Field {
 			Optional(),
 		field.String("category_type").
 			Comment("the category type of the file, if any (e.g. evidence, invoice, etc.)").
+			Annotations(
+				entgql.Directives(
+					entgql.Deprecated("use category_status_name instead"),
+				),
+			).
 			Optional(),
 		field.String("uri").
 			Comment("the full URI of the file").
@@ -152,6 +157,7 @@ func (f File) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
+			newCustomEnumMixin(f, withEnumFieldName("category")),
 		},
 	}.getMixins(f)
 }

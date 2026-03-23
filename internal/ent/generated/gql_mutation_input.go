@@ -8848,6 +8848,7 @@ type CreateFileInput struct {
 	SystemInternalID          *string
 	EnvironmentName           *string
 	ScopeName                 *string
+	FileCategoryName          *string
 	ProvidedFileName          string
 	ProvidedFileExtension     string
 	ProvidedFileSize          *int64
@@ -8867,6 +8868,7 @@ type CreateFileInput struct {
 	LastAccessedAt            *time.Time
 	EnvironmentID             *string
 	ScopeID                   *string
+	FileCategoryID            *string
 	OrganizationIDs           []string
 	GroupIDs                  []string
 	ContactIDs                []string
@@ -8903,6 +8905,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.FileCategoryName; v != nil {
+		m.SetFileCategoryName(*v)
 	}
 	m.SetProvidedFileName(i.ProvidedFileName)
 	m.SetProvidedFileExtension(i.ProvidedFileExtension)
@@ -8954,6 +8959,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if v := i.FileCategoryID; v != nil {
+		m.SetFileCategoryID(*v)
 	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
@@ -9030,6 +9038,8 @@ type UpdateFileInput struct {
 	EnvironmentName                 *string
 	ClearScopeName                  bool
 	ScopeName                       *string
+	ClearFileCategoryName           bool
+	FileCategoryName                *string
 	ProvidedFileName                *string
 	ProvidedFileExtension           *string
 	ClearProvidedFileSize           bool
@@ -9065,6 +9075,8 @@ type UpdateFileInput struct {
 	EnvironmentID                   *string
 	ClearScope                      bool
 	ScopeID                         *string
+	ClearFileCategory               bool
+	FileCategoryID                  *string
 	ClearOrganization               bool
 	AddOrganizationIDs              []string
 	RemoveOrganizationIDs           []string
@@ -9155,6 +9167,12 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearFileCategoryName {
+		m.ClearFileCategoryName()
+	}
+	if v := i.FileCategoryName; v != nil {
+		m.SetFileCategoryName(*v)
 	}
 	if v := i.ProvidedFileName; v != nil {
 		m.SetProvidedFileName(*v)
@@ -9260,6 +9278,12 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if i.ClearFileCategory {
+		m.ClearFileCategory()
+	}
+	if v := i.FileCategoryID; v != nil {
+		m.SetFileCategoryID(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
