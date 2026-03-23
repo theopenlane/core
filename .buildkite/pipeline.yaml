@@ -471,9 +471,6 @@ steps:
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
-          - sparse-checkout#v1.6.0:
-              paths:
-                - sonar-project.properties
           - artifacts#v1.9.4:
               download: "coverage-handlers.out"
               step: "go_test_handlers"
@@ -518,9 +515,6 @@ steps:
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
-          - sparse-checkout#v1.6.0:
-              paths:
-                - sonar-project.properties
           - artifacts#v1.9.4:
               download: "coverage-no-api.out"
               step: "go_test_no_api"
