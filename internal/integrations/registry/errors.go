@@ -5,12 +5,8 @@ import "errors"
 var (
 	// ErrDefinitionIDRequired indicates a definition is missing its canonical identifier
 	ErrDefinitionIDRequired = errors.New("integrations/registry: definition id required")
-	// ErrDefinitionSlugRequired indicates a definition is missing its slug
-	ErrDefinitionSlugRequired = errors.New("integrations/registry: definition slug required")
 	// ErrDefinitionAlreadyRegistered indicates the definition ID is already present
 	ErrDefinitionAlreadyRegistered = errors.New("integrations/registry: definition already registered")
-	// ErrDefinitionSlugAlreadyRegistered indicates another definition already owns the slug
-	ErrDefinitionSlugAlreadyRegistered = errors.New("integrations/registry: definition slug already registered")
 	// ErrDefinitionNotFound indicates the requested definition does not exist
 	ErrDefinitionNotFound = errors.New("integrations/registry: definition not found")
 	// ErrClientRequired indicates a client registration is missing its identity

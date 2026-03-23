@@ -31,8 +31,7 @@ type AuthState struct {
 	ExpiresAt time.Time
 }
 
-// AuthStateStore persists callback state until the definition auth callback is completed.
-// This is intentionally ephemeral and scoped to the definition auth flow lifecycle.
+// AuthStateStore persists callback state until the definition auth callback is completed
 type AuthStateStore interface {
 	Save(state AuthState) error
 	Take(token string) (AuthState, error)
@@ -120,6 +119,7 @@ func (m *InMemoryAuthStateStore) Take(token string) (AuthState, error) {
 	return session, nil
 }
 
+// purgeExpiredLocked removes expired sessions from the store. m.mu must be held by the caller
 func (m *InMemoryAuthStateStore) purgeExpiredLocked(now time.Time) {
 	for key, session := range m.sessions {
 		if !session.ExpiresAt.IsZero() && !session.ExpiresAt.After(now) {

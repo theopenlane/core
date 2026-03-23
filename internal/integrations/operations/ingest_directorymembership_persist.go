@@ -44,7 +44,7 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 	)
 }
 
-// resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence.
+// resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence
 func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
 	accountID, err := resolveDirectoryAccountID(ctx, db, integration, input.DirectoryAccountID)
 	if err != nil {
@@ -62,6 +62,7 @@ func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 	return input, nil
 }
 
+// resolveDirectoryAccountID resolves a directory account reference to its internal ID by checking primary key, external ID, and canonical email
 func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration *ent.Integration, value string) (string, error) {
 	value = strings.TrimSpace(value)
 	if value == "" {
@@ -97,6 +98,7 @@ func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration 
 	return account.ID, nil
 }
 
+// resolveDirectoryGroupID resolves a directory group reference to its internal ID by checking primary key, external ID, and email
 func resolveDirectoryGroupID(ctx context.Context, db *ent.Client, integration *ent.Integration, value string) (string, error) {
 	value = strings.TrimSpace(value)
 	if value == "" {

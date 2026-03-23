@@ -13,7 +13,6 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "azure",
 				DisplayName: "Microsoft Defender for Cloud",
 				Description: "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
@@ -31,7 +30,7 @@ func Builder() registry.Builder {
 					Ref:         securityCenterCredential.ID(),
 					Name:        "Azure Security Center Credential",
 					Description: "Credential slot used by the Azure Security Center client in this definition.",
-					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+					Schema:      securityCenterSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -62,14 +61,15 @@ func Builder() registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Azure Security Center assessments API to verify access",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   SecurityCenterClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        AssessmentsCollectOperation.Name(),
 					Description: "Collect unhealthy security posture assessment findings for vulnerability ingestion",
-					Topic:       AssessmentsCollectOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), AssessmentsCollectOperation.Name()),
 					ClientRef:   SecurityCenterClient.ID(),
 					Ingest: []types.IngestContract{
 						{
@@ -81,7 +81,7 @@ func Builder() registry.Builder {
 				{
 					Name:        SubAssessmentsCollectOperation.Name(),
 					Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
-					Topic:       SubAssessmentsCollectOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), SubAssessmentsCollectOperation.Name()),
 					ClientRef:   SecurityCenterClient.ID(),
 					Ingest: []types.IngestContract{
 						{

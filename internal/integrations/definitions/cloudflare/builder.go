@@ -13,7 +13,6 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "cloudflare",
 				DisplayName: "Cloudflare",
 				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",
@@ -31,7 +30,7 @@ func Builder() registry.Builder {
 					Ref:         cloudflareCredential.ID(),
 					Name:        "Cloudflare Credential",
 					Description: "Credential slot used by the Cloudflare client in this definition.",
-					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+					Schema:      cloudflareSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -62,14 +61,15 @@ func Builder() registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify Cloudflare API token via /user/tokens/verify",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   CloudflareClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Collect account members as directory accounts",
-					Topic:       DirectorySyncOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
 					ClientRef:   CloudflareClient.ID(),
 					Ingest: []types.IngestContract{
 						{

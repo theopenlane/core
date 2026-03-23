@@ -13,7 +13,6 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "scim",
 				DisplayName: "SCIM Directory Sync",
 				Description: "Synchronize directory objects through SCIM",
@@ -30,13 +29,14 @@ func Builder() registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Report push-based SCIM health status",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Synchronize directory state through SCIM",
-					Topic:       DirectorySyncOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

@@ -194,6 +194,7 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 	}, nil
 }
 
+// validateInstallation checks that the installation exists and is associated with the expected definition and caller organization
 func (s *Service) validateInstallation(ctx context.Context, installationID string, definitionID string) error {
 	installation, err := s.installationLookup(ctx, installationID)
 	if err != nil {

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -13,13 +12,40 @@ import (
 // in-process identity without requiring per-type backing structs
 type keyID struct{ _ bool }
 
+// namedRef is the shared base for ref types that carry a pointer-based in-process identity
+// and a stable string name used for persistence and topic derivation
+type namedRef struct {
+	// key is the pointer-based in-process identity for the ref
+	key *keyID `json:"-" yaml:"-"`
+	// name is the stable string name used for persistence and topic derivation
+	name string
+}
+
+// newNamedRef creates a named ref with a fresh in-process identity
+func newNamedRef(name string) namedRef {
+	return namedRef{key: new(keyID), name: name}
+}
+
+// Name returns the stable identifier for the ref
+func (r namedRef) Name() string { return r.name }
+
+// unmarshalJSON decodes a JSON document into the typed value using jsonx.UnmarshalIfPresent
+func unmarshalJSON[T any](raw json.RawMessage) (T, error) {
+	var out T
+	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
+		return out, err
+	}
+	return out, nil
+}
+
 // =========
 // Definitions
-// This is the only entity in here that uses plain string because it's string identity is the canonical ID and we store it as a key used to perform lookups
+// This is the only entity in here that uses plain string because its string identity is the canonical ID and we store it as a key used to perform lookups
 // =========
 
 // DefinitionRef is the durable identity for one registered definition
 type DefinitionRef struct {
+	// id is the durable definition identifier
 	id string
 }
 
@@ -37,9 +63,10 @@ func (r DefinitionRef) ID() string {
 // Credentials
 // =========
 
-// CredentialSlotID is the non-generic durable identity for one credential slot used by a definition.
+// CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
 // It is used in registration structs, bindings, and persistence where the credential schema type is not needed
 type CredentialSlotID struct {
+	// name is the stable credential slot name used for persistence and equality comparisons
 	name string
 }
 
@@ -77,6 +104,7 @@ func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 
 // CredentialRef is a typed handle for one credential slot, parameterized by the credential schema type
 type CredentialRef[T any] struct {
+	// id is the non-generic credential slot identity
 	id CredentialSlotID
 }
 
@@ -97,20 +125,18 @@ func (r CredentialRef[T]) String() string {
 
 // Resolve decodes the credential bound to this slot from the supplied bindings
 func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) {
-	for _, b := range bindings {
-		if b.Ref.String() == r.id.String() {
-			var out T
-			if err := json.Unmarshal(b.Credential.Data, &out); err != nil {
-				return out, true, err
-			}
-
-			return out, true, nil
-		}
+	cred, ok := bindings.Resolve(r.id)
+	if !ok {
+		var zero T
+		return zero, false, nil
 	}
 
-	var zero T
+	var out T
+	if err := json.Unmarshal(cred.Data, &out); err != nil {
+		return out, true, err
+	}
 
-	return zero, false, nil
+	return out, true, nil
 }
 
 // =========
@@ -119,6 +145,7 @@ func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) 
 
 // ClientID is the opaque in-process identity for one registered client
 type ClientID struct {
+	// key is the pointer-based in-process identity for the client
 	key *keyID `json:"-" yaml:"-"`
 }
 
@@ -134,6 +161,7 @@ func (id ClientID) String() string {
 
 // ClientRef is a typed handle for one registered client identity
 type ClientRef[T any] struct {
+	// id is the opaque client identity
 	id ClientID `json:"-" yaml:"-"`
 }
 
@@ -165,35 +193,17 @@ func (r ClientRef[T]) Cast(client any) (T, error) {
 
 // OperationRef is a typed handle for one registered operation identity
 type OperationRef[T any] struct {
-	key  *keyID `json:"-" yaml:"-"`
-	name string
+	namedRef
 }
 
 // NewOperationRef creates a typed operation identity handle
 func NewOperationRef[T any](name string) OperationRef[T] {
-	return OperationRef[T]{
-		key:  new(keyID),
-		name: name,
-	}
-}
-
-// Name returns the durable operation identifier
-func (r OperationRef[T]) Name() string {
-	return r.name
-}
-
-// Topic returns the canonical gala topic for one definition slug and operation
-func (r OperationRef[T]) Topic(slug string) gala.TopicName {
-	return gala.TopicName("integration." + slug + "." + r.name)
+	return OperationRef[T]{namedRef: newNamedRef(name)}
 }
 
 // UnmarshalConfig decodes a JSON operation config document into the typed config value
 func (r OperationRef[T]) UnmarshalConfig(raw json.RawMessage) (T, error) {
-	var out T
-	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
-		return out, err
-	}
-	return out, nil
+	return unmarshalJSON[T](raw)
 }
 
 // =========
@@ -202,21 +212,12 @@ func (r OperationRef[T]) UnmarshalConfig(raw json.RawMessage) (T, error) {
 
 // WebhookRef is a handle for one registered webhook contract identity
 type WebhookRef struct {
-	key  *keyID `json:"-" yaml:"-"`
-	name string
+	namedRef
 }
 
 // NewWebhookRef creates a webhook contract identity handle
 func NewWebhookRef(name string) WebhookRef {
-	return WebhookRef{
-		key:  new(keyID),
-		name: name,
-	}
-}
-
-// Name returns the durable webhook identifier
-func (r WebhookRef) Name() string {
-	return r.name
+	return WebhookRef{namedRef: newNamedRef(name)}
 }
 
 // =========
@@ -225,8 +226,10 @@ func (r WebhookRef) Name() string {
 
 // InstallationRef is a typed handle for one definition's installation metadata derivation
 type InstallationRef[T any] struct {
+	// key is the pointer-based in-process identity for the installation ref
 	key *keyID
-	fn  func(ctx context.Context, req InstallationRequest) (T, bool, error)
+	// fn is the typed resolve function that derives installation metadata
+	fn func(ctx context.Context, req InstallationRequest) (T, bool, error)
 }
 
 // NewInstallationRef creates a typed installation metadata handle
@@ -260,33 +263,15 @@ func (r InstallationRef[T]) Registration() *InstallationRegistration {
 
 // WebhookEventRef is a typed handle for one registered webhook event identity
 type WebhookEventRef[T any] struct {
-	key  *keyID `json:"-" yaml:"-"`
-	name string
+	namedRef
 }
 
 // NewWebhookEventRef creates a typed webhook event identity handle
 func NewWebhookEventRef[T any](name string) WebhookEventRef[T] {
-	return WebhookEventRef[T]{
-		key:  new(keyID),
-		name: name,
-	}
-}
-
-// Name returns the durable webhook event identifier
-func (r WebhookEventRef[T]) Name() string {
-	return r.name
-}
-
-// Topic returns the canonical gala topic for one definition slug and webhook event
-func (r WebhookEventRef[T]) Topic(slug string) gala.TopicName {
-	return gala.TopicName("integration." + slug + ".webhook." + r.name)
+	return WebhookEventRef[T]{namedRef: newNamedRef(name)}
 }
 
 // UnmarshalPayload decodes a JSON webhook event payload into the typed payload value
 func (r WebhookEventRef[T]) UnmarshalPayload(raw json.RawMessage) (T, error) {
-	var out T
-	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
-		return out, err
-	}
-	return out, nil
+	return unmarshalJSON[T](raw)
 }

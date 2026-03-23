@@ -69,10 +69,6 @@ func scimRuntimeInstallation(ic *IntegrationContext) (*generated.Integration, er
 		installation.DefinitionID = integrationscim.DefinitionID.ID()
 	}
 
-	if installation.DefinitionSlug == "" {
-		installation.DefinitionSlug = integrationscim.Slug
-	}
-
 	return &installation, nil
 }
 

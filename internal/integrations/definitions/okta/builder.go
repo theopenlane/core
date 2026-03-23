@@ -13,7 +13,6 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "okta",
 				DisplayName: "Okta",
 				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
@@ -31,7 +30,7 @@ func Builder() registry.Builder {
 					Ref:         oktaCredential.ID(),
 					Name:        "Okta Credential",
 					Description: "Credential slot used by the Okta client in this definition.",
-					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+					Schema:      oktaCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -62,21 +61,15 @@ func Builder() registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Okta user API to verify API token",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   OktaClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
-				{
-					Name:        PoliciesCollectOperation.Name(),
-					Description: "Collect sign-on policy metadata for posture analysis",
-					Topic:       PoliciesCollectOperation.Topic(Slug),
-					ClientRef:   OktaClient.ID(),
-					Handle:      PoliciesCollect{}.Handle(),
-				},
-				{
+					{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Collect Okta directory users, groups, and memberships as directory accounts",
-					Topic:       DirectorySyncOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
 					ClientRef:   OktaClient.ID(),
 					Ingest: []types.IngestContract{
 						{

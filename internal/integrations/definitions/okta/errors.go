@@ -15,8 +15,6 @@ var (
 	ErrClientConfigInvalid = errors.New("okta: client config invalid")
 	// ErrUserLookupFailed indicates the current user lookup failed
 	ErrUserLookupFailed = errors.New("okta: user lookup failed")
-	// ErrPoliciesFetchFailed indicates policy listing failed
-	ErrPoliciesFetchFailed = errors.New("okta: policies fetch failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("okta: result encode failed")
 	// ErrDirectoryUsersFetchFailed indicates the Okta users listing failed

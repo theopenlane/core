@@ -50,7 +50,9 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 
 // staticTokenCredential wraps a pre-obtained bearer token as an azcore.TokenCredential
 type staticTokenCredential struct {
-	token  string
+	// token is the pre-obtained bearer token used for Microsoft Graph requests
+	token string
+	// expiry is the timestamp at which the bearer token expires
 	expiry time.Time
 }
 

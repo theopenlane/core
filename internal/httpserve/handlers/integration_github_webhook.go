@@ -40,7 +40,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 	// GitHub signs deliveries at the app webhook level using the operator-configured secret,
 	// so verify the signature before resolving any local state
 	if webhook.Verify != nil {
-		if err := webhook.Verify(types.WebhookVerifyRequest{Request: req, Payload: payload}); err != nil {
+		if err := webhook.Verify(types.WebhookInboundRequest{Request: req, Payload: payload}); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("webhook verification failed")
 			return h.BadRequest(ctx, err, openapiCtx)
 		}

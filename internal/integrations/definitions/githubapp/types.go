@@ -3,24 +3,27 @@ package githubapp
 import (
 	"time"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 var (
 	// DefinitionID is the stable identifier for the GitHub App integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
+	// gitHubAppCredentialSchema is the reflected JSON schema for the GitHub App credential
 	// GitHubAppCredential is the auth-managed credential slot used by the GitHub client
-	GitHubAppCredential = types.NewCredentialRef[githubAppCredential](Slug)
+	gitHubAppCredentialSchema, GitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	GitHubClient = types.NewClientRef[GraphQLClient]()
 	// HealthDefaultOperation is the operation ref for the GitHub App health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
 	// RepositorySyncOperation is the operation ref for the repository sync operation
-	RepositorySyncOperation = types.NewOperationRef[RepositorySync]("repository.sync")
+	_, RepositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
+	// vulnerabilityCollectSchema is the reflected JSON schema for the vulnerability collect operation config
 	// VulnerabilityCollectOperation is the operation ref for the vulnerability collection operation
-	VulnerabilityCollectOperation = types.NewOperationRef[VulnerabilityCollectConfig]("vulnerability.collect")
+	vulnerabilityCollectSchema, VulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilityCollectConfig]()
 	// DirectorySyncOperation is the operation ref for the directory account sync operation
-	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
+	_, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events
@@ -38,9 +41,6 @@ var (
 	// Installation is the typed installation metadata handle for the GitHub App definition
 	Installation = types.NewInstallationRef(resolveInstallationMetadata)
 )
-
-// Slug is the unique identifier for the GitHub App integration
-const Slug = "github_app"
 
 const (
 	// githubAlertTypeDependabot is the variant name for Dependabot security alert payloads

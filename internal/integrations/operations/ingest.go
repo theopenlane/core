@@ -55,6 +55,7 @@ type mappedIngestRecord struct {
 	Payload json.RawMessage
 }
 
+// directorySyncRunSchemas is the set of mapping schemas that require a directory sync run record
 var directorySyncRunSchemas = map[string]struct{}{
 	integrationgenerated.IntegrationMappingSchemaDirectoryAccount:    {},
 	integrationgenerated.IntegrationMappingSchemaDirectoryGroup:      {},

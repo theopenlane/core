@@ -68,6 +68,17 @@ var (
 	)
 )
 
+// mapExprRepositoryAsset is the CEL mapping expression for GitHub repository payloads mapped to Asset
+var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
+	{Key: integrationgenerated.IntegrationMappingAssetSourceIdentifier, Expr: "payload.nameWithOwner"},
+	{Key: integrationgenerated.IntegrationMappingAssetDisplayName, Expr: "payload.nameWithOwner"},
+	{Key: integrationgenerated.IntegrationMappingAssetAssetType, Expr: `"repository"`},
+	{Key: integrationgenerated.IntegrationMappingAssetSourceType, Expr: `"github"`},
+	{Key: integrationgenerated.IntegrationMappingAssetWebsite, Expr: "payload.url"},
+	{Key: integrationgenerated.IntegrationMappingAssetObservedAt, Expr: "payload.updatedAt"},
+	{Key: integrationgenerated.IntegrationMappingAssetCategories, Expr: `payload.isPrivate ? ["private"] : ["public"]`},
+})
+
 // mapExprDirectoryAccount is the CEL mapping expression for GitHub organization member payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'database_id' in payload && payload.database_id != 0 ? string(payload.database_id) : ('login' in payload ? payload.login : "")`},
@@ -104,11 +115,21 @@ func githubAppMappings() []types.MappingRegistration {
 		}
 	})
 
-	return append(vulnMappings, types.MappingRegistration{
-		Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-		Spec: types.MappingOverride{
-			FilterExpr: "true",
-			MapExpr:    mapExprDirectoryAccount,
+	return append(vulnMappings,
+		types.MappingRegistration{
+			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Variant: repositoryAssetVariant,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprRepositoryAsset,
+			},
 		},
-	})
+		types.MappingRegistration{
+			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprDirectoryAccount,
+			},
+		},
+	)
 }

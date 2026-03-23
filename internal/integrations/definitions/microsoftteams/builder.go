@@ -13,7 +13,6 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "microsoft",
 				DisplayName: "Microsoft Teams",
 				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
@@ -34,6 +33,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         teamsCredential.ID(),
 					Name:        "Microsoft Teams Credential",
 					Description: "Auth-managed credential slot used by the Microsoft Teams client in this definition.",
+					Schema:      teamsCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -94,16 +94,17 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Graph /me to verify Teams access",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   TeamsClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:         MessageSendOperation.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        MessageSendOperation.Topic(Slug),
+					Topic:        types.OperationTopic(DefinitionID.ID(), MessageSendOperation.Name()),
 					ClientRef:    TeamsClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[MessageOperationInput](),
+					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),
 				},
 			},

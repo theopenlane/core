@@ -17,19 +17,29 @@ type Builder func() (types.Definition, error)
 // All registrations must complete before concurrent reads begin;
 // after that point all query methods are safe for concurrent use
 type Registry struct {
-	mu                   sync.RWMutex
-	definitions          map[string]definitionEntry
-	operationsByTopic    map[gala.TopicName]types.OperationRegistration
+	// mu guards all mutable state in the registry
+	mu sync.RWMutex
+	// definitions maps definition ID to its compiled entry
+	definitions map[string]definitionEntry
+	// operationsByTopic maps a topic name to its operation registration
+	operationsByTopic map[gala.TopicName]types.OperationRegistration
+	// webhookEventsByTopic maps a topic name to its webhook event registration
 	webhookEventsByTopic map[gala.TopicName]types.WebhookEventRegistration
 }
 
 // definitionEntry captures the indexed details for one registered definition
 type definitionEntry struct {
-	definition    types.Definition
-	connections   map[string]types.ConnectionRegistration
-	clients       map[types.ClientID]types.ClientRegistration
-	operations    map[string]types.OperationRegistration
-	webhooks      map[string]types.WebhookRegistration
+	// definition holds the original definition as supplied by the caller
+	definition types.Definition
+	// connections maps credential ref name to its connection registration
+	connections map[string]types.ConnectionRegistration
+	// clients maps client ID to its client registration
+	clients map[types.ClientID]types.ClientRegistration
+	// operations maps operation name to its operation registration
+	operations map[string]types.OperationRegistration
+	// webhooks maps webhook name to its webhook registration
+	webhooks map[string]types.WebhookRegistration
+	// webhookEvents maps webhook name to a nested map of event name to event registration
 	webhookEvents map[string]map[string]types.WebhookEventRegistration
 }
 
@@ -155,18 +165,8 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrDefinitionIDRequired
 	}
 
-	if def.Slug == "" {
-		return ErrDefinitionSlugRequired
-	}
-
 	if _, exists := r.definitions[def.ID]; exists {
 		return ErrDefinitionAlreadyRegistered
-	}
-
-	if lo.ContainsBy(lo.Values(r.definitions), func(e definitionEntry) bool {
-		return e.definition.Slug == def.Slug
-	}) {
-		return ErrDefinitionSlugAlreadyRegistered
 	}
 
 	if def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0 {
@@ -231,8 +231,8 @@ func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, err
 	}, nil
 }
 
-// indexCredentialNames builds a set of declared credential ref names for a definition.
-// Returns an error if any two registrations share the same name.
+// indexCredentialNames builds a set of declared credential ref names for a definition,
+// returning an error if any two registrations share the same name
 func indexCredentialNames(registrations []types.CredentialRegistration) (map[string]struct{}, error) {
 	index := make(map[string]struct{}, len(registrations))
 	for _, reg := range registrations {
@@ -247,9 +247,9 @@ func indexCredentialNames(registrations []types.CredentialRegistration) (map[str
 	return index, nil
 }
 
-// indexClients indexes client registrations by client ref and rejects duplicate or invalid entries.
-// credentialNames is the set of declared credential ref names for the definition; every ref listed
-// in ClientRegistration.CredentialRefs must appear in this set.
+// indexClients indexes client registrations by client ref and rejects duplicate or invalid entries;
+// credentialNames is the set of declared credential ref names for the definition and every ref listed
+// in ClientRegistration.CredentialRefs must appear in this set
 func indexClients(clients []types.ClientRegistration, credentialNames map[string]struct{}) (map[types.ClientID]types.ClientRegistration, error) {
 	clientIndex := make(map[types.ClientID]types.ClientRegistration, len(clients))
 	for _, client := range clients {
@@ -487,8 +487,8 @@ func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
 	return mapx.SortedValues(r.webhookEventsByTopic, func(e types.WebhookEventRegistration) gala.TopicName { return e.Topic })
 }
 
-// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap.
-// Callers must hold r.mu.RLock
+// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap;
+// callers must hold r.mu.RLock
 func lookupInEntry[K comparable, V any](r *Registry, id string, key K, getMap func(definitionEntry) map[K]V, notFoundErr error) (V, error) {
 	entry, ok := r.definitions[id]
 	if !ok {

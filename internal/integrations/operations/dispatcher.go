@@ -88,7 +88,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}, nil
 }
 
-// ValidateConfig validates one raw configuration payload against the operation schema.
+// ValidateConfig validates one raw configuration payload against the operation schema
 func ValidateConfig(schema json.RawMessage, value json.RawMessage) error {
 	if len(schema) == 0 {
 		return nil

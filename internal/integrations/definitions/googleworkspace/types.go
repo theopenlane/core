@@ -5,6 +5,7 @@ import (
 
 	admin "google.golang.org/api/admin/directory/v1"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -13,18 +14,20 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
 	// Installation is the typed installation metadata handle for the Google Workspace definition
 	Installation = types.NewInstallationRef(resolveInstallationMetadata)
+
+	// workspaceCredentialSchema is the reflected JSON schema for the workspace credential
 	// workspaceCredential is the auth-managed credential slot used by the Workspace client
-	workspaceCredential = types.NewCredentialRef[googleWorkspaceCred](Slug)
+	workspaceCredentialSchema, workspaceCredential = providerkit.CredentialSchema[googleWorkspaceCred]()
+
 	// WorkspaceClient is the client ref for the Google Workspace Admin SDK client used by this definition
 	WorkspaceClient = types.NewClientRef[*admin.Service]()
-	// HealthDefaultOperation is the operation ref for the Google Workspace health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
-	// DirectorySyncOperation is the operation ref for the Google Workspace directory sync operation
-	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
-)
 
-// Slug is the unique identifier for the Google Workspace integration
-const Slug = "google_workspace"
+	// HealthDefaultOperation is the operation ref for the Google Workspace health check
+	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
+	// directorySyncSchema is the reflected JSON schema for the directory sync operation config
+	// DirectorySyncOperation is the operation ref for the Google Workspace directory sync operation
+	directorySyncSchema, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+)
 
 // googleWorkspaceCred holds the provider-owned credential material for a Google Workspace installation
 type googleWorkspaceCred struct {

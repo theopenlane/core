@@ -45,12 +45,11 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 
 	providers := map[string]types.Definition{}
 	for _, provider := range resp.Providers {
-		providers[provider.Slug] = provider
+		providers[provider.ID] = provider
 	}
 
-	gcpscc, ok := providers["gcpscc"]
+	gcpscc, ok := providers[configTestProviderID]
 	require.True(t, ok)
-	assert.Equal(t, configTestProviderID, gcpscc.ID)
 	assert.True(t, gcpscc.Active)
 	assert.True(t, gcpscc.Visible)
 	assert.Len(t, gcpscc.CredentialRegistrations, 1)
@@ -59,7 +58,6 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	assert.Len(t, gcpscc.Operations, 1)
 	assert.Equal(t, "health.default", gcpscc.Operations[0].Name)
 
-	other, ok := providers["other"]
+	_, ok = providers["def_test_other"]
 	require.True(t, ok)
-	assert.Equal(t, "def_test_other", other.ID)
 }

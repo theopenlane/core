@@ -214,7 +214,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 
 	resp := IntegrationTokenResponse{
 		Reply:    rout.Reply{Success: true},
-		Provider: def.Slug,
+		Provider: def.ID,
 	}
 
 	if tokenView != nil {

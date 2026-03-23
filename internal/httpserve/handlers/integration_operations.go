@@ -10,7 +10,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	integrationstypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -60,7 +59,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 	}
 
-	inlineExecution := operationName == integrationstypes.HealthDefaultOperation || operation.Policy.Inline
+	inlineExecution := operation.Policy.Inline
 	queueCtx := context.WithoutCancel(requestCtx)
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
@@ -87,13 +86,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		}
 
 		summary := "Integration operation completed"
-		if operationName == integrationstypes.HealthDefaultOperation {
-			summary = "Health check completed"
-		}
 
 		return h.Success(ctx, IntegrationOperationResponse{
 			Reply:     rout.Reply{Success: true},
-			Provider:  def.Slug,
+			Provider:  def.ID,
 			Operation: operationName,
 			Status:    "ok",
 			Summary:   summary,
@@ -123,7 +119,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	return h.Success(ctx, IntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
-		Provider:  def.Slug,
+		Provider:  def.ID,
 		Operation: operationName,
 		Status:    "queued",
 		Summary:   "Integration operation queued",

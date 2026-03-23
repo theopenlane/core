@@ -7,7 +7,9 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// serviceAccountIdentity represents the identity fields extracted from a GCP service account key
 type serviceAccountIdentity struct {
+	// ClientEmail is the email address of the GCP service account
 	ClientEmail string `json:"client_email"`
 }
 

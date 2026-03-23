@@ -63,6 +63,21 @@ var mapExprFinding = celMapExpr([]celMapEntry{
 	{key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, expr: "payload"},
 })
 
+// mapExprAssessment is the CEL mapping expression for AWS Audit Manager assessment payloads mapped to Finding
+var mapExprAssessment = celMapExpr([]celMapEntry{
+	{key: integrationgenerated.IntegrationMappingFindingExternalID, expr: `'id' in payload ? payload.id : ""`},
+	{key: integrationgenerated.IntegrationMappingFindingExternalOwnerID, expr: `'accountId' in payload ? payload.accountId : resource`},
+	{key: integrationgenerated.IntegrationMappingFindingSource, expr: `dyn("aws_audit_manager")`},
+	{key: integrationgenerated.IntegrationMappingFindingCategory, expr: `'complianceType' in payload ? payload.complianceType : ""`},
+	{key: integrationgenerated.IntegrationMappingFindingDisplayName, expr: `'name' in payload ? payload.name : ""`},
+	{key: integrationgenerated.IntegrationMappingFindingDescription, expr: `'name' in payload && 'complianceType' in payload ? payload.name + " (" + payload.complianceType + ")" : ('name' in payload ? payload.name : "")`},
+	{key: integrationgenerated.IntegrationMappingFindingStatus, expr: `'status' in payload ? payload.status : ""`},
+	{key: integrationgenerated.IntegrationMappingFindingFindingClass, expr: `dyn("compliance_assessment")`},
+	{key: integrationgenerated.IntegrationMappingFindingReportedAt, expr: `'creationTime' in payload ? payload.creationTime : null`},
+	{key: integrationgenerated.IntegrationMappingFindingSourceUpdatedAt, expr: `'lastUpdated' in payload ? payload.lastUpdated : null`},
+	{key: integrationgenerated.IntegrationMappingFindingRawPayload, expr: "payload"},
+})
+
 // awsSecurityHubMappings returns the built-in Security Hub ingest mappings
 func awsSecurityHubMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
@@ -71,6 +86,14 @@ func awsSecurityHubMappings() []types.MappingRegistration {
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprFinding,
+			},
+		},
+		{
+			Schema:  integrationgenerated.IntegrationMappingSchemaFinding,
+			Variant: assessmentVariant,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprAssessment,
 			},
 		},
 	}

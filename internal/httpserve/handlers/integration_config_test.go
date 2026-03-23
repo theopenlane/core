@@ -396,7 +396,6 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) reg
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
-				Slug:        slug,
 				DisplayName: "Config Test",
 				Active:      true,
 				Visible:     true,
@@ -443,7 +442,6 @@ func userInputOnlyTestDefinitionBuilder(definitionID, slug string) registry.Buil
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
-				Slug:        slug,
 				DisplayName: "User Input Test",
 				Active:      true,
 				Visible:     true,

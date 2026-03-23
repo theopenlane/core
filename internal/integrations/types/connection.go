@@ -1,5 +1,7 @@
 package types
 
+import "github.com/samber/lo"
+
 // ConnectionRegistration describes one connection mode for a definition
 type ConnectionRegistration struct {
 	// CredentialRef is the user-facing credential schema that selects this connection mode
@@ -24,11 +26,12 @@ type ConnectionRegistration struct {
 
 // ConnectionRegistration returns the connection registration for the given credential slot
 func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
-	for _, reg := range d.Connections {
-		if reg.CredentialRef.String() == ref.String() {
-			return reg, nil
-		}
+	reg, found := lo.Find(d.Connections, func(r ConnectionRegistration) bool {
+		return r.CredentialRef.String() == ref.String()
+	})
+	if !found {
+		return ConnectionRegistration{}, ErrConnectionRefNotFound
 	}
 
-	return ConnectionRegistration{}, ErrConnectionRefNotFound
+	return reg, nil
 }

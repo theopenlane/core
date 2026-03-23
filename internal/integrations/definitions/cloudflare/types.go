@@ -3,6 +3,7 @@ package cloudflare
 import (
 	cf "github.com/cloudflare/cloudflare-go/v6"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -11,18 +12,16 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
 	// Installation is the typed installation metadata handle for the Cloudflare definition
 	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	// cloudflareSchema is the reflected JSON schema for the Cloudflare credential
 	// cloudflareCredential is the credential slot used by the Cloudflare client
-	cloudflareCredential = types.NewCredentialRef[CredentialSchema](Slug)
+	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
 	CloudflareClient = types.NewClientRef[*cf.Client]()
 	// HealthDefaultOperation is the operation ref for the Cloudflare health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
+	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
 	// DirectorySyncOperation is the operation ref for the directory account sync operation
-	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
+	_, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
-
-// Slug is the unique identifier for the Cloudflare integration
-const Slug = "cloudflare"
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {

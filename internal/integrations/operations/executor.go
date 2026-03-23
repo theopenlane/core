@@ -7,9 +7,9 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime.
+// RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime
 // Pass nil for operationHandle to skip operation execution listeners (used when a workflow
-// engine registers its own wrapping listeners on the same topics).
+// engine registers its own wrapping listeners on the same topics)
 func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error) error {
 	if runtime == nil {
 		return ErrGalaRequired

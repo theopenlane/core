@@ -6,8 +6,6 @@ import "encoding/json"
 type DefinitionSpec struct {
 	// ID is the canonical opaque identifier for the definition
 	ID string `json:"id"`
-	// Slug is the human-readable alias for the definition
-	Slug string `json:"slug"`
 	// Family is the optional grouping label for related definitions
 	Family string `json:"family,omitempty"`
 	// DisplayName is the UI-facing name for the definition

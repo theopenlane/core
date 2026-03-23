@@ -37,16 +37,22 @@ func TestClientRefIDsAreDistinct(t *testing.T) {
 	}
 }
 
-func TestOperationRefTopic(t *testing.T) {
+func TestOperationRefName(t *testing.T) {
 	t.Parallel()
 
 	ref := NewOperationRef[struct{}]("health.default")
 	if ref.Name() != "health.default" {
 		t.Fatalf("OperationRef.Name() = %q", ref.Name())
 	}
+}
 
-	if ref.Topic("github_app") != "integration.github_app.health.default" {
-		t.Fatalf("OperationRef.Topic() = %q", ref.Topic("github_app"))
+func TestOperationTopic(t *testing.T) {
+	t.Parallel()
+
+	got := OperationTopic("def_001", "health.default")
+	want := "integration.def_001.health.default"
+	if string(got) != want {
+		t.Fatalf("OperationTopic() = %q, want %q", got, want)
 	}
 }
 

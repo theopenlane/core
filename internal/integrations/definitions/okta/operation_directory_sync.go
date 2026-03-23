@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// directoryDefaultPageSize is the number of records requested per Okta API page
 const directoryDefaultPageSize = int32(200)
 
 // directoryGroupRef is a lightweight identifier for the group side of a membership payload

@@ -20,7 +20,6 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 	definition := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_01HZY6PZQK2T64B7J9QX4N5Z6A",
-			Slug:        "github_app",
 			Family:      "github",
 			DisplayName: "GitHub App",
 			Active:      true,
@@ -97,7 +96,6 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 	first := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first",
-			Slug:        "first",
 			DisplayName: "First",
 			Active:      true,
 			Visible:     true,
@@ -113,7 +111,6 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 	second := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_second",
-			Slug:        "second",
 			DisplayName: "Second",
 			Active:      true,
 			Visible:     true,
@@ -149,7 +146,6 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 	first := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first_same_name",
-			Slug:        "first_same_name",
 			DisplayName: "First",
 			Active:      true,
 			Visible:     true,
@@ -165,7 +161,6 @@ func TestRegistryRejectsDuplicateOperationTopicSameName(t *testing.T) {
 	second := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_second_same_name",
-			Slug:        "second_same_name",
 			DisplayName: "Second",
 			Active:      true,
 			Visible:     true,
@@ -200,7 +195,6 @@ func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
 	definition := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_multi_client",
-			Slug:        "multi_client",
 			DisplayName: "Multi Client",
 			Active:      true,
 			Visible:     true,
@@ -270,7 +264,6 @@ func TestRegistryRejectsDuplicateWebhookEventTopicWithinDefinition(t *testing.T)
 	definition := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_webhook_topic_collision",
-			Slug:        "webhook_topic_collision",
 			DisplayName: "Webhook Topic Collision",
 			Active:      true,
 			Visible:     true,
@@ -278,7 +271,7 @@ func TestRegistryRejectsDuplicateWebhookEventTopicWithinDefinition(t *testing.T)
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
 				Name: "default",
-				Event: func(integrationtypes.WebhookEventRequest) (integrationtypes.WebhookReceivedEvent, error) {
+				Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
 					return integrationtypes.WebhookReceivedEvent{Name: "created"}, nil
 				},
 				Events: []integrationtypes.WebhookEventRegistration{
@@ -307,37 +300,3 @@ func TestRegistryRejectsDuplicateWebhookEventTopicWithinDefinition(t *testing.T)
 	}
 }
 
-// TestRegistryRejectsDuplicateSlug verifies slugs remain unique across registered definitions
-func TestRegistryRejectsDuplicateSlug(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-
-	first := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          "def_first",
-			Slug:        "shared_slug",
-			DisplayName: "First",
-			Active:      true,
-			Visible:     true,
-		},
-	}
-	second := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          "def_second",
-			Slug:        "shared_slug",
-			DisplayName: "Second",
-			Active:      true,
-			Visible:     true,
-		},
-	}
-
-	if err := reg.Register(first); err != nil {
-		t.Fatalf("Register(first) error = %v", err)
-	}
-
-	err := reg.Register(second)
-	if !errors.Is(err, ErrDefinitionSlugAlreadyRegistered) {
-		t.Fatalf("Register(second) error = %v, want %v", err, ErrDefinitionSlugAlreadyRegistered)
-	}
-}

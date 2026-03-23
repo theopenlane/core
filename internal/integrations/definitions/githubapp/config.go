@@ -10,6 +10,6 @@ type Config struct {
 	WebhookSecret string `json:"webhooksecret" koanf:"webhooksecret" sensitive:"true"`
 	// AppSlug is the GitHub App slug identifier
 	AppSlug string `json:"appslug" koanf:"appslug"`
-	// APIURL overrides the GitHub API host for local tests.
+	// APIURL overrides the GitHub API host for local tests
 	APIURL string `json:"-" koanf:"-"`
 }

@@ -2,7 +2,6 @@ package awssecurityhub
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 	"time"
 
@@ -10,69 +9,64 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 	auditmanagertypes "github.com/aws/aws-sdk-go-v2/service/auditmanager/types"
 
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// assessmentsPageSize is the number of assessments requested per paginated API call.
+// assessmentsPageSize is the number of assessments requested per paginated API call
 const assessmentsPageSize = int32(100)
 
-// AssessmentsConfig holds per-invocation parameters for the assessments.list operation.
+// assessmentVariant is the mapping variant for Audit Manager assessment payloads
+const assessmentVariant = "assessment"
+
+// AssessmentsConfig holds per-invocation parameters for the assessments.collect operation
 type AssessmentsConfig struct {
-	// Status filters assessments by enrollment status. Valid values: ACTIVE, INACTIVE. Empty returns all.
+	// Status filters assessments by enrollment status. Valid values: ACTIVE, INACTIVE. Empty returns all
 	Status string `json:"status,omitempty" jsonschema:"title=Status Filter,description=Filter assessments by status (ACTIVE INACTIVE). Empty returns all."`
-	// MaxAssessments caps the total number of assessments returned; 0 means no limit.
+	// MaxAssessments caps the total number of assessments returned; 0 means no limit
 	MaxAssessments int `json:"maxAssessments,omitempty" jsonschema:"title=Max Assessments,description=Maximum number of assessments to return. 0 means no limit."`
 }
 
-// AssessmentSummary captures the fields from AssessmentMetadataItem useful for future compliance ingest.
-type AssessmentSummary struct {
-	// ID is the Audit Manager assessment identifier.
+// AssessmentPayload is the normalized assessment payload emitted for Finding ingest
+type AssessmentPayload struct {
+	// ID is the Audit Manager assessment identifier
 	ID string `json:"id,omitempty"`
-	// Name is the assessment display name.
+	// Name is the assessment display name
 	Name string `json:"name,omitempty"`
-	// ComplianceType is the compliance framework type for the assessment.
+	// ComplianceType is the compliance framework type for the assessment
 	ComplianceType string `json:"complianceType,omitempty"`
-	// Status is the current assessment status.
+	// Status is the current assessment status
 	Status string `json:"status,omitempty"`
-	// DelegationCount is the number of active delegations for the assessment.
+	// DelegationCount is the number of active delegations for the assessment
 	DelegationCount int32 `json:"delegationCount,omitempty"`
-	// CreationTime is when the assessment was created.
-	CreationTime time.Time `json:"creationTime,omitempty"`
-	// LastUpdated is when the assessment was last updated.
-	LastUpdated time.Time `json:"lastUpdated,omitempty"`
-}
-
-// AssessmentsList lists and returns AWS Audit Manager assessments.
-//
-// TODO: map these summaries into ingest payloads and add upsert contracts once the target schema is defined.
-type AssessmentsList struct {
-	// Region is the AWS region used for the session.
-	Region string `json:"region"`
-	// RoleARN is the assumed role ARN when present.
-	RoleARN string `json:"roleArn,omitempty"`
-	// AccountID is the AWS account identifier when provided in the credential input.
+	// CreationTime is when the assessment was created
+	CreationTime time.Time `json:"creationTime"`
+	// LastUpdated is when the assessment was last updated
+	LastUpdated time.Time `json:"lastUpdated"`
+	// AccountID is the AWS account identifier
 	AccountID string `json:"accountId,omitempty"`
-	// Total is the total number of returned assessments.
-	Total int `json:"total"`
-	// Assessments is the collected assessment list.
-	Assessments []AssessmentSummary `json:"assessments"`
+	// Region is the AWS region
+	Region string `json:"region,omitempty"`
 }
 
-// Handle adapts assessments listing to the generic operation registration boundary.
-func (a AssessmentsList) Handle() types.OperationHandler {
+// AssessmentsCollect collects AWS Audit Manager assessments for Finding ingest
+type AssessmentsCollect struct{}
+
+// IngestHandle adapts assessment collection to the ingest operation registration boundary
+func (a AssessmentsCollect) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(
 		AuditManagerClient,
-		AssessmentsListOperation,
+		AssessmentsCollectOperation,
 		ErrOperationConfigInvalid,
-		func(ctx context.Context, request types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) (json.RawMessage, error) {
+		func(ctx context.Context, request types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
 			return a.Run(ctx, request.Credentials, client, cfg)
 		},
 	)
 }
 
-// Run paginates through all Audit Manager assessments.
-func (AssessmentsList) Run(ctx context.Context, credentials types.CredentialBindings, c *auditmanager.Client, cfg AssessmentsConfig) (json.RawMessage, error) {
+// Run paginates through Audit Manager assessments and emits Finding ingest payloads
+func (AssessmentsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
 	awsCredential, err := resolveAssumeRoleCredential(credentials)
 	if err != nil {
 		return nil, err
@@ -87,7 +81,7 @@ func (AssessmentsList) Run(ctx context.Context, credentials types.CredentialBind
 	}
 
 	var (
-		summaries []AssessmentSummary
+		envelopes []types.MappingEnvelope
 		nextToken *string
 	)
 
@@ -103,28 +97,18 @@ collectLoop:
 		}
 
 		for i := range resp.AssessmentMetadata {
-			if cfg.MaxAssessments > 0 && len(summaries) >= cfg.MaxAssessments {
+			if cfg.MaxAssessments > 0 && len(envelopes) >= cfg.MaxAssessments {
 				break collectLoop
 			}
 
-			item := resp.AssessmentMetadata[i]
-			summary := AssessmentSummary{
-				ID:              awssdk.ToString(item.Id),
-				Name:            awssdk.ToString(item.Name),
-				ComplianceType:  awssdk.ToString(item.ComplianceType),
-				Status:          string(item.Status),
-				DelegationCount: int32(len(item.Delegations)),
+			payload := mapAssessmentPayload(resp.AssessmentMetadata[i], awsCredential)
+
+			envelope, err := providerkit.MarshalEnvelopeVariant(assessmentVariant, payload.AccountID, payload, ErrAssessmentEncode)
+			if err != nil {
+				return nil, err
 			}
 
-			if item.CreationTime != nil {
-				summary.CreationTime = *item.CreationTime
-			}
-
-			if item.LastUpdated != nil {
-				summary.LastUpdated = *item.LastUpdated
-			}
-
-			summaries = append(summaries, summary)
+			envelopes = append(envelopes, envelope)
 		}
 
 		if resp.NextToken == nil || *resp.NextToken == "" {
@@ -134,11 +118,33 @@ collectLoop:
 		nextToken = resp.NextToken
 	}
 
-	return providerkit.EncodeResult(AssessmentsList{
-		Region:      awsCredential.HomeRegion,
-		RoleARN:     awsCredential.RoleARN,
-		AccountID:   awsCredential.AccountID,
-		Total:       len(summaries),
-		Assessments: summaries,
-	}, ErrResultEncode)
+	return []types.IngestPayloadSet{
+		{
+			Schema:    integrationgenerated.IntegrationMappingSchemaFinding,
+			Envelopes: envelopes,
+		},
+	}, nil
+}
+
+// mapAssessmentPayload converts an Audit Manager assessment metadata item to the ingest payload shape
+func mapAssessmentPayload(item auditmanagertypes.AssessmentMetadataItem, credential AssumeRoleCredentialSchema) AssessmentPayload {
+	payload := AssessmentPayload{
+		ID:              awssdk.ToString(item.Id),
+		Name:            awssdk.ToString(item.Name),
+		ComplianceType:  awssdk.ToString(item.ComplianceType),
+		Status:          string(item.Status),
+		DelegationCount: int32(len(item.Delegations)),
+		AccountID:       credential.AccountID,
+		Region:          credential.HomeRegion,
+	}
+
+	if item.CreationTime != nil {
+		payload.CreationTime = *item.CreationTime
+	}
+
+	if item.LastUpdated != nil {
+		payload.LastUpdated = *item.LastUpdated
+	}
+
+	return payload
 }

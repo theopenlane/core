@@ -15,8 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-const githubAppSlug = githubapp.Slug
-
 var githubAppDefinitionID = githubapp.DefinitionID.ID()
 var githubTestCredentialRef = types.NewCredentialSlotID("github_test")
 
@@ -65,8 +63,7 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 }
 
 // gcpSCCTestDefinitionBuilder returns a test definition for GCP SCC-style credential config tests.
-// The definition uses definitionID as both Spec.ID and Spec.Slug so registry lookups and DB
-// queries using the same string work correctly.
+// The definition uses definitionID as Spec.ID so registry lookups work correctly.
 func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
 	schema, err := json.Marshal(map[string]any{
 		"type": "object",
@@ -115,7 +112,6 @@ func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
-				Slug:        definitionID,
 				DisplayName: "Google Cloud SCC",
 				Description: "Google Cloud Security Command Center integration",
 				Category:    "cloud",
@@ -170,7 +166,6 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
-				Slug:        definitionID,
 				DisplayName: "GitHub",
 				Active:      true,
 				Visible:     true,

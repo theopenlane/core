@@ -59,7 +59,6 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 		SetName("GitHub App").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
-		SetDefinitionSlug(githubAppSlug).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -93,7 +92,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 		SetName("GitHub App").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
-		SetDefinitionSlug(githubAppSlug).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -137,7 +135,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 		SetName("GitHub App").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
-		SetDefinitionSlug(githubAppSlug).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -181,7 +178,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		SetName("GitHub App").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
-		SetDefinitionSlug(githubAppSlug).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -238,7 +234,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 		SetName("GitHub App").
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
-		SetDefinitionSlug(githubAppSlug).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -268,7 +263,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	dedupeCount, err := suite.db.IntegrationWebhook.Query().
 		Where(
 			integrationwebhook.OwnerIDEQ(user.OrganizationID),
-			integrationwebhook.ProviderEQ(githubAppSlug),
+			integrationwebhook.ProviderEQ(githubAppDefinitionID),
 			integrationwebhook.ExternalEventIDEQ(deliveryID),
 		).
 		Count(user.UserCtx)

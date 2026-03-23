@@ -5,13 +5,13 @@ import "errors"
 var (
 	// ErrGalaRequired indicates the gala dependency is missing
 	ErrGalaRequired = errors.New("integrations/operations: gala required")
-	// ErrDispatchInputInvalid indicates the queued operation request failed caller-input validation.
+	// ErrDispatchInputInvalid indicates the queued operation request failed caller-input validation
 	ErrDispatchInputInvalid = errors.New("integrations/operations: dispatch input invalid")
 	// ErrInstallationIDRequired indicates the installation identifier is missing
 	ErrInstallationIDRequired = errors.New("integrations/operations: installation id required")
 	// ErrOperationNameRequired indicates the operation identifier is missing
 	ErrOperationNameRequired = errors.New("integrations/operations: operation name required")
-	// ErrOperationConfigInvalid indicates queued operation config failed caller-input validation.
+	// ErrOperationConfigInvalid indicates queued operation config failed caller-input validation
 	ErrOperationConfigInvalid = errors.New("integrations/operations: operation config invalid")
 	// ErrRunIDRequired indicates the run identifier is missing
 	ErrRunIDRequired = errors.New("integrations/operations: run id required")

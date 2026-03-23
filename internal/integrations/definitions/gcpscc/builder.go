@@ -13,7 +13,6 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "gcp",
 				DisplayName: "GCP Security Command Center",
 				Description: "Collect Google Cloud Security Command Center findings for security posture reporting.",
@@ -31,7 +30,7 @@ func Builder() registry.Builder {
 					Ref:         sccCredential.ID(),
 					Name:        "GCP SCC Credential",
 					Description: "Credential slot used by the GCP Security Command Center client in this definition.",
-					Schema:      providerkit.SchemaFrom[CredentialSchema](),
+					Schema:      sccSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -62,29 +61,23 @@ func Builder() registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify GCP SCC access",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   SCCClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
 					Name:         FindingsCollectOperation.Name(),
 					Description:  "Collect GCP Security Command Center findings for vulnerability ingestion",
-					Topic:        FindingsCollectOperation.Topic(Slug),
+					Topic:        types.OperationTopic(DefinitionID.ID(), FindingsCollectOperation.Name()),
 					ClientRef:    SCCClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[FindingsConfig](),
+					ConfigSchema: findingsCollectSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
 						},
 					},
 					IngestHandle: FindingsCollect{}.IngestHandle(),
-				},
-				{
-					Name:        SettingsScanOperation.Name(),
-					Description: "Scan GCP Security Command Center source and notification settings",
-					Topic:       SettingsScanOperation.Topic(Slug),
-					ClientRef:   SCCClient.ID(),
-					Handle:      SettingsScan{}.Handle(),
 				},
 			},
 			Mappings: gcpsccMappings(),

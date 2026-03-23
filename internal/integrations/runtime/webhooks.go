@@ -21,7 +21,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one installation.
+// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one installation
 // previousIntegrationID is non-empty when the caller has just created a new integration record to
 // replace an existing one; it is used by ensureWebhook to roll forward existing endpoint rows to the
 // new integration ID so that externally configured webhook URLs remain valid
@@ -273,7 +273,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 		return db.IntegrationWebhook.Create().
 			SetOwnerID(installation.OwnerID).
 			SetIntegrationID(installation.ID).
-			SetProvider(installation.DefinitionSlug).
+			SetProvider(installation.DefinitionID).
 			SetName(registration.Name).
 			SetAllowedEvents(allowedEvents).
 			SetStatus(status).

@@ -35,7 +35,6 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
-				Slug:        definitionID,
 				DisplayName: "Operation Test",
 				Active:      true,
 				Visible:     true,

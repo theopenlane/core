@@ -14,7 +14,6 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "azure",
 				DisplayName: "Azure EntraID",
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",
@@ -35,6 +34,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         entraTenantCredential.ID(),
 					Name:        "Azure Entra ID Credential",
 					Description: "Credential slot shared by the Azure Entra ID clients in this definition.",
+					Schema:      entraTenantSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -120,21 +120,15 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify Azure client credentials can acquire a token against Microsoft Graph",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   EntraCredential.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
-				{
-					Name:        DirectoryInspectOperation.Name(),
-					Description: "Collect basic tenant metadata via Microsoft Graph",
-					Topic:       DirectoryInspectOperation.Topic(Slug),
-					ClientRef:   EntraClient.ID(),
-					Handle:      DirectoryInspect{}.Handle(),
-				},
-				{
+					{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
-					Topic:       DirectorySyncOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
 					ClientRef:   EntraClient.ID(),
 					Ingest: []types.IngestContract{
 						{

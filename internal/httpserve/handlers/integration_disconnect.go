@@ -50,7 +50,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 
 	resp := models.DeleteIntegrationResponse{
 		Reply:   rout.Reply{Success: true},
-		Message: lo.CoalesceOrEmpty(result.Message, fmt.Sprintf("%s integration disconnected", lo.CoalesceOrEmpty(def.DisplayName, def.Slug))),
+		Message: lo.CoalesceOrEmpty(result.Message, fmt.Sprintf("%s integration disconnected", def.DisplayName)),
 	}
 
 	resp.RedirectURL = result.RedirectURL

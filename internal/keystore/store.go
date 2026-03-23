@@ -56,7 +56,7 @@ func NewStore(db *ent.Client) (*Store, error) {
 	}, nil
 }
 
-// LoadCredential resolves one persisted credential slot for one installation record.
+// LoadCredential resolves one persisted credential slot for one installation record
 func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
 	if credentialRef == (types.CredentialSlotID{}) {
 		return types.CredentialSet{}, false, ErrCredentialNotFound
@@ -73,7 +73,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 	return types.CredentialSet(record.CredentialSet), true, nil
 }
 
-// LoadCredentials resolves the requested credential slots for one installation record.
+// LoadCredentials resolves the requested credential slots for one installation record
 func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
 	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, credentialRefs)
 	if err != nil {
@@ -96,7 +96,7 @@ func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integrati
 	return bindings, nil
 }
 
-// SaveCredential upserts one credential slot for one installation record.
+// SaveCredential upserts one credential slot for one installation record
 func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
 	if credentialRef == (types.CredentialSlotID{}) {
 		return ErrCredentialNotFound
@@ -133,7 +133,7 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 	return nil
 }
 
-// SaveInstallationCredential loads the installation record by ID and upserts one credential slot.
+// SaveInstallationCredential loads the installation record by ID and upserts one credential slot
 func (s *Store) SaveInstallationCredential(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
 	if installationID == "" {
 		return ErrInstallationIDRequired
@@ -176,7 +176,7 @@ func (s *Store) DeleteCredential(ctx context.Context, installationID string) err
 	return nil
 }
 
-// BuildClient resolves one named client for an installation using explicit credential bundles.
+// BuildClient resolves one named client for an installation using explicit credential bundles
 func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, registration types.ClientRegistration, credentials types.CredentialBindings, config json.RawMessage, force bool) (any, error) {
 	cacheKey := clientCacheKey{
 		installationID: installation.ID,
@@ -218,6 +218,7 @@ func (s *Store) InvalidateClients(installationID string) {
 	}
 }
 
+// trackClientKey tracks a client cache key for an installation
 func (s *Store) trackClientKey(key clientCacheKey) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -229,6 +230,7 @@ func (s *Store) trackClientKey(key clientCacheKey) {
 	s.clientKeys[key.installationID][key] = struct{}{}
 }
 
+// clientCacheDigest computes a hash digest for a set of credentials and config
 func clientCacheDigest(credentials types.CredentialBindings, config json.RawMessage) string {
 	encodedCredential, err := json.Marshal(credentials)
 	if err != nil {
@@ -240,6 +242,7 @@ func clientCacheDigest(credentials types.CredentialBindings, config json.RawMess
 		Hex()
 }
 
+// singleCredential returns a single credential from bindings if only one ref is present
 func singleCredential(credentials types.CredentialBindings, refs []types.CredentialSlotID) types.CredentialSet {
 	if len(refs) != 1 {
 		return types.CredentialSet{}
@@ -254,12 +257,14 @@ func singleCredential(credentials types.CredentialBindings, refs []types.Credent
 	return types.CredentialSet{}
 }
 
+// cloneCredentialSet returns a deep copy of a CredentialSet
 func cloneCredentialSet(credential types.CredentialSet) types.CredentialSet {
 	return types.CredentialSet{
 		Data: jsonx.CloneRawMessage(credential.Data),
 	}
 }
 
+// cloneCredentialBindings returns a deep copy of CredentialBindings
 func cloneCredentialBindings(credentials types.CredentialBindings) types.CredentialBindings {
 	if len(credentials) == 0 {
 		return nil
@@ -276,6 +281,7 @@ func cloneCredentialBindings(credentials types.CredentialBindings) types.Credent
 	return cloned
 }
 
+// activeCredentialRecord returns the active credential record for an installation and credential ref
 func (s *Store) activeCredentialRecord(ctx context.Context, installationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
 	records, err := s.activeCredentialRecords(ctx, installationID, []types.CredentialSlotID{credentialRef})
 	if err != nil {
@@ -290,6 +296,7 @@ func (s *Store) activeCredentialRecord(ctx context.Context, installationID strin
 	return record, true, nil
 }
 
+// activeCredentialRecords returns all active credential records for an installation and credential refs
 func (s *Store) activeCredentialRecords(ctx context.Context, installationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
 	query := s.db.Hush.Query().
 		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installationID)))
@@ -331,6 +338,7 @@ func (s *Store) activeCredentialRecords(ctx context.Context, installationID stri
 	return out, nil
 }
 
+// integrationSystemContext returns a context with system-level privileges for integration operations
 func integrationSystemContext(ctx context.Context) context.Context {
 	callCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	return auth.WithCaller(callCtx, auth.NewKeystoreCaller())

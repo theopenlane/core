@@ -30,7 +30,7 @@ type DisconnectResult struct {
 	// Details is an opaque provider-specific payload describing teardown actions taken or required
 	Details json.RawMessage `json:"details,omitempty"`
 	// SkipLocalCleanup indicates the runtime should not delete credentials and the installation
-	// record; set when teardown is deferred to an external event (e.g. provider webhook)
+	// record, set when teardown is deferred to an external event such as a provider webhook
 	SkipLocalCleanup bool `json:"-"`
 }
 

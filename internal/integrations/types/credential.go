@@ -22,7 +22,7 @@ type CredentialBinding struct {
 // CredentialBindings lists persisted credential bundles by durable credential slot
 type CredentialBindings []CredentialBinding
 
-// Resolve returns the credential bound to the supplied slot ref when present.
+// Resolve returns the credential bound to the supplied slot ref when present
 // Comparison uses the stable name since bindings reconstructed from persisted records carry a fresh key
 func (bindings CredentialBindings) Resolve(ref CredentialSlotID) (CredentialSet, bool) {
 	for _, binding := range bindings {

@@ -19,7 +19,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	definitionID := "github-oauth"
 	installationID := "install-1"
 
-	def := authTestDefinition(definitionID, "github-oauth", &fakeAuthFlow{
+	def := authTestDefinition(definitionID, &fakeAuthFlow{
 		startResult: types.AuthStartResult{
 			URL:   "https://github.com/login/oauth/authorize",
 			State: json.RawMessage(`{"csrf":"abc123"}`),
@@ -94,7 +94,7 @@ func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 		t.Fatalf("expected ErrInstallationIDRequired, got %v", err)
 	}
 
-	def := authTestDefinition("d", "d", &fakeAuthFlow{startResult: types.AuthStartResult{URL: "https://example.com"}})
+	def := authTestDefinition("d", &fakeAuthFlow{startResult: types.AuthStartResult{URL: "https://example.com"}})
 	svc = NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).PersistAuthResult, matchingInstallationResolver("i", "d").ResolveInstallation, NewInMemoryAuthStateStore())
 
 	_, err = svc.BeginAuth(context.Background(), BeginRequest{DefinitionID: "d", InstallationID: "i"})
@@ -122,7 +122,7 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth"},
+		DefinitionSpec: types.DefinitionSpec{ID: "no-auth"},
 		Connections: []types.ConnectionRegistration{
 			{
 				CredentialRef:  keymakerTestCredentialRef,
@@ -146,7 +146,7 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 func TestService_BeginAuthGeneratesSessionStateToken(t *testing.T) {
 	t.Parallel()
 
-	def := authTestDefinition("d1", "d1", &fakeAuthFlow{
+	def := authTestDefinition("d1", &fakeAuthFlow{
 		startResult: types.AuthStartResult{URL: "https://example.com"},
 	})
 
@@ -169,7 +169,7 @@ func TestService_BeginAuthGeneratesSessionStateToken(t *testing.T) {
 func TestService_BeginAuthInstallationDefinitionMismatch(t *testing.T) {
 	t.Parallel()
 
-	def := authTestDefinition("d1", "d1", &fakeAuthFlow{
+	def := authTestDefinition("d1", &fakeAuthFlow{
 		startResult: types.AuthStartResult{URL: "https://example.com"},
 	})
 
@@ -196,7 +196,7 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 	now := time.Now()
 	clock := func() time.Time { return now }
 
-	def := authTestDefinition("slack", "slack", &fakeAuthFlow{
+	def := authTestDefinition("slack", &fakeAuthFlow{
 		startResult:    types.AuthStartResult{URL: "https://slack.com/oauth"},
 		completeResult: types.AuthCompleteResult{},
 	})
@@ -244,7 +244,7 @@ func TestService_CompleteAuthSaveError(t *testing.T) {
 
 	ctx := context.Background()
 
-	def := authTestDefinition("okta", "okta", &fakeAuthFlow{
+	def := authTestDefinition("okta", &fakeAuthFlow{
 		startResult:    types.AuthStartResult{URL: "https://okta.com"},
 		completeResult: types.AuthCompleteResult{Credential: types.CredentialSet{}},
 	})
@@ -274,7 +274,7 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 
 	var receivedCallbackState json.RawMessage
 
-	def := authTestDefinition("az", "az", &fakeAuthFlow{
+	def := authTestDefinition("az", &fakeAuthFlow{
 		startResult: types.AuthStartResult{
 			URL:   "https://login.microsoftonline.com",
 			State: json.RawMessage(`{"nonce":"n1","tenant":"t1"}`),
@@ -315,7 +315,7 @@ func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
 	ctx := context.Background()
 	installations := matchingInstallationResolver("i1", "az")
 
-	def := authTestDefinition("az", "az", &fakeAuthFlow{
+	def := authTestDefinition("az", &fakeAuthFlow{
 		startResult:    types.AuthStartResult{URL: "https://login.microsoftonline.com"},
 		completeResult: types.AuthCompleteResult{Credential: types.CredentialSet{Data: json.RawMessage(`{"accessToken":"az-token"}`)}},
 	})
@@ -344,9 +344,9 @@ type fakeAuthFlow struct {
 	onComplete     func(state json.RawMessage)
 }
 
-func authTestDefinition(definitionID string, slug string, flow *fakeAuthFlow) types.Definition {
+func authTestDefinition(definitionID string, flow *fakeAuthFlow) types.Definition {
 	return types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: definitionID, Slug: slug},
+		DefinitionSpec: types.DefinitionSpec{ID: definitionID},
 		Connections: []types.ConnectionRegistration{
 			{
 				CredentialRef:  keymakerTestCredentialRef,

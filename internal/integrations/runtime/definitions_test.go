@@ -39,7 +39,6 @@ func TestResolveDefinitionForInstallationSuccess(t *testing.T) {
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
 			ID:   "test-def",
-			Slug: "test",
 		},
 	})
 
@@ -85,7 +84,6 @@ func TestResolvePersistedConnectionNoConnections(t *testing.T) {
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
 			ID:   "test-def",
-			Slug: "test",
 		},
 	})
 
@@ -106,7 +104,6 @@ func TestResolvePersistedConnectionMatchesPersistedRef(t *testing.T) {
 	err := reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
 			ID:   "test-def",
-			Slug: "test",
 		},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{
@@ -158,8 +155,7 @@ func TestNewForTestingRegistry(t *testing.T) {
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:   "def-1",
-			Slug: "slug-1",
+			ID: "def-1",
 		},
 	})
 
@@ -168,13 +164,9 @@ func TestNewForTestingRegistry(t *testing.T) {
 		t.Fatal("expected registry to match")
 	}
 
-	def, ok := rt.Definition("def-1")
+	_, ok := rt.Definition("def-1")
 	if !ok {
 		t.Fatal("expected definition to be found")
-	}
-
-	if def.Slug != "slug-1" {
-		t.Fatalf("expected slug slug-1, got %q", def.Slug)
 	}
 
 	catalog := rt.Catalog()

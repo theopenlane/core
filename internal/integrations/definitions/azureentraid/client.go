@@ -16,6 +16,7 @@ const graphScope = "https://graph.microsoft.com/.default"
 
 // CredentialClient builds the Azure token credential for one installation
 type CredentialClient struct {
+	// cfg is the operator-level Azure Entra ID configuration
 	cfg Config
 }
 
@@ -36,6 +37,7 @@ func (c CredentialClient) Build(_ context.Context, req types.ClientBuildRequest)
 
 // GraphClient builds the Microsoft Graph service client for one installation
 type GraphClient struct {
+	// cfg is the operator-level Azure Entra ID configuration
 	cfg Config
 }
 

@@ -36,7 +36,6 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
-				Slug:        definitionID,
 				DisplayName: "Webhook Test",
 				Active:      true,
 				Visible:     true,
@@ -58,7 +57,7 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 			Webhooks: []types.WebhookRegistration{
 				{
 					Name: "inbound.events",
-					Event: func(req types.WebhookEventRequest) (types.WebhookReceivedEvent, error) {
+					Event: func(req types.WebhookInboundRequest) (types.WebhookReceivedEvent, error) {
 						var envelope struct {
 							Event      string `json:"event"`
 							DeliveryID string `json:"delivery_id"`

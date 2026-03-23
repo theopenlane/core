@@ -19,6 +19,8 @@ var (
 	ErrOperationConfigInvalid = errors.New("awssecurityhub: operation config invalid")
 	// ErrListAssessmentsFailed indicates ListAssessments failed
 	ErrListAssessmentsFailed = errors.New("awssecurityhub: list assessments failed")
+	// ErrAssessmentEncode indicates an assessment payload could not be serialized for ingest
+	ErrAssessmentEncode = errors.New("awssecurityhub: assessment encode failed")
 	// ErrFindingsFetchFailed indicates GetFindings failed
 	ErrFindingsFetchFailed = errors.New("awssecurityhub: findings fetch failed")
 	// ErrFindingEncode indicates a finding payload could not be serialized

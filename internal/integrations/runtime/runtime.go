@@ -89,6 +89,7 @@ func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) 
 	return result, err
 }
 
+// normalizeDispatchError translates registry-level dispatch errors into runtime sentinel errors
 func normalizeDispatchError(err error) error {
 	switch {
 	case err == nil:
@@ -104,7 +105,7 @@ func normalizeDispatchError(err error) error {
 	}
 }
 
-// NewForTesting constructs a Runtime backed only by the supplied registry.
+// NewForTesting constructs a Runtime backed only by the supplied registry
 // Use only in unit tests that exercise registry lookup without executing operations
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()

@@ -14,7 +14,6 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "google",
 				DisplayName: "Google Workspace",
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
@@ -35,6 +34,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         workspaceCredential.ID(),
 					Name:        "Google Workspace Credential",
 					Description: "Auth-managed credential slot used by the Google Workspace client in this definition.",
+					Schema:      workspaceCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -99,15 +99,17 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Google Admin SDK users.list to verify the workspace token",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   WorkspaceClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
-					Name:        DirectorySyncOperation.Name(),
-					Description: "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:       DirectorySyncOperation.Topic(Slug),
-					ClientRef:   WorkspaceClient.ID(),
+					Name:         DirectorySyncOperation.Name(),
+					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
+					Topic:        types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
+					ClientRef:    WorkspaceClient.ID(),
+					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

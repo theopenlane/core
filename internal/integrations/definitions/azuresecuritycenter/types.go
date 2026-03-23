@@ -1,26 +1,30 @@
 package azuresecuritycenter
 
-import "github.com/theopenlane/core/internal/integrations/types"
+import (
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+)
 
 var (
 	// DefinitionID is the stable identifier for the Azure Security Center integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
 	// Installation is the typed installation metadata handle for the Azure Security Center definition
 	Installation = types.NewInstallationRef(resolveInstallationMetadata)
+
+	// securityCenterSchema is the reflected JSON schema for the security center credential
 	// securityCenterCredential is the credential slot used by the Azure Security Center client
-	securityCenterCredential = types.NewCredentialRef[CredentialSchema](Slug)
+	securityCenterSchema, securityCenterCredential = providerkit.CredentialSchema[CredentialSchema]()
+
 	// SecurityCenterClient is the client ref for the Azure Security Center client used by this definition
 	SecurityCenterClient = types.NewClientRef[*azureSecurityClient]()
-	// HealthDefaultOperation is the operation ref for the Azure Security Center health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
-	// AssessmentsCollectOperation is the operation ref for collecting security assessment findings
-	AssessmentsCollectOperation = types.NewOperationRef[AssessmentsCollect]("assessments.collect")
-	// SubAssessmentsCollectOperation is the operation ref for collecting sub-assessment vulnerability findings
-	SubAssessmentsCollectOperation = types.NewOperationRef[SubAssessmentsCollect]("subassessments.collect")
-)
 
-// Slug is the unique identifier for the Azure Security Center integration
-const Slug = "azure_security_center"
+	// HealthDefaultOperation is the operation ref for the Azure Security Center health check
+	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
+	// AssessmentsCollectOperation is the operation ref for collecting security assessment findings
+	_, AssessmentsCollectOperation = providerkit.OperationSchema[AssessmentsCollect]()
+	// SubAssessmentsCollectOperation is the operation ref for collecting sub-assessment vulnerability findings
+	_, SubAssessmentsCollectOperation = providerkit.OperationSchema[SubAssessmentsCollect]()
+)
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {

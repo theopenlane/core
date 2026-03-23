@@ -6,6 +6,7 @@ import (
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -14,20 +15,17 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
 	// Installation is the typed installation metadata handle for the GCP Security Command Center definition
 	Installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// sccSchema is the reflected JSON schema for the GCP SCC credential
 	// sccCredential is the credential slot used by the SCC client
-	sccCredential = types.NewCredentialRef[CredentialSchema](Slug)
+	sccSchema, sccCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// SCCClient is the client ref for the GCP Security Command Center client used by this definition
 	SCCClient = types.NewClientRef[*cloudscc.Client]()
 	// HealthDefaultOperation is the operation ref for the GCP SCC health check
-	HealthDefaultOperation = types.NewOperationRef[HealthCheck](types.HealthDefaultOperation)
+	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
+	// findingsCollectSchema is the reflected JSON schema for the findings collect operation config
 	// FindingsCollectOperation is the operation ref for the GCP SCC findings collection operation
-	FindingsCollectOperation = types.NewOperationRef[FindingsConfig]("findings.collect")
-	// SettingsScanOperation is the operation ref for the GCP SCC settings scan operation
-	SettingsScanOperation = types.NewOperationRef[SettingsScan]("settings.scan")
+	findingsCollectSchema, FindingsCollectOperation = providerkit.OperationSchema[FindingsConfig]()
 )
-
-// Slug is the unique identifier for the GCP Security Command Center integration
-const Slug = "gcp_scc"
 
 const (
 	// projectScopeAll indicates collection should target all GCP projects in the organization

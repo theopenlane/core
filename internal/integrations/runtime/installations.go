@@ -52,7 +52,7 @@ func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installation
 }
 
 // EnsureInstallation returns an existing installation for the owner and definition or creates a new
-// Pending one when none exists. When an explicit installationID is given the record must already exist.
+// Pending one when none exists. When an explicit installationID is given the record must already exist
 // The boolean return value indicates whether a new record was created
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, installationID string, def types.Definition) (*ent.Integration, bool, error) {
 	db := r.DB()
@@ -79,7 +79,6 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, installationI
 		SetOwnerID(ownerID).
 		SetName(def.DisplayName).
 		SetDefinitionID(def.ID).
-		SetDefinitionSlug(def.Slug).
 		SetFamily(def.Family).
 		SetStatus(enums.IntegrationStatusPending).
 		Save(ctx)
@@ -89,4 +88,3 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, installationI
 
 	return record, true, nil
 }
-

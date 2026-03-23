@@ -10,14 +10,13 @@ import (
 
 const redisAuthStateKeyPrefix = "keymaker:auth-state:"
 
-// RedisAuthStateStore stores auth callback state in Redis so callback completion
-// works across process restarts and across multiple server instances.
+// RedisAuthStateStore stores auth callback state in Redis
 type RedisAuthStateStore struct {
 	client *redis.Client
 	now    func() time.Time
 }
 
-// NewRedisAuthStateStore returns a Redis-backed auth state store.
+// NewRedisAuthStateStore returns a Redis-backed auth state store
 func NewRedisAuthStateStore(client *redis.Client) *RedisAuthStateStore {
 	return &RedisAuthStateStore{
 		client: client,
@@ -25,7 +24,7 @@ func NewRedisAuthStateStore(client *redis.Client) *RedisAuthStateStore {
 	}
 }
 
-// Save records the provided definition authorization state with an expiry.
+// Save records the provided definition authorization state with an expiry
 func (r *RedisAuthStateStore) Save(state AuthState) error {
 	if state.State == "" {
 		return ErrAuthStateTokenRequired
@@ -54,7 +53,7 @@ func (r *RedisAuthStateStore) Save(state AuthState) error {
 	return r.client.Set(context.Background(), redisAuthStateKey(clone.State), encoded, ttl).Err()
 }
 
-// Take retrieves and deletes authorization state associated with the given token.
+// Take retrieves and deletes authorization state associated with the given token
 func (r *RedisAuthStateStore) Take(token string) (AuthState, error) {
 	if token == "" {
 		return AuthState{}, ErrAuthStateTokenRequired
@@ -82,6 +81,7 @@ func (r *RedisAuthStateStore) Take(token string) (AuthState, error) {
 	return state, nil
 }
 
+// redisAuthStateKey returns the Redis key for the given auth state token
 func redisAuthStateKey(token string) string {
 	return redisAuthStateKeyPrefix + token
 }

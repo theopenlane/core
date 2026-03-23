@@ -58,9 +58,7 @@ type OperationRegistration struct {
 	Ingest []IngestContract `json:"ingest,omitempty"`
 	// Handle executes the operation; set for operations that do not produce ingest payloads
 	Handle OperationHandler `json:"-"`
-	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline;
-	// set for operations that produce ingest data — mutually exclusive with Handle
+	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline,
+	// set for operations that produce ingest data and mutually exclusive with Handle
 	IngestHandle IngestHandler `json:"-"`
 }
-
-const HealthDefaultOperation = "health.default"

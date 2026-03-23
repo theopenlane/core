@@ -55,7 +55,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	return h.Success(ctx, IntegrationConfigResponse{
 		Reply:          rout.Reply{Success: true},
-		Provider:       def.Slug,
+		Provider:       def.ID,
 		InstallationID: installationRec.ID,
 	})
 }

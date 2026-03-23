@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// GraphQLClient is the subset of the GitHub GraphQL client used by this definition.
+// GraphQLClient is the subset of the GitHub GraphQL client used by this definition
 type GraphQLClient interface {
 	// Query executes a GraphQL query against the GitHub API
 	Query(ctx context.Context, q any, variables map[string]any) error
@@ -31,7 +31,7 @@ func (c *graphQLClient) Query(ctx context.Context, q any, variables map[string]a
 
 // Client builds installation-scoped GitHub GraphQL clients
 type Client struct {
-	// APIURL overrides the GitHub API host for local tests.
+	// APIURL overrides the GitHub API host for local tests
 	APIURL string
 }
 

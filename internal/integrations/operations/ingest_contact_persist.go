@@ -8,10 +8,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 )
 
-// persistContactInput upserts one Contact record using the ingest lookup key fields.
-// ExternalID takes priority when present; email is used as the fallback identifier.
+// persistContactInput upserts one Contact record using the ingest lookup key fields
+// ExternalID takes priority when present; email is used as the fallback identifier
 // Using both fields in a single AND query would produce false negatives when a contact
-// exists by email but has not yet had an external_id assigned.
+// exists by email but has not yet had an external_id assigned
 func persistContactInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateContactInput) error {
 	hasExternalID := createInput.ExternalID != nil && *createInput.ExternalID != ""
 	hasEmail := createInput.Email != nil && *createInput.Email != ""

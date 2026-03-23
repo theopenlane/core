@@ -13,7 +13,6 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "aws",
 				DisplayName: "AWS Security Hub",
 				Description: "Collect AWS Security Hub findings and Audit Manager summaries using a shared AWS assume-role credential.",
@@ -31,13 +30,13 @@ func Builder() registry.Builder {
 					Ref:         awsAssumeRoleCredential.ID(),
 					Name:        "AWS Assume Role",
 					Description: "Assume-role and collection-scope credential slot shared by the AWS service clients in this definition.",
-					Schema:      providerkit.SchemaFrom[AssumeRoleCredentialSchema](),
+					Schema:      awsAssumeRoleSchema,
 				},
 				{
 					Ref:         awsSourceCredential.ID(),
 					Name:        "AWS Source Credential",
 					Description: "Optional static source credential used to assume the configured AWS role when runtime IAM is unavailable.",
-					Schema:      providerkit.SchemaFrom[SourceCredentialSchema](),
+					Schema:      awsSourceSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -74,24 +73,30 @@ func Builder() registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate Security Hub access",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   SecurityHubClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
 				{
-					Name:         AssessmentsListOperation.Name(),
-					Description:  "List AWS Audit Manager assessments for review and future ingest support",
-					Topic:        AssessmentsListOperation.Topic(Slug),
+					Name:         AssessmentsCollectOperation.Name(),
+					Description:  "Collect AWS Audit Manager assessments as findings",
+					Topic:        types.OperationTopic(DefinitionID.ID(), AssessmentsCollectOperation.Name()),
 					ClientRef:    AuditManagerClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[AssessmentsConfig](),
-					Handle:       AssessmentsList{}.Handle(),
+					ConfigSchema: assessmentsCollectSchema,
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+						},
+					},
+					IngestHandle: AssessmentsCollect{}.IngestHandle(),
 				},
 				{
 					Name:         VulnerabilitiesCollectOperation.Name(),
 					Description:  "Collect AWS Security Hub findings for vulnerability ingestion",
-					Topic:        VulnerabilitiesCollectOperation.Topic(Slug),
+					Topic:        types.OperationTopic(DefinitionID.ID(), VulnerabilitiesCollectOperation.Name()),
 					ClientRef:    SecurityHubClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[FindingsConfig](),
+					ConfigSchema: vulnerabilitiesCollectSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,

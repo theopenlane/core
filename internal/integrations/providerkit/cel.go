@@ -85,7 +85,7 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 	)
 }
 
-// envelopeToVars converts a MappingEnvelope into the CEL variable map.
+// envelopeToVars converts a MappingEnvelope into the CEL variable map
 func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	var payload any
 
@@ -109,9 +109,9 @@ func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	}
 }
 
-// EvalFilter evaluates a CEL filter expression against a MappingEnvelope.
+// EvalFilter evaluates a CEL filter expression against a MappingEnvelope
 // An empty expr returns true (pass-through). Returns false when the expression excludes the envelope,
-// or a wrapped ErrFilterExprEval on evaluation failure.
+// or a wrapped ErrFilterExprEval on evaluation failure
 func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope) (bool, error) {
 	if expr == "" {
 		return true, nil
@@ -139,9 +139,9 @@ func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope
 	return value, nil
 }
 
-// EvalMap evaluates a CEL map expression against a MappingEnvelope and returns a JSON payload.
-// An empty expr returns the original envelope.Payload (pass-through).
-// Returns a wrapped ErrMapExprEval on failure.
+// EvalMap evaluates a CEL map expression against a MappingEnvelope and returns a JSON payload
+// An empty expr returns the original envelope.Payload (pass-through)
+// Returns a wrapped ErrMapExprEval on failure
 func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (json.RawMessage, error) {
 	if expr == "" {
 		return envelope.Payload, nil

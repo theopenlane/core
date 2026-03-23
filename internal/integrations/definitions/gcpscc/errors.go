@@ -23,8 +23,6 @@ var (
 	ErrListSourcesFailed = errors.New("gcpscc: list sources failed")
 	// ErrListFindingsFailed indicates the findings listing request failed
 	ErrListFindingsFailed = errors.New("gcpscc: list findings failed")
-	// ErrNotificationConfigScanFailed indicates the notification config scan failed
-	ErrNotificationConfigScanFailed = errors.New("gcpscc: notification config scan failed")
 	// ErrFindingEncode indicates a finding payload could not be serialized
 	ErrFindingEncode = errors.New("gcpscc: finding encode failed")
 	// ErrResultEncode indicates an operation result could not be serialized

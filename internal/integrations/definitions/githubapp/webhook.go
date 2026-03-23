@@ -107,7 +107,7 @@ type githubWebhookVerificationMetadata struct {
 // Verify validates the HMAC-SHA256 signature on an inbound GitHub webhook request.
 // Follows the GitHub webhook verification pattern: the X-Hub-Signature-256 header
 // contains "sha256=<hex-encoded HMAC-SHA256>" computed using the app webhook secret
-func (a App) Verify(request types.WebhookVerifyRequest) error {
+func (a App) Verify(request types.WebhookInboundRequest) error {
 	if a.Config.WebhookSecret == "" {
 		return ErrWebhookSecretMissing
 	}
@@ -138,7 +138,7 @@ func (a App) Verify(request types.WebhookVerifyRequest) error {
 }
 
 // Event resolves the inbound webhook payload into one registered GitHub webhook event
-func (App) Event(request types.WebhookEventRequest) (types.WebhookReceivedEvent, error) {
+func (App) Event(request types.WebhookInboundRequest) (types.WebhookReceivedEvent, error) {
 	eventType := request.Request.Header.Get(githubWebhookEventHeader)
 	if eventType == "" {
 		return types.WebhookReceivedEvent{}, ErrWebhookEventMissing

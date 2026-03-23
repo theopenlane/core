@@ -14,7 +14,6 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Slug:        Slug,
 				Family:      "slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
@@ -101,38 +100,23 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:        HealthDefaultOperation.Name(),
 					Description: "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:       HealthDefaultOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
 					ClientRef:   SlackClient.ID(),
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle:      HealthCheck{}.Handle(),
 				},
-				{
-					Name:        TeamInspectOperation.Name(),
-					Description: "Collect workspace metadata via team.info for posture analysis",
-					Topic:       TeamInspectOperation.Topic(Slug),
-					ClientRef:   SlackClient.ID(),
-					Handle:      TeamInspect{}.Handle(),
-				},
-				{
-					Name:         ChannelsListOperation.Name(),
-					Description:  "List Slack channels available for use as notification destinations",
-					Topic:        ChannelsListOperation.Topic(Slug),
-					ClientRef:    SlackClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[ChannelsListOperationInput](),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       ChannelsList{}.Handle(),
-				},
-				{
+					{
 					Name:         MessageSendOperation.Name(),
 					Description:  "Send a Slack message via chat.postMessage",
-					Topic:        MessageSendOperation.Topic(Slug),
+					Topic:        types.OperationTopic(DefinitionID.ID(), MessageSendOperation.Name()),
 					ClientRef:    SlackClient.ID(),
-					ConfigSchema: providerkit.SchemaFrom[MessageOperationInput](),
+					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),
 				},
 				{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Collect workspace users as directory accounts",
-					Topic:       DirectorySyncOperation.Topic(Slug),
+					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
 					ClientRef:   SlackClient.ID(),
 					Ingest: []types.IngestContract{
 						{

@@ -135,7 +135,7 @@ func (h *Handler) handleResolvedIntegrationWebhook(ctx echo.Context, requestCtx 
 	})
 
 	if !skipVerify && webhook.Verify != nil {
-		if err := webhook.Verify(types.WebhookVerifyRequest{
+		if err := webhook.Verify(types.WebhookInboundRequest{
 			Integration: installation,
 			Webhook:     persistedWebhook,
 			Request:     ctx.Request(),
@@ -149,7 +149,7 @@ func (h *Handler) handleResolvedIntegrationWebhook(ctx echo.Context, requestCtx 
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
 	}
 
-	event, err := webhook.Event(types.WebhookEventRequest{
+	event, err := webhook.Event(types.WebhookInboundRequest{
 		Integration: installation,
 		Webhook:     persistedWebhook,
 		Request:     ctx.Request(),

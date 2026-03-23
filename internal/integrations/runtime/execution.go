@@ -14,9 +14,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// ExecuteOperation runs one integration operation inline without run tracking.
-// When the operation declares a ConfigSchema and a config payload is provided, the payload
-// is validated against the schema before execution.
+// ExecuteOperation runs one integration operation inline without run tracking
 func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentialOverrides types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
 	if installation == nil {
 		return nil, ErrInstallationRequired
@@ -33,7 +31,7 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integr
 	})
 }
 
-// HandleOperation executes one queued operation envelope through the runtime-managed dependencies.
+// HandleOperation executes one queued operation envelope through the runtime-managed dependencies
 func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
 	startedAt := time.Now()
 	db := r.DB()
@@ -156,6 +154,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 	return response, nil
 }
 
+// mergeCredentials combines two credential binding sets, with overrides replacing matching entries in current
 func mergeCredentials(current, overrides types.CredentialBindings) types.CredentialBindings {
 	if len(current) == 0 && len(overrides) == 0 {
 		return nil
@@ -184,6 +183,7 @@ func mergeCredentials(current, overrides types.CredentialBindings) types.Credent
 	return merged
 }
 
+// singleCredential returns the resolved credential when exactly one ref is declared, or an empty set otherwise
 func singleCredential(credentials types.CredentialBindings, refs []types.CredentialSlotID) types.CredentialSet {
 	if len(refs) != 1 {
 		return types.CredentialSet{}

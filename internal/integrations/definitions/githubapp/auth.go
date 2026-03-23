@@ -29,11 +29,13 @@ const (
 	jwtIssuedAtBackdateSeconds = 30 * time.Second
 	// stateTokenBytes is the number of random bytes used for CSRF state tokens
 	stateTokenBytes = 16
-	// installURLTemplate is the GitHub App installation URL pattern
+	// installURLTemplate is the GitHub App installation URL pattern used to construct the install redirect
 	installURLTemplate = "https://github.com/apps/%s/installations/new"
 )
 
+// disconnectDetails holds the metadata returned when initiating a GitHub App disconnect
 type disconnectDetails struct {
+	// InstallationID is the GitHub App installation ID being disconnected
 	InstallationID string `json:"installationId,omitempty"`
 }
 
@@ -43,6 +45,7 @@ type statePayload struct {
 	Token string `json:"token"`
 }
 
+// appInstallAuthRegistration builds the auth registration for GitHub App installation flow
 func appInstallAuthRegistration(cfg Config) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: GitHubAppCredential.ID(),
@@ -69,7 +72,8 @@ func appInstallAuthRegistration(cfg Config) *types.AuthRegistration {
 	}
 }
 
-func appInstallDisconnectRegistration(_ Config) *types.DisconnectRegistration {
+// appInstallDisconnectRegistration builds the disconnect registration for GitHub App installations
+func appInstallDisconnectRegistration() *types.DisconnectRegistration {
 	return &types.DisconnectRegistration{
 		CredentialRef: GitHubAppCredential.ID(),
 		Name:          "Disconnect GitHub App Installation",
@@ -97,6 +101,7 @@ func appInstallDisconnectRegistration(_ Config) *types.DisconnectRegistration {
 	}
 }
 
+// startAppInstall generates the GitHub App installation URL and CSRF state token
 func startAppInstall(cfg Config) (types.AuthStartResult, error) {
 	if cfg.AppSlug == "" {
 		return types.AuthStartResult{}, ErrAppSlugMissing
@@ -120,6 +125,7 @@ func startAppInstall(cfg Config) (types.AuthStartResult, error) {
 	}, nil
 }
 
+// completeAppInstall validates the callback state, exchanges the installation ID for a token, and returns the auth result
 func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
 	var savedState statePayload
 	if err := jsonx.UnmarshalIfPresent(state, &savedState); err != nil {
@@ -159,6 +165,7 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 	}, nil
 }
 
+// refreshAppInstall mints a new installation token from the stored installation ID
 func refreshAppInstall(ctx context.Context, cfg Config, credential types.CredentialSet) (types.CredentialSet, error) {
 	var cred githubAppCredential
 	if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
@@ -172,6 +179,7 @@ func refreshAppInstall(ctx context.Context, cfg Config, credential types.Credent
 	return mintCredential(ctx, cfg, cred.InstallationID)
 }
 
+// disconnectInstallationID extracts the installation ID from the credential or installation metadata
 func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
 	if req.Credential != nil {
 		var cred githubAppCredential

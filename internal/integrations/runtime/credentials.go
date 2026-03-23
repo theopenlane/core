@@ -176,16 +176,7 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
-func (r *Runtime) reconcileCredential(
-	ctx context.Context,
-	installation *ent.Integration,
-	def types.Definition,
-	credentialRef types.CredentialSlotID,
-	credential types.CredentialSet,
-	installationInput json.RawMessage,
-) error {
-	log := logx.FromContext(ctx)
-
+func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Integration, def types.Definition, credentialRef types.CredentialSlotID, credential types.CredentialSet, installationInput json.RawMessage) error {
 	registration, err := def.CredentialRegistration(credentialRef)
 	if err != nil {
 		return err
@@ -213,7 +204,8 @@ func (r *Runtime) reconcileCredential(
 
 		_, validationErr := r.ExecuteOperation(ctx, installation, validationOp, bindings, nil)
 		if validationErr != nil {
-			log.Warn().Err(validationErr).Str("installation_id", installation.ID).Str("credential_ref", connection.CredentialRef.String()).Msg("validation failed during reconcile")
+			logx.FromContext(ctx).Error().Err(validationErr).Msg("validation failed during reconcile")
+
 			return fmt.Errorf("reconcile: validation failed: %w", validationErr)
 		}
 	}
@@ -244,14 +236,7 @@ func (r *Runtime) reconcileCredential(
 }
 
 // reconcileConnectionInstallationMetadata updates installation metadata for a connection
-func (r *Runtime) reconcileConnectionInstallationMetadata(
-	ctx context.Context,
-	installation *ent.Integration,
-	connection types.ConnectionRegistration,
-	credential types.CredentialSet,
-	bindings types.CredentialBindings,
-	input json.RawMessage,
-) error {
+func (r *Runtime) reconcileConnectionInstallationMetadata(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, credential types.CredentialSet, bindings types.CredentialBindings, input json.RawMessage) error {
 	if connection.Installation == nil {
 		return nil
 	}
@@ -275,8 +260,7 @@ func (r *Runtime) reconcileConnectionInstallationMetadata(
 	return r.saveInstallationMetadata(ctx, installation, metadata)
 }
 
-// resolveConnectionFromState resolves the connection persisted in provider state for an installation.
-// Returns the connection, whether state was found, and any error
+// resolveConnectionFromState resolves the connection persisted in provider state for an installation
 func (r *Runtime) resolveConnectionFromState(def types.Definition, installation *ent.Integration) (types.ConnectionRegistration, bool, error) {
 	state, err := def.ProviderState(installation.ProviderState)
 	if err != nil {

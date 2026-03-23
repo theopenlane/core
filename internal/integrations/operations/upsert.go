@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// roundTripUpdateInput converts one create input into its matching update input using JSON round-tripping.
+// roundTripUpdateInput converts one create input into its matching update input using JSON round-tripping
 func roundTripUpdateInput[Create any, Update any](createInput Create) (Update, error) {
 	var updateInput Update
 	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
@@ -17,7 +17,7 @@ func roundTripUpdateInput[Create any, Update any](createInput Create) (Update, e
 	return updateInput, nil
 }
 
-// persistUpsert centralizes the common ingest upsert flow while allowing schema-specific lookup and mutation logic.
+// persistUpsert centralizes the common ingest upsert flow while allowing schema-specific lookup and mutation logic
 func persistUpsert[Create any, Update any, Existing any](
 	ctx context.Context,
 	createInput Create,
@@ -44,7 +44,7 @@ func persistUpsert[Create any, Update any, Existing any](
 	return wrapIngestPersistError(update(ctx, existing, updateInput))
 }
 
-// persistRoundTripUpsert centralizes the common ingest upsert flow for schemas whose update input can be derived by round-tripping the create input.
+// persistRoundTripUpsert centralizes the common ingest upsert flow for schemas whose update input can be derived by round-tripping the create input
 func persistRoundTripUpsert[Create any, Update any, Existing any](
 	ctx context.Context,
 	createInput Create,

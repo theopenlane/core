@@ -382,7 +382,6 @@ func (suite *HandlerTestSuite) TestSCIMDirectoryUserHandlerCreateUsesRuntimeInge
 		SetName("SCIM Directory").
 		SetKind("scim").
 		SetDefinitionID(definitionscim.DefinitionID.ID()).
-		SetDefinitionSlug(definitionscim.Slug).
 		SetConfig(openapi.IntegrationConfig{SCIMProvisionMode: enums.SCIMProvisionModeDirectory}).
 		Save(createCtx)
 	suite.Require().NoError(err)
@@ -447,7 +446,6 @@ func (suite *HandlerTestSuite) TestSCIMDirectoryGroupHandlerCreateUsesRuntimeIng
 		SetName("SCIM Directory").
 		SetKind("scim").
 		SetDefinitionID(definitionscim.DefinitionID.ID()).
-		SetDefinitionSlug(definitionscim.Slug).
 		SetConfig(openapi.IntegrationConfig{SCIMProvisionMode: enums.SCIMProvisionModeDirectory}).
 		Save(createCtx)
 	suite.Require().NoError(err)

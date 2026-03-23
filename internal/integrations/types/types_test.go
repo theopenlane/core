@@ -397,28 +397,23 @@ func TestWebhookRefNameBasic(t *testing.T) {
 	}
 }
 
-func TestWebhookEventRefNameAndTopic(t *testing.T) {
+func TestWebhookEventRefName(t *testing.T) {
 	t.Parallel()
 
 	ref := NewWebhookEventRef[struct{}]("pull_request.opened")
+	if ref.Name() != "pull_request.opened" {
+		t.Fatalf("got %q, want %q", ref.Name(), "pull_request.opened")
+	}
+}
 
-	t.Run("name", func(t *testing.T) {
-		t.Parallel()
+func TestWebhookEventTopic(t *testing.T) {
+	t.Parallel()
 
-		if ref.Name() != "pull_request.opened" {
-			t.Fatalf("got %q, want %q", ref.Name(), "pull_request.opened")
-		}
-	})
-
-	t.Run("topic", func(t *testing.T) {
-		t.Parallel()
-
-		want := "integration.github_app.webhook.pull_request.opened"
-		got := string(ref.Topic("github_app"))
-		if got != want {
-			t.Fatalf("got %q, want %q", got, want)
-		}
-	})
+	got := WebhookEventTopic("def_001", "pull_request.opened")
+	want := "integration.def_001.webhook.pull_request.opened"
+	if string(got) != want {
+		t.Fatalf("got %q, want %q", got, want)
+	}
 }
 
 func TestInstallationRefResolve(t *testing.T) {

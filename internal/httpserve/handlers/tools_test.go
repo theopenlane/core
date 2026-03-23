@@ -416,7 +416,6 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 	return types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          testAuthDefinitionID,
-			Slug:        "test-oauth",
 			DisplayName: "Test OAuth",
 			Active:      true,
 		},
