@@ -14,6 +14,19 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// SubcontrolToCreate is used to track which subcontrols need to be created for a given control
+type SubcontrolToCreate struct {
+	NewControlID string
+	RefControl   *generated.Control
+}
+
+// ControlToUpdate is used to track existing controls that need to be updated due to changes
+// in the revision of their connected standards
+type ControlToUpdate struct {
+	ExistingControlID string
+	SourceControl     *generated.Control
+}
+
 // CloneControls clones the given controls with the provided options and returns the IDs of the created controls, the subcontrols to create, and any errors that occurred during cloning
 func CloneControls(ctx context.Context, client *generated.Client, controlsToClone []*generated.Control, opts ...CloneOption) ([]string, []SubcontrolToCreate, error) {
 	if client == nil {
@@ -49,7 +62,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 
 	for i, c := range controlsToClone {
 		funcs[i] = func() {
-			controlInput, _, isTCControl := CreateCloneControlInput(c, options.programID, options.orgID)
+			controlInput, isTCControl := CreateCloneControlInput(c, options.programID, options.orgID)
 
 			res, err := client.Control.Create().
 				SetInput(controlInput).
@@ -113,7 +126,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 
 // CreateCloneControlInput creates a CreateControlInput from the given control that is being cloned
 // and returns the input, the standard ID that was set, and whether the control is a trust center control
-func CreateCloneControlInput(c *generated.Control, programID *string, orgID string) (generated.CreateControlInput, string, bool) {
+func CreateCloneControlInput(c *generated.Control, programID *string, orgID string) (generated.CreateControlInput, bool) {
 	controlInput := generated.CreateControlInput{
 		// grab fields from the existing control
 		RefCode:                c.RefCode,
@@ -162,7 +175,7 @@ func CreateCloneControlInput(c *generated.Control, programID *string, orgID stri
 		controlInput.ProgramIDs = []string{*programID}
 	}
 
-	return controlInput, standardID, isTrustCenterStandard(c.Edges.Standard)
+	return controlInput, isTrustCenterStandard(c.Edges.Standard)
 }
 
 // CreateCloneSubcontrolInput creates a CreateSubcontrolInput from the given subcontrol that is being cloned
@@ -194,6 +207,7 @@ func CreateCloneSubcontrolInput(subcontrol *generated.Subcontrol, orgID string) 
 	}
 }
 
+// HasRevisionChanged checks if the revision of the control has changed compared to the standard revision
 func HasRevisionChanged(existingRevision *string, standardRevision string) bool {
 	if existingRevision == nil {
 		return standardRevision != ""
@@ -202,6 +216,7 @@ func HasRevisionChanged(existingRevision *string, standardRevision string) bool 
 	return *existingRevision != standardRevision
 }
 
+// CreateRevisionUpdateInput creates an UpdateControlInput from the given control that is being updated for a revision change
 func CreateRevisionUpdateInput(c *generated.Control) generated.UpdateControlInput {
 	input := generated.UpdateControlInput{
 		Title:                  &c.Title,
@@ -229,6 +244,7 @@ func CreateRevisionUpdateInput(c *generated.Control) generated.UpdateControlInpu
 	return input
 }
 
+// CreateSubcontrolRevisionUpdateInput creates an UpdateSubcontrolInput from the given subcontrol that is being updated for a revision change
 func CreateSubcontrolRevisionUpdateInput(sc *generated.Subcontrol, standardRevision *string) generated.UpdateSubcontrolInput {
 	input := generated.UpdateSubcontrolInput{
 		Title:                      &sc.Title,

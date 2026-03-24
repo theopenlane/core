@@ -12,27 +12,37 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
-// trustCenterStandardShortName is the short name of the trust center standard
-// used to identify controls that should be flagged as trust center controls during clone
-var trustCenterStandardShortName = "OTS"
-var TrustCenterFrameworkName = "openlane-trust-center"
+var (
+	// trustCenterStandardShortName is the short name of the trust center standard
+	// used to identify controls that should be flagged as trust center controls during clone
+	trustCenterStandardShortName = "OTS"
+
+	// trustCenterFrameworkName is the name of the framework the trust center standard belongs to, used in conjunction with trustCenterStandardShortName to identify controls that should be flagged as trust center controls during clone
+	trustCenterFrameworkName = "openlane-trust-center"
+
+	// trustCenterStandardFilter is the filter used to identify controls that should be flagged as trust center controls during clone
+	trustCenterStandardFilter = CloneFilterOptions{
+		StandardShortName:     &trustCenterStandardShortName,
+		StandardFrameworkName: &trustCenterFrameworkName,
+	}
+)
 
 // isTrustCenterStandard returns true if the standard is the trust center standard
 func isTrustCenterStandard(std *generated.Standard) bool {
 	return std != nil && std.ShortName == trustCenterStandardShortName
 }
 
-var trustCenterStandardFilter = CloneFilterOptions{
-	StandardShortName:     &trustCenterStandardShortName,
-	StandardFrameworkName: &TrustCenterFrameworkName,
-}
-
+// getTrustCenterControls retrieves the trust center controls
 func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*generated.Control, error) {
 	if client == nil {
 		return nil, nil
 	}
 
+	// ensure we get the public, system owned standard
 	stdWhereFilter := StandardFilter(trustCenterStandardFilter)
+	stdWhereFilter = append(stdWhereFilter, standard.IsPublic(true))
+	stdWhereFilter = append(stdWhereFilter, standard.SystemOwned(true))
+
 	stds, err := client.Standard.Query().
 		Where(stdWhereFilter...).
 		Select(standard.FieldID, standard.FieldIsPublic).
@@ -83,6 +93,7 @@ func CloneTrustCenterControls(ctx context.Context) error {
 		return err
 	}
 
+	// trust center controls do no have subcontrols so we can ignore the returned subcontrols to create
 	_, _, err = CloneControls(ctx, getClientFromContext(ctx), controls, WithOrgID(orgID))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error cloning trust center controls")
