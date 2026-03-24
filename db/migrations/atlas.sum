@@ -1,4 +1,4 @@
-h1:iINKst0qcscVvTmGW+A1YZA57xZ4LPittVwBszQavLA=
+h1:kpPLBX4FadfVQQdhvGJpdLlfUN8jOFCiYv1lRy49wAE=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -80,3 +80,5 @@ h1:iINKst0qcscVvTmGW+A1YZA57xZ4LPittVwBszQavLA=
 20260320205600_task_edges.sql h1:R9bFCFn/h4YZq9q6+XdlDZnn3pc433GDq4J88l08fK4=
 20260322192758_remove_finding_rev_rem_dup.sql h1:OTWVKSX9va+hdTDQ8/GW23hzde6bA6EmnCqEYVDDONE=
 20260323163856_fix_edges_vulns_controls.sql h1:+hrovsPaRZMDTubu5bHeqCBcgk4votIYQRvy2lrUPYM=
+20260324013719_campaign_freq.sql h1:zKYaHFYcsTpswE5BsDC1JCwtFA+67flHUe5zPTJ9DuE=
+20260324013722_campaign_freq_history.sql h1:uSS8UXP94pIYVJuQxt9MdTJxHIqtZo3G4SEsAWzfQ6I=
