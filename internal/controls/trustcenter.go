@@ -34,7 +34,7 @@ func isTrustCenterStandard(std *generated.Standard) bool {
 }
 
 // getTrustCenterControls retrieves the trust center controls
-func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*generated.Control, error) {
+func getTrustCenterControls(ctx context.Context, client *generated.Tx) ([]*generated.Control, error) {
 	if client == nil {
 		return nil, nil
 	}
@@ -90,9 +90,21 @@ func CloneTrustCenterControls(ctx context.Context) error {
 	orgID := caller.OrganizationID
 
 	txClient := getClientFromContext(ctx)
-	controls, err := getTrustCenterControls(ctx, txClient.Client())
+	if txClient == nil {
+		logx.FromContext(ctx).Error().Msg("unable to get transaction client from context")
+
+		return nil
+	}
+
+	controls, err := getTrustCenterControls(ctx, txClient)
 	if err != nil {
 		return err
+	}
+
+	if len(controls) == 0 {
+		logx.FromContext(ctx).Info().Msg("no trust center controls found to clone")
+
+		return nil
 	}
 
 	// trust center controls do no have subcontrols so we can ignore the returned subcontrols to create
