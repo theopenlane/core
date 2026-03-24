@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -88,13 +89,14 @@ func CloneTrustCenterControls(ctx context.Context) error {
 
 	orgID := caller.OrganizationID
 
-	controls, err := getTrustCenterControls(ctx, getClientFromContext(ctx))
+	txClient := getClientFromContext(ctx)
+	controls, err := getTrustCenterControls(ctx, txClient.Client())
 	if err != nil {
 		return err
 	}
 
 	// trust center controls do no have subcontrols so we can ignore the returned subcontrols to create
-	_, _, err = CloneControls(ctx, getClientFromContext(ctx), controls, WithOrgID(orgID))
+	_, _, err = CloneControls(ctx, txClient.Client(), controls, WithOrgID(orgID))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error cloning trust center controls")
 
@@ -106,13 +108,27 @@ func CloneTrustCenterControls(ctx context.Context) error {
 
 // getClientFromContext is a helper function to get the generated client from the context and log an error if it is not found
 // it will not prevent the function from executing, but it will return nil and log the error for debugging purposes
-func getClientFromContext(ctx context.Context) *generated.Client {
-	client := generated.FromContext(ctx)
-	if client == nil {
+func getClientFromContext(ctx context.Context) *generated.Tx {
+	txClient := transactionFromContext(ctx)
+	if txClient == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get client from context")
 
 		return nil
 	}
 
-	return client
+	return txClient
+}
+
+// transactionFromContext returns the transaction from the context if it exists
+func transactionFromContext(ctx context.Context) *generated.Tx {
+	// check if the transaction is in the context
+	// this is returned from all graphql requests
+	tx := generated.TxFromContext(ctx)
+	if tx != nil {
+		return tx
+	}
+
+	// check if the transaction is in the context
+	// from the REST middleware
+	return transaction.FromContext(ctx)
 }

@@ -155,8 +155,8 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 
 		newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
 
-		_, err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
-			Save(newCtx)
+		err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
+			Exec(newCtx)
 		if err != nil && !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
 			return nil, err
 		}
