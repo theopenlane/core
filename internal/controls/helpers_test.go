@@ -1,8 +1,9 @@
-package graphapi
+package controls_test
 
 import (
 	"testing"
 
+	"github.com/theopenlane/core/internal/controls"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -10,7 +11,7 @@ import (
 
 func TestGetControlIDFromRefCode(t *testing.T) {
 	t.Run("match by control refCode", func(t *testing.T) {
-		controls := []*generated.Control{
+		matchControls := []*generated.Control{
 			{
 				ID:      "control-1",
 				RefCode: "REF-1",
@@ -23,7 +24,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode("REF-1", controls)
+		id, isSubcontrol := controls.GetControlIDFromRefCode("REF-1", matchControls)
 
 		assert.Assert(t, id != nil)
 		assert.Check(t, is.Equal("control-1", *id))
@@ -31,7 +32,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 	})
 
 	t.Run("match by control alias", func(t *testing.T) {
-		controls := []*generated.Control{
+		matchControls := []*generated.Control{
 			{
 				ID:      "control-1",
 				RefCode: "REF-1",
@@ -39,7 +40,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode("ALIAS-2", controls)
+		id, isSubcontrol := controls.GetControlIDFromRefCode("ALIAS-2", matchControls)
 
 		assert.Assert(t, id != nil)
 		assert.Check(t, is.Equal("control-1", *id))
@@ -47,7 +48,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 	})
 
 	t.Run("match by subcontrol refCode", func(t *testing.T) {
-		controls := []*generated.Control{
+		matchControls := []*generated.Control{
 			{
 				ID:      "control-1",
 				RefCode: "REF-1",
@@ -63,7 +64,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode("SUBREF-1", controls)
+		id, isSubcontrol := controls.GetControlIDFromRefCode("SUBREF-1", matchControls)
 
 		assert.Assert(t, id != nil)
 		assert.Check(t, is.Equal("control-1", *id))
@@ -71,7 +72,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 	})
 
 	t.Run("match by subcontrol alias", func(t *testing.T) {
-		controls := []*generated.Control{
+		matchControls := []*generated.Control{
 			{
 				ID:      "control-1",
 				RefCode: "REF-1",
@@ -87,7 +88,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode("SUBALIAS-1", controls)
+		id, isSubcontrol := controls.GetControlIDFromRefCode("SUBALIAS-1", matchControls)
 
 		assert.Assert(t, id != nil)
 		assert.Check(t, is.Equal("control-1", *id))
@@ -95,14 +96,14 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 	})
 
 	t.Run("no match found", func(t *testing.T) {
-		controls := []*generated.Control{
+		matchControls := []*generated.Control{
 			{
 				ID:      "control-1",
 				RefCode: "REF-1",
 			},
 		}
 
-		id, isSubcontrol := getControlIDFromRefCode("NON-EXIST	ENT", controls)
+		id, isSubcontrol := controls.GetControlIDFromRefCode("NON-EXIST	ENT", matchControls)
 
 		assert.Assert(t, id == nil)
 		assert.Check(t, is.Equal(false, isSubcontrol))

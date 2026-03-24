@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/controls"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -31,15 +32,15 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
 	if hasStandardFilter(input) {
-		cf := cloneFilterOptions{
-			categories: input.Categories,
+		cf := controls.CloneFilterOptions{
+			Categories: input.Categories,
 		}
 
 		if input.StandardID != nil {
-			cf.standardID = input.StandardID
+			cf.StandardID = input.StandardID
 		} else {
-			cf.standardShortName = input.StandardShortName
-			cf.standardVersion = input.StandardVersion
+			cf.StandardShortName = input.StandardShortName
+			cf.StandardVersion = input.StandardVersion
 		}
 
 		bulkControls, err := r.cloneControlsFromStandard(ctx, cf, nil)
@@ -107,7 +108,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
 	if hasStandardFilter(input) {
-		bulkControls, err := r.cloneControlsFromStandard(ctx, cloneFilterOptions{standardID: input.StandardID}, nil)
+		bulkControls, err := r.cloneControlsFromStandard(ctx, controls.CloneFilterOptions{StandardID: input.StandardID}, nil)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 		}

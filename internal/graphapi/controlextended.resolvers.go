@@ -13,6 +13,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/controls"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -35,10 +36,10 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	filters := getCloneFilterOptions(input)
+	filters := controls.GetCloneFilterOptions(input)
 
 	// if a standard is provided, clone those controls
-	if filterByStandard(filters) {
+	if controls.FilterByStandard(filters) {
 		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
 		if err != nil {
 			return nil, parseRequestError(ctx, generated.ErrPermissionDenied, common.Action{Action: common.ActionCreate, Object: "control"})
@@ -89,7 +90,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	convertedInput, err := convertToCloneControlInput(data)
+	convertedInput, err := controls.ConvertToCloneControlInput(data)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to convert clone control input")
 
@@ -119,7 +120,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 			continue
 		}
 
-		controlID, isSubControl := getControlIDFromRefCode(*c.RefCode, out.Controls)
+		controlID, isSubControl := controls.GetControlIDFromRefCode(*c.RefCode, out.Controls)
 		if controlID == nil || *controlID == "" {
 			logger.Warn().Str("ref_code", *c.RefCode).Msg("could not find control ID for ref code, skipping additional object/implementation creation")
 
@@ -132,7 +133,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		}
 
 		if isSubControl {
-			scInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
+			scInput, hasUpdate, convErr := controls.GetFieldsToUpdate[generated.UpdateSubcontrolInput](c)
 			if convErr != nil {
 				logger.Error().Err(convErr).Msg("error preparing subcontrol update fields")
 			}
@@ -161,7 +162,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 
 				if c.ImplementationGuidance != nil {
-					guidance := cleanImplementationGuidance(c.ImplementationGuidance)
+					guidance := controls.CleanImplementationGuidance(c.ImplementationGuidance)
 
 					if guidance != nil {
 						base.AppendImplementationGuidance([]models.ImplementationGuidance{*guidance})
@@ -173,7 +174,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 			}
 		} else {
-			cInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateControlInput](c)
+			cInput, hasUpdate, convErr := controls.GetFieldsToUpdate[generated.UpdateControlInput](c)
 			if convErr != nil {
 				logger.Error().Err(convErr).Msg("error preparing control update fields")
 			}
@@ -202,7 +203,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 
 				if c.ImplementationGuidance != nil {
-					guidance := cleanImplementationGuidance(c.ImplementationGuidance)
+					guidance := controls.CleanImplementationGuidance(c.ImplementationGuidance)
 
 					if guidance != nil {
 						base.AppendImplementationGuidance([]models.ImplementationGuidance{*guidance})

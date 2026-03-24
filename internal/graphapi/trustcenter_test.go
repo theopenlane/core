@@ -223,6 +223,16 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	customDomainAnotherOrg := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// create trust center standard
+	trustCenterControlStd := (&StandardBuilder{client: suite.client, Name: "OTS", Framework: "openlane-trust-center", IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	trustCenterControlIDs := []string{}
+	numTrustCenterControls := 5
+	for range numTrustCenterControls {
+		control := (&ControlBuilder{client: suite.client, StandardID: trustCenterControlStd.ID}).MustNew(systemAdminUser.UserCtx, t)
+		trustCenterControlIDs = append(trustCenterControlIDs, control.ID)
+	}
+
 	// Create a trust center first to test the duplicate constraint
 	existingTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -328,6 +338,15 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig != nil)
 			assert.Check(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig.Text != nil)
 
+			// get controls for the trust center standard and ensure they are added to the trust center
+			controlsResp, err := tc.client.GetControls(tc.ctx, nil, nil, nil, nil, &testclient.ControlWhereInput{
+				IsTrustCenterControl: lo.ToPtr(true),
+				SystemOwned:          lo.ToPtr(false),
+			}, nil)
+			assert.NilError(t, err)
+			assert.Assert(t, controlsResp != nil)
+			assert.Check(t, is.Equal(numTrustCenterControls, len(controlsResp.Controls.Edges)))
+
 			// Clean up
 			(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: resp.CreateTrustCenter.TrustCenter.ID}).MustDelete(tc.ctx, t)
 		})
@@ -337,6 +356,9 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: existingTrustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	// cleanup trust center standard and control
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: trustCenterControlIDs}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: trustCenterControlStd.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestGetAllTrustCenters(t *testing.T) {
