@@ -300,7 +300,7 @@ const DefaultReviewFrequency enums.Frequency = "YEARLY"
 // ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
 func ReviewFrequencyValidator(rf enums.Frequency) error {
 	switch rf.String() {
-	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("entityhistory: invalid enum value for review_frequency field: %q", rf)
