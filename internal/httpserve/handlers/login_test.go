@@ -161,6 +161,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			expectedModules: []interface{}{
 				models.CatalogBaseModule.String(),
 				models.CatalogComplianceModule.String(),
+				models.CatalogTrustCenterModule.String(),
 			},
 		},
 		{
@@ -172,6 +173,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			expectedModules: []interface{}{
 				models.CatalogBaseModule.String(),
 				models.CatalogComplianceModule.String(),
+				models.CatalogTrustCenterModule.String(),
 			},
 		},
 		{
