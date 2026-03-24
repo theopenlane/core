@@ -125,6 +125,7 @@ func (Campaign) Fields() []ent.Field {
 		field.Enum("recurrence_frequency").
 			Comment("the recurrence cadence for the campaign").
 			GoType(enums.Frequency("")).
+			Default(enums.FrequencyNone.String()).
 			Optional().
 			Annotations(
 				entgql.OrderField("recurrence_frequency"),

@@ -55643,6 +55643,7 @@ enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/common/enu
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 Ordering options for ActionPlan connections
@@ -59319,6 +59320,7 @@ enum CampaignFrequency @goModel(model: "github.com/theopenlane/core/common/enums
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 Ordering options for Campaign connections
@@ -77027,6 +77029,7 @@ enum EntityFrequency @goModel(model: "github.com/theopenlane/core/common/enums.F
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 Ordering options for Entity connections
@@ -89374,6 +89377,7 @@ enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/common
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 Ordering options for InternalPolicy connections
@@ -103253,6 +103257,7 @@ enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/common/enum
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 Ordering options for Procedure connections
