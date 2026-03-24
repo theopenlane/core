@@ -227,30 +227,30 @@ func TestBuildOAuthMaterialZeroExpiry(t *testing.T) {
 	}
 }
 
-func TestBuildAuthURLOpts(t *testing.T) {
+func TestMapAuthCodeOptionsAuthURL(t *testing.T) {
 	t.Parallel()
 
-	opts := buildAuthURLOpts(map[string]string{"prompt": "consent", "access_type": "offline"})
+	opts := mapAuthCodeOptions[rp.AuthURLOpt](map[string]string{"prompt": "consent", "access_type": "offline"})
 	if len(opts) != 2 {
-		t.Fatalf("buildAuthURLOpts() returned %d opts, want 2", len(opts))
+		t.Fatalf("mapAuthCodeOptions() returned %d opts, want 2", len(opts))
 	}
 }
 
-func TestBuildAuthURLOptsNil(t *testing.T) {
+func TestMapAuthCodeOptionsNil(t *testing.T) {
 	t.Parallel()
 
-	opts := buildAuthURLOpts(nil)
+	opts := mapAuthCodeOptions[rp.AuthURLOpt](nil)
 	if opts != nil {
-		t.Fatalf("buildAuthURLOpts(nil) = %v, want nil", opts)
+		t.Fatalf("mapAuthCodeOptions(nil) = %v, want nil", opts)
 	}
 }
 
-func TestBuildCodeExchangeOpts(t *testing.T) {
+func TestMapAuthCodeOptionsCodeExchange(t *testing.T) {
 	t.Parallel()
 
-	opts := buildCodeExchangeOpts(map[string]string{"grant_type": "authorization_code"})
+	opts := mapAuthCodeOptions[rp.CodeExchangeOpt](map[string]string{"grant_type": "authorization_code"})
 	if len(opts) != 1 {
-		t.Fatalf("buildCodeExchangeOpts() returned %d opts, want 1", len(opts))
+		t.Fatalf("mapAuthCodeOptions() returned %d opts, want 1", len(opts))
 	}
 }
 

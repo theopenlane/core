@@ -19,7 +19,7 @@ func Builder(cfg Config) registry.Builder {
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
-				Labels:      map[string]string{"vendor": "google", "product": "workspace"},
+				Tags:        []string{"directory-sync"},
 				Active:      true,
 				Visible:     true,
 			},
@@ -33,7 +33,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:         workspaceCredential.ID(),
 					Name:        "Google Workspace Credential",
-					Description: "Auth-managed credential slot used by the Google Workspace client in this definition.",
+					Description: "OAuth credential used to access Google Workspace directory data.",
 					Schema:      workspaceCredentialSchema,
 				},
 			},
@@ -41,7 +41,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					CredentialRef:       workspaceCredential.ID(),
 					Name:                "Google Workspace OAuth",
-					Description:         "Authenticate with Google Workspace using delegated OAuth access.",
+					Description:         "Connect your Google Workspace domain using OAuth.",
 					CredentialRefs:      []types.CredentialSlotID{workspaceCredential.ID()},
 					ClientRefs:          []types.ClientID{workspaceClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
@@ -82,8 +82,7 @@ func Builder(cfg Config) registry.Builder {
 					}),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: workspaceCredential.ID(),
-						Name:          "Disconnect Google Workspace OAuth",
-						Description:   "Remove the persisted Google Workspace OAuth credential and disconnect this installation from Openlane.",
+						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google Workspace admin console under Security > API controls.",
 					},
 				},
 			},

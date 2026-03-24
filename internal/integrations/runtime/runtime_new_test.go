@@ -28,14 +28,14 @@ func newTestGala(t *testing.T) *gala.Gala {
 func TestNewMinimalConfig(t *testing.T) {
 	t.Parallel()
 
-	g := newTestGala(t)
-	ks, err := keystore.NewStore(nil)
-	if err != nil {
-		t.Fatalf("expected keystore error for nil DB: %v", err)
+	// keystore.NewStore requires a non-nil DB and returns an error for nil
+	_, err := keystore.NewStore(nil)
+	if err == nil {
+		t.Fatal("expected error from keystore.NewStore(nil)")
 	}
 
-	_ = ks
-	// keystore.NewStore requires a non-nil DB, so we test New with a registry override
+	// New without a keystore should panic or error at wiring time
+	g := newTestGala(t)
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
@@ -44,19 +44,14 @@ func TestNewMinimalConfig(t *testing.T) {
 		},
 	})
 
-	// New requires non-nil DB for keystore, so test what we can without it
-	// Test that New returns an error when keystore is nil
 	_, err = New(Config{
 		Gala:                  g,
 		Registry:              reg,
 		SkipExecutorListeners: true,
 	})
-	// This will fail because keystore is nil, but the error path is tested
 	if err == nil {
-		// If it somehow succeeds, verify it works
 		return
 	}
-	// Expected: panics or errors from nil keystore - acceptable for unit test boundary
 }
 
 func TestNewWithRegistryOverride(t *testing.T) {

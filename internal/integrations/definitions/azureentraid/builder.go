@@ -19,7 +19,7 @@ func Builder(cfg Config) registry.Builder {
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
-				Labels:      map[string]string{"vendor": "microsoft", "product": "EntraID"},
+				Tags:        []string{"directory-sync"},
 				Active:      false,
 				Visible:     true,
 			},
@@ -33,7 +33,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:         entraTenantCredential.ID(),
 					Name:        "Azure Entra ID Credential",
-					Description: "Credential slot shared by the Azure Entra ID clients in this definition.",
+					Description: "OAuth credential used to access Microsoft Graph for Entra ID directory data.",
 					Schema:      entraTenantSchema,
 				},
 			},
@@ -41,7 +41,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					CredentialRef:       entraTenantCredential.ID(),
 					Name:                "Azure Entra ID OAuth",
-					Description:         "Authenticate with Microsoft Graph using delegated tenant admin consent.",
+					Description:         "Connect your Azure Entra ID tenant using admin consent.",
 					CredentialRefs:      []types.CredentialSlotID{entraTenantCredential.ID()},
 					ClientRefs:          []types.ClientID{entraCredential.ID(), entraClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
@@ -97,8 +97,7 @@ func Builder(cfg Config) registry.Builder {
 					}),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: entraTenantCredential.ID(),
-						Name:          "Disconnect Azure Entra ID OAuth",
-						Description:   "Remove the persisted Azure Entra ID OAuth credential and disconnect this installation from Openlane.",
+						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
 					},
 				},
 			},

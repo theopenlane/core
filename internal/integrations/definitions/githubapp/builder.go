@@ -24,9 +24,9 @@ func Builder(cfg Config) registry.Builder {
 				Family:      "github",
 				DisplayName: "GitHub App",
 				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
-				Category:    "code",
+				Category:    "source-control",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app/overview",
-				Labels:      map[string]string{"vendor": "github"},
+				Tags:        []string{"vulnerabilities", "assets"},
 				Active:      true,
 				Visible:     true,
 			},
@@ -40,7 +40,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:         gitHubAppCredential.ID(),
 					Name:        "GitHub App Credential",
-					Description: "Auth-managed credential slot used by the GitHub App client in this definition.",
+					Description: "Installation credential managed by the GitHub App install flow.",
 					Schema:      gitHubAppCredentialSchema,
 				},
 			},
@@ -48,7 +48,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					CredentialRef:       gitHubAppCredential.ID(),
 					Name:                "GitHub App installation",
-					Description:         "Install the Openlane GitHub App into a GitHub organization or repository owner account.",
+					Description:         "Install the Openlane GitHub App into your GitHub organization.",
 					CredentialRefs:      []types.CredentialSlotID{gitHubAppCredential.ID()},
 					ClientRefs:          []types.ClientID{gitHubClient.ID()},
 					ValidationOperation: healthDefaultOperation.Name(),
@@ -68,8 +68,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
-						Name:          "Disconnect GitHub App installation",
-						Description:   "Open the GitHub installation settings page and uninstall the Openlane GitHub App. Openlane will remove the installation after GitHub sends the uninstall webhook.",
+						Description:   "Uninstall the Openlane GitHub App from your GitHub organization settings. Openlane will complete the removal after GitHub confirms the uninstall.",
 						Disconnect: func(_ context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
 							installationID, err := disconnectInstallationID(req)
 							if err != nil {

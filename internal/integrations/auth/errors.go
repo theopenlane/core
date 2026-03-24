@@ -9,8 +9,6 @@ var (
 	ErrOAuthStateGeneration = errors.New("auth: oauth state generation failed")
 	// ErrOAuthStateInvalid indicates the stored oauth start state could not be decoded
 	ErrOAuthStateInvalid = errors.New("auth: oauth state invalid")
-	// ErrOAuthStateMissing indicates the callback omitted the required CSRF state
-	ErrOAuthStateMissing = errors.New("auth: oauth callback state missing")
 	// ErrOAuthStateMismatch indicates the callback state does not match the stored CSRF state
 	ErrOAuthStateMismatch = errors.New("auth: oauth state mismatch")
 	// ErrOAuthCodeMissing indicates the authorization code is absent from the callback input

@@ -69,7 +69,7 @@ func StartOAuth(ctx context.Context, cfg OAuthConfig) (types.AuthStartResult, er
 		return types.AuthStartResult{}, ErrOAuthStateGeneration
 	}
 
-	authURL := rp.AuthURL(csrfState, rparty, buildAuthURLOpts(cfg.AuthParams)...)
+	authURL := rp.AuthURL(csrfState, rparty, mapAuthCodeOptions[rp.AuthURLOpt](cfg.AuthParams)...)
 
 	stateData, err := jsonx.ToRawMessage(oauthStartState{State: csrfState})
 	if err != nil {
@@ -95,11 +95,7 @@ func CompleteOAuth(ctx context.Context, cfg OAuthConfig, state json.RawMessage, 
 		return OAuthMaterial{}, ErrOAuthCodeMissing
 	}
 
-	if startState.State != "" && callbackState == "" {
-		return OAuthMaterial{}, ErrOAuthStateMissing
-	}
-
-	if startState.State != "" && callbackState != "" && startState.State != callbackState {
+	if startState.State != "" && callbackState != startState.State {
 		return OAuthMaterial{}, ErrOAuthStateMismatch
 	}
 
@@ -108,7 +104,7 @@ func CompleteOAuth(ctx context.Context, cfg OAuthConfig, state json.RawMessage, 
 		return OAuthMaterial{}, err
 	}
 
-	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, code, rparty, buildCodeExchangeOpts(cfg.TokenParams)...)
+	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, code, rparty, mapAuthCodeOptions[rp.CodeExchangeOpt](cfg.TokenParams)...)
 	if err != nil {
 		return OAuthMaterial{}, ErrOAuthCodeExchange
 	}
@@ -148,16 +144,14 @@ func buildRelyingParty(ctx context.Context, cfg OAuthConfig) (rp.RelyingParty, e
 
 // buildOAuthMaterial constructs an OAuthMaterial from an oauth2 token and optional OIDC claims
 func buildOAuthMaterial(token *oauth2.Token, claims *oidc.IDTokenClaims) (OAuthMaterial, error) {
-	mat := OAuthMaterial{}
+	mat := OAuthMaterial{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+	}
 
-	if token != nil {
-		mat.AccessToken = token.AccessToken
-		mat.RefreshToken = token.RefreshToken
-
-		if !token.Expiry.IsZero() {
-			exp := token.Expiry.UTC()
-			mat.Expiry = &exp
-		}
+	if !token.Expiry.IsZero() {
+		exp := token.Expiry.UTC()
+		mat.Expiry = &exp
 	}
 
 	if claims != nil {
@@ -170,16 +164,6 @@ func buildOAuthMaterial(token *oauth2.Token, claims *oidc.IDTokenClaims) (OAuthM
 	}
 
 	return mat, nil
-}
-
-// buildAuthURLOpts converts extra auth parameters into rp.AuthURLOpt values
-func buildAuthURLOpts(params map[string]string) []rp.AuthURLOpt {
-	return mapAuthCodeOptions[rp.AuthURLOpt](params)
-}
-
-// buildCodeExchangeOpts converts extra token parameters into rp.CodeExchangeOpt values
-func buildCodeExchangeOpts(params map[string]string) []rp.CodeExchangeOpt {
-	return mapAuthCodeOptions[rp.CodeExchangeOpt](params)
 }
 
 // mapAuthCodeOptions converts a string map into a sorted slice of auth code options

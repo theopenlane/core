@@ -8,9 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 )
 
-// Config aggregates operator-level configuration for all definitions that require
-// credentials or secrets at deploy time. Providers that derive all configuration
-// from user-supplied credentials at install time do not require fields here
+// Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
 type Config struct {
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`

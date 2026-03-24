@@ -425,7 +425,6 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 					ValidationOperation: configHealthCheckOperation.Name(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: configTestCredentialRef,
-						Name:          "Disconnect Config Test Connection",
 						Description:   "Remove the persisted config test credential and disconnect this installation.",
 					},
 				},

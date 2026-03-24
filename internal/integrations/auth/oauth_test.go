@@ -122,8 +122,8 @@ func TestCompleteOAuthMissingCallbackStateReturnsError(t *testing.T) {
 			{Name: "code", Values: []string{"code-123"}},
 		},
 	})
-	if !errors.Is(err, ErrOAuthStateMissing) {
-		t.Fatalf("CompleteOAuth() error = %v, want %v", err, ErrOAuthStateMissing)
+	if !errors.Is(err, ErrOAuthStateMismatch) {
+		t.Fatalf("CompleteOAuth() error = %v, want %v", err, ErrOAuthStateMismatch)
 	}
 }
 

@@ -441,7 +441,6 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 				},
 				Disconnect: &types.DisconnectRegistration{
 					CredentialRef: testAuthCredentialRef,
-					Name:          "Disconnect Test OAuth",
 					Description:   "Remove the persisted test OAuth credential and disconnect this installation.",
 				},
 			},

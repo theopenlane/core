@@ -348,10 +348,6 @@ func (r *Runtime) candidateCredentials(ctx context.Context, installation *ent.In
 
 // connectionCredentials loads all credentials for a connection
 func (r *Runtime) connectionCredentials(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration) (types.CredentialBindings, error) {
-	if len(connection.CredentialRefs) == 0 {
-		return nil, nil
-	}
-
 	return r.LoadCredentials(ctx, installation, connection.CredentialRefs)
 }
 

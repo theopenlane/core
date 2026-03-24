@@ -41,9 +41,7 @@ type DisconnectFunc func(ctx context.Context, request DisconnectRequest) (Discon
 type DisconnectRegistration struct {
 	// CredentialRef identifies which credential slot this disconnect flow is bound to
 	CredentialRef CredentialSlotID `json:"credentialRef,omitempty"`
-	// Name is the user-facing disconnect flow name
-	Name string `json:"name,omitempty"`
-	// Description is the user-facing explanation of what disconnect does for this provider
+	// Description is the user-facing explanation of what disconnect does and any recommended provider-side cleanup
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema describing the disconnect result details payload
 	Schema json.RawMessage `json:"schema,omitempty"`

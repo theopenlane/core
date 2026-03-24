@@ -18,10 +18,8 @@ type DefinitionSpec struct {
 	DocsURL string `json:"docsUrl,omitempty"`
 	// LogoURL links to a catalog logo asset
 	LogoURL string `json:"logoUrl,omitempty"`
-	// Tags are optional catalog labels for the definition
+	// Tags are UI-facing labels that describe what the integration provides
 	Tags []string `json:"tags,omitempty"`
-	// Labels stores arbitrary metadata for the definition
-	Labels map[string]string `json:"labels,omitempty"`
 	// Active indicates whether the definition is enabled
 	Active bool `json:"active"`
 	// Visible indicates whether the definition is visible in catalog surfaces

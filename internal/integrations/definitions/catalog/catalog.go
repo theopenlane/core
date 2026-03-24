@@ -18,16 +18,16 @@ import (
 // Builders returns the built-in reference definition builders
 func Builders(cfg Config) []registry.Builder {
 	return []registry.Builder{
-		githubapp.Builder(cfg.GitHubApp),
 		awssecurityhub.Builder(),
-		scim.Builder(),
-		slack.Builder(cfg.Slack),
-		okta.Builder(),
-		cloudflare.Builder(),
-		googleworkspace.Builder(cfg.GoogleWorkspace),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
+		cloudflare.Builder(),
 		gcpscc.Builder(),
+		githubapp.Builder(cfg.GitHubApp),
+		googleworkspace.Builder(cfg.GoogleWorkspace),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
+		okta.Builder(),
+		scim.Builder(),
+		slack.Builder(cfg.Slack),
 	}
 }

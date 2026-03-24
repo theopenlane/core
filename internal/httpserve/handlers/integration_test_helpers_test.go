@@ -146,7 +146,6 @@ func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
 					ValidationOperation: helperHealthCheckOperation.Name(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: gcpSCCTestCredential,
-						Name:          "Disconnect GCP SCC Test Connection",
 						Description:   "Remove the persisted GCP SCC test credential and disconnect this installation.",
 					},
 				},
@@ -195,7 +194,6 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 					CredentialRefs: []types.CredentialSlotID{githubTestCredentialRef},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: githubTestCredentialRef,
-						Name:          "Disconnect GitHub Test Connection",
 						Description:   "Remove the persisted GitHub test credential and disconnect this installation.",
 					},
 				},
