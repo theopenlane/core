@@ -108,16 +108,6 @@ func OwnerID(v string) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// SLADefinitionSeverityLevelName applies equality check predicate on the "sla_definition_severity_level_name" field. It's identical to SLADefinitionSeverityLevelNameEQ.
-func SLADefinitionSeverityLevelName(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldEQ(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelID applies equality check predicate on the "sla_definition_severity_level_id" field. It's identical to SLADefinitionSeverityLevelIDEQ.
-func SLADefinitionSeverityLevelID(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldEQ(FieldSLADefinitionSeverityLevelID, v))
-}
-
 // SLADays applies equality check predicate on the "sla_days" field. It's identical to SLADaysEQ.
 func SLADays(v int) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.FieldEQ(FieldSLADays, v))
@@ -648,156 +638,6 @@ func OwnerIDContainsFold(v string) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// SLADefinitionSeverityLevelNameEQ applies the EQ predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameEQ(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldEQ(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameNEQ applies the NEQ predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameNEQ(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNEQ(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameIn applies the In predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameIn(vs ...string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldIn(FieldSLADefinitionSeverityLevelName, vs...))
-}
-
-// SLADefinitionSeverityLevelNameNotIn applies the NotIn predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameNotIn(vs ...string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNotIn(FieldSLADefinitionSeverityLevelName, vs...))
-}
-
-// SLADefinitionSeverityLevelNameGT applies the GT predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameGT(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldGT(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameGTE applies the GTE predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameGTE(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldGTE(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameLT applies the LT predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameLT(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldLT(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameLTE applies the LTE predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameLTE(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldLTE(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameContains applies the Contains predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameContains(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldContains(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameHasPrefix applies the HasPrefix predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameHasPrefix(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldHasPrefix(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameHasSuffix applies the HasSuffix predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameHasSuffix(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldHasSuffix(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameIsNil applies the IsNil predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameIsNil() predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldIsNull(FieldSLADefinitionSeverityLevelName))
-}
-
-// SLADefinitionSeverityLevelNameNotNil applies the NotNil predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameNotNil() predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNotNull(FieldSLADefinitionSeverityLevelName))
-}
-
-// SLADefinitionSeverityLevelNameEqualFold applies the EqualFold predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameEqualFold(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldEqualFold(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelNameContainsFold applies the ContainsFold predicate on the "sla_definition_severity_level_name" field.
-func SLADefinitionSeverityLevelNameContainsFold(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldContainsFold(FieldSLADefinitionSeverityLevelName, v))
-}
-
-// SLADefinitionSeverityLevelIDEQ applies the EQ predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDEQ(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldEQ(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDNEQ applies the NEQ predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDNEQ(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNEQ(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDIn applies the In predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDIn(vs ...string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldIn(FieldSLADefinitionSeverityLevelID, vs...))
-}
-
-// SLADefinitionSeverityLevelIDNotIn applies the NotIn predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDNotIn(vs ...string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNotIn(FieldSLADefinitionSeverityLevelID, vs...))
-}
-
-// SLADefinitionSeverityLevelIDGT applies the GT predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDGT(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldGT(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDGTE applies the GTE predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDGTE(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldGTE(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDLT applies the LT predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDLT(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldLT(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDLTE applies the LTE predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDLTE(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldLTE(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDContains applies the Contains predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDContains(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldContains(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDHasPrefix applies the HasPrefix predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDHasPrefix(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldHasPrefix(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDHasSuffix applies the HasSuffix predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDHasSuffix(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldHasSuffix(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDIsNil applies the IsNil predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDIsNil() predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldIsNull(FieldSLADefinitionSeverityLevelID))
-}
-
-// SLADefinitionSeverityLevelIDNotNil applies the NotNil predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDNotNil() predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldNotNull(FieldSLADefinitionSeverityLevelID))
-}
-
-// SLADefinitionSeverityLevelIDEqualFold applies the EqualFold predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDEqualFold(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldEqualFold(FieldSLADefinitionSeverityLevelID, v))
-}
-
-// SLADefinitionSeverityLevelIDContainsFold applies the ContainsFold predicate on the "sla_definition_severity_level_id" field.
-func SLADefinitionSeverityLevelIDContainsFold(v string) predicate.SLADefinition {
-	return predicate.SLADefinition(sql.FieldContainsFold(FieldSLADefinitionSeverityLevelID, v))
-}
-
 // SLADaysEQ applies the EQ predicate on the "sla_days" field.
 func SLADaysEQ(v int) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.FieldEQ(FieldSLADays, v))
@@ -888,35 +728,6 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.SLADefinition {
 		step := newOwnerStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.SLADefinition
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasSLADefinitionSeverityLevel applies the HasEdge predicate on the "sla_definition_severity_level" edge.
-func HasSLADefinitionSeverityLevel() predicate.SLADefinition {
-	return predicate.SLADefinition(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, SLADefinitionSeverityLevelTable, SLADefinitionSeverityLevelColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.SLADefinition
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasSLADefinitionSeverityLevelWith applies the HasEdge predicate on the "sla_definition_severity_level" edge with a given conditions (other predicates).
-func HasSLADefinitionSeverityLevelWith(preds ...predicate.CustomTypeEnum) predicate.SLADefinition {
-	return predicate.SLADefinition(func(s *sql.Selector) {
-		step := newSLADefinitionSeverityLevelStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.SLADefinition
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

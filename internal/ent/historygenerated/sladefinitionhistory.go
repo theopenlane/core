@@ -46,13 +46,9 @@ type SLADefinitionHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName string `json:"sla_definition_severity_level_name,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelID string `json:"sla_definition_severity_level_id,omitempty"`
 	// remediation service level agreement in days for the severity level
 	SLADays int `json:"sla_days,omitempty"`
-	// incoming source severity
+	// security level to map with the SLA definition
 	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	selectValues  sql.SelectValues
 }
@@ -68,7 +64,7 @@ func (*SLADefinitionHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case sladefinitionhistory.FieldSLADays:
 			values[i] = new(sql.NullInt64)
-		case sladefinitionhistory.FieldID, sladefinitionhistory.FieldRef, sladefinitionhistory.FieldCreatedBy, sladefinitionhistory.FieldUpdatedBy, sladefinitionhistory.FieldDeletedBy, sladefinitionhistory.FieldDisplayID, sladefinitionhistory.FieldOwnerID, sladefinitionhistory.FieldSLADefinitionSeverityLevelName, sladefinitionhistory.FieldSLADefinitionSeverityLevelID, sladefinitionhistory.FieldSecurityLevel:
+		case sladefinitionhistory.FieldID, sladefinitionhistory.FieldRef, sladefinitionhistory.FieldCreatedBy, sladefinitionhistory.FieldUpdatedBy, sladefinitionhistory.FieldDeletedBy, sladefinitionhistory.FieldDisplayID, sladefinitionhistory.FieldOwnerID, sladefinitionhistory.FieldSecurityLevel:
 			values[i] = new(sql.NullString)
 		case sladefinitionhistory.FieldHistoryTime, sladefinitionhistory.FieldCreatedAt, sladefinitionhistory.FieldUpdatedAt, sladefinitionhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -167,18 +163,6 @@ func (_m *SLADefinitionHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
-		case sladefinitionhistory.FieldSLADefinitionSeverityLevelName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field sla_definition_severity_level_name", values[i])
-			} else if value.Valid {
-				_m.SLADefinitionSeverityLevelName = value.String
-			}
-		case sladefinitionhistory.FieldSLADefinitionSeverityLevelID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field sla_definition_severity_level_id", values[i])
-			} else if value.Valid {
-				_m.SLADefinitionSeverityLevelID = value.String
-			}
 		case sladefinitionhistory.FieldSLADays:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field sla_days", values[i])
@@ -262,12 +246,6 @@ func (_m *SLADefinitionHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
-	builder.WriteString(", ")
-	builder.WriteString("sla_definition_severity_level_name=")
-	builder.WriteString(_m.SLADefinitionSeverityLevelName)
-	builder.WriteString(", ")
-	builder.WriteString("sla_definition_severity_level_id=")
-	builder.WriteString(_m.SLADefinitionSeverityLevelID)
 	builder.WriteString(", ")
 	builder.WriteString("sla_days=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SLADays))

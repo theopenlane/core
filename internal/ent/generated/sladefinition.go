@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 )
@@ -39,13 +38,9 @@ type SLADefinition struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName string `json:"sla_definition_severity_level_name,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelID string `json:"sla_definition_severity_level_id,omitempty"`
 	// remediation service level agreement in days for the severity level
 	SLADays int `json:"sla_days,omitempty"`
-	// incoming source severity
+	// security level to map with the SLA definition
 	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SLADefinitionQuery when eager-loading is set.
@@ -57,8 +52,6 @@ type SLADefinition struct {
 type SLADefinitionEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// SLADefinitionSeverityLevel holds the value of the sla_definition_severity_level edge.
-	SLADefinitionSeverityLevel *CustomTypeEnum `json:"sla_definition_severity_level,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -67,9 +60,9 @@ type SLADefinitionEdges struct {
 	Viewers []*Group `json:"viewers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [4]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
@@ -87,21 +80,10 @@ func (e SLADefinitionEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// SLADefinitionSeverityLevelOrErr returns the SLADefinitionSeverityLevel value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e SLADefinitionEdges) SLADefinitionSeverityLevelOrErr() (*CustomTypeEnum, error) {
-	if e.SLADefinitionSeverityLevel != nil {
-		return e.SLADefinitionSeverityLevel, nil
-	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: customtypeenum.Label}
-	}
-	return nil, &NotLoadedError{edge: "sla_definition_severity_level"}
-}
-
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e SLADefinitionEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -110,7 +92,7 @@ func (e SLADefinitionEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e SLADefinitionEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -119,7 +101,7 @@ func (e SLADefinitionEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e SLADefinitionEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -134,7 +116,7 @@ func (*SLADefinition) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case sladefinition.FieldSLADays:
 			values[i] = new(sql.NullInt64)
-		case sladefinition.FieldID, sladefinition.FieldCreatedBy, sladefinition.FieldUpdatedBy, sladefinition.FieldDeletedBy, sladefinition.FieldDisplayID, sladefinition.FieldOwnerID, sladefinition.FieldSLADefinitionSeverityLevelName, sladefinition.FieldSLADefinitionSeverityLevelID, sladefinition.FieldSecurityLevel:
+		case sladefinition.FieldID, sladefinition.FieldCreatedBy, sladefinition.FieldUpdatedBy, sladefinition.FieldDeletedBy, sladefinition.FieldDisplayID, sladefinition.FieldOwnerID, sladefinition.FieldSecurityLevel:
 			values[i] = new(sql.NullString)
 		case sladefinition.FieldCreatedAt, sladefinition.FieldUpdatedAt, sladefinition.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -215,18 +197,6 @@ func (_m *SLADefinition) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
-		case sladefinition.FieldSLADefinitionSeverityLevelName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field sla_definition_severity_level_name", values[i])
-			} else if value.Valid {
-				_m.SLADefinitionSeverityLevelName = value.String
-			}
-		case sladefinition.FieldSLADefinitionSeverityLevelID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field sla_definition_severity_level_id", values[i])
-			} else if value.Valid {
-				_m.SLADefinitionSeverityLevelID = value.String
-			}
 		case sladefinition.FieldSLADays:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field sla_days", values[i])
@@ -255,11 +225,6 @@ func (_m *SLADefinition) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the SLADefinition entity.
 func (_m *SLADefinition) QueryOwner() *OrganizationQuery {
 	return NewSLADefinitionClient(_m.config).QueryOwner(_m)
-}
-
-// QuerySLADefinitionSeverityLevel queries the "sla_definition_severity_level" edge of the SLADefinition entity.
-func (_m *SLADefinition) QuerySLADefinitionSeverityLevel() *CustomTypeEnumQuery {
-	return NewSLADefinitionClient(_m.config).QuerySLADefinitionSeverityLevel(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the SLADefinition entity.
@@ -326,12 +291,6 @@ func (_m *SLADefinition) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
-	builder.WriteString(", ")
-	builder.WriteString("sla_definition_severity_level_name=")
-	builder.WriteString(_m.SLADefinitionSeverityLevelName)
-	builder.WriteString(", ")
-	builder.WriteString("sla_definition_severity_level_id=")
-	builder.WriteString(_m.SLADefinitionSeverityLevelID)
 	builder.WriteString(", ")
 	builder.WriteString("sla_days=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SLADays))

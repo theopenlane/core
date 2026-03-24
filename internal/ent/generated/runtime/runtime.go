@@ -6299,7 +6299,6 @@ func init() {
 	sladefinitionMixinHooks3 := sladefinitionMixin[3].Hooks()
 	sladefinitionMixinHooks5 := sladefinitionMixin[5].Hooks()
 	sladefinitionMixinHooks6 := sladefinitionMixin[6].Hooks()
-	sladefinitionMixinHooks7 := sladefinitionMixin[7].Hooks()
 
 	sladefinition.Hooks[1] = sladefinitionMixinHooks0[0]
 
@@ -6313,11 +6312,9 @@ func init() {
 
 	sladefinition.Hooks[6] = sladefinitionMixinHooks6[0]
 
-	sladefinition.Hooks[7] = sladefinitionMixinHooks7[0]
+	sladefinition.Hooks[7] = sladefinitionMixinHooks6[1]
 
-	sladefinition.Hooks[8] = sladefinitionMixinHooks7[1]
-
-	sladefinition.Hooks[9] = sladefinitionMixinHooks7[2]
+	sladefinition.Hooks[8] = sladefinitionMixinHooks6[2]
 	sladefinitionMixinInters1 := sladefinitionMixin[1].Interceptors()
 	sladefinitionMixinInters5 := sladefinitionMixin[5].Interceptors()
 	sladefinition.Interceptors[0] = sladefinitionMixinInters1[0]

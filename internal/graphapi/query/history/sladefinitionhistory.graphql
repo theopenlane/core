@@ -1,6 +1,4 @@
-
-
-query GetAllSLADefinitionHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionHistoryOrder!]){
+query GetAllSLADefinitionHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionHistoryOrder!]) {
   slaDefinitionHistories(
     first: $first
     last: $last
@@ -26,8 +24,7 @@ query GetAllSLADefinitionHistories($first: Int, $last: Int, $after: Cursor, $bef
         ownerID
         ref
         slaDays
-        slaDefinitionSeverityLevelID
-        slaDefinitionSeverityLevelName
+        securityLevel
         tags
         updatedAt
         updatedBy
@@ -38,13 +35,13 @@ query GetAllSLADefinitionHistories($first: Int, $last: Int, $after: Cursor, $bef
 
 query GetSLADefinitionHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionHistoryOrder!], $where: SLADefinitionHistoryWhereInput) {
   slaDefinitionHistories(
-      first: $first
-      last: $last
-      after: $after
-      before: $before
-      orderBy: $orderBy
-      where: $where
-    ) {
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -63,8 +60,7 @@ query GetSLADefinitionHistories($first: Int, $last: Int, $after: Cursor, $before
         ownerID
         ref
         slaDays
-        slaDefinitionSeverityLevelID
-        slaDefinitionSeverityLevelName
+        securityLevel
         tags
         updatedAt
         updatedBy

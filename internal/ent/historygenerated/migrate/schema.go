@@ -2306,8 +2306,6 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "sla_definition_severity_level_name", Type: field.TypeString, Nullable: true},
-		{Name: "sla_definition_severity_level_id", Type: field.TypeString, Nullable: true},
 		{Name: "sla_days", Type: field.TypeInt},
 		{Name: "security_level", Type: field.TypeEnum, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "NONE"},
 	}

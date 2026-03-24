@@ -3363,10 +3363,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "sla_definition_severity_level": {
-	ObjectType:      "sla_definition_severity_level",
-	SkipEditCheck:   true,
-	CheckViewAccess: false,
 }, "blocked_groups": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,

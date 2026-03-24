@@ -6108,11 +6108,9 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "sla_definition_severity_level_name", Type: field.TypeString, Nullable: true},
 		{Name: "sla_days", Type: field.TypeInt},
 		{Name: "security_level", Type: field.TypeEnum, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}, Default: "NONE"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "sla_definition_severity_level_id", Type: field.TypeString, Nullable: true},
 	}
 	// SLADefinitionsTable holds the schema information for the "sla_definitions" table.
 	SLADefinitionsTable = &schema.Table{
@@ -6122,14 +6120,8 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "sla_definitions_organizations_sla_definitions",
-				Columns:    []*schema.Column{SLADefinitionsColumns[12]},
+				Columns:    []*schema.Column{SLADefinitionsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "sla_definitions_custom_type_enums_sla_definition_severity_level",
-				Columns:    []*schema.Column{SLADefinitionsColumns[13]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -6137,12 +6129,12 @@ var (
 			{
 				Name:    "sladefinition_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SLADefinitionsColumns[7], SLADefinitionsColumns[12]},
+				Columns: []*schema.Column{SLADefinitionsColumns[7], SLADefinitionsColumns[11]},
 			},
 			{
 				Name:    "sladefinition_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SLADefinitionsColumns[12]},
+				Columns: []*schema.Column{SLADefinitionsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6150,7 +6142,7 @@ var (
 			{
 				Name:    "sladefinition_security_level_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SLADefinitionsColumns[11], SLADefinitionsColumns[12]},
+				Columns: []*schema.Column{SLADefinitionsColumns[10], SLADefinitionsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -13772,7 +13764,6 @@ func init() {
 	RisksTable.ForeignKeys[12].RefTable = GroupsTable
 	RisksTable.ForeignKeys[13].RefTable = VulnerabilitiesTable
 	SLADefinitionsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	SLADefinitionsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	ScansTable.ForeignKeys[0].RefTable = EntitiesTable
 	ScansTable.ForeignKeys[1].RefTable = FindingsTable
 	ScansTable.ForeignKeys[2].RefTable = OrganizationsTable

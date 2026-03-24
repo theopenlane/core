@@ -13122,14 +13122,6 @@ func (_m *SLADefinition) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (_m *SLADefinition) SLADefinitionSeverityLevel(ctx context.Context) (*CustomTypeEnum, error) {
-	result, err := _m.Edges.SLADefinitionSeverityLevelOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QuerySLADefinitionSeverityLevel().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (_m *SLADefinition) BlockedGroups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
@@ -13138,7 +13130,7 @@ func (_m *SLADefinition) BlockedGroups(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
 	if nodes, err := _m.NamedBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -13159,7 +13151,7 @@ func (_m *SLADefinition) Editors(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
 	if nodes, err := _m.NamedEditors(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -13180,7 +13172,7 @@ func (_m *SLADefinition) Viewers(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
 	if nodes, err := _m.NamedViewers(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {

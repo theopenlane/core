@@ -2211,21 +2211,19 @@ type ComplexityRoot struct {
 	}
 
 	SLADefinitionHistory struct {
-		CreatedAt                      func(childComplexity int) int
-		CreatedBy                      func(childComplexity int) int
-		DisplayID                      func(childComplexity int) int
-		HistoryTime                    func(childComplexity int) int
-		ID                             func(childComplexity int) int
-		Operation                      func(childComplexity int) int
-		OwnerID                        func(childComplexity int) int
-		Ref                            func(childComplexity int) int
-		SLADays                        func(childComplexity int) int
-		SLADefinitionSeverityLevelID   func(childComplexity int) int
-		SLADefinitionSeverityLevelName func(childComplexity int) int
-		SecurityLevel                  func(childComplexity int) int
-		Tags                           func(childComplexity int) int
-		UpdatedAt                      func(childComplexity int) int
-		UpdatedBy                      func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		SLADays       func(childComplexity int) int
+		SecurityLevel func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	SLADefinitionHistoryConnection struct {
@@ -15724,20 +15722,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SLADefinitionHistory.SLADays(childComplexity), true
-
-	case "SLADefinitionHistory.slaDefinitionSeverityLevelID":
-		if e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelID(childComplexity), true
-
-	case "SLADefinitionHistory.slaDefinitionSeverityLevelName":
-		if e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelName(childComplexity), true
 
 	case "SLADefinitionHistory.securityLevel":
 		if e.ComplexityRoot.SLADefinitionHistory.SecurityLevel == nil {
@@ -50899,19 +50883,11 @@ type SLADefinitionHistory implements Node {
   """
   ownerID: String
   """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelName: String
-  """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelID: String
-  """
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
   """
-  incoming source severity
+  security level to map with the SLA definition
   """
   securityLevel: SLADefinitionHistorySecurityLevel!
 }
@@ -51139,42 +51115,6 @@ input SLADefinitionHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  sla_definition_severity_level_name field predicates
-  """
-  slaDefinitionSeverityLevelName: String
-  slaDefinitionSeverityLevelNameNEQ: String
-  slaDefinitionSeverityLevelNameIn: [String!]
-  slaDefinitionSeverityLevelNameNotIn: [String!]
-  slaDefinitionSeverityLevelNameGT: String
-  slaDefinitionSeverityLevelNameGTE: String
-  slaDefinitionSeverityLevelNameLT: String
-  slaDefinitionSeverityLevelNameLTE: String
-  slaDefinitionSeverityLevelNameContains: String
-  slaDefinitionSeverityLevelNameHasPrefix: String
-  slaDefinitionSeverityLevelNameHasSuffix: String
-  slaDefinitionSeverityLevelNameIsNil: Boolean
-  slaDefinitionSeverityLevelNameNotNil: Boolean
-  slaDefinitionSeverityLevelNameEqualFold: String
-  slaDefinitionSeverityLevelNameContainsFold: String
-  """
-  sla_definition_severity_level_id field predicates
-  """
-  slaDefinitionSeverityLevelID: String
-  slaDefinitionSeverityLevelIDNEQ: String
-  slaDefinitionSeverityLevelIDIn: [String!]
-  slaDefinitionSeverityLevelIDNotIn: [String!]
-  slaDefinitionSeverityLevelIDGT: String
-  slaDefinitionSeverityLevelIDGTE: String
-  slaDefinitionSeverityLevelIDLT: String
-  slaDefinitionSeverityLevelIDLTE: String
-  slaDefinitionSeverityLevelIDContains: String
-  slaDefinitionSeverityLevelIDHasPrefix: String
-  slaDefinitionSeverityLevelIDHasSuffix: String
-  slaDefinitionSeverityLevelIDIsNil: Boolean
-  slaDefinitionSeverityLevelIDNotNil: Boolean
-  slaDefinitionSeverityLevelIDEqualFold: String
-  slaDefinitionSeverityLevelIDContainsFold: String
   """
   sla_days field predicates
   """

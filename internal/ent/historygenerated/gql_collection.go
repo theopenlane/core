@@ -11044,16 +11044,6 @@ func (_q *SLADefinitionHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, sladefinitionhistory.FieldOwnerID)
 				fieldSeen[sladefinitionhistory.FieldOwnerID] = struct{}{}
 			}
-		case "slaDefinitionSeverityLevelName":
-			if _, ok := fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelName]; !ok {
-				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADefinitionSeverityLevelName)
-				fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelName] = struct{}{}
-			}
-		case "slaDefinitionSeverityLevelID":
-			if _, ok := fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelID]; !ok {
-				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADefinitionSeverityLevelID)
-				fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelID] = struct{}{}
-			}
 		case "slaDays":
 			if _, ok := fieldSeen[sladefinitionhistory.FieldSLADays]; !ok {
 				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADays)

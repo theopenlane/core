@@ -8195,15 +8195,12 @@ type CreateRiskInput struct {
 type CreateSLADefinitionInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName *string `json:"slaDefinitionSeverityLevelName,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                      int64    `json:"slaDays"`
-	OwnerID                      *string  `json:"ownerID,omitempty"`
-	SLADefinitionSeverityLevelID *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
-	BlockedGroupIDs              []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                    []string `json:"editorIDs,omitempty"`
-	ViewerIDs                    []string `json:"viewerIDs,omitempty"`
+	SLADays         int64    `json:"slaDays"`
+	OwnerID         *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs       []string `json:"editorIDs,omitempty"`
+	ViewerIDs       []string `json:"viewerIDs,omitempty"`
 }
 
 // CreateScanInput is used for create Scan object.
@@ -30170,19 +30167,14 @@ type SLADefinition struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName *string `json:"slaDefinitionSeverityLevelName,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelID *string `json:"slaDefinitionSeverityLevelID,omitempty"`
 	// remediation service level agreement in days for the severity level
 	SLADays int64 `json:"slaDays"`
-	// incoming source severity
-	SecurityLevel              enums.SecurityLevel `json:"securityLevel"`
-	Owner                      *Organization       `json:"owner,omitempty"`
-	SLADefinitionSeverityLevel *CustomTypeEnum     `json:"slaDefinitionSeverityLevel,omitempty"`
-	BlockedGroups              *GroupConnection    `json:"blockedGroups"`
-	Editors                    *GroupConnection    `json:"editors"`
-	Viewers                    *GroupConnection    `json:"viewers"`
+	// security level to map with the SLA definition
+	SecurityLevel enums.SecurityLevel `json:"securityLevel"`
+	Owner         *Organization       `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection    `json:"blockedGroups"`
+	Editors       *GroupConnection    `json:"editors"`
+	Viewers       *GroupConnection    `json:"viewers"`
 }
 
 func (SLADefinition) IsNode() {}
@@ -30352,38 +30344,6 @@ type SLADefinitionWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-	// sla_definition_severity_level_name field predicates
-	SLADefinitionSeverityLevelName             *string  `json:"slaDefinitionSeverityLevelName,omitempty"`
-	SLADefinitionSeverityLevelNameNeq          *string  `json:"slaDefinitionSeverityLevelNameNEQ,omitempty"`
-	SLADefinitionSeverityLevelNameIn           []string `json:"slaDefinitionSeverityLevelNameIn,omitempty"`
-	SLADefinitionSeverityLevelNameNotIn        []string `json:"slaDefinitionSeverityLevelNameNotIn,omitempty"`
-	SLADefinitionSeverityLevelNameGt           *string  `json:"slaDefinitionSeverityLevelNameGT,omitempty"`
-	SLADefinitionSeverityLevelNameGte          *string  `json:"slaDefinitionSeverityLevelNameGTE,omitempty"`
-	SLADefinitionSeverityLevelNameLt           *string  `json:"slaDefinitionSeverityLevelNameLT,omitempty"`
-	SLADefinitionSeverityLevelNameLte          *string  `json:"slaDefinitionSeverityLevelNameLTE,omitempty"`
-	SLADefinitionSeverityLevelNameContains     *string  `json:"slaDefinitionSeverityLevelNameContains,omitempty"`
-	SLADefinitionSeverityLevelNameHasPrefix    *string  `json:"slaDefinitionSeverityLevelNameHasPrefix,omitempty"`
-	SLADefinitionSeverityLevelNameHasSuffix    *string  `json:"slaDefinitionSeverityLevelNameHasSuffix,omitempty"`
-	SLADefinitionSeverityLevelNameIsNil        *bool    `json:"slaDefinitionSeverityLevelNameIsNil,omitempty"`
-	SLADefinitionSeverityLevelNameNotNil       *bool    `json:"slaDefinitionSeverityLevelNameNotNil,omitempty"`
-	SLADefinitionSeverityLevelNameEqualFold    *string  `json:"slaDefinitionSeverityLevelNameEqualFold,omitempty"`
-	SLADefinitionSeverityLevelNameContainsFold *string  `json:"slaDefinitionSeverityLevelNameContainsFold,omitempty"`
-	// sla_definition_severity_level_id field predicates
-	SLADefinitionSeverityLevelID             *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
-	SLADefinitionSeverityLevelIdneq          *string  `json:"slaDefinitionSeverityLevelIDNEQ,omitempty"`
-	SLADefinitionSeverityLevelIDIn           []string `json:"slaDefinitionSeverityLevelIDIn,omitempty"`
-	SLADefinitionSeverityLevelIDNotIn        []string `json:"slaDefinitionSeverityLevelIDNotIn,omitempty"`
-	SLADefinitionSeverityLevelIdgt           *string  `json:"slaDefinitionSeverityLevelIDGT,omitempty"`
-	SLADefinitionSeverityLevelIdgte          *string  `json:"slaDefinitionSeverityLevelIDGTE,omitempty"`
-	SLADefinitionSeverityLevelIdlt           *string  `json:"slaDefinitionSeverityLevelIDLT,omitempty"`
-	SLADefinitionSeverityLevelIdlte          *string  `json:"slaDefinitionSeverityLevelIDLTE,omitempty"`
-	SLADefinitionSeverityLevelIDContains     *string  `json:"slaDefinitionSeverityLevelIDContains,omitempty"`
-	SLADefinitionSeverityLevelIDHasPrefix    *string  `json:"slaDefinitionSeverityLevelIDHasPrefix,omitempty"`
-	SLADefinitionSeverityLevelIDHasSuffix    *string  `json:"slaDefinitionSeverityLevelIDHasSuffix,omitempty"`
-	SLADefinitionSeverityLevelIDIsNil        *bool    `json:"slaDefinitionSeverityLevelIDIsNil,omitempty"`
-	SLADefinitionSeverityLevelIDNotNil       *bool    `json:"slaDefinitionSeverityLevelIDNotNil,omitempty"`
-	SLADefinitionSeverityLevelIDEqualFold    *string  `json:"slaDefinitionSeverityLevelIDEqualFold,omitempty"`
-	SLADefinitionSeverityLevelIDContainsFold *string  `json:"slaDefinitionSeverityLevelIDContainsFold,omitempty"`
 	// sla_days field predicates
 	SLADays      *int64  `json:"slaDays,omitempty"`
 	SLADaysNeq   *int64  `json:"slaDaysNEQ,omitempty"`
@@ -30401,9 +30361,6 @@ type SLADefinitionWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// sla_definition_severity_level edge predicates
-	HasSLADefinitionSeverityLevel     *bool                       `json:"hasSLADefinitionSeverityLevel,omitempty"`
-	HasSLADefinitionSeverityLevelWith []*CustomTypeEnumWhereInput `json:"hasSLADefinitionSeverityLevelWith,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -42266,24 +42223,19 @@ type UpdateSLADefinitionInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName      *string `json:"slaDefinitionSeverityLevelName,omitempty"`
-	ClearSLADefinitionSeverityLevelName *bool   `json:"clearSLADefinitionSeverityLevelName,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                         *int64   `json:"slaDays,omitempty"`
-	OwnerID                         *string  `json:"ownerID,omitempty"`
-	ClearOwner                      *bool    `json:"clearOwner,omitempty"`
-	SLADefinitionSeverityLevelID    *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
-	ClearSLADefinitionSeverityLevel *bool    `json:"clearSLADefinitionSeverityLevel,omitempty"`
-	AddBlockedGroupIDs              []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs           []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups              *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                    []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs                 []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors                    *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs                    []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs                 []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers                    *bool    `json:"clearViewers,omitempty"`
+	SLADays               *int64   `json:"slaDays,omitempty"`
+	OwnerID               *string  `json:"ownerID,omitempty"`
+	ClearOwner            *bool    `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs          []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs          []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs       []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers          *bool    `json:"clearViewers,omitempty"`
 }
 
 // UpdateScanInput is used for update Scan object.

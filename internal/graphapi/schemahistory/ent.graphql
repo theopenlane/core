@@ -29561,19 +29561,11 @@ type SLADefinitionHistory implements Node {
   """
   ownerID: String
   """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelName: String
-  """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelID: String
-  """
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
   """
-  incoming source severity
+  security level to map with the SLA definition
   """
   securityLevel: SLADefinitionHistorySecurityLevel!
 }
@@ -29801,42 +29793,6 @@ input SLADefinitionHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  sla_definition_severity_level_name field predicates
-  """
-  slaDefinitionSeverityLevelName: String
-  slaDefinitionSeverityLevelNameNEQ: String
-  slaDefinitionSeverityLevelNameIn: [String!]
-  slaDefinitionSeverityLevelNameNotIn: [String!]
-  slaDefinitionSeverityLevelNameGT: String
-  slaDefinitionSeverityLevelNameGTE: String
-  slaDefinitionSeverityLevelNameLT: String
-  slaDefinitionSeverityLevelNameLTE: String
-  slaDefinitionSeverityLevelNameContains: String
-  slaDefinitionSeverityLevelNameHasPrefix: String
-  slaDefinitionSeverityLevelNameHasSuffix: String
-  slaDefinitionSeverityLevelNameIsNil: Boolean
-  slaDefinitionSeverityLevelNameNotNil: Boolean
-  slaDefinitionSeverityLevelNameEqualFold: String
-  slaDefinitionSeverityLevelNameContainsFold: String
-  """
-  sla_definition_severity_level_id field predicates
-  """
-  slaDefinitionSeverityLevelID: String
-  slaDefinitionSeverityLevelIDNEQ: String
-  slaDefinitionSeverityLevelIDIn: [String!]
-  slaDefinitionSeverityLevelIDNotIn: [String!]
-  slaDefinitionSeverityLevelIDGT: String
-  slaDefinitionSeverityLevelIDGTE: String
-  slaDefinitionSeverityLevelIDLT: String
-  slaDefinitionSeverityLevelIDLTE: String
-  slaDefinitionSeverityLevelIDContains: String
-  slaDefinitionSeverityLevelIDHasPrefix: String
-  slaDefinitionSeverityLevelIDHasSuffix: String
-  slaDefinitionSeverityLevelIDIsNil: Boolean
-  slaDefinitionSeverityLevelIDNotNil: Boolean
-  slaDefinitionSeverityLevelIDEqualFold: String
-  slaDefinitionSeverityLevelIDContainsFold: String
   """
   sla_days field predicates
   """
