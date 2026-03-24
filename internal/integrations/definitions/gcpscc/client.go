@@ -42,7 +42,6 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return client, nil
 }
 
-
 // metadataFromCredential decodes SCC credential metadata from the credential set
 func metadataFromCredential(credential types.CredentialSet) (CredentialSchema, error) {
 	if len(credential.Data) == 0 {

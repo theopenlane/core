@@ -32,8 +32,8 @@ func TestResolveAssumeRoleCredential_ValidData(t *testing.T) {
 	assert.Equal(t, "all", credential.AccountScope)
 }
 
-// TestResolveAssumeRoleCredential_DefaultSessionName verifies the default session name is applied.
-func TestResolveAssumeRoleCredential_DefaultSessionName(t *testing.T) {
+// TestResolveAssumeRoleCredential_OmittedSessionName verifies omitted session name resolves to empty
+func TestResolveAssumeRoleCredential_OmittedSessionName(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":    "arn:aws:iam::123:role/R",
 		"homeRegion": "us-west-2",
@@ -45,7 +45,7 @@ func TestResolveAssumeRoleCredential_DefaultSessionName(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	assert.Equal(t, defaultSessionName, credential.SessionName)
+	assert.Empty(t, credential.SessionName)
 }
 
 // TestResolveAssumeRoleCredential_SessionNameFromData verifies provider data can override the session name.
@@ -65,8 +65,8 @@ func TestResolveAssumeRoleCredential_SessionNameFromData(t *testing.T) {
 	assert.Equal(t, "custom-session", credential.SessionName)
 }
 
-// TestResolveAssumeRoleCredential_DefaultAccountScope verifies account scope defaults to all.
-func TestResolveAssumeRoleCredential_DefaultAccountScope(t *testing.T) {
+// TestResolveAssumeRoleCredential_OmittedAccountScope verifies omitted account scope resolves to empty
+func TestResolveAssumeRoleCredential_OmittedAccountScope(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"homeRegion": "us-east-1",
 	})
@@ -77,7 +77,7 @@ func TestResolveAssumeRoleCredential_DefaultAccountScope(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	assert.Equal(t, AccountScopeAll, credential.AccountScope)
+	assert.Empty(t, credential.AccountScope)
 }
 
 // TestResolveAssumeRoleCredential_EmptyInput verifies empty provider data is rejected.
@@ -85,7 +85,7 @@ func TestResolveAssumeRoleCredential_EmptyInput(t *testing.T) {
 	_, err := resolveAssumeRoleCredential(types.CredentialBindings{
 		{Ref: awsAssumeRoleCredential.ID(), Credential: types.CredentialSet{}},
 	})
-	require.ErrorIs(t, err, ErrCredentialMetadataRequired)
+	require.ErrorIs(t, err, ErrCredentialMetadataInvalid)
 }
 
 // TestParseDuration_Valid verifies valid durations are parsed.

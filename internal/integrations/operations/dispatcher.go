@@ -30,7 +30,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	if err := ValidateConfig(operation.ConfigSchema, req.Config); err != nil {
-		if err == ErrOperationConfigInvalid {
+		if errors.Is(err, ErrOperationConfigInvalid) {
 			return DispatchResult{}, ErrDispatchInputInvalid
 		}
 
@@ -43,9 +43,9 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
-		InstallationID: req.InstallationID,
-		Operation:      req.Operation,
-		Config:         jsonx.CloneRawMessage(req.Config),
+		InstallationID:     req.InstallationID,
+		Operation:          req.Operation,
+		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
 		RunType:            runType,
 	})
@@ -60,7 +60,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		Operation:          req.Operation,
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
-		WorkflowMeta:   req.WorkflowMeta,
+		WorkflowMeta:       req.WorkflowMeta,
 	}, gala.Headers{
 		IdempotencyKey: runRecord.ID,
 		Properties: map[string]string{

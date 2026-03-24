@@ -154,23 +154,19 @@ func New(config Config) (*Runtime, error) {
 		return registryInstance, nil
 	})
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
-		return keymaker.NewService(
-			rt.Definition,
-			func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
-				installation, err := rt.ResolveInstallation(ctx, "", installationID, def.ID)
-				if err != nil {
-					return err
-				}
+		return keymaker.NewService(rt.Definition, func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
+			installation, err := rt.ResolveInstallation(ctx, "", installationID, def.ID)
+			if err != nil {
+				return err
+			}
 
-				if connection, err := def.ConnectionRegistration(credentialRef); err != nil {
-					return err
-				} else {
-					return rt.Reconcile(ctx, installation, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput)
-				}
-			},
-			rt.lookupKeymakerInstallation,
-			do.MustInvoke[keymaker.AuthStateStore](i),
-		), nil
+			connection, err := def.ConnectionRegistration(credentialRef)
+			if err != nil {
+				return err
+			}
+
+			return rt.Reconcile(ctx, installation, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput)
+		}, rt.lookupKeymakerInstallation, do.MustInvoke[keymaker.AuthStateStore](i)), nil
 	})
 
 	if _, err := do.Invoke[*registry.Registry](injector); err != nil {
@@ -181,12 +177,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(
-		rt.Gala(),
-		rt.Registry(),
-		lo.Ternary(!config.SkipExecutorListeners, rt.HandleOperation, nil),
-		rt.HandleWebhookEvent,
-	); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), lo.Ternary(!config.SkipExecutorListeners, rt.HandleOperation, nil), rt.HandleWebhookEvent); err != nil {
 		return nil, err
 	}
 

@@ -2,8 +2,8 @@ package okta
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -12,7 +12,7 @@ func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "okta",
 				DisplayName: "Okta",
 				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
@@ -39,9 +39,9 @@ func Builder() registry.Builder {
 					Name:                "Okta API Token",
 					Description:         "Configure Okta tenant access using an API token issued for the target organization.",
 					CredentialRefs:      []types.CredentialSlotID{oktaCredential.ID()},
-					ClientRefs:          []types.ClientID{OktaClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{oktaClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: oktaCredential.ID(),
 						Name:          "Disconnect Okta API Token",
@@ -51,7 +51,7 @@ func Builder() registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            OktaClient.ID(),
+					Ref:            oktaClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
 					Description:    "Okta API client",
 					Build:          Client{}.Build,
@@ -59,18 +59,20 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Call Okta user API to verify API token",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   OktaClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Call Okta user API to verify API token",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    oktaClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: healthCheckSchema,
+					Handle:       HealthCheck{}.Handle(),
 				},
-					{
-					Name:        DirectorySyncOperation.Name(),
-					Description: "Collect Okta directory users, groups, and memberships as directory accounts",
-					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
-					ClientRef:   OktaClient.ID(),
+				{
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect Okta directory users, groups, and memberships as directory accounts",
+					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					ClientRef:    oktaClient.ID(),
+					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

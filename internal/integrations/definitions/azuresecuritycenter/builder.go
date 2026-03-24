@@ -2,8 +2,8 @@ package azuresecuritycenter
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -12,7 +12,7 @@ func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "azure",
 				DisplayName: "Microsoft Defender for Cloud",
 				Description: "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
@@ -39,9 +39,9 @@ func Builder() registry.Builder {
 					Name:                "Azure Service Principal",
 					Description:         "Configure Microsoft Defender for Cloud access using an Azure service principal credential.",
 					CredentialRefs:      []types.CredentialSlotID{securityCenterCredential.ID()},
-					ClientRefs:          []types.ClientID{SecurityCenterClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{securityCenterClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: securityCenterCredential.ID(),
 						Name:          "Disconnect Azure Service Principal",
@@ -51,7 +51,7 @@ func Builder() registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            SecurityCenterClient.ID(),
+					Ref:            securityCenterClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{securityCenterCredential.ID()},
 					Description:    "Azure Security Center assessments and sub-assessments client",
 					Build:          Client{}.Build,
@@ -59,18 +59,20 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Call Azure Security Center assessments API to verify access",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   SecurityCenterClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Call Azure Security Center assessments API to verify access",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    securityCenterClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
 				},
 				{
-					Name:        AssessmentsCollectOperation.Name(),
-					Description: "Collect unhealthy security posture assessment findings for vulnerability ingestion",
-					Topic:       types.OperationTopic(DefinitionID.ID(), AssessmentsCollectOperation.Name()),
-					ClientRef:   SecurityCenterClient.ID(),
+					Name:         assessmentsCollectOperation.Name(),
+					Description:  "Collect unhealthy security posture assessment findings for vulnerability ingestion",
+					Topic:        types.OperationTopic(definitionID.ID(), assessmentsCollectOperation.Name()),
+					ClientRef:    securityCenterClient.ID(),
+					ConfigSchema: assessmentsCollectSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
@@ -79,10 +81,11 @@ func Builder() registry.Builder {
 					IngestHandle: AssessmentsCollect{}.IngestHandle(),
 				},
 				{
-					Name:        SubAssessmentsCollectOperation.Name(),
-					Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
-					Topic:       types.OperationTopic(DefinitionID.ID(), SubAssessmentsCollectOperation.Name()),
-					ClientRef:   SecurityCenterClient.ID(),
+					Name:         subAssessmentsCollectOperation.Name(),
+					Description:  "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
+					Topic:        types.OperationTopic(definitionID.ID(), subAssessmentsCollectOperation.Name()),
+					ClientRef:    securityCenterClient.ID(),
+					ConfigSchema: subAssessmentsCollectSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,

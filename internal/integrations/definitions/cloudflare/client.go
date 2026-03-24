@@ -26,4 +26,3 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 
 	return cf.NewClient(option.WithAPIToken(cred.APIToken)), nil
 }
-

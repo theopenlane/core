@@ -12,26 +12,24 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	integrationscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	integrationops "github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
-const scimDeleteAction = "delete"
+const (
+	scimDeleteAction     = "delete"
+	scimStatusBadRequest = 400
+	scimStatusConflict   = 409
+)
 
 // ingestDirectoryPayloadSets routes SCIM directory payloads through the shared Runtime ingest path
 func ingestDirectoryPayloadSets(ctx context.Context, client *generated.Client, ic *IntegrationContext, payloadSets []integrationtypes.IngestPayloadSet) error {
-	if ic == nil || ic.Runtime == nil {
+	if ic == nil || ic.Runtime == nil || ic.Installation == nil {
 		return integrationsruntime.ErrInstallationRequired
 	}
 
-	installation, err := scimRuntimeInstallation(ic)
-	if err != nil {
-		return err
-	}
-
-	syncRunID, err := ensureScimSyncRun(ctx, client, installation.ID, installation.OwnerID)
+	syncRunID, err := ensureScimSyncRun(ctx, client, ic.Installation.ID, ic.Installation.OwnerID)
 	if err != nil {
 		return err
 	}
@@ -46,30 +44,16 @@ func ingestDirectoryPayloadSets(ctx context.Context, client *generated.Client, i
 		integrationops.IngestContext{
 			Registry:     ic.Runtime.Registry(),
 			DB:           client,
-			Installation: installation,
+			Installation: ic.Installation,
 		},
 		contracts,
 		payloadSets,
 		integrationops.IngestOptions{
-			DirectorySyncRunID:              syncRunID,
+			DirectorySyncRunID:               syncRunID,
 			SkipDirectorySyncRunFinalization: true,
 			Source:                           integrationgenerated.IntegrationIngestSourceDirect,
 		},
 	)
-}
-
-// scimRuntimeInstallation normalizes legacy SCIM integrations so Runtime can resolve the definition
-func scimRuntimeInstallation(ic *IntegrationContext) (*generated.Integration, error) {
-	if ic == nil || ic.Installation == nil {
-		return nil, integrationsruntime.ErrInstallationRequired
-	}
-
-	installation := *ic.Installation
-	if installation.DefinitionID == "" {
-		installation.DefinitionID = integrationscim.DefinitionID.ID()
-	}
-
-	return &installation, nil
 }
 
 // handleDirectoryIngestError maps shared ingest failures to SCIM-compatible errors
@@ -81,20 +65,20 @@ func handleDirectoryIngestError(err error, detail string) error {
 		return scimerrors.ScimError{
 			ScimType: scimerrors.ScimTypeInvalidValue,
 			Detail:   detail,
-			Status:   400,
+			Status:   scimStatusBadRequest,
 		}
 	case errors.Is(err, integrationops.ErrIngestMappedDocumentInvalid),
 		errors.Is(err, integrationops.ErrIngestUpsertKeyMissing):
 		return scimerrors.ScimError{
 			ScimType: scimerrors.ScimTypeInvalidValue,
 			Detail:   detail,
-			Status:   400,
+			Status:   scimStatusBadRequest,
 		}
 	case errors.Is(err, integrationops.ErrIngestUpsertConflict):
 		return scimerrors.ScimError{
 			ScimType: scimerrors.ScimTypeUniqueness,
 			Detail:   detail,
-			Status:   409,
+			Status:   scimStatusConflict,
 		}
 	default:
 		return fmt.Errorf("directory ingest failed: %w", err)

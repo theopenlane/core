@@ -25,8 +25,8 @@ import (
 const (
 	// defaultJWTExpiry is the default expiry duration for GitHub App JWTs (max 10 minutes per GitHub docs)
 	defaultJWTExpiry = 9 * time.Minute
-	// jwtIssuedAtBackdateSeconds is the amount of time to backdate the JWT iat claim to account for clock skew
-	jwtIssuedAtBackdateSeconds = 30 * time.Second
+	// jwtIssuedAtBackdate is the amount of time to backdate the JWT iat claim to account for clock skew
+	jwtIssuedAtBackdate = 30 * time.Second
 	// stateTokenBytes is the number of random bytes used for CSRF state tokens
 	stateTokenBytes = 16
 	// installURLTemplate is the GitHub App installation URL pattern used to construct the install redirect
@@ -45,60 +45,17 @@ type statePayload struct {
 	Token string `json:"token"`
 }
 
-// appInstallAuthRegistration builds the auth registration for GitHub App installation flow
-func appInstallAuthRegistration(cfg Config) *types.AuthRegistration {
-	return &types.AuthRegistration{
-		CredentialRef: GitHubAppCredential.ID(),
-		Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-			return startAppInstall(cfg)
-		},
-		Complete: func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
-			return completeAppInstall(ctx, cfg, state, input)
-		},
-		Refresh: func(ctx context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
-			return refreshAppInstall(ctx, cfg, credential)
-		},
-		TokenView: func(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
-			var cred githubAppCredential
-			if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
-				return nil, ErrCredentialDecode
-			}
-
-			return &types.TokenView{
-				AccessToken: cred.AccessToken,
-				ExpiresAt:   cred.Expiry,
-			}, nil
-		},
+// tokenViewAppInstall extracts the access token and expiry from a GitHub App credential
+func tokenViewAppInstall(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
+	var cred githubAppCredential
+	if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
+		return nil, ErrCredentialDecode
 	}
-}
 
-// appInstallDisconnectRegistration builds the disconnect registration for GitHub App installations
-func appInstallDisconnectRegistration() *types.DisconnectRegistration {
-	return &types.DisconnectRegistration{
-		CredentialRef: GitHubAppCredential.ID(),
-		Name:          "Disconnect GitHub App Installation",
-		Description:   "Open the GitHub installation settings page and uninstall the Openlane GitHub App. Openlane will remove the installation after GitHub sends the uninstall webhook.",
-		Disconnect: func(_ context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
-			installationID, err := disconnectInstallationID(req)
-			if err != nil {
-				return types.DisconnectResult{}, err
-			}
-
-			details, err := jsonx.ToRawMessage(disconnectDetails{
-				InstallationID: strconv.FormatInt(installationID, 10),
-			})
-			if err != nil {
-				return types.DisconnectResult{}, ErrInstallationMetadataEncode
-			}
-
-			return types.DisconnectResult{
-				RedirectURL:      fmt.Sprintf("https://github.com/settings/installations/%d", installationID),
-				Message:          "Uninstall the Openlane GitHub App in GitHub to finish disconnecting this integration.",
-				Details:          details,
-				SkipLocalCleanup: true,
-			}, nil
-		},
-	}
+	return &types.TokenView{
+		AccessToken: cred.AccessToken,
+		ExpiresAt:   cred.Expiry,
+	}, nil
 }
 
 // startAppInstall generates the GitHub App installation URL and CSRF state token
@@ -259,7 +216,7 @@ func appJWT(cfg Config) (string, error) {
 	now := time.Now()
 	claims := jwt.RegisteredClaims{
 		Issuer:    cfg.AppID,
-		IssuedAt:  jwt.NewNumericDate(now.Add(-jwtIssuedAtBackdateSeconds)),
+		IssuedAt:  jwt.NewNumericDate(now.Add(-jwtIssuedAtBackdate)),
 		ExpiresAt: jwt.NewNumericDate(now.Add(defaultJWTExpiry)),
 	}
 

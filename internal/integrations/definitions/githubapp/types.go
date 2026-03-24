@@ -10,36 +10,31 @@ import (
 var (
 	// DefinitionID is the stable identifier for the GitHub App integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
-	// gitHubAppCredentialSchema is the reflected JSON schema for the GitHub App credential
-	// GitHubAppCredential is the auth-managed credential slot used by the GitHub client
-	gitHubAppCredentialSchema, GitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
-	GitHubClient = types.NewClientRef[GraphQLClient]()
-	// HealthDefaultOperation is the operation ref for the GitHub App health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
-	// RepositorySyncOperation is the operation ref for the repository sync operation
-	_, RepositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
-	// vulnerabilityCollectSchema is the reflected JSON schema for the vulnerability collect operation config
-	// VulnerabilityCollectOperation is the operation ref for the vulnerability collection operation
-	vulnerabilityCollectSchema, VulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilityCollectConfig]()
-	// DirectorySyncOperation is the operation ref for the directory account sync operation
-	_, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	gitHubClient = types.NewClientRef[GraphQLClient]()
+	// healthDefaultOperation is the operation ref for the GitHub App health check
+	healthCheckSchema, healthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events
-	PingWebhookEvent = types.NewWebhookEventRef[struct{}]("ping")
+	pingWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("ping")
 	// InstallationCreatedWebhookEvent is the webhook event ref for GitHub installation created events
-	InstallationCreatedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.created")
+	installationCreatedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.created")
 	// InstallationDeletedWebhookEvent is the webhook event ref for GitHub installation deleted events
-	InstallationDeletedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.deleted")
+	installationDeletedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.deleted")
 	// DependabotAlertWebhookEvent is the webhook event ref for Dependabot alert events
-	DependabotAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("dependabot_alert")
+	dependabotAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("dependabot_alert")
 	// CodeScanningAlertWebhookEvent is the webhook event ref for code scanning alert events
-	CodeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
+	codeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
-	SecretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
-	// Installation is the typed installation metadata handle for the GitHub App definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
+	secretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
+	// installation is the typed installation metadata handle for the GitHub App definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+
+	gitHubAppCredentialSchema, gitHubAppCredential            = providerkit.CredentialSchema[githubAppCredential]()
+	repositorySyncSchema, repositorySyncOperation             = providerkit.OperationSchema[RepositorySync]()
+	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilityCollectConfig]()
+	directorySyncSchema, directorySyncOperation               = providerkit.OperationSchema[DirectorySync]()
 )
 
 const (
@@ -72,5 +67,5 @@ type UserInput struct {
 // InstallationMetadata holds the stable GitHub App installation identity attributes
 type InstallationMetadata struct {
 	// InstallationID is the GitHub App installation identifier
-	InstallationID string `json:"installationId,omitempty" jsonschema:"title=Installation ID"`
+	InstallationID string `json:"installationId,omitempty" jsonschema:"title=installation ID"`
 }

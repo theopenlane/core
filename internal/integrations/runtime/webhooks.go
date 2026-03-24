@@ -22,9 +22,6 @@ import (
 )
 
 // reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one installation
-// previousIntegrationID is non-empty when the caller has just created a new integration record to
-// replace an existing one; it is used by ensureWebhook to roll forward existing endpoint rows to the
-// new integration ID so that externally configured webhook URLs remain valid
 func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, installation *ent.Integration, previousIntegrationID string) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -32,12 +29,7 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, installatio
 	}
 
 	db := r.DB()
-	existing, err := db.IntegrationWebhook.Query().
-		Where(
-			integrationwebhook.IntegrationIDEQ(installation.ID),
-			integrationwebhook.ExternalEventIDIsNil(),
-		).
-		All(ctx)
+	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(installation.ID), integrationwebhook.ExternalEventIDIsNil()).All(ctx)
 	if err != nil {
 		return err
 	}
@@ -52,9 +44,7 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, installatio
 	})
 
 	if len(staleIDs) > 0 {
-		if _, err := db.IntegrationWebhook.Delete().
-			Where(integrationwebhook.IDIn(staleIDs...)).
-			Exec(ctx); err != nil {
+		if _, err := db.IntegrationWebhook.Delete().Where(integrationwebhook.IDIn(staleIDs...)).Exec(ctx); err != nil {
 			return err
 		}
 	}
@@ -204,24 +194,17 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 			Headers:    maps.Clone(envelope.Headers),
 		},
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
-			return operations.EmitPayloadSets(
-				ingestCtx,
-				operations.IngestContext{
-					Registry:     r.Registry(),
-					DB:           r.DB(),
-					Runtime:      r.Gala(),
-					Installation: installation,
-				},
-				envelope.Webhook,
-				registration.Ingest,
-				payloadSets,
-				operations.IngestOptions{
-					Source:       integrationgenerated.IntegrationIngestSourceWebhook,
-					Webhook:      envelope.Webhook,
-					WebhookEvent: envelope.Event,
-					DeliveryID:   envelope.DeliveryID,
-				},
-			)
+			return operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
+				Registry:     r.Registry(),
+				DB:           r.DB(),
+				Runtime:      r.Gala(),
+				Installation: installation,
+			}, envelope.Webhook, registration.Ingest, payloadSets, operations.IngestOptions{
+				Source:       integrationgenerated.IntegrationIngestSourceWebhook,
+				Webhook:      envelope.Webhook,
+				WebhookEvent: envelope.Event,
+				DeliveryID:   envelope.DeliveryID,
+			})
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {
 			_, dispatchErr := r.Dispatch(dispatchCtx, operations.DispatchRequest{

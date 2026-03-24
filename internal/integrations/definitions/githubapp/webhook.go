@@ -54,7 +54,7 @@ type SecretScanningAlertWebhook struct{}
 type githubWebhookEnvelope struct {
 	// Action is the event action sub-type (e.g. "created", "dismissed")
 	Action string `json:"action"`
-	// Installation identifies the GitHub App installation that sent the event
+	// installation identifies the GitHub App installation that sent the event
 	Installation *githubWebhookInstallation `json:"installation"`
 	// Repository is the repository the event originated from, if any
 	Repository *githubWebhookRepository `json:"repository"`
@@ -152,19 +152,20 @@ func (App) Event(request types.WebhookInboundRequest) (types.WebhookReceivedEven
 	name := ""
 	switch eventType {
 	case "ping":
-		name = PingWebhookEvent.Name()
+		name = pingWebhookEvent.Name()
 	case "installation":
-		if envelope.Action == "created" {
-			name = InstallationCreatedWebhookEvent.Name()
-		} else if envelope.Action == "deleted" {
-			name = InstallationDeletedWebhookEvent.Name()
+		switch envelope.Action {
+		case "created":
+			name = installationCreatedWebhookEvent.Name()
+		case "deleted":
+			name = installationDeletedWebhookEvent.Name()
 		}
 	case "dependabot_alert":
-		name = DependabotAlertWebhookEvent.Name()
+		name = dependabotAlertWebhookEvent.Name()
 	case "code_scanning_alert":
-		name = CodeScanningAlertWebhookEvent.Name()
+		name = codeScanningAlertWebhookEvent.Name()
 	case "secret_scanning_alert":
-		name = SecretScanningAlertWebhookEvent.Name()
+		name = secretScanningAlertWebhookEvent.Name()
 	}
 
 	headers := make(map[string]string, len(request.Request.Header))
@@ -206,7 +207,7 @@ func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.Webh
 		return nil
 	}
 
-	envelope, err := InstallationCreatedWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	envelope, err := installationCreatedWebhookEvent.UnmarshalPayload(request.Event.Payload)
 	if err != nil {
 		return ErrWebhookPayloadInvalid
 	}
@@ -255,7 +256,7 @@ func (InstallationDeletedWebhook) Handle(ctx context.Context, request types.Webh
 
 // Handle ingests one Dependabot alert from the webhook payload
 func (DependabotAlertWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	envelope, err := DependabotAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	envelope, err := dependabotAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
 	if err != nil {
 		return ErrWebhookPayloadInvalid
 	}
@@ -265,7 +266,7 @@ func (DependabotAlertWebhook) Handle(ctx context.Context, request types.WebhookH
 
 // Handle ingests one code scanning alert from the webhook payload
 func (CodeScanningAlertWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	envelope, err := CodeScanningAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	envelope, err := codeScanningAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
 	if err != nil {
 		return ErrWebhookPayloadInvalid
 	}
@@ -275,7 +276,7 @@ func (CodeScanningAlertWebhook) Handle(ctx context.Context, request types.Webhoo
 
 // Handle ingests one secret scanning alert from the webhook payload
 func (SecretScanningAlertWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	envelope, err := SecretScanningAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
+	envelope, err := secretScanningAlertWebhookEvent.UnmarshalPayload(request.Event.Payload)
 	if err != nil {
 		return ErrWebhookPayloadInvalid
 	}

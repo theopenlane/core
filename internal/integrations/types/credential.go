@@ -23,10 +23,9 @@ type CredentialBinding struct {
 type CredentialBindings []CredentialBinding
 
 // Resolve returns the credential bound to the supplied slot ref when present
-// Comparison uses the stable name since bindings reconstructed from persisted records carry a fresh key
 func (bindings CredentialBindings) Resolve(ref CredentialSlotID) (CredentialSet, bool) {
 	for _, binding := range bindings {
-		if binding.Ref.String() == ref.String() {
+		if binding.Ref == ref {
 			return binding.Credential, true
 		}
 	}
@@ -49,7 +48,7 @@ type CredentialRegistration struct {
 // CredentialRegistration returns the credential registration for the given ref
 func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegistration, error) {
 	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return r.Ref.String() == ref.String()
+		return r.Ref == ref
 	})
 	if !found {
 		return CredentialRegistration{}, ErrCredentialRefNotFound

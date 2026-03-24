@@ -46,20 +46,16 @@ func ObjectFromRef(ref *generated.WorkflowObjectRef) (*Object, error) {
 	return nil, ErrMissingObjectID
 }
 
-// TargetConfig defines who should receive workflow actions.
+// TargetConfig defines who should receive workflow actions
 type TargetConfig struct {
-	// Type selects how targets are resolved.
+	// Type selects how targets are resolved
 	Type enums.WorkflowTargetType `json:"type"`
-	// ID identifies the target resource for static targets.
+	// ID identifies the target resource for static targets
 	ID string `json:"id,omitempty"`
-	// ResolverKey names the resolver used for dynamic targets.
+	// ResolverKey names the resolver used for dynamic targets
 	ResolverKey string `json:"resolver_key,omitempty"`
-	// Channel identifies the notification channel when Type is CHANNEL.
-	Channel enums.Channel `json:"channel,omitempty"`
-	// Destination identifies the external channel destination when Type is CHANNEL.
+	// Destination identifies the external channel destination
 	Destination string `json:"destination,omitempty"`
-	// Config carries optional provider-specific message settings when Type is CHANNEL.
-	Config map[string]any `json:"config,omitempty"`
 }
 
 // CELContextBuilder can override how CEL activation variables are built per object type.

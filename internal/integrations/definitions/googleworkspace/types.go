@@ -10,22 +10,18 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the Google Workspace integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
-	// Installation is the typed installation metadata handle for the Google Workspace definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// definitionID is the stable identifier for the Google Workspace integration definition
+	definitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
+	// installation is the typed installation metadata handle for the Google Workspace definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 
 	// workspaceCredentialSchema is the reflected JSON schema for the workspace credential
 	// workspaceCredential is the auth-managed credential slot used by the Workspace client
 	workspaceCredentialSchema, workspaceCredential = providerkit.CredentialSchema[googleWorkspaceCred]()
 
 	// WorkspaceClient is the client ref for the Google Workspace Admin SDK client used by this definition
-	WorkspaceClient = types.NewClientRef[*admin.Service]()
-
-	// HealthDefaultOperation is the operation ref for the Google Workspace health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
-	// directorySyncSchema is the reflected JSON schema for the directory sync operation config
-	// DirectorySyncOperation is the operation ref for the Google Workspace directory sync operation
+	workspaceClient                             = types.NewClientRef[*admin.Service]()
+	healthCheckSchema, healthCheckOperation     = providerkit.OperationSchema[HealthCheck]()
 	directorySyncSchema, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 

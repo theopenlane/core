@@ -2,8 +2,8 @@ package scim
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -27,16 +27,18 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Report push-based SCIM health status",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Report push-based SCIM health status",
+					Topic:        types.OperationTopic(DefinitionID.ID(), healthCheckOperation.Name()),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: directorySyncSchema,
+					Handle:       HealthCheck{}.Handle(),
 				},
 				{
-					Name:        DirectorySyncOperation.Name(),
-					Description: "Synchronize directory state through SCIM",
-					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
+					Name:         directorySyncOperation.Name(),
+					Description:  "Synchronize directory state through SCIM",
+					Topic:        types.OperationTopic(DefinitionID.ID(), directorySyncOperation.Name()),
+					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

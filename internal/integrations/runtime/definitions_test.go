@@ -38,7 +38,7 @@ func TestResolveDefinitionForInstallationSuccess(t *testing.T) {
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:   "test-def",
+			ID: "test-def",
 		},
 	})
 
@@ -83,7 +83,7 @@ func TestResolvePersistedConnectionNoConnections(t *testing.T) {
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:   "test-def",
+			ID: "test-def",
 		},
 	})
 
@@ -103,7 +103,7 @@ func TestResolvePersistedConnectionMatchesPersistedRef(t *testing.T) {
 	reg := registry.New()
 	err := reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{
-			ID:   "test-def",
+			ID: "test-def",
 		},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{

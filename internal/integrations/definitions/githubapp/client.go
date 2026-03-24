@@ -48,7 +48,6 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 	return newGraphQLClient(httpClient, c.APIURL), nil
 }
 
-
 // newGraphQLClient constructs a GitHub GraphQL client targeting the given API URL
 func newGraphQLClient(httpClient *http.Client, apiURL string) GraphQLClient {
 	endpoint := "https://api.github.com/graphql"

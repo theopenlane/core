@@ -17,25 +17,22 @@ import (
 
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
-	// DirectorySyncRunID is the database ID of the DirectorySyncRun record that groups all
-	// directory-related ingest records (accounts, groups, memberships) from one sync batch;
+	// DirectorySyncRunID groups all directory-related ingest records from one sync batch
 	// created at the start of processing and finalized when the batch completes
 	DirectorySyncRunID string
-	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory
-	// sync run after processing; set when the caller is responsible for finalization (e.g. async path)
+	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory sync run after processing
 	SkipDirectorySyncRunFinalization bool
 	// Source identifies the mechanism that produced the ingest data (e.g. webhook, poll, manual)
 	Source integrationgenerated.IntegrationIngestSource
-	// RunID is a caller-supplied correlation identifier for the overall operation run (e.g. a polling
-	// job invocation); propagated into Gala message headers for distributed tracing — not a DB entity
+	// RunID is a caller-supplied correlation identifier for the overall operation run
 	RunID string
-	// Webhook is the webhook name or identifier that triggered this ingest, if applicable
+	// Webhook is the webhook name or identifier that triggered this ingest
 	Webhook string
-	// WebhookEvent is the event type reported by the webhook provider (e.g. "push", "member_added")
+	// WebhookEvent is the event type reported by the webhook provider
 	WebhookEvent string
-	// DeliveryID is the provider-assigned delivery identifier for webhook payloads, used for deduplication
+	// DeliveryID is the provider-assigned delivery identifier; used for deduplication
 	DeliveryID string
-	// WorkflowMeta carries workflow instance context when ingest is triggered from a workflow action
+	// WorkflowMeta carries workflow instance context
 	WorkflowMeta *WorkflowMeta
 }
 
@@ -65,15 +62,13 @@ var directorySyncRunSchemas = map[string]struct{}{
 // EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
 func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	if needsDirectorySyncRun(contracts) {
-		// Directory sync runs must finalize in the same process that creates them.
+		// directory sync runs must finalize in the same process that creates them
 		return ProcessPayloadSets(ctx, ic, contracts, payloadSets, options)
 	}
 
 	if ic.Runtime == nil {
 		return ErrGalaRequired
 	}
-
-	options.SkipDirectorySyncRunFinalization = true
 
 	return processPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		return emitMappedRecord(handleCtx, ic.Runtime, ic.Installation, operationName, record, options)
@@ -99,8 +94,10 @@ func processPayloadSets(ctx context.Context, ic IngestContext, contracts []types
 		return ErrIngestInstallationFilterConfigInvalid
 	}
 
+	directorySync := needsDirectorySyncRun(contracts)
+
 	directorySyncRunID := options.DirectorySyncRunID
-	if directorySyncRunID == "" && needsDirectorySyncRun(contracts) {
+	if directorySyncRunID == "" && directorySync {
 		directorySyncRunID, err = createDirectorySyncRun(ctx, ic.DB, ic.Installation)
 		if err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
@@ -111,7 +108,7 @@ func processPayloadSets(ctx context.Context, ic IngestContext, contracts []types
 		ctx = withDirectorySyncRunID(ctx, directorySyncRunID)
 	}
 
-	shouldFinalizeDirectorySyncRun := directorySyncRunID != "" && needsDirectorySyncRun(contracts) && !options.SkipDirectorySyncRunFinalization
+	shouldFinalizeDirectorySyncRun := directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization
 	if shouldFinalizeDirectorySyncRun {
 		defer func() {
 			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, err); finalizeErr != nil && err == nil {
@@ -122,7 +119,7 @@ func processPayloadSets(ctx context.Context, ic IngestContext, contracts []types
 
 	for _, payloadSet := range payloadSets {
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
-			return ErrIngestSchemaNotFound
+			return ErrIngestSchemaNotDeclared
 		}
 		if _, ok := integrationgenerated.IntegrationMappingSchemas[payloadSet.Schema]; !ok {
 			return ErrIngestSchemaNotFound
@@ -175,10 +172,6 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 // resolveInstallationFilterExpr pulls the per-installation filter expression out of the config
 func resolveInstallationFilterExpr(installation *ent.Integration) (string, error) {
-	if installation == nil {
-		return "", nil
-	}
-
 	var cfg installationFilterConfig
 	if err := jsonx.UnmarshalIfPresent(installation.Config.ClientConfig, &cfg); err != nil {
 		return "", err

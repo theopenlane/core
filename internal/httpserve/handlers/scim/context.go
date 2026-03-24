@@ -38,7 +38,7 @@ func IntegrationContextFromContext(ctx context.Context) (*IntegrationContext, bo
 }
 
 // ProvisionModeFromContext returns the SCIMProvisionMode from the context, defaulting to
-// SCIMProvisionModeUsers when no IntegrationContext is present (e.g. on the legacy route)
+// SCIMProvisionModeUsers when no IntegrationContext is present
 func ProvisionModeFromContext(ctx context.Context) enums.SCIMProvisionMode {
 	ic, ok := integrationContextKey.Get(ctx)
 	if !ok || ic == nil {

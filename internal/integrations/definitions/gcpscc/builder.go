@@ -2,8 +2,8 @@ package gcpscc
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -12,7 +12,7 @@ func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "gcp",
 				DisplayName: "GCP Security Command Center",
 				Description: "Collect Google Cloud Security Command Center findings for security posture reporting.",
@@ -39,9 +39,9 @@ func Builder() registry.Builder {
 					Name:                "GCP Service Account",
 					Description:         "Configure Security Command Center access using a service account credential payload.",
 					CredentialRefs:      []types.CredentialSlotID{sccCredential.ID()},
-					ClientRefs:          []types.ClientID{SCCClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{sccClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: sccCredential.ID(),
 						Name:          "Disconnect GCP Service Account",
@@ -51,7 +51,7 @@ func Builder() registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            SCCClient.ID(),
+					Ref:            sccClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{sccCredential.ID()},
 					Description:    "Google Cloud Security Command Center v2 client",
 					Build:          Client{}.Build,
@@ -59,18 +59,19 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Verify GCP SCC access",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   SCCClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Verify GCP SCC access",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    sccClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
 				},
 				{
-					Name:         FindingsCollectOperation.Name(),
+					Name:         findingsCollectOperation.Name(),
 					Description:  "Collect GCP Security Command Center findings for vulnerability ingestion",
-					Topic:        types.OperationTopic(DefinitionID.ID(), FindingsCollectOperation.Name()),
-					ClientRef:    SCCClient.ID(),
+					Topic:        types.OperationTopic(definitionID.ID(), findingsCollectOperation.Name()),
+					ClientRef:    sccClient.ID(),
 					ConfigSchema: findingsCollectSchema,
 					Ingest: []types.IngestContract{
 						{

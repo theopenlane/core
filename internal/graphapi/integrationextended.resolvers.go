@@ -30,7 +30,7 @@ func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.In
 
 	webhookURLs := make(map[string]any, len(def.Webhooks))
 	for _, webhook := range def.Webhooks {
-		webhookURLs[webhook.Name] = integrationWebhookURL(ec.Scheme(), ec.Request().Host, obj.DefinitionID, obj.ID, webhook.Name)
+		webhookURLs[webhook.Name] = integrationWebhookURL(ec.Scheme(), ec.Request().Host, obj.ID, webhook.Name)
 	}
 
 	return webhookURLs, nil

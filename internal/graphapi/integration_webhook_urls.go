@@ -3,32 +3,21 @@ package graphapi
 import (
 	"fmt"
 	"net/url"
-
-	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 )
 
 const (
-	genericIntegrationWebhookPathPrefix = "/v1/integrations/webhook"
-	gitHubAppWebhookPath                = "/v1/github/app/webhook"
+	integrationWebhookPathPrefix = "/v1/integrations/webhook"
 )
 
-func integrationWebhookURL(scheme, host, definitionID, integrationID, webhookName string) string {
+func integrationWebhookURL(scheme, host, integrationID, webhookName string) string {
 	return (&url.URL{
 		Scheme: scheme,
 		Host:   host,
-		Path:   integrationWebhookPath(definitionID, integrationID, webhookName),
+		Path: fmt.Sprintf(
+			"%s/%s/%s",
+			integrationWebhookPathPrefix,
+			url.PathEscape(integrationID),
+			url.PathEscape(webhookName),
+		),
 	}).String()
-}
-
-func integrationWebhookPath(definitionID, integrationID, webhookName string) string {
-	if definitionID == githubapp.DefinitionID.ID() {
-		return gitHubAppWebhookPath
-	}
-
-	return fmt.Sprintf(
-		"%s/%s/%s",
-		genericIntegrationWebhookPathPrefix,
-		url.PathEscape(integrationID),
-		url.PathEscape(webhookName),
-	)
 }

@@ -265,19 +265,6 @@ func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *
 	return dg, members, nil
 }
 
-// removeGroupMembers removes specified DirectoryAccount IDs from the group
-func (h *DirectoryGroupHandler) removeGroupMembers(ctx context.Context, client *generated.Client, groupID string, memberIDs []string) error {
-	for _, memberID := range memberIDs {
-		if _, err := client.DirectoryMembership.Delete().
-			Where(directorymembership.DirectoryGroupID(groupID), directorymembership.DirectoryAccountID(memberID)).
-			Exec(ctx); err != nil && !generated.IsNotFound(err) {
-			return fmt.Errorf("failed to remove directory group member: %w", err)
-		}
-	}
-
-	return nil
-}
-
 // clearGroupMembers removes all DirectoryMembership records for the given group
 func (h *DirectoryGroupHandler) clearGroupMembers(ctx context.Context, client *generated.Client, groupID string) error {
 	_, err := client.DirectoryMembership.Delete().

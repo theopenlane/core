@@ -805,7 +805,6 @@ func (l *WorkflowListeners) HandleInstanceCompleted(ctx gala.HandlerContext, pay
 	return nil
 }
 
-
 // resumeWorkflowAfterApproval advances a paused workflow after approvals complete
 func (l *WorkflowListeners) resumeWorkflowAfterApproval(scope *observability.Scope, instance *generated.WorkflowInstance, orgID string, actionIndex int, obj *workflows.Object, def models.WorkflowDefinitionDocument, clearParallel bool) error {
 	allowCtx := workflows.AllowContext(scope.Context())

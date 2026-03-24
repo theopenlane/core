@@ -27,8 +27,7 @@ type OAuthConfig struct {
 	AuthURL string
 	// TokenURL is the token endpoint URL; leave empty when DiscoveryURL is set
 	TokenURL string
-	// DiscoveryURL is the OIDC issuer URL used for endpoint discovery; when non-empty,
-	// AuthURL and TokenURL are ignored and resolved via OIDC discovery
+	// DiscoveryURL is the OIDC issuer URL used for endpoint discovery
 	DiscoveryURL string
 	// RedirectURL is the callback URL registered with the OAuth provider
 	RedirectURL string

@@ -18,17 +18,34 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
-	operationTestDefinitionID = "def_test_operation"
+	operationTestDefinitionID = "def_01K0TESTOPS00000000000001"
 	operationTestPath         = "/v1/integrations/:definitionID/operations"
 )
 
-var operationTestCredentialRef = types.NewCredentialSlotID("op_test")
+// OperationTestHealthCheck is the config type for the test health check operation
+type OperationTestHealthCheck struct{}
+
+// OperationTestRepoSync is the config type for the test repository sync operation
+type OperationTestRepoSync struct{}
+
+// OperationTestValidated is the config type for the test validated operation
+type OperationTestValidated struct {
+	// Target is the required target field
+	Target string `json:"target" jsonschema:"required"`
+}
+
+var (
+	operationTestCredentialRef                                = types.NewCredentialSlotID("op_test")
+	opTestHealthSchema, opTestHealthCheckOperation            = providerkit.OperationSchema[OperationTestHealthCheck]()
+	opTestRepoSyncSchema, opTestRepoSyncOperation             = providerkit.OperationSchema[OperationTestRepoSync]()
+	opTestValidatedSchema, opTestValidatedOperation           = providerkit.OperationSchema[OperationTestValidated]()
+)
 
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
@@ -55,27 +72,30 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Description: "Validate the test credential",
-					Topic:       gala.TopicName("integration." + definitionID + ".health.default"),
+					Name:         opTestHealthCheckOperation.Name(),
+					Description:  "Validate the test credential",
+					Topic:        types.OperationTopic(definitionID, opTestHealthCheckOperation.Name()),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: opTestHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
 				},
 				{
-					Name:        "sync.repos",
-					Description: "Sync repositories",
-					Topic:       gala.TopicName("integration." + definitionID + ".sync.repos"),
-					Policy:      types.ExecutionPolicy{Inline: inlineNonHealth},
+					Name:         opTestRepoSyncOperation.Name(),
+					Description:  "Sync repositories",
+					Topic:        types.OperationTopic(definitionID, opTestRepoSyncOperation.Name()),
+					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
+					ConfigSchema: opTestRepoSyncSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"synced":true}`), nil
 					},
 				},
 				{
-					Name:         "validated.op",
+					Name:         opTestValidatedOperation.Name(),
 					Description:  "Operation with config schema",
-					Topic:        gala.TopicName("integration." + definitionID + ".validated.op"),
-					ConfigSchema: json.RawMessage(`{"type":"object","required":["target"],"properties":{"target":{"type":"string"}}}`),
+					Topic:        types.OperationTopic(definitionID, opTestValidatedOperation.Name()),
+					ConfigSchema: opTestValidatedSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"validated":true}`), nil
@@ -105,7 +125,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 		DefinitionID:  operationTestDefinitionID,
 		IntegrationID: integrationID,
 		Body: handlers.IntegrationOperationBody{
-			Operation: "health.default",
+			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
 	require.NoError(t, err)
@@ -122,8 +142,8 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "ok", resp.Status)
-	assert.Equal(t, "health.default", resp.Operation)
-	assert.Contains(t, resp.Summary, "Health check")
+	assert.Equal(t, opTestHealthCheckOperation.Name(), resp.Operation)
+	assert.Contains(t, resp.Summary, "Integration operation completed")
 }
 
 func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
@@ -145,7 +165,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 		DefinitionID:  operationTestDefinitionID,
 		IntegrationID: integrationID,
 		Body: handlers.IntegrationOperationBody{
-			Operation: "sync.repos",
+			Operation: opTestRepoSyncOperation.Name(),
 		},
 	})
 	require.NoError(t, err)
@@ -162,7 +182,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "ok", resp.Status)
-	assert.Equal(t, "sync.repos", resp.Operation)
+	assert.Equal(t, opTestRepoSyncOperation.Name(), resp.Operation)
 	assert.Contains(t, resp.Summary, "Integration operation completed")
 }
 
@@ -185,7 +205,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 		DefinitionID:  operationTestDefinitionID,
 		IntegrationID: integrationID,
 		Body: handlers.IntegrationOperationBody{
-			Operation: "sync.repos",
+			Operation: opTestRepoSyncOperation.Name(),
 		},
 	})
 	require.NoError(t, err)
@@ -202,7 +222,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "queued", resp.Status)
-	assert.Equal(t, "sync.repos", resp.Operation)
+	assert.Equal(t, opTestRepoSyncOperation.Name(), resp.Operation)
 	assert.Contains(t, resp.Summary, "queued")
 	assert.NotEmpty(t, resp.Details)
 }
@@ -217,7 +237,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
 	body, err := json.Marshal(handlers.IntegrationOperationPayload{
 		DefinitionID: operationTestDefinitionID,
 		Body: handlers.IntegrationOperationBody{
-			Operation: "health.default",
+			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
 	require.NoError(t, err)
@@ -244,7 +264,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
 	body, err := json.Marshal(handlers.IntegrationOperationPayload{
 		DefinitionID: "def_nonexistent",
 		Body: handlers.IntegrationOperationBody{
-			Operation: "health.default",
+			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
 	require.NoError(t, err)
@@ -335,7 +355,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
 		DefinitionID:  operationTestDefinitionID,
 		IntegrationID: integrationID,
 		Body: handlers.IntegrationOperationBody{
-			Operation: "validated.op",
+			Operation: opTestValidatedOperation.Name(),
 			Config:    json.RawMessage(`{"missing":"target_field"}`),
 		},
 	})
@@ -366,7 +386,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 	body, err := json.Marshal(handlers.IntegrationOperationPayload{
 		DefinitionID: operationTestDefinitionID,
 		Body: handlers.IntegrationOperationBody{
-			Operation: "health.default",
+			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
 	require.NoError(t, err)

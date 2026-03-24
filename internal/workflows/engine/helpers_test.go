@@ -193,12 +193,12 @@ func TestApplyStringTemplates(t *testing.T) {
 
 	nested := got["nested"].(map[string]any)
 	assert.Equal(t, "42", nested["id"])
-	assert.Equal(t, 2, nested["count"])
+	assert.Equal(t, float64(2), nested["count"])
 
 	list := got["list"].([]any)
 	assert.Equal(t, "Ada", list[0])
 	assert.Equal(t, "42", list[1].(map[string]any)["id"])
-	assert.Equal(t, 7, list[2])
+	assert.Equal(t, float64(7), list[2])
 
 	empty := applyStringTemplates(nil, replacements)
 	assert.Empty(t, empty)

@@ -65,12 +65,6 @@ var (
 	ErrTargetUnknownResolver = errors.New("unknown resolver key")
 	// ErrTargetInvalidType is returned when a target has an invalid type
 	ErrTargetInvalidType = errors.New("invalid target type")
-	// ErrTargetMissingChannel is returned when a channel target is missing channel
-	ErrTargetMissingChannel = errors.New("channel target requires channel")
-	// ErrTargetMissingDestination is returned when a channel target is missing destination
-	ErrTargetMissingDestination = errors.New("channel target requires destination")
-	// ErrTargetUnsupportedChannel is returned when a channel target uses an unsupported channel
-	ErrTargetUnsupportedChannel = errors.New("channel target channel is not supported")
 	// ErrWebhookParamsRequired is returned when webhook params are required but not provided
 	ErrWebhookParamsRequired = errors.New("webhook params required")
 	// ErrWebhookURLRequired is returned when webhook URL is required but not provided

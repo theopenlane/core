@@ -8,19 +8,19 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the Cloudflare integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
-	// Installation is the typed installation metadata handle for the Cloudflare definition
-	Installation = types.NewInstallationRef[InstallationMetadata](resolveInstallationMetadata)
+	// definitionID is the stable identifier for the Cloudflare integration definition
+	definitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	// installation is the typed installation metadata handle for the Cloudflare definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// cloudflareSchema is the reflected JSON schema for the Cloudflare credential
 	// cloudflareCredential is the credential slot used by the Cloudflare client
 	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// CloudflareClient is the client ref for the Cloudflare API client used by this definition
-	CloudflareClient = types.NewClientRef[*cf.Client]()
-	// HealthDefaultOperation is the operation ref for the Cloudflare health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
+	cloudflareClient = types.NewClientRef[*cf.Client]()
+	// healthDefaultOperation is the operation ref for the Cloudflare health check
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// DirectorySyncOperation is the operation ref for the directory account sync operation
-	_, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 
 // UserInput holds installation-specific configuration collected from the user

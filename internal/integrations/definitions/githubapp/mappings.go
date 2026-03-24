@@ -36,10 +36,7 @@ func buildMappingExpr(category, externalIDExpr string, extras []providerkit.CelM
 
 var (
 	// mapExprDependabot is the CEL mapping expression for Dependabot alert payloads
-	mapExprDependabot = buildMappingExpr(
-		githubAlertTypeDependabot,
-		`"github:" + resource + ":dependabot:" + (payload.number != 0 ? string(payload.number) : (payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown"))`,
-		[]providerkit.CelMapEntry{
+	mapExprDependabot = buildMappingExpr(githubAlertTypeDependabot, `"github:" + resource + ":dependabot:" + (payload.number != 0 ? string(payload.number) : (payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown"))`, []providerkit.CelMapEntry{
 			{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: "payload.security_advisory.severity"},
 			{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: "payload.security_advisory.summary"},
 			{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: "payload.security_advisory.description"},
@@ -47,20 +44,14 @@ var (
 		},
 	)
 	// mapExprCodeScanning is the CEL mapping expression for code scanning alert payloads
-	mapExprCodeScanning = buildMappingExpr(
-		githubAlertTypeCodeScanning,
-		`"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
-		[]providerkit.CelMapEntry{
+	mapExprCodeScanning = buildMappingExpr(githubAlertTypeCodeScanning, `"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`, []providerkit.CelMapEntry{
 			{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : payload.rule.severity`},
 			{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `payload.rule.description != "" ? payload.rule.description : payload.rule.name`},
 			{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `payload.most_recent_instance.message.text`},
 		},
 	)
 	// mapExprSecretScanning is the CEL mapping expression for secret scanning alert payloads
-	mapExprSecretScanning = buildMappingExpr(
-		githubAlertTypeSecretScan,
-		`"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
-		[]providerkit.CelMapEntry{
+	mapExprSecretScanning = buildMappingExpr(githubAlertTypeSecretScan, `"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`, []providerkit.CelMapEntry{
 			{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `"high"`},
 			{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `payload.secret_type_display_name != "" ? payload.secret_type_display_name : payload.secret_type`},
 			{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `payload.resolution`},

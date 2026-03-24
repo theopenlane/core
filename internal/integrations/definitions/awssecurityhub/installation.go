@@ -21,7 +21,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		return InstallationMetadata{}, false, nil
 	}
 
-	_, hasSourceCredential, _ := awsSourceCredential.Resolve(req.Credentials)
+	_, hasSourceCredential, _ := awsServiceAccountCredential.Resolve(req.Credentials)
 
 	return InstallationMetadata{
 		RoleARN:              assumeRole.RoleARN,

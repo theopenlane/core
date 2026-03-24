@@ -34,4 +34,3 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 
 	return svc, nil
 }
-

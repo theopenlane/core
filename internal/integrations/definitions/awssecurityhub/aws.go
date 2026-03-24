@@ -18,8 +18,6 @@ const (
 	AccountScopeAll = "all"
 	// AccountScopeSpecific indicates operations should be limited to explicitly listed accounts
 	AccountScopeSpecific = "specific"
-	// defaultSessionName is the STS session name used when no override is present in the credential metadata
-	defaultSessionName = "openlane-aws"
 )
 
 // resolveAssumeRoleCredential extracts and validates the assume-role credential from the bindings
@@ -33,12 +31,12 @@ func resolveAssumeRoleCredential(bindings types.CredentialBindings) (AssumeRoleC
 		return AssumeRoleCredentialSchema{}, ErrCredentialMetadataRequired
 	}
 
-	return decoded.applyDefaults(), nil
+	return decoded, nil
 }
 
-// resolveSourceCredential extracts the optional static source credential from the bindings
-func resolveSourceCredential(bindings types.CredentialBindings) (*SourceCredentialSchema, error) {
-	decoded, ok, err := awsSourceCredential.Resolve(bindings)
+// resolveSourceCredential extracts the service account credential from the bindings
+func resolveSourceCredential(bindings types.CredentialBindings) (*ServiceAccountCredentialSchema, error) {
+	decoded, ok, err := awsServiceAccountCredential.Resolve(bindings)
 	if err != nil {
 		return nil, err
 	}
@@ -50,21 +48,8 @@ func resolveSourceCredential(bindings types.CredentialBindings) (*SourceCredenti
 	return &decoded, nil
 }
 
-// applyDefaults fills in zero-value fields with sensible defaults
-func (c AssumeRoleCredentialSchema) applyDefaults() AssumeRoleCredentialSchema {
-	if c.AccountScope == "" {
-		c.AccountScope = AccountScopeAll
-	}
-
-	if c.SessionName == "" {
-		c.SessionName = defaultSessionName
-	}
-
-	return c
-}
-
-// buildAWSConfig constructs an AWS SDK config with assume-role credentials and optional static source credentials
-func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredentialSchema, sourceCredential *SourceCredentialSchema) (awssdk.Config, error) {
+// buildAWSConfig constructs an AWS SDK config with assume-role credentials and service account credentials
+func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredentialSchema, sourceCredential *ServiceAccountCredentialSchema) (awssdk.Config, error) {
 	opts := []func(*config.LoadOptions) error{
 		config.WithRegion(assumeRoleCredential.HomeRegion),
 	}

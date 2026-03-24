@@ -17,15 +17,15 @@ func TestEvaluateInstallationScope(t *testing.T) {
 	}
 
 	record := &ent.Integration{
-		ID:             "int_123",
-		DefinitionSlug: "github_app",
+		ID:           "int_123",
+		DefinitionID: "def_01K0GHAPP000000000000000001",
 	}
 
 	opName := "vulnerability.collect"
 
 	allowed, err := evaluateInstallationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
-		ScopeExpression: "provider == 'github_app'",
+		ScopeExpression: "provider == 'def_01K0GHAPP000000000000000001'",
 	}, record, opName, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
@@ -36,7 +36,7 @@ func TestEvaluateInstallationScope(t *testing.T) {
 
 	allowed, err = evaluateInstallationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
-		ScopeExpression: "provider == 'slack'",
+		ScopeExpression: "provider == 'def_01K0SLACK000000000000000001'",
 	}, record, opName, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
@@ -63,8 +63,8 @@ func TestEvaluateInstallationScopeUsesClientConfig(t *testing.T) {
 	}
 
 	record := &ent.Integration{
-		ID:             "int_123",
-		DefinitionSlug: "github_app",
+		ID:           "int_123",
+		DefinitionID: "def_01K0GHAPP000000000000000001",
 		Metadata: map[string]any{
 			"environment": "stale",
 		},

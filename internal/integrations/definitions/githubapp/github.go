@@ -2,6 +2,7 @@ package githubapp
 
 import (
 	"context"
+	"math"
 	"time"
 
 	"github.com/shurcooL/githubv4"
@@ -55,7 +56,7 @@ func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) 
 		}
 
 		variables := map[string]any{
-			"first": githubv4.Int(pageSize),
+			"first": githubv4.Int(int32(min(pageSize, math.MaxInt32))), //nolint:gosec // G115: clamped to maxPageSize (100)
 			"after": after,
 		}
 

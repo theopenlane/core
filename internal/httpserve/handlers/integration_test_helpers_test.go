@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -15,8 +16,14 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-var githubAppDefinitionID = githubapp.DefinitionID.ID()
-var githubTestCredentialRef = types.NewCredentialSlotID("github_test")
+// HelperTestHealthCheck is the config type for the helper test health check operation
+type HelperTestHealthCheck struct{}
+
+var (
+	githubAppDefinitionID                                  = githubapp.DefinitionID.ID()
+	githubTestCredentialRef                                = types.NewCredentialSlotID("github_test")
+	helperHealthSchema, helperHealthCheckOperation         = providerkit.OperationSchema[HelperTestHealthCheck]()
+)
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
 // built from the given definition builders. Returns a restore function.
@@ -39,14 +46,14 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []re
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		Keystore:              credStore,
-		DefinitionBuilders:    builders,
-		SkipExecutorListeners: true,
+		DefinitionBuilders: builders,
 	})
 	assert.NoError(t, err)
 
 	suite.h.IntegrationsRuntime = rt
 
 	return func() {
+		_ = galaInstance.Close()
 		suite.h.IntegrationsRuntime = original
 		suite.h.IntegrationsConfig = originalConfig
 	}
@@ -136,7 +143,7 @@ func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
 					Name:                "GCP SCC Test Connection",
 					Description:         "Connect the GCP SCC test definition using the configured credential payload.",
 					CredentialRefs:      []types.CredentialSlotID{gcpSCCTestCredential},
-					ValidationOperation: "health.default",
+					ValidationOperation: helperHealthCheckOperation.Name(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: gcpSCCTestCredential,
 						Name:          "Disconnect GCP SCC Test Connection",
@@ -146,9 +153,11 @@ func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Description: "Validate the test credential payload",
-					Topic:       gala.TopicName("integration." + definitionID + ".health.default"),
+					Name:         helperHealthCheckOperation.Name(),
+					Description:  "Validate the test credential payload",
+					Topic:        types.OperationTopic(definitionID, helperHealthCheckOperation.Name()),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: helperHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},

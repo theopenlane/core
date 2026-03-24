@@ -30,14 +30,9 @@ type VulnerabilitiesCollect struct{}
 
 // IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
 func (v VulnerabilitiesCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(
-		SecurityHubClient,
-		VulnerabilitiesCollectOperation,
-		ErrOperationConfigInvalid,
-		func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-			return v.Run(ctx, request.Credentials, client, cfg)
-		},
-	)
+	return providerkit.WithClientRequestConfig(securityHubClient, vulnerabilitiesCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+		return v.Run(ctx, request.Credentials, client, cfg)
+	})
 }
 
 // Run collects Security Hub findings using credential-defined collection scope

@@ -11,22 +11,20 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the Azure Entra ID integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
-	// Installation is the typed installation metadata handle for the Azure Entra ID definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// entraTenantSchema is the reflected JSON schema for the Entra ID tenant credential
-	// entraTenantCredential is the credential slot shared by the Entra clients in this definition
+	// definitionID is the stable identifier for the Azure Entra ID integration definition
+	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// installation is the typed installation metadata handle for the Azure Entra ID definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// entraTenantSchema is the cred schema for entraID
 	entraTenantSchema, entraTenantCredential = providerkit.CredentialSchema[entraIDCred]()
 	// EntraCredential is the client ref for the Azure token credential used by the health check
-	EntraCredential = types.NewClientRef[azcore.TokenCredential]()
+	entraCredential = types.NewClientRef[azcore.TokenCredential]()
 	// EntraClient is the client ref for the Microsoft Graph service client used by directory operations
-	EntraClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-
-	// HealthDefaultOperation is the operation ref for the Azure Entra ID health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
+	entraClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
+	// healthDefaultOperation is the operation ref for the Azure Entra ID health check
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// DirectorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
-	_, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 
 // UserInput holds installation-specific configuration collected from the user

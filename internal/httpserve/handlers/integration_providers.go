@@ -7,7 +7,7 @@ import (
 )
 
 // ListIntegrationProviders returns declarative metadata about available third-party integration definitions
-func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
 	if isRegistrationContext(ctx) {
 		return nil
 	}

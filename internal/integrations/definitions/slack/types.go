@@ -10,24 +10,20 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the Slack integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
-	// Installation is the typed installation metadata handle for the Slack definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
-
+	// definitionID is the stable identifier for the Slack integration definition
+	definitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
+	// installation is the typed installation metadata handle for the Slack definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the Slack client
-	_, slackCredential = providerkit.CredentialSchema[slackCred]()
-
+	slackCredentialSchema, slackCredential = providerkit.CredentialSchema[slackCred]()
 	// SlackClient is the client ref for the Slack Web API client used by this definition
-	SlackClient = types.NewClientRef[*slackgo.Client]()
-
-	// HealthDefaultOperation is the operation ref for the Slack health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
-	// messageSendSchema is the reflected JSON schema for the message send operation config
-	// MessageSendOperation is the operation ref for the Slack message send operation
-	messageSendSchema, MessageSendOperation = providerkit.OperationSchema[MessageOperationInput]()
-	// DirectorySyncOperation is the operation ref for the directory account sync operation
-	_, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	slackClient = types.NewClientRef[*slackgo.Client]()
+	// healthDefaultOperation is the operation ref for the Slack health check
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	// directorySyncSchema is the operation ref for the directory account sync operation
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// messageSendSchema is the operation ref for the Slack message send operation
+	messageSendSchema, messageSendOperation = providerkit.OperationSchema[MessageSendOperation]()
 )
 
 // slackCredential holds the provider-owned credential material for a Slack installation

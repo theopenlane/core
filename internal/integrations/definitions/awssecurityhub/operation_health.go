@@ -24,12 +24,9 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(
-		SecurityHubClient,
-		func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) (json.RawMessage, error) {
-			return h.Run(ctx, request.Credentials, client)
-		},
-	)
+	return providerkit.WithClientRequest(securityHubClient, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) (json.RawMessage, error) {
+		return h.Run(ctx, request.Credentials, client)
+	})
 }
 
 // Run validates Security Hub access by calling DescribeHub

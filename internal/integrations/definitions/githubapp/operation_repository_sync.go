@@ -29,7 +29,7 @@ type RepositoryAssetPayload struct {
 
 // IngestHandle adapts repository sync to the ingest operation registration boundary
 func (r RepositorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClient(GitHubClient, r.Run)
+	return providerkit.WithClient(gitHubClient, r.Run)
 }
 
 // Run enumerates repositories accessible to the installation and emits Asset ingest payloads
@@ -42,12 +42,7 @@ func (RepositorySync) Run(ctx context.Context, client GraphQLClient) ([]types.In
 	envelopes := make([]types.MappingEnvelope, 0, len(repositories))
 
 	for _, repo := range repositories {
-		payload := RepositoryAssetPayload{
-			NameWithOwner: repo.NameWithOwner,
-			IsPrivate:     repo.IsPrivate,
-			UpdatedAt:     repo.UpdatedAt,
-			URL:           repo.URL,
-		}
+		payload := RepositoryAssetPayload(repo)
 
 		envelope, err := providerkit.MarshalEnvelopeVariant(repositoryAssetVariant, repo.NameWithOwner, payload, ErrIngestPayloadEncode)
 		if err != nil {

@@ -17,7 +17,6 @@ var schemaReflector = &jsonschema.Reflector{
 }
 
 // SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON
-// Returns nil if schema marshaling fails
 func SchemaFrom[T any]() json.RawMessage {
 	schema := schemaReflector.Reflect(new(T))
 
@@ -46,6 +45,7 @@ func SchemaID(schema json.RawMessage) string {
 // and a typed credential ref whose slot identity is derived from the schema definition key
 func CredentialSchema[T any]() (json.RawMessage, types.CredentialRef[T]) {
 	schema := SchemaFrom[T]()
+
 	return schema, types.NewCredentialRef[T](SchemaID(schema))
 }
 
@@ -53,6 +53,7 @@ func CredentialSchema[T any]() (json.RawMessage, types.CredentialRef[T]) {
 // and a typed operation ref whose name is derived from the schema definition key
 func OperationSchema[T any]() (json.RawMessage, types.OperationRef[T]) {
 	schema := SchemaFrom[T]()
+
 	return schema, types.NewOperationRef[T](SchemaID(schema))
 }
 
@@ -60,5 +61,6 @@ func OperationSchema[T any]() (json.RawMessage, types.OperationRef[T]) {
 // and a typed webhook event ref whose name is derived from the schema definition key
 func WebhookEventSchema[T any]() (json.RawMessage, types.WebhookEventRef[T]) {
 	schema := SchemaFrom[T]()
+
 	return schema, types.NewWebhookEventRef[T](SchemaID(schema))
 }

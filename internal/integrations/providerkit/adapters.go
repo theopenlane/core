@@ -19,6 +19,7 @@ func WithClientRequest[C, R any](ref types.ClientRef[C], run func(context.Contex
 		client, err := ref.Cast(request.Client)
 		if err != nil {
 			var zero R
+
 			return zero, err
 		}
 
@@ -39,12 +40,14 @@ func WithClientRequestConfig[C, Config, R any](ref types.ClientRef[C], op types.
 		client, err := ref.Cast(request.Client)
 		if err != nil {
 			var zero R
+
 			return zero, err
 		}
 
 		cfg, err := op.UnmarshalConfig(request.Config)
 		if err != nil {
 			var zero R
+
 			return zero, configErr
 		}
 

@@ -3,7 +3,10 @@ package runtime
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -56,7 +59,7 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 	}
 
 	connection, err := r.resolvePersistedConnection(def, installation)
-	if err != nil && err != ErrConnectionRequired {
+	if err != nil && !errors.Is(err, ErrConnectionRequired) {
 		return types.DisconnectResult{}, err
 	}
 
@@ -97,14 +100,7 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 }
 
 // Reconcile reconciles installation user input and/or one credential update
-func (r *Runtime) Reconcile(
-	ctx context.Context,
-	installation *ent.Integration,
-	userInput json.RawMessage,
-	credentialRef types.CredentialSlotID,
-	credential *types.CredentialSet,
-	installationInput json.RawMessage,
-) error {
+func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, userInput json.RawMessage, credentialRef types.CredentialSlotID, credential *types.CredentialSet, installationInput json.RawMessage) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
 		return err
@@ -141,7 +137,6 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 	if m, ok := decoded.(map[string]any); ok {
 		if name, ok := m["name"].(string); ok && name != "" {
 			update.SetName(name)
-			installation.Name = name
 		}
 	}
 
@@ -170,9 +165,28 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		return err
 	}
 
+	if connection.Installation == nil {
+		return nil
+	}
+
 	credential, _ := bindings.Resolve(connection.CredentialRef)
 
-	return r.reconcileConnectionInstallationMetadata(systemCtx, installation, connection, credential, bindings, nil)
+	metadata, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
+		Installation: installation,
+		Connection:   connection,
+		Credential:   credential,
+		Credentials:  bindings,
+		Config:       installation.Config,
+	})
+	if err != nil {
+		return err
+	}
+
+	if !ok {
+		return r.saveInstallationMetadata(systemCtx, installation, types.IntegrationInstallationMetadata{})
+	}
+
+	return r.saveInstallationMetadata(systemCtx, installation, metadata)
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -220,8 +234,26 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := r.reconcileConnectionInstallationMetadata(systemCtx, installation, connection, credential, bindings, installationInput); err != nil {
-		return err
+	if connection.Installation != nil {
+		metadata, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
+			Installation: installation,
+			Connection:   connection,
+			Credential:   credential,
+			Credentials:  bindings,
+			Config:       installation.Config,
+			Input:        installationInput,
+		})
+		if err != nil {
+			return err
+		}
+
+		if !ok {
+			metadata = types.IntegrationInstallationMetadata{}
+		}
+
+		if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
+			return err
+		}
 	}
 
 	if err := r.DB().Integration.UpdateOneID(installation.ID).
@@ -233,31 +265,6 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	installation.Status = enums.IntegrationStatusConnected
 
 	return r.reconcileInstallationWebhooks(systemCtx, installation, "")
-}
-
-// reconcileConnectionInstallationMetadata updates installation metadata for a connection
-func (r *Runtime) reconcileConnectionInstallationMetadata(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, credential types.CredentialSet, bindings types.CredentialBindings, input json.RawMessage) error {
-	if connection.Installation == nil {
-		return nil
-	}
-
-	metadata, ok, err := connection.Installation.Resolve(ctx, types.InstallationRequest{
-		Installation: installation,
-		Connection:   connection,
-		Credential:   credential,
-		Credentials:  bindings,
-		Config:       installation.Config,
-		Input:        input,
-	})
-	if err != nil {
-		return err
-	}
-
-	if !ok {
-		return r.saveInstallationMetadata(ctx, installation, types.IntegrationInstallationMetadata{})
-	}
-
-	return r.saveInstallationMetadata(ctx, installation, metadata)
 }
 
 // resolveConnectionFromState resolves the connection persisted in provider state for an installation
@@ -305,16 +312,8 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 	}
 
 	if found {
-		credentialDeclared := false
-		for _, ref := range connection.CredentialRefs {
-			if ref.String() == credentialRef.String() {
-				credentialDeclared = true
-				break
-			}
-		}
-
-		if !credentialDeclared {
-			return types.ConnectionRegistration{}, ErrConnectionNotFound
+		if !lo.Contains(connection.CredentialRefs, credentialRef) {
+			return types.ConnectionRegistration{}, ErrCredentialNotDeclared
 		}
 
 		return connection, nil
@@ -365,11 +364,5 @@ func (r *Runtime) persistConnectionState(ctx context.Context, installation *ent.
 		return err
 	}
 
-	if err := r.DB().Integration.UpdateOneID(installation.ID).SetProviderState(next).Exec(ctx); err != nil {
-		return err
-	}
-
-	installation.ProviderState = next
-
-	return nil
+	return r.DB().Integration.UpdateOneID(installation.ID).SetProviderState(next).Exec(ctx)
 }

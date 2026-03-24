@@ -3,8 +3,8 @@ package googleworkspace
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -13,7 +13,7 @@ func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "google",
 				DisplayName: "Google Workspace",
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
@@ -43,9 +43,9 @@ func Builder(cfg Config) registry.Builder {
 					Name:                "Google Workspace OAuth",
 					Description:         "Authenticate with Google Workspace using delegated OAuth access.",
 					CredentialRefs:      []types.CredentialSlotID{workspaceCredential.ID()},
-					ClientRefs:          []types.ClientID{WorkspaceClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{workspaceClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{
@@ -89,7 +89,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            WorkspaceClient.ID(),
+					Ref:            workspaceClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
 					Description:    "Google Workspace Admin SDK client",
 					Build:          Client{}.Build,
@@ -97,18 +97,19 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Call Google Admin SDK users.list to verify the workspace token",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   WorkspaceClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Call Google Admin SDK users.list to verify the workspace token",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    workspaceClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: healthCheckSchema,
+					Handle:       HealthCheck{}.Handle(),
 				},
 				{
 					Name:         DirectorySyncOperation.Name(),
 					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:        types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
-					ClientRef:    WorkspaceClient.ID(),
+					Topic:        types.OperationTopic(definitionID.ID(), DirectorySyncOperation.Name()),
+					ClientRef:    workspaceClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{

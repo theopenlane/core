@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-const disconnectTestDefinitionID = "def_test_github"
+const disconnectTestDefinitionID = "def_01K0TESTDISC0000000000001"
 
 func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 	t := suite.T()

@@ -33,9 +33,11 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 
 	for _, event := range reg.WebhookListeners() {
 		if _, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[WebhookEnvelope]{
-			Topic:  gala.Topic[WebhookEnvelope]{Name: event.Topic},
-			Name:   event.Name,
-			Handle: func(ctx gala.HandlerContext, envelope WebhookEnvelope) error { return webhookHandle(ctx.Context, envelope) },
+			Topic: gala.Topic[WebhookEnvelope]{Name: event.Topic},
+			Name:  event.Name,
+			Handle: func(ctx gala.HandlerContext, envelope WebhookEnvelope) error {
+				return webhookHandle(ctx.Context, envelope)
+			},
 		}); err != nil {
 			return err
 		}

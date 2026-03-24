@@ -96,9 +96,6 @@ func enrichOrganizationMetadata(ctx context.Context, accessToken string, meta *I
 	org := orgResp.Value[0]
 	meta.DisplayName = org.DisplayName
 	meta.VerifiedDomains = lo.Map(org.VerifiedDomains, func(d graphVerifiedDomain, _ int) VerifiedDomain {
-		return VerifiedDomain{
-			Name:      d.Name,
-			IsDefault: d.IsDefault,
-		}
+		return VerifiedDomain(d)
 	})
 }

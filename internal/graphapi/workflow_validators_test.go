@@ -457,26 +457,6 @@ func TestValidateNotificationActionParams(t *testing.T) {
 			wantErr: ErrNotificationTemplateBothIDAndKey,
 		},
 		{
-			name:    "valid channel target",
-			params:  json.RawMessage(`{"targets":[{"type":"CHANNEL","channel":"SLACK","destination":"C01234567"}]}`),
-			wantErr: nil,
-		},
-		{
-			name:    "channel target missing channel",
-			params:  json.RawMessage(`{"targets":[{"type":"CHANNEL","destination":"C01234567"}]}`),
-			wantErr: ErrTargetMissingChannel,
-		},
-		{
-			name:    "channel target missing destination",
-			params:  json.RawMessage(`{"targets":[{"type":"CHANNEL","channel":"SLACK"}]}`),
-			wantErr: ErrTargetMissingDestination,
-		},
-		{
-			name:    "channel target rejects in app channel",
-			params:  json.RawMessage(`{"targets":[{"type":"CHANNEL","channel":"IN_APP","destination":"ignored"}]}`),
-			wantErr: ErrTargetUnsupportedChannel,
-		},
-		{
 			name:    "valid user target",
 			params:  json.RawMessage(`{"targets":[{"type":"USER","id":"user123"}]}`),
 			wantErr: nil,

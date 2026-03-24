@@ -27,7 +27,7 @@ type ConnectionRegistration struct {
 // ConnectionRegistration returns the connection registration for the given credential slot
 func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
 	reg, found := lo.Find(d.Connections, func(r ConnectionRegistration) bool {
-		return r.CredentialRef.String() == ref.String()
+		return r.CredentialRef == ref
 	})
 	if !found {
 		return ConnectionRegistration{}, ErrConnectionRefNotFound

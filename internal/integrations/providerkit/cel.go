@@ -74,15 +74,13 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 		CrossTypeNumericComparisons: true,
 	}
 
-	return celx.NewEnv(cfg,
-		cel.VariableDecls(
-			decls.NewVariable(celVarEnvelope, celtypes.DynType),
-			decls.NewVariable(celVarVariant, celtypes.DynType),
-			decls.NewVariable(celVarResource, celtypes.DynType),
-			decls.NewVariable(celVarAction, celtypes.DynType),
-			decls.NewVariable(celVarPayload, celtypes.DynType),
-		),
-	)
+	return celx.NewEnv(cfg, cel.VariableDecls(
+		decls.NewVariable(celVarEnvelope, celtypes.DynType),
+		decls.NewVariable(celVarVariant, celtypes.DynType),
+		decls.NewVariable(celVarResource, celtypes.DynType),
+		decls.NewVariable(celVarAction, celtypes.DynType),
+		decls.NewVariable(celVarPayload, celtypes.DynType),
+	))
 }
 
 // envelopeToVars converts a MappingEnvelope into the CEL variable map

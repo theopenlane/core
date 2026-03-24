@@ -10,23 +10,18 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the Microsoft Teams integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
-	// Installation is the typed installation metadata handle for the Microsoft Teams definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
-
-	// teamsCredentialSchema is the reflected JSON schema for the teams credential
+	// definitionID is the stable identifier for the Microsoft Teams integration definition
+	definitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
+	// installation is the typed installation metadata handle for the Microsoft Teams definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// teamsCredential is the auth-managed credential slot used by the Teams client
 	teamsCredentialSchema, teamsCredential = providerkit.CredentialSchema[teamsCred]()
-
-	// TeamsClient is the client ref for the Microsoft Graph service client used by this definition
-	TeamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-
-	// HealthDefaultOperation is the operation ref for the Microsoft Teams health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
-	// messageSendSchema is the reflected JSON schema for the message send operation config
-	// MessageSendOperation is the operation ref for the Microsoft Teams message send operation
-	messageSendSchema, MessageSendOperation = providerkit.OperationSchema[MessageOperationInput]()
+	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
+	teamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
+	// healthDefaultOperation is the operation ref for the Microsoft Teams health check
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	// messageSendSchema is the operation ref for the Microsoft Teams message send operation
+	messageSendSchema, messageSendOperation = providerkit.OperationSchema[MessageSendOperation]()
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation

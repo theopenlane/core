@@ -72,7 +72,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(ctx, webhookCtx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
+	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
 }
 
 func (h *Handler) resolveGitHubAppWebhookInstallation(ctx context.Context, payload []byte) (*ent.Integration, error) {

@@ -11,20 +11,17 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the GCP Security Command Center integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
-	// Installation is the typed installation metadata handle for the GCP Security Command Center definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// definitionID is the stable identifier for the GCP Security Command Center integration definition
+	definitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
+	// installation is the typed installation metadata handle for the GCP Security Command Center definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// sccSchema is the reflected JSON schema for the GCP SCC credential
 	// sccCredential is the credential slot used by the SCC client
 	sccSchema, sccCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// SCCClient is the client ref for the GCP Security Command Center client used by this definition
-	SCCClient = types.NewClientRef[*cloudscc.Client]()
-	// HealthDefaultOperation is the operation ref for the GCP SCC health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
-	// findingsCollectSchema is the reflected JSON schema for the findings collect operation config
-	// FindingsCollectOperation is the operation ref for the GCP SCC findings collection operation
-	findingsCollectSchema, FindingsCollectOperation = providerkit.OperationSchema[FindingsConfig]()
+	// sccClient is the client ref for the GCP Security Command Center client used by this definition
+	sccClient                                       = types.NewClientRef[*cloudscc.Client]()
+	healthCheckSchema, healthCheckOperation         = providerkit.OperationSchema[HealthCheck]()
+	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingsConfig]()
 )
 
 const (

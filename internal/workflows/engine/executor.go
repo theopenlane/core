@@ -27,7 +27,6 @@ import (
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/celx"
-	"github.com/theopenlane/core/pkg/mapx"
 )
 
 const (
@@ -107,36 +106,6 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 	return normalized, nil
 }
 
-// splitNotificationTargets separates user-resolved notification targets from direct channel targets
-func splitNotificationTargets(targets []wfworkflows.TargetConfig) ([]wfworkflows.TargetConfig, []notificationChannelTarget, error) {
-	userTargets := make([]wfworkflows.TargetConfig, 0, len(targets))
-	channelTargets := make([]notificationChannelTarget, 0)
-
-	for _, target := range targets {
-		if target.Type != enums.WorkflowTargetTypeChannel {
-			userTargets = append(userTargets, target)
-			continue
-		}
-
-		if target.Channel == "" || target.Channel == enums.ChannelInvalid {
-			return nil, nil, ErrNotificationChannelTargetChannelRequired
-		}
-		if target.Channel == enums.ChannelInApp {
-			return nil, nil, ErrNotificationChannelUnsupported
-		}
-		if target.Destination == "" {
-			return nil, nil, ErrNotificationChannelTargetDestinationRequired
-		}
-
-		channelTargets = append(channelTargets, notificationChannelTarget{
-			Channel:     target.Channel,
-			Destination: target.Destination,
-			Config:      mapx.DeepCloneMapAny(target.Config),
-		})
-	}
-
-	return userTargets, channelTargets, nil
-}
 
 // executeGatedAction creates workflow assignments for approval and review actions
 func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object, cfg gatedActionConfig) error {
@@ -374,16 +343,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		return ErrObjectRefMissingID
 	}
 
-	channels := params.Channels
-	if len(channels) == 0 {
-		channels = []enums.Channel{enums.ChannelInApp}
-	}
-
-	userTargets, channelTargets, err := splitNotificationTargets(params.Targets)
-	if err != nil {
-		return err
-	}
-
 	ownerID, err := wfworkflows.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		return err
@@ -397,8 +356,8 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		}
 	}
 
-	hasTemplateDestinations := rendered != nil && rendered.Template != nil && len(rendered.Template.Destinations) > 0
-	if len(userTargets) == 0 && len(channelTargets) == 0 && !hasTemplateDestinations {
+	hasIntegration := rendered != nil && rendered.Template != nil && rendered.Template.IntegrationID != ""
+	if len(params.Targets) == 0 && !hasIntegration {
 		return nil
 	}
 
@@ -418,7 +377,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		data = rendered.Data
 		vars = rendered.Vars
 	} else {
-		var err error
 		vars, data, err = e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
 		if err != nil {
 			return err
@@ -426,7 +384,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	}
 
 	if title == "" {
-		var err error
 		title, err = renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
 		if err != nil {
 			return err
@@ -434,7 +391,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	}
 
 	if body == "" {
-		var err error
 		body, err = renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
 		if err != nil {
 			return err
@@ -446,38 +402,25 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		templateID = rendered.Template.ID
 	}
 
-	userIDs := []string{}
-	if len(userTargets) > 0 {
-		userIDs, err = e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, userTargets, params.Topic, title, body, data, channels, ownerID, action.Type, action.Key, templateID)
+	if len(params.Targets) > 0 {
+		_, err = e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params.Targets, params.Topic, title, body, data, ownerID, action.Type, action.Key, templateID)
 		if err != nil {
 			return err
 		}
 	}
 
-	integrationRendered := rendered
-	if integrationRendered == nil {
-		integrationRendered = &renderedNotificationTemplate{
-			Title: title,
-			Body:  body,
-			Data:  data,
-			Vars:  vars,
+	if hasIntegration {
+		integrationRendered := rendered
+		if integrationRendered == nil {
+			integrationRendered = &renderedNotificationTemplate{
+				Title: title,
+				Body:  body,
+				Data:  data,
+				Vars:  vars,
+			}
 		}
-	}
 
-	if len(userIDs) > 0 {
-		if err := e.dispatchNotificationIntegrations(ctx, ownerID, channels, integrationRendered, userIDs); err != nil {
-			return err
-		}
-	}
-
-	if hasTemplateDestinations {
-		if err := e.dispatchTemplateNotificationDestinations(ctx, ownerID, integrationRendered); err != nil {
-			return err
-		}
-	}
-
-	if len(channelTargets) > 0 {
-		if err := e.dispatchNotificationChannelTargets(ctx, ownerID, integrationRendered, channelTargets); err != nil {
+		if err := e.dispatchTemplateIntegration(ctx, integrationRendered, params.OperationName); err != nil {
 			return err
 		}
 	}
@@ -485,12 +428,12 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	return nil
 }
 
-// dispatchWorkflowNotifications sends notification payloads to configured channels
-func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, userTargets []wfworkflows.TargetConfig, topic string, title, body string, data map[string]any, channels []enums.Channel, ownerID string, actionType string, actionKey string, templateID string) ([]string, error) {
+// dispatchWorkflowNotifications creates in-app notification records for resolved user targets
+func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, targets []wfworkflows.TargetConfig, topic string, title, body string, data map[string]any, ownerID string, actionType string, actionKey string, templateID string) ([]string, error) {
 	seenUsers := make(map[string]struct{})
 	resolvedUserIDs := make([]string, 0)
 
-	for _, targetConfig := range userTargets {
+	for _, targetConfig := range targets {
 		targetUserIDs, err := e.resolveTargetUsers(ctx, targetConfig, obj, actionType, actionKey)
 		if err != nil {
 			return nil, fmt.Errorf("%w %s: %w", ErrFailedToResolveNotificationTarget, targetConfig.Type.String(), err)
@@ -514,7 +457,6 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allo
 				SetTitle(title).
 				SetBody(body).
 				SetData(notificationData).
-				SetChannels(channels).
 				SetUserID(userID)
 
 			if templateID != "" {

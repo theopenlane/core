@@ -3,6 +3,7 @@ package keymaker
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -61,7 +62,7 @@ func (r *RedisAuthStateStore) Take(token string) (AuthState, error) {
 
 	encoded, err := r.client.GetDel(context.Background(), redisAuthStateKey(token)).Bytes()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return AuthState{}, ErrAuthStateNotFound
 		}
 

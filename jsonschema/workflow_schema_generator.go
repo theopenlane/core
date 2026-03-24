@@ -125,19 +125,13 @@ func workflowTypeMapper(t reflect.Type) *jsonschema.Schema {
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowTargetTypes),
-			Description: "The type of target (USER, GROUP, ROLE, RESOLVER, CHANNEL)",
+			Description: "The type of target (USER, GROUP, ROLE, RESOLVER)",
 		}
 	case reflect.TypeOf(enums.WorkflowActionType("")):
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowActionTypes),
 			Description: "The type of workflow action",
-		}
-	case reflect.TypeOf(enums.Channel("")):
-		return &jsonschema.Schema{
-			Type:        "string",
-			Enum:        toInterfaceSlice(enums.Channel("").Values()),
-			Description: "Notification delivery channel",
 		}
 	case reflect.TypeOf(json.RawMessage{}):
 		return &jsonschema.Schema{
@@ -197,22 +191,13 @@ func addTargetConfigDescription(schema *jsonschema.Schema) {
 
 	if schema.Properties != nil {
 		if prop, ok := schema.Properties.Get("type"); ok {
-			prop.Description = "Target type: USER (specific user), GROUP (group members), ROLE (role holders), RESOLVER (dynamic resolution), or CHANNEL (direct external destination)"
+			prop.Description = "Target type: USER (specific user), GROUP (group members), ROLE (role holders), or RESOLVER (dynamic resolution)"
 		}
 		if prop, ok := schema.Properties.Get("id"); ok {
 			prop.Description = "The ID of the target user, group, or role (required for USER, GROUP, ROLE types)"
 		}
 		if prop, ok := schema.Properties.Get("resolver_key"); ok {
 			prop.Description = "The resolver key for dynamic target resolution (required for RESOLVER type)"
-		}
-		if prop, ok := schema.Properties.Get("channel"); ok {
-			prop.Description = "Notification delivery channel for CHANNEL targets (required for CHANNEL type)"
-		}
-		if prop, ok := schema.Properties.Get("destination"); ok {
-			prop.Description = "External destination identifier for CHANNEL targets (required for CHANNEL type)"
-		}
-		if prop, ok := schema.Properties.Get("config"); ok {
-			prop.Description = "Optional provider-specific message settings for CHANNEL targets"
 		}
 	}
 }
@@ -265,14 +250,14 @@ func addReviewParamsDescription(schema *jsonschema.Schema) {
 // addNotificationParamsDescription adds descriptions to NotificationActionParams schema
 func addNotificationParamsDescription(schema *jsonschema.Schema) {
 	schema.Title = "NotificationActionParams"
-	schema.Description = "Parameters for NOTIFY actions that send notifications to users and direct channel destinations"
+	schema.Description = "Parameters for NOTIFY actions that send notifications to users"
 
 	if schema.Properties != nil {
 		if prop, ok := schema.Properties.Get("targets"); ok {
-			prop.Description = "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications and CHANNEL for direct external channel sends"
+			prop.Description = "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications"
 		}
-		if prop, ok := schema.Properties.Get("channels"); ok {
-			prop.Description = "Notification delivery channels (IN_APP, SLACK, EMAIL)"
+		if prop, ok := schema.Properties.Get("operation_name"); ok {
+			prop.Description = "Integration operation to invoke when the template has an integration_id"
 		}
 		if prop, ok := schema.Properties.Get("topic"); ok {
 			prop.Description = "Optional notification topic for categorization"

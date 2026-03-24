@@ -27,4 +27,6 @@ var (
 	ErrUserInputInvalid = errors.New("integrations/runtime: user input invalid")
 	// ErrCredentialInvalid indicates the credential payload failed schema validation
 	ErrCredentialInvalid = errors.New("integrations/runtime: credential invalid")
+	// ErrCredentialNotDeclared indicates the credential is not declared on the resolved connection
+	ErrCredentialNotDeclared = errors.New("integrations/runtime: credential not declared on connection")
 )

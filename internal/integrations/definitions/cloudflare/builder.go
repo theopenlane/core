@@ -2,8 +2,8 @@ package cloudflare
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -12,7 +12,7 @@ func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "cloudflare",
 				DisplayName: "Cloudflare",
 				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",
@@ -39,9 +39,9 @@ func Builder() registry.Builder {
 					Name:                "Cloudflare API Token",
 					Description:         "Configure Cloudflare access using an API token scoped to the account and zones you want Openlane to inspect.",
 					CredentialRefs:      []types.CredentialSlotID{cloudflareCredential.ID()},
-					ClientRefs:          []types.ClientID{CloudflareClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{cloudflareClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: cloudflareCredential.ID(),
 						Name:          "Disconnect Cloudflare API Token",
@@ -51,7 +51,7 @@ func Builder() registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            CloudflareClient.ID(),
+					Ref:            cloudflareClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{cloudflareCredential.ID()},
 					Description:    "Cloudflare REST API client",
 					Build:          Client{}.Build,
@@ -59,18 +59,20 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Verify Cloudflare API token via /user/tokens/verify",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   CloudflareClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Verify Cloudflare API token via /user/tokens/verify",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    cloudflareClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
 				},
 				{
-					Name:        DirectorySyncOperation.Name(),
-					Description: "Collect account members as directory accounts",
-					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
-					ClientRef:   CloudflareClient.ID(),
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect account members as directory accounts",
+					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					ClientRef:    cloudflareClient.ID(),
+					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

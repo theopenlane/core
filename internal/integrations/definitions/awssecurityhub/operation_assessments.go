@@ -2,6 +2,7 @@ package awssecurityhub
 
 import (
 	"context"
+	"math"
 	"strings"
 	"time"
 
@@ -55,14 +56,9 @@ type AssessmentsCollect struct{}
 
 // IngestHandle adapts assessment collection to the ingest operation registration boundary
 func (a AssessmentsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(
-		AuditManagerClient,
-		AssessmentsCollectOperation,
-		ErrOperationConfigInvalid,
-		func(ctx context.Context, request types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
-			return a.Run(ctx, request.Credentials, client, cfg)
-		},
-	)
+	return providerkit.WithClientRequestConfig(auditManagerClient, assessmentsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
+		return a.Run(ctx, request.Credentials, client, cfg)
+	})
 }
 
 // Run paginates through Audit Manager assessments and emits Finding ingest payloads
@@ -133,7 +129,7 @@ func mapAssessmentPayload(item auditmanagertypes.AssessmentMetadataItem, credent
 		Name:            awssdk.ToString(item.Name),
 		ComplianceType:  awssdk.ToString(item.ComplianceType),
 		Status:          string(item.Status),
-		DelegationCount: int32(len(item.Delegations)),
+		DelegationCount: int32(min(len(item.Delegations), math.MaxInt32)), //nolint:gosec // G115: bounded by min
 		AccountID:       credential.AccountID,
 		Region:          credential.HomeRegion,
 	}

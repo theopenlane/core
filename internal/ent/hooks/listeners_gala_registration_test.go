@@ -71,12 +71,11 @@ func TestRegisterGalaWorkflowListenersRegistersCommandTopics(t *testing.T) {
 
 	ids, err := RegisterGalaWorkflowListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, len(enums.WorkflowObjectTypes)+7)
+	require.Len(t, ids, len(enums.WorkflowObjectTypes)+6)
 
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowTriggered, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionStarted, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionCompleted, ""))
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCreated, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCompleted, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowInstanceCompleted, ""))
 	require.False(t, registry.InterestedIn(gala.TopicName("workflows.command.triggered"), ""))

@@ -31,7 +31,7 @@ func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	client, err := GitHubClient.Cast(clientValue)
+	client, err := gitHubClient.Cast(clientValue)
 	require.NoError(t, err)
 
 	repositories, err := queryRepositories(context.Background(), client, 1)

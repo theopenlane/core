@@ -43,7 +43,7 @@ var (
 	ErrIntegrationRegistryRequired = errors.New("integration registry required")
 	// ErrIntegrationOperationsRequired is returned when integration dispatcher is not configured
 	ErrIntegrationOperationsRequired = errors.New("integration dispatcher required")
-// ErrIntegrationOperationCriteriaRequired indicates operation name is required
+	// ErrIntegrationOperationCriteriaRequired indicates operation name is required
 	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation name required")
 	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation
 	ErrIntegrationScopeConditionFalse = errors.New("integration scope condition false")
@@ -65,14 +65,6 @@ var (
 	ErrNotificationTemplateReferenceConflict = errors.New("notification template reference conflict")
 	// ErrNotificationTemplateDataInvalid is returned when template data fails schema validation
 	ErrNotificationTemplateDataInvalid = errors.New("notification template data invalid")
-	// ErrNotificationTemplateChannelMismatch is returned when template channel does not match requested channel
-	ErrNotificationTemplateChannelMismatch = errors.New("notification template channel mismatch")
-	// ErrNotificationChannelUnsupported is returned when a notification channel lacks integration support
-	ErrNotificationChannelUnsupported = errors.New("notification channel unsupported")
-	// ErrNotificationChannelTargetChannelRequired is returned when a CHANNEL target omits channel
-	ErrNotificationChannelTargetChannelRequired = errors.New("notification channel target requires channel")
-	// ErrNotificationChannelTargetDestinationRequired is returned when a CHANNEL target omits destination
-	ErrNotificationChannelTargetDestinationRequired = errors.New("notification channel target requires destination")
 	// ErrWebhookURLRequired is returned when webhook action is missing URL
 	ErrWebhookURLRequired = errors.New("webhook action requires url")
 	// ErrAssignmentUpdateFailed is returned when assignment update fails

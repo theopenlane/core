@@ -4,15 +4,18 @@ import (
 	"context"
 	"strings"
 
-	"github.com/samber/lo"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"github.com/microsoftgraph/msgraph-sdk-go/models"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+// mapCapacityFactor is the multiplier applied to the expected entry count when pre-sizing maps for deduplication
+const mapCapacityFactor = 2
 
 // directoryUserPayload is the JSON-serializable representation of one Entra ID user
 type directoryUserPayload struct {
@@ -75,17 +78,13 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(
-		EntraClient,
-		func(ctx context.Context, request types.OperationRequest, c *msgraphsdk.GraphServiceClient) ([]types.IngestPayloadSet, error) {
-			var cfg UserInput
-			if request.Integration != nil {
-				_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-			}
-
-			return d.Run(ctx, c, cfg)
-		},
-	)
+	return providerkit.WithClientRequest(entraClient, func(ctx context.Context, request types.OperationRequest, c *msgraphsdk.GraphServiceClient) ([]types.IngestPayloadSet, error) {
+		var cfg UserInput
+		if request.Integration != nil {
+			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
+		}
+		return d.Run(ctx, c, cfg)
+	})
 }
 
 // Run collects Azure Entra ID directory users, groups, and memberships
@@ -96,7 +95,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 	}
 
 	accountEnvelopes := make([]types.MappingEnvelope, 0, len(users))
-	includedUsers := make(map[string]struct{}, len(users)*2)
+	includedUsers := make(map[string]struct{}, len(users)*mapCapacityFactor)
 
 	for _, user := range users {
 		if !isEntraUserIncluded(user, cfg) {
@@ -208,12 +207,7 @@ type odataPage[T any] interface {
 }
 
 // paginateOData pages through all records from an OData-paginated endpoint
-func paginateOData[T any, P odataPage[T]](
-	ctx context.Context,
-	fetchFirst func() (P, error),
-	fetchNext func(nextLink string) (P, error),
-	fetchErr error,
-) ([]T, error) {
+func paginateOData[T any, P odataPage[T]](ctx context.Context, fetchFirst func() (P, error), fetchNext func(nextLink string) (P, error), fetchErr error) ([]T, error) {
 	result, err := fetchFirst()
 	if err != nil {
 		return nil, fetchErr
@@ -239,26 +233,16 @@ func paginateOData[T any, P odataPage[T]](
 
 // listEntraUsers pages through all Azure Entra ID users
 func listEntraUsers(ctx context.Context, c *msgraphsdk.GraphServiceClient) ([]models.Userable, error) {
-	return paginateOData(
-		ctx,
-		func() (models.UserCollectionResponseable, error) { return c.Users().Get(ctx, nil) },
-		func(nextLink string) (models.UserCollectionResponseable, error) {
-			return c.Users().WithUrl(nextLink).Get(ctx, nil)
-		},
-		ErrUsersFetchFailed,
-	)
+	return paginateOData(ctx, func() (models.UserCollectionResponseable, error) { return c.Users().Get(ctx, nil) }, func(nextLink string) (models.UserCollectionResponseable, error) {
+		return c.Users().WithUrl(nextLink).Get(ctx, nil)
+	}, ErrUsersFetchFailed)
 }
 
 // listEntraGroups pages through all Azure Entra ID groups
 func listEntraGroups(ctx context.Context, c *msgraphsdk.GraphServiceClient) ([]models.Groupable, error) {
-	return paginateOData(
-		ctx,
-		func() (models.GroupCollectionResponseable, error) { return c.Groups().Get(ctx, nil) },
-		func(nextLink string) (models.GroupCollectionResponseable, error) {
-			return c.Groups().WithUrl(nextLink).Get(ctx, nil)
-		},
-		ErrGroupsFetchFailed,
-	)
+	return paginateOData(ctx, func() (models.GroupCollectionResponseable, error) { return c.Groups().Get(ctx, nil) }, func(nextLink string) (models.GroupCollectionResponseable, error) {
+		return c.Groups().WithUrl(nextLink).Get(ctx, nil)
+	}, ErrGroupsFetchFailed)
 }
 
 // listEntraGroupUserMembers pages through user-type members for one group via the /microsoft.graph.user cast endpoint
@@ -266,17 +250,11 @@ func listEntraGroupUserMembers(ctx context.Context, c *msgraphsdk.GraphServiceCl
 	if groupID == "" {
 		return nil, nil
 	}
-
-	return paginateOData(
-		ctx,
-		func() (models.UserCollectionResponseable, error) {
-			return c.Groups().ByGroupId(groupID).Members().GraphUser().Get(ctx, nil)
-		},
-		func(nextLink string) (models.UserCollectionResponseable, error) {
-			return c.Groups().ByGroupId(groupID).Members().GraphUser().WithUrl(nextLink).Get(ctx, nil)
-		},
-		ErrMembersFetchFailed,
-	)
+	return paginateOData(ctx, func() (models.UserCollectionResponseable, error) {
+		return c.Groups().ByGroupId(groupID).Members().GraphUser().Get(ctx, nil)
+	}, func(nextLink string) (models.UserCollectionResponseable, error) {
+		return c.Groups().ByGroupId(groupID).Members().GraphUser().WithUrl(nextLink).Get(ctx, nil)
+	}, ErrMembersFetchFailed)
 }
 
 // isEntraUserIncluded applies inclusion filters based on installation config

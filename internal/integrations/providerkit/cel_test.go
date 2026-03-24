@@ -180,6 +180,52 @@ func TestEvalMap(t *testing.T) {
 	}
 }
 
+func TestEvalFilter_NonBoolResult(t *testing.T) {
+	t.Parallel()
+
+	// Expression that returns a string instead of a bool should return ErrFilterExprEval
+	ctx := context.Background()
+	_, err := EvalFilter(ctx, `"not-a-bool"`, types.MappingEnvelope{})
+
+	if err == nil {
+		t.Fatal("expected error for non-bool result")
+	}
+
+	if !errors.Is(err, ErrFilterExprEval) {
+		t.Fatalf("expected ErrFilterExprEval, got %v", err)
+	}
+}
+
+func TestEvalMap_PayloadTransform(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	env := types.MappingEnvelope{
+		Variant:  "alert",
+		Resource: "vulns",
+		Action:   "created",
+		Payload:  json.RawMessage(`{"severity":"HIGH","id":42}`),
+	}
+
+	got, err := EvalMap(ctx, `{"sev": payload.severity, "src": resource}`, env)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var m map[string]any
+	if err := json.Unmarshal(got, &m); err != nil {
+		t.Fatalf("unmarshal result: %v", err)
+	}
+
+	if m["sev"] != "HIGH" {
+		t.Fatalf("expected sev=HIGH, got %v", m["sev"])
+	}
+
+	if m["src"] != "vulns" {
+		t.Fatalf("expected src=vulns, got %v", m["src"])
+	}
+}
+
 func TestEnvelopeToVars(t *testing.T) {
 	t.Parallel()
 
@@ -228,6 +274,26 @@ func TestEnvelopeToVars(t *testing.T) {
 
 		if envelopeVar["variant"] != "alert" {
 			t.Fatalf("envelope.variant = %v, want %q", envelopeVar["variant"], "alert")
+		}
+	})
+
+	t.Run("invalid JSON payload falls back to string", func(t *testing.T) {
+		t.Parallel()
+
+		env := types.MappingEnvelope{
+			Variant: "raw",
+			Payload: json.RawMessage(`not-valid-json`),
+		}
+
+		vars := envelopeToVars(env)
+
+		payload, ok := vars[celVarPayload].(string)
+		if !ok {
+			t.Fatalf("expected string payload fallback, got %T", vars[celVarPayload])
+		}
+
+		if payload != "not-valid-json" {
+			t.Fatalf("payload = %q, want %q", payload, "not-valid-json")
 		}
 	})
 

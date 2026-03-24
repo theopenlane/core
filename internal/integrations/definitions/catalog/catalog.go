@@ -1,7 +1,6 @@
 package catalog
 
 import (
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/definitions/azuresecuritycenter"
@@ -13,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/okta"
 	"github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
 // Builders returns the built-in reference definition builders

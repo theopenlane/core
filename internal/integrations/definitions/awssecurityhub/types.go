@@ -9,31 +9,24 @@ import (
 )
 
 var (
-	// DefinitionID is the stable identifier for the AWS Security Hub integration definition
-	DefinitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
-	// Installation is the typed installation metadata handle for the AWS Security Hub definition
-	Installation = types.NewInstallationRef(resolveInstallationMetadata)
-
-	// awsAssumeRoleSchema is the reflected JSON schema for the assume-role credential
-	// awsAssumeRoleCredential is the assume-role credential slot shared by the AWS service clients in this definition
+	// definitionID is the stable identifier for the AWS Security Hub integration definition
+	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	// installation is the typed installation metadata handle for the AWS Security Hub definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// awsAssumeRoleScheme is the cred schema for AWS STS auth
 	awsAssumeRoleSchema, awsAssumeRoleCredential = providerkit.CredentialSchema[AssumeRoleCredentialSchema]()
-	// awsSourceSchema is the reflected JSON schema for the optional source credential
-	// awsSourceCredential is the optional static source credential slot used to assume the configured AWS role
-	awsSourceSchema, awsSourceCredential = providerkit.CredentialSchema[SourceCredentialSchema]()
-
+	// awsServiceAccountSchema is the cred schema for AWS service account credentials
+	awsServiceAccountSchema, awsServiceAccountCredential = providerkit.CredentialSchema[ServiceAccountCredentialSchema]()
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
-	SecurityHubClient = types.NewClientRef[*securityhub.Client]()
+	securityHubClient = types.NewClientRef[*securityhub.Client]()
 	// AuditManagerClient is the client ref for the AWS Audit Manager client used by this definition
-	AuditManagerClient = types.NewClientRef[*auditmanager.Client]()
-
-	// HealthDefaultOperation is the operation ref for the AWS Security Hub health check
-	_, HealthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
-	// assessmentsCollectSchema is the reflected JSON schema for the assessments collect operation config
-	// AssessmentsCollectOperation is the operation ref for the AWS Audit Manager assessments collection operation
-	assessmentsCollectSchema, AssessmentsCollectOperation = providerkit.OperationSchema[AssessmentsConfig]()
-	// vulnerabilitiesCollectSchema is the reflected JSON schema for the vulnerabilities collect operation config
-	// VulnerabilitiesCollectOperation is the operation ref for the Security Hub vulnerabilities collection operation
-	vulnerabilitiesCollectSchema, VulnerabilitiesCollectOperation = providerkit.OperationSchema[FindingsConfig]()
+	auditManagerClient = types.NewClientRef[*auditmanager.Client]()
+	// healthCheckSchema is the AWS Security Hub health check
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	// assessmentsCollectSchema is the AWS Security Hub assessment collection operation
+	assessmentsCollectSchema, assessmentsCollectOperation = providerkit.OperationSchema[AssessmentsConfig]()
+	// vulnerabilitiesCollectSchema is the AWS Security Hub vulnerabilities collection operation
+	vulnerabilitiesCollectSchema, vulnerabilitiesCollectOperation = providerkit.OperationSchema[FindingsConfig]()
 )
 
 // UserInput holds installation-specific configuration collected from the user
@@ -64,9 +57,9 @@ type AssumeRoleCredentialSchema struct {
 	SessionDuration string `json:"sessionDuration,omitempty" jsonschema:"title=Session Duration,description=Optional STS session duration (e.g. 1h)."`
 }
 
-// SourceCredentialSchema holds the optional static source credential used to assume the configured AWS role
-type SourceCredentialSchema struct {
-	// AccessKeyID is an optional static source credential when runtime IAM is unavailable
+// ServiceAccountCredentialSchema is the service account based credential schema
+type ServiceAccountCredentialSchema struct {
+	// AccessKeyID is an service account credential when runtime IAM is unavailable
 	AccessKeyID string `json:"accessKeyId"     jsonschema:"required,title=Access Key ID,description=Static source credential used when runtime IAM is unavailable."`
 	// SecretAccessKey is the AWS secret access key for static credentials
 	SecretAccessKey string `json:"secretAccessKey" jsonschema:"required,title=Secret Access Key"`

@@ -60,12 +60,9 @@ type AssessmentsCollect struct{}
 
 // IngestHandle adapts assessments collection to the ingest operation registration boundary
 func (a AssessmentsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(
-		SecurityCenterClient,
-		func(ctx context.Context, _ types.OperationRequest, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
-			return a.Run(ctx, client)
-		},
-	)
+	return providerkit.WithClientRequest(securityCenterClient, func(ctx context.Context, _ types.OperationRequest, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
+		return a.Run(ctx, client)
+	})
 }
 
 // Run collects all unhealthy security assessment findings for the subscription
@@ -111,10 +108,10 @@ func (AssessmentsCollect) Run(ctx context.Context, client *azureSecurityClient) 
 // buildAssessmentPayload extracts all mappable fields from an armsecurity.AssessmentResponse
 func buildAssessmentPayload(a *armsecurity.AssessmentResponse) AssessmentPayload {
 	payload := AssessmentPayload{
-		ID:          lo.FromPtr(a.ID),
-		StatusCode:  string(lo.FromPtr(a.Properties.Status.Code)),
-		StatusCause: lo.FromPtr(a.Properties.Status.Cause),
-		DisplayName: lo.FromPtr(a.Properties.DisplayName),
+		ID:               lo.FromPtr(a.ID),
+		StatusCode:       string(lo.FromPtr(a.Properties.Status.Code)),
+		StatusCause:      lo.FromPtr(a.Properties.Status.Cause),
+		DisplayName:      lo.FromPtr(a.Properties.DisplayName),
 		FirstEvaluatedAt: a.Properties.Status.FirstEvaluationDate,
 		StatusChangedAt:  a.Properties.Status.StatusChangeDate,
 	}

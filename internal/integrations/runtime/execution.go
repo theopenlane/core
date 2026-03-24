@@ -161,14 +161,12 @@ func mergeCredentials(current, overrides types.CredentialBindings) types.Credent
 	}
 
 	merged := make(types.CredentialBindings, 0, len(current)+len(overrides))
-	for _, binding := range current {
-		merged = append(merged, binding)
-	}
+	merged = append(merged, current...)
 
 	for _, override := range overrides {
 		replaced := false
 		for index := range merged {
-			if merged[index].Ref.String() == override.Ref.String() {
+			if merged[index].Ref == override.Ref {
 				merged[index] = override
 				replaced = true
 				break

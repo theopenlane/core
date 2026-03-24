@@ -25,4 +25,3 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 
 	return slackgo.New(cred.AccessToken), nil
 }
-

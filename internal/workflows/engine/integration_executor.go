@@ -190,12 +190,12 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	result, err := e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
-		InstallationID: installationRecord.ID,
-		Operation:      req.Operation,
-		Config:         jsonx.CloneRawMessage(req.Config),
+		InstallationID:     installationRecord.ID,
+		Operation:          req.Operation,
+		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
-		RunType:        runType,
-		WorkflowMeta:   req.WorkflowMeta,
+		RunType:            runType,
+		WorkflowMeta:       req.WorkflowMeta,
 	})
 	if err != nil {
 		return IntegrationQueueResult{}, err
@@ -329,4 +329,3 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		InstallationID:     installationRecord.ID,
 	})
 }
-

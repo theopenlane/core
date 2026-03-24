@@ -38,14 +38,9 @@ type FindingsCollect struct{}
 
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(
-		SCCClient,
-		FindingsCollectOperation,
-		ErrOperationConfigInvalid,
-		func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-			return f.Run(ctx, request.Credential, client, cfg)
-		},
-	)
+	return providerkit.WithClientRequestConfig(sccClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+		return f.Run(ctx, request.Credential, client, cfg)
+	})
 }
 
 // Run collects GCP SCC findings from configured sources

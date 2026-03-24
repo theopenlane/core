@@ -2,8 +2,8 @@ package microsoftteams
 
 import (
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -12,7 +12,7 @@ func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "microsoft",
 				DisplayName: "Microsoft Teams",
 				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
@@ -42,9 +42,9 @@ func Builder(cfg Config) registry.Builder {
 					Name:                "Microsoft Teams OAuth",
 					Description:         "Authenticate with Microsoft Graph to send Teams channel messages.",
 					CredentialRefs:      []types.CredentialSlotID{teamsCredential.ID()},
-					ClientRefs:          []types.ClientID{TeamsClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{teamsClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						CredentialRef: teamsCredential,
 						Config: auth.OAuthConfig{
@@ -84,7 +84,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            TeamsClient.ID(),
+					Ref:            teamsClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
 					Description:    "Microsoft Graph API client",
 					Build:          Client{}.Build,
@@ -92,18 +92,19 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Call Graph /me to verify Teams access",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   TeamsClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Call Graph /me to verify Teams access",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    teamsClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: healthCheckSchema,
+					Handle:       HealthCheck{}.Handle(),
 				},
 				{
-					Name:         MessageSendOperation.Name(),
+					Name:         messageSendOperation.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        types.OperationTopic(DefinitionID.ID(), MessageSendOperation.Name()),
-					ClientRef:    TeamsClient.ID(),
+					Topic:        types.OperationTopic(definitionID.ID(), messageSendOperation.Name()),
+					ClientRef:    teamsClient.ID(),
 					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),
 				},

@@ -3,8 +3,8 @@ package slack
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -13,7 +13,7 @@ func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
@@ -34,6 +34,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         slackCredential.ID(),
 					Name:        "Slack Credential",
 					Description: "Auth-managed credential slot used by the Slack client in this definition.",
+					Schema:      slackCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -42,9 +43,9 @@ func Builder(cfg Config) registry.Builder {
 					Name:                "Slack OAuth",
 					Description:         "Authenticate with Slack using an installed bot token.",
 					CredentialRefs:      []types.CredentialSlotID{slackCredential.ID()},
-					ClientRefs:          []types.ClientID{SlackClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{slackClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[slackCred]{
 						CredentialRef: slackCredential,
 						Config: auth.OAuthConfig{
@@ -90,7 +91,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            SlackClient.ID(),
+					Ref:            slackClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{slackCredential.ID()},
 					Description:    "Slack Web API client",
 					Build:          Client{}.Build,
@@ -98,26 +99,28 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   SlackClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    slackClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: healthCheckSchema,
+					Handle:       HealthCheck{}.Handle(),
 				},
-					{
-					Name:         MessageSendOperation.Name(),
+				{
+					Name:         messageSendOperation.Name(),
 					Description:  "Send a Slack message via chat.postMessage",
-					Topic:        types.OperationTopic(DefinitionID.ID(), MessageSendOperation.Name()),
-					ClientRef:    SlackClient.ID(),
+					Topic:        types.OperationTopic(definitionID.ID(), messageSendOperation.Name()),
+					ClientRef:    slackClient.ID(),
 					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),
 				},
 				{
-					Name:        DirectorySyncOperation.Name(),
-					Description: "Collect workspace users as directory accounts",
-					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
-					ClientRef:   SlackClient.ID(),
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect workspace users as directory accounts",
+					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					ClientRef:    slackClient.ID(),
+					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

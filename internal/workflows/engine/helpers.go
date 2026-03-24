@@ -20,6 +20,9 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// pairsPerReplacement is the number of string pairs (old, new) per replacement entry
+const pairsPerReplacement = 2
+
 // computeHMACSignature computes an HMAC-SHA256 signature for webhook authentication
 func computeHMACSignature(secret string, payload []byte) string {
 	mac := hmac.New(sha256.New, []byte(secret))
@@ -41,7 +44,7 @@ func applyStringTemplates(input map[string]any, replacements map[string]string) 
 		return input
 	}
 
-	pairs := make([]string, 0, len(replacements)*2)
+	pairs := make([]string, 0, len(replacements)*pairsPerReplacement)
 	for k, v := range replacements {
 		pairs = append(pairs, "{{"+k+"}}", v)
 	}

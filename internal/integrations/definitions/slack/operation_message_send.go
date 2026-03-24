@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// MessageOperationInput holds per-invocation parameters for the message.send operation
-type MessageOperationInput struct {
+// MessageSendOperation holds per-invocation parameters for the message.send operation
+type MessageSendOperation struct {
 	// Channel is the Slack channel identifier to post to
 	Channel string `json:"channel,omitempty" jsonschema:"title=Channel"`
 	// Destinations are Slack channel identifiers to post the same message to
@@ -46,11 +46,11 @@ type MessageDelivery struct {
 
 // Handle adapts message send to the generic operation registration boundary
 func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(SlackClient, MessageSendOperation, ErrOperationConfigInvalid, m.Run)
+	return providerkit.WithClientConfig(slackClient, messageSendOperation, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Slack message via chat.postMessage
-func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageOperationInput) (json.RawMessage, error) {
+func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOperation) (json.RawMessage, error) {
 	destinations := slackMessageDestinations(cfg)
 	if len(destinations) == 0 {
 		return nil, ErrChannelMissing
@@ -115,7 +115,7 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageOperat
 }
 
 // slackMessageDestinations returns a deduplicated ordered list of target channel IDs from the operation config
-func slackMessageDestinations(cfg MessageOperationInput) []string {
+func slackMessageDestinations(cfg MessageSendOperation) []string {
 	destinations := make([]string, 0, len(cfg.Destinations)+1)
 	seen := make(map[string]struct{}, len(cfg.Destinations)+1)
 

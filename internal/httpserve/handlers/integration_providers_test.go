@@ -26,8 +26,8 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{
-		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
-		configTestDefinitionBuilder("def_test_other", "other", false),
+		configTestDefinitionBuilder(configTestProviderID, false),
+		configTestDefinitionBuilder("def_01K0TESTOTH00000000000001", false),
 	})
 	defer restore()
 
@@ -56,8 +56,8 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	assert.NotNil(t, gcpscc.CredentialRegistrations[0].Schema)
 	assert.NotNil(t, gcpscc.UserInput)
 	assert.Len(t, gcpscc.Operations, 1)
-	assert.Equal(t, "health.default", gcpscc.Operations[0].Name)
+	assert.Equal(t, configHealthCheckOperation.Name(), gcpscc.Operations[0].Name)
 
-	_, ok = providers["def_test_other"]
+	_, ok = providers["def_01K0TESTOTH00000000000001"]
 	require.True(t, ok)
 }

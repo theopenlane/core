@@ -47,12 +47,9 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(
-		SlackClient,
-		func(ctx context.Context, _ types.OperationRequest, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
-			return d.Run(ctx, client)
-		},
-	)
+	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
+		return d.Run(ctx, client)
+	})
 }
 
 // Run collects Slack workspace users and emits directory account ingest payloads

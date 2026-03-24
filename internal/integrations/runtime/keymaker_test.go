@@ -49,7 +49,7 @@ func TestResolveKeymakerInstallationPassesThroughUnexpectedErrors(t *testing.T) 
 func TestResolveKeymakerInstallationReturnsRecord(t *testing.T) {
 	t.Parallel()
 
-	record, err := resolveKeymakerInstallation(context.Background(), "install-1", func(_ context.Context, ownerID, installationID string, definitionID string) (*ent.Integration, error) {
+	record, err := resolveKeymakerInstallation(context.Background(), "install-1", func(_ context.Context, ownerID, installationID, definitionID string) (*ent.Integration, error) {
 		if ownerID != "" {
 			t.Fatalf("expected empty ownerID, got %q", ownerID)
 		}

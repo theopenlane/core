@@ -100,6 +100,25 @@ func TestMarshalEnvelopeVariant(t *testing.T) {
 	})
 }
 
+func TestMarshalEnvelope_EncodeError(t *testing.T) {
+	t.Parallel()
+
+	// Channels cannot be marshaled to JSON
+	_, err := MarshalEnvelope("items", make(chan int), errEncodeTest)
+	if !errors.Is(err, errEncodeTest) {
+		t.Fatalf("expected errEncodeTest, got %v", err)
+	}
+}
+
+func TestMarshalEnvelopeVariant_EncodeError(t *testing.T) {
+	t.Parallel()
+
+	_, err := MarshalEnvelopeVariant("alert", "items", make(chan int), errEncodeTest)
+	if !errors.Is(err, errEncodeTest) {
+		t.Fatalf("expected errEncodeTest, got %v", err)
+	}
+}
+
 func TestRawEnvelope(t *testing.T) {
 	t.Parallel()
 

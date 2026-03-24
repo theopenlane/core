@@ -75,12 +75,15 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
+	// Re-set the caller now that the owning organization is known
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(installation.OwnerID))
+
 	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(installation.DefinitionID, persistedWebhook.Name)
 	if err != nil {
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(ctx, webhookCtx, openapiCtx, installation, webhookReg, persistedWebhook, payload, false)
+	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, installation, webhookReg, persistedWebhook, payload, false)
 }
 
 func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
@@ -128,7 +131,7 @@ func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) e
 	return nil
 }
 
-func (h *Handler) handleResolvedIntegrationWebhook(ctx echo.Context, requestCtx context.Context, openapiCtx *OpenAPIContext, installation *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
+func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, installation *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
 	requestCtx = logx.WithFields(requestCtx, logx.LogFields{
 		"integration_id": installation.ID,
 		"webhook":        webhook.Name,

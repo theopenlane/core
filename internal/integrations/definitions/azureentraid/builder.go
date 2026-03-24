@@ -3,8 +3,8 @@ package azureentraid
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -13,7 +13,7 @@ func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "azure",
 				DisplayName: "Azure EntraID",
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",
@@ -43,9 +43,9 @@ func Builder(cfg Config) registry.Builder {
 					Name:                "Azure Entra ID OAuth",
 					Description:         "Authenticate with Microsoft Graph using delegated tenant admin consent.",
 					CredentialRefs:      []types.CredentialSlotID{entraTenantCredential.ID()},
-					ClientRefs:          []types.ClientID{EntraCredential.ID(), EntraClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					ClientRefs:          []types.ClientID{entraCredential.ID(), entraClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[entraIDCred]{
 						CredentialRef: entraTenantCredential,
 						Config: auth.OAuthConfig{
@@ -104,13 +104,13 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            EntraCredential.ID(),
+					Ref:            entraCredential.ID(),
 					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
 					Description:    "Azure client credentials token credential for auth verification",
 					Build:          CredentialClient{cfg: cfg}.Build,
 				},
 				{
-					Ref:            EntraClient.ID(),
+					Ref:            entraClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
 					Description:    "Microsoft Graph service client for directory operations",
 					Build:          GraphClient{cfg: cfg}.Build,
@@ -118,18 +118,20 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Verify Azure client credentials can acquire a token against Microsoft Graph",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   EntraCredential.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Verify Azure client credentials can acquire a token against Microsoft Graph",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    entraCredential.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
 				},
-					{
-					Name:        DirectorySyncOperation.Name(),
-					Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
-					Topic:       types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
-					ClientRef:   EntraClient.ID(),
+				{
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect Azure Entra ID users, groups, and memberships as directory accounts",
+					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					ClientRef:    entraClient.ID(),
+					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

@@ -14,6 +14,8 @@ import (
 )
 
 const (
+	// mapCapacityFactor is the multiplier applied to the expected entry count when pre-sizing maps for deduplication
+	mapCapacityFactor = 2
 	// directoryDefaultPageSize is the number of records to request per page when listing users, groups, and members
 	directoryDefaultPageSize = int64(200)
 	// userDirectoryFields is the Google Admin SDK field mask for user listing requests
@@ -45,17 +47,14 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(
-		WorkspaceClient,
-		func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
-			var cfg UserInput
-			if request.Integration != nil {
-				_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-			}
+	return providerkit.WithClientRequest(workspaceClient, func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
+		var cfg UserInput
+		if request.Integration != nil {
+			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
+		}
 
-			return d.Run(ctx, svc, cfg)
-		},
-	)
+		return d.Run(ctx, svc, cfg)
+	})
 }
 
 // Run collects Google Workspace directory users, groups, and memberships
@@ -66,7 +65,7 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, cfg UserInput)
 	}
 
 	accountEnvelopes := make([]types.MappingEnvelope, 0, len(users))
-	includedUsers := make(map[string]struct{}, len(users)*2)
+	includedUsers := make(map[string]struct{}, len(users)*mapCapacityFactor)
 
 	for _, user := range users {
 		if !isUserIncluded(user, cfg) {
@@ -409,4 +408,3 @@ func firstNonEmpty(values ...string) string {
 
 	return ""
 }
-

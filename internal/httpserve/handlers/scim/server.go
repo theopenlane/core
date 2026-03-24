@@ -326,4 +326,3 @@ func (d *ModeDispatchGroupHandler) Delete(r *http.Request, id string) error {
 		return d.groups.Delete(r, id)
 	}
 }
-

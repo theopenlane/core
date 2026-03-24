@@ -18,14 +18,8 @@ func roundTripUpdateInput[Create any, Update any](createInput Create) (Update, e
 }
 
 // persistUpsert centralizes the common ingest upsert flow while allowing schema-specific lookup and mutation logic
-func persistUpsert[Create any, Update any, Existing any](
-	ctx context.Context,
-	createInput Create,
-	toUpdate func(Create) (Update, error),
-	findExisting func(context.Context) (Existing, error),
-	create func(context.Context, Create) error,
-	update func(context.Context, Existing, Update) error,
-) error {
+// the function input signature is ugly and hard to read but the call sites are much cleaner
+func persistUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, toUpdate func(Create) (Update, error), findExisting func(context.Context) (Existing, error), create func(context.Context, Create) error, update func(context.Context, Existing, Update) error) error {
 	existing, err := findExisting(ctx)
 	switch {
 	case err == nil:
@@ -45,12 +39,6 @@ func persistUpsert[Create any, Update any, Existing any](
 }
 
 // persistRoundTripUpsert centralizes the common ingest upsert flow for schemas whose update input can be derived by round-tripping the create input
-func persistRoundTripUpsert[Create any, Update any, Existing any](
-	ctx context.Context,
-	createInput Create,
-	findExisting func(context.Context) (Existing, error),
-	create func(context.Context, Create) error,
-	update func(context.Context, Existing, Update) error,
-) error {
+func persistRoundTripUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, findExisting func(context.Context) (Existing, error), create func(context.Context, Create) error, update func(context.Context, Existing, Update) error) error {
 	return persistUpsert(ctx, createInput, roundTripUpdateInput, findExisting, create, update)
 }

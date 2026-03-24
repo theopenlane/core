@@ -18,18 +18,28 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
-	webhookTestDefinitionID = "def_test_webhook"
+	webhookTestDefinitionID = "def_01K0TESTWBHK0000000000001"
 	webhookTestPath         = "/v1/integrations/webhooks/:endpointID"
 	webhookTestSecret       = "webhook-test-secret"
 )
 
-var webhookTestCredentialRef = types.NewCredentialSlotID("webhook_test")
+// WebhookTestHealthCheck is the config type for the webhook test health check operation
+type WebhookTestHealthCheck struct{}
+
+// webhookTestAlertEnvelope is the payload type for the test webhook events
+type webhookTestAlertEnvelope struct{}
+
+var (
+	webhookTestCredentialRef                         = types.NewCredentialSlotID("webhook_test")
+	webhookHealthSchema, webhookHealthCheckOperation = providerkit.OperationSchema[WebhookTestHealthCheck]()
+	webhookAlertCreatedEvent                         = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
+)
 
 func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
@@ -76,13 +86,24 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 							Payload:    req.Payload,
 						}, nil
 					},
+					Events: []types.WebhookEventRegistration{
+						{
+							Name:  webhookAlertCreatedEvent.Name(),
+							Topic: types.WebhookEventTopic(definitionID, webhookAlertCreatedEvent.Name()),
+							Handle: func(context.Context, types.WebhookHandleRequest) error {
+								return nil
+							},
+						},
+					},
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Description: "Health check",
-					Topic:       gala.TopicName("integration." + definitionID + ".health.default"),
+					Name:         webhookHealthCheckOperation.Name(),
+					Description:  "Health check",
+					Topic:        types.OperationTopic(definitionID, webhookHealthCheckOperation.Name()),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					ConfigSchema: webhookHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
@@ -278,7 +299,6 @@ func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx co
 		SetOwnerID(orgID).
 		SetName(definitionID).
 		SetDefinitionID(definitionID).
-		SetDefinitionSlug(definitionID).
 		Save(ctx)
 	require.NoError(t, err)
 

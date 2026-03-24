@@ -2,8 +2,8 @@ package awssecurityhub
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -12,7 +12,7 @@ func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
+				ID:          definitionID.ID(),
 				Family:      "aws",
 				DisplayName: "AWS Security Hub",
 				Description: "Collect AWS Security Hub findings and Audit Manager summaries using a shared AWS assume-role credential.",
@@ -33,10 +33,10 @@ func Builder() registry.Builder {
 					Schema:      awsAssumeRoleSchema,
 				},
 				{
-					Ref:         awsSourceCredential.ID(),
+					Ref:         awsServiceAccountCredential.ID(),
 					Name:        "AWS Source Credential",
-					Description: "Optional static source credential used to assume the configured AWS role when runtime IAM is unavailable.",
-					Schema:      awsSourceSchema,
+					Description: "service account credential used to assume the configured AWS role when runtime IAM is unavailable.",
+					Schema:      awsServiceAccountSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -44,10 +44,10 @@ func Builder() registry.Builder {
 					CredentialRef:       awsAssumeRoleCredential.ID(),
 					Name:                "AWS Assume Role",
 					Description:         "Configure AWS Security Hub and Audit Manager access using a cross-account IAM role and optional source credentials for STS.",
-					CredentialRefs:      []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsSourceCredential.ID()},
-					ClientRefs:          []types.ClientID{SecurityHubClient.ID(), AuditManagerClient.ID()},
-					ValidationOperation: HealthDefaultOperation.Name(),
-					Installation:        Installation.Registration(),
+					CredentialRefs:      []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsServiceAccountCredential.ID()},
+					ClientRefs:          []types.ClientID{securityHubClient.ID(), auditManagerClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: awsAssumeRoleCredential.ID(),
 						Name:          "Disconnect AWS Assume Role",
@@ -57,32 +57,33 @@ func Builder() registry.Builder {
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Ref:            SecurityHubClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsSourceCredential.ID()},
+					Ref:            securityHubClient.ID(),
+					CredentialRefs: []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsServiceAccountCredential.ID()},
 					Description:    "AWS Security Hub client",
 					Build:          SecurityHubClientBuilder{}.Build,
 				},
 				{
-					Ref:            AuditManagerClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsSourceCredential.ID()},
+					Ref:            auditManagerClient.ID(),
+					CredentialRefs: []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsServiceAccountCredential.ID()},
 					Description:    "AWS Audit Manager client",
 					Build:          AuditManagerClientBuilder{}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        HealthDefaultOperation.Name(),
-					Description: "Validate Security Hub access",
-					Topic:       types.OperationTopic(DefinitionID.ID(), HealthDefaultOperation.Name()),
-					ClientRef:   SecurityHubClient.ID(),
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      HealthCheck{}.Handle(),
+					Name:         healthCheckOperation.Name(),
+					Description:  "Validate Security Hub access",
+					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					ClientRef:    securityHubClient.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
 				},
 				{
-					Name:         AssessmentsCollectOperation.Name(),
+					Name:         assessmentsCollectOperation.Name(),
 					Description:  "Collect AWS Audit Manager assessments as findings",
-					Topic:        types.OperationTopic(DefinitionID.ID(), AssessmentsCollectOperation.Name()),
-					ClientRef:    AuditManagerClient.ID(),
+					Topic:        types.OperationTopic(definitionID.ID(), assessmentsCollectOperation.Name()),
+					ClientRef:    auditManagerClient.ID(),
 					ConfigSchema: assessmentsCollectSchema,
 					Ingest: []types.IngestContract{
 						{
@@ -92,10 +93,10 @@ func Builder() registry.Builder {
 					IngestHandle: AssessmentsCollect{}.IngestHandle(),
 				},
 				{
-					Name:         VulnerabilitiesCollectOperation.Name(),
+					Name:         vulnerabilitiesCollectOperation.Name(),
 					Description:  "Collect AWS Security Hub findings for vulnerability ingestion",
-					Topic:        types.OperationTopic(DefinitionID.ID(), VulnerabilitiesCollectOperation.Name()),
-					ClientRef:    SecurityHubClient.ID(),
+					Topic:        types.OperationTopic(definitionID.ID(), vulnerabilitiesCollectOperation.Name()),
+					ClientRef:    securityHubClient.ID(),
 					ConfigSchema: vulnerabilitiesCollectSchema,
 					Ingest: []types.IngestContract{
 						{

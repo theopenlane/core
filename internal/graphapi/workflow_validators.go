@@ -303,7 +303,7 @@ func validateNotificationActionParams(params json.RawMessage) error {
 	}
 
 	for _, target := range input.Targets {
-		if err := validateNotificationTarget(target); err != nil {
+		if err := validateTarget(target); err != nil {
 			return err
 		}
 	}
@@ -830,24 +830,6 @@ func validateTarget(t workflows.TargetConfig) error {
 	return nil
 }
 
-// validateNotificationTarget validates target configuration for notification actions
-func validateNotificationTarget(t workflows.TargetConfig) error {
-	if t.Type != enums.WorkflowTargetTypeChannel {
-		return validateTarget(t)
-	}
-
-	if t.Channel == "" || t.Channel == enums.ChannelInvalid {
-		return ErrTargetMissingChannel
-	}
-	if t.Channel == enums.ChannelInApp {
-		return ErrTargetUnsupportedChannel
-	}
-	if t.Destination == "" {
-		return ErrTargetMissingDestination
-	}
-
-	return nil
-}
 
 // validateWebhookActionParams validates webhook action parameters
 func validateWebhookActionParams(raw json.RawMessage, celCfg *workflows.Config) error {

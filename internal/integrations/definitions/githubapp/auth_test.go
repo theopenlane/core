@@ -156,8 +156,7 @@ func TestFlowTokenViewDecodesCredential(t *testing.T) {
 	data, err := jsonx.ToRawMessage(cred)
 	require.NoError(t, err)
 
-	reg := appInstallAuthRegistration(Config{})
-	view, err := reg.TokenView(context.Background(), types.CredentialSet{Data: data})
+	view, err := tokenViewAppInstall(context.Background(), types.CredentialSet{Data: data})
 	require.NoError(t, err)
 	require.Equal(t, "ghs_viewtest", view.AccessToken)
 	require.NotNil(t, view.ExpiresAt)
@@ -168,8 +167,7 @@ func TestFlowTokenViewDecodesCredential(t *testing.T) {
 func TestFlowTokenViewEmptyData(t *testing.T) {
 	t.Parallel()
 
-	reg := appInstallAuthRegistration(Config{})
-	view, err := reg.TokenView(context.Background(), types.CredentialSet{})
+	view, err := tokenViewAppInstall(context.Background(), types.CredentialSet{})
 	require.NoError(t, err)
 	require.Empty(t, view.AccessToken)
 	require.Nil(t, view.ExpiresAt)

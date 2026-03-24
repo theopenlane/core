@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/samber/lo"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -21,7 +21,7 @@ type HealthCheck struct {
 
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(TeamsClient, h.Run)
+	return providerkit.WithClient(teamsClient, h.Run)
 }
 
 // Run executes the Microsoft Teams health check via Microsoft Graph

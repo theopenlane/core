@@ -402,7 +402,7 @@ func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_Success() {
 	var resp handlers.IntegrationTokenResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Equal(t, "test-oauth", resp.Provider)
+	assert.Equal(t, testAuthDefinitionID, resp.Provider)
 	assert.Equal(t, "refreshed-access-token", resp.AccessToken)
 	assert.NotNil(t, resp.ExpiresAt)
 }

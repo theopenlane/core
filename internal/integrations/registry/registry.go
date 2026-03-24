@@ -13,9 +13,7 @@ import (
 // Builder builds one manifest-backed definition
 type Builder func() (types.Definition, error)
 
-// Registry is the in-memory index of registered definitions.
-// All registrations must complete before concurrent reads begin;
-// after that point all query methods are safe for concurrent use
+// Registry is the in-memory index of registered definitions
 type Registry struct {
 	// mu guards all mutable state in the registry
 	mu sync.RWMutex
@@ -61,7 +59,7 @@ func (r *Registry) Register(def types.Definition) error {
 		return err
 	}
 
-	entry, err := r.compileDefinition(def)
+	entry, err := compileDefinition(def)
 	if err != nil {
 		return err
 	}
@@ -195,18 +193,15 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 }
 
 // compileDefinition builds the indexed client, operation, and webhook event maps for one definition
-func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, error) {
-	credentialNames, err := indexCredentialNames(def.CredentialRegistrations)
-	if err != nil {
-		return definitionEntry{}, err
-	}
+func compileDefinition(def types.Definition) (definitionEntry, error) {
+	credentialNames := indexCredentialNames(def.CredentialRegistrations)
 
 	clients, err := indexClients(def.Clients, credentialNames)
 	if err != nil {
 		return definitionEntry{}, err
 	}
 
-	operations, err := r.indexOperations(def.Operations, clients)
+	operations, err := indexOperations(def.Operations, clients)
 	if err != nil {
 		return definitionEntry{}, err
 	}
@@ -216,7 +211,7 @@ func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, err
 		return definitionEntry{}, err
 	}
 
-	webhooks, webhookEvents, err := r.indexWebhooks(def.Webhooks)
+	webhooks, webhookEvents, err := indexWebhooks(def.Webhooks)
 	if err != nil {
 		return definitionEntry{}, err
 	}
@@ -231,34 +226,20 @@ func (r *Registry) compileDefinition(def types.Definition) (definitionEntry, err
 	}, nil
 }
 
-// indexCredentialNames builds a set of declared credential ref names for a definition,
-// returning an error if any two registrations share the same name
-func indexCredentialNames(registrations []types.CredentialRegistration) (map[string]struct{}, error) {
-	index := make(map[string]struct{}, len(registrations))
-	for _, reg := range registrations {
-		name := reg.Ref.String()
-		if _, exists := index[name]; exists {
-			return nil, ErrCredentialRefDuplicate
-		}
-
-		index[name] = struct{}{}
-	}
-
-	return index, nil
+// indexCredentialNames builds a set of declared credential ref names for a definition
+func indexCredentialNames(registrations []types.CredentialRegistration) map[string]struct{} {
+	return lo.SliceToMap(registrations, func(reg types.CredentialRegistration) (string, struct{}) {
+		return reg.Ref.String(), struct{}{}
+	})
 }
 
-// indexClients indexes client registrations by client ref and rejects duplicate or invalid entries;
-// credentialNames is the set of declared credential ref names for the definition and every ref listed
-// in ClientRegistration.CredentialRefs must appear in this set
+// indexClients indexes client registrations by client ref while validating credential cross-references
 func indexClients(clients []types.ClientRegistration, credentialNames map[string]struct{}) (map[types.ClientID]types.ClientRegistration, error) {
-	clientIndex := make(map[types.ClientID]types.ClientRegistration, len(clients))
+	index := make(map[types.ClientID]types.ClientRegistration, len(clients))
+
 	for _, client := range clients {
 		if !client.Ref.Valid() {
 			return nil, ErrClientRequired
-		}
-
-		if _, exists := clientIndex[client.Ref]; exists {
-			return nil, ErrClientAlreadyRegistered
 		}
 
 		for _, ref := range client.CredentialRefs {
@@ -267,17 +248,15 @@ func indexClients(clients []types.ClientRegistration, credentialNames map[string
 			}
 		}
 
-		clientIndex[client.Ref] = client
+		index[client.Ref] = client
 	}
 
-	return clientIndex, nil
+	return index, nil
 }
 
-// credentialRefDeclared reports whether target appears in refs by string comparison
+// credentialRefDeclared reports whether target appears in refs
 func credentialRefDeclared(refs []types.CredentialSlotID, target types.CredentialSlotID) bool {
-	return lo.ContainsBy(refs, func(ref types.CredentialSlotID) bool {
-		return ref.String() == target.String()
-	})
+	return lo.Contains(refs, target)
 }
 
 // indexConnections indexes connection registrations while enforcing credential, client, and validation constraints
@@ -290,9 +269,6 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 		}
 
 		name := connection.CredentialRef.String()
-		if _, exists := connectionIndex[name]; exists {
-			return nil, ErrConnectionRefDuplicate
-		}
 
 		if _, declared := credentialNames[connection.CredentialRef.String()]; !declared {
 			return nil, ErrConnectionCredentialRefNotDeclared
@@ -346,30 +322,11 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 	return connectionIndex, nil
 }
 
-// indexOperations indexes operations by name while enforcing topic and client reference constraints
-func (r *Registry) indexOperations(operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
-	operationIndex := make(map[string]types.OperationRegistration, len(operations))
-	localTopics := make(map[gala.TopicName]struct{}, len(operations))
+// indexOperations indexes operations by name while validating handler and client cross-references
+func indexOperations(operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
+	index := make(map[string]types.OperationRegistration, len(operations))
 
 	for _, operation := range operations {
-		if operation.Name == "" {
-			return nil, ErrOperationNameRequired
-		}
-
-		if operation.Topic == "" {
-			return nil, ErrOperationTopicRequired
-		}
-
-		if _, exists := operationIndex[operation.Name]; exists {
-			return nil, ErrOperationAlreadyRegistered
-		}
-
-		_, local := localTopics[operation.Topic]
-		_, global := r.operationsByTopic[operation.Topic]
-		if local || global {
-			return nil, ErrOperationTopicAlreadyRegistered
-		}
-
 		switch {
 		case operation.Handle == nil && operation.IngestHandle == nil:
 			return nil, ErrOperationHandlerRequired
@@ -385,64 +342,34 @@ func (r *Registry) indexOperations(operations []types.OperationRegistration, cli
 			}
 		}
 
-		localTopics[operation.Topic] = struct{}{}
-		operationIndex[operation.Name] = operation
+		index[operation.Name] = operation
 	}
 
-	return operationIndex, nil
+	return index, nil
 }
 
-// indexWebhooks indexes webhook contracts and webhook events while enforcing name and topic uniqueness
-func (r *Registry) indexWebhooks(webhooks []types.WebhookRegistration) (map[string]types.WebhookRegistration, map[string]map[string]types.WebhookEventRegistration, error) {
+// indexWebhooks indexes webhook contracts and webhook events while validating structural constraints
+func indexWebhooks(webhooks []types.WebhookRegistration) (map[string]types.WebhookRegistration, map[string]map[string]types.WebhookEventRegistration, error) {
 	webhookIndex := make(map[string]types.WebhookRegistration, len(webhooks))
 	webhookEventIndex := make(map[string]map[string]types.WebhookEventRegistration, len(webhooks))
-	localTopics := make(map[gala.TopicName]struct{})
 
 	for _, webhook := range webhooks {
-		name := webhook.Name
-		if name == "" {
-			return nil, nil, ErrWebhookNameRequired
-		}
-
 		if len(webhook.Events) > 0 && webhook.Event == nil {
 			return nil, nil, ErrWebhookEventResolverRequired
 		}
 
-		if _, exists := webhookIndex[name]; exists {
-			return nil, nil, ErrWebhookAlreadyRegistered
-		}
-
-		webhookIndex[name] = webhook
-
 		eventIndex := make(map[string]types.WebhookEventRegistration, len(webhook.Events))
+
 		for _, event := range webhook.Events {
-			if event.Name == "" {
-				return nil, nil, ErrWebhookNameRequired
-			}
-
-			if event.Topic == "" {
-				return nil, nil, ErrOperationTopicRequired
-			}
-
 			if event.Handle == nil {
 				return nil, nil, ErrWebhookEventHandlerRequired
 			}
 
-			if _, exists := eventIndex[event.Name]; exists {
-				return nil, nil, ErrWebhookAlreadyRegistered
-			}
-
-			_, local := localTopics[event.Topic]
-			_, global := r.webhookEventsByTopic[event.Topic]
-			if local || global {
-				return nil, nil, ErrOperationTopicAlreadyRegistered
-			}
-
-			localTopics[event.Topic] = struct{}{}
 			eventIndex[event.Name] = event
 		}
 
-		webhookEventIndex[name] = eventIndex
+		webhookIndex[webhook.Name] = webhook
+		webhookEventIndex[webhook.Name] = eventIndex
 	}
 
 	return webhookIndex, webhookEventIndex, nil
@@ -487,8 +414,7 @@ func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
 	return mapx.SortedValues(r.webhookEventsByTopic, func(e types.WebhookEventRegistration) gala.TopicName { return e.Topic })
 }
 
-// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap;
-// callers must hold r.mu.RLock
+// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap; callers must hold r.mu.RLock
 func lookupInEntry[K comparable, V any](r *Registry, id string, key K, getMap func(definitionEntry) map[K]V, notFoundErr error) (V, error) {
 	entry, ok := r.definitions[id]
 	if !ok {
