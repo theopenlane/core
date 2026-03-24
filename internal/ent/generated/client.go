@@ -26715,25 +26715,6 @@ func (c *SLADefinitionClient) QueryOwner(_m *SLADefinition) *OrganizationQuery {
 	return query
 }
 
-// QuerySLADefinitionSeverityLevel queries the sla_definition_severity_level edge of a SLADefinition.
-func (c *SLADefinitionClient) QuerySLADefinitionSeverityLevel(_m *SLADefinition) *CustomTypeEnumQuery {
-	query := (&CustomTypeEnumClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(sladefinition.Table, sladefinition.FieldID, id),
-			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, sladefinition.SLADefinitionSeverityLevelTable, sladefinition.SLADefinitionSeverityLevelColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.SLADefinition
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryBlockedGroups queries the blocked_groups edge of a SLADefinition.
 func (c *SLADefinitionClient) QueryBlockedGroups(_m *SLADefinition) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()

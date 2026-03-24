@@ -2183,22 +2183,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "SLADefinitionHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			sladefinitionhistory.FieldHistoryTime:                    {Type: field.TypeTime, Column: sladefinitionhistory.FieldHistoryTime},
-			sladefinitionhistory.FieldRef:                            {Type: field.TypeString, Column: sladefinitionhistory.FieldRef},
-			sladefinitionhistory.FieldOperation:                      {Type: field.TypeEnum, Column: sladefinitionhistory.FieldOperation},
-			sladefinitionhistory.FieldCreatedAt:                      {Type: field.TypeTime, Column: sladefinitionhistory.FieldCreatedAt},
-			sladefinitionhistory.FieldUpdatedAt:                      {Type: field.TypeTime, Column: sladefinitionhistory.FieldUpdatedAt},
-			sladefinitionhistory.FieldCreatedBy:                      {Type: field.TypeString, Column: sladefinitionhistory.FieldCreatedBy},
-			sladefinitionhistory.FieldUpdatedBy:                      {Type: field.TypeString, Column: sladefinitionhistory.FieldUpdatedBy},
-			sladefinitionhistory.FieldDeletedAt:                      {Type: field.TypeTime, Column: sladefinitionhistory.FieldDeletedAt},
-			sladefinitionhistory.FieldDeletedBy:                      {Type: field.TypeString, Column: sladefinitionhistory.FieldDeletedBy},
-			sladefinitionhistory.FieldDisplayID:                      {Type: field.TypeString, Column: sladefinitionhistory.FieldDisplayID},
-			sladefinitionhistory.FieldTags:                           {Type: field.TypeJSON, Column: sladefinitionhistory.FieldTags},
-			sladefinitionhistory.FieldOwnerID:                        {Type: field.TypeString, Column: sladefinitionhistory.FieldOwnerID},
-			sladefinitionhistory.FieldSLADefinitionSeverityLevelName: {Type: field.TypeString, Column: sladefinitionhistory.FieldSLADefinitionSeverityLevelName},
-			sladefinitionhistory.FieldSLADefinitionSeverityLevelID:   {Type: field.TypeString, Column: sladefinitionhistory.FieldSLADefinitionSeverityLevelID},
-			sladefinitionhistory.FieldSLADays:                        {Type: field.TypeInt, Column: sladefinitionhistory.FieldSLADays},
-			sladefinitionhistory.FieldSecurityLevel:                  {Type: field.TypeEnum, Column: sladefinitionhistory.FieldSecurityLevel},
+			sladefinitionhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: sladefinitionhistory.FieldHistoryTime},
+			sladefinitionhistory.FieldRef:           {Type: field.TypeString, Column: sladefinitionhistory.FieldRef},
+			sladefinitionhistory.FieldOperation:     {Type: field.TypeEnum, Column: sladefinitionhistory.FieldOperation},
+			sladefinitionhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: sladefinitionhistory.FieldCreatedAt},
+			sladefinitionhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: sladefinitionhistory.FieldUpdatedAt},
+			sladefinitionhistory.FieldCreatedBy:     {Type: field.TypeString, Column: sladefinitionhistory.FieldCreatedBy},
+			sladefinitionhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: sladefinitionhistory.FieldUpdatedBy},
+			sladefinitionhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: sladefinitionhistory.FieldDeletedAt},
+			sladefinitionhistory.FieldDeletedBy:     {Type: field.TypeString, Column: sladefinitionhistory.FieldDeletedBy},
+			sladefinitionhistory.FieldDisplayID:     {Type: field.TypeString, Column: sladefinitionhistory.FieldDisplayID},
+			sladefinitionhistory.FieldTags:          {Type: field.TypeJSON, Column: sladefinitionhistory.FieldTags},
+			sladefinitionhistory.FieldOwnerID:       {Type: field.TypeString, Column: sladefinitionhistory.FieldOwnerID},
+			sladefinitionhistory.FieldSLADays:       {Type: field.TypeInt, Column: sladefinitionhistory.FieldSLADays},
+			sladefinitionhistory.FieldSecurityLevel: {Type: field.TypeEnum, Column: sladefinitionhistory.FieldSecurityLevel},
 		},
 	}
 	graph.Nodes[51] = &sqlgraph.Node{
@@ -12436,16 +12434,6 @@ func (f *SLADefinitionHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *SLADefinitionHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(sladefinitionhistory.FieldOwnerID))
-}
-
-// WhereSLADefinitionSeverityLevelName applies the entql string predicate on the sla_definition_severity_level_name field.
-func (f *SLADefinitionHistoryFilter) WhereSLADefinitionSeverityLevelName(p entql.StringP) {
-	f.Where(p.Field(sladefinitionhistory.FieldSLADefinitionSeverityLevelName))
-}
-
-// WhereSLADefinitionSeverityLevelID applies the entql string predicate on the sla_definition_severity_level_id field.
-func (f *SLADefinitionHistoryFilter) WhereSLADefinitionSeverityLevelID(p entql.StringP) {
-	f.Where(p.Field(sladefinitionhistory.FieldSLADefinitionSeverityLevelID))
 }
 
 // WhereSLADays applies the entql int predicate on the sla_days field.

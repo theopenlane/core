@@ -21441,14 +21441,12 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateSLADefinitionInput represents a mutation input for creating sladefinitions.
 type CreateSLADefinitionInput struct {
-	Tags                           []string
-	SLADefinitionSeverityLevelName *string
-	SLADays                        int
-	OwnerID                        *string
-	SLADefinitionSeverityLevelID   *string
-	BlockedGroupIDs                []string
-	EditorIDs                      []string
-	ViewerIDs                      []string
+	Tags            []string
+	SLADays         int
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
 }
 
 // Mutate applies the CreateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -21456,15 +21454,9 @@ func (i *CreateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	if v := i.SLADefinitionSeverityLevelName; v != nil {
-		m.SetSLADefinitionSeverityLevelName(*v)
-	}
 	m.SetSLADays(i.SLADays)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.SLADefinitionSeverityLevelID; v != nil {
-		m.SetSLADefinitionSeverityLevelID(*v)
 	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
@@ -21485,25 +21477,21 @@ func (c *SLADefinitionCreate) SetInput(i CreateSLADefinitionInput) *SLADefinitio
 
 // UpdateSLADefinitionInput represents a mutation input for updating sladefinitions.
 type UpdateSLADefinitionInput struct {
-	ClearTags                           bool
-	Tags                                []string
-	AppendTags                          []string
-	ClearSLADefinitionSeverityLevelName bool
-	SLADefinitionSeverityLevelName      *string
-	SLADays                             *int
-	ClearOwner                          bool
-	OwnerID                             *string
-	ClearSLADefinitionSeverityLevel     bool
-	SLADefinitionSeverityLevelID        *string
-	ClearBlockedGroups                  bool
-	AddBlockedGroupIDs                  []string
-	RemoveBlockedGroupIDs               []string
-	ClearEditors                        bool
-	AddEditorIDs                        []string
-	RemoveEditorIDs                     []string
-	ClearViewers                        bool
-	AddViewerIDs                        []string
-	RemoveViewerIDs                     []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	SLADays               *int
+	ClearOwner            bool
+	OwnerID               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
 }
 
 // Mutate applies the UpdateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -21517,12 +21505,6 @@ func (i *UpdateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearSLADefinitionSeverityLevelName {
-		m.ClearSLADefinitionSeverityLevelName()
-	}
-	if v := i.SLADefinitionSeverityLevelName; v != nil {
-		m.SetSLADefinitionSeverityLevelName(*v)
-	}
 	if v := i.SLADays; v != nil {
 		m.SetSLADays(*v)
 	}
@@ -21531,12 +21513,6 @@ func (i *UpdateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearSLADefinitionSeverityLevel {
-		m.ClearSLADefinitionSeverityLevel()
-	}
-	if v := i.SLADefinitionSeverityLevelID; v != nil {
-		m.SetSLADefinitionSeverityLevelID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

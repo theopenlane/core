@@ -5397,23 +5397,20 @@ type ComplexityRoot struct {
 	}
 
 	SLADefinition struct {
-		BlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CreatedAt                      func(childComplexity int) int
-		CreatedBy                      func(childComplexity int) int
-		DisplayID                      func(childComplexity int) int
-		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                             func(childComplexity int) int
-		Owner                          func(childComplexity int) int
-		OwnerID                        func(childComplexity int) int
-		SLADays                        func(childComplexity int) int
-		SLADefinitionSeverityLevel     func(childComplexity int) int
-		SLADefinitionSeverityLevelID   func(childComplexity int) int
-		SLADefinitionSeverityLevelName func(childComplexity int) int
-		SecurityLevel                  func(childComplexity int) int
-		Tags                           func(childComplexity int) int
-		UpdatedAt                      func(childComplexity int) int
-		UpdatedBy                      func(childComplexity int) int
-		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID            func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		SLADays       func(childComplexity int) int
+		SecurityLevel func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	SLADefinitionBulkCreatePayload struct {
@@ -40827,27 +40824,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SLADefinition.SLADays(childComplexity), true
 
-	case "SLADefinition.slaDefinitionSeverityLevel":
-		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevel == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevel(childComplexity), true
-
-	case "SLADefinition.slaDefinitionSeverityLevelID":
-		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelID(childComplexity), true
-
-	case "SLADefinition.slaDefinitionSeverityLevelName":
-		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName(childComplexity), true
-
 	case "SLADefinition.securityLevel":
 		if e.ComplexityRoot.SLADefinition.SecurityLevel == nil {
 			break
@@ -68500,15 +68476,10 @@ input CreateSLADefinitionInput {
   """
   tags: [String!]
   """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelName: String
-  """
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
   ownerID: ID
-  slaDefinitionSeverityLevelID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -111987,23 +111958,14 @@ type SLADefinition implements Node {
   """
   ownerID: ID
   """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelName: String
-  """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelID: ID
-  """
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
   """
-  incoming source severity
+  security level to map with the SLA definition
   """
   securityLevel: SLADefinitionSecurityLevel!
   owner: Organization
-  slaDefinitionSeverityLevel: CustomTypeEnum
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -112278,42 +112240,6 @@ input SLADefinitionWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  sla_definition_severity_level_name field predicates
-  """
-  slaDefinitionSeverityLevelName: String
-  slaDefinitionSeverityLevelNameNEQ: String
-  slaDefinitionSeverityLevelNameIn: [String!]
-  slaDefinitionSeverityLevelNameNotIn: [String!]
-  slaDefinitionSeverityLevelNameGT: String
-  slaDefinitionSeverityLevelNameGTE: String
-  slaDefinitionSeverityLevelNameLT: String
-  slaDefinitionSeverityLevelNameLTE: String
-  slaDefinitionSeverityLevelNameContains: String
-  slaDefinitionSeverityLevelNameHasPrefix: String
-  slaDefinitionSeverityLevelNameHasSuffix: String
-  slaDefinitionSeverityLevelNameIsNil: Boolean
-  slaDefinitionSeverityLevelNameNotNil: Boolean
-  slaDefinitionSeverityLevelNameEqualFold: String
-  slaDefinitionSeverityLevelNameContainsFold: String
-  """
-  sla_definition_severity_level_id field predicates
-  """
-  slaDefinitionSeverityLevelID: ID
-  slaDefinitionSeverityLevelIDNEQ: ID
-  slaDefinitionSeverityLevelIDIn: [ID!]
-  slaDefinitionSeverityLevelIDNotIn: [ID!]
-  slaDefinitionSeverityLevelIDGT: ID
-  slaDefinitionSeverityLevelIDGTE: ID
-  slaDefinitionSeverityLevelIDLT: ID
-  slaDefinitionSeverityLevelIDLTE: ID
-  slaDefinitionSeverityLevelIDContains: ID
-  slaDefinitionSeverityLevelIDHasPrefix: ID
-  slaDefinitionSeverityLevelIDHasSuffix: ID
-  slaDefinitionSeverityLevelIDIsNil: Boolean
-  slaDefinitionSeverityLevelIDNotNil: Boolean
-  slaDefinitionSeverityLevelIDEqualFold: ID
-  slaDefinitionSeverityLevelIDContainsFold: ID
-  """
   sla_days field predicates
   """
   slaDays: Int
@@ -112336,11 +112262,6 @@ input SLADefinitionWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
-  """
-  sla_definition_severity_level edge predicates
-  """
-  hasSLADefinitionSeverityLevel: Boolean
-  hasSLADefinitionSeverityLevelWith: [CustomTypeEnumWhereInput!]
   """
   blocked_groups edge predicates
   """
@@ -129856,18 +129777,11 @@ input UpdateSLADefinitionInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelName: String
-  clearSLADefinitionSeverityLevelName: Boolean
-  """
   remediation service level agreement in days for the severity level
   """
   slaDays: Int
   ownerID: ID
   clearOwner: Boolean
-  slaDefinitionSeverityLevelID: ID
-  clearSLADefinitionSeverityLevel: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

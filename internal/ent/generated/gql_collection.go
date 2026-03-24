@@ -64279,21 +64279,6 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 				fieldSeen[sladefinition.FieldOwnerID] = struct{}{}
 			}
 
-		case "slaDefinitionSeverityLevel":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&CustomTypeEnumClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
-				return err
-			}
-			_q.withSLADefinitionSeverityLevel = query
-			if _, ok := fieldSeen[sladefinition.FieldSLADefinitionSeverityLevelID]; !ok {
-				selectedFields = append(selectedFields, sladefinition.FieldSLADefinitionSeverityLevelID)
-				fieldSeen[sladefinition.FieldSLADefinitionSeverityLevelID] = struct{}{}
-			}
-
 		case "blockedGroups":
 			var (
 				alias = field.Alias
@@ -64337,10 +64322,10 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -64348,10 +64333,10 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*SLADefinition) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -64426,10 +64411,10 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[3] == nil {
-								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[3][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -64437,10 +64422,10 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*SLADefinition) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
-							if nodes[i].Edges.totalCount[3] == nil {
-								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[3][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -64515,10 +64500,10 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[3][alias] = n
 						}
 						return nil
 					})
@@ -64526,10 +64511,10 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*SLADefinition) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Viewers)
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[3][alias] = n
 						}
 						return nil
 					})
@@ -64594,16 +64579,6 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[sladefinition.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, sladefinition.FieldOwnerID)
 				fieldSeen[sladefinition.FieldOwnerID] = struct{}{}
-			}
-		case "slaDefinitionSeverityLevelName":
-			if _, ok := fieldSeen[sladefinition.FieldSLADefinitionSeverityLevelName]; !ok {
-				selectedFields = append(selectedFields, sladefinition.FieldSLADefinitionSeverityLevelName)
-				fieldSeen[sladefinition.FieldSLADefinitionSeverityLevelName] = struct{}{}
-			}
-		case "slaDefinitionSeverityLevelID":
-			if _, ok := fieldSeen[sladefinition.FieldSLADefinitionSeverityLevelID]; !ok {
-				selectedFields = append(selectedFields, sladefinition.FieldSLADefinitionSeverityLevelID)
-				fieldSeen[sladefinition.FieldSLADefinitionSeverityLevelID] = struct{}{}
 			}
 		case "slaDays":
 			if _, ok := fieldSeen[sladefinition.FieldSLADays]; !ok {

@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -45,14 +44,12 @@ func (SLADefinition) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("sla_days").
 			Comment("remediation service level agreement in days for the severity level").
-			Positive().
+			Range(0, 365).
 			Annotations(
 				entgql.OrderField("sla_days"),
-				entx.FieldSearchable(),
 			),
-
 		field.Enum("security_level").
-			Comment("incoming source severity").
+			Comment("security level to map with the SLA definition").
 			GoType(enums.SecurityLevel("")).
 			Default(enums.SecurityLevelNone.String()).
 			Annotations(
@@ -68,7 +65,6 @@ func (s SLADefinition) Mixin() []ent.Mixin {
 		prefix: "SLAD",
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s),
-			newCustomEnumMixin(s, withEnumFieldName("severity_level")),
 			newGroupPermissionsMixin(),
 		},
 	}.getMixins(s)

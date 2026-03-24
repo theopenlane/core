@@ -18712,14 +18712,6 @@ func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if slaDefinitionSeverityLevelName, exists := m.SLADefinitionSeverityLevelName(); exists {
-		create = create.SetSLADefinitionSeverityLevelName(slaDefinitionSeverityLevelName)
-	}
-
-	if slaDefinitionSeverityLevelID, exists := m.SLADefinitionSeverityLevelID(); exists {
-		create = create.SetSLADefinitionSeverityLevelID(slaDefinitionSeverityLevelID)
-	}
-
 	if slaDays, exists := m.SLADays(); exists {
 		create = create.SetSLADays(slaDays)
 	}
@@ -18813,18 +18805,6 @@ func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetOwnerID(sladefinition.OwnerID)
 		}
 
-		if slaDefinitionSeverityLevelName, exists := m.SLADefinitionSeverityLevelName(); exists {
-			create = create.SetSLADefinitionSeverityLevelName(slaDefinitionSeverityLevelName)
-		} else {
-			create = create.SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName)
-		}
-
-		if slaDefinitionSeverityLevelID, exists := m.SLADefinitionSeverityLevelID(); exists {
-			create = create.SetSLADefinitionSeverityLevelID(slaDefinitionSeverityLevelID)
-		} else {
-			create = create.SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID)
-		}
-
 		if slaDays, exists := m.SLADays(); exists {
 			create = create.SetSLADays(slaDays)
 		} else {
@@ -18881,8 +18861,6 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDisplayID(sladefinition.DisplayID).
 			SetTags(sladefinition.Tags).
 			SetOwnerID(sladefinition.OwnerID).
-			SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName).
-			SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID).
 			SetSLADays(sladefinition.SLADays).
 			SetSecurityLevel(sladefinition.SecurityLevel).
 			Save(ctx)

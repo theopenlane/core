@@ -2685,19 +2685,17 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "SLADefinition",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			sladefinition.FieldCreatedAt:                      {Type: field.TypeTime, Column: sladefinition.FieldCreatedAt},
-			sladefinition.FieldUpdatedAt:                      {Type: field.TypeTime, Column: sladefinition.FieldUpdatedAt},
-			sladefinition.FieldCreatedBy:                      {Type: field.TypeString, Column: sladefinition.FieldCreatedBy},
-			sladefinition.FieldUpdatedBy:                      {Type: field.TypeString, Column: sladefinition.FieldUpdatedBy},
-			sladefinition.FieldDeletedAt:                      {Type: field.TypeTime, Column: sladefinition.FieldDeletedAt},
-			sladefinition.FieldDeletedBy:                      {Type: field.TypeString, Column: sladefinition.FieldDeletedBy},
-			sladefinition.FieldDisplayID:                      {Type: field.TypeString, Column: sladefinition.FieldDisplayID},
-			sladefinition.FieldTags:                           {Type: field.TypeJSON, Column: sladefinition.FieldTags},
-			sladefinition.FieldOwnerID:                        {Type: field.TypeString, Column: sladefinition.FieldOwnerID},
-			sladefinition.FieldSLADefinitionSeverityLevelName: {Type: field.TypeString, Column: sladefinition.FieldSLADefinitionSeverityLevelName},
-			sladefinition.FieldSLADefinitionSeverityLevelID:   {Type: field.TypeString, Column: sladefinition.FieldSLADefinitionSeverityLevelID},
-			sladefinition.FieldSLADays:                        {Type: field.TypeInt, Column: sladefinition.FieldSLADays},
-			sladefinition.FieldSecurityLevel:                  {Type: field.TypeEnum, Column: sladefinition.FieldSecurityLevel},
+			sladefinition.FieldCreatedAt:     {Type: field.TypeTime, Column: sladefinition.FieldCreatedAt},
+			sladefinition.FieldUpdatedAt:     {Type: field.TypeTime, Column: sladefinition.FieldUpdatedAt},
+			sladefinition.FieldCreatedBy:     {Type: field.TypeString, Column: sladefinition.FieldCreatedBy},
+			sladefinition.FieldUpdatedBy:     {Type: field.TypeString, Column: sladefinition.FieldUpdatedBy},
+			sladefinition.FieldDeletedAt:     {Type: field.TypeTime, Column: sladefinition.FieldDeletedAt},
+			sladefinition.FieldDeletedBy:     {Type: field.TypeString, Column: sladefinition.FieldDeletedBy},
+			sladefinition.FieldDisplayID:     {Type: field.TypeString, Column: sladefinition.FieldDisplayID},
+			sladefinition.FieldTags:          {Type: field.TypeJSON, Column: sladefinition.FieldTags},
+			sladefinition.FieldOwnerID:       {Type: field.TypeString, Column: sladefinition.FieldOwnerID},
+			sladefinition.FieldSLADays:       {Type: field.TypeInt, Column: sladefinition.FieldSLADays},
+			sladefinition.FieldSecurityLevel: {Type: field.TypeEnum, Column: sladefinition.FieldSecurityLevel},
 		},
 	}
 	graph.Nodes[73] = &sqlgraph.Node{
@@ -13606,18 +13604,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"SLADefinition",
 		"Organization",
-	)
-	graph.MustAddE(
-		"sla_definition_severity_level",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   sladefinition.SLADefinitionSeverityLevelTable,
-			Columns: []string{sladefinition.SLADefinitionSeverityLevelColumn},
-			Bidi:    false,
-		},
-		"SLADefinition",
-		"CustomTypeEnum",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -39514,16 +39500,6 @@ func (f *SLADefinitionFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(sladefinition.FieldOwnerID))
 }
 
-// WhereSLADefinitionSeverityLevelName applies the entql string predicate on the sla_definition_severity_level_name field.
-func (f *SLADefinitionFilter) WhereSLADefinitionSeverityLevelName(p entql.StringP) {
-	f.Where(p.Field(sladefinition.FieldSLADefinitionSeverityLevelName))
-}
-
-// WhereSLADefinitionSeverityLevelID applies the entql string predicate on the sla_definition_severity_level_id field.
-func (f *SLADefinitionFilter) WhereSLADefinitionSeverityLevelID(p entql.StringP) {
-	f.Where(p.Field(sladefinition.FieldSLADefinitionSeverityLevelID))
-}
-
 // WhereSLADays applies the entql int predicate on the sla_days field.
 func (f *SLADefinitionFilter) WhereSLADays(p entql.IntP) {
 	f.Where(p.Field(sladefinition.FieldSLADays))
@@ -39542,20 +39518,6 @@ func (f *SLADefinitionFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *SLADefinitionFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasSLADefinitionSeverityLevel applies a predicate to check if query has an edge sla_definition_severity_level.
-func (f *SLADefinitionFilter) WhereHasSLADefinitionSeverityLevel() {
-	f.Where(entql.HasEdge("sla_definition_severity_level"))
-}
-
-// WhereHasSLADefinitionSeverityLevelWith applies a predicate to check if query has an edge sla_definition_severity_level with a given conditions (other predicates).
-func (f *SLADefinitionFilter) WhereHasSLADefinitionSeverityLevelWith(preds ...predicate.CustomTypeEnum) {
-	f.Where(entql.HasEdgeWith("sla_definition_severity_level", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
