@@ -14,7 +14,7 @@ replace github.com/theopenlane/core/common => ./common
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/securitycenter v1.38.1
+	cloud.google.com/go/securitycenter v1.39.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20260317212542-e0ba79d911cc
 	github.com/99designs/gqlgen v0.17.88
@@ -366,8 +366,8 @@ require (
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20260217215200-42d3e9bedb6d // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260311181403-84a4fc48630c // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260316180232-0b37fe3546d5 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260316180232-0b37fe3546d5 // indirect
 	google.golang.org/grpc v1.79.3 // indirect
 	google.golang.org/protobuf v1.36.11
 )
