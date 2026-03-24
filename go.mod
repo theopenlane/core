@@ -16,7 +16,7 @@ require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.39.0
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.6-0.20260317212542-e0ba79d911cc
+	entgo.io/ent v0.14.6
 	github.com/99designs/gqlgen v0.17.88
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/alicebob/miniredis/v2 v2.37.0
@@ -24,9 +24,9 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.4
 	github.com/aws/aws-sdk-go-v2/config v1.32.12
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.12
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.8
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.10
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.1
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.9
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.11
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.2
 	github.com/brianvoe/gofakeit/v7 v7.14.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.8.0
@@ -158,7 +158,7 @@ require (
 	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.7 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.8 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.20 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.20 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.20 // indirect
