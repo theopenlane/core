@@ -44,7 +44,7 @@ func (SLADefinition) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("sla_days").
 			Comment("remediation service level agreement in days for the severity level").
-			Range(0, 365).
+			Range(0, 365). //nolint:mnd
 			Annotations(
 				entgql.OrderField("sla_days"),
 			),
