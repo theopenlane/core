@@ -7,13 +7,16 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
 
+	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/core/internal/controls"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/logx"
@@ -167,6 +170,13 @@ func HookTrustCenter() ent.Hook {
 				trustCenter.Edges.PreviewSetting = previewSetting
 			}
 
+			// create trust center controls by cloning the controls from the trust center standard
+			if err := controls.CloneTrustCenterControls(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to clone trust center controls")
+
+				return nil, ErrInternalServerError
+			}
+
 			// create watermark config for trust center with default values
 			if id, ok := m.WatermarkConfigID(); ok && id != "" {
 				// watermark config was provided, skip creation
@@ -240,6 +250,44 @@ func HookTrustCenterDelete() ent.Hook {
 			if !ok {
 				// If we can't get the ID, just proceed with the deletion
 				return next.Mutate(ctx, m)
+			}
+
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil || caller.OrganizationID == "" {
+				log.Error().Msg("unable to get caller from context in trust center delete hook")
+
+				return nil, generated.ErrPermissionDenied
+			}
+
+			// Get the trust center controls to delete
+			tcControlIDs, err := m.Client().Control.Query().
+				Where(
+					control.IsTrustCenterControl(true),
+					control.OwnerID(caller.OrganizationID),
+				).
+				IDs(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to query trust center controls for deletion")
+
+				return nil, ErrInternalServerError
+			}
+
+			// Delete the trust center controls
+			if len(tcControlIDs) > 0 {
+				deletedCount, err := m.Client().Control.Delete().
+					Where(control.IDIn(tcControlIDs...)).
+					Exec(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to delete trust center controls")
+
+					return nil, ErrInternalServerError
+				}
+
+				if deletedCount != len(tcControlIDs) {
+					logx.FromContext(ctx).Error().Int("expected_deleted_count", len(tcControlIDs)).Int("actual_deleted_count", deletedCount).Msg("unexpected number of trust center controls deleted")
+
+					return nil, ErrInternalServerError
+				}
 			}
 
 			// Query the trust center to get the pirsch_domain_id before deletion
