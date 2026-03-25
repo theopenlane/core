@@ -26,7 +26,7 @@ type DNSVerification struct {
 const (
 	// SchemaDNSVerification is the name of the DNSVerification schema.
 	SchemaDNSVerification = "dns_verification"
-	maxTXTValueLen        = 200
+	maxTXTValueLen        = 255
 	cloudflareIDMaxLen    = 64
 	maxStatusReasonLen    = 255
 )
