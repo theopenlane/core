@@ -369,7 +369,11 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		return nil
 	}
 
-	oldDisplayName := displayName
+	oldDisplayName, err := m.OldDisplayName(ctx)
+	if err != nil {
+		return err
+	}
+
 	if ok {
 		var err error
 
@@ -410,7 +414,6 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		groups, err := m.Client().Group.Query().
 			Where(
 				group.OwnerID(membership.OrganizationID),
-				group.CreatedBy(user.ID),
 				group.IsManaged(true),
 				group.Name(groupName),
 			).
