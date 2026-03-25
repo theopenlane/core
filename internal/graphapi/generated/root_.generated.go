@@ -50,6 +50,7 @@ type ResolverRoot interface {
 	CreateScanInput() CreateScanInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
+	CreateUserInput() CreateUserInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
@@ -68,6 +69,7 @@ type ResolverRoot interface {
 	UpdateTaskInput() UpdateTaskInputResolver
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
+	UpdateUserInput() UpdateUserInputResolver
 }
 
 type DirectiveRoot struct {
@@ -3449,7 +3451,7 @@ type ComplexityRoot struct {
 		CreateOrgMembership                  func(childComplexity int, input generated.CreateOrgMembershipInput) int
 		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
 		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
-		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
+		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) int
 		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
 		CreatePlatform                       func(childComplexity int, input generated.CreatePlatformInput) int
 		CreateProcedure                      func(childComplexity int, input generated.CreateProcedureInput) int
@@ -25740,7 +25742,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateOrganizationWithMembers(childComplexity, args["organizationInput"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["members"].([]*model.OrgMembersInput)), true
+		return e.ComplexityRoot.Mutation.CreateOrganizationWithMembers(childComplexity, args["organizationInput"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput), args["members"].([]*model.OrgMembersInput)), true
 
 	case "Mutation.createPersonalAccessToken":
 		if e.ComplexityRoot.Mutation.CreatePersonalAccessToken == nil {
@@ -50684,6 +50686,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputEvidenceWhereInput,
 		ec.unmarshalInputExportOrder,
 		ec.unmarshalInputExportWhereInput,
+		ec.unmarshalInputFileMetadataInput,
 		ec.unmarshalInputFileOrder,
 		ec.unmarshalInputFileWhereInput,
 		ec.unmarshalInputFindingControlOrder,
@@ -138488,10 +138491,14 @@ type EntityBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
   note: CreateNoteInput
+  entityFilesMetadata: [FileMetadataInput!]
+  logoFileMetadata: FileMetadataInput
 }
 
 extend input UpdateEntityInput {
   note:  CreateNoteInput
+  entityFilesMetadata: [FileMetadataInput!]
+  logoFileMetadata: FileMetadataInput
 }
 `, BuiltIn: false},
 	{Name: "../schema/entitytype.graphql", Input: `extend type Query {
@@ -139148,6 +139155,13 @@ type FileDeletePayload {
     presignedURL: String
     base64: String
 }
+
+input FileMetadataInput {
+    """
+    the display name for the file, defaults to the original filename
+    """
+    name: String
+}
 `, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Query {
     """
@@ -139573,6 +139587,7 @@ type GroupBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateGroupInput {
@@ -139584,6 +139599,7 @@ extend input UpdateGroupInput {
   as the specified group ID, existing permissions will be removed
   """
   inheritGroupPermissions: ID
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input GroupMembershipWhereInput {
@@ -142726,12 +142742,14 @@ type OrganizationSettingBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateOrganizationInput {
   addOrgMembers: [CreateOrgMembershipInput!]
   removeOrgMembers: [ID!]
   updateOrgSettings: UpdateOrganizationSettingInput
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input OrgMembershipWhereInput {
@@ -142761,6 +142779,10 @@ extend type Mutation{
         avatar file to Upload
         """
         avatarFile: Upload
+        """
+        metadata for the avatar file
+        """
+        avatarFileMetadata: FileMetadataInput
         """
         organization members to be added to the new org
         """
@@ -148721,6 +148743,14 @@ type UserBulkCreatePayload {
     """
     users: [User!]
 }`, BuiltIn: false},
+	{Name: "../schema/userextended.graphql", Input: `extend input CreateUserInput {
+  avatarFileMetadata: FileMetadataInput
+}
+
+extend input UpdateUserInput {
+  avatarFileMetadata: FileMetadataInput
+}
+`, BuiltIn: false},
 	{Name: "../schema/usersetting.graphql", Input: `extend type Query {
     """
     Look up userSetting by ID

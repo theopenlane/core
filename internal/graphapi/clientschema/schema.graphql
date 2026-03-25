@@ -12292,6 +12292,8 @@ input CreateEntityInput {
 	entityTypeID: ID
 	logoFileID: ID
 	note: CreateNoteInput
+	entityFilesMetadata: [FileMetadataInput!]
+	logoFileMetadata: FileMetadataInput
 }
 """
 CreateEntityTypeInput is used for create EntityType object.
@@ -12909,6 +12911,7 @@ input CreateGroupInput {
 	campaignIDs: [ID!]
 	campaignTargetIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
+	avatarFileMetadata: FileMetadataInput
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -13970,6 +13973,7 @@ input CreateOrganizationInput {
 	directorySyncRunIDs: [ID!]
 	discussionIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
+	avatarFileMetadata: FileMetadataInput
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -16033,6 +16037,7 @@ input CreateUserInput {
 	identityHolderProfileIDs: [ID!]
 	impersonationEventIDs: [ID!]
 	targetedImpersonationIDs: [ID!]
+	avatarFileMetadata: FileMetadataInput
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -27879,6 +27884,12 @@ type FileEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+input FileMetadataInput {
+	"""
+	the display name for the file, defaults to the original filename
+	"""
+	name: String
 }
 """
 Ordering options for File connections
@@ -44738,6 +44749,11 @@ type Mutation {
 		avatar file to Upload
 		"""
 		avatarFile: Upload
+
+		"""
+		metadata for the avatar file
+		"""
+		avatarFileMetadata: FileMetadataInput
 
 		"""
 		organization members to be added to the new org
@@ -85198,6 +85214,8 @@ input UpdateEntityInput {
 	logoFileID: ID
 	clearLogoFile: Boolean
 	note: CreateNoteInput
+	entityFilesMetadata: [FileMetadataInput!]
+	logoFileMetadata: FileMetadataInput
 }
 """
 UpdateEntityTypeInput is used for update EntityType object.
@@ -86136,6 +86154,7 @@ input UpdateGroupInput {
 	as the specified group ID, existing permissions will be removed
 	"""
 	inheritGroupPermissions: ID
+	avatarFileMetadata: FileMetadataInput
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -87565,6 +87584,7 @@ input UpdateOrganizationInput {
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
+	avatarFileMetadata: FileMetadataInput
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -90412,6 +90432,7 @@ input UpdateUserInput {
 	addTargetedImpersonationIDs: [ID!]
 	removeTargetedImpersonationIDs: [ID!]
 	clearTargetedImpersonations: Boolean
+	avatarFileMetadata: FileMetadataInput
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.

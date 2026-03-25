@@ -360,7 +360,7 @@ type MutationResolver interface {
 	DeleteBulkOrganizationSetting(ctx context.Context, ids []string) (*model.OrganizationSettingBulkDeletePayload, error)
 	UpdateBulkOrganizationSetting(ctx context.Context, ids []string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingBulkUpdatePayload, error)
 	UpdateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkUpdatePayload, error)
-	CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error)
+	CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error)
 	TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string) (*model.OrganizationTransferOwnershipPayload, error)
 	CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error)
 	CreateBulkOrgMembership(ctx context.Context, input []*generated.CreateOrgMembershipInput) (*model.OrgMembershipBulkCreatePayload, error)
@@ -2882,11 +2882,16 @@ func (ec *executionContext) field_Mutation_createOrganizationWithMembers_args(ct
 		return nil, err
 	}
 	args["avatarFile"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "members", ec.unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["members"] = arg2
+	args["avatarFileMetadata"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "members", ec.unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["members"] = arg3
 	return args, nil
 }
 
@@ -24524,7 +24529,7 @@ func (ec *executionContext) _Mutation_createOrganizationWithMembers(ctx context.
 		ec.fieldContext_Mutation_createOrganizationWithMembers,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateOrganizationWithMembers(ctx, fc.Args["organizationInput"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["members"].([]*model.OrgMembersInput))
+			return ec.Resolvers.Mutation().CreateOrganizationWithMembers(ctx, fc.Args["organizationInput"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput), fc.Args["members"].([]*model.OrgMembersInput))
 		},
 		nil,
 		ec.marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload,

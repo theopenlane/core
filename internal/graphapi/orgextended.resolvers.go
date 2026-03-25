@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
@@ -23,7 +24,7 @@ import (
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
-func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
+func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
 	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organization"})
@@ -204,6 +205,11 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 	return nil
 }
 
+// AvatarFileMetadata is the resolver for the avatarFileMetadata field.
+func (r *createOrganizationInputResolver) AvatarFileMetadata(ctx context.Context, obj *generated.CreateOrganizationInput, data *model.FileMetadataInput) error {
+	panic(fmt.Errorf("not implemented: AvatarFileMetadata - avatarFileMetadata"))
+}
+
 // AddOrgMembers is the resolver for the addOrgMembers field.
 func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []*generated.CreateOrgMembershipInput) error {
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
@@ -282,4 +288,9 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	}
 
 	return nil
+}
+
+// AvatarFileMetadata is the resolver for the avatarFileMetadata field.
+func (r *updateOrganizationInputResolver) AvatarFileMetadata(ctx context.Context, obj *generated.UpdateOrganizationInput, data *model.FileMetadataInput) error {
+	panic(fmt.Errorf("not implemented: AvatarFileMetadata - avatarFileMetadata"))
 }

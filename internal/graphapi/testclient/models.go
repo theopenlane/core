@@ -6543,40 +6543,42 @@ type CreateEntityInput struct {
 	// when the entity contract is up for renewal
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
-	VendorMetadata                      map[string]any   `json:"vendorMetadata,omitempty"`
-	OwnerID                             *string          `json:"ownerID,omitempty"`
-	BlockedGroupIDs                     []string         `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                           []string         `json:"editorIDs,omitempty"`
-	ViewerIDs                           []string         `json:"viewerIDs,omitempty"`
-	InternalOwnerUserID                 *string          `json:"internalOwnerUserID,omitempty"`
-	InternalOwnerGroupID                *string          `json:"internalOwnerGroupID,omitempty"`
-	ReviewedByUserID                    *string          `json:"reviewedByUserID,omitempty"`
-	ReviewedByGroupID                   *string          `json:"reviewedByGroupID,omitempty"`
-	EntityRelationshipStateID           *string          `json:"entityRelationshipStateID,omitempty"`
-	EntitySecurityQuestionnaireStatusID *string          `json:"entitySecurityQuestionnaireStatusID,omitempty"`
-	EntitySourceTypeID                  *string          `json:"entitySourceTypeID,omitempty"`
-	EnvironmentID                       *string          `json:"environmentID,omitempty"`
-	ScopeID                             *string          `json:"scopeID,omitempty"`
-	ContactIDs                          []string         `json:"contactIDs,omitempty"`
-	DocumentIDs                         []string         `json:"documentIDs,omitempty"`
-	NoteIDs                             []string         `json:"noteIDs,omitempty"`
-	FileIDs                             []string         `json:"fileIDs,omitempty"`
-	AssetIDs                            []string         `json:"assetIDs,omitempty"`
-	ScanIDs                             []string         `json:"scanIDs,omitempty"`
-	CampaignIDs                         []string         `json:"campaignIDs,omitempty"`
-	AssessmentResponseIDs               []string         `json:"assessmentResponseIDs,omitempty"`
-	IntegrationIDs                      []string         `json:"integrationIDs,omitempty"`
-	SubprocessorIDs                     []string         `json:"subprocessorIDs,omitempty"`
-	AuthMethodIDs                       []string         `json:"authMethodIDs,omitempty"`
-	EmployerIdentityHolderIDs           []string         `json:"employerIdentityHolderIDs,omitempty"`
-	IdentityHolderIDs                   []string         `json:"identityHolderIDs,omitempty"`
-	ControlIDs                          []string         `json:"controlIDs,omitempty"`
-	PlatformIDs                         []string         `json:"platformIDs,omitempty"`
-	OutOfScopePlatformIDs               []string         `json:"outOfScopePlatformIDs,omitempty"`
-	SourcePlatformIDs                   []string         `json:"sourcePlatformIDs,omitempty"`
-	EntityTypeID                        *string          `json:"entityTypeID,omitempty"`
-	LogoFileID                          *string          `json:"logoFileID,omitempty"`
-	Note                                *CreateNoteInput `json:"note,omitempty"`
+	VendorMetadata                      map[string]any       `json:"vendorMetadata,omitempty"`
+	OwnerID                             *string              `json:"ownerID,omitempty"`
+	BlockedGroupIDs                     []string             `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                           []string             `json:"editorIDs,omitempty"`
+	ViewerIDs                           []string             `json:"viewerIDs,omitempty"`
+	InternalOwnerUserID                 *string              `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID                *string              `json:"internalOwnerGroupID,omitempty"`
+	ReviewedByUserID                    *string              `json:"reviewedByUserID,omitempty"`
+	ReviewedByGroupID                   *string              `json:"reviewedByGroupID,omitempty"`
+	EntityRelationshipStateID           *string              `json:"entityRelationshipStateID,omitempty"`
+	EntitySecurityQuestionnaireStatusID *string              `json:"entitySecurityQuestionnaireStatusID,omitempty"`
+	EntitySourceTypeID                  *string              `json:"entitySourceTypeID,omitempty"`
+	EnvironmentID                       *string              `json:"environmentID,omitempty"`
+	ScopeID                             *string              `json:"scopeID,omitempty"`
+	ContactIDs                          []string             `json:"contactIDs,omitempty"`
+	DocumentIDs                         []string             `json:"documentIDs,omitempty"`
+	NoteIDs                             []string             `json:"noteIDs,omitempty"`
+	FileIDs                             []string             `json:"fileIDs,omitempty"`
+	AssetIDs                            []string             `json:"assetIDs,omitempty"`
+	ScanIDs                             []string             `json:"scanIDs,omitempty"`
+	CampaignIDs                         []string             `json:"campaignIDs,omitempty"`
+	AssessmentResponseIDs               []string             `json:"assessmentResponseIDs,omitempty"`
+	IntegrationIDs                      []string             `json:"integrationIDs,omitempty"`
+	SubprocessorIDs                     []string             `json:"subprocessorIDs,omitempty"`
+	AuthMethodIDs                       []string             `json:"authMethodIDs,omitempty"`
+	EmployerIdentityHolderIDs           []string             `json:"employerIdentityHolderIDs,omitempty"`
+	IdentityHolderIDs                   []string             `json:"identityHolderIDs,omitempty"`
+	ControlIDs                          []string             `json:"controlIDs,omitempty"`
+	PlatformIDs                         []string             `json:"platformIDs,omitempty"`
+	OutOfScopePlatformIDs               []string             `json:"outOfScopePlatformIDs,omitempty"`
+	SourcePlatformIDs                   []string             `json:"sourcePlatformIDs,omitempty"`
+	EntityTypeID                        *string              `json:"entityTypeID,omitempty"`
+	LogoFileID                          *string              `json:"logoFileID,omitempty"`
+	Note                                *CreateNoteInput     `json:"note,omitempty"`
+	EntityFilesMetadata                 []*FileMetadataInput `json:"entityFilesMetadata,omitempty"`
+	LogoFileMetadata                    *FileMetadataInput   `json:"logoFileMetadata,omitempty"`
 }
 
 // CreateEntityTypeInput is used for create EntityType object.
@@ -6973,6 +6975,7 @@ type CreateGroupInput struct {
 	CampaignIDs                          []string                 `json:"campaignIDs,omitempty"`
 	CampaignTargetIDs                    []string                 `json:"campaignTargetIDs,omitempty"`
 	CreateGroupSettings                  *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
+	AvatarFileMetadata                   *FileMetadataInput       `json:"avatarFileMetadata,omitempty"`
 }
 
 // CreateGroupMembershipInput is used for create GroupMembership object.
@@ -7656,6 +7659,7 @@ type CreateOrganizationInput struct {
 	DirectorySyncRunIDs               []string                        `json:"directorySyncRunIDs,omitempty"`
 	DiscussionIDs                     []string                        `json:"discussionIDs,omitempty"`
 	CreateOrgSettings                 *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
+	AvatarFileMetadata                *FileMetadataInput              `json:"avatarFileMetadata,omitempty"`
 }
 
 // CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -8912,27 +8916,28 @@ type CreateUserInput struct {
 	// the SCIM preferred language for the user
 	ScimPreferredLanguage *string `json:"scimPreferredLanguage,omitempty"`
 	// the SCIM locale for the user
-	ScimLocale               *string  `json:"scimLocale,omitempty"`
-	PersonalAccessTokenIDs   []string `json:"personalAccessTokenIDs,omitempty"`
-	TfaSettingIDs            []string `json:"tfaSettingIDs,omitempty"`
-	SettingID                string   `json:"settingID"`
-	GroupIDs                 []string `json:"groupIDs,omitempty"`
-	OrganizationIDs          []string `json:"organizationIDs,omitempty"`
-	WebauthnIDs              []string `json:"webauthnIDs,omitempty"`
-	AvatarFileID             *string  `json:"avatarFileID,omitempty"`
-	EventIDs                 []string `json:"eventIDs,omitempty"`
-	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
-	CampaignIDs              []string `json:"campaignIDs,omitempty"`
-	CampaignTargetIDs        []string `json:"campaignTargetIDs,omitempty"`
-	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
-	AssignerTaskIDs          []string `json:"assignerTaskIDs,omitempty"`
-	AssigneeTaskIDs          []string `json:"assigneeTaskIDs,omitempty"`
-	ProgramIDs               []string `json:"programIDs,omitempty"`
-	ProgramsOwnedIDs         []string `json:"programsOwnedIDs,omitempty"`
-	PlatformsOwnedIDs        []string `json:"platformsOwnedIDs,omitempty"`
-	IdentityHolderProfileIDs []string `json:"identityHolderProfileIDs,omitempty"`
-	ImpersonationEventIDs    []string `json:"impersonationEventIDs,omitempty"`
-	TargetedImpersonationIDs []string `json:"targetedImpersonationIDs,omitempty"`
+	ScimLocale               *string            `json:"scimLocale,omitempty"`
+	PersonalAccessTokenIDs   []string           `json:"personalAccessTokenIDs,omitempty"`
+	TfaSettingIDs            []string           `json:"tfaSettingIDs,omitempty"`
+	SettingID                string             `json:"settingID"`
+	GroupIDs                 []string           `json:"groupIDs,omitempty"`
+	OrganizationIDs          []string           `json:"organizationIDs,omitempty"`
+	WebauthnIDs              []string           `json:"webauthnIDs,omitempty"`
+	AvatarFileID             *string            `json:"avatarFileID,omitempty"`
+	EventIDs                 []string           `json:"eventIDs,omitempty"`
+	ActionPlanIDs            []string           `json:"actionPlanIDs,omitempty"`
+	CampaignIDs              []string           `json:"campaignIDs,omitempty"`
+	CampaignTargetIDs        []string           `json:"campaignTargetIDs,omitempty"`
+	SubcontrolIDs            []string           `json:"subcontrolIDs,omitempty"`
+	AssignerTaskIDs          []string           `json:"assignerTaskIDs,omitempty"`
+	AssigneeTaskIDs          []string           `json:"assigneeTaskIDs,omitempty"`
+	ProgramIDs               []string           `json:"programIDs,omitempty"`
+	ProgramsOwnedIDs         []string           `json:"programsOwnedIDs,omitempty"`
+	PlatformsOwnedIDs        []string           `json:"platformsOwnedIDs,omitempty"`
+	IdentityHolderProfileIDs []string           `json:"identityHolderProfileIDs,omitempty"`
+	ImpersonationEventIDs    []string           `json:"impersonationEventIDs,omitempty"`
+	TargetedImpersonationIDs []string           `json:"targetedImpersonationIDs,omitempty"`
+	AvatarFileMetadata       *FileMetadataInput `json:"avatarFileMetadata,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -15642,6 +15647,11 @@ type FileEdge struct {
 	Node *File `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+type FileMetadataInput struct {
+	// the display name for the file, defaults to the original filename
+	Name *string `json:"name,omitempty"`
 }
 
 // Ordering options for File connections
@@ -39405,91 +39415,93 @@ type UpdateEntityInput struct {
 	ContractRenewalAt      *models.DateTime `json:"contractRenewalAt,omitempty"`
 	ClearContractRenewalAt *bool            `json:"clearContractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
-	VendorMetadata                         map[string]any   `json:"vendorMetadata,omitempty"`
-	ClearVendorMetadata                    *bool            `json:"clearVendorMetadata,omitempty"`
-	AddBlockedGroupIDs                     []string         `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs                  []string         `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups                     *bool            `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                           []string         `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs                        []string         `json:"removeEditorIDs,omitempty"`
-	ClearEditors                           *bool            `json:"clearEditors,omitempty"`
-	AddViewerIDs                           []string         `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs                        []string         `json:"removeViewerIDs,omitempty"`
-	ClearViewers                           *bool            `json:"clearViewers,omitempty"`
-	InternalOwnerUserID                    *string          `json:"internalOwnerUserID,omitempty"`
-	ClearInternalOwnerUser                 *bool            `json:"clearInternalOwnerUser,omitempty"`
-	InternalOwnerGroupID                   *string          `json:"internalOwnerGroupID,omitempty"`
-	ClearInternalOwnerGroup                *bool            `json:"clearInternalOwnerGroup,omitempty"`
-	ReviewedByUserID                       *string          `json:"reviewedByUserID,omitempty"`
-	ClearReviewedByUser                    *bool            `json:"clearReviewedByUser,omitempty"`
-	ReviewedByGroupID                      *string          `json:"reviewedByGroupID,omitempty"`
-	ClearReviewedByGroup                   *bool            `json:"clearReviewedByGroup,omitempty"`
-	EntityRelationshipStateID              *string          `json:"entityRelationshipStateID,omitempty"`
-	ClearEntityRelationshipState           *bool            `json:"clearEntityRelationshipState,omitempty"`
-	EntitySecurityQuestionnaireStatusID    *string          `json:"entitySecurityQuestionnaireStatusID,omitempty"`
-	ClearEntitySecurityQuestionnaireStatus *bool            `json:"clearEntitySecurityQuestionnaireStatus,omitempty"`
-	EntitySourceTypeID                     *string          `json:"entitySourceTypeID,omitempty"`
-	ClearEntitySourceType                  *bool            `json:"clearEntitySourceType,omitempty"`
-	EnvironmentID                          *string          `json:"environmentID,omitempty"`
-	ClearEnvironment                       *bool            `json:"clearEnvironment,omitempty"`
-	ScopeID                                *string          `json:"scopeID,omitempty"`
-	ClearScope                             *bool            `json:"clearScope,omitempty"`
-	AddContactIDs                          []string         `json:"addContactIDs,omitempty"`
-	RemoveContactIDs                       []string         `json:"removeContactIDs,omitempty"`
-	ClearContacts                          *bool            `json:"clearContacts,omitempty"`
-	AddDocumentIDs                         []string         `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs                      []string         `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments                         *bool            `json:"clearDocuments,omitempty"`
-	AddNoteIDs                             []string         `json:"addNoteIDs,omitempty"`
-	RemoveNoteIDs                          []string         `json:"removeNoteIDs,omitempty"`
-	ClearNotes                             *bool            `json:"clearNotes,omitempty"`
-	AddFileIDs                             []string         `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                          []string         `json:"removeFileIDs,omitempty"`
-	ClearFiles                             *bool            `json:"clearFiles,omitempty"`
-	AddAssetIDs                            []string         `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs                         []string         `json:"removeAssetIDs,omitempty"`
-	ClearAssets                            *bool            `json:"clearAssets,omitempty"`
-	AddScanIDs                             []string         `json:"addScanIDs,omitempty"`
-	RemoveScanIDs                          []string         `json:"removeScanIDs,omitempty"`
-	ClearScans                             *bool            `json:"clearScans,omitempty"`
-	AddCampaignIDs                         []string         `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs                      []string         `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns                         *bool            `json:"clearCampaigns,omitempty"`
-	AddAssessmentResponseIDs               []string         `json:"addAssessmentResponseIDs,omitempty"`
-	RemoveAssessmentResponseIDs            []string         `json:"removeAssessmentResponseIDs,omitempty"`
-	ClearAssessmentResponses               *bool            `json:"clearAssessmentResponses,omitempty"`
-	AddIntegrationIDs                      []string         `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs                   []string         `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations                      *bool            `json:"clearIntegrations,omitempty"`
-	AddSubprocessorIDs                     []string         `json:"addSubprocessorIDs,omitempty"`
-	RemoveSubprocessorIDs                  []string         `json:"removeSubprocessorIDs,omitempty"`
-	ClearSubprocessors                     *bool            `json:"clearSubprocessors,omitempty"`
-	AddAuthMethodIDs                       []string         `json:"addAuthMethodIDs,omitempty"`
-	RemoveAuthMethodIDs                    []string         `json:"removeAuthMethodIDs,omitempty"`
-	ClearAuthMethods                       *bool            `json:"clearAuthMethods,omitempty"`
-	AddEmployerIdentityHolderIDs           []string         `json:"addEmployerIdentityHolderIDs,omitempty"`
-	RemoveEmployerIdentityHolderIDs        []string         `json:"removeEmployerIdentityHolderIDs,omitempty"`
-	ClearEmployerIdentityHolders           *bool            `json:"clearEmployerIdentityHolders,omitempty"`
-	AddIdentityHolderIDs                   []string         `json:"addIdentityHolderIDs,omitempty"`
-	RemoveIdentityHolderIDs                []string         `json:"removeIdentityHolderIDs,omitempty"`
-	ClearIdentityHolders                   *bool            `json:"clearIdentityHolders,omitempty"`
-	AddControlIDs                          []string         `json:"addControlIDs,omitempty"`
-	RemoveControlIDs                       []string         `json:"removeControlIDs,omitempty"`
-	ClearControls                          *bool            `json:"clearControls,omitempty"`
-	AddPlatformIDs                         []string         `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs                      []string         `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms                         *bool            `json:"clearPlatforms,omitempty"`
-	AddOutOfScopePlatformIDs               []string         `json:"addOutOfScopePlatformIDs,omitempty"`
-	RemoveOutOfScopePlatformIDs            []string         `json:"removeOutOfScopePlatformIDs,omitempty"`
-	ClearOutOfScopePlatforms               *bool            `json:"clearOutOfScopePlatforms,omitempty"`
-	AddSourcePlatformIDs                   []string         `json:"addSourcePlatformIDs,omitempty"`
-	RemoveSourcePlatformIDs                []string         `json:"removeSourcePlatformIDs,omitempty"`
-	ClearSourcePlatforms                   *bool            `json:"clearSourcePlatforms,omitempty"`
-	EntityTypeID                           *string          `json:"entityTypeID,omitempty"`
-	ClearEntityType                        *bool            `json:"clearEntityType,omitempty"`
-	LogoFileID                             *string          `json:"logoFileID,omitempty"`
-	ClearLogoFile                          *bool            `json:"clearLogoFile,omitempty"`
-	Note                                   *CreateNoteInput `json:"note,omitempty"`
+	VendorMetadata                         map[string]any       `json:"vendorMetadata,omitempty"`
+	ClearVendorMetadata                    *bool                `json:"clearVendorMetadata,omitempty"`
+	AddBlockedGroupIDs                     []string             `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs                  []string             `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups                     *bool                `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                           []string             `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                        []string             `json:"removeEditorIDs,omitempty"`
+	ClearEditors                           *bool                `json:"clearEditors,omitempty"`
+	AddViewerIDs                           []string             `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs                        []string             `json:"removeViewerIDs,omitempty"`
+	ClearViewers                           *bool                `json:"clearViewers,omitempty"`
+	InternalOwnerUserID                    *string              `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser                 *bool                `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID                   *string              `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup                *bool                `json:"clearInternalOwnerGroup,omitempty"`
+	ReviewedByUserID                       *string              `json:"reviewedByUserID,omitempty"`
+	ClearReviewedByUser                    *bool                `json:"clearReviewedByUser,omitempty"`
+	ReviewedByGroupID                      *string              `json:"reviewedByGroupID,omitempty"`
+	ClearReviewedByGroup                   *bool                `json:"clearReviewedByGroup,omitempty"`
+	EntityRelationshipStateID              *string              `json:"entityRelationshipStateID,omitempty"`
+	ClearEntityRelationshipState           *bool                `json:"clearEntityRelationshipState,omitempty"`
+	EntitySecurityQuestionnaireStatusID    *string              `json:"entitySecurityQuestionnaireStatusID,omitempty"`
+	ClearEntitySecurityQuestionnaireStatus *bool                `json:"clearEntitySecurityQuestionnaireStatus,omitempty"`
+	EntitySourceTypeID                     *string              `json:"entitySourceTypeID,omitempty"`
+	ClearEntitySourceType                  *bool                `json:"clearEntitySourceType,omitempty"`
+	EnvironmentID                          *string              `json:"environmentID,omitempty"`
+	ClearEnvironment                       *bool                `json:"clearEnvironment,omitempty"`
+	ScopeID                                *string              `json:"scopeID,omitempty"`
+	ClearScope                             *bool                `json:"clearScope,omitempty"`
+	AddContactIDs                          []string             `json:"addContactIDs,omitempty"`
+	RemoveContactIDs                       []string             `json:"removeContactIDs,omitempty"`
+	ClearContacts                          *bool                `json:"clearContacts,omitempty"`
+	AddDocumentIDs                         []string             `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs                      []string             `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments                         *bool                `json:"clearDocuments,omitempty"`
+	AddNoteIDs                             []string             `json:"addNoteIDs,omitempty"`
+	RemoveNoteIDs                          []string             `json:"removeNoteIDs,omitempty"`
+	ClearNotes                             *bool                `json:"clearNotes,omitempty"`
+	AddFileIDs                             []string             `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                          []string             `json:"removeFileIDs,omitempty"`
+	ClearFiles                             *bool                `json:"clearFiles,omitempty"`
+	AddAssetIDs                            []string             `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs                         []string             `json:"removeAssetIDs,omitempty"`
+	ClearAssets                            *bool                `json:"clearAssets,omitempty"`
+	AddScanIDs                             []string             `json:"addScanIDs,omitempty"`
+	RemoveScanIDs                          []string             `json:"removeScanIDs,omitempty"`
+	ClearScans                             *bool                `json:"clearScans,omitempty"`
+	AddCampaignIDs                         []string             `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs                      []string             `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns                         *bool                `json:"clearCampaigns,omitempty"`
+	AddAssessmentResponseIDs               []string             `json:"addAssessmentResponseIDs,omitempty"`
+	RemoveAssessmentResponseIDs            []string             `json:"removeAssessmentResponseIDs,omitempty"`
+	ClearAssessmentResponses               *bool                `json:"clearAssessmentResponses,omitempty"`
+	AddIntegrationIDs                      []string             `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs                   []string             `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations                      *bool                `json:"clearIntegrations,omitempty"`
+	AddSubprocessorIDs                     []string             `json:"addSubprocessorIDs,omitempty"`
+	RemoveSubprocessorIDs                  []string             `json:"removeSubprocessorIDs,omitempty"`
+	ClearSubprocessors                     *bool                `json:"clearSubprocessors,omitempty"`
+	AddAuthMethodIDs                       []string             `json:"addAuthMethodIDs,omitempty"`
+	RemoveAuthMethodIDs                    []string             `json:"removeAuthMethodIDs,omitempty"`
+	ClearAuthMethods                       *bool                `json:"clearAuthMethods,omitempty"`
+	AddEmployerIdentityHolderIDs           []string             `json:"addEmployerIdentityHolderIDs,omitempty"`
+	RemoveEmployerIdentityHolderIDs        []string             `json:"removeEmployerIdentityHolderIDs,omitempty"`
+	ClearEmployerIdentityHolders           *bool                `json:"clearEmployerIdentityHolders,omitempty"`
+	AddIdentityHolderIDs                   []string             `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs                []string             `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders                   *bool                `json:"clearIdentityHolders,omitempty"`
+	AddControlIDs                          []string             `json:"addControlIDs,omitempty"`
+	RemoveControlIDs                       []string             `json:"removeControlIDs,omitempty"`
+	ClearControls                          *bool                `json:"clearControls,omitempty"`
+	AddPlatformIDs                         []string             `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs                      []string             `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms                         *bool                `json:"clearPlatforms,omitempty"`
+	AddOutOfScopePlatformIDs               []string             `json:"addOutOfScopePlatformIDs,omitempty"`
+	RemoveOutOfScopePlatformIDs            []string             `json:"removeOutOfScopePlatformIDs,omitempty"`
+	ClearOutOfScopePlatforms               *bool                `json:"clearOutOfScopePlatforms,omitempty"`
+	AddSourcePlatformIDs                   []string             `json:"addSourcePlatformIDs,omitempty"`
+	RemoveSourcePlatformIDs                []string             `json:"removeSourcePlatformIDs,omitempty"`
+	ClearSourcePlatforms                   *bool                `json:"clearSourcePlatforms,omitempty"`
+	EntityTypeID                           *string              `json:"entityTypeID,omitempty"`
+	ClearEntityType                        *bool                `json:"clearEntityType,omitempty"`
+	LogoFileID                             *string              `json:"logoFileID,omitempty"`
+	ClearLogoFile                          *bool                `json:"clearLogoFile,omitempty"`
+	Note                                   *CreateNoteInput     `json:"note,omitempty"`
+	EntityFilesMetadata                    []*FileMetadataInput `json:"entityFilesMetadata,omitempty"`
+	LogoFileMetadata                       *FileMetadataInput   `json:"logoFileMetadata,omitempty"`
 }
 
 // UpdateEntityTypeInput is used for update EntityType object.
@@ -40209,7 +40221,8 @@ type UpdateGroupInput struct {
 	UpdateGroupSettings                        *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 	// inheritGroupPermissions allows a group to be updated with the same permissions
 	// as the specified group ID, existing permissions will be removed
-	InheritGroupPermissions *string `json:"inheritGroupPermissions,omitempty"`
+	InheritGroupPermissions *string            `json:"inheritGroupPermissions,omitempty"`
+	AvatarFileMetadata      *FileMetadataInput `json:"avatarFileMetadata,omitempty"`
 }
 
 // UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -41315,6 +41328,7 @@ type UpdateOrganizationInput struct {
 	AddOrgMembers                           []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                        []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                       *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
+	AvatarFileMetadata                      *FileMetadataInput              `json:"avatarFileMetadata,omitempty"`
 }
 
 // UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -43365,65 +43379,66 @@ type UpdateUserInput struct {
 	ScimPreferredLanguage      *string `json:"scimPreferredLanguage,omitempty"`
 	ClearScimPreferredLanguage *bool   `json:"clearScimPreferredLanguage,omitempty"`
 	// the SCIM locale for the user
-	ScimLocale                     *string  `json:"scimLocale,omitempty"`
-	ClearScimLocale                *bool    `json:"clearScimLocale,omitempty"`
-	AddPersonalAccessTokenIDs      []string `json:"addPersonalAccessTokenIDs,omitempty"`
-	RemovePersonalAccessTokenIDs   []string `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessTokens      *bool    `json:"clearPersonalAccessTokens,omitempty"`
-	AddTfaSettingIDs               []string `json:"addTfaSettingIDs,omitempty"`
-	RemoveTfaSettingIDs            []string `json:"removeTfaSettingIDs,omitempty"`
-	ClearTfaSettings               *bool    `json:"clearTfaSettings,omitempty"`
-	SettingID                      *string  `json:"settingID,omitempty"`
-	AddGroupIDs                    []string `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs                 []string `json:"removeGroupIDs,omitempty"`
-	ClearGroups                    *bool    `json:"clearGroups,omitempty"`
-	AddOrganizationIDs             []string `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs          []string `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganizations             *bool    `json:"clearOrganizations,omitempty"`
-	AddWebauthnIDs                 []string `json:"addWebauthnIDs,omitempty"`
-	RemoveWebauthnIDs              []string `json:"removeWebauthnIDs,omitempty"`
-	ClearWebauthns                 *bool    `json:"clearWebauthns,omitempty"`
-	AvatarFileID                   *string  `json:"avatarFileID,omitempty"`
-	ClearAvatarFile                *bool    `json:"clearAvatarFile,omitempty"`
-	AddEventIDs                    []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs                 []string `json:"removeEventIDs,omitempty"`
-	ClearEvents                    *bool    `json:"clearEvents,omitempty"`
-	AddActionPlanIDs               []string `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs            []string `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans               *bool    `json:"clearActionPlans,omitempty"`
-	AddCampaignIDs                 []string `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs              []string `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns                 *bool    `json:"clearCampaigns,omitempty"`
-	AddCampaignTargetIDs           []string `json:"addCampaignTargetIDs,omitempty"`
-	RemoveCampaignTargetIDs        []string `json:"removeCampaignTargetIDs,omitempty"`
-	ClearCampaignTargets           *bool    `json:"clearCampaignTargets,omitempty"`
-	AddSubcontrolIDs               []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs            []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols               *bool    `json:"clearSubcontrols,omitempty"`
-	AddAssignerTaskIDs             []string `json:"addAssignerTaskIDs,omitempty"`
-	RemoveAssignerTaskIDs          []string `json:"removeAssignerTaskIDs,omitempty"`
-	ClearAssignerTasks             *bool    `json:"clearAssignerTasks,omitempty"`
-	AddAssigneeTaskIDs             []string `json:"addAssigneeTaskIDs,omitempty"`
-	RemoveAssigneeTaskIDs          []string `json:"removeAssigneeTaskIDs,omitempty"`
-	ClearAssigneeTasks             *bool    `json:"clearAssigneeTasks,omitempty"`
-	AddProgramIDs                  []string `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs               []string `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                  *bool    `json:"clearPrograms,omitempty"`
-	AddProgramsOwnedIDs            []string `json:"addProgramsOwnedIDs,omitempty"`
-	RemoveProgramsOwnedIDs         []string `json:"removeProgramsOwnedIDs,omitempty"`
-	ClearProgramsOwned             *bool    `json:"clearProgramsOwned,omitempty"`
-	AddPlatformsOwnedIDs           []string `json:"addPlatformsOwnedIDs,omitempty"`
-	RemovePlatformsOwnedIDs        []string `json:"removePlatformsOwnedIDs,omitempty"`
-	ClearPlatformsOwned            *bool    `json:"clearPlatformsOwned,omitempty"`
-	AddIdentityHolderProfileIDs    []string `json:"addIdentityHolderProfileIDs,omitempty"`
-	RemoveIdentityHolderProfileIDs []string `json:"removeIdentityHolderProfileIDs,omitempty"`
-	ClearIdentityHolderProfiles    *bool    `json:"clearIdentityHolderProfiles,omitempty"`
-	AddImpersonationEventIDs       []string `json:"addImpersonationEventIDs,omitempty"`
-	RemoveImpersonationEventIDs    []string `json:"removeImpersonationEventIDs,omitempty"`
-	ClearImpersonationEvents       *bool    `json:"clearImpersonationEvents,omitempty"`
-	AddTargetedImpersonationIDs    []string `json:"addTargetedImpersonationIDs,omitempty"`
-	RemoveTargetedImpersonationIDs []string `json:"removeTargetedImpersonationIDs,omitempty"`
-	ClearTargetedImpersonations    *bool    `json:"clearTargetedImpersonations,omitempty"`
+	ScimLocale                     *string            `json:"scimLocale,omitempty"`
+	ClearScimLocale                *bool              `json:"clearScimLocale,omitempty"`
+	AddPersonalAccessTokenIDs      []string           `json:"addPersonalAccessTokenIDs,omitempty"`
+	RemovePersonalAccessTokenIDs   []string           `json:"removePersonalAccessTokenIDs,omitempty"`
+	ClearPersonalAccessTokens      *bool              `json:"clearPersonalAccessTokens,omitempty"`
+	AddTfaSettingIDs               []string           `json:"addTfaSettingIDs,omitempty"`
+	RemoveTfaSettingIDs            []string           `json:"removeTfaSettingIDs,omitempty"`
+	ClearTfaSettings               *bool              `json:"clearTfaSettings,omitempty"`
+	SettingID                      *string            `json:"settingID,omitempty"`
+	AddGroupIDs                    []string           `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs                 []string           `json:"removeGroupIDs,omitempty"`
+	ClearGroups                    *bool              `json:"clearGroups,omitempty"`
+	AddOrganizationIDs             []string           `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs          []string           `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganizations             *bool              `json:"clearOrganizations,omitempty"`
+	AddWebauthnIDs                 []string           `json:"addWebauthnIDs,omitempty"`
+	RemoveWebauthnIDs              []string           `json:"removeWebauthnIDs,omitempty"`
+	ClearWebauthns                 *bool              `json:"clearWebauthns,omitempty"`
+	AvatarFileID                   *string            `json:"avatarFileID,omitempty"`
+	ClearAvatarFile                *bool              `json:"clearAvatarFile,omitempty"`
+	AddEventIDs                    []string           `json:"addEventIDs,omitempty"`
+	RemoveEventIDs                 []string           `json:"removeEventIDs,omitempty"`
+	ClearEvents                    *bool              `json:"clearEvents,omitempty"`
+	AddActionPlanIDs               []string           `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs            []string           `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans               *bool              `json:"clearActionPlans,omitempty"`
+	AddCampaignIDs                 []string           `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs              []string           `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns                 *bool              `json:"clearCampaigns,omitempty"`
+	AddCampaignTargetIDs           []string           `json:"addCampaignTargetIDs,omitempty"`
+	RemoveCampaignTargetIDs        []string           `json:"removeCampaignTargetIDs,omitempty"`
+	ClearCampaignTargets           *bool              `json:"clearCampaignTargets,omitempty"`
+	AddSubcontrolIDs               []string           `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string           `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool              `json:"clearSubcontrols,omitempty"`
+	AddAssignerTaskIDs             []string           `json:"addAssignerTaskIDs,omitempty"`
+	RemoveAssignerTaskIDs          []string           `json:"removeAssignerTaskIDs,omitempty"`
+	ClearAssignerTasks             *bool              `json:"clearAssignerTasks,omitempty"`
+	AddAssigneeTaskIDs             []string           `json:"addAssigneeTaskIDs,omitempty"`
+	RemoveAssigneeTaskIDs          []string           `json:"removeAssigneeTaskIDs,omitempty"`
+	ClearAssigneeTasks             *bool              `json:"clearAssigneeTasks,omitempty"`
+	AddProgramIDs                  []string           `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string           `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool              `json:"clearPrograms,omitempty"`
+	AddProgramsOwnedIDs            []string           `json:"addProgramsOwnedIDs,omitempty"`
+	RemoveProgramsOwnedIDs         []string           `json:"removeProgramsOwnedIDs,omitempty"`
+	ClearProgramsOwned             *bool              `json:"clearProgramsOwned,omitempty"`
+	AddPlatformsOwnedIDs           []string           `json:"addPlatformsOwnedIDs,omitempty"`
+	RemovePlatformsOwnedIDs        []string           `json:"removePlatformsOwnedIDs,omitempty"`
+	ClearPlatformsOwned            *bool              `json:"clearPlatformsOwned,omitempty"`
+	AddIdentityHolderProfileIDs    []string           `json:"addIdentityHolderProfileIDs,omitempty"`
+	RemoveIdentityHolderProfileIDs []string           `json:"removeIdentityHolderProfileIDs,omitempty"`
+	ClearIdentityHolderProfiles    *bool              `json:"clearIdentityHolderProfiles,omitempty"`
+	AddImpersonationEventIDs       []string           `json:"addImpersonationEventIDs,omitempty"`
+	RemoveImpersonationEventIDs    []string           `json:"removeImpersonationEventIDs,omitempty"`
+	ClearImpersonationEvents       *bool              `json:"clearImpersonationEvents,omitempty"`
+	AddTargetedImpersonationIDs    []string           `json:"addTargetedImpersonationIDs,omitempty"`
+	RemoveTargetedImpersonationIDs []string           `json:"removeTargetedImpersonationIDs,omitempty"`
+	ClearTargetedImpersonations    *bool              `json:"clearTargetedImpersonations,omitempty"`
+	AvatarFileMetadata             *FileMetadataInput `json:"avatarFileMetadata,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.

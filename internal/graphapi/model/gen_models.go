@@ -1164,6 +1164,11 @@ type FileDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type FileMetadataInput struct {
+	// the display name for the file, defaults to the original filename
+	Name *string `json:"name,omitempty"`
+}
+
 // Return response for createBulkFinding mutation
 type FindingBulkCreatePayload struct {
 	// Created findings

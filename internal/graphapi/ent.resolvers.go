@@ -3331,6 +3331,11 @@ func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputR
 	return &createTrustCenterInputResolver{r}
 }
 
+// CreateUserInput returns gqlgenerated.CreateUserInputResolver implementation.
+func (r *Resolver) CreateUserInput() gqlgenerated.CreateUserInputResolver {
+	return &createUserInputResolver{r}
+}
+
 // UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
 func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
 	return &updateActionPlanInputResolver{r}
@@ -3421,6 +3426,11 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 	return &updateTrustCenterInputResolver{r}
 }
 
+// UpdateUserInput returns gqlgenerated.UpdateUserInputResolver implementation.
+func (r *Resolver) UpdateUserInput() gqlgenerated.UpdateUserInputResolver {
+	return &updateUserInputResolver{r}
+}
+
 type actionPlanResolver struct{ *Resolver }
 type campaignResolver struct{ *Resolver }
 type campaignTargetResolver struct{ *Resolver }
@@ -3445,6 +3455,7 @@ type createOrganizationInputResolver struct{ *Resolver }
 type createScanInputResolver struct{ *Resolver }
 type createTrustCenterFAQInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
+type createUserInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
@@ -3463,3 +3474,4 @@ type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
 type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }
+type updateUserInputResolver struct{ *Resolver }

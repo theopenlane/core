@@ -7,9 +7,11 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -28,6 +30,16 @@ func (r *createEntityInputResolver) Note(ctx context.Context, obj *generated.Cre
 	obj.NoteIDs = []string{note.ID}
 
 	return nil
+}
+
+// EntityFilesMetadata is the resolver for the entityFilesMetadata field.
+func (r *createEntityInputResolver) EntityFilesMetadata(ctx context.Context, obj *generated.CreateEntityInput, data []*model.FileMetadataInput) error {
+	panic(fmt.Errorf("not implemented: EntityFilesMetadata - entityFilesMetadata"))
+}
+
+// LogoFileMetadata is the resolver for the logoFileMetadata field.
+func (r *createEntityInputResolver) LogoFileMetadata(ctx context.Context, obj *generated.CreateEntityInput, data *model.FileMetadataInput) error {
+	panic(fmt.Errorf("not implemented: LogoFileMetadata - logoFileMetadata"))
 }
 
 // Note is the resolver for the Note field.
@@ -70,4 +82,14 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 	obj.AddNoteIDs = []string{note.ID}
 
 	return nil
+}
+
+// EntityFilesMetadata is the resolver for the entityFilesMetadata field.
+func (r *updateEntityInputResolver) EntityFilesMetadata(ctx context.Context, obj *generated.UpdateEntityInput, data []*model.FileMetadataInput) error {
+	panic(fmt.Errorf("not implemented: EntityFilesMetadata - entityFilesMetadata"))
+}
+
+// LogoFileMetadata is the resolver for the logoFileMetadata field.
+func (r *updateEntityInputResolver) LogoFileMetadata(ctx context.Context, obj *generated.UpdateEntityInput, data *model.FileMetadataInput) error {
+	panic(fmt.Errorf("not implemented: LogoFileMetadata - logoFileMetadata"))
 }
