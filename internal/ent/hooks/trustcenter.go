@@ -326,35 +326,6 @@ func HookTrustCenterDelete() ent.Hook {
 				}
 			}
 
-			// Clear cache for the deleted trust center (cascade deletes files)
-			if m.Job != nil {
-				cacheArgs := jobspec.ClearTrustCenterCacheArgs{
-					TrustCenterSlug: tc.Slug,
-				}
-
-				if tc.CustomDomainID != nil {
-					if cd, err := m.Client().CustomDomain.Get(ctx, *tc.CustomDomainID); err == nil && cd.CnameRecord != "" {
-						cacheArgs.CustomDomain = cd.CnameRecord
-					}
-				}
-
-				if cacheArgs.CustomDomain != "" || cacheArgs.TrustCenterSlug != "" {
-					if err := enqueueJob(ctx, m.Job, cacheArgs, nil); err != nil {
-						return nil, err
-					}
-				}
-
-				if tc.PreviewDomainID != "" {
-					if cd, err := m.Client().CustomDomain.Get(ctx, tc.PreviewDomainID); err == nil && cd.CnameRecord != "" {
-						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
-							CustomDomain: cd.CnameRecord,
-						}, nil); err != nil {
-							return nil, err
-						}
-					}
-				}
-			}
-
 			return retVal, nil
 		})
 	}
