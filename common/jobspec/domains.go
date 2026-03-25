@@ -118,3 +118,29 @@ func (ClearTrustCenterCacheArgs) Kind() string { return "clear_trust_center_cach
 func (ClearTrustCenterCacheArgs) InsertOpts() river.InsertOpts {
 	return river.InsertOpts{Queue: QueueTrustcenter}
 }
+
+// CreatePreviewDomainSSLAcmeArgs for the worker to process the preview domain and add it's acme content
+//
+// When creating a preview domain, since we do not require the user to add the cnames and others to verify
+// the domain, we add it as a subdomain of ours, Cloudflare proceeds to automatically generate the ssl certificate
+//
+// but the problem here is that it automatically goes into an "initializing" state and we do not
+// want to wait in the "create preview worker" job for say a minute or more to get the acme challenge content
+type CreatePreviewDomainSSLAcmeArgs struct {
+	// ID of the custom domain in our system
+	CustomDomainID string `json:"custom_domain_id"`
+
+	// TrustCenterID is the ID of the trust center this preview domain belongs to
+	TrustCenterID string `json:"trust_center_id"`
+
+	// TrustCenterPreviewZoneID is the cloudflare zone id for this preview domain
+	TrustCenterPreviewZoneID string `json:"trust_center_preview_zone_id"`
+}
+
+// Kind satisfies the river.Job interface
+func (CreatePreviewDomainSSLAcmeArgs) Kind() string { return "create_preview_doman_ssl" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (CreatePreviewDomainSSLAcmeArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
