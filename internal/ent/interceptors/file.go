@@ -3,20 +3,22 @@ package interceptors
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 	"time"
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 )
 
@@ -93,12 +95,13 @@ func InterceptorPresignedURL() ent.Interceptor {
 			if ok {
 				for _, f := range res {
 					if presignedRequested {
-						if err := setPresignedURL(ctx, f, q); err != nil {
+						if err := setPresignedURL(ctx, f, q); err != nil && !isFileNotFound(err) {
 							logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURL")
 						}
 					}
+
 					if base64Requested {
-						if err := setBase64(ctx, f, q); err != nil {
+						if err := setBase64(ctx, f, q); err != nil && !isFileNotFound(err) {
 							logx.FromContext(ctx).Warn().Err(err).Msg("failed to set base64")
 						}
 					}
@@ -111,12 +114,12 @@ func InterceptorPresignedURL() ent.Interceptor {
 			f, ok := v.(*generated.File)
 			if ok {
 				if presignedRequested {
-					if err := setPresignedURL(ctx, f, q); err != nil {
+					if err := setPresignedURL(ctx, f, q); err != nil && !isFileNotFound(err) {
 						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
 					}
 				}
 				if base64Requested {
-					if err := setBase64(ctx, f, q); err != nil {
+					if err := setBase64(ctx, f, q); err != nil && !isFileNotFound(err) {
 						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set base64")
 					}
 				}
@@ -184,7 +187,6 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 	url, err := q.ObjectManager.GetPresignedURL(ctx, storageFile, presignedURLDuration)
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to get presigned URL")
-
 		return err
 	}
 
@@ -231,4 +233,8 @@ func setBase64(ctx context.Context, file *generated.File, q *generated.FileQuery
 	file.Base64 = base64.StdEncoding.EncodeToString(downloaded.File)
 
 	return nil
+}
+
+func isFileNotFound(err error) bool {
+	return errors.Is(err, dbprovider.ErrFileNotFound)
 }
