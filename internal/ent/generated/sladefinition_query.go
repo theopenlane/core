@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -26,20 +25,19 @@ import (
 // SLADefinitionQuery is the builder for querying SLADefinition entities.
 type SLADefinitionQuery struct {
 	config
-	ctx                            *QueryContext
-	order                          []sladefinition.OrderOption
-	inters                         []Interceptor
-	predicates                     []predicate.SLADefinition
-	withOwner                      *OrganizationQuery
-	withSLADefinitionSeverityLevel *CustomTypeEnumQuery
-	withBlockedGroups              *GroupQuery
-	withEditors                    *GroupQuery
-	withViewers                    *GroupQuery
-	loadTotal                      []func(context.Context, []*SLADefinition) error
-	modifiers                      []func(*sql.Selector)
-	withNamedBlockedGroups         map[string]*GroupQuery
-	withNamedEditors               map[string]*GroupQuery
-	withNamedViewers               map[string]*GroupQuery
+	ctx                    *QueryContext
+	order                  []sladefinition.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.SLADefinition
+	withOwner              *OrganizationQuery
+	withBlockedGroups      *GroupQuery
+	withEditors            *GroupQuery
+	withViewers            *GroupQuery
+	loadTotal              []func(context.Context, []*SLADefinition) error
+	modifiers              []func(*sql.Selector)
+	withNamedBlockedGroups map[string]*GroupQuery
+	withNamedEditors       map[string]*GroupQuery
+	withNamedViewers       map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -94,31 +92,6 @@ func (_q *SLADefinitionQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.SLADefinition
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QuerySLADefinitionSeverityLevel chains the current query on the "sla_definition_severity_level" edge.
-func (_q *SLADefinitionQuery) QuerySLADefinitionSeverityLevel() *CustomTypeEnumQuery {
-	query := (&CustomTypeEnumClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(sladefinition.Table, sladefinition.FieldID, selector),
-			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, sladefinition.SLADefinitionSeverityLevelTable, sladefinition.SLADefinitionSeverityLevelColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.SLADefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -388,16 +361,15 @@ func (_q *SLADefinitionQuery) Clone() *SLADefinitionQuery {
 		return nil
 	}
 	return &SLADefinitionQuery{
-		config:                         _q.config,
-		ctx:                            _q.ctx.Clone(),
-		order:                          append([]sladefinition.OrderOption{}, _q.order...),
-		inters:                         append([]Interceptor{}, _q.inters...),
-		predicates:                     append([]predicate.SLADefinition{}, _q.predicates...),
-		withOwner:                      _q.withOwner.Clone(),
-		withSLADefinitionSeverityLevel: _q.withSLADefinitionSeverityLevel.Clone(),
-		withBlockedGroups:              _q.withBlockedGroups.Clone(),
-		withEditors:                    _q.withEditors.Clone(),
-		withViewers:                    _q.withViewers.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]sladefinition.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.SLADefinition{}, _q.predicates...),
+		withOwner:         _q.withOwner.Clone(),
+		withBlockedGroups: _q.withBlockedGroups.Clone(),
+		withEditors:       _q.withEditors.Clone(),
+		withViewers:       _q.withViewers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -413,17 +385,6 @@ func (_q *SLADefinitionQuery) WithOwner(opts ...func(*OrganizationQuery)) *SLADe
 		opt(query)
 	}
 	_q.withOwner = query
-	return _q
-}
-
-// WithSLADefinitionSeverityLevel tells the query-builder to eager-load the nodes that are connected to
-// the "sla_definition_severity_level" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SLADefinitionQuery) WithSLADefinitionSeverityLevel(opts ...func(*CustomTypeEnumQuery)) *SLADefinitionQuery {
-	query := (&CustomTypeEnumClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withSLADefinitionSeverityLevel = query
 	return _q
 }
 
@@ -544,9 +505,8 @@ func (_q *SLADefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*SLADefinition{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [4]bool{
 			_q.withOwner != nil,
-			_q.withSLADefinitionSeverityLevel != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
@@ -578,12 +538,6 @@ func (_q *SLADefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *SLADefinition, e *Organization) { n.Edges.Owner = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withSLADefinitionSeverityLevel; query != nil {
-		if err := _q.loadSLADefinitionSeverityLevel(ctx, query, nodes, nil,
-			func(n *SLADefinition, e *CustomTypeEnum) { n.Edges.SLADefinitionSeverityLevel = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -659,35 +613,6 @@ func (_q *SLADefinitionQuery) loadOwner(ctx context.Context, query *Organization
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (_q *SLADefinitionQuery) loadSLADefinitionSeverityLevel(ctx context.Context, query *CustomTypeEnumQuery, nodes []*SLADefinition, init func(*SLADefinition), assign func(*SLADefinition, *CustomTypeEnum)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*SLADefinition)
-	for i := range nodes {
-		fk := nodes[i].SLADefinitionSeverityLevelID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(customtypeenum.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "sla_definition_severity_level_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -821,9 +746,6 @@ func (_q *SLADefinitionQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(sladefinition.FieldOwnerID)
-		}
-		if _q.withSLADefinitionSeverityLevel != nil {
-			_spec.Node.AddColumnOnce(sladefinition.FieldSLADefinitionSeverityLevelID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

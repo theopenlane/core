@@ -44,10 +44,6 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldSLADefinitionSeverityLevelName holds the string denoting the sla_definition_severity_level_name field in the database.
-	FieldSLADefinitionSeverityLevelName = "sla_definition_severity_level_name"
-	// FieldSLADefinitionSeverityLevelID holds the string denoting the sla_definition_severity_level_id field in the database.
-	FieldSLADefinitionSeverityLevelID = "sla_definition_severity_level_id"
 	// FieldSLADays holds the string denoting the sla_days field in the database.
 	FieldSLADays = "sla_days"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
@@ -71,8 +67,6 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
-	FieldSLADefinitionSeverityLevelName,
-	FieldSLADefinitionSeverityLevelID,
 	FieldSLADays,
 	FieldSecurityLevel,
 }
@@ -193,16 +187,6 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
-}
-
-// BySLADefinitionSeverityLevelName orders the results by the sla_definition_severity_level_name field.
-func BySLADefinitionSeverityLevelName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSLADefinitionSeverityLevelName, opts...).ToFunc()
-}
-
-// BySLADefinitionSeverityLevelID orders the results by the sla_definition_severity_level_id field.
-func BySLADefinitionSeverityLevelID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSLADefinitionSeverityLevelID, opts...).ToFunc()
 }
 
 // BySLADays orders the results by the sla_days field.

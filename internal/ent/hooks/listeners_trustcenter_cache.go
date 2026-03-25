@@ -2,7 +2,9 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"strings"
 	"time"
@@ -416,11 +418,6 @@ func handleTrustCenterMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 		return nil
 	}
 
-	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
-		return nil
-	}
-
 	trustCenterID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok || trustCenterID == "" {
 		return nil
@@ -476,7 +473,7 @@ func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenter
 
 	tc, err := client.TrustCenter.Query().
 		Where(trustcenter.ID(trustCenterID)).
-		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug).
+		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug, trustcenter.FieldPreviewDomainID).
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to query trust center for cache invalidation")
@@ -500,11 +497,32 @@ func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenter
 	}
 
 	targetURL := buildTrustCenterURL(customDomain, tc.Slug)
-	if targetURL == "" {
+	if targetURL != "" {
+		if err := triggerCacheRefresh(ctx, targetURL); err != nil {
+			return err
+		}
+	}
+
+	if tc.PreviewDomainID == "" {
 		return nil
 	}
 
-	return triggerCacheRefresh(ctx, targetURL)
+	cd, err := client.CustomDomain.Query().
+		Where(customdomain.ID(tc.PreviewDomainID)).
+		Select(customdomain.FieldCnameRecord).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Str("preview_domain_id", tc.PreviewDomainID).Msg("failed to query preview domain for cache invalidation")
+
+		return err
+	}
+
+	previewURL := buildTrustCenterURL(cd.CnameRecord, "")
+	if previewURL == "" {
+		return nil
+	}
+
+	return triggerCacheRefresh(ctx, previewURL)
 }
 
 // buildTrustCenterURL constructs the trust center URL from custom domain or slug
@@ -550,6 +568,14 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 
 	for attempt := range cacheRefreshMaxRetries {
 		resp, err := requester.ReceiveWithContext(ctx, nil, append(requestOpts, httpsling.Header("X-Cache-Refresh-Attempt", fmt.Sprintf("%d", attempt+1)))...)
+
+		if err != nil {
+			var dnsErr *net.DNSError
+			if errors.As(err, &dnsErr) {
+				logx.FromContext(ctx).Info().Err(err).Str("target_url", targetURL).Msg("dns lookup failed for trust center cache refresh, skipping")
+				return nil
+			}
+		}
 
 		if err == nil && resp != nil {
 			defer resp.Body.Close()

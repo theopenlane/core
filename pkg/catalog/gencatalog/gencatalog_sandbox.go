@@ -171,6 +171,7 @@ var DefaultSandboxCatalog = models.Catalog{
 			}}},
 			Description:          "Public Security Portal",
 			DisplayName:          "Trust Center",
+			IncludeWithTrial:     true,
 			LookupKey:            "trust_center_module",
 			MarketingDescription: "Build customer trust with a professional security portal. Share compliance documentation securely with stakeholders",
 			ProductID:            "prod_SzqDywr83XkXk5",

@@ -207,6 +207,7 @@ enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/core/com
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 ActionPlanHistoryOpType is enum for the field operation
@@ -2823,6 +2824,7 @@ enum CampaignHistoryFrequency @goModel(model: "github.com/theopenlane/core/commo
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 CampaignHistoryOpType is enum for the field operation
@@ -10752,6 +10754,7 @@ enum EntityHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 EntityHistoryOpType is enum for the field operation
@@ -17443,6 +17446,7 @@ enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/core
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 InternalPolicyHistoryOpType is enum for the field operation
@@ -23753,6 +23757,7 @@ enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/core/comm
   QUARTERLY
   BIANNUALLY
   MONTHLY
+  NONE
 }
 """
 ProcedureHistoryOpType is enum for the field operation
@@ -29600,19 +29605,11 @@ type SLADefinitionHistory implements Node {
   """
   ownerID: String
   """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelName: String
-  """
-  the severity_level of the sla_definition
-  """
-  slaDefinitionSeverityLevelID: String
-  """
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
   """
-  incoming source severity
+  security level to map with the SLA definition
   """
   securityLevel: SLADefinitionHistorySecurityLevel!
 }
@@ -29840,42 +29837,6 @@ input SLADefinitionHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
-  """
-  sla_definition_severity_level_name field predicates
-  """
-  slaDefinitionSeverityLevelName: String
-  slaDefinitionSeverityLevelNameNEQ: String
-  slaDefinitionSeverityLevelNameIn: [String!]
-  slaDefinitionSeverityLevelNameNotIn: [String!]
-  slaDefinitionSeverityLevelNameGT: String
-  slaDefinitionSeverityLevelNameGTE: String
-  slaDefinitionSeverityLevelNameLT: String
-  slaDefinitionSeverityLevelNameLTE: String
-  slaDefinitionSeverityLevelNameContains: String
-  slaDefinitionSeverityLevelNameHasPrefix: String
-  slaDefinitionSeverityLevelNameHasSuffix: String
-  slaDefinitionSeverityLevelNameIsNil: Boolean
-  slaDefinitionSeverityLevelNameNotNil: Boolean
-  slaDefinitionSeverityLevelNameEqualFold: String
-  slaDefinitionSeverityLevelNameContainsFold: String
-  """
-  sla_definition_severity_level_id field predicates
-  """
-  slaDefinitionSeverityLevelID: String
-  slaDefinitionSeverityLevelIDNEQ: String
-  slaDefinitionSeverityLevelIDIn: [String!]
-  slaDefinitionSeverityLevelIDNotIn: [String!]
-  slaDefinitionSeverityLevelIDGT: String
-  slaDefinitionSeverityLevelIDGTE: String
-  slaDefinitionSeverityLevelIDLT: String
-  slaDefinitionSeverityLevelIDLTE: String
-  slaDefinitionSeverityLevelIDContains: String
-  slaDefinitionSeverityLevelIDHasPrefix: String
-  slaDefinitionSeverityLevelIDHasSuffix: String
-  slaDefinitionSeverityLevelIDIsNil: Boolean
-  slaDefinitionSeverityLevelIDNotNil: Boolean
-  slaDefinitionSeverityLevelIDEqualFold: String
-  slaDefinitionSeverityLevelIDContainsFold: String
   """
   sla_days field predicates
   """

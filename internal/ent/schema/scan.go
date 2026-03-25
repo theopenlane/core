@@ -157,6 +157,7 @@ func (s Scan) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(s, Platform{}),
 		defaultEdgeFromWithPagination(s, Vulnerability{}),
 		defaultEdgeFromWithPagination(s, Control{}),
+		defaultEdgeFromWithPagination(s, Subcontrol{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: s,
 			name:       "generated_by_platform",

@@ -168,34 +168,6 @@ func (_c *SLADefinitionHistoryCreate) SetNillableOwnerID(v *string) *SLADefiniti
 	return _c
 }
 
-// SetSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field.
-func (_c *SLADefinitionHistoryCreate) SetSLADefinitionSeverityLevelName(v string) *SLADefinitionHistoryCreate {
-	_c.mutation.SetSLADefinitionSeverityLevelName(v)
-	return _c
-}
-
-// SetNillableSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field if the given value is not nil.
-func (_c *SLADefinitionHistoryCreate) SetNillableSLADefinitionSeverityLevelName(v *string) *SLADefinitionHistoryCreate {
-	if v != nil {
-		_c.SetSLADefinitionSeverityLevelName(*v)
-	}
-	return _c
-}
-
-// SetSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field.
-func (_c *SLADefinitionHistoryCreate) SetSLADefinitionSeverityLevelID(v string) *SLADefinitionHistoryCreate {
-	_c.mutation.SetSLADefinitionSeverityLevelID(v)
-	return _c
-}
-
-// SetNillableSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field if the given value is not nil.
-func (_c *SLADefinitionHistoryCreate) SetNillableSLADefinitionSeverityLevelID(v *string) *SLADefinitionHistoryCreate {
-	if v != nil {
-		_c.SetSLADefinitionSeverityLevelID(*v)
-	}
-	return _c
-}
-
 // SetSLADays sets the "sla_days" field.
 func (_c *SLADefinitionHistoryCreate) SetSLADays(v int) *SLADefinitionHistoryCreate {
 	_c.mutation.SetSLADays(v)
@@ -416,14 +388,6 @@ func (_c *SLADefinitionHistoryCreate) createSpec() (*SLADefinitionHistory, *sqlg
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(sladefinitionhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
-	}
-	if value, ok := _c.mutation.SLADefinitionSeverityLevelName(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADefinitionSeverityLevelName, field.TypeString, value)
-		_node.SLADefinitionSeverityLevelName = value
-	}
-	if value, ok := _c.mutation.SLADefinitionSeverityLevelID(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADefinitionSeverityLevelID, field.TypeString, value)
-		_node.SLADefinitionSeverityLevelID = value
 	}
 	if value, ok := _c.mutation.SLADays(); ok {
 		_spec.SetField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)

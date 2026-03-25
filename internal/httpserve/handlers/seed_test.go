@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -70,7 +71,10 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 		require.NoError(t, err)
 	}
 
+	// ensure unique email for each test user, even if the same email is provided in the input, by appending a ULID to the email
 	email := gofakeit.Email()
+	parts := strings.Split(email, "@")
+	email = parts[0] + strings.ToLower(ulids.New().String()) + "@" + parts[1]
 	if input != nil && input.email != "" {
 		email = input.email
 	}

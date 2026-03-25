@@ -90,10 +90,8 @@ type Review struct {
 	RawPayload map[string]interface{} `json:"raw_payload,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ReviewQuery when eager-loading is set.
-	Edges                 ReviewEdges `json:"edges"`
-	remediation_reviews   *string
-	vulnerability_reviews *string
-	selectValues          sql.SelectValues
+	Edges        ReviewEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // ReviewEdges holds the relations/edges for other nodes in the graph.
@@ -377,10 +375,6 @@ func (*Review) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case review.FieldCreatedAt, review.FieldUpdatedAt, review.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case review.ForeignKeys[0]: // remediation_reviews
-			values[i] = new(sql.NullString)
-		case review.ForeignKeys[1]: // vulnerability_reviews
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -610,20 +604,6 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.RawPayload); err != nil {
 					return fmt.Errorf("unmarshal field raw_payload: %w", err)
 				}
-			}
-		case review.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field remediation_reviews", values[i])
-			} else if value.Valid {
-				_m.remediation_reviews = new(string)
-				*_m.remediation_reviews = value.String
-			}
-		case review.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_reviews", values[i])
-			} else if value.Valid {
-				_m.vulnerability_reviews = new(string)
-				*_m.vulnerability_reviews = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

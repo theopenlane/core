@@ -403,10 +403,12 @@ func StatusValidator(s enums.CampaignStatus) error {
 	}
 }
 
+const DefaultRecurrenceFrequency enums.Frequency = "NONE"
+
 // RecurrenceFrequencyValidator is a validator for the "recurrence_frequency" field enum values. It is called by the builders before save.
 func RecurrenceFrequencyValidator(rf enums.Frequency) error {
 	switch rf.String() {
-	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("campaign: invalid enum value for recurrence_frequency field: %q", rf)

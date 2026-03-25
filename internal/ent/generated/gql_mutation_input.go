@@ -2844,6 +2844,9 @@ type CreateControlInput struct {
 	ControlOwnerID             *string
 	DelegateID                 *string
 	ResponsiblePartyID         *string
+	ReviewIDs                  []string
+	RemediationIDs             []string
+	ScanIDs                    []string
 	OwnerID                    *string
 	BlockedGroupIDs            []string
 	EditorIDs                  []string
@@ -2854,12 +2857,9 @@ type CreateControlInput struct {
 	ProgramIDs                 []string
 	PlatformIDs                []string
 	AssetIDs                   []string
-	ScanIDs                    []string
 	EntityIDs                  []string
 	IdentityHolderIDs          []string
 	CampaignIDs                []string
-	RemediationIDs             []string
-	ReviewIDs                  []string
 	FindingIDs                 []string
 	ControlImplementationIDs   []string
 	SubcontrolIDs              []string
@@ -3014,6 +3014,15 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ResponsiblePartyID; v != nil {
 		m.SetResponsiblePartyID(*v)
 	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -3044,9 +3053,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.AssetIDs; len(v) > 0 {
 		m.AddAssetIDs(v...)
 	}
-	if v := i.ScanIDs; len(v) > 0 {
-		m.AddScanIDs(v...)
-	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
@@ -3055,12 +3061,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.CampaignIDs; len(v) > 0 {
 		m.AddCampaignIDs(v...)
-	}
-	if v := i.RemediationIDs; len(v) > 0 {
-		m.AddRemediationIDs(v...)
-	}
-	if v := i.ReviewIDs; len(v) > 0 {
-		m.AddReviewIDs(v...)
 	}
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
@@ -3204,6 +3204,15 @@ type UpdateControlInput struct {
 	DelegateID                      *string
 	ClearResponsibleParty           bool
 	ResponsiblePartyID              *string
+	ClearReviews                    bool
+	AddReviewIDs                    []string
+	RemoveReviewIDs                 []string
+	ClearRemediations               bool
+	AddRemediationIDs               []string
+	RemoveRemediationIDs            []string
+	ClearScans                      bool
+	AddScanIDs                      []string
+	RemoveScanIDs                   []string
 	ClearBlockedGroups              bool
 	AddBlockedGroupIDs              []string
 	RemoveBlockedGroupIDs           []string
@@ -3227,9 +3236,6 @@ type UpdateControlInput struct {
 	ClearAssets                     bool
 	AddAssetIDs                     []string
 	RemoveAssetIDs                  []string
-	ClearScans                      bool
-	AddScanIDs                      []string
-	RemoveScanIDs                   []string
 	ClearEntities                   bool
 	AddEntityIDs                    []string
 	RemoveEntityIDs                 []string
@@ -3239,12 +3245,6 @@ type UpdateControlInput struct {
 	ClearCampaigns                  bool
 	AddCampaignIDs                  []string
 	RemoveCampaignIDs               []string
-	ClearRemediations               bool
-	AddRemediationIDs               []string
-	RemoveRemediationIDs            []string
-	ClearReviews                    bool
-	AddReviewIDs                    []string
-	RemoveReviewIDs                 []string
 	ClearFindings                   bool
 	AddFindingIDs                   []string
 	RemoveFindingIDs                []string
@@ -3615,6 +3615,33 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ResponsiblePartyID; v != nil {
 		m.SetResponsiblePartyID(*v)
 	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -3684,15 +3711,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveAssetIDs; len(v) > 0 {
 		m.RemoveAssetIDs(v...)
 	}
-	if i.ClearScans {
-		m.ClearScans()
-	}
-	if v := i.AddScanIDs; len(v) > 0 {
-		m.AddScanIDs(v...)
-	}
-	if v := i.RemoveScanIDs; len(v) > 0 {
-		m.RemoveScanIDs(v...)
-	}
 	if i.ClearEntities {
 		m.ClearEntities()
 	}
@@ -3719,24 +3737,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveCampaignIDs; len(v) > 0 {
 		m.RemoveCampaignIDs(v...)
-	}
-	if i.ClearRemediations {
-		m.ClearRemediations()
-	}
-	if v := i.AddRemediationIDs; len(v) > 0 {
-		m.AddRemediationIDs(v...)
-	}
-	if v := i.RemoveRemediationIDs; len(v) > 0 {
-		m.RemoveRemediationIDs(v...)
-	}
-	if i.ClearReviews {
-		m.ClearReviews()
-	}
-	if v := i.AddReviewIDs; len(v) > 0 {
-		m.AddReviewIDs(v...)
-	}
-	if v := i.RemoveReviewIDs; len(v) > 0 {
-		m.RemoveReviewIDs(v...)
 	}
 	if i.ClearFindings {
 		m.ClearFindings()
@@ -21465,14 +21465,12 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateSLADefinitionInput represents a mutation input for creating sladefinitions.
 type CreateSLADefinitionInput struct {
-	Tags                           []string
-	SLADefinitionSeverityLevelName *string
-	SLADays                        int
-	OwnerID                        *string
-	SLADefinitionSeverityLevelID   *string
-	BlockedGroupIDs                []string
-	EditorIDs                      []string
-	ViewerIDs                      []string
+	Tags            []string
+	SLADays         int
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
 }
 
 // Mutate applies the CreateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -21480,15 +21478,9 @@ func (i *CreateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	if v := i.SLADefinitionSeverityLevelName; v != nil {
-		m.SetSLADefinitionSeverityLevelName(*v)
-	}
 	m.SetSLADays(i.SLADays)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.SLADefinitionSeverityLevelID; v != nil {
-		m.SetSLADefinitionSeverityLevelID(*v)
 	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
@@ -21509,25 +21501,21 @@ func (c *SLADefinitionCreate) SetInput(i CreateSLADefinitionInput) *SLADefinitio
 
 // UpdateSLADefinitionInput represents a mutation input for updating sladefinitions.
 type UpdateSLADefinitionInput struct {
-	ClearTags                           bool
-	Tags                                []string
-	AppendTags                          []string
-	ClearSLADefinitionSeverityLevelName bool
-	SLADefinitionSeverityLevelName      *string
-	SLADays                             *int
-	ClearOwner                          bool
-	OwnerID                             *string
-	ClearSLADefinitionSeverityLevel     bool
-	SLADefinitionSeverityLevelID        *string
-	ClearBlockedGroups                  bool
-	AddBlockedGroupIDs                  []string
-	RemoveBlockedGroupIDs               []string
-	ClearEditors                        bool
-	AddEditorIDs                        []string
-	RemoveEditorIDs                     []string
-	ClearViewers                        bool
-	AddViewerIDs                        []string
-	RemoveViewerIDs                     []string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	SLADays               *int
+	ClearOwner            bool
+	OwnerID               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
 }
 
 // Mutate applies the UpdateSLADefinitionInput on the SLADefinitionMutation builder.
@@ -21541,12 +21529,6 @@ func (i *UpdateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearSLADefinitionSeverityLevelName {
-		m.ClearSLADefinitionSeverityLevelName()
-	}
-	if v := i.SLADefinitionSeverityLevelName; v != nil {
-		m.SetSLADefinitionSeverityLevelName(*v)
-	}
 	if v := i.SLADays; v != nil {
 		m.SetSLADays(*v)
 	}
@@ -21555,12 +21537,6 @@ func (i *UpdateSLADefinitionInput) Mutate(m *SLADefinitionMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearSLADefinitionSeverityLevel {
-		m.ClearSLADefinitionSeverityLevel()
-	}
-	if v := i.SLADefinitionSeverityLevelID; v != nil {
-		m.SetSLADefinitionSeverityLevelID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -21639,6 +21615,7 @@ type CreateScanInput struct {
 	PlatformIDs           []string
 	VulnerabilityIDs      []string
 	ControlIDs            []string
+	SubcontrolIDs         []string
 	GeneratedByPlatformID *string
 	PerformedByUserID     *string
 	PerformedByGroupID    *string
@@ -21746,6 +21723,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.GeneratedByPlatformID; v != nil {
 		m.SetGeneratedByPlatformID(*v)
 	}
@@ -21843,6 +21823,9 @@ type UpdateScanInput struct {
 	ClearControls            bool
 	AddControlIDs            []string
 	RemoveControlIDs         []string
+	ClearSubcontrols         bool
+	AddSubcontrolIDs         []string
+	RemoveSubcontrolIDs      []string
 	ClearGeneratedByPlatform bool
 	GeneratedByPlatformID    *string
 	ClearPerformedByUser     bool
@@ -22086,6 +22069,15 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 	if i.ClearGeneratedByPlatform {
 		m.ClearGeneratedByPlatform()
@@ -22689,6 +22681,9 @@ type CreateSubcontrolInput struct {
 	ControlOwnerID             *string
 	DelegateID                 *string
 	ResponsiblePartyID         *string
+	ReviewIDs                  []string
+	RemediationIDs             []string
+	ScanIDs                    []string
 	OwnerID                    *string
 	SubcontrolKindID           *string
 	ControlID                  string
@@ -22835,6 +22830,15 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ResponsiblePartyID; v != nil {
 		m.SetResponsiblePartyID(*v)
 	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -22972,6 +22976,15 @@ type UpdateSubcontrolInput struct {
 	DelegateID                      *string
 	ClearResponsibleParty           bool
 	ResponsiblePartyID              *string
+	ClearReviews                    bool
+	AddReviewIDs                    []string
+	RemoveReviewIDs                 []string
+	ClearRemediations               bool
+	AddRemediationIDs               []string
+	RemoveRemediationIDs            []string
+	ClearScans                      bool
+	AddScanIDs                      []string
+	RemoveScanIDs                   []string
 	ClearSubcontrolKind             bool
 	SubcontrolKindID                *string
 	ControlID                       *string
@@ -23320,6 +23333,33 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.ResponsiblePartyID; v != nil {
 		m.SetResponsiblePartyID(*v)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
 	}
 	if i.ClearSubcontrolKind {
 		m.ClearSubcontrolKind()

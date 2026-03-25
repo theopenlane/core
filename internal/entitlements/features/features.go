@@ -72,7 +72,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"SLADefinition":              {models.CatalogVulnerabilityManagementModule, models.CatalogComplianceModule},
 	"Standard":                   {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon, models.CatalogRiskManagementAddon, models.CatalogEntityManagementModule, models.CatalogTrustCenterModule},
 	"Subcontrol":                 {models.CatalogComplianceModule},
-	"Subprocessor":               {models.CatalogTrustCenterModule},
+	"Subprocessor":               {models.CatalogTrustCenterModule, models.CatalogEntityManagementModule, models.CatalogComplianceModule},
 	"Subscriber":                 {models.CatalogBaseModule},
 	"SystemDetail":               {models.CatalogComplianceModule},
 	"TagDefinition":              {models.CatalogBaseModule},

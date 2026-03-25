@@ -8,8 +8,7 @@ mutation CreateBulkCSVSLADefinition($input: Upload!) {
       id
       ownerID
       slaDays
-      slaDefinitionSeverityLevelID
-      slaDefinitionSeverityLevelName
+      securityLevel
       tags
       updatedAt
       updatedBy
@@ -26,8 +25,7 @@ mutation CreateBulkSLADefinition($input: [CreateSLADefinitionInput!]) {
       id
       ownerID
       slaDays
-      slaDefinitionSeverityLevelID
-      slaDefinitionSeverityLevelName
+      securityLevel
       tags
       updatedAt
       updatedBy
@@ -44,8 +42,7 @@ mutation CreateSLADefinition($input: CreateSLADefinitionInput!) {
       id
       ownerID
       slaDays
-      slaDefinitionSeverityLevelID
-      slaDefinitionSeverityLevelName
+      securityLevel
       tags
       updatedAt
       updatedBy
@@ -68,8 +65,7 @@ mutation UpdateBulkSLADefinition($ids: [ID!]!, $input: UpdateSLADefinitionInput!
       id
       ownerID
       slaDays
-      slaDefinitionSeverityLevelID
-      slaDefinitionSeverityLevelName
+      securityLevel
       tags
       updatedAt
       updatedBy
@@ -87,8 +83,7 @@ mutation UpdateBulkCSVSLADefinition($input: Upload!) {
       id
       ownerID
       slaDays
-      slaDefinitionSeverityLevelID
-      slaDefinitionSeverityLevelName
+      securityLevel
       tags
       updatedAt
       updatedBy
@@ -126,8 +121,7 @@ query GetAllSLADefinitions($first: Int, $last: Int, $after: Cursor, $before: Cur
         id
         ownerID
         slaDays
-        slaDefinitionSeverityLevelID
-        slaDefinitionSeverityLevelName
+        securityLevel
         tags
         updatedAt
         updatedBy
@@ -143,8 +137,7 @@ query GetSLADefinitionByID($slaDefinitionId: ID!) {
     id
     ownerID
     slaDays
-    slaDefinitionSeverityLevelID
-    slaDefinitionSeverityLevelName
+    securityLevel
     tags
     updatedAt
     updatedBy
@@ -175,8 +168,7 @@ query GetSLADefinitions($first: Int, $last: Int, $after: Cursor, $before: Cursor
         id
         ownerID
         slaDays
-        slaDefinitionSeverityLevelID
-        slaDefinitionSeverityLevelName
+        securityLevel
         tags
         updatedAt
         updatedBy
@@ -193,8 +185,7 @@ mutation UpdateSLADefinition($updateSLADefinitionId: ID!, $input: UpdateSLADefin
       id
       ownerID
       slaDays
-      slaDefinitionSeverityLevelID
-      slaDefinitionSeverityLevelName
+      securityLevel
       tags
       updatedAt
       updatedBy

@@ -136,6 +136,8 @@ type ScanEdges struct {
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// GeneratedByPlatform holds the value of the generated_by_platform edge.
 	GeneratedByPlatform *Platform `json:"generated_by_platform,omitempty"`
 	// PerformedByUser holds the value of the performed_by_user edge.
@@ -144,9 +146,9 @@ type ScanEdges struct {
 	PerformedByGroup *Group `json:"performed_by_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [24]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -161,6 +163,7 @@ type ScanEdges struct {
 	namedPlatforms       map[string][]*Platform
 	namedVulnerabilities map[string][]*Vulnerability
 	namedControls        map[string][]*Control
+	namedSubcontrols     map[string][]*Subcontrol
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -357,12 +360,21 @@ func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[20] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // GeneratedByPlatformOrErr returns the GeneratedByPlatform value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 	if e.GeneratedByPlatform != nil {
 		return e.GeneratedByPlatform, nil
-	} else if e.loadedTypes[20] {
+	} else if e.loadedTypes[21] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "generated_by_platform"}
@@ -373,7 +385,7 @@ func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 	if e.PerformedByUser != nil {
 		return e.PerformedByUser, nil
-	} else if e.loadedTypes[21] {
+	} else if e.loadedTypes[22] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_user"}
@@ -384,7 +396,7 @@ func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 func (e ScanEdges) PerformedByGroupOrErr() (*Group, error) {
 	if e.PerformedByGroup != nil {
 		return e.PerformedByGroup, nil
-	} else if e.loadedTypes[22] {
+	} else if e.loadedTypes[23] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_group"}
@@ -753,6 +765,11 @@ func (_m *Scan) QueryVulnerabilities() *VulnerabilityQuery {
 // QueryControls queries the "controls" edge of the Scan entity.
 func (_m *Scan) QueryControls() *ControlQuery {
 	return NewScanClient(_m.config).QueryControls(_m)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the Scan entity.
+func (_m *Scan) QuerySubcontrols() *SubcontrolQuery {
+	return NewScanClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryGeneratedByPlatform queries the "generated_by_platform" edge of the Scan entity.
@@ -1201,6 +1218,30 @@ func (_m *Scan) appendNamedControls(name string, edges ...*Control) {
 		_m.Edges.namedControls[name] = []*Control{}
 	} else {
 		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 

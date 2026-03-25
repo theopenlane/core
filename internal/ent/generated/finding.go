@@ -136,9 +136,8 @@ type Finding struct {
 	RawPayload map[string]interface{} `json:"raw_payload,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FindingQuery when eager-loading is set.
-	Edges                  FindingEdges `json:"edges"`
-	vulnerability_findings *string
-	selectValues           sql.SelectValues
+	Edges        FindingEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // FindingEdges holds the relations/edges for other nodes in the graph.
@@ -486,8 +485,6 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case finding.ForeignKeys[0]: // vulnerability_findings
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -865,13 +862,6 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.RawPayload); err != nil {
 					return fmt.Errorf("unmarshal field raw_payload: %w", err)
 				}
-			}
-		case finding.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_findings", values[i])
-			} else if value.Valid {
-				_m.vulnerability_findings = new(string)
-				*_m.vulnerability_findings = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

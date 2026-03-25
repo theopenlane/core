@@ -208,7 +208,7 @@ func (r Remediation) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Entity{}.Name()),
 			},
 		}),
-		edgeToWithPagination(&edgeDefinition{
+		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: r,
 			edgeSchema: Review{},
 			annotations: []schema.Annotation{

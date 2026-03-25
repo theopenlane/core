@@ -36,18 +36,12 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldSLADefinitionSeverityLevelName holds the string denoting the sla_definition_severity_level_name field in the database.
-	FieldSLADefinitionSeverityLevelName = "sla_definition_severity_level_name"
-	// FieldSLADefinitionSeverityLevelID holds the string denoting the sla_definition_severity_level_id field in the database.
-	FieldSLADefinitionSeverityLevelID = "sla_definition_severity_level_id"
 	// FieldSLADays holds the string denoting the sla_days field in the database.
 	FieldSLADays = "sla_days"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
 	FieldSecurityLevel = "security_level"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeSLADefinitionSeverityLevel holds the string denoting the sla_definition_severity_level edge name in mutations.
-	EdgeSLADefinitionSeverityLevel = "sla_definition_severity_level"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -63,13 +57,6 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// SLADefinitionSeverityLevelTable is the table that holds the sla_definition_severity_level relation/edge.
-	SLADefinitionSeverityLevelTable = "sla_definitions"
-	// SLADefinitionSeverityLevelInverseTable is the table name for the CustomTypeEnum entity.
-	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
-	SLADefinitionSeverityLevelInverseTable = "custom_type_enums"
-	// SLADefinitionSeverityLevelColumn is the table column denoting the sla_definition_severity_level relation/edge.
-	SLADefinitionSeverityLevelColumn = "sla_definition_severity_level_id"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
 	BlockedGroupsTable = "groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
@@ -105,8 +92,6 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
-	FieldSLADefinitionSeverityLevelName,
-	FieldSLADefinitionSeverityLevelID,
 	FieldSLADays,
 	FieldSecurityLevel,
 }
@@ -127,7 +112,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -208,16 +193,6 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// BySLADefinitionSeverityLevelName orders the results by the sla_definition_severity_level_name field.
-func BySLADefinitionSeverityLevelName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSLADefinitionSeverityLevelName, opts...).ToFunc()
-}
-
-// BySLADefinitionSeverityLevelID orders the results by the sla_definition_severity_level_id field.
-func BySLADefinitionSeverityLevelID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSLADefinitionSeverityLevelID, opts...).ToFunc()
-}
-
 // BySLADays orders the results by the sla_days field.
 func BySLADays(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSLADays, opts...).ToFunc()
@@ -232,13 +207,6 @@ func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// BySLADefinitionSeverityLevelField orders the results by sla_definition_severity_level field.
-func BySLADefinitionSeverityLevelField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSLADefinitionSeverityLevelStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -288,13 +256,6 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
-	)
-}
-func newSLADefinitionSeverityLevelStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SLADefinitionSeverityLevelInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, SLADefinitionSeverityLevelTable, SLADefinitionSeverityLevelColumn),
 	)
 }
 func newBlockedGroupsStep() *sqlgraph.Step {

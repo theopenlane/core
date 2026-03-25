@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
@@ -134,34 +133,6 @@ func (_c *SLADefinitionCreate) SetNillableOwnerID(v *string) *SLADefinitionCreat
 	return _c
 }
 
-// SetSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field.
-func (_c *SLADefinitionCreate) SetSLADefinitionSeverityLevelName(v string) *SLADefinitionCreate {
-	_c.mutation.SetSLADefinitionSeverityLevelName(v)
-	return _c
-}
-
-// SetNillableSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field if the given value is not nil.
-func (_c *SLADefinitionCreate) SetNillableSLADefinitionSeverityLevelName(v *string) *SLADefinitionCreate {
-	if v != nil {
-		_c.SetSLADefinitionSeverityLevelName(*v)
-	}
-	return _c
-}
-
-// SetSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field.
-func (_c *SLADefinitionCreate) SetSLADefinitionSeverityLevelID(v string) *SLADefinitionCreate {
-	_c.mutation.SetSLADefinitionSeverityLevelID(v)
-	return _c
-}
-
-// SetNillableSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field if the given value is not nil.
-func (_c *SLADefinitionCreate) SetNillableSLADefinitionSeverityLevelID(v *string) *SLADefinitionCreate {
-	if v != nil {
-		_c.SetSLADefinitionSeverityLevelID(*v)
-	}
-	return _c
-}
-
 // SetSLADays sets the "sla_days" field.
 func (_c *SLADefinitionCreate) SetSLADays(v int) *SLADefinitionCreate {
 	_c.mutation.SetSLADays(v)
@@ -199,11 +170,6 @@ func (_c *SLADefinitionCreate) SetNillableID(v *string) *SLADefinitionCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *SLADefinitionCreate) SetOwner(v *Organization) *SLADefinitionCreate {
 	return _c.SetOwnerID(v.ID)
-}
-
-// SetSLADefinitionSeverityLevel sets the "sla_definition_severity_level" edge to the CustomTypeEnum entity.
-func (_c *SLADefinitionCreate) SetSLADefinitionSeverityLevel(v *CustomTypeEnum) *SLADefinitionCreate {
-	return _c.SetSLADefinitionSeverityLevelID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -419,10 +385,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 		_spec.SetField(sladefinition.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := _c.mutation.SLADefinitionSeverityLevelName(); ok {
-		_spec.SetField(sladefinition.FieldSLADefinitionSeverityLevelName, field.TypeString, value)
-		_node.SLADefinitionSeverityLevelName = value
-	}
 	if value, ok := _c.mutation.SLADays(); ok {
 		_spec.SetField(sladefinition.FieldSLADays, field.TypeInt, value)
 		_node.SLADays = value
@@ -447,24 +409,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.SLADefinitionSeverityLevelIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   sladefinition.SLADefinitionSeverityLevelTable,
-			Columns: []string{sladefinition.SLADefinitionSeverityLevelColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.SLADefinition
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.SLADefinitionSeverityLevelID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {

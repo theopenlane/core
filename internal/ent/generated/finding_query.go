@@ -75,7 +75,6 @@ type FindingQuery struct {
 	withFiles                   *FileQuery
 	withWorkflowObjectRefs      *WorkflowObjectRefQuery
 	withControlMappings         *FindingControlQuery
-	withFKs                     bool
 	loadTotal                   []func(context.Context, []*Finding) error
 	modifiers                   []func(*sql.Selector)
 	withNamedBlockedGroups      map[string]*GroupQuery
@@ -350,11 +349,11 @@ func (_q *FindingQuery) QueryVulnerabilities() *VulnerabilityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.VulnerabilitiesTable, finding.VulnerabilitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.VulnerabilitiesTable, finding.VulnerabilitiesPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.FindingVulnerabilities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1380,7 +1379,6 @@ func (_q *FindingQuery) prepareQuery(ctx context.Context) error {
 func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Finding, error) {
 	var (
 		nodes       = []*Finding{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [26]bool{
 			_q.withOwner != nil,
@@ -1411,9 +1409,6 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			_q.withControlMappings != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, finding.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Finding).scanValues(nil, columns)
 	}
@@ -2053,33 +2048,64 @@ func (_q *FindingQuery) loadIntegrations(ctx context.Context, query *Integration
 	return nil
 }
 func (_q *FindingQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Vulnerability)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Vulnerability(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.VulnerabilitiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.FindingVulnerabilities)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(finding.VulnerabilitiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.VulnerabilitiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.VulnerabilitiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_vulnerabilities
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_vulnerabilities" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_vulnerabilities" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

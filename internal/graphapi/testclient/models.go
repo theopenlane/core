@@ -3955,6 +3955,9 @@ type Control struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// the entity who is responsible for the control implementation when it is a third party
 	ResponsibleParty       *Entity                          `json:"responsibleParty,omitempty"`
+	Reviews                *ReviewConnection                `json:"reviews"`
+	Remediations           *RemediationConnection           `json:"remediations"`
+	Scans                  *ScanConnection                  `json:"scans"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	BlockedGroups          *GroupConnection                 `json:"blockedGroups"`
 	Editors                *GroupConnection                 `json:"editors"`
@@ -3965,12 +3968,9 @@ type Control struct {
 	Programs               *ProgramConnection               `json:"programs"`
 	Platforms              *PlatformConnection              `json:"platforms"`
 	Assets                 *AssetConnection                 `json:"assets"`
-	Scans                  *ScanConnection                  `json:"scans"`
 	Entities               *EntityConnection                `json:"entities"`
 	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
 	Campaigns              *CampaignConnection              `json:"campaigns"`
-	Remediations           *RemediationConnection           `json:"remediations"`
-	Reviews                *ReviewConnection                `json:"reviews"`
 	Findings               *FindingConnection               `json:"findings"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
@@ -5445,6 +5445,15 @@ type ControlWhereInput struct {
 	// responsible_party edge predicates
 	HasResponsibleParty     *bool               `json:"hasResponsibleParty,omitempty"`
 	HasResponsiblePartyWith []*EntityWhereInput `json:"hasResponsiblePartyWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// scans edge predicates
+	HasScans     *bool             `json:"hasScans,omitempty"`
+	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -5475,9 +5484,6 @@ type ControlWhereInput struct {
 	// assets edge predicates
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
 	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
-	// scans edge predicates
-	HasScans     *bool             `json:"hasScans,omitempty"`
-	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
@@ -5487,12 +5493,6 @@ type ControlWhereInput struct {
 	// campaigns edge predicates
 	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
 	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
-	// remediations edge predicates
-	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
-	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
-	// reviews edge predicates
-	HasReviews     *bool               `json:"hasReviews,omitempty"`
-	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 	// findings edge predicates
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
@@ -6017,6 +6017,9 @@ type CreateControlInput struct {
 	ControlOwnerID           *string                             `json:"controlOwnerID,omitempty"`
 	DelegateID               *string                             `json:"delegateID,omitempty"`
 	ResponsiblePartyID       *string                             `json:"responsiblePartyID,omitempty"`
+	ReviewIDs                []string                            `json:"reviewIDs,omitempty"`
+	RemediationIDs           []string                            `json:"remediationIDs,omitempty"`
+	ScanIDs                  []string                            `json:"scanIDs,omitempty"`
 	OwnerID                  *string                             `json:"ownerID,omitempty"`
 	BlockedGroupIDs          []string                            `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                []string                            `json:"editorIDs,omitempty"`
@@ -6027,12 +6030,9 @@ type CreateControlInput struct {
 	ProgramIDs               []string                            `json:"programIDs,omitempty"`
 	PlatformIDs              []string                            `json:"platformIDs,omitempty"`
 	AssetIDs                 []string                            `json:"assetIDs,omitempty"`
-	ScanIDs                  []string                            `json:"scanIDs,omitempty"`
 	EntityIDs                []string                            `json:"entityIDs,omitempty"`
 	IdentityHolderIDs        []string                            `json:"identityHolderIDs,omitempty"`
 	CampaignIDs              []string                            `json:"campaignIDs,omitempty"`
-	RemediationIDs           []string                            `json:"remediationIDs,omitempty"`
-	ReviewIDs                []string                            `json:"reviewIDs,omitempty"`
 	FindingIDs               []string                            `json:"findingIDs,omitempty"`
 	ControlImplementationIDs []string                            `json:"controlImplementationIDs,omitempty"`
 	SubcontrolIDs            []string                            `json:"subcontrolIDs,omitempty"`
@@ -8198,15 +8198,12 @@ type CreateRiskInput struct {
 type CreateSLADefinitionInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName *string `json:"slaDefinitionSeverityLevelName,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                      int64    `json:"slaDays"`
-	OwnerID                      *string  `json:"ownerID,omitempty"`
-	SLADefinitionSeverityLevelID *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
-	BlockedGroupIDs              []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                    []string `json:"editorIDs,omitempty"`
-	ViewerIDs                    []string `json:"viewerIDs,omitempty"`
+	SLADays         int64    `json:"slaDays"`
+	OwnerID         *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs       []string `json:"editorIDs,omitempty"`
+	ViewerIDs       []string `json:"viewerIDs,omitempty"`
 }
 
 // CreateScanInput is used for create Scan object.
@@ -8260,6 +8257,7 @@ type CreateScanInput struct {
 	PlatformIDs           []string          `json:"platformIDs,omitempty"`
 	VulnerabilityIDs      []string          `json:"vulnerabilityIDs,omitempty"`
 	ControlIDs            []string          `json:"controlIDs,omitempty"`
+	SubcontrolIDs         []string          `json:"subcontrolIDs,omitempty"`
 	GeneratedByPlatformID *string           `json:"generatedByPlatformID,omitempty"`
 	PerformedByUserID     *string           `json:"performedByUserID,omitempty"`
 	PerformedByGroupID    *string           `json:"performedByGroupID,omitempty"`
@@ -8424,6 +8422,9 @@ type CreateSubcontrolInput struct {
 	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
 	DelegateID               *string  `json:"delegateID,omitempty"`
 	ResponsiblePartyID       *string  `json:"responsiblePartyID,omitempty"`
+	ReviewIDs                []string `json:"reviewIDs,omitempty"`
+	RemediationIDs           []string `json:"remediationIDs,omitempty"`
+	ScanIDs                  []string `json:"scanIDs,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
 	SubcontrolKindID         *string  `json:"subcontrolKindID,omitempty"`
 	ControlID                string   `json:"controlID"`
@@ -30209,19 +30210,14 @@ type SLADefinition struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName *string `json:"slaDefinitionSeverityLevelName,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelID *string `json:"slaDefinitionSeverityLevelID,omitempty"`
 	// remediation service level agreement in days for the severity level
 	SLADays int64 `json:"slaDays"`
-	// incoming source severity
-	SecurityLevel              enums.SecurityLevel `json:"securityLevel"`
-	Owner                      *Organization       `json:"owner,omitempty"`
-	SLADefinitionSeverityLevel *CustomTypeEnum     `json:"slaDefinitionSeverityLevel,omitempty"`
-	BlockedGroups              *GroupConnection    `json:"blockedGroups"`
-	Editors                    *GroupConnection    `json:"editors"`
-	Viewers                    *GroupConnection    `json:"viewers"`
+	// security level to map with the SLA definition
+	SecurityLevel enums.SecurityLevel `json:"securityLevel"`
+	Owner         *Organization       `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection    `json:"blockedGroups"`
+	Editors       *GroupConnection    `json:"editors"`
+	Viewers       *GroupConnection    `json:"viewers"`
 }
 
 func (SLADefinition) IsNode() {}
@@ -30391,38 +30387,6 @@ type SLADefinitionWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-	// sla_definition_severity_level_name field predicates
-	SLADefinitionSeverityLevelName             *string  `json:"slaDefinitionSeverityLevelName,omitempty"`
-	SLADefinitionSeverityLevelNameNeq          *string  `json:"slaDefinitionSeverityLevelNameNEQ,omitempty"`
-	SLADefinitionSeverityLevelNameIn           []string `json:"slaDefinitionSeverityLevelNameIn,omitempty"`
-	SLADefinitionSeverityLevelNameNotIn        []string `json:"slaDefinitionSeverityLevelNameNotIn,omitempty"`
-	SLADefinitionSeverityLevelNameGt           *string  `json:"slaDefinitionSeverityLevelNameGT,omitempty"`
-	SLADefinitionSeverityLevelNameGte          *string  `json:"slaDefinitionSeverityLevelNameGTE,omitempty"`
-	SLADefinitionSeverityLevelNameLt           *string  `json:"slaDefinitionSeverityLevelNameLT,omitempty"`
-	SLADefinitionSeverityLevelNameLte          *string  `json:"slaDefinitionSeverityLevelNameLTE,omitempty"`
-	SLADefinitionSeverityLevelNameContains     *string  `json:"slaDefinitionSeverityLevelNameContains,omitempty"`
-	SLADefinitionSeverityLevelNameHasPrefix    *string  `json:"slaDefinitionSeverityLevelNameHasPrefix,omitempty"`
-	SLADefinitionSeverityLevelNameHasSuffix    *string  `json:"slaDefinitionSeverityLevelNameHasSuffix,omitempty"`
-	SLADefinitionSeverityLevelNameIsNil        *bool    `json:"slaDefinitionSeverityLevelNameIsNil,omitempty"`
-	SLADefinitionSeverityLevelNameNotNil       *bool    `json:"slaDefinitionSeverityLevelNameNotNil,omitempty"`
-	SLADefinitionSeverityLevelNameEqualFold    *string  `json:"slaDefinitionSeverityLevelNameEqualFold,omitempty"`
-	SLADefinitionSeverityLevelNameContainsFold *string  `json:"slaDefinitionSeverityLevelNameContainsFold,omitempty"`
-	// sla_definition_severity_level_id field predicates
-	SLADefinitionSeverityLevelID             *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
-	SLADefinitionSeverityLevelIdneq          *string  `json:"slaDefinitionSeverityLevelIDNEQ,omitempty"`
-	SLADefinitionSeverityLevelIDIn           []string `json:"slaDefinitionSeverityLevelIDIn,omitempty"`
-	SLADefinitionSeverityLevelIDNotIn        []string `json:"slaDefinitionSeverityLevelIDNotIn,omitempty"`
-	SLADefinitionSeverityLevelIdgt           *string  `json:"slaDefinitionSeverityLevelIDGT,omitempty"`
-	SLADefinitionSeverityLevelIdgte          *string  `json:"slaDefinitionSeverityLevelIDGTE,omitempty"`
-	SLADefinitionSeverityLevelIdlt           *string  `json:"slaDefinitionSeverityLevelIDLT,omitempty"`
-	SLADefinitionSeverityLevelIdlte          *string  `json:"slaDefinitionSeverityLevelIDLTE,omitempty"`
-	SLADefinitionSeverityLevelIDContains     *string  `json:"slaDefinitionSeverityLevelIDContains,omitempty"`
-	SLADefinitionSeverityLevelIDHasPrefix    *string  `json:"slaDefinitionSeverityLevelIDHasPrefix,omitempty"`
-	SLADefinitionSeverityLevelIDHasSuffix    *string  `json:"slaDefinitionSeverityLevelIDHasSuffix,omitempty"`
-	SLADefinitionSeverityLevelIDIsNil        *bool    `json:"slaDefinitionSeverityLevelIDIsNil,omitempty"`
-	SLADefinitionSeverityLevelIDNotNil       *bool    `json:"slaDefinitionSeverityLevelIDNotNil,omitempty"`
-	SLADefinitionSeverityLevelIDEqualFold    *string  `json:"slaDefinitionSeverityLevelIDEqualFold,omitempty"`
-	SLADefinitionSeverityLevelIDContainsFold *string  `json:"slaDefinitionSeverityLevelIDContainsFold,omitempty"`
 	// sla_days field predicates
 	SLADays      *int64  `json:"slaDays,omitempty"`
 	SLADaysNeq   *int64  `json:"slaDaysNEQ,omitempty"`
@@ -30440,9 +30404,6 @@ type SLADefinitionWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// sla_definition_severity_level edge predicates
-	HasSLADefinitionSeverityLevel     *bool                       `json:"hasSLADefinitionSeverityLevel,omitempty"`
-	HasSLADefinitionSeverityLevelWith []*CustomTypeEnumWhereInput `json:"hasSLADefinitionSeverityLevelWith,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -30530,6 +30491,7 @@ type Scan struct {
 	Platforms           *PlatformConnection      `json:"platforms"`
 	Vulnerabilities     *VulnerabilityConnection `json:"vulnerabilities"`
 	Controls            *ControlConnection       `json:"controls"`
+	Subcontrols         *SubcontrolConnection    `json:"subcontrols"`
 	GeneratedByPlatform *Platform                `json:"generatedByPlatform,omitempty"`
 	PerformedByUser     *User                    `json:"performedByUser,omitempty"`
 	PerformedByGroup    *Group                   `json:"performedByGroup,omitempty"`
@@ -31018,6 +30980,9 @@ type ScanWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// generated_by_platform edge predicates
 	HasGeneratedByPlatform     *bool                 `json:"hasGeneratedByPlatform,omitempty"`
 	HasGeneratedByPlatformWith []*PlatformWhereInput `json:"hasGeneratedByPlatformWith,omitempty"`
@@ -32129,6 +32094,9 @@ type Subcontrol struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// the entity who is responsible for the control implementation when it is a third party
 	ResponsibleParty       *Entity                          `json:"responsibleParty,omitempty"`
+	Reviews                *ReviewConnection                `json:"reviews"`
+	Remediations           *RemediationConnection           `json:"remediations"`
+	Scans                  *ScanConnection                  `json:"scans"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	SubcontrolKind         *CustomTypeEnum                  `json:"subcontrolKind,omitempty"`
 	Control                *Control                         `json:"control"`
@@ -32730,6 +32698,15 @@ type SubcontrolWhereInput struct {
 	// responsible_party edge predicates
 	HasResponsibleParty     *bool               `json:"hasResponsibleParty,omitempty"`
 	HasResponsiblePartyWith []*EntityWhereInput `json:"hasResponsiblePartyWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// scans edge predicates
+	HasScans     *bool             `json:"hasScans,omitempty"`
+	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -38630,6 +38607,15 @@ type UpdateControlInput struct {
 	ClearDelegate                  *bool                               `json:"clearDelegate,omitempty"`
 	ResponsiblePartyID             *string                             `json:"responsiblePartyID,omitempty"`
 	ClearResponsibleParty          *bool                               `json:"clearResponsibleParty,omitempty"`
+	AddReviewIDs                   []string                            `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                []string                            `json:"removeReviewIDs,omitempty"`
+	ClearReviews                   *bool                               `json:"clearReviews,omitempty"`
+	AddRemediationIDs              []string                            `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs           []string                            `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations              *bool                               `json:"clearRemediations,omitempty"`
+	AddScanIDs                     []string                            `json:"addScanIDs,omitempty"`
+	RemoveScanIDs                  []string                            `json:"removeScanIDs,omitempty"`
+	ClearScans                     *bool                               `json:"clearScans,omitempty"`
 	AddBlockedGroupIDs             []string                            `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs          []string                            `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups             *bool                               `json:"clearBlockedGroups,omitempty"`
@@ -38653,9 +38639,6 @@ type UpdateControlInput struct {
 	AddAssetIDs                    []string                            `json:"addAssetIDs,omitempty"`
 	RemoveAssetIDs                 []string                            `json:"removeAssetIDs,omitempty"`
 	ClearAssets                    *bool                               `json:"clearAssets,omitempty"`
-	AddScanIDs                     []string                            `json:"addScanIDs,omitempty"`
-	RemoveScanIDs                  []string                            `json:"removeScanIDs,omitempty"`
-	ClearScans                     *bool                               `json:"clearScans,omitempty"`
 	AddEntityIDs                   []string                            `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs                []string                            `json:"removeEntityIDs,omitempty"`
 	ClearEntities                  *bool                               `json:"clearEntities,omitempty"`
@@ -38665,12 +38648,6 @@ type UpdateControlInput struct {
 	AddCampaignIDs                 []string                            `json:"addCampaignIDs,omitempty"`
 	RemoveCampaignIDs              []string                            `json:"removeCampaignIDs,omitempty"`
 	ClearCampaigns                 *bool                               `json:"clearCampaigns,omitempty"`
-	AddRemediationIDs              []string                            `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs           []string                            `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations              *bool                               `json:"clearRemediations,omitempty"`
-	AddReviewIDs                   []string                            `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs                []string                            `json:"removeReviewIDs,omitempty"`
-	ClearReviews                   *bool                               `json:"clearReviews,omitempty"`
 	AddFindingIDs                  []string                            `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs               []string                            `json:"removeFindingIDs,omitempty"`
 	ClearFindings                  *bool                               `json:"clearFindings,omitempty"`
@@ -42294,24 +42271,19 @@ type UpdateSLADefinitionInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the severity_level of the sla_definition
-	SLADefinitionSeverityLevelName      *string `json:"slaDefinitionSeverityLevelName,omitempty"`
-	ClearSLADefinitionSeverityLevelName *bool   `json:"clearSLADefinitionSeverityLevelName,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                         *int64   `json:"slaDays,omitempty"`
-	OwnerID                         *string  `json:"ownerID,omitempty"`
-	ClearOwner                      *bool    `json:"clearOwner,omitempty"`
-	SLADefinitionSeverityLevelID    *string  `json:"slaDefinitionSeverityLevelID,omitempty"`
-	ClearSLADefinitionSeverityLevel *bool    `json:"clearSLADefinitionSeverityLevel,omitempty"`
-	AddBlockedGroupIDs              []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs           []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups              *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                    []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs                 []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors                    *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs                    []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs                 []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers                    *bool    `json:"clearViewers,omitempty"`
+	SLADays               *int64   `json:"slaDays,omitempty"`
+	OwnerID               *string  `json:"ownerID,omitempty"`
+	ClearOwner            *bool    `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs          []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs          []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs       []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers          *bool    `json:"clearViewers,omitempty"`
 }
 
 // UpdateScanInput is used for update Scan object.
@@ -42409,6 +42381,9 @@ type UpdateScanInput struct {
 	AddControlIDs            []string          `json:"addControlIDs,omitempty"`
 	RemoveControlIDs         []string          `json:"removeControlIDs,omitempty"`
 	ClearControls            *bool             `json:"clearControls,omitempty"`
+	AddSubcontrolIDs         []string          `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs      []string          `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols         *bool             `json:"clearSubcontrols,omitempty"`
 	GeneratedByPlatformID    *string           `json:"generatedByPlatformID,omitempty"`
 	ClearGeneratedByPlatform *bool             `json:"clearGeneratedByPlatform,omitempty"`
 	PerformedByUserID        *string           `json:"performedByUserID,omitempty"`
@@ -42672,6 +42647,15 @@ type UpdateSubcontrolInput struct {
 	ClearDelegate                  *bool                   `json:"clearDelegate,omitempty"`
 	ResponsiblePartyID             *string                 `json:"responsiblePartyID,omitempty"`
 	ClearResponsibleParty          *bool                   `json:"clearResponsibleParty,omitempty"`
+	AddReviewIDs                   []string                `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                []string                `json:"removeReviewIDs,omitempty"`
+	ClearReviews                   *bool                   `json:"clearReviews,omitempty"`
+	AddRemediationIDs              []string                `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs           []string                `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations              *bool                   `json:"clearRemediations,omitempty"`
+	AddScanIDs                     []string                `json:"addScanIDs,omitempty"`
+	RemoveScanIDs                  []string                `json:"removeScanIDs,omitempty"`
+	ClearScans                     *bool                   `json:"clearScans,omitempty"`
 	SubcontrolKindID               *string                 `json:"subcontrolKindID,omitempty"`
 	ClearSubcontrolKind            *bool                   `json:"clearSubcontrolKind,omitempty"`
 	ControlID                      *string                 `json:"controlID,omitempty"`
