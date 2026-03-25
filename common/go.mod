@@ -21,7 +21,7 @@ require (
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.13.4
+	github.com/theopenlane/core v1.13.5
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.23.0
 	github.com/theopenlane/httpsling v0.3.0
@@ -34,7 +34,7 @@ require (
 require (
 	ariga.io/atlas v1.1.0 // indirect
 	entgo.io/contrib v0.7.0 // indirect
-	github.com/99designs/gqlgen v0.17.88 // indirect
+	github.com/99designs/gqlgen v0.17.89 // indirect
 	github.com/XSAM/otelsql v0.41.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
