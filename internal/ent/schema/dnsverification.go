@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -25,7 +26,7 @@ type DNSVerification struct {
 const (
 	// SchemaDNSVerification is the name of the DNSVerification schema.
 	SchemaDNSVerification = "dns_verification"
-	maxTXTValueLen        = 64
+	maxTXTValueLen        = 200
 	cloudflareIDMaxLen    = 64
 	maxStatusReasonLen    = 255
 )
