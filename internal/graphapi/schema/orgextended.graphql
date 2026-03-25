@@ -1,11 +1,13 @@
 extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateOrganizationInput {
   addOrgMembers: [CreateOrgMembershipInput!]
   removeOrgMembers: [ID!]
   updateOrgSettings: UpdateOrganizationSettingInput
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input OrgMembershipWhereInput {
@@ -35,6 +37,10 @@ extend type Mutation{
         avatar file to Upload
         """
         avatarFile: Upload
+        """
+        metadata for the avatar file
+        """
+        avatarFileMetadata: FileMetadataInput
         """
         organization members to be added to the new org
         """

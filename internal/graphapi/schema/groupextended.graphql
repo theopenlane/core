@@ -1,5 +1,6 @@
 extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateGroupInput {
@@ -11,6 +12,7 @@ extend input UpdateGroupInput {
   as the specified group ID, existing permissions will be removed
   """
   inheritGroupPermissions: ID
+  avatarFileMetadata: FileMetadataInput
 }
 
 extend input GroupMembershipWhereInput {
