@@ -22,13 +22,13 @@ type HealthCheck struct {
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
 	return providerkit.WithClientRequest(sccClient, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client) (json.RawMessage, error) {
-		return h.Run(ctx, request.Credential, client)
+		return h.Run(ctx, request.Credentials, client)
 	})
 }
 
 // Run executes the GCP SCC health check
-func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, c *cloudscc.Client) (json.RawMessage, error) {
-	meta, err := metadataFromCredential(credential)
+func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client) (json.RawMessage, error) {
+	meta, err := resolveCredential(credentials)
 	if err != nil {
 		return nil, err
 	}

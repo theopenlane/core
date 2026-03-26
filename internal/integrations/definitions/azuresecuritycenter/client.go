@@ -8,7 +8,6 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -36,8 +35,8 @@ type Client struct{}
 
 // Build constructs an Azure Security Center client using client credentials
 func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	var cred CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+	cred, _, err := securityCenterCredential.Resolve(req.Credentials)
+	if err != nil {
 		return nil, ErrCredentialInvalid
 	}
 

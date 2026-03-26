@@ -33,6 +33,22 @@ func (bindings CredentialBindings) Resolve(ref CredentialSlotID) (CredentialSet,
 	return CredentialSet{}, false
 }
 
+// With returns a copy of the bindings with the given ref set to credential,
+// replacing an existing binding for the same ref or appending a new one
+func (bindings CredentialBindings) With(ref CredentialSlotID, credential CredentialSet) CredentialBindings {
+	out := make(CredentialBindings, len(bindings))
+	copy(out, bindings)
+
+	for i := range out {
+		if out[i].Ref == ref {
+			out[i].Credential = credential
+			return out
+		}
+	}
+
+	return append(out, CredentialBinding{Ref: ref, Credential: credential})
+}
+
 // CredentialRegistration declares how a definition accepts credentials
 type CredentialRegistration struct {
 	// Ref is the durable credential slot identifier

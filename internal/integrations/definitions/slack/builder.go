@@ -32,9 +32,15 @@ func Builder(cfg Config) registry.Builder {
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
 					Ref:         slackCredential.ID(),
-					Name:        "Slack Credential",
+					Name:        "Slack OAuth Credential",
 					Description: "OAuth credential used to access the Slack workspace.",
 					Schema:      slackCredentialSchema,
+				},
+				{
+					Ref:         slackBotTokenCredential.ID(),
+					Name:        "Slack Bot Token",
+					Description: "User-provisioned bot token from a custom Slack app.",
+					Schema:      slackBotTokenCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -87,11 +93,24 @@ func Builder(cfg Config) registry.Builder {
 						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Slack workspace under Administration > Manage apps.",
 					},
 				},
+				{
+					CredentialRef:       slackBotTokenCredential.ID(),
+					Name:                "Slack Bot Token",
+					Description:         "Connect your Slack workspace using a bot token from a custom Slack app.",
+					CredentialRefs:      []types.CredentialSlotID{slackBotTokenCredential.ID()},
+					ClientRefs:          []types.ClientID{slackClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Installation:        installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: slackBotTokenCredential.ID(),
+						Description:   "Removes the stored bot token from Openlane. To fully revoke access, delete or regenerate the token in your Slack app under OAuth & Permissions.",
+					},
+				},
 			},
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            slackClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{slackCredential.ID()},
+					CredentialRefs: []types.CredentialSlotID{slackCredential.ID(), slackBotTokenCredential.ID()},
 					Description:    "Slack Web API client",
 					Build:          Client{}.Build,
 				},

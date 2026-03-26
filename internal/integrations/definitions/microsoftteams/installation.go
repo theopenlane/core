@@ -6,13 +6,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // resolveInstallationMetadata derives Microsoft tenant metadata from the persisted access token when available
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-	var cred teamsCred
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+	cred, _, err := teamsCredential.Resolve(req.Credentials)
+	if err != nil {
 		return InstallationMetadata{}, false, ErrCredentialDecode
 	}
 

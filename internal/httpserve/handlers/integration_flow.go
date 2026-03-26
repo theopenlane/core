@@ -169,7 +169,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	rec, err := h.IntegrationsRuntime.ResolveInstallation(reqCtx, caller.OrganizationID, in.InstallationID, "")
+	rec, err := h.IntegrationsRuntime.ResolveIntegration(reqCtx, caller.OrganizationID, in.InstallationID, "")
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)

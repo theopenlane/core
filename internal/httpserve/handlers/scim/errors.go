@@ -33,8 +33,8 @@ var (
 	ErrDirectoryAccountNotFound = errors.New("directory account not found")
 	// ErrDirectoryGroupNotFound is returned when a DirectoryGroup record cannot be located.
 	ErrDirectoryGroupNotFound = errors.New("directory group not found")
-	// ErrSyncRunRequired is returned when a DirectorySyncRun cannot be obtained for directory writes.
-	ErrSyncRunRequired = errors.New("directory sync run is required for directory mode writes")
+	// ErrSyncRunRequired is returned when a DirectorySyncRun cannot be obtained for SCIM directory writes.
+	ErrSyncRunRequired = errors.New("directory sync run is required for SCIM directory writes")
 )
 
 // HandleEntError converts ent database errors to SCIM-compliant error responses

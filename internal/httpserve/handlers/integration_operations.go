@@ -56,23 +56,26 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation not found")
+
 		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 	}
 
 	inlineExecution := operation.Policy.Inline
+
 	queueCtx := context.WithoutCancel(requestCtx)
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
 	if inlineExecution {
 		if err := operations.ValidateConfig(operation.ConfigSchema, configDoc); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
+
 			return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 		}
 	}
 
 	integrationID := req.IntegrationID
 
-	installationRec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
+	installationRec, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, caller.OrganizationID, integrationID, def.ID)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
@@ -85,14 +88,12 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 
-		summary := "Integration operation completed"
-
 		return h.Success(ctx, IntegrationOperationResponse{
 			Reply:     rout.Reply{Success: true},
 			Provider:  def.ID,
 			Operation: operationName,
 			Status:    "ok",
-			Summary:   summary,
+			Summary:   "Integration operation completed",
 			Details:   output,
 		})
 	}

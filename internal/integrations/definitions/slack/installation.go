@@ -6,21 +6,16 @@ import (
 	slackgo "github.com/slack-go/slack"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// resolveInstallationMetadata derives Slack workspace metadata from the persisted OAuth credential
+// resolveInstallationMetadata derives Slack workspace metadata from whichever credential is bound
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-	var cred slackCred
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
-		return InstallationMetadata{}, false, ErrCredentialDecode
+	token, err := resolveAccessToken(req.Credentials)
+	if err != nil {
+		return InstallationMetadata{}, false, err
 	}
 
-	if cred.AccessToken == "" {
-		return InstallationMetadata{}, false, ErrOAuthTokenMissing
-	}
-
-	authTest, err := slackgo.New(cred.AccessToken).AuthTestContext(ctx)
+	authTest, err := slackgo.New(token).AuthTestContext(ctx)
 	if err != nil {
 		return InstallationMetadata{}, false, ErrAuthTestFailed
 	}

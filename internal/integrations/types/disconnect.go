@@ -13,8 +13,6 @@ type DisconnectRequest struct {
 	Installation *generated.Integration
 	// Connection is the resolved connection mode for this installation
 	Connection ConnectionRegistration
-	// Credential is the persisted credential for the installation when available
-	Credential *CredentialSet
 	// Credentials are the persisted credentials participating in this connection mode
 	Credentials CredentialBindings
 	// Config is the installation-scoped configuration payload

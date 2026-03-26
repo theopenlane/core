@@ -11,8 +11,6 @@ import (
 type ClientBuildRequest struct {
 	// Installation is the target installation record
 	Installation *generated.Integration
-	// Credential is the primary credential bundle for convenience when the client uses one slot
-	Credential CredentialSet
 	// Credentials lists all resolved credential bundles for this client by slot ref
 	Credentials CredentialBindings
 	// Config is the client-specific configuration payload

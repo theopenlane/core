@@ -8,9 +8,9 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/httpserve/handlers/scim"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
@@ -24,8 +24,8 @@ func registerSCIMRoutes(router *Router) error {
 	scimHandler := scim.WrapSCIMServerHTTPHandler(server)
 
 	// Integration-scoped SCIM route: /scim/:integrationId/*
-	// Validates the integration belongs to the authenticated org,
-	// loads SCIMProvisionMode, and injects IntegrationContext before dispatching.
+	// Validates the integration belongs to the authenticated org, resolves the
+	// SCIM installation context, and injects IntegrationContext before dispatching.
 	handler := func(c echo.Context) error {
 		req := c.Request()
 		ctx := req.Context()
@@ -48,15 +48,14 @@ func registerSCIMRoutes(router *Router) error {
 		client := transaction.FromContext(ctx)
 
 		integ, err := client.Integration.Query().
-			Where(integration.ID(integrationID), integration.OwnerID(orgID)).
+			Where(
+				integration.ID(integrationID),
+				integration.OwnerID(orgID),
+				integration.DefinitionID(definitionscim.DefinitionID.ID()),
+			).
 			Only(ctx)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusNotFound, scim.ErrIntegrationNotFound.Error())
-		}
-
-		mode := integ.Config.SCIMProvisionMode
-		if mode == "" {
-			mode = enums.SCIMProvisionModeUsers
 		}
 
 		ic := &scim.IntegrationContext{
@@ -64,7 +63,6 @@ func registerSCIMRoutes(router *Router) error {
 			Installation:  integ,
 			OrgID:         orgID,
 			Runtime:       router.Handler.IntegrationsRuntime,
-			ProvisionMode: mode,
 		}
 
 		updatedCtx := scim.WithIntegrationContext(ctx, ic)

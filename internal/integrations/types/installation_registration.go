@@ -13,8 +13,6 @@ type InstallationRequest struct {
 	Installation *generated.Integration
 	// Connection is the resolved connection mode for the installation when available
 	Connection ConnectionRegistration
-	// Credential is the primary credential bundle for convenience when one slot is used
-	Credential CredentialSet
 	// Credentials lists all resolved credential bundles participating in the connection mode
 	Credentials CredentialBindings
 	// Config is the installation-scoped configuration payload

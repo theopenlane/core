@@ -2179,7 +2179,7 @@ type RefreshIntegrationTokenRequest struct {
 	// Provider is the provider value.
 	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 	// IntegrationID scopes refresh to a specific installed integration record.
-	IntegrationID string `query:"integration_id,omitempty" description:"Optional integration ID for scoped token refresh" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	IntegrationID string `query:"integration_id" description:"Optional integration ID for scoped token refresh" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleRefreshIntegrationTokenRequest is an example refresh integration token request for OpenAPI documentation
@@ -2443,15 +2443,13 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
 type DisconnectIntegrationRequest struct {
-	// DefinitionID is the definitionid value.
-	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
-	// IntegrationID is the integrationid value.
-	IntegrationID string `query:"integration_id,omitempty" description:"Specific integration ID to delete"`
+	// IntegrationID is the integration ID to disconnect
+	IntegrationID string `param:"integrationID" description:"Integration ID to disconnect" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
 var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
-	DefinitionID: "def_01K0GHAPP000000000000000001",
+	IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
 // =========

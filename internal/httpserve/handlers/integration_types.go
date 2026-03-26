@@ -13,7 +13,7 @@ import (
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
 type IntegrationConfigPayload struct {
 	// DefinitionID is the canonical integration definition ID from the path.
-	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GWKSP000000000000000001"`
+	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GCPSCC00000000000000001"`
 	// InstallationID is the optional existing installation to update credentials on.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
@@ -126,8 +126,7 @@ func (r *IntegrationAuthStartRequest) Validate() error {
 
 // ExampleIntegrationAuthStartRequest is an example auth start request for OpenAPI documentation
 var ExampleIntegrationAuthStartRequest = IntegrationAuthStartRequest{
-	DefinitionID:  "def_01K0SLACK000000000000000001",
-	CredentialRef: types.NewCredentialSlotID("slack"),
+	DefinitionID: "def_01K0SLACK000000000000000001",
 }
 
 // RefreshInstallationCredentialRequest is the request for refreshing an installation's auth tokens.
@@ -145,11 +144,10 @@ func (r *RefreshInstallationCredentialRequest) Validate() error {
 	return nil
 }
 
-// ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
+// ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	DefinitionID:  "def_01K0GWKSP000000000000000001",
-	CredentialRef: types.NewCredentialSlotID("gcp_scc"),
-	Body:          json.RawMessage(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
+	DefinitionID: "def_01K0GCPSCC00000000000000001",
+	Body:         json.RawMessage(`{"organizationId":"123456789","serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
 // ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.

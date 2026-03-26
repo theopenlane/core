@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -15,7 +16,7 @@ import (
 )
 
 // ExecuteOperation runs one integration operation inline without run tracking
-func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentialOverrides types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
+func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
 	if installation == nil {
 		return nil, ErrInstallationRequired
 	}
@@ -26,13 +27,17 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integr
 		}
 	}
 
-	return r.executeResolvedOperation(ctx, installation, operation, credentialOverrides, config, false, operations.IngestOptions{
+	return r.executeResolvedOperation(ctx, installation, operation, credentials, config, false, operations.IngestOptions{
 		Source: integrationgenerated.IntegrationIngestSourceOperation,
 	})
 }
 
 // HandleOperation executes one queued operation envelope through the runtime-managed dependencies
 func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
+	// Operation handlers are system-level; the privacy bypass set by the original
+	// dispatcher is not captured by context codecs in durable dispatch mode
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
 	startedAt := time.Now()
 	db := r.DB()
 
@@ -91,38 +96,30 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 }
 
 // executeResolvedOperation executes the given operation with the input integration and registered Operation
-func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentialOverrides types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, error) {
-	var (
-		client       any
-		err          error
-		credentials  types.CredentialBindings
-		registration types.ClientRegistration
-	)
+func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, error) {
+	var client any
 
 	if operation.ClientRef.Valid() {
-		registration, err = r.Registry().Client(installation.DefinitionID, operation.ClientRef)
+		registration, err := r.Registry().Client(installation.DefinitionID, operation.ClientRef)
 		if err != nil {
 			return nil, err
 		}
 
-		credentials, err = r.LoadCredentials(ctx, installation, registration.CredentialRefs)
-		if err != nil {
-			return nil, err
+		if credentials == nil {
+			credentials, err = r.LoadCredentials(ctx, installation, registration.CredentialRefs)
+			if err != nil {
+				return nil, err
+			}
 		}
-
-		credentials = mergeCredentials(credentials, credentialOverrides)
 
 		client, err = r.Keystore().BuildClient(ctx, installation, registration, credentials, config, clientForce)
 		if err != nil {
 			return nil, err
 		}
-	} else {
-		credentials = mergeCredentials(nil, credentialOverrides)
 	}
 
 	req := types.OperationRequest{
 		Integration: installation,
-		Credential:  singleCredential(credentials, registration.CredentialRefs),
 		Credentials: credentials,
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
@@ -152,42 +149,4 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, installation *en
 	}
 
 	return response, nil
-}
-
-// mergeCredentials combines two credential binding sets, with overrides replacing matching entries in current
-func mergeCredentials(current, overrides types.CredentialBindings) types.CredentialBindings {
-	if len(current) == 0 && len(overrides) == 0 {
-		return nil
-	}
-
-	merged := make(types.CredentialBindings, 0, len(current)+len(overrides))
-	merged = append(merged, current...)
-
-	for _, override := range overrides {
-		replaced := false
-		for index := range merged {
-			if merged[index].Ref == override.Ref {
-				merged[index] = override
-				replaced = true
-				break
-			}
-		}
-
-		if !replaced {
-			merged = append(merged, override)
-		}
-	}
-
-	return merged
-}
-
-// singleCredential returns the resolved credential when exactly one ref is declared, or an empty set otherwise
-func singleCredential(credentials types.CredentialBindings, refs []types.CredentialSlotID) types.CredentialSet {
-	if len(refs) != 1 {
-		return types.CredentialSet{}
-	}
-
-	credential, _ := credentials.Resolve(refs[0])
-
-	return credential
 }

@@ -8,12 +8,12 @@ import (
 	"github.com/theopenlane/core/internal/keymaker"
 )
 
-// installationResolverFunc matches the signature of Runtime.ResolveInstallation for testability
+// installationResolverFunc matches the signature of Runtime.ResolveIntegration for testability
 type installationResolverFunc func(ctx context.Context, ownerID, installationID, definitionID string) (*ent.Integration, error)
 
 // lookupKeymakerInstallation adapts runtime installation resolution to keymaker's lookup contract
 func (r *Runtime) lookupKeymakerInstallation(ctx context.Context, installationID string) (keymaker.InstallationRecord, error) {
-	return resolveKeymakerInstallation(ctx, installationID, r.ResolveInstallation)
+	return resolveKeymakerInstallation(ctx, installationID, r.ResolveIntegration)
 }
 
 // resolveKeymakerInstallation maps installation resolution into a keymaker record

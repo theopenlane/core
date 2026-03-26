@@ -171,7 +171,7 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 
 	allowCtx := workflows.AllowContext(ctx)
 
-	installationRecord, err := e.integrationRuntime.ResolveInstallation(allowCtx, orgID, req.InstallationID, req.DefinitionID)
+	installationRecord, err := e.integrationRuntime.ResolveIntegration(allowCtx, orgID, req.InstallationID, req.DefinitionID)
 	if err != nil {
 		return IntegrationQueueResult{}, err
 	}

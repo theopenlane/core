@@ -8,7 +8,6 @@ import (
 	"google.golang.org/api/option"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // defaultScope is the GCP OAuth scope requested when no explicit scopes are provided
@@ -19,7 +18,7 @@ type Client struct{}
 
 // Build constructs the GCP Security Command Center client for one installation
 func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	meta, err := metadataFromCredential(req.Credential)
+	meta, err := resolveCredential(req.Credentials)
 	if err != nil {
 		return nil, err
 	}
@@ -42,18 +41,18 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 	return client, nil
 }
 
-// metadataFromCredential decodes SCC credential metadata from the credential set
-func metadataFromCredential(credential types.CredentialSet) (CredentialSchema, error) {
-	if len(credential.Data) == 0 {
-		return CredentialSchema{}, ErrCredentialMetadataRequired
-	}
-
-	var meta CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(credential.Data, &meta); err != nil {
+// resolveCredential decodes SCC credential metadata from the credential bindings
+func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
+	cred, ok, err := sccCredential.Resolve(bindings)
+	if err != nil {
 		return CredentialSchema{}, ErrMetadataDecode
 	}
 
-	return meta.applyDefaults(), nil
+	if !ok {
+		return CredentialSchema{}, ErrCredentialMetadataRequired
+	}
+
+	return cred.applyDefaults(), nil
 }
 
 // clientOptions builds client options based on available credentials

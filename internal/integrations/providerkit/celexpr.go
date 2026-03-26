@@ -26,8 +26,9 @@ func CelMapExpr(entries []CelMapEntry) string {
 	for i, entry := range entries {
 		b.WriteString("  ")
 		b.WriteString(strconv.Quote(entry.Key))
-		b.WriteString(": ")
+		b.WriteString(": dyn(")
 		b.WriteString(entry.Expr)
+		b.WriteString(")")
 
 		if i < len(entries)-1 {
 			b.WriteString(",")

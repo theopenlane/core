@@ -37,17 +37,16 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	// GitHub signs deliveries at the app webhook level using the operator-configured secret,
-	// so verify the signature before resolving any local state
+	// gitHub signs deliveries at the app webhook level
 	if webhook.Verify != nil {
 		if err := webhook.Verify(types.WebhookInboundRequest{Request: req, Payload: payload}); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("webhook verification failed")
+
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 	}
 
-	// GitHub App webhook deliveries are unauthenticated — set privacy bypass and a synthetic caller
-	// so that ent queries succeed against privacy-policy-protected tables
+	// gitHub App webhook deliveries are unauthenticated — set privacy bypass and a synthetic caller
 	webhookCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
 	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
 
@@ -57,8 +56,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	// Now that we know which installation this delivery belongs to, set the org-scoped
-	// synthetic caller so ent hooks can resolve the organization context
+	// set the org-scope
 	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(installation.OwnerID))
 
 	webhookCtx = logx.WithFields(webhookCtx, logx.LogFields{
@@ -69,22 +67,25 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(webhookCtx, installation, webhook.Name, "")
 	if err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to ensure webhook")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
 }
 
+// resolveGitHubAppWebhookInstallation extracts the githubapp installation ID from the webhook payload and looks up the corresponding integration record
 func (h *Handler) resolveGitHubAppWebhookInstallation(ctx context.Context, payload []byte) (*ent.Integration, error) {
-	providerInstallationID, err := extractGitHubAppWebhookProviderInstallationID(payload)
+	providerInstallationID, err := extractGitHubAppInstallationID(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	return h.lookupGitHubAppIntegrationByProviderInstallationID(ctx, "", providerInstallationID)
+	return h.lookupGitHubAppByInstallationID(ctx, "", providerInstallationID)
 }
 
-func (h *Handler) lookupGitHubAppIntegrationByProviderInstallationID(ctx context.Context, ownerID, providerInstallationID string) (*ent.Integration, error) {
+// lookupGitHubAppByInstallationID looks up a GitHub App integration record by matching the installation ID in the installation metadata
+func (h *Handler) lookupGitHubAppByInstallationID(ctx context.Context, ownerID, providerInstallationID string) (*ent.Integration, error) {
 	query := h.DBClient.Integration.Query().
 		Where(
 			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
@@ -99,7 +100,8 @@ func (h *Handler) lookupGitHubAppIntegrationByProviderInstallationID(ctx context
 	return query.Only(ctx)
 }
 
-func extractGitHubAppWebhookProviderInstallationID(payload []byte) (string, error) {
+// extractGitHubAppInstallationID extracts the GitHub App installation ID from the webhook payload envelope
+func extractGitHubAppInstallationID(payload []byte) (string, error) {
 	var envelope struct {
 		Installation *struct {
 			ID int64 `json:"id"`

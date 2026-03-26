@@ -70,20 +70,20 @@ func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string
 		return ErrGalaRequired
 	}
 
-	return processPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+	return applyPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		return emitMappedRecord(handleCtx, ic.Runtime, ic.Installation, operationName, record, options)
 	})
 }
 
 // ProcessPayloadSets persists one batch of mapped payload sets synchronously
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	return processPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+	return applyPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		return persistMappedRecord(handleCtx, ic.DB, ic.Installation, record.Schema, record.Payload)
 	})
 }
 
-// processPayloadSets is the shared core for both async emit and sync persist paths
-func processPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
+// applyPayloadSets is the shared core for both async emit and sync persist paths
+func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
 	definition, ok := ic.Registry.Definition(ic.Installation.DefinitionID)
 	if !ok {
 		return ErrIngestDefinitionNotFound

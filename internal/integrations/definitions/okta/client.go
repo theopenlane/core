@@ -6,7 +6,6 @@ import (
 	oktagosdk "github.com/okta/okta-sdk-golang/v5/okta"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -21,8 +20,8 @@ type Client struct{}
 
 // Build constructs the Okta API client for one installation
 func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	var cred CredentialSchema
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+	cred, _, err := oktaCredential.Resolve(req.Credentials)
+	if err != nil {
 		return nil, ErrCredentialInvalid
 	}
 

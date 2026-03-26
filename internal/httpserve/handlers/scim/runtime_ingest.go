@@ -11,6 +11,7 @@ import (
 	scimerrors "github.com/elimity-com/scim/errors"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	entprivacy "github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	integrationops "github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
@@ -29,7 +30,11 @@ func ingestDirectoryPayloadSets(ctx context.Context, client *generated.Client, i
 		return integrationsruntime.ErrInstallationRequired
 	}
 
-	syncRunID, err := ensureScimSyncRun(ctx, client, ic.Installation.ID, ic.Installation.OwnerID)
+	// Route/auth has already validated the installation belongs to the caller's org
+	// Bypass ent privacy rules for the internal sync-run + ingest writes
+	allowCtx := entprivacy.DecisionContext(ctx, entprivacy.Allow)
+
+	syncRunID, err := ensureScimSyncRun(allowCtx, client, ic.Installation.ID, ic.Installation.OwnerID)
 	if err != nil {
 		return err
 	}
@@ -40,7 +45,7 @@ func ingestDirectoryPayloadSets(ctx context.Context, client *generated.Client, i
 	}
 
 	return integrationops.ProcessPayloadSets(
-		ctx,
+		allowCtx,
 		integrationops.IngestContext{
 			Registry:     ic.Runtime.Registry(),
 			DB:           client,

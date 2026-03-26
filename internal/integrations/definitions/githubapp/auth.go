@@ -138,15 +138,13 @@ func refreshAppInstall(ctx context.Context, cfg Config, credential types.Credent
 
 // disconnectInstallationID extracts the installation ID from the credential or installation metadata
 func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
-	if req.Credential != nil {
-		var cred githubAppCredential
-		if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
-			return 0, ErrCredentialDecode
-		}
+	cred, ok, err := gitHubAppCredential.Resolve(req.Credentials)
+	if err != nil {
+		return 0, ErrCredentialDecode
+	}
 
-		if cred.InstallationID != 0 {
-			return cred.InstallationID, nil
-		}
+	if ok && cred.InstallationID != 0 {
+		return cred.InstallationID, nil
 	}
 
 	var metadata InstallationMetadata

@@ -192,7 +192,6 @@ func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, 
 
 	client, err := registration.Build(ctx, types.ClientBuildRequest{
 		Installation: installation,
-		Credential:   singleCredential(credentials, registration.CredentialRefs),
 		Credentials:  cloneCredentialBindings(credentials),
 		Config:       jsonx.CloneRawMessage(config),
 	})
@@ -240,21 +239,6 @@ func clientCacheDigest(credentials types.CredentialBindings, config json.RawMess
 	return helpers.NewHashBuilder().
 		WriteStrings(string(encodedCredential), string(config)).
 		Hex()
-}
-
-// singleCredential returns a single credential from bindings if only one ref is present
-func singleCredential(credentials types.CredentialBindings, refs []types.CredentialSlotID) types.CredentialSet {
-	if len(refs) != 1 {
-		return types.CredentialSet{}
-	}
-
-	for _, ref := range refs {
-		if credential, ok := credentials.Resolve(ref); ok {
-			return cloneCredentialSet(credential)
-		}
-	}
-
-	return types.CredentialSet{}
 }
 
 // cloneCredentialSet returns a deep copy of a CredentialSet

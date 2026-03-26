@@ -65,11 +65,10 @@ func (s *WorkflowEngineTestSuite) newNotificationTestRuntime() *integrationsrunt
 	s.Require().NoError(err)
 
 	rt, err := integrationsruntime.New(integrationsruntime.Config{
-		DB:                    s.client,
-		Gala:                  s.galaRuntime,
-		Registry:              reg,
-		Keystore:              credStore,
-		SkipExecutorListeners: true,
+		DB:       s.client,
+		Gala:     s.galaRuntime,
+		Registry: reg,
+		Keystore: credStore,
 	})
 	s.Require().NoError(err)
 

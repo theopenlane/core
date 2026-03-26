@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -304,7 +305,7 @@ func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, 
 			},
 		},
 	}); err != nil {
-		return ErrWebhookIngestFailed
+		return fmt.Errorf("%w: %w", ErrWebhookIngestFailed, err)
 	}
 
 	return nil

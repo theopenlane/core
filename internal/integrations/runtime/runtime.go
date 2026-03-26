@@ -6,7 +6,6 @@ import (
 
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
-	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
@@ -34,8 +33,6 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
-	// SkipExecutorListeners disables automatic Gala listener registration for the executor
-	SkipExecutorListeners bool
 }
 
 // Runtime bundles the integrations services behind a do injector
@@ -155,7 +152,7 @@ func New(config Config) (*Runtime, error) {
 	})
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(rt.Definition, func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
-			installation, err := rt.ResolveInstallation(ctx, "", installationID, def.ID)
+			installation, err := rt.ResolveIntegration(ctx, "", installationID, def.ID)
 			if err != nil {
 				return err
 			}
@@ -177,7 +174,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), lo.Ternary(!config.SkipExecutorListeners, rt.HandleOperation, nil), rt.HandleWebhookEvent); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
 		return nil, err
 	}
 

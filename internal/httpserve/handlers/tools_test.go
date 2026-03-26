@@ -401,11 +401,10 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 	assert.NoError(suite.T(), err)
 
 	rt, err := runtime.New(runtime.Config{
-		DB:                    suite.db,
-		Gala:                  galaInstance,
-		Keystore:              credStore,
-		DefinitionBuilders:    []registry.Builder{registry.Builder(buildTestOAuthDefinition)},
-		SkipExecutorListeners: true,
+		DB:                 suite.db,
+		Gala:               galaInstance,
+		Keystore:           credStore,
+		DefinitionBuilders: []registry.Builder{registry.Builder(buildTestOAuthDefinition)},
 	})
 	assert.NoError(suite.T(), err)
 

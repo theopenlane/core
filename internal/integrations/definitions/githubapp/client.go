@@ -9,7 +9,6 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // GraphQLClient is the subset of the GitHub GraphQL client used by this definition
@@ -37,7 +36,7 @@ type Client struct {
 
 // Build constructs the GitHub GraphQL client for one installation
 func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	token, err := tokenFromCredential(req.Credential)
+	token, err := tokenFromCredentials(req.Credentials)
 	if err != nil {
 		return nil, err
 	}
@@ -58,10 +57,10 @@ func newGraphQLClient(httpClient *http.Client, apiURL string) GraphQLClient {
 	return &graphQLClient{client: graphql.NewClient(endpoint, httpClient)}
 }
 
-// tokenFromCredential extracts the access token from a credential set
-func tokenFromCredential(credential types.CredentialSet) (string, error) {
-	var cred githubAppCredential
-	if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
+// tokenFromCredentials extracts the access token from credential bindings
+func tokenFromCredentials(bindings types.CredentialBindings) (string, error) {
+	cred, _, err := gitHubAppCredential.Resolve(bindings)
+	if err != nil {
 		return "", ErrCredentialDecode
 	}
 

@@ -15,7 +15,7 @@ type serviceAccountIdentity struct {
 
 // resolveInstallationMetadata derives GCP SCC installation metadata from the persisted credential
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-	meta, err := metadataFromCredential(req.Credential)
+	meta, err := resolveCredential(req.Credentials)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}

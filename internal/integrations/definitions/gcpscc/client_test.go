@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// TestMetadataFromCredential verifies credential metadata decoding and default application
-func TestMetadataFromCredential(t *testing.T) {
+// TestResolveCredential verifies credential resolution from bindings and default application
+func TestResolveCredential(t *testing.T) {
 	t.Run("decodes into credential schema and applies defaults", func(t *testing.T) {
 		raw, err := jsonx.ToRawMessage(CredentialSchema{
 			ProjectID:         "project-123",
@@ -21,7 +21,11 @@ func TestMetadataFromCredential(t *testing.T) {
 		})
 		require.NoError(t, err)
 
-		meta, err := metadataFromCredential(types.CredentialSet{Data: raw})
+		bindings := types.CredentialBindings{
+			{Ref: sccCredential.ID(), Credential: types.CredentialSet{Data: raw}},
+		}
+
+		meta, err := resolveCredential(bindings)
 		require.NoError(t, err)
 
 		assert.Equal(t, "project-123", meta.ProjectID)
@@ -32,7 +36,16 @@ func TestMetadataFromCredential(t *testing.T) {
 	})
 
 	t.Run("returns decode error for invalid provider data", func(t *testing.T) {
-		_, err := metadataFromCredential(types.CredentialSet{Data: []byte(`{`)})
+		bindings := types.CredentialBindings{
+			{Ref: sccCredential.ID(), Credential: types.CredentialSet{Data: []byte(`{`)}},
+		}
+
+		_, err := resolveCredential(bindings)
 		require.ErrorIs(t, err, ErrMetadataDecode)
+	})
+
+	t.Run("returns required error when binding is missing", func(t *testing.T) {
+		_, err := resolveCredential(nil)
+		require.ErrorIs(t, err, ErrCredentialMetadataRequired)
 	})
 }

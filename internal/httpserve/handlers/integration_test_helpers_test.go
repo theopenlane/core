@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"testing"
+	"time"
 
+	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
@@ -20,9 +22,9 @@ import (
 type HelperTestHealthCheck struct{}
 
 var (
-	githubAppDefinitionID                                  = githubapp.DefinitionID.ID()
-	githubTestCredentialRef                                = types.NewCredentialSlotID("github_test")
-	helperHealthSchema, helperHealthCheckOperation         = providerkit.OperationSchema[HelperTestHealthCheck]()
+	githubAppDefinitionID   = githubapp.DefinitionID.ID()
+	githubTestCredentialRef = types.NewCredentialSlotID("github_test")
+	_, _                    = providerkit.OperationSchema[HelperTestHealthCheck]()
 )
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
@@ -43,9 +45,9 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []re
 	assert.NoError(t, err)
 
 	rt, err := runtime.New(runtime.Config{
-		DB:                    suite.db,
-		Gala:                  galaInstance,
-		Keystore:              credStore,
+		DB:                 suite.db,
+		Gala:               galaInstance,
+		Keystore:           credStore,
 		DefinitionBuilders: builders,
 	})
 	assert.NoError(t, err)
@@ -69,101 +71,49 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 	return restore
 }
 
-// gcpSCCTestDefinitionBuilder returns a test definition for GCP SCC-style credential config tests.
-// The definition uses definitionID as Spec.ID so registry lookups work correctly.
-func gcpSCCTestDefinitionBuilder(definitionID string) registry.Builder {
-	schema, err := json.Marshal(map[string]any{
-		"type": "object",
-		"required": []string{
-			"projectId",
-			"serviceAccountEmail",
-		},
-		"properties": map[string]any{
-			"projectId": map[string]any{
-				"type":        "string",
-				"title":       "Project ID",
-				"description": "GCP project identifier",
-			},
-			"serviceAccountEmail": map[string]any{
-				"type":        "string",
-				"title":       "Service Account Email",
-				"description": "Workload identity service account",
-			},
-			"organizationId": map[string]any{
-				"type":        "string",
-				"title":       "Organization ID",
-				"description": "Optional organization scope",
-			},
-		},
+// withDurableGitHubAppIntegrationRuntime swaps the suite handler's IntegrationsRuntime for one
+// backed by a durable Gala instance with River workers, matching production dispatch behavior
+func (suite *HandlerTestSuite) withDurableGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config) func() {
+	t.Helper()
+
+	original := suite.h.IntegrationsRuntime
+	originalConfig := suite.h.IntegrationsConfig
+
+	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     suite.tf.URI,
+		QueueName:         "github_webhook_test",
+		WorkerCount:       5,
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond,
 	})
-	if err != nil {
-		panic(err)
+	assert.NoError(t, err)
+
+	do.ProvideValue(galaInstance.Injector(), suite.db)
+
+	credStore, err := keystore.NewStore(suite.db)
+	assert.NoError(t, err)
+
+	rt, err := runtime.New(runtime.Config{
+		DB:                 suite.db,
+		Gala:               galaInstance,
+		Keystore:           credStore,
+		DefinitionBuilders: []registry.Builder{githubapp.Builder(cfg)},
+	})
+	assert.NoError(t, err)
+
+	assert.NoError(t, galaInstance.StartWorkers(context.Background()))
+
+	suite.h.IntegrationsRuntime = rt
+	suite.h.IntegrationsConfig.GitHubApp = cfg
+
+	return func() {
+		_ = galaInstance.StopWorkers(context.Background())
+		_ = galaInstance.Close()
+		suite.h.IntegrationsRuntime = original
+		suite.h.IntegrationsConfig = originalConfig
 	}
-
-	userInputSchema, err := json.Marshal(map[string]any{
-		"type": "object",
-		"properties": map[string]any{
-			"filterExpr": map[string]any{
-				"type":  "string",
-				"title": "Filter Expression",
-			},
-		},
-	})
-	if err != nil {
-		panic(err)
-	}
-
-	return registry.Builder(func() (types.Definition, error) {
-		gcpSCCTestCredential := types.NewCredentialSlotID("gcp_scc_test")
-
-		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID,
-				DisplayName: "Google Cloud SCC",
-				Description: "Google Cloud Security Command Center integration",
-				Category:    "cloud",
-				Active:      true,
-				Visible:     true,
-				Tags:        []string{"cloud", "google"},
-			},
-			UserInput: &types.UserInputRegistration{
-				Schema: json.RawMessage(userInputSchema),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         gcpSCCTestCredential,
-					Name:        "GCP SCC Test Credential",
-					Description: "Credential slot used by the GCP SCC test definition.",
-					Schema:      json.RawMessage(schema),
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:       gcpSCCTestCredential,
-					Name:                "GCP SCC Test Connection",
-					Description:         "Connect the GCP SCC test definition using the configured credential payload.",
-					CredentialRefs:      []types.CredentialSlotID{gcpSCCTestCredential},
-					ValidationOperation: helperHealthCheckOperation.Name(),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: gcpSCCTestCredential,
-						Description:   "Remove the persisted GCP SCC test credential and disconnect this installation.",
-					},
-				},
-			},
-			Operations: []types.OperationRegistration{
-				{
-					Name:         helperHealthCheckOperation.Name(),
-					Description:  "Validate the test credential payload",
-					Topic:        types.OperationTopic(definitionID, helperHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: helperHealthSchema,
-					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
-						return json.RawMessage(`{"ok":true}`), nil
-					},
-				},
-			},
-		}, nil
-	})
 }
 
 // githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests.

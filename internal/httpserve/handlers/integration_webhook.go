@@ -36,10 +36,6 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 	}
 
 	endpointID := ctx.PathParam("endpointID")
-	if endpointID == "" {
-		return h.BadRequest(ctx, rout.MissingField("endpointID"), openapiCtx)
-	}
-
 	req := ctx.Request()
 
 	payload, err := readIntegrationWebhookPayload(ctx)
@@ -51,12 +47,12 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 	// so that ent queries succeed against privacy-policy-protected tables
 	webhookCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
 	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
-	webhookCtx = logx.WithField(webhookCtx, "endpoint_id", endpointID)
 
 	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(webhookCtx, endpointID)
 	if err != nil {
 		if !ent.IsNotFound(err) {
 			logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to query integration webhook")
+
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
@@ -66,12 +62,14 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 	// Verify the webhook signature using the persisted secret token before any further processing
 	if err := verifyWebhookHMACSHA256(req, payload, persistedWebhook.SecretToken); err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("webhook signature verification failed")
+
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	installation, err := h.IntegrationsRuntime.ResolveInstallation(webhookCtx, "", persistedWebhook.IntegrationID, "")
+	installation, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, "", persistedWebhook.IntegrationID, "")
 	if err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve installation")
+
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
@@ -194,7 +192,9 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 
 	if err := h.IntegrationsRuntime.DispatchWebhookEvent(requestCtx, installation, webhook.Name, event); err != nil {
 		_ = h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "failed", err)
+
 		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to dispatch webhook event")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 

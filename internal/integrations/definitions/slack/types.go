@@ -14,9 +14,11 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
 	// installation is the typed installation metadata handle for the Slack definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// slackCredential is the auth-managed credential slot used by the Slack client
+	// slackCredential is the auth-managed credential slot used by the OAuth connection
 	slackCredentialSchema, slackCredential = providerkit.CredentialSchema[slackCred]()
-	// SlackClient is the client ref for the Slack Web API client used by this definition
+	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
+	slackBotTokenCredentialSchema, slackBotTokenCredential = providerkit.CredentialSchema[slackBotTokenCred]()
+	// slackClient is the client ref for the Slack Web API client used by this definition
 	slackClient = types.NewClientRef[*slackgo.Client]()
 	// healthDefaultOperation is the operation ref for the Slack health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
@@ -26,7 +28,7 @@ var (
 	messageSendSchema, messageSendOperation = providerkit.OperationSchema[MessageSendOperation]()
 )
 
-// slackCredential holds the provider-owned credential material for a Slack installation
+// slackCred holds the provider-owned credential material for an OAuth-based Slack installation
 type slackCred struct {
 	// AccessToken is the OAuth2 access token
 	AccessToken string `json:"accessToken"`
@@ -34,6 +36,12 @@ type slackCred struct {
 	RefreshToken string `json:"refreshToken,omitempty"`
 	// Expiry is the token expiration time
 	Expiry *time.Time `json:"expiry,omitempty"`
+}
+
+// slackBotTokenCred holds a user-provisioned bot token for a Slack installation
+type slackBotTokenCred struct {
+	// BotToken is a Slack Bot User OAuth Token (xoxb-...) created by the user in their Slack app
+	BotToken string `json:"botToken" jsonschema:"required,title=Bot Token,description=Bot User OAuth Token from your Slack app (starts with xoxb-)"`
 }
 
 // UserInput holds installation-specific configuration collected from the user

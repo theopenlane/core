@@ -90,15 +90,13 @@ func (r *Runtime) FinalizeWebhookDelivery(ctx context.Context, webhook *ent.Inte
 
 	update := r.DB().IntegrationWebhook.UpdateOneID(webhook.ID).
 		SetLastDeliveryAt(time.Now().UTC()).
-		SetLastDeliveryStatus(status).
-		SetStatus(enums.IntegrationWebhookStatusActive)
+		SetLastDeliveryStatus(status)
 
 	if deliveryID != "" {
 		update.SetLastDeliveryID(deliveryID)
 	}
 
 	if deliveryErr != nil {
-		update.SetStatus(enums.IntegrationWebhookStatusFailed)
 		update.SetLastDeliveryError(deliveryErr.Error())
 	} else {
 		update.ClearLastDeliveryError()
@@ -168,7 +166,11 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, installation *ent.In
 
 // HandleWebhookEvent processes one emitted integration webhook envelope
 func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
-	installation, err := r.ResolveInstallation(ctx, "", envelope.IntegrationID, envelope.DefinitionID)
+	// Webhook event handlers are system-level operations; the privacy bypass set by the
+	// HTTP handler is not captured by context codecs in durable dispatch mode
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	installation, err := r.ResolveIntegration(ctx, "", envelope.IntegrationID, envelope.DefinitionID)
 	if err != nil {
 		return err
 	}
@@ -223,19 +225,14 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 }
 
 // ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration
-func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
+func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
 	})
 
-	status := enums.IntegrationWebhookStatusPending
-	if installation.Status == enums.IntegrationStatusConnected {
-		status = enums.IntegrationWebhookStatusActive
-	}
-
 	db := r.DB()
 
-	integrationIDs := []string{installation.ID}
+	integrationIDs := []string{intg.ID}
 	if previousIntegrationID != "" {
 		integrationIDs = append(integrationIDs, previousIntegrationID)
 	}
@@ -254,12 +251,11 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 	if len(rows) == 0 {
 		endpointID := keygen.PrefixedSecret("tolwh")
 		return db.IntegrationWebhook.Create().
-			SetOwnerID(installation.OwnerID).
-			SetIntegrationID(installation.ID).
-			SetProvider(installation.DefinitionID).
+			SetOwnerID(intg.OwnerID).
+			SetIntegrationID(intg.ID).
+			SetProvider(intg.DefinitionID).
 			SetName(registration.Name).
 			SetAllowedEvents(allowedEvents).
-			SetStatus(status).
 			SetEndpointID(endpointID).
 			SetEndpointURL("/v1/integrations/webhook/" + endpointID).
 			Save(ctx)
@@ -280,11 +276,10 @@ func (r *Runtime) ensureWebhook(ctx context.Context, installation *ent.Integrati
 	}
 
 	update := db.IntegrationWebhook.UpdateOneID(row.ID).
-		SetAllowedEvents(allowedEvents).
-		SetStatus(status)
+		SetAllowedEvents(allowedEvents)
 
-	if row.IntegrationID != installation.ID {
-		update.SetIntegrationID(installation.ID)
+	if row.IntegrationID != intg.ID {
+		update.SetIntegrationID(intg.ID)
 	}
 
 	return update.Save(ctx)

@@ -495,7 +495,7 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 		Installation: &ent.Integration{DefinitionID: "nonexistent"},
 	}
 
-	err := processPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -522,7 +522,7 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 		{Schema: integrationgenerated.IntegrationMappingSchemaAsset, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	err := processPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -546,7 +546,7 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 		{Schema: "totally_bogus_schema", Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	err := processPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -576,7 +576,7 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		},
 	}
 
-	err := processPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -598,7 +598,7 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 		},
 	}
 
-	err := processPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -635,7 +635,7 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	var handled []mappedIngestRecord
 
-	err := processPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
 		handled = append(handled, record)
 		return nil
 	})
@@ -661,7 +661,7 @@ func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
 		Installation: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	err := processPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		t.Fatal("handler should not be called for empty payload sets")
 		return nil
 	})
@@ -703,7 +703,7 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	var handled int
 
-	err := processPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		handled++
 		return nil
 	})
@@ -744,7 +744,7 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 
 	handleErr := errors.New("persist failed")
 
-	err := processPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return handleErr
 	})
 

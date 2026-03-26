@@ -1,10 +1,6 @@
 package openapi
 
-import (
-	"encoding/json"
-
-	"github.com/theopenlane/core/common/enums"
-)
+import "encoding/json"
 
 // IntegrationProviderMetadata is a snapshot of definition metadata captured on installation
 type IntegrationProviderMetadata struct {
@@ -46,8 +42,6 @@ type IntegrationProviderMetadata struct {
 type IntegrationConfig struct {
 	// ClientConfig is the client configuration JSON
 	ClientConfig json.RawMessage `json:"clientConfig,omitempty"`
-	// SCIMProvisionMode is the SCIM provision mode
-	SCIMProvisionMode enums.SCIMProvisionMode `json:"scimProvisionMode,omitempty"`
 }
 
 // IntegrationInstallationMetadata stores stable, non-secret installation identity metadata

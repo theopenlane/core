@@ -5,6 +5,10 @@ import "errors"
 var (
 	// ErrOAuthTokenMissing indicates the Slack OAuth access token is missing from the credential
 	ErrOAuthTokenMissing = errors.New("slack: oauth token missing")
+	// ErrBotTokenMissing indicates the Slack bot token is missing from the credential
+	ErrBotTokenMissing = errors.New("slack: bot token missing")
+	// ErrNoCredentialResolved indicates neither OAuth nor bot token credential was found
+	ErrNoCredentialResolved = errors.New("slack: no credential resolved")
 	// ErrChannelMissing indicates the Slack channel is missing from the operation config
 	ErrChannelMissing = errors.New("slack: channel missing")
 	// ErrMessageEmpty indicates the Slack message has no content

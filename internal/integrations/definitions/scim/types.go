@@ -8,8 +8,9 @@ import (
 var (
 	// definitionID is the stable identifier for the SCIM Directory Sync integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
-
-	healthCheckSchema, healthCheckOperation     = providerkit.OperationSchema[HealthCheck]()
+	// healthCheckOperation is the operation ref for health checks for SCIM
+	_, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	// directorySyncSchema is the operation ref for the directory sync operation for SCIM
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 

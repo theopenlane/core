@@ -71,15 +71,9 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 			return types.DisconnectResult{}, loadErr
 		}
 
-		var credential *types.CredentialSet
-		if resolved, ok := credentials.Resolve(connection.Disconnect.CredentialRef); ok {
-			credential = &resolved
-		}
-
 		result, err = connection.Disconnect.Disconnect(ctx, types.DisconnectRequest{
 			Installation: installation,
 			Connection:   connection,
-			Credential:   credential,
 			Credentials:  credentials,
 			Config:       installation.Config,
 		})
@@ -169,12 +163,9 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		return nil
 	}
 
-	credential, _ := bindings.Resolve(connection.CredentialRef)
-
 	metadata, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
 		Installation: installation,
 		Connection:   connection,
-		Credential:   credential,
 		Credentials:  bindings,
 		Config:       installation.Config,
 	})
@@ -187,6 +178,11 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 	}
 
 	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+}
+
+// saveInstallationMetadata persists installation metadata for one installation
+func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
+	return r.DB().Integration.UpdateOneID(installation.ID).SetInstallationMetadata(metadata).Exec(ctx)
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -205,22 +201,24 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	bindings, err := r.candidateCredentials(ctx, installation, connection, credentialRef, credential)
+	bindings, err := r.connectionCredentials(ctx, installation, connection)
 	if err != nil {
 		return err
 	}
 
+	bindings = bindings.With(credentialRef, credential)
+
 	if connection.ValidationOperation != "" {
 		validationOp, err := r.Registry().Operation(def.ID, connection.ValidationOperation)
 		if err != nil {
-			return fmt.Errorf("reconcile: resolve validation operation: %w", err)
+			return fmt.Errorf("resolve validation operation: %w", err)
 		}
 
 		_, validationErr := r.ExecuteOperation(ctx, installation, validationOp, bindings, nil)
 		if validationErr != nil {
 			logx.FromContext(ctx).Error().Err(validationErr).Msg("validation failed during reconcile")
 
-			return fmt.Errorf("reconcile: validation failed: %w", validationErr)
+			return fmt.Errorf("validation failed: %w", validationErr)
 		}
 	}
 
@@ -238,7 +236,6 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		metadata, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
 			Installation: installation,
 			Connection:   connection,
-			Credential:   credential,
 			Credentials:  bindings,
 			Config:       installation.Config,
 			Input:        installationInput,
@@ -329,21 +326,6 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 	}
 
 	return connection, nil
-}
-
-// candidateCredentials returns credential bindings with a candidate credential override
-func (r *Runtime) candidateCredentials(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, credentialRef types.CredentialSlotID, credential types.CredentialSet) (types.CredentialBindings, error) {
-	current, err := r.connectionCredentials(ctx, installation, connection)
-	if err != nil {
-		return nil, err
-	}
-
-	override := types.CredentialBindings{{
-		Ref:        credentialRef,
-		Credential: credential,
-	}}
-
-	return mergeCredentials(current, override), nil
 }
 
 // connectionCredentials loads all credentials for a connection

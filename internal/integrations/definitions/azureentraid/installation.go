@@ -10,7 +10,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // graphOrganizationURL is the Microsoft Graph endpoint for tenant organization metadata
@@ -18,8 +17,8 @@ const graphOrganizationURL = "https://graph.microsoft.com/v1.0/organization"
 
 // resolveInstallationMetadata derives Azure Entra installation metadata from the persisted credential
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-	var cred entraIDCred
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+	cred, _, err := entraTenantCredential.Resolve(req.Credentials)
+	if err != nil {
 		return InstallationMetadata{}, false, ErrCredentialDecode
 	}
 

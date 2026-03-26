@@ -8,7 +8,6 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // graphScope is the default scope used for Microsoft Graph client credentials requests
@@ -68,8 +67,8 @@ func (c GraphClient) Build(_ context.Context, req types.ClientBuildRequest) (any
 
 // credentialFromRequest decodes and validates the installation credential data
 func credentialFromRequest(req types.ClientBuildRequest) (entraIDCred, error) {
-	var cred entraIDCred
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+	cred, _, err := entraTenantCredential.Resolve(req.Credentials)
+	if err != nil {
 		return entraIDCred{}, ErrCredentialDecode
 	}
 

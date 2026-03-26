@@ -22,7 +22,7 @@ func TestCelMapExpr(t *testing.T) {
 			entries: []CelMapEntry{
 				{Key: "severity", Expr: "payload.severity"},
 			},
-			want: "{\n  \"severity\": payload.severity\n}",
+			want: "{\n  \"severity\": dyn(payload.severity)\n}",
 		},
 		{
 			name: "multiple entries separated by commas",
@@ -30,14 +30,14 @@ func TestCelMapExpr(t *testing.T) {
 				{Key: "name", Expr: "resource"},
 				{Key: "level", Expr: "variant"},
 			},
-			want: "{\n  \"name\": resource,\n  \"level\": variant\n}",
+			want: "{\n  \"name\": dyn(resource),\n  \"level\": dyn(variant)\n}",
 		},
 		{
 			name: "key with special characters is quoted",
 			entries: []CelMapEntry{
 				{Key: "field.name", Expr: "payload.x"},
 			},
-			want: "{\n  \"field.name\": payload.x\n}",
+			want: "{\n  \"field.name\": dyn(payload.x)\n}",
 		},
 	}
 

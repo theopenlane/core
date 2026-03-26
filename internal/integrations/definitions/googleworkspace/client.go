@@ -8,7 +8,6 @@ import (
 	"google.golang.org/api/option"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Client builds Google Workspace Admin SDK clients for one installation
@@ -16,8 +15,8 @@ type Client struct{}
 
 // Build constructs the Google Workspace Admin SDK client for one installation
 func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	var cred googleWorkspaceCred
-	if err := jsonx.UnmarshalIfPresent(req.Credential.Data, &cred); err != nil {
+	cred, _, err := workspaceCredential.Resolve(req.Credentials)
+	if err != nil {
 		return nil, ErrCredentialDecode
 	}
 
