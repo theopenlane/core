@@ -3440,6 +3440,7 @@ type ComplexityRoot struct {
 		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateNotification                   func(childComplexity int, input generated.CreateNotificationInput) int
 		CreateNotificationPreference         func(childComplexity int, input generated.CreateNotificationPreferenceInput) int
 		CreateNotificationTemplate           func(childComplexity int, input generated.CreateNotificationTemplateInput) int
 		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
@@ -3974,6 +3975,10 @@ type ComplexityRoot struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	NotificationCreatePayload struct {
+		Notification func(childComplexity int) int
 	}
 
 	NotificationEdge struct {
@@ -25634,6 +25639,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateNarrative(childComplexity, args["input"].(generated.CreateNarrativeInput)), true
 
+	case "Mutation.createNotification":
+		if e.ComplexityRoot.Mutation.CreateNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateNotification(childComplexity, args["input"].(generated.CreateNotificationInput)), true
+
 	case "Mutation.createNotificationPreference":
 		if e.ComplexityRoot.Mutation.CreateNotificationPreference == nil {
 			break
@@ -31101,6 +31118,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationConnection.TotalCount(childComplexity), true
+
+	case "NotificationCreatePayload.notification":
+		if e.ComplexityRoot.NotificationCreatePayload.Notification == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationCreatePayload.Notification(childComplexity), true
 
 	case "NotificationEdge.cursor":
 		if e.ComplexityRoot.NotificationEdge.Cursor == nil {
@@ -142010,6 +142034,15 @@ type NoteDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/notification.graphql", Input: `extend type Mutation{
     """
+    Create a new notification
+    """
+    createNotification(
+        """
+        values of the notification
+        """
+        input: CreateNotificationInput!
+    ): NotificationCreatePayload!
+    """
     Update an existing notification
     """
     updateNotification(
@@ -142052,6 +142085,16 @@ type ActionNotificationsReadPayload {
     Updated notification IDs
     """
     readIDs: [ID]!
+}
+
+"""
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+    """
+    Created notification
+    """
+    notification: Notification!
 }`, BuiltIn: false},
 	{Name: "../schema/notificationpreference.graphql", Input: `extend type Query {
     """

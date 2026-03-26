@@ -183,7 +183,9 @@ func (Notification) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			// only allow requests from inside the server to add notifications but not other users
+			// or by system admins only
 			rule.AllowIfContextAllowRule(),
+			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
 }

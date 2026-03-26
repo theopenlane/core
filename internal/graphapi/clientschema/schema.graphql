@@ -44361,6 +44361,15 @@ type Mutation {
 		id: ID!
 	): NoteDeletePayload!
 	"""
+	Create a new notification
+	"""
+	createNotification(
+		"""
+		values of the notification
+		"""
+		input: CreateNotificationInput!
+	): NotificationCreatePayload!
+	"""
 	Update an existing notification
 	"""
 	updateNotification(
@@ -48447,6 +48456,15 @@ type NotificationConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+	"""
+	Created notification
+	"""
+	notification: Notification!
 }
 """
 An edge in a connection.

@@ -124,3 +124,17 @@ func (CreatePreviewDomainSSLAcmeArgs) Kind() string { return "create_preview_dom
 func (CreatePreviewDomainSSLAcmeArgs) InsertOpts() river.InsertOpts {
 	return river.InsertOpts{Queue: QueueTrustcenter}
 }
+
+// CreateDomainScanArgs for the worker to scan the domains provided by the organization
+type CreateDomainScanArgs struct {
+	// ID of the onboarded organization.
+	OnboardingID string `json:"organization_id"`
+}
+
+// Kind satisfies the river.Job interface
+func (CreateDomainScanArgs) Kind() string { return "create_domain_scan_args"}
+
+// InsertOpts provides the default configuration when processing this job.
+func (CreateDomainScanArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
