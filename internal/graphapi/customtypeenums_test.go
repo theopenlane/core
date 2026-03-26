@@ -27,6 +27,24 @@ func TestQueryCustomTypeEnum(t *testing.T) {
 		Color:       "#ff0000",
 	}).MustNew(systemAdminUser.UserCtx, t)
 
+	customTypeEnumStatusFinding := (&CustomTypeEnumBuilder{
+		client:      suite.client,
+		Name:        "Open",
+		ObjectType:  "finding",
+		Field:       "status",
+		Description: "An enum for finding status",
+		Color:       "#00ff00",
+	}).MustNew(testUser1.UserCtx, t)
+
+	customTypeEnumStatusVulnerability := (&CustomTypeEnumBuilder{
+		client:      suite.client,
+		Name:        "Open",
+		ObjectType:  "vulnerability",
+		Field:       "status",
+		Description: "An enum for vulnerability status",
+		Color:       "#0000ff",
+	}).MustNew(testUser1.UserCtx, t)
+
 	// add test cases for querying the CustomTypeEnum
 	testCases := []struct {
 		name     string
@@ -102,7 +120,7 @@ func TestQueryCustomTypeEnum(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: customTypeEnum.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{customTypeEnum.ID, customTypeEnumStatusFinding.ID, customTypeEnumStatusVulnerability.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: systemOwnedEnum.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
