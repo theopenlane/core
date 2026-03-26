@@ -4620,7 +4620,7 @@ var (
 		{Name: "data", Type: field.TypeJSON, Nullable: true},
 		{Name: "read_at", Type: field.TypeTime, Nullable: true},
 		{Name: "channels", Type: field.TypeJSON, Nullable: true},
-		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE"}},
+		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE", "DOMAIN_SCAN"}},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
