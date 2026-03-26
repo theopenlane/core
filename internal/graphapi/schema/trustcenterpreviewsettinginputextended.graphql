@@ -1,0 +1,5 @@
+extend input CreateTrustCenterPreviewSettingInput {
+  logoFileName: UploadFileName
+  faviconFileName: UploadFileName
+  heroImageFileName: UploadFileName
+}

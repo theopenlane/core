@@ -1,0 +1,8 @@
+extend input CreateTrustCenterDocInput {
+  trustCenterDocFileName: UploadFileName
+}
+
+extend input UpdateTrustCenterDocInput {
+  trustCenterDocFileName: UploadFileName
+  watermarkedTrustCenterDocFileName: UploadFileName
+}

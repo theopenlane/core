@@ -6579,6 +6579,7 @@ type CreateEntityInput struct {
 	Note                                *CreateNoteInput     `json:"note,omitempty"`
 	EntityFilesMetadata                 []*FileMetadataInput `json:"entityFilesMetadata,omitempty"`
 	LogoFileMetadata                    *FileMetadataInput   `json:"logoFileMetadata,omitempty"`
+	LogoFileName                        *string              `json:"logoFileName,omitempty"`
 }
 
 // CreateEntityTypeInput is used for create EntityType object.
@@ -6976,6 +6977,7 @@ type CreateGroupInput struct {
 	CampaignTargetIDs                    []string                 `json:"campaignTargetIDs,omitempty"`
 	CreateGroupSettings                  *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 	AvatarFileMetadata                   *FileMetadataInput       `json:"avatarFileMetadata,omitempty"`
+	AvatarFileName                       *string                  `json:"avatarFileName,omitempty"`
 }
 
 // CreateGroupMembershipInput is used for create GroupMembership object.
@@ -7174,6 +7176,7 @@ type CreateInternalPolicyInput struct {
 	CommentIDs               []string `json:"commentIDs,omitempty"`
 	DiscussionIDs            []string `json:"discussionIDs,omitempty"`
 	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
+	InternalPolicyFileName   *string  `json:"internalPolicyFileName,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -7660,6 +7663,7 @@ type CreateOrganizationInput struct {
 	DiscussionIDs                     []string                        `json:"discussionIDs,omitempty"`
 	CreateOrgSettings                 *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 	AvatarFileMetadata                *FileMetadataInput              `json:"avatarFileMetadata,omitempty"`
+	AvatarFileName                    *string                         `json:"avatarFileName,omitempty"`
 }
 
 // CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -7912,6 +7916,7 @@ type CreateProcedureInput struct {
 	DiscussionIDs          []string `json:"discussionIDs,omitempty"`
 	FileID                 *string  `json:"fileID,omitempty"`
 	WorkflowObjectRefIDs   []string `json:"workflowObjectRefIDs,omitempty"`
+	ProcedureFileName      *string  `json:"procedureFileName,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -8342,6 +8347,7 @@ type CreateStandardInput struct {
 	TrustCenterDocIDs        []string `json:"trustCenterDocIDs,omitempty"`
 	ApplicablePlatformIDs    []string `json:"applicablePlatformIDs,omitempty"`
 	LogoFileID               *string  `json:"logoFileID,omitempty"`
+	LogoFileName             *string  `json:"logoFileName,omitempty"`
 }
 
 // CreateSubcontrolInput is used for create Subcontrol object.
@@ -8456,6 +8462,7 @@ type CreateSubprocessorInput struct {
 	LogoFileID                 *string  `json:"logoFileID,omitempty"`
 	TrustCenterSubprocessorIDs []string `json:"trustCenterSubprocessorIDs,omitempty"`
 	EntityIDs                  []string `json:"entityIDs,omitempty"`
+	LogoFileName               *string  `json:"logoFileName,omitempty"`
 }
 
 // CreateSubscriberInput is used for create Subscriber object.
@@ -8640,14 +8647,15 @@ type CreateTrustCenterDocInput struct {
 	// status of the watermarking
 	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility           *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	TrustCenterDocKindID *string                              `json:"trustCenterDocKindID,omitempty"`
-	BlockedGroupIDs      []string                             `json:"blockedGroupIDs,omitempty"`
-	EditorIDs            []string                             `json:"editorIDs,omitempty"`
-	TrustCenterID        *string                              `json:"trustCenterID,omitempty"`
-	StandardID           *string                              `json:"standardID,omitempty"`
-	FileID               *string                              `json:"fileID,omitempty"`
-	OriginalFileID       *string                              `json:"originalFileID,omitempty"`
+	Visibility             *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	TrustCenterDocKindID   *string                              `json:"trustCenterDocKindID,omitempty"`
+	BlockedGroupIDs        []string                             `json:"blockedGroupIDs,omitempty"`
+	EditorIDs              []string                             `json:"editorIDs,omitempty"`
+	TrustCenterID          *string                              `json:"trustCenterID,omitempty"`
+	StandardID             *string                              `json:"standardID,omitempty"`
+	FileID                 *string                              `json:"fileID,omitempty"`
+	OriginalFileID         *string                              `json:"originalFileID,omitempty"`
+	TrustCenterDocFileName *string                              `json:"trustCenterDocFileName,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation
@@ -8670,6 +8678,7 @@ type CreateTrustCenterEntityInput struct {
 	LogoFileID      *string  `json:"logoFileID,omitempty"`
 	TrustCenterID   *string  `json:"trustCenterID,omitempty"`
 	EntityTypeID    *string  `json:"entityTypeID,omitempty"`
+	LogoFileName    *string  `json:"logoFileName,omitempty"`
 }
 
 // CreateTrustCenterFAQInput is used for create TrustCenterFAQ object.
@@ -8788,7 +8797,10 @@ type CreateTrustCenterPreviewSettingInput struct {
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
 	// hero image local file ID
-	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
+	HeroImageFileID   *string `json:"heroImageFileID,omitempty"`
+	LogoFileName      *string `json:"logoFileName,omitempty"`
+	FaviconFileName   *string `json:"faviconFileName,omitempty"`
+	HeroImageFileName *string `json:"heroImageFileName,omitempty"`
 }
 
 // CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -8833,12 +8845,15 @@ type CreateTrustCenterSettingInput struct {
 	// whether NDA requests require approval before being processed
 	NdaApprovalRequired *bool `json:"ndaApprovalRequired,omitempty"`
 	// URL to the company's status page
-	StatusPageURL   *string  `json:"statusPageURL,omitempty"`
-	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string `json:"editorIDs,omitempty"`
-	LogoFileID      *string  `json:"logoFileID,omitempty"`
-	FaviconFileID   *string  `json:"faviconFileID,omitempty"`
-	HeroImageFileID *string  `json:"heroImageFileID,omitempty"`
+	StatusPageURL     *string  `json:"statusPageURL,omitempty"`
+	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string `json:"editorIDs,omitempty"`
+	LogoFileID        *string  `json:"logoFileID,omitempty"`
+	FaviconFileID     *string  `json:"faviconFileID,omitempty"`
+	HeroImageFileID   *string  `json:"heroImageFileID,omitempty"`
+	LogoFileName      *string  `json:"logoFileName,omitempty"`
+	FaviconFileName   *string  `json:"faviconFileName,omitempty"`
+	HeroImageFileName *string  `json:"heroImageFileName,omitempty"`
 }
 
 // CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -8873,12 +8888,13 @@ type CreateTrustCenterWatermarkConfigInput struct {
 	// color of the watermark text
 	Color *string `json:"color,omitempty"`
 	// font of the watermark text
-	Font            *enums.Font `json:"font,omitempty"`
-	OwnerID         *string     `json:"ownerID,omitempty"`
-	BlockedGroupIDs []string    `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string    `json:"editorIDs,omitempty"`
-	TrustCenterIDs  []string    `json:"trustCenterIDs,omitempty"`
-	FileID          *string     `json:"fileID,omitempty"`
+	Font              *enums.Font `json:"font,omitempty"`
+	OwnerID           *string     `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string    `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string    `json:"editorIDs,omitempty"`
+	TrustCenterIDs    []string    `json:"trustCenterIDs,omitempty"`
+	FileID            *string     `json:"fileID,omitempty"`
+	WatermarkFileName *string     `json:"watermarkFileName,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -8938,6 +8954,7 @@ type CreateUserInput struct {
 	ImpersonationEventIDs    []string           `json:"impersonationEventIDs,omitempty"`
 	TargetedImpersonationIDs []string           `json:"targetedImpersonationIDs,omitempty"`
 	AvatarFileMetadata       *FileMetadataInput `json:"avatarFileMetadata,omitempty"`
+	AvatarFileName           *string            `json:"avatarFileName,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -39139,19 +39156,20 @@ type UpdateDocumentDataInput struct {
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
 	// the json data of the document
-	Data             map[string]any `json:"data,omitempty"`
-	EnvironmentID    *string        `json:"environmentID,omitempty"`
-	ClearEnvironment *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID          *string        `json:"scopeID,omitempty"`
-	ClearScope       *bool          `json:"clearScope,omitempty"`
-	TemplateID       *string        `json:"templateID,omitempty"`
-	ClearTemplate    *bool          `json:"clearTemplate,omitempty"`
-	AddEntityIDs     []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs  []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities    *bool          `json:"clearEntities,omitempty"`
-	AddFileIDs       []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs    []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles       *bool          `json:"clearFiles,omitempty"`
+	Data                 map[string]any `json:"data,omitempty"`
+	EnvironmentID        *string        `json:"environmentID,omitempty"`
+	ClearEnvironment     *bool          `json:"clearEnvironment,omitempty"`
+	ScopeID              *string        `json:"scopeID,omitempty"`
+	ClearScope           *bool          `json:"clearScope,omitempty"`
+	TemplateID           *string        `json:"templateID,omitempty"`
+	ClearTemplate        *bool          `json:"clearTemplate,omitempty"`
+	AddEntityIDs         []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs      []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities        *bool          `json:"clearEntities,omitempty"`
+	AddFileIDs           []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs        []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles           *bool          `json:"clearFiles,omitempty"`
+	DocumentDataFileName *string        `json:"documentDataFileName,omitempty"`
 }
 
 // UpdateEmailBrandingInput is used for update EmailBranding object.
@@ -39502,6 +39520,7 @@ type UpdateEntityInput struct {
 	Note                                   *CreateNoteInput     `json:"note,omitempty"`
 	EntityFilesMetadata                    []*FileMetadataInput `json:"entityFilesMetadata,omitempty"`
 	LogoFileMetadata                       *FileMetadataInput   `json:"logoFileMetadata,omitempty"`
+	LogoFileName                           *string              `json:"logoFileName,omitempty"`
 }
 
 // UpdateEntityTypeInput is used for update EntityType object.
@@ -40223,6 +40242,7 @@ type UpdateGroupInput struct {
 	// as the specified group ID, existing permissions will be removed
 	InheritGroupPermissions *string            `json:"inheritGroupPermissions,omitempty"`
 	AvatarFileMetadata      *FileMetadataInput `json:"avatarFileMetadata,omitempty"`
+	AvatarFileName          *string            `json:"avatarFileName,omitempty"`
 }
 
 // UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -40557,6 +40577,7 @@ type UpdateInternalPolicyInput struct {
 	AddWorkflowObjectRefIDs        []string                `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs     []string                `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs        *bool                   `json:"clearWorkflowObjectRefs,omitempty"`
+	InternalPolicyFileName         *string                 `json:"internalPolicyFileName,omitempty"`
 	AddDiscussion                  *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
 	UpdateDiscussion               *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
 	DeleteDiscussion               *string                 `json:"deleteDiscussion,omitempty"`
@@ -41329,6 +41350,7 @@ type UpdateOrganizationInput struct {
 	RemoveOrgMembers                        []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                       *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 	AvatarFileMetadata                      *FileMetadataInput              `json:"avatarFileMetadata,omitempty"`
+	AvatarFileName                          *string                         `json:"avatarFileName,omitempty"`
 }
 
 // UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -41780,6 +41802,7 @@ type UpdateProcedureInput struct {
 	DeleteDiscussion            *string                 `json:"deleteDiscussion,omitempty"`
 	AddComment                  *CreateNoteInput        `json:"addComment,omitempty"`
 	DeleteComment               *string                 `json:"deleteComment,omitempty"`
+	ProcedureFileName           *string                 `json:"procedureFileName,omitempty"`
 	RevisionBump                *models.VersionBump     `json:"RevisionBump,omitempty"`
 }
 
@@ -42513,6 +42536,7 @@ type UpdateStandardInput struct {
 	LogoFileID                     *string             `json:"logoFileID,omitempty"`
 	ClearLogoFile                  *bool               `json:"clearLogoFile,omitempty"`
 	RevisionBump                   *models.VersionBump `json:"RevisionBump,omitempty"`
+	LogoFileName                   *string             `json:"logoFileName,omitempty"`
 }
 
 // UpdateSubcontrolInput is used for update Subcontrol object.
@@ -42718,6 +42742,7 @@ type UpdateSubprocessorInput struct {
 	AddEntityIDs                     []string `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs                  []string `json:"removeEntityIDs,omitempty"`
 	ClearEntities                    *bool    `json:"clearEntities,omitempty"`
+	LogoFileName                     *string  `json:"logoFileName,omitempty"`
 }
 
 // UpdateSubscriberInput is used for update Subscriber object.
@@ -43020,22 +43045,24 @@ type UpdateTrustCenterDocInput struct {
 	WatermarkStatus      *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	ClearWatermarkStatus *bool                  `json:"clearWatermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility              *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	ClearVisibility         *bool                                `json:"clearVisibility,omitempty"`
-	TrustCenterDocKindID    *string                              `json:"trustCenterDocKindID,omitempty"`
-	ClearTrustCenterDocKind *bool                                `json:"clearTrustCenterDocKind,omitempty"`
-	AddBlockedGroupIDs      []string                             `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string                             `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                                `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string                             `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string                             `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                                `json:"clearEditors,omitempty"`
-	StandardID              *string                              `json:"standardID,omitempty"`
-	ClearStandard           *bool                                `json:"clearStandard,omitempty"`
-	FileID                  *string                              `json:"fileID,omitempty"`
-	ClearFile               *bool                                `json:"clearFile,omitempty"`
-	OriginalFileID          *string                              `json:"originalFileID,omitempty"`
-	ClearOriginalFile       *bool                                `json:"clearOriginalFile,omitempty"`
+	Visibility                        *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	ClearVisibility                   *bool                                `json:"clearVisibility,omitempty"`
+	TrustCenterDocKindID              *string                              `json:"trustCenterDocKindID,omitempty"`
+	ClearTrustCenterDocKind           *bool                                `json:"clearTrustCenterDocKind,omitempty"`
+	AddBlockedGroupIDs                []string                             `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs             []string                             `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups                *bool                                `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                      []string                             `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                   []string                             `json:"removeEditorIDs,omitempty"`
+	ClearEditors                      *bool                                `json:"clearEditors,omitempty"`
+	StandardID                        *string                              `json:"standardID,omitempty"`
+	ClearStandard                     *bool                                `json:"clearStandard,omitempty"`
+	FileID                            *string                              `json:"fileID,omitempty"`
+	ClearFile                         *bool                                `json:"clearFile,omitempty"`
+	OriginalFileID                    *string                              `json:"originalFileID,omitempty"`
+	ClearOriginalFile                 *bool                                `json:"clearOriginalFile,omitempty"`
+	TrustCenterDocFileName            *string                              `json:"trustCenterDocFileName,omitempty"`
+	WatermarkedTrustCenterDocFileName *string                              `json:"watermarkedTrustCenterDocFileName,omitempty"`
 }
 
 // UpdateTrustCenterEntityInput is used for update TrustCenterEntity object.
@@ -43052,6 +43079,7 @@ type UpdateTrustCenterEntityInput struct {
 	ClearEditors          *bool    `json:"clearEditors,omitempty"`
 	LogoFileID            *string  `json:"logoFileID,omitempty"`
 	ClearLogoFile         *bool    `json:"clearLogoFile,omitempty"`
+	LogoFileName          *string  `json:"logoFileName,omitempty"`
 }
 
 // UpdateTrustCenterFAQInput is used for update TrustCenterFAQ object.
@@ -43270,6 +43298,9 @@ type UpdateTrustCenterSettingInput struct {
 	ClearFaviconFile      *bool    `json:"clearFaviconFile,omitempty"`
 	HeroImageFileID       *string  `json:"heroImageFileID,omitempty"`
 	ClearHeroImageFile    *bool    `json:"clearHeroImageFile,omitempty"`
+	LogoFileName          *string  `json:"logoFileName,omitempty"`
+	FaviconFileName       *string  `json:"faviconFileName,omitempty"`
+	HeroImageFileName     *string  `json:"heroImageFileName,omitempty"`
 }
 
 // UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
@@ -43327,6 +43358,7 @@ type UpdateTrustCenterWatermarkConfigInput struct {
 	ClearTrustCenter      *bool       `json:"clearTrustCenter,omitempty"`
 	FileID                *string     `json:"fileID,omitempty"`
 	ClearFile             *bool       `json:"clearFile,omitempty"`
+	WatermarkFileName     *string     `json:"watermarkFileName,omitempty"`
 }
 
 // UpdateUserInput is used for update User object.
@@ -43439,6 +43471,7 @@ type UpdateUserInput struct {
 	RemoveTargetedImpersonationIDs []string           `json:"removeTargetedImpersonationIDs,omitempty"`
 	ClearTargetedImpersonations    *bool              `json:"clearTargetedImpersonations,omitempty"`
 	AvatarFileMetadata             *FileMetadataInput `json:"avatarFileMetadata,omitempty"`
+	AvatarFileName                 *string            `json:"avatarFileName,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.

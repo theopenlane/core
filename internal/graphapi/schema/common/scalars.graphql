@@ -4,6 +4,10 @@ This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
 """
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
+"""
 The `Address` scalar type represents a physical or mailing address.
 This scalar can be used to store and validate address information in the GraphQL schema.
 It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`

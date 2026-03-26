@@ -44,17 +44,26 @@ type ResolverRoot interface {
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
+	CreateInternalPolicyInput() CreateInternalPolicyInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateNotificationInput() CreateNotificationInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
+	CreateProcedureInput() CreateProcedureInputResolver
 	CreateScanInput() CreateScanInputResolver
+	CreateStandardInput() CreateStandardInputResolver
+	CreateSubprocessorInput() CreateSubprocessorInputResolver
+	CreateTrustCenterDocInput() CreateTrustCenterDocInputResolver
+	CreateTrustCenterEntityInput() CreateTrustCenterEntityInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
+	CreateTrustCenterSettingInput() CreateTrustCenterSettingInputResolver
+	CreateTrustCenterWatermarkConfigInput() CreateTrustCenterWatermarkConfigInputResolver
 	CreateUserInput() CreateUserInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateDiscussionInput() UpdateDiscussionInputResolver
+	UpdateDocumentDataInput() UpdateDocumentDataInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateEvidenceInput() UpdateEvidenceInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
@@ -65,10 +74,15 @@ type ResolverRoot interface {
 	UpdateRiskInput() UpdateRiskInputResolver
 	UpdateStandardInput() UpdateStandardInputResolver
 	UpdateSubcontrolInput() UpdateSubcontrolInputResolver
+	UpdateSubprocessorInput() UpdateSubprocessorInputResolver
 	UpdateTFASettingInput() UpdateTFASettingInputResolver
 	UpdateTaskInput() UpdateTaskInputResolver
+	UpdateTrustCenterDocInput() UpdateTrustCenterDocInputResolver
+	UpdateTrustCenterEntityInput() UpdateTrustCenterEntityInputResolver
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
+	UpdateTrustCenterSettingInput() UpdateTrustCenterSettingInputResolver
+	UpdateTrustCenterWatermarkConfigInput() UpdateTrustCenterWatermarkConfigInputResolver
 	UpdateUserInput() UpdateUserInputResolver
 }
 
@@ -51039,6 +51053,10 @@ This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
 """
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
+"""
 The ` + "`" + `Address` + "`" + ` scalar type represents a physical or mailing address.
 This scalar can be used to store and validate address information in the GraphQL schema.
 It contains ` + "`" + `Line1` + "`" + `, ` + "`" + `Line2` + "`" + `, ` + "`" + `City` + "`" + `, ` + "`" + `State` + "`" + `, ` + "`" + `PostalCode` + "`" + `, and ` + "`" + `Country` + "`" + `
@@ -54357,6 +54375,10 @@ type DocumentDataBulkUpdatePayload {
     IDs of the updated documentDatas
     """
     updatedIDs: [ID!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/documentdatainputextended.graphql", Input: `extend input UpdateDocumentDataInput {
+  documentDataFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/emailbranding.graphql", Input: `extend type Query {
@@ -138501,6 +138523,14 @@ extend input UpdateEntityInput {
   logoFileMetadata: FileMetadataInput
 }
 `, BuiltIn: false},
+	{Name: "../schema/entityinputextended.graphql", Input: `extend input CreateEntityInput {
+  logoFileName: UploadFileName
+}
+
+extend input UpdateEntityInput {
+  logoFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/entitytype.graphql", Input: `extend type Query {
     """
     Look up entityType by ID
@@ -139838,6 +139868,14 @@ extend type Mutation{
       cloneGroupMembers: ID
   ): GroupCreatePayload!
 }`, BuiltIn: false},
+	{Name: "../schema/groupinputextended.graphql", Input: `extend input CreateGroupInput {
+  avatarFileName: UploadFileName
+}
+
+extend input UpdateGroupInput {
+  avatarFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/groupmembership.graphql", Input: `extend type Query {
     """
     Look up groupMembership by ID
@@ -140739,6 +140777,14 @@ type InternalPolicyBulkDeletePayload {
     Deleted internalPolicy IDs
     """
     deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
+	{Name: "../schema/internalpolicyinputextended.graphql", Input: `extend input CreateInternalPolicyInput {
+  internalPolicyFileName: UploadFileName
+}
+
+extend input UpdateInternalPolicyInput {
+  internalPolicyFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/invite.graphql", Input: `extend type Query {
@@ -142812,6 +142858,14 @@ type OrganizationTransferOwnershipPayload {
     """
     invitationSent: Boolean!
 }`, BuiltIn: false},
+	{Name: "../schema/orginputextended.graphql", Input: `extend input CreateOrganizationInput {
+  avatarFileName: UploadFileName
+}
+
+extend input UpdateOrganizationInput {
+  avatarFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/orgmembership.graphql", Input: `extend type Query {
     """
     Look up orgMembership by ID
@@ -143408,6 +143462,14 @@ type ProcedureBulkDeletePayload {
     Deleted export IDs
     """
     deletedIDs: [ID!]!
+}
+`, BuiltIn: false},
+	{Name: "../schema/procedureinputextended.graphql", Input: `extend input CreateProcedureInput {
+  procedureFileName: UploadFileName
+}
+
+extend input UpdateProcedureInput {
+  procedureFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/program.graphql", Input: `extend type Query {
@@ -146148,6 +146210,14 @@ type StandardBulkCreatePayload {
     """
     standards: [Standard!]
 }`, BuiltIn: false},
+	{Name: "../schema/standardinputextended.graphql", Input: `extend input CreateStandardInput {
+  logoFileName: UploadFileName
+}
+
+extend input UpdateStandardInput {
+  logoFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/subcontrol.graphql", Input: `extend type Subcontrol {
     """
     Indicates if this subcontrol has pending changes awaiting workflow approval
@@ -146500,6 +146570,14 @@ type SubprocessorBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
+	{Name: "../schema/subprocessorinputextended.graphql", Input: `extend input CreateSubprocessorInput {
+  logoFileName: UploadFileName
+}
+
+extend input UpdateSubprocessorInput {
+  logoFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/subscriber.graphql", Input: `extend type Query {
     """
     Look up subscriber by Email
@@ -147666,6 +147744,15 @@ type TrustCenterDocBulkUpdatePayload {
     """
     updatedIDs: [ID!]
 }`, BuiltIn: false},
+	{Name: "../schema/trustcenterdocextended.graphql", Input: `extend input CreateTrustCenterDocInput {
+  trustCenterDocFileName: UploadFileName
+}
+
+extend input UpdateTrustCenterDocInput {
+  trustCenterDocFileName: UploadFileName
+  watermarkedTrustCenterDocFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
     """
     Create a new trustCenterSetting
@@ -147809,6 +147896,14 @@ type TrustCenterEntityBulkCreatePayload {
     """
     trustCenterEntities: [TrustCenterEntity!]
 }`, BuiltIn: false},
+	{Name: "../schema/trustcenterentityinputextended.graphql", Input: `extend input CreateTrustCenterEntityInput {
+  logoFileName: UploadFileName
+}
+
+extend input UpdateTrustCenterEntityInput {
+  logoFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcenterextended.graphql", Input: `extend input UpdateTrustCenterInput {
   updateTrustCenterSetting: UpdateTrustCenterSettingInput
 }
@@ -148296,6 +148391,12 @@ input CreateTrustCenterPreviewSettingInput {
   heroImageFileID: ID
 }
 `, BuiltIn: false},
+	{Name: "../schema/trustcenterpreviewsettinginputextended.graphql", Input: `extend input CreateTrustCenterPreviewSettingInput {
+  logoFileName: UploadFileName
+  faviconFileName: UploadFileName
+  heroImageFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {
     """
     Look up trustCenterSetting by ID
@@ -148403,6 +148504,18 @@ type TrustCenterSettingBulkCreatePayload {
     """
     trustCenterSettings: [TrustCenterSetting!]
 }`, BuiltIn: false},
+	{Name: "../schema/trustcentersettinginputextended.graphql", Input: `extend input CreateTrustCenterSettingInput {
+  logoFileName: UploadFileName
+  faviconFileName: UploadFileName
+  heroImageFileName: UploadFileName
+}
+
+extend input UpdateTrustCenterSettingInput {
+  logoFileName: UploadFileName
+  faviconFileName: UploadFileName
+  heroImageFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcentersubprocessor.graphql", Input: `extend type Query {
     """
     Look up trustCenterSubprocessor by ID
@@ -148649,6 +148762,14 @@ type TrustCenterWatermarkConfigBulkCreatePayload {
     trustCenterWatermarkConfigs: [TrustCenterWatermarkConfig!]
 }
 `, BuiltIn: false},
+	{Name: "../schema/trustcenterwatermarkconfiginputextended.graphql", Input: `extend input CreateTrustCenterWatermarkConfigInput {
+  watermarkFileName: UploadFileName
+}
+
+extend input UpdateTrustCenterWatermarkConfigInput {
+  watermarkFileName: UploadFileName
+}
+`, BuiltIn: false},
 	{Name: "../schema/user.graphql", Input: `extend type Query {
     """
     Look up user by ID
@@ -148749,6 +148870,14 @@ type UserBulkCreatePayload {
 
 extend input UpdateUserInput {
   avatarFileMetadata: FileMetadataInput
+}
+`, BuiltIn: false},
+	{Name: "../schema/userinputextended.graphql", Input: `extend input CreateUserInput {
+  avatarFileName: UploadFileName
+}
+
+extend input UpdateUserInput {
+  avatarFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/usersetting.graphql", Input: `extend type Query {

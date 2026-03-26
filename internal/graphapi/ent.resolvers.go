@@ -3301,6 +3301,11 @@ func (r *Resolver) CreateGroupInput() gqlgenerated.CreateGroupInputResolver {
 	return &createGroupInputResolver{r}
 }
 
+// CreateInternalPolicyInput returns gqlgenerated.CreateInternalPolicyInputResolver implementation.
+func (r *Resolver) CreateInternalPolicyInput() gqlgenerated.CreateInternalPolicyInputResolver {
+	return &createInternalPolicyInputResolver{r}
+}
+
 // CreateMappedControlInput returns gqlgenerated.CreateMappedControlInputResolver implementation.
 func (r *Resolver) CreateMappedControlInput() gqlgenerated.CreateMappedControlInputResolver {
 	return &createMappedControlInputResolver{r}
@@ -3316,9 +3321,34 @@ func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInpu
 	return &createOrganizationInputResolver{r}
 }
 
+// CreateProcedureInput returns gqlgenerated.CreateProcedureInputResolver implementation.
+func (r *Resolver) CreateProcedureInput() gqlgenerated.CreateProcedureInputResolver {
+	return &createProcedureInputResolver{r}
+}
+
 // CreateScanInput returns gqlgenerated.CreateScanInputResolver implementation.
 func (r *Resolver) CreateScanInput() gqlgenerated.CreateScanInputResolver {
 	return &createScanInputResolver{r}
+}
+
+// CreateStandardInput returns gqlgenerated.CreateStandardInputResolver implementation.
+func (r *Resolver) CreateStandardInput() gqlgenerated.CreateStandardInputResolver {
+	return &createStandardInputResolver{r}
+}
+
+// CreateSubprocessorInput returns gqlgenerated.CreateSubprocessorInputResolver implementation.
+func (r *Resolver) CreateSubprocessorInput() gqlgenerated.CreateSubprocessorInputResolver {
+	return &createSubprocessorInputResolver{r}
+}
+
+// CreateTrustCenterDocInput returns gqlgenerated.CreateTrustCenterDocInputResolver implementation.
+func (r *Resolver) CreateTrustCenterDocInput() gqlgenerated.CreateTrustCenterDocInputResolver {
+	return &createTrustCenterDocInputResolver{r}
+}
+
+// CreateTrustCenterEntityInput returns gqlgenerated.CreateTrustCenterEntityInputResolver implementation.
+func (r *Resolver) CreateTrustCenterEntityInput() gqlgenerated.CreateTrustCenterEntityInputResolver {
+	return &createTrustCenterEntityInputResolver{r}
 }
 
 // CreateTrustCenterFAQInput returns gqlgenerated.CreateTrustCenterFAQInputResolver implementation.
@@ -3329,6 +3359,16 @@ func (r *Resolver) CreateTrustCenterFAQInput() gqlgenerated.CreateTrustCenterFAQ
 // CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
 func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputResolver {
 	return &createTrustCenterInputResolver{r}
+}
+
+// CreateTrustCenterSettingInput returns gqlgenerated.CreateTrustCenterSettingInputResolver implementation.
+func (r *Resolver) CreateTrustCenterSettingInput() gqlgenerated.CreateTrustCenterSettingInputResolver {
+	return &createTrustCenterSettingInputResolver{r}
+}
+
+// CreateTrustCenterWatermarkConfigInput returns gqlgenerated.CreateTrustCenterWatermarkConfigInputResolver implementation.
+func (r *Resolver) CreateTrustCenterWatermarkConfigInput() gqlgenerated.CreateTrustCenterWatermarkConfigInputResolver {
+	return &createTrustCenterWatermarkConfigInputResolver{r}
 }
 
 // CreateUserInput returns gqlgenerated.CreateUserInputResolver implementation.
@@ -3354,6 +3394,11 @@ func (r *Resolver) UpdateControlObjectiveInput() gqlgenerated.UpdateControlObjec
 // UpdateDiscussionInput returns gqlgenerated.UpdateDiscussionInputResolver implementation.
 func (r *Resolver) UpdateDiscussionInput() gqlgenerated.UpdateDiscussionInputResolver {
 	return &updateDiscussionInputResolver{r}
+}
+
+// UpdateDocumentDataInput returns gqlgenerated.UpdateDocumentDataInputResolver implementation.
+func (r *Resolver) UpdateDocumentDataInput() gqlgenerated.UpdateDocumentDataInputResolver {
+	return &updateDocumentDataInputResolver{r}
 }
 
 // UpdateEntityInput returns gqlgenerated.UpdateEntityInputResolver implementation.
@@ -3406,6 +3451,11 @@ func (r *Resolver) UpdateSubcontrolInput() gqlgenerated.UpdateSubcontrolInputRes
 	return &updateSubcontrolInputResolver{r}
 }
 
+// UpdateSubprocessorInput returns gqlgenerated.UpdateSubprocessorInputResolver implementation.
+func (r *Resolver) UpdateSubprocessorInput() gqlgenerated.UpdateSubprocessorInputResolver {
+	return &updateSubprocessorInputResolver{r}
+}
+
 // UpdateTFASettingInput returns gqlgenerated.UpdateTFASettingInputResolver implementation.
 func (r *Resolver) UpdateTFASettingInput() gqlgenerated.UpdateTFASettingInputResolver {
 	return &updateTFASettingInputResolver{r}
@@ -3416,6 +3466,16 @@ func (r *Resolver) UpdateTaskInput() gqlgenerated.UpdateTaskInputResolver {
 	return &updateTaskInputResolver{r}
 }
 
+// UpdateTrustCenterDocInput returns gqlgenerated.UpdateTrustCenterDocInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterDocInput() gqlgenerated.UpdateTrustCenterDocInputResolver {
+	return &updateTrustCenterDocInputResolver{r}
+}
+
+// UpdateTrustCenterEntityInput returns gqlgenerated.UpdateTrustCenterEntityInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterEntityInput() gqlgenerated.UpdateTrustCenterEntityInputResolver {
+	return &updateTrustCenterEntityInputResolver{r}
+}
+
 // UpdateTrustCenterFAQInput returns gqlgenerated.UpdateTrustCenterFAQInputResolver implementation.
 func (r *Resolver) UpdateTrustCenterFAQInput() gqlgenerated.UpdateTrustCenterFAQInputResolver {
 	return &updateTrustCenterFAQInputResolver{r}
@@ -3424,6 +3484,16 @@ func (r *Resolver) UpdateTrustCenterFAQInput() gqlgenerated.UpdateTrustCenterFAQ
 // UpdateTrustCenterInput returns gqlgenerated.UpdateTrustCenterInputResolver implementation.
 func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputResolver {
 	return &updateTrustCenterInputResolver{r}
+}
+
+// UpdateTrustCenterSettingInput returns gqlgenerated.UpdateTrustCenterSettingInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterSettingInput() gqlgenerated.UpdateTrustCenterSettingInputResolver {
+	return &updateTrustCenterSettingInputResolver{r}
+}
+
+// UpdateTrustCenterWatermarkConfigInput returns gqlgenerated.UpdateTrustCenterWatermarkConfigInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterWatermarkConfigInput() gqlgenerated.UpdateTrustCenterWatermarkConfigInputResolver {
+	return &updateTrustCenterWatermarkConfigInputResolver{r}
 }
 
 // UpdateUserInput returns gqlgenerated.UpdateUserInputResolver implementation.
@@ -3449,17 +3519,26 @@ type workflowProposalResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
+type createInternalPolicyInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
 type createNotificationInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
+type createProcedureInputResolver struct{ *Resolver }
 type createScanInputResolver struct{ *Resolver }
+type createStandardInputResolver struct{ *Resolver }
+type createSubprocessorInputResolver struct{ *Resolver }
+type createTrustCenterDocInputResolver struct{ *Resolver }
+type createTrustCenterEntityInputResolver struct{ *Resolver }
 type createTrustCenterFAQInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
+type createTrustCenterSettingInputResolver struct{ *Resolver }
+type createTrustCenterWatermarkConfigInputResolver struct{ *Resolver }
 type createUserInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateDiscussionInputResolver struct{ *Resolver }
+type updateDocumentDataInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateEvidenceInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
@@ -3470,8 +3549,13 @@ type updateProgramInputResolver struct{ *Resolver }
 type updateRiskInputResolver struct{ *Resolver }
 type updateStandardInputResolver struct{ *Resolver }
 type updateSubcontrolInputResolver struct{ *Resolver }
+type updateSubprocessorInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
+type updateTrustCenterDocInputResolver struct{ *Resolver }
+type updateTrustCenterEntityInputResolver struct{ *Resolver }
 type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }
+type updateTrustCenterSettingInputResolver struct{ *Resolver }
+type updateTrustCenterWatermarkConfigInputResolver struct{ *Resolver }
 type updateUserInputResolver struct{ *Resolver }

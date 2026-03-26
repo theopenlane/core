@@ -12294,6 +12294,7 @@ input CreateEntityInput {
 	note: CreateNoteInput
 	entityFilesMetadata: [FileMetadataInput!]
 	logoFileMetadata: FileMetadataInput
+	logoFileName: UploadFileName
 }
 """
 CreateEntityTypeInput is used for create EntityType object.
@@ -12912,6 +12913,7 @@ input CreateGroupInput {
 	campaignTargetIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
 	avatarFileMetadata: FileMetadataInput
+	avatarFileName: UploadFileName
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -13233,6 +13235,7 @@ input CreateInternalPolicyInput {
 	commentIDs: [ID!]
 	discussionIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	internalPolicyFileName: UploadFileName
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -13974,6 +13977,7 @@ input CreateOrganizationInput {
 	discussionIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 	avatarFileMetadata: FileMetadataInput
+	avatarFileName: UploadFileName
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -14394,6 +14398,7 @@ input CreateProcedureInput {
 	discussionIDs: [ID!]
 	fileID: ID
 	workflowObjectRefIDs: [ID!]
+	procedureFileName: UploadFileName
 }
 """
 CreateProgramInput is used for create Program object.
@@ -15079,6 +15084,7 @@ input CreateStandardInput {
 	trustCenterDocIDs: [ID!]
 	applicablePlatformIDs: [ID!]
 	logoFileID: ID
+	logoFileName: UploadFileName
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -15273,6 +15279,7 @@ input CreateSubprocessorInput {
 	logoFileID: ID
 	trustCenterSubprocessorIDs: [ID!]
 	entityIDs: [ID!]
+	logoFileName: UploadFileName
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -15573,6 +15580,7 @@ input CreateTrustCenterDocInput {
 	standardID: ID
 	fileID: ID
 	originalFileID: ID
+	trustCenterDocFileName: UploadFileName
 }
 """
 Input for createTrustCenterDomain mutation
@@ -15605,6 +15613,7 @@ input CreateTrustCenterEntityInput {
 	logoFileID: ID
 	trustCenterID: ID
 	entityTypeID: ID
+	logoFileName: UploadFileName
 }
 """
 CreateTrustCenterFAQInput is used for create TrustCenterFAQ object.
@@ -15795,6 +15804,9 @@ input CreateTrustCenterPreviewSettingInput {
 	hero image local file ID
 	"""
 	heroImageFileID: ID
+	logoFileName: UploadFileName
+	faviconFileName: UploadFileName
+	heroImageFileName: UploadFileName
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -15886,6 +15898,9 @@ input CreateTrustCenterSettingInput {
 	logoFileID: ID
 	faviconFileID: ID
 	heroImageFileID: ID
+	logoFileName: UploadFileName
+	faviconFileName: UploadFileName
+	heroImageFileName: UploadFileName
 }
 """
 CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -15948,6 +15963,7 @@ input CreateTrustCenterWatermarkConfigInput {
 	editorIDs: [ID!]
 	trustCenterIDs: [ID!]
 	fileID: ID
+	watermarkFileName: UploadFileName
 }
 """
 CreateUserInput is used for create User object.
@@ -16038,6 +16054,7 @@ input CreateUserInput {
 	impersonationEventIDs: [ID!]
 	targetedImpersonationIDs: [ID!]
 	avatarFileMetadata: FileMetadataInput
+	avatarFileName: UploadFileName
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -84717,6 +84734,7 @@ input UpdateDocumentDataInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	documentDataFileName: UploadFileName
 }
 """
 UpdateEmailBrandingInput is used for update EmailBranding object.
@@ -85216,6 +85234,7 @@ input UpdateEntityInput {
 	note: CreateNoteInput
 	entityFilesMetadata: [FileMetadataInput!]
 	logoFileMetadata: FileMetadataInput
+	logoFileName: UploadFileName
 }
 """
 UpdateEntityTypeInput is used for update EntityType object.
@@ -86155,6 +86174,7 @@ input UpdateGroupInput {
 	"""
 	inheritGroupPermissions: ID
 	avatarFileMetadata: FileMetadataInput
+	avatarFileName: UploadFileName
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -86608,6 +86628,7 @@ input UpdateInternalPolicyInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	internalPolicyFileName: UploadFileName
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -87585,6 +87606,7 @@ input UpdateOrganizationInput {
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
 	avatarFileMetadata: FileMetadataInput
+	avatarFileName: UploadFileName
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -88204,6 +88226,7 @@ input UpdateProcedureInput {
 	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
+	procedureFileName: UploadFileName
 	RevisionBump: VersionBump
 }
 """
@@ -89177,6 +89200,7 @@ input UpdateStandardInput {
 	logoFileID: ID
 	clearLogoFile: Boolean
 	RevisionBump: VersionBump
+	logoFileName: UploadFileName
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -89460,6 +89484,7 @@ input UpdateSubprocessorInput {
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
 	clearEntities: Boolean
+	logoFileName: UploadFileName
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -89890,6 +89915,8 @@ input UpdateTrustCenterDocInput {
 	clearFile: Boolean
 	originalFileID: ID
 	clearOriginalFile: Boolean
+	trustCenterDocFileName: UploadFileName
+	watermarkedTrustCenterDocFileName: UploadFileName
 }
 """
 UpdateTrustCenterEntityInput is used for update TrustCenterEntity object.
@@ -89909,6 +89936,7 @@ input UpdateTrustCenterEntityInput {
 	clearEditors: Boolean
 	logoFileID: ID
 	clearLogoFile: Boolean
+	logoFileName: UploadFileName
 }
 """
 UpdateTrustCenterFAQInput is used for update TrustCenterFAQ object.
@@ -90213,6 +90241,9 @@ input UpdateTrustCenterSettingInput {
 	clearFaviconFile: Boolean
 	heroImageFileID: ID
 	clearHeroImageFile: Boolean
+	logoFileName: UploadFileName
+	faviconFileName: UploadFileName
+	heroImageFileName: UploadFileName
 }
 """
 UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
@@ -90290,6 +90321,7 @@ input UpdateTrustCenterWatermarkConfigInput {
 	clearTrustCenter: Boolean
 	fileID: ID
 	clearFile: Boolean
+	watermarkFileName: UploadFileName
 }
 """
 UpdateUserInput is used for update User object.
@@ -90433,6 +90465,7 @@ input UpdateUserInput {
 	removeTargetedImpersonationIDs: [ID!]
 	clearTargetedImpersonations: Boolean
 	avatarFileMetadata: FileMetadataInput
+	avatarFileName: UploadFileName
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
@@ -90849,6 +90882,10 @@ The `Upload` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
+"""
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
 type User implements Node {
 	id: ID!
 	createdAt: Time

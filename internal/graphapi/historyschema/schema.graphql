@@ -37603,6 +37603,10 @@ The `Upload` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
+"""
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
 type UserHistory implements Node {
 	id: ID!
 	historyTime: Time!

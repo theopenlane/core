@@ -1,0 +1,7 @@
+extend input CreateGroupInput {
+  avatarFileName: UploadFileName
+}
+
+extend input UpdateGroupInput {
+  avatarFileName: UploadFileName
+}

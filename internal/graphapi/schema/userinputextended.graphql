@@ -1,0 +1,7 @@
+extend input CreateUserInput {
+  avatarFileName: UploadFileName
+}
+
+extend input UpdateUserInput {
+  avatarFileName: UploadFileName
+}

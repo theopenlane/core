@@ -1,0 +1,11 @@
+extend input CreateTrustCenterSettingInput {
+  logoFileName: UploadFileName
+  faviconFileName: UploadFileName
+  heroImageFileName: UploadFileName
+}
+
+extend input UpdateTrustCenterSettingInput {
+  logoFileName: UploadFileName
+  faviconFileName: UploadFileName
+  heroImageFileName: UploadFileName
+}
