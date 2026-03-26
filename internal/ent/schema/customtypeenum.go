@@ -154,7 +154,7 @@ func (t CustomTypeEnum) Edges() []ent.Edge {
 // Indexes of the CustomTypeEnum
 func (CustomTypeEnum) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("name", ownerFieldName).
+		index.Fields("name", "object_type", "field", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("object_type"),
 	}

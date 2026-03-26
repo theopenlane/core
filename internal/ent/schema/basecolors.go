@@ -1,6 +1,8 @@
 package schema
 
-import "github.com/brianvoe/gofakeit/v7"
+import (
+	"github.com/brianvoe/gofakeit/v7"
+)
 
 // defaultTagColors is a list of default colors to use for tags
 // if no color is specified, a random color from this list will be chosen
@@ -22,5 +24,6 @@ var defaultTagColors = []string{
 // defaultRandomColor returns a random color from the defaultTagColors list
 func defaultRandomColor() string {
 	randomIndex := gofakeit.Number(0, len(defaultTagColors)-1)
+
 	return defaultTagColors[randomIndex]
 }
