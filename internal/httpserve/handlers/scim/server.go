@@ -13,15 +13,15 @@ const (
 	maxSCIMResults = 200
 )
 
-// NewSCIMServer creates a new SCIM server with directory-backed User and Group resource handlers.
+// NewSCIMServer creates a new SCIM server with User and Group resource handlers
 func NewSCIMServer() (scim.Server, error) {
 	config := scim.ServiceProviderConfig{
-		DocumentationURI: opt.NewString("https://docs.theopenlane.io/docs/platform/integrations/scim"),
+		DocumentationURI: opt.NewString("https://docs.theopenlane.io/scim"),
 		AuthenticationSchemes: []scim.AuthenticationScheme{
 			{
 				Type:        scim.AuthenticationTypeOauthBearerToken,
-				Name:        "Bearer API Token",
-				Description: "Authenticate with an Openlane API token using the Authorization: Bearer <token> header",
+				Name:        "SCIM Bearer Token",
+				Description: "Authenticate with the SCIM bearer secret provisioned for this installation",
 			},
 		},
 		SupportPatch:     true,

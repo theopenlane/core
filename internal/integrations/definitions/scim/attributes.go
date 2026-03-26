@@ -1,11 +1,9 @@
 package scim
 
-import (
-	"github.com/samber/lo"
-)
+import "github.com/samber/lo"
 
-// extractMemberIDsFromValue extracts and deduplicates member IDs from a SCIM members value
-func extractMemberIDsFromValue(value any) []string {
+// ExtractMemberIDsFromValue extracts and deduplicates member IDs from a SCIM members value
+func ExtractMemberIDsFromValue(value any) []string {
 	members, ok := value.([]any)
 	if !ok {
 		return nil

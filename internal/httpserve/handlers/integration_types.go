@@ -50,6 +50,12 @@ type IntegrationConfigResponse struct {
 	Provider string `json:"provider"`
 	// InstallationID is the installation record ID that was created or updated.
 	InstallationID string `json:"installationId"`
+	// WebhookEndpointURL is the user-facing webhook or SCIM endpoint URL when the definition declares webhooks.
+	// This value is only populated on initial creation and should be captured by the caller.
+	WebhookEndpointURL string `json:"webhookEndpointUrl,omitempty"`
+	// WebhookSecret is the shared secret for authenticating inbound webhook or SCIM deliveries.
+	// This value is only populated on initial creation and should be captured by the caller.
+	WebhookSecret string `json:"webhookSecret,omitempty"`
 }
 
 // IntegrationTokenResponse is the response containing a refreshed integration access token.

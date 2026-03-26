@@ -254,11 +254,6 @@ func indexClients(clients []types.ClientRegistration, credentialNames map[string
 	return index, nil
 }
 
-// credentialRefDeclared reports whether target appears in refs
-func credentialRefDeclared(refs []types.CredentialSlotID, target types.CredentialSlotID) bool {
-	return lo.Contains(refs, target)
-}
-
 // indexConnections indexes connection registrations while enforcing credential, client, and validation constraints
 func indexConnections(connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration, operations map[string]types.OperationRegistration) (map[string]types.ConnectionRegistration, error) {
 	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
@@ -274,7 +269,7 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 			return nil, ErrConnectionCredentialRefNotDeclared
 		}
 
-		if !credentialRefDeclared(connection.CredentialRefs, connection.CredentialRef) {
+		if !lo.Contains(connection.CredentialRefs, connection.CredentialRef) {
 			connection.CredentialRefs = append(connection.CredentialRefs, connection.CredentialRef)
 		}
 
@@ -301,7 +296,7 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 				return nil, ErrConnectionAuthCredentialRefNotDeclared
 			}
 
-			if !credentialRefDeclared(connection.CredentialRefs, connection.Auth.CredentialRef) {
+			if !lo.Contains(connection.CredentialRefs, connection.Auth.CredentialRef) {
 				return nil, ErrConnectionAuthCredentialRefNotDeclared
 			}
 		}
@@ -311,7 +306,7 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
 			}
 
-			if !credentialRefDeclared(connection.CredentialRefs, connection.Disconnect.CredentialRef) {
+			if !lo.Contains(connection.CredentialRefs, connection.Disconnect.CredentialRef) {
 				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
 			}
 		}

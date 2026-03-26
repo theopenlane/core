@@ -10,10 +10,12 @@ import (
 var (
 	// DefinitionID is the stable identifier for the GitHub App integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
+	// installation is the typed installation metadata handle for the GitHub App definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// gitHubAppCredentialSchema is the credential schema for GitHub App credentials
+	gitHubAppCredentialSchema, gitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	gitHubClient = types.NewClientRef[GraphQLClient]()
-	// healthDefaultOperation is the operation ref for the GitHub App health check
-	healthCheckSchema, healthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events
@@ -28,13 +30,14 @@ var (
 	codeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	secretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
-	// installation is the typed installation metadata handle for the GitHub App definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
-
-	gitHubAppCredentialSchema, gitHubAppCredential            = providerkit.CredentialSchema[githubAppCredential]()
-	repositorySyncSchema, repositorySyncOperation             = providerkit.OperationSchema[RepositorySync]()
+	// healthDefaultOperation is the operation ref for the GitHub App health check
+	healthCheckSchema, healthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
+	// repositorySyncSchema is the operation schema for the GitHub repository sync operation
+	repositorySyncSchema, repositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
+	// vulnerabilityCollectSchema is the operation schema for the GitHub vulnerability collection operation
 	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilityCollectConfig]()
-	directorySyncSchema, directorySyncOperation               = providerkit.OperationSchema[DirectorySync]()
+	// directorySyncSchema is the operation schema for the GitHub directory sync operationß
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 
 const (

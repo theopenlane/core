@@ -1,10 +1,15 @@
 package handlers
 
 import (
+	"fmt"
+
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -36,7 +41,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.InstallationID, def)
+	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.InstallationID, def)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
@@ -53,9 +58,57 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	return h.Success(ctx, IntegrationConfigResponse{
+	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
+
+	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
+		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
+			SetStatus(enums.IntegrationStatusConnected).
+			Exec(systemCtx); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
+			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		installationRec.Status = enums.IntegrationStatusConnected
+	}
+
+	resp := IntegrationConfigResponse{
 		Reply:          rout.Reply{Success: true},
 		Provider:       def.ID,
 		InstallationID: installationRec.ID,
-	})
+	}
+
+	var primaryWebhookURL string
+	var primaryWebhookSecret string
+
+	for i, registration := range def.Webhooks {
+		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(systemCtx, installationRec, registration.Name, "")
+		if webhookErr != nil {
+			logx.FromContext(requestCtx).Error().Err(webhookErr).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
+			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		if i == 0 && webhook != nil {
+			primaryWebhookURL = absoluteEndpointURL(ctx, lo.FromPtr(webhook.EndpointURL))
+			primaryWebhookSecret = webhook.SecretToken
+		}
+	}
+
+	if isNewInstallation {
+		resp.WebhookEndpointURL = primaryWebhookURL
+		resp.WebhookSecret = primaryWebhookSecret
+	}
+
+	return h.Success(ctx, resp)
+}
+
+func absoluteEndpointURL(ctx echo.Context, path string) string {
+	if path == "" {
+		return ""
+	}
+
+	if path[0] != '/' {
+		return path
+	}
+
+	return fmt.Sprintf("%s://%s%s", ctx.Scheme(), ctx.Request().Host, path)
 }

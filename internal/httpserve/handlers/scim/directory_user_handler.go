@@ -6,29 +6,23 @@ import (
 	"net/http"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
 	"github.com/elimity-com/scim"
-	scimerrors "github.com/elimity-com/scim/errors"
-	scimoptional "github.com/elimity-com/scim/optional"
 	scimschema "github.com/elimity-com/scim/schema"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
 const (
-	// scimSyncRunCursor is the sentinel source_cursor value used to identify SCIM-sourced sync runs
-	scimSyncRunCursor = "scim"
 	// defaultSCIMPageSize is the default page size for SCIM list operations
 	defaultSCIMPageSize = 100
 )
 
 // DirectoryUserHandler implements scim.ResourceHandler writing to DirectoryAccount instead of User.
-// All records are scoped to the integration identified in the request context.
+// All records are scoped to the integration identified in the request context
 type DirectoryUserHandler struct{}
 
 // NewDirectoryUserHandler creates a new DirectoryUserHandler
@@ -37,17 +31,14 @@ func NewDirectoryUserHandler() *DirectoryUserHandler {
 }
 
 // Create stores a new DirectoryAccount record derived from SCIM user attributes,
-// upserting by (integration_id, external_id) when a match exists.
+// upserting by (integration_id, external_id) when a match exists
 func (h *DirectoryUserHandler) Create(r *http.Request, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	da, err := h.syncDirectoryAccount(ctx, client, ic, attributes, "")
+	da, err := h.syncDirectoryAccount(ctx, client, sr, attributes, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -57,23 +48,17 @@ func (h *DirectoryUserHandler) Create(r *http.Request, attributes scim.ResourceA
 
 // Get returns the DirectoryAccount corresponding to the given identifier, scoped by integration
 func (h *DirectoryUserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	da, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
-		}
+	q := client.DirectoryAccount.Query().
+		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(sr.Installation.ID))
 
-		return scim.Resource{}, fmt.Errorf("failed to get directory account: %w", err)
+	da, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
 	return directoryAccountToSCIMResource(da), nil
@@ -81,15 +66,12 @@ func (h *DirectoryUserHandler) Get(r *http.Request, id string) (scim.Resource, e
 
 // GetAll returns a paginated list of DirectoryAccount resources scoped by integration
 func (h *DirectoryUserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (scim.Page, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Page{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Page{}, err
 	}
 
-	query := client.DirectoryAccount.Query().Where(directoryaccount.IntegrationID(ic.IntegrationID))
+	query := client.DirectoryAccount.Query().Where(directoryaccount.IntegrationID(sr.Installation.ID))
 
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
@@ -121,29 +103,23 @@ func (h *DirectoryUserHandler) GetAll(r *http.Request, params scim.ListRequestPa
 
 // Replace replaces all attributes on the DirectoryAccount identified by id
 func (h *DirectoryUserHandler) Replace(r *http.Request, id string, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
-	}
-
-	da, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
+	ctx, client, sr, err := ResolveRequest(r)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
-		}
-
-		return scim.Resource{}, fmt.Errorf("failed to get directory account: %w", err)
+		return scim.Resource{}, err
 	}
 
-	replacement := cloneSCIMAttributes(attributes)
+	q := client.DirectoryAccount.Query().
+		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(sr.Installation.ID))
+
+	da, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return scim.Resource{}, err
+	}
+
+	replacement := definitionscim.CloneSCIMAttributes(attributes)
 	replacement["externalId"] = da.ExternalID
 
-	updated, err := h.syncDirectoryAccount(ctx, client, ic, replacement, "")
+	updated, err := h.syncDirectoryAccount(ctx, client, sr, replacement, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -153,23 +129,17 @@ func (h *DirectoryUserHandler) Replace(r *http.Request, id string, attributes sc
 
 // Patch applies a set of patch operations to the DirectoryAccount identified by id
 func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	da, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
-		}
+	q := client.DirectoryAccount.Query().
+		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(sr.Installation.ID))
 
-		return scim.Resource{}, fmt.Errorf("failed to get directory account: %w", err)
+	da, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
 	patched := directoryAccountAttributesFromRecord(da)
@@ -177,7 +147,7 @@ func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []sc
 		return scim.Resource{}, err
 	}
 
-	updated, err := h.syncDirectoryAccount(ctx, client, ic, patched, "")
+	updated, err := h.syncDirectoryAccount(ctx, client, sr, patched, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -187,60 +157,50 @@ func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []sc
 
 // Delete sets the DirectoryAccount status to DELETED
 func (h *DirectoryUserHandler) Delete(r *http.Request, id string) error {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return ErrIntegrationIDRequired
-	}
-
-	da, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
+	ctx, client, sr, err := ResolveRequest(r)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return scimerrors.ScimErrorResourceNotFound(id)
-		}
-
-		return fmt.Errorf("failed to get directory account: %w", err)
+		return err
 	}
 
-	return h.deleteDirectoryAccount(ctx, client, ic, da)
+	q := client.DirectoryAccount.Query().
+		Where(directoryaccount.ID(id), directoryaccount.IntegrationID(sr.Installation.ID))
+
+	da, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return err
+	}
+
+	attributes := directoryAccountAttributesFromRecord(da)
+	_, err = h.syncDirectoryAccount(ctx, client, sr, attributes, definitionscim.DeleteAction)
+
+	return err
 }
 
-// syncDirectoryAccount upserts one SCIM directory account through Runtime and reloads the normalized record
-func (h *DirectoryUserHandler) syncDirectoryAccount(ctx context.Context, client *generated.Client, ic *IntegrationContext, attributes scim.ResourceAttributes, action string) (*generated.DirectoryAccount, error) {
-	payloadSet, err := buildDirectoryAccountPayloadSet(attributes, action)
+// syncDirectoryAccount upserts one SCIM directory account through the inline operation path
+func (h *DirectoryUserHandler) syncDirectoryAccount(ctx context.Context, client *generated.Client, sr *SCIMRequest, attributes scim.ResourceAttributes, action string) (*generated.DirectoryAccount, error) {
+	payloadSet, err := definitionscim.BuildDirectoryAccountPayloadSet(attributes, action)
 	if err != nil {
-		return nil, handleDirectoryIngestError(err, "directory account payload is invalid")
+		return nil, handleIngestError(err, "directory account payload is invalid")
 	}
 
-	if err := ingestDirectoryPayloadSets(ctx, client, ic, []integrationtypes.IngestPayloadSet{payloadSet}); err != nil {
-		return nil, handleDirectoryIngestError(err, "directory account payload is invalid")
+	externalID := definitionscim.DirectoryAccountExternalID(attributes)
+	if err := ingestPayloadSets(ctx, client, sr, []integrationtypes.IngestPayloadSet{payloadSet}); err != nil {
+		return nil, handleIngestError(err, "directory account payload is invalid")
 	}
 
-	externalID := directoryAccountExternalID(attributes)
-	da, err := client.DirectoryAccount.Query().
-		Where(directoryaccount.IntegrationID(ic.IntegrationID), directoryaccount.ExternalID(externalID)).
-		Only(ctx)
+	q := client.DirectoryAccount.Query().
+		Where(directoryaccount.IntegrationID(sr.Installation.ID), directoryaccount.ExternalID(externalID))
+
+	da, err := q.Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return nil, ErrDirectoryAccountNotFound
+			return nil, definitionscim.ErrDirectoryAccountNotFound
 		}
 
 		return nil, fmt.Errorf("failed to reload directory account: %w", err)
 	}
 
 	return da, nil
-}
-
-// deleteDirectoryAccount marks a directory account as deleted through Runtime ingest
-func (h *DirectoryUserHandler) deleteDirectoryAccount(ctx context.Context, client *generated.Client, ic *IntegrationContext, da *generated.DirectoryAccount) error {
-	attributes := directoryAccountAttributesFromRecord(da)
-	_, err := h.syncDirectoryAccount(ctx, client, ic, attributes, scimDeleteAction)
-
-	return err
 }
 
 // applyDirectoryAccountPatchOperations applies SCIM PATCH operations to account attributes before ingest
@@ -252,7 +212,7 @@ func applyDirectoryAccountPatchOperations(attributes scim.ResourceAttributes, op
 		case scim.PatchOperationRemove:
 			applyDirectoryAccountRemove(attributes, op)
 		default:
-			return fmt.Errorf("%w: unsupported patch operation %s", ErrInvalidAttributes, op.Op)
+			return fmt.Errorf("%w: unsupported patch operation %s", definitionscim.ErrInvalidAttributes, op.Op)
 		}
 	}
 
@@ -272,7 +232,7 @@ func applyDirectoryAccountPatch(attributes scim.ResourceAttributes, op scim.Patc
 			return
 		}
 
-		mergeSCIMMap(attributes, valueMap)
+		definitionscim.MergeSCIMMap(attributes, valueMap)
 
 		return
 	}
@@ -284,12 +244,12 @@ func applyDirectoryAccountPatch(attributes scim.ResourceAttributes, op scim.Patc
 		}
 	case "name.givenname":
 		if v, ok := op.Value.(string); ok && v != "" {
-			name := ensureSCIMMap(attributes, "name")
+			name := definitionscim.EnsureSCIMMap(attributes, "name")
 			name["givenName"] = v
 		}
 	case "name.familyname":
 		if v, ok := op.Value.(string); ok && v != "" {
-			name := ensureSCIMMap(attributes, "name")
+			name := definitionscim.EnsureSCIMMap(attributes, "name")
 			name["familyName"] = v
 		}
 	case "active":
@@ -306,7 +266,7 @@ func applyDirectoryAccountPatch(attributes scim.ResourceAttributes, op scim.Patc
 		}
 	case "emails":
 		if v, ok := op.Value.([]any); ok {
-			attributes["emails"] = cloneSCIMValue(v)
+			attributes["emails"] = definitionscim.CloneSCIMValue(v)
 		}
 	}
 }
@@ -321,9 +281,9 @@ func applyDirectoryAccountRemove(attributes scim.ResourceAttributes, op scim.Pat
 
 	switch pathStr {
 	case "name.givenname":
-		delete(ensureSCIMMap(attributes, "name"), "givenName")
+		delete(definitionscim.EnsureSCIMMap(attributes, "name"), "givenName")
 	case "name.familyname":
-		delete(ensureSCIMMap(attributes, "name"), "familyName")
+		delete(definitionscim.EnsureSCIMMap(attributes, "name"), "familyName")
 	case "displayname":
 		delete(attributes, "displayName")
 	case "emails":
@@ -333,26 +293,7 @@ func applyDirectoryAccountRemove(attributes scim.ResourceAttributes, op scim.Pat
 
 // directoryAccountToSCIMResource converts a DirectoryAccount entity to a SCIM Resource
 func directoryAccountToSCIMResource(da *generated.DirectoryAccount) scim.Resource {
-	attrs := directoryAccountAttributesFromRecord(da)
-	delete(attrs, "externalId")
-
-	externalID := scimoptional.NewString("")
-	if da.ExternalID != "" {
-		externalID = scimoptional.NewString(da.ExternalID)
-	}
-
-	meta := scim.Meta{
-		Created:      &da.CreatedAt,
-		LastModified: &da.UpdatedAt,
-		Version:      fmt.Sprintf("W/\"%d\"", da.UpdatedAt.Unix()),
-	}
-
-	return scim.Resource{
-		ID:         da.ID,
-		ExternalID: externalID,
-		Attributes: attrs,
-		Meta:       meta,
-	}
+	return buildSCIMResource(da.ID, da.ExternalID, da.CreatedAt, da.UpdatedAt, directoryAccountAttributesFromRecord(da))
 }
 
 // directoryAccountAttributesFromRecord renders a DirectoryAccount as SCIM attributes for patching and delete ingest
@@ -394,36 +335,4 @@ func directoryAccountAttributesFromRecord(da *generated.DirectoryAccount) scim.R
 	}
 
 	return attrs
-}
-
-// ensureScimSyncRun gets or creates a sentinel DirectorySyncRun for SCIM-sourced directory writes.
-// It queries for an existing run with source_cursor="scim" for the given integration, creating one
-// if none exists, and returns its ID.
-func ensureScimSyncRun(ctx context.Context, client *generated.Client, integrationID, orgID string) (string, error) {
-	existing, err := client.DirectorySyncRun.Query().
-		Where(
-			directorysyncrun.IntegrationID(integrationID),
-			directorysyncrun.SourceCursor(scimSyncRunCursor),
-		).
-		Order(directorysyncrun.ByCreatedAt(sql.OrderDesc())).
-		First(ctx)
-	if err != nil && !generated.IsNotFound(err) {
-		return "", fmt.Errorf("failed to query scim sync run: %w", err)
-	}
-
-	if existing != nil {
-		return existing.ID, nil
-	}
-
-	run, err := client.DirectorySyncRun.Create().
-		SetIntegrationID(integrationID).
-		SetOwnerID(orgID).
-		SetStatus(enums.DirectorySyncRunStatusRunning).
-		SetSourceCursor(scimSyncRunCursor).
-		Save(ctx)
-	if err != nil {
-		return "", fmt.Errorf("failed to create scim sync run: %w", err)
-	}
-
-	return run.ID, nil
 }

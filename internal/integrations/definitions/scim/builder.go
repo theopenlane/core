@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// Builder returns the SCIM definition builder
+// Builder returns a registry builder that constructs the SCIM directory sync definition
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
@@ -25,32 +25,33 @@ func Builder() registry.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
+			Webhooks: []types.WebhookRegistration{
+				{
+					Name:                SCIMAuthWebhook.Name(),
+					EndpointURLTemplate: "/v1/integrations/scim/{endpointID}/v2",
+				},
+			},
 			Operations: []types.OperationRegistration{
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Report push-based SCIM health status",
 					Topic:        types.OperationTopic(DefinitionID.ID(), healthCheckOperation.Name()),
 					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: directorySyncSchema,
-					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
+					Handle:       providerkit.StaticHandler(HealthCheck{}.Run),
 				},
 				{
-					Name:         directorySyncOperation.Name(),
+					Name:         DirectorySyncOperation.Name(),
 					Description:  "Synchronize directory state through SCIM",
-					Topic:        types.OperationTopic(DefinitionID.ID(), directorySyncOperation.Name()),
+					Topic:        types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
 					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Inline: true},
 					Ingest: []types.IngestContract{
-						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-						},
-						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-						},
-						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-						},
+						{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount},
+						{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup},
+						{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership},
 					},
-					Handle: DirectorySync{}.Handle(),
+					Handle: providerkit.StaticHandler(DirectorySync{}.Run),
 				},
 			},
 			Mappings: scimMappings(),

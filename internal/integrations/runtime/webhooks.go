@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"maps"
+	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -250,6 +251,8 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 
 	if len(rows) == 0 {
 		endpointID := keygen.PrefixedSecret("tolwh")
+		endpointURL := webhookEndpointURL(registration, endpointID)
+
 		return db.IntegrationWebhook.Create().
 			SetOwnerID(intg.OwnerID).
 			SetIntegrationID(intg.ID).
@@ -257,11 +260,12 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 			SetName(registration.Name).
 			SetAllowedEvents(allowedEvents).
 			SetEndpointID(endpointID).
-			SetEndpointURL("/v1/integrations/webhook/" + endpointID).
+			SetEndpointURL(endpointURL).
 			Save(ctx)
 	}
 
 	row := rows[0]
+	endpointURL := webhookEndpointURL(registration, lo.FromPtr(row.EndpointID))
 
 	// Remove duplicates that should not exist
 	duplicateIDs := lo.FilterMap(rows, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
@@ -276,11 +280,20 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	}
 
 	update := db.IntegrationWebhook.UpdateOneID(row.ID).
-		SetAllowedEvents(allowedEvents)
+		SetAllowedEvents(allowedEvents).
+		SetEndpointURL(endpointURL)
 
 	if row.IntegrationID != intg.ID {
 		update.SetIntegrationID(intg.ID)
 	}
 
 	return update.Save(ctx)
+}
+
+func webhookEndpointURL(registration types.WebhookRegistration, endpointID string) string {
+	if registration.EndpointURLTemplate == "" {
+		return "/v1/integrations/webhook/" + endpointID
+	}
+
+	return strings.ReplaceAll(registration.EndpointURLTemplate, "{endpointID}", endpointID)
 }

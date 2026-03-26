@@ -9,6 +9,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -19,7 +20,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -32,8 +35,8 @@ const configTestProviderID = "def_01K0TESTCFG00000000000001"
 type ConfigTestHealthCheck struct{}
 
 var (
-	configTestCredentialRef                                  = types.NewCredentialSlotID("config_test")
-	configHealthSchema, configHealthCheckOperation           = providerkit.OperationSchema[ConfigTestHealthCheck]()
+	configTestCredentialRef                        = types.NewCredentialSlotID("config_test")
+	configHealthSchema, configHealthCheckOperation = providerkit.OperationSchema[ConfigTestHealthCheck]()
 )
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
@@ -82,6 +85,60 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	require.True(t, ok)
 	assert.Contains(t, string(credential.Data), "projectId")
 	assert.Equal(t, `payload.severity == "HIGH"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpointDetails() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderSCIM"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{definitionscim.Builder()})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		DefinitionID: definitionscim.DefinitionID.ID(),
+		UserInput:    json.RawMessage(mustMarshalJSON(t, map[string]any{"name": "Okta Production"})),
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+definitionscim.DefinitionID.ID()+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationConfigResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+
+	assert.True(t, resp.Success)
+	assert.Equal(t, definitionscim.DefinitionID.ID(), resp.Provider)
+	assert.NotEmpty(t, resp.InstallationID)
+	assert.NotEmpty(t, resp.WebhookSecret)
+	assert.True(t, strings.HasPrefix(resp.WebhookEndpointURL, "http://example.com/v1/integrations/scim/"))
+	assert.True(t, strings.HasSuffix(resp.WebhookEndpointURL, "/v2"))
+
+	stored := suite.db.Integration.GetX(testUser.UserCtx, resp.InstallationID)
+	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
+	assert.Equal(t, "Okta Production", stored.Name)
+
+	webhook := suite.db.IntegrationWebhook.Query().
+		Where(
+			integrationwebhook.IntegrationIDEQ(stored.ID),
+			integrationwebhook.NameEQ(definitionscim.SCIMAuthWebhook.Name()),
+			integrationwebhook.ExternalEventIDIsNil(),
+		).
+		OnlyX(testUser.UserCtx)
+
+	require.NotNil(t, webhook.EndpointID)
+	require.NotNil(t, webhook.EndpointURL)
+	assert.Equal(t, "/v1/integrations/scim/"+*webhook.EndpointID+"/v2", *webhook.EndpointURL)
+	assert.Equal(t, "http://example.com"+*webhook.EndpointURL, resp.WebhookEndpointURL)
+	assert.Equal(t, webhook.SecretToken, resp.WebhookSecret)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinitionID() {

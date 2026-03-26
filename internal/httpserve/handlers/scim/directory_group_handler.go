@@ -7,19 +7,18 @@ import (
 	"strings"
 
 	"github.com/elimity-com/scim"
-	scimerrors "github.com/elimity-com/scim/errors"
-	scimoptional "github.com/elimity-com/scim/optional"
 	scimschema "github.com/elimity-com/scim/schema"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 )
 
 // DirectoryGroupHandler implements scim.ResourceHandler writing to DirectoryGroup instead of Group.
-// All records are scoped to the integration identified in the request context.
+// All records are scoped to the integration identified in the request context
 type DirectoryGroupHandler struct{}
 
 // NewDirectoryGroupHandler creates a new DirectoryGroupHandler
@@ -28,43 +27,34 @@ func NewDirectoryGroupHandler() *DirectoryGroupHandler {
 }
 
 // Create stores a new DirectoryGroup record derived from SCIM group attributes,
-// upserting by (integration_id, external_id) when a match exists.
+// upserting by (integration_id, external_id) when a match exists
 func (h *DirectoryGroupHandler) Create(r *http.Request, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
-	}
-
-	dg, members, err := h.syncDirectoryGroup(ctx, client, ic, attributes, "")
+	ctx, client, sr, err := ResolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
 
-	return directoryGroupToSCIMResource(dg, members), nil
+	dg, members, err := h.syncDirectoryGroup(ctx, client, sr, attributes, "")
+	if err != nil {
+		return scim.Resource{}, err
+	}
+
+	return directoryGroupToSCIMResource(sr.BasePath, dg, members), nil
 }
 
 // Get returns the DirectoryGroup corresponding to the given identifier, scoped by integration
 func (h *DirectoryGroupHandler) Get(r *http.Request, id string) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	dg, err := client.DirectoryGroup.Query().
-		Where(directorygroup.ID(id), directorygroup.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
-		}
+	q := client.DirectoryGroup.Query().
+		Where(directorygroup.ID(id), directorygroup.IntegrationID(sr.Installation.ID))
 
-		return scim.Resource{}, fmt.Errorf("failed to get directory group: %w", err)
+	dg, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
 	members, err := h.loadGroupMembers(ctx, client, dg.ID)
@@ -72,20 +62,17 @@ func (h *DirectoryGroupHandler) Get(r *http.Request, id string) (scim.Resource, 
 		return scim.Resource{}, err
 	}
 
-	return directoryGroupToSCIMResource(dg, members), nil
+	return directoryGroupToSCIMResource(sr.BasePath, dg, members), nil
 }
 
 // GetAll returns a paginated list of DirectoryGroup resources scoped by integration
 func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestParams) (scim.Page, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Page{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Page{}, err
 	}
 
-	query := client.DirectoryGroup.Query().Where(directorygroup.IntegrationID(ic.IntegrationID))
+	query := client.DirectoryGroup.Query().Where(directorygroup.IntegrationID(sr.Installation.ID))
 
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
@@ -111,7 +98,7 @@ func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestP
 			return scim.Page{}, err
 		}
 
-		resources = append(resources, directoryGroupToSCIMResource(dg, members))
+		resources = append(resources, directoryGroupToSCIMResource(sr.BasePath, dg, members))
 	}
 
 	return scim.Page{
@@ -122,59 +109,47 @@ func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestP
 
 // Replace replaces all attributes on the DirectoryGroup identified by id
 func (h *DirectoryGroupHandler) Replace(r *http.Request, id string, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
-	}
-
-	dg, err := client.DirectoryGroup.Query().
-		Where(directorygroup.ID(id), directorygroup.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
+	ctx, client, sr, err := ResolveRequest(r)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
-		}
-
-		return scim.Resource{}, fmt.Errorf("failed to get directory group: %w", err)
+		return scim.Resource{}, err
 	}
 
-	replacement := cloneSCIMAttributes(attributes)
+	q := client.DirectoryGroup.Query().
+		Where(directorygroup.ID(id), directorygroup.IntegrationID(sr.Installation.ID))
+
+	dg, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return scim.Resource{}, err
+	}
+
+	replacement := definitionscim.CloneSCIMAttributes(attributes)
 	replacement["externalId"] = dg.ExternalID
 
 	if err := h.clearGroupMembers(ctx, client, dg.ID); err != nil {
 		return scim.Resource{}, err
 	}
 
-	updated, members, err := h.syncDirectoryGroup(ctx, client, ic, replacement, "")
+	updated, members, err := h.syncDirectoryGroup(ctx, client, sr, replacement, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
 
-	return directoryGroupToSCIMResource(updated, members), nil
+	return directoryGroupToSCIMResource(sr.BasePath, updated, members), nil
 }
 
 // Patch applies a set of patch operations to the DirectoryGroup identified by id
 func (h *DirectoryGroupHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return scim.Resource{}, ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
-	dg, err := client.DirectoryGroup.Query().
-		Where(directorygroup.ID(id), directorygroup.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return scim.Resource{}, scimerrors.ScimErrorResourceNotFound(id)
-		}
+	q := client.DirectoryGroup.Query().
+		Where(directorygroup.ID(id), directorygroup.IntegrationID(sr.Installation.ID))
 
-		return scim.Resource{}, fmt.Errorf("failed to get directory group: %w", err)
+	dg, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return scim.Resource{}, err
 	}
 
 	currentMembers, err := h.loadGroupMembers(ctx, client, dg.ID)
@@ -182,7 +157,7 @@ func (h *DirectoryGroupHandler) Patch(r *http.Request, id string, operations []s
 		return scim.Resource{}, err
 	}
 
-	patched := directoryGroupAttributesFromRecord(dg, currentMembers)
+	patched := directoryGroupAttributesFromRecord(sr.BasePath, dg, currentMembers)
 	membersTouched, err := applyGroupPatchOperations(patched, operations)
 	if err != nil {
 		return scim.Resource{}, err
@@ -194,33 +169,27 @@ func (h *DirectoryGroupHandler) Patch(r *http.Request, id string, operations []s
 		}
 	}
 
-	updated, members, err := h.syncDirectoryGroup(ctx, client, ic, patched, "")
+	updated, members, err := h.syncDirectoryGroup(ctx, client, sr, patched, "")
 	if err != nil {
 		return scim.Resource{}, err
 	}
 
-	return directoryGroupToSCIMResource(updated, members), nil
+	return directoryGroupToSCIMResource(sr.BasePath, updated, members), nil
 }
 
 // Delete sets the DirectoryGroup status to DELETED
 func (h *DirectoryGroupHandler) Delete(r *http.Request, id string) error {
-	ctx := r.Context()
-	client := transaction.FromContext(ctx).Client()
-
-	ic, ok := IntegrationContextFromContext(ctx)
-	if !ok || ic == nil {
-		return ErrIntegrationIDRequired
+	ctx, client, sr, err := ResolveRequest(r)
+	if err != nil {
+		return err
 	}
 
-	dg, err := client.DirectoryGroup.Query().
-		Where(directorygroup.ID(id), directorygroup.IntegrationID(ic.IntegrationID)).
-		Only(ctx)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return scimerrors.ScimErrorResourceNotFound(id)
-		}
+	q := client.DirectoryGroup.Query().
+		Where(directorygroup.ID(id), directorygroup.IntegrationID(sr.Installation.ID))
 
-		return fmt.Errorf("failed to get directory group: %w", err)
+	dg, err := lookupByID(ctx, id, q.Only)
+	if err != nil {
+		return err
 	}
 
 	members, err := h.loadGroupMembers(ctx, client, dg.ID)
@@ -228,30 +197,33 @@ func (h *DirectoryGroupHandler) Delete(r *http.Request, id string) error {
 		return err
 	}
 
-	attributes := directoryGroupAttributesFromRecord(dg, members)
-	_, _, err = h.syncDirectoryGroup(ctx, client, ic, attributes, scimDeleteAction)
+	attributes := directoryGroupAttributesFromRecord(sr.BasePath, dg, members)
+	_, _, err = h.syncDirectoryGroup(ctx, client, sr, attributes, definitionscim.DeleteAction)
 
 	return err
 }
 
-// syncDirectoryGroup upserts one SCIM directory group and its memberships through Runtime and reloads the normalized records
-func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *generated.Client, ic *IntegrationContext, attributes scim.ResourceAttributes, action string) (*generated.DirectoryGroup, []*generated.DirectoryMembership, error) {
-	payloadSets, err := buildDirectoryGroupPayloadSets(attributes, action)
+// syncDirectoryGroup upserts one SCIM directory group and its memberships through the inline operation path
+func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *generated.Client, sr *SCIMRequest, attributes scim.ResourceAttributes, action string) (*generated.DirectoryGroup, []*generated.DirectoryMembership, error) {
+	payloadSets, err := definitionscim.BuildDirectoryGroupPayloadSets(attributes, action)
 	if err != nil {
-		return nil, nil, handleDirectoryIngestError(err, "directory group payload is invalid")
+		return nil, nil, handleIngestError(err, "directory group payload is invalid")
 	}
 
-	if err := ingestDirectoryPayloadSets(ctx, client, ic, payloadSets); err != nil {
-		return nil, nil, handleDirectoryIngestError(err, "directory group payload is invalid")
+	externalID := definitionscim.DirectoryGroupExternalID(attributes)
+	if err := ingestPayloadSets(ctx, client, sr, payloadSets); err != nil {
+		return nil, nil, handleIngestError(err, "directory group payload is invalid")
 	}
 
-	externalID := directoryGroupExternalID(attributes)
 	dg, err := client.DirectoryGroup.Query().
-		Where(directorygroup.IntegrationID(ic.IntegrationID), directorygroup.ExternalID(externalID)).
+		Where(
+			directorygroup.IntegrationID(sr.Installation.ID),
+			directorygroup.ExternalID(externalID),
+		).
 		Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return nil, nil, ErrDirectoryGroupNotFound
+			return nil, nil, definitionscim.ErrDirectoryGroupNotFound
 		}
 
 		return nil, nil, fmt.Errorf("failed to reload directory group: %w", err)
@@ -259,7 +231,7 @@ func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *
 
 	members, err := h.loadGroupMembers(ctx, client, dg.ID)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, fmt.Errorf("failed to reload directory memberships: %w", err)
 	}
 
 	return dg, members, nil
@@ -294,7 +266,7 @@ func applyGroupPatchOperations(attributes scim.ResourceAttributes, operations []
 		case scim.PatchOperationRemove:
 			membersTouched = applyGroupRemoveOp(attributes, op) || membersTouched
 		default:
-			return false, fmt.Errorf("%w: unsupported patch operation %s", ErrInvalidAttributes, op.Op)
+			return false, fmt.Errorf("%w: unsupported patch operation %s", definitionscim.ErrInvalidAttributes, op.Op)
 		}
 	}
 
@@ -314,7 +286,7 @@ func applyGroupReplaceOp(attributes scim.ResourceAttributes, op scim.PatchOperat
 			return false
 		}
 
-		mergeSCIMMap(attributes, valueMap)
+		definitionscim.MergeSCIMMap(attributes, valueMap)
 
 		_, membersTouched := valueMap["members"]
 
@@ -335,7 +307,7 @@ func applyGroupReplaceOp(attributes scim.ResourceAttributes, op scim.PatchOperat
 			attributes["externalId"] = v
 		}
 	case "members":
-		attributes["members"] = memberRefsFromIDs(extractMemberIDsFromValue(op.Value))
+		attributes["members"] = memberRefsFromIDs("", definitionscim.ExtractMemberIDsFromValue(op.Value))
 		return true
 	}
 
@@ -350,7 +322,7 @@ func applyGroupAddOp(attributes scim.ResourceAttributes, op scim.PatchOperation)
 			return false
 		}
 
-		mergeSCIMMap(attributes, valueMap)
+		definitionscim.MergeSCIMMap(attributes, valueMap)
 
 		_, membersTouched := valueMap["members"]
 
@@ -362,9 +334,9 @@ func applyGroupAddOp(attributes scim.ResourceAttributes, op scim.PatchOperation)
 		return false
 	}
 
-	current := extractMemberIDsFromValue(attributes["members"])
-	additions := extractMemberIDsFromValue(op.Value)
-	attributes["members"] = memberRefsFromIDs(append(current, additions...))
+	current := definitionscim.ExtractMemberIDsFromValue(attributes["members"])
+	additions := definitionscim.ExtractMemberIDsFromValue(op.Value)
+	attributes["members"] = memberRefsFromIDs("", append(current, additions...))
 
 	return len(additions) > 0
 }
@@ -380,95 +352,58 @@ func applyGroupRemoveOp(attributes scim.ResourceAttributes, op scim.PatchOperati
 		return false
 	}
 
-	removals := extractMemberIDsFromValue(op.Value)
+	removals := definitionscim.ExtractMemberIDsFromValue(op.Value)
 	if len(removals) == 0 {
 		delete(attributes, "members")
 		return true
 	}
 
-	current := extractMemberIDsFromValue(attributes["members"])
-	filtered := make([]string, 0, len(current))
-	for _, memberID := range current {
-		if !containsString(removals, memberID) {
-			filtered = append(filtered, memberID)
-		}
-	}
-
-	attributes["members"] = memberRefsFromIDs(filtered)
+	current := definitionscim.ExtractMemberIDsFromValue(attributes["members"])
+	attributes["members"] = memberRefsFromIDs("", lo.Without(current, removals...))
 
 	return true
 }
 
 // directoryGroupToSCIMResource converts a DirectoryGroup entity and its memberships to a SCIM Resource
-func directoryGroupToSCIMResource(dg *generated.DirectoryGroup, memberships []*generated.DirectoryMembership) scim.Resource {
-	attrs := directoryGroupAttributesFromRecord(dg, memberships)
-	delete(attrs, "externalId")
-
-	externalID := scimoptional.NewString("")
-	if dg.ExternalID != "" {
-		externalID = scimoptional.NewString(dg.ExternalID)
-	}
-
-	meta := scim.Meta{
-		Created:      &dg.CreatedAt,
-		LastModified: &dg.UpdatedAt,
-		Version:      fmt.Sprintf("W/\"%d\"", dg.UpdatedAt.Unix()),
-	}
-
-	return scim.Resource{
-		ID:         dg.ID,
-		ExternalID: externalID,
-		Attributes: attrs,
-		Meta:       meta,
-	}
+func directoryGroupToSCIMResource(basePath string, dg *generated.DirectoryGroup, memberships []*generated.DirectoryMembership) scim.Resource {
+	return buildSCIMResource(dg.ID, dg.ExternalID, dg.CreatedAt, dg.UpdatedAt, directoryGroupAttributesFromRecord(basePath, dg, memberships))
 }
 
 // directoryGroupAttributesFromRecord renders a DirectoryGroup as SCIM attributes for patching and delete ingest
-func directoryGroupAttributesFromRecord(dg *generated.DirectoryGroup, memberships []*generated.DirectoryMembership) scim.ResourceAttributes {
+func directoryGroupAttributesFromRecord(basePath string, dg *generated.DirectoryGroup, memberships []*generated.DirectoryMembership) scim.ResourceAttributes {
 	return scim.ResourceAttributes{
 		scimschema.CommonAttributeID: dg.ID,
 		"externalId":                 dg.ExternalID,
 		"displayName":                dg.DisplayName,
-		"members":                    memberRefsFromMemberships(memberships),
+		"members":                    memberRefsFromMemberships(basePath, memberships),
 		"active":                     dg.Status == enums.DirectoryGroupStatusActive,
 	}
 }
 
 // memberRefsFromMemberships renders SCIM member references from DirectoryMembership rows
-func memberRefsFromMemberships(memberships []*generated.DirectoryMembership) []map[string]any {
-	members := make([]map[string]any, 0, len(memberships))
-	for _, membership := range memberships {
-		members = append(members, map[string]any{
-			"value": membership.DirectoryAccountID,
-			"$ref":  fmt.Sprintf("/v1/scim/Users/%s", membership.DirectoryAccountID),
-		})
-	}
-
-	return members
+func memberRefsFromMemberships(basePath string, memberships []*generated.DirectoryMembership) []map[string]any {
+	return lo.Map(memberships, func(m *generated.DirectoryMembership, _ int) map[string]any {
+		return map[string]any{
+			"value": m.DirectoryAccountID,
+			"$ref":  scimUserRef(basePath, m.DirectoryAccountID),
+		}
+	})
 }
 
 // memberRefsFromIDs renders SCIM member references from account IDs
-func memberRefsFromIDs(memberIDs []string) []map[string]any {
-	memberIDs = uniqueStrings(memberIDs)
-
-	members := make([]map[string]any, 0, len(memberIDs))
-	for _, memberID := range memberIDs {
-		members = append(members, map[string]any{
-			"value": memberID,
-			"$ref":  fmt.Sprintf("/v1/scim/Users/%s", memberID),
-		})
-	}
-
-	return members
+func memberRefsFromIDs(basePath string, memberIDs []string) []map[string]any {
+	return lo.Map(lo.Uniq(memberIDs), func(id string, _ int) map[string]any {
+		return map[string]any{
+			"value": id,
+			"$ref":  scimUserRef(basePath, id),
+		}
+	})
 }
 
-// containsString reports whether a slice contains a given value
-func containsString(values []string, target string) bool {
-	for _, value := range values {
-		if value == target {
-			return true
-		}
+func scimUserRef(basePath, memberID string) string {
+	if basePath == "" {
+		return fmt.Sprintf("Users/%s", memberID)
 	}
 
-	return false
+	return fmt.Sprintf("%s/Users/%s", basePath, memberID)
 }

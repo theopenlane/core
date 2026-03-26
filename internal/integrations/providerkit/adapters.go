@@ -2,6 +2,7 @@ package providerkit
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -52,5 +53,12 @@ func WithClientRequestConfig[C, Config, R any](ref types.ClientRef[C], op types.
 		}
 
 		return run(ctx, request, client, cfg)
+	}
+}
+
+// StaticHandler wraps a function that needs no context or request into an OperationHandler
+func StaticHandler(run func() (json.RawMessage, error)) types.OperationHandler {
+	return func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+		return run()
 	}
 }
