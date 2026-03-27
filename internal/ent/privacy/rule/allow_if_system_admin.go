@@ -44,7 +44,7 @@ func systemAdminCheck(ctx context.Context) error {
 // but in schemas like notification and potentially new ones, we strictly want
 // only admins and no fallthroughs
 func DenyMutationIfNotSystemAdmin() privacy.MutationRuleFunc {
-	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
 			return privacy.Skip

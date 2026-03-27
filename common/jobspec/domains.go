@@ -127,12 +127,14 @@ func (CreatePreviewDomainSSLAcmeArgs) InsertOpts() river.InsertOpts {
 
 // CreateDomainScanArgs for the worker to scan the domains provided by the organization
 type CreateDomainScanArgs struct {
-	// ID of the onboarded organization.
-	OnboardingID string `json:"organization_id"`
+	// OrganizationID is the organization that owns the onboarding
+	OrganizationID string `json:"organization_id"`
+
+	Domains []string `json:"domains"`
 }
 
 // Kind satisfies the river.Job interface
-func (CreateDomainScanArgs) Kind() string { return "create_domain_scan_args"}
+func (CreateDomainScanArgs) Kind() string { return "create_domain_scan_args" }
 
 // InsertOpts provides the default configuration when processing this job.
 func (CreateDomainScanArgs) InsertOpts() river.InsertOpts {
