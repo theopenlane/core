@@ -45,6 +45,19 @@ func TestMutationCreateNotification(t *testing.T) {
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
+		{
+			name: "not authorized, create notification as org owner/admin",
+			request: testclient.CreateNotificationInput{
+				NotificationType: enums.NotificationTypeOrganization,
+				ObjectType:       "program",
+				Title:            "Test Notification",
+				Body:             "This is a test notification body",
+				OwnerID:          &testUser1.OrganizationID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {

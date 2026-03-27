@@ -1,4 +1,4 @@
-h1:Sq8q+N+OZI5dYSWdTzhsFwAzrEA1kZ49nUJcce+HtAQ=
+h1:HfVckq9gv//+QjDCsjJaCNrxfyt3exEgG77YsGNmXdY=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -82,3 +82,5 @@ h1:Sq8q+N+OZI5dYSWdTzhsFwAzrEA1kZ49nUJcce+HtAQ=
 20260323163903_fix_edges_vulns_controls.sql h1:NhSw0J4lXZlw8H0C57ZPGoitZmtznkAsEZyySgHo3xw=
 20260324013726_campaign_freq.sql h1:2fGiD/4IPvws190c1ccIhx3X6Ikv6mRVkwbbds/SocA=
 20260324013729_campaign_freq_history.sql h1:ypBW51urEr6ZhHkrRynnI+h1cBxvt3oanvVfaS1Xdt0=
+20260327133135_domain_scan_notifications.sql h1:dgtxMOU12T4wSsCnZ2YzmOB0OnzxsxyW7x+amaBPyXQ=
+20260327133145_domain_scan_notifications_history.sql h1:FVrVE5vz8+2EYAQ3zr8RA1phsFs44uJdqIAOoGbzE+g=
