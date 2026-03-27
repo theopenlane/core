@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/utils/keygen"
 
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -52,7 +53,22 @@ func HookOnboarding() ent.Hook {
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(domains) > 0 {
+				err = enqueueJob(ctx, m.Job, jobspec.CreateDomainScanArgs{
+					Domains:        domains,
+					OrganizationID: org.ID,
+				}, nil)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return v, err
 		})
 	}, ent.OpCreate)
 }
