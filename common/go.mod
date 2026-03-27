@@ -16,7 +16,7 @@ require (
 	github.com/knadh/koanf/v2 v2.3.4
 	github.com/riverqueue/river v0.32.0
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/rs/zerolog v1.34.0
+	github.com/rs/zerolog v1.35.0
 	github.com/samber/lo v1.53.0
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
