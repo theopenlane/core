@@ -116,8 +116,6 @@ func main() {
 	// setup logging
 	genhelpers.SetupLogging()
 
-	print("Start test!!!\n\n")
-
 	// change to the root of the repo so that the config hierarchy is correct
 	genhelpers.ChangeToRootDir("../../../")
 
