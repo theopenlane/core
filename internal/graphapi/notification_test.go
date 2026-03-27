@@ -43,7 +43,7 @@ func TestMutationCreateNotification(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "not authorized, create notification as org owner/admin",
@@ -56,7 +56,7 @@ func TestMutationCreateNotification(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 
