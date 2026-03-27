@@ -8,10 +8,12 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/utils/keygen"
 
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookOnboarding runs on onboarding mutations to create the organization and settings
@@ -52,7 +54,22 @@ func HookOnboarding() ent.Hook {
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(domains) > 0 {
+				err = enqueueJob(ctx, m.Job, jobspec.CreateDomainScanArgs{
+					Domains:        domains,
+					OrganizationID: org.ID,
+				}, nil)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to enqueue domain scanning job")
+				}
+			}
+
+			return v, err
 		})
 	}, ent.OpCreate)
 }

@@ -23051,6 +23051,12 @@ type NotificationConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// Return response for createNotification mutation
+type NotificationCreatePayload struct {
+	// Created notification
+	Notification *Notification `json:"notification"`
+}
+
 // An edge in a connection.
 type NotificationEdge struct {
 	// The item at the end of the edge.
