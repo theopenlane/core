@@ -22,13 +22,13 @@ func getNextReviewDate(frequency enums.Frequency, lastReviewedAt models.DateTime
 
 	switch frequency {
 	case enums.FrequencyYearly:
-		return models.DateTime(lastReviewDate.AddDate(1, 0, 0))
+		return models.DateTime(lastReviewDate.AddDate(1, 0, 0)) //nolint:mnd
 	case enums.FrequencyBiAnnually:
-		return models.DateTime(lastReviewDate.AddDate(0, 6, 0))
+		return models.DateTime(lastReviewDate.AddDate(0, 6, 0)) //nolint:mnd
 	case enums.FrequencyQuarterly:
-		return models.DateTime(lastReviewDate.AddDate(0, 3, 0))
+		return models.DateTime(lastReviewDate.AddDate(0, 3, 0)) //nolint:mnd
 	case enums.FrequencyMonthly:
-		return models.DateTime(lastReviewDate.AddDate(0, 1, 0))
+		return models.DateTime(lastReviewDate.AddDate(0, 1, 0)) //nolint:mnd
 	default:
 		return models.DateTime{}
 	}
@@ -71,6 +71,7 @@ func HookReviewFiles() ent.Hook {
 				funcs = append(funcs, func() {
 					ent, err := m.Client().Entity.
 						Query().Select(entity.FieldReviewFrequency).
+						Where(entity.ID(id)).
 						Only(ctx)
 					if err != nil {
 						logx.FromContext(ctx).Err(err).
