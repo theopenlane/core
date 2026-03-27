@@ -2,15 +2,37 @@ package hooks
 
 import (
 	"context"
+	"fmt"
+	"sync"
+	"time"
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
+
+func getNextReviewDate(frequency enums.Frequency, lastReviewedAt models.DateTime) models.DateTime {
+	lastReviewDate := time.Time(lastReviewedAt)
+
+	switch frequency {
+	case enums.FrequencyYearly:
+		return models.DateTime(lastReviewDate.AddDate(1, 0, 0))
+	case enums.FrequencyBiAnnually:
+		return models.DateTime(lastReviewDate.AddDate(0, 6, 0))
+	case enums.FrequencyQuarterly:
+		return models.DateTime(lastReviewDate.AddDate(0, 3, 0))
+	case enums.FrequencyMonthly:
+		return models.DateTime(lastReviewDate.AddDate(0, 1, 0))
+	default:
+		return models.DateTime{}
+	}
+}
 
 // HookReviewFiles runs on review mutations to check for uploaded files
 func HookReviewFiles() ent.Hook {
@@ -41,25 +63,61 @@ func HookReviewFiles() ent.Hook {
 			userID, exists := m.CreatedBy()
 			createdAt, createdAtExists := m.CreatedAt()
 
+			var errs []string
+			var mu sync.Mutex
+
+			funcs := make([]func(), 0, len(entityIDs))
 			for _, id := range entityIDs {
-				q := m.Client().Entity.UpdateOneID(id)
+				funcs = append(funcs, func() {
+					ent, err := m.Client().Entity.
+						Query().Select(entity.FieldReviewFrequency).
+						Only(ctx)
+					if err != nil {
+						logx.FromContext(ctx).Err(err).
+							Str("entity_id", id).
+							Msg("could not fetch entity for review")
+						mu.Lock()
+						errs = append(errs, err.Error())
+						mu.Unlock()
+						return
+					}
 
-				if exists {
-					q = q.SetReviewedBy(userID)
-				}
+					q := m.Client().Entity.UpdateOneID(id)
 
-				if createdAtExists {
-					q = q.SetLastReviewedAt(models.DateTime(createdAt))
-				}
+					if exists {
+						q = q.SetReviewedBy(userID)
+					}
 
-				err := q.Exec(ctx)
-				if err != nil {
-					logx.FromContext(ctx).Err(err).
-						Str("entity_id", id).
-						Msg("could not update entity reviewer")
-					return nil, err
-				}
+					if createdAtExists {
+						q = q.SetLastReviewedAt(models.DateTime(createdAt))
 
+						if frequency := ent.ReviewFrequency; frequency != enums.FrequencyNone {
+							q = q.SetNextReviewAt(getNextReviewDate(frequency, models.DateTime(createdAt)))
+						}
+					}
+
+					err = q.Exec(ctx)
+					if err != nil {
+						logx.FromContext(ctx).Err(err).
+							Str("entity_id", id).Msg("could not update entity reviewer")
+						mu.Lock()
+						errs = append(errs, err.Error())
+						mu.Unlock()
+					}
+				})
+			}
+
+			if err := m.Client().Pool.SubmitMultipleAndWait(funcs); err != nil {
+				return nil, err
+			}
+
+			if len(errs) > 0 {
+				logx.FromContext(ctx).Error().
+					Int("error_count", len(errs)).
+					Strs("errors", errs).
+					Msg("review file hook: entity updates failed")
+
+				return nil, fmt.Errorf("%d entities could not be updated", len(errs)) //nolint:err113
 			}
 
 			return v, nil
