@@ -1,130 +1,129 @@
-mutation CreateAPIToken($input: CreateAPITokenInput!) {
-  createAPIToken(input: $input) {
-    apiToken {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      ownerID
-      revokedAt
-      revokedBy
-      revokedReason
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateAPIToken ($input: CreateAPITokenInput!) {
+	createAPIToken(input: $input) {
+		apiToken {
+			createdAt
+			createdBy
+			description
+			expiresAt
+			id
+			isActive
+			lastUsedAt
+			name
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			ssoAuthorizations
+			tags
+			token
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteAPIToken($deleteAPITokenId: ID!) {
-  deleteAPIToken(id: $deleteAPITokenId) {
-    deletedID
-  }
+mutation DeleteAPIToken ($deleteAPITokenId: ID!) {
+	deleteAPIToken(id: $deleteAPITokenId) {
+		deletedID
+	}
 }
-
+query GetAPITokenByID ($apiTokenId: ID!) {
+	apiToken(id: $apiTokenId) {
+		createdAt
+		createdBy
+		description
+		expiresAt
+		id
+		isActive
+		lastUsedAt
+		name
+		ownerID
+		revokedAt
+		revokedBy
+		revokedReason
+		scopes
+		ssoAuthorizations
+		tags
+		token
+		updatedAt
+		updatedBy
+		owner {
+			id
+			displayName
+		}
+	}
+}
+query GetAPITokens ($where: APITokenWhereInput) {
+	apiTokens(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
 query GetAllAPITokens {
-  apiTokens {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        expiresAt
-        id
-        isActive
-        lastUsedAt
-        name
-        ownerID
-        revokedAt
-        revokedBy
-        revokedReason
-        scopes
-        tags
-        token
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	apiTokens {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetAPITokenByID($apiTokenId: ID!) {
-  apiToken(id: $apiTokenId) {
-    createdAt
-    createdBy
-    description
-    expiresAt
-    id
-    isActive
-    lastUsedAt
-    name
-    owner {
-      id
-      displayName
-    }
-    revokedAt
-    revokedBy
-    revokedReason
-    scopes
-    tags
-    token
-    updatedAt
-    updatedBy
-  }
-}
-
-query GetAPITokens($where: APITokenWhereInput) {
-  apiTokens(where: $where) {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        expiresAt
-        id
-        isActive
-        lastUsedAt
-        name
-        ownerID
-        revokedAt
-        revokedBy
-        revokedReason
-        scopes
-        tags
-        token
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
-
-mutation UpdateAPIToken($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
-  updateAPIToken(id: $updateAPITokenId, input: $input) {
-    apiToken {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      ownerID
-      revokedAt
-      revokedBy
-      revokedReason
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateAPIToken ($updateAPITokenId: ID!, $input: UpdateAPITokenInput!) {
+	updateAPIToken(id: $updateAPITokenId, input: $input) {
+		apiToken {
+			createdAt
+			createdBy
+			description
+			expiresAt
+			id
+			isActive
+			lastUsedAt
+			name
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			ssoAuthorizations
+			tags
+			token
+			updatedAt
+			updatedBy
+		}
+	}
 }

@@ -339,10 +339,10 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.Check(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig.Text != nil)
 
 			// get controls for the trust center standard and ensure they are added to the trust center
-			controlsResp, err := tc.client.GetControls(tc.ctx, nil, nil, nil, nil, &testclient.ControlWhereInput{
+			controlsResp, err := tc.client.GetControls(tc.ctx, nil, nil, nil, nil, nil, &testclient.ControlWhereInput{
 				IsTrustCenterControl: lo.ToPtr(true),
 				SystemOwned:          lo.ToPtr(false),
-			}, nil)
+			})
 			assert.NilError(t, err)
 			assert.Assert(t, controlsResp != nil)
 			assert.Check(t, is.Equal(numTrustCenterControls, len(controlsResp.Controls.Edges)))

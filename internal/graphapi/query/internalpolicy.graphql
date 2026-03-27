@@ -1,491 +1,646 @@
-mutation CreateBulkCSVInternalPolicy($input: Upload!) {
-  createBulkCSVInternalPolicy(input: $input) {
-    internalPolicies {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
+	createBulkCSVInternalPolicy(input: $input) {
+		internalPolicies {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			internalPolicyKindID
+			internalPolicyKindName
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
-  createBulkInternalPolicy(input: $input) {
-    internalPolicies {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
+	createBulkInternalPolicy(input: $input) {
+		internalPolicies {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			internalPolicyKindID
+			internalPolicyKindName
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
-  createInternalPolicy(input: $input) {
-    internalPolicy {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      summary
-      tags
-      updatedAt
-      updatedBy
-      controls {
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
+	createInternalPolicy(input: $input) {
+		internalPolicy {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			internalPolicyKindID
+			internalPolicyKindName
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			controls {
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateUploadInternalPolicy($internalPolicyFile: Upload!, $ownerID: ID) {
-  createUploadInternalPolicy(
-    internalPolicyFile: $internalPolicyFile
-    ownerID: $ownerID
-  ) {
-    internalPolicy {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      summary
-      tags
-      updatedAt
-      updatedBy
-      controls {
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateUploadInternalPolicy ($internalPolicyFile: Upload!, $ownerID: ID) {
+	createUploadInternalPolicy(internalPolicyFile: $internalPolicyFile, ownerID: $ownerID) {
+		internalPolicy {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			summary
+			tags
+			updatedAt
+			updatedBy
+			controls {
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
-  deleteInternalPolicy(id: $deleteInternalPolicyId) {
-    deletedID
-  }
+mutation DeleteInternalPolicy ($deleteInternalPolicyId: ID!) {
+	deleteInternalPolicy(id: $deleteInternalPolicyId) {
+		deletedID
+	}
 }
-
-query GetAllInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!]) {
-  internalPolicies(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        approvalRequired
-        createdAt
-        createdBy
-        details
-        displayID
-        id
-        name
-        ownerID
-        reviewDue
-        reviewFrequency
-        revision
-        status
-        summary
-        tags
-        updatedAt
-        updatedBy
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        approver {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!]) {
+	internalPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				approvalRequired
+				approverID
+				controlSuggestions
+				createdAt
+				createdBy
+				delegateID
+				details
+				detailsJSON
+				dismissedControlSuggestions
+				dismissedImprovementSuggestions
+				dismissedTagSuggestions
+				displayID
+				environmentID
+				environmentName
+				externalUUID
+				fileID
+				id
+				improvementSuggestions
+				internalNotes
+				internalPolicyKindID
+				internalPolicyKindName
+				name
+				ownerID
+				reviewDue
+				reviewFrequency
+				revision
+				scopeID
+				scopeName
+				status
+				summary
+				systemInternalID
+				systemOwned
+				tagSuggestions
+				tags
+				updatedAt
+				updatedBy
+				url
+				workflowEligibleMarker
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				approver {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: InternalPolicyWhereInput, $orderBy: [InternalPolicyOrder!]) {
-  internalPolicies(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    where: $where
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        approvalRequired
-        createdAt
-        createdBy
-        details
-        displayID
-        id
-        name
-        ownerID
-        reviewDue
-        reviewFrequency
-        revision
-        status
-        tags
-        updatedAt
-        updatedBy
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        approver {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!], $where: InternalPolicyWhereInput) {
+	internalPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				approvalRequired
+				approverID
+				controlSuggestions
+				createdAt
+				createdBy
+				delegateID
+				details
+				detailsJSON
+				dismissedControlSuggestions
+				dismissedImprovementSuggestions
+				dismissedTagSuggestions
+				displayID
+				environmentID
+				environmentName
+				externalUUID
+				fileID
+				id
+				improvementSuggestions
+				internalNotes
+				internalPolicyKindID
+				internalPolicyKindName
+				name
+				ownerID
+				reviewDue
+				reviewFrequency
+				revision
+				scopeID
+				scopeName
+				status
+				summary
+				systemInternalID
+				systemOwned
+				tagSuggestions
+				tags
+				updatedAt
+				updatedBy
+				url
+				workflowEligibleMarker
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				approver {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetInternalPolicyByID($internalPolicyId: ID!) {
-  internalPolicy(id: $internalPolicyId) {
-    approvalRequired
-    createdAt
-    createdBy
-    details
-    displayID
-    id
-    name
-    ownerID
-    reviewDue
-    reviewFrequency
-    revision
-    status
-    tags
-    updatedAt
-    updatedBy
-    editors {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    blockedGroups {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    approver {
-      id
-      name
-    }
-    delegate {
-      id
-      name
-    }
-  }
+query GetInternalPolicyByID ($internalPolicyId: ID!) {
+	internalPolicy(id: $internalPolicyId) {
+		approvalRequired
+		approverID
+		controlSuggestions
+		createdAt
+		createdBy
+		delegateID
+		details
+		detailsJSON
+		dismissedControlSuggestions
+		dismissedImprovementSuggestions
+		dismissedTagSuggestions
+		displayID
+		environmentID
+		environmentName
+		externalUUID
+		fileID
+		id
+		improvementSuggestions
+		internalNotes
+		internalPolicyKindID
+		internalPolicyKindName
+		name
+		ownerID
+		reviewDue
+		reviewFrequency
+		revision
+		scopeID
+		scopeName
+		status
+		summary
+		systemInternalID
+		systemOwned
+		tagSuggestions
+		tags
+		updatedAt
+		updatedBy
+		url
+		workflowEligibleMarker
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		approver {
+			id
+			name
+		}
+		delegate {
+			id
+			name
+		}
+	}
 }
-
-mutation UpdateBulkInternalPolicy($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {
-  updateBulkInternalPolicy(ids: $ids, input: $input) {
-    internalPolicies {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-    updatedIDs
-  }
+mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {
+	updateBulkInternalPolicy(ids: $ids, input: $input) {
+		internalPolicies {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			internalPolicyKindID
+			internalPolicyKindName
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
 }
-
-mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
-  updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
-    internalPolicy {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      summary
-      tags
-      updatedAt
-      updatedBy
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-      discussions {
-        edges {
-          node {
-            id
-            externalID
-            comments {
-              edges {
-                node {
-                  id
-                  displayID
-                  text
-                  createdAt
-                  createdBy
-                  updatedAt
-                  updatedBy
-                }
-              }
-            }
-          }
-        }
-      }
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-    }
-  }
+mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
+	updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
+		internalPolicy {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			internalPolicyKindID
+			internalPolicyKindName
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+			discussions {
+				edges {
+					node {
+						id
+						externalID
+						comments {
+							edges {
+								node {
+									id
+									displayID
+									text
+									createdAt
+									createdBy
+									updatedAt
+									updatedBy
+								}
+							}
+						}
+					}
+				}
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateInternalPolicyComment($updatePolicyCommentId: ID!, $input: UpdateNoteInput!) {
-  updateInternalPolicyComment(id: $updatePolicyCommentId, input: $input) {
-    internalPolicy {
-      id
-      comments {
-        edges {
-          node {
-            id
-            text
-            textJSON
-          }
-        }
-      }
-      discussions {
-        edges {
-          node {
-            id
-            comments {
-              edges {
-                node {
-                  id
-                  text
-                  textJSON
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+mutation UpdateInternalPolicyComment ($updatePolicyCommentId: ID!, $input: UpdateNoteInput!) {
+	updateInternalPolicyComment(id: $updatePolicyCommentId, input: $input) {
+		internalPolicy {
+			id
+			comments {
+				edges {
+					node {
+						id
+						text
+						textJSON
+					}
+				}
+			}
+			discussions {
+				edges {
+					node {
+						id
+						comments {
+							edges {
+								node {
+									id
+									text
+									textJSON
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

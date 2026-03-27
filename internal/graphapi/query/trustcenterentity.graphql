@@ -1,162 +1,154 @@
-mutation CreateBulkCSVTrustCenterEntity($input: Upload!) {
-  createBulkCSVTrustCenterEntity(input: $input) {
-    trustCenterEntities {
-      createdAt
-      createdBy
-      id
-      name
-      trustCenterID
-      entityTypeID
-      updatedAt
-      updatedBy
-      url
-    }
-  }
+mutation CreateBulkCSVTrustCenterEntity ($input: Upload!) {
+	createBulkCSVTrustCenterEntity(input: $input) {
+		trustCenterEntities {
+			createdAt
+			createdBy
+			entityTypeID
+			id
+			logoFileID
+			name
+			trustCenterID
+			updatedAt
+			updatedBy
+			url
+		}
+	}
 }
-
-mutation CreateBulkTrustCenterEntity($input: [CreateTrustCenterEntityInput!]) {
-  createBulkTrustCenterEntity(input: $input) {
-    trustCenterEntities {
-      createdAt
-      createdBy
-      id
-      name
-      trustCenterID
-      entityTypeID
-      updatedAt
-      updatedBy
-      url
-    }
-  }
+mutation CreateBulkTrustCenterEntity ($input: [CreateTrustCenterEntityInput!]) {
+	createBulkTrustCenterEntity(input: $input) {
+		trustCenterEntities {
+			createdAt
+			createdBy
+			entityTypeID
+			id
+			logoFileID
+			name
+			trustCenterID
+			updatedAt
+			updatedBy
+			url
+		}
+	}
 }
-
-mutation CreateTrustCenterEntity($input: CreateTrustCenterEntityInput!, $logoFile: Upload) {
-  createTrustCenterEntity(input: $input, logoFile: $logoFile) {
-    trustCenterEntity {
-      createdAt
-      createdBy
-      id
-      name
-      trustCenterID
-      entityTypeID
-      updatedAt
-      updatedBy
-      url
-      logoFile {
-        id
-        md5Hash
-        presignedURL
-      }
-    }
-  }
+mutation CreateTrustCenterEntity ($input: CreateTrustCenterEntityInput!, $logoFile: Upload) {
+	createTrustCenterEntity(input: $input, logoFile: $logoFile) {
+		trustCenterEntity {
+			createdAt
+			createdBy
+			id
+			name
+			trustCenterID
+			entityTypeID
+			updatedAt
+			updatedBy
+			url
+			logoFile {
+				id
+				md5Hash
+				presignedURL
+			}
+		}
+	}
 }
-
-mutation DeleteTrustCenterEntity($deleteTrustCenterEntityId: ID!) {
-  deleteTrustCenterEntity(id: $deleteTrustCenterEntityId) {
-    deletedID
-  }
+mutation DeleteTrustCenterEntity ($deleteTrustCenterEntityId: ID!) {
+	deleteTrustCenterEntity(id: $deleteTrustCenterEntityId) {
+		deletedID
+	}
 }
-
 query GetAlltrustCenterEntities {
-  trustCenterEntities {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        id
-        name
-        trustCenterID
-        entityTypeID
-        updatedAt
-        updatedBy
-        url
-        logoFile {
-          id
-          base64
-          presignedURL
-        }
-      }
-    }
-  }
+	trustCenterEntities {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				name
+				trustCenterID
+				entityTypeID
+				updatedAt
+				updatedBy
+				url
+				logoFile {
+					id
+					base64
+					presignedURL
+				}
+			}
+		}
+	}
 }
-
-query GetTrustCenterEntities($first: Int, $last: Int, $where: TrustCenterEntityWhereInput) {
-  trustCenterEntities(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        id
-        name
-        trustCenterID
-        entityTypeID
-        updatedAt
-        updatedBy
-        url
-        logoFile {
-          id
-          base64
-          presignedURL
-        }
-      }
-    }
-  }
+query GetTrustCenterEntities ($first: Int, $last: Int, $where: TrustCenterEntityWhereInput) {
+	trustCenterEntities(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				name
+				trustCenterID
+				entityTypeID
+				updatedAt
+				updatedBy
+				url
+				logoFile {
+					id
+					base64
+					presignedURL
+				}
+			}
+		}
+	}
 }
-
-query GetTrustCenterEntityByID($trustCenterEntityId: ID!) {
-  trustCenterEntity(id: $trustCenterEntityId) {
-    createdAt
-    createdBy
-    id
-    name
-    trustCenterID
-    entityTypeID
-    updatedAt
-    updatedBy
-    url
-    logoFile {
-      id
-      base64
-      presignedURL
-    }
-  }
+query GetTrustCenterEntityByID ($trustCenterEntityId: ID!) {
+	trustCenterEntity(id: $trustCenterEntityId) {
+		createdAt
+		createdBy
+		entityTypeID
+		id
+		logoFileID
+		name
+		trustCenterID
+		updatedAt
+		updatedBy
+		url
+		logoFile {
+			id
+			base64
+			presignedURL
+		}
+	}
 }
-
-mutation UpdateTrustCenterEntity($updateTrustCenterEntityId: ID!, $input: UpdateTrustCenterEntityInput!, $logoFile: Upload) {
-  updateTrustCenterEntity(
-    id: $updateTrustCenterEntityId
-    input: $input
-    logoFile: $logoFile
-  ) {
-    trustCenterEntity {
-      createdAt
-      createdBy
-      id
-      name
-      trustCenterID
-      entityTypeID
-      updatedAt
-      updatedBy
-      url
-      logoFile {
-        id
-        md5Hash
-        presignedURL
-      }
-    }
-  }
+mutation UpdateTrustCenterEntity ($updateTrustCenterEntityId: ID!, $input: UpdateTrustCenterEntityInput!, $logoFile: Upload) {
+	updateTrustCenterEntity(id: $updateTrustCenterEntityId, input: $input, logoFile: $logoFile) {
+		trustCenterEntity {
+			createdAt
+			createdBy
+			id
+			name
+			trustCenterID
+			entityTypeID
+			updatedAt
+			updatedBy
+			url
+			logoFile {
+				id
+				md5Hash
+				presignedURL
+			}
+		}
+	}
 }

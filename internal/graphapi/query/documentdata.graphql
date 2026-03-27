@@ -1,45 +1,54 @@
-mutation CreateDocumentData($input: CreateDocumentDataInput!) {
-  createDocumentData(input: $input) {
-    documentData {
-      id
-      templateID
-      data
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateDocumentData ($input: CreateDocumentDataInput!) {
+	createDocumentData(input: $input) {
+		documentData {
+			createdAt
+			createdBy
+			data
+			environmentID
+			environmentName
+			id
+			ownerID
+			scopeID
+			scopeName
+			tags
+			templateID
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteDocumentData($deleteDocumentDataId: ID!) {
-  deleteDocumentData(id: $deleteDocumentDataId) {
-    deletedID
-  }
+mutation DeleteDocumentData ($deleteDocumentDataId: ID!) {
+	deleteDocumentData(id: $deleteDocumentDataId) {
+		deletedID
+	}
 }
-
-query GetDocumentDataByID($documentDataId: ID!) {
-  documentData(id: $documentDataId) {
-    id
-    templateID
-    data
-    createdAt
-    createdBy
-    updatedAt
-    updatedBy
-  }
+query GetDocumentDataByID ($documentDataId: ID!) {
+	documentData(id: $documentDataId) {
+		createdAt
+		createdBy
+		data
+		environmentID
+		environmentName
+		id
+		ownerID
+		scopeID
+		scopeName
+		tags
+		templateID
+		updatedAt
+		updatedBy
+	}
 }
-
-mutation UpdateDocumentData($updateDocumentDataId: ID!, $input: UpdateDocumentDataInput!, $documentDataFile: Upload) {
-  updateDocumentData(id: $updateDocumentDataId, input: $input, documentDataFile: $documentDataFile) {
-    documentData {
-      id
-      templateID
-      data
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateDocumentData ($updateDocumentDataId: ID!, $input: UpdateDocumentDataInput!, $documentDataFile: Upload) {
+	updateDocumentData(id: $updateDocumentDataId, input: $input, documentDataFile: $documentDataFile) {
+		documentData {
+			id
+			templateID
+			data
+			createdAt
+			createdBy
+			updatedAt
+			updatedBy
+		}
+	}
 }

@@ -116,6 +116,8 @@ func main() {
 	// setup logging
 	genhelpers.SetupLogging()
 
+	print("Start test!!!\n\n")
+
 	// change to the root of the repo so that the config hierarchy is correct
 	genhelpers.ChangeToRootDir("../../../")
 
@@ -343,10 +345,6 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			genhooks.WithCSVPackageName("csvgenerated"),
 			genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
 			genhooks.WithCSVGenerateAllWrappers(true)),
-		genhooks.GenIntegrationMappingSchema(
-			genhooks.WithIntegrationMappingOutputDir(integrationGeneratedPath),
-			genhooks.WithIntegrationMappingPackageName("integrationgenerated"),
-		),
 		accessMapExt.Hook(),
 		exportenums.New().Hook(),
 		workflowGenExt.Hook(),

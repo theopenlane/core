@@ -1,50 +1,52 @@
-mutation CreateTFASetting($input: CreateTFASettingInput!) {
-  createTFASetting(input: $input) {
-    tfaSetting {
-      totpAllowed
-      verified
-      owner {
-        id
-      }
-    }
-    qrCode
-    tfaSecret
-  }
+mutation CreateTFASetting ($input: CreateTFASettingInput!) {
+	createTFASetting(input: $input) {
+		tfaSetting {
+			createdAt
+			createdBy
+			id
+			totpAllowed
+			updatedAt
+			updatedBy
+			verified
+			owner {
+				id
+			}
+		}
+		qrCode
+		tfaSecret
+	}
 }
-
 query GetAllTFASettings {
-  tfaSettings {
-    edges {
-      node {
-        totpAllowed
-        verified
-        owner {
-          id
-        }
-      }
-    }
-  }
+	tfaSettings {
+		edges {
+			node {
+				totpAllowed
+				verified
+				owner {
+					id
+				}
+			}
+		}
+	}
 }
-
 query GetTFASetting {
-  tfaSetting {
-    id
-    totpAllowed
-    verified
-    owner {
-      id
-    }
-  }
+	tfaSetting {
+		id
+		totpAllowed
+		verified
+		owner {
+			id
+		}
+	}
 }
-
-mutation UpdateTFASetting($input: UpdateTFASettingInput!) {
-  updateTFASetting(input: $input) {
-    tfaSetting {
-      totpAllowed
-      verified
-    }
-    qrCode
-    tfaSecret
-    recoveryCodes
-  }
+mutation UpdateTFASetting ($input: UpdateTFASettingInput!) {
+	updateTFASetting(input: $input) {
+		tfaSetting {
+			totpAllowed
+			verified
+		}
+		qrCode
+		tfaSecret
+		recoveryCodes
+	}
 }

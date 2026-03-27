@@ -1,252 +1,250 @@
-mutation CreateStandard($input: CreateStandardInput!, $logoFile: Upload) {
-  createStandard(input: $input, logoFile: $logoFile) {
-    standard {
-      createdAt
-      createdBy
-      description
-      domains
-      framework
-      freeToUse
-      governingBody
-      governingBodyLogoURL
-      id
-      isPublic
-      link
-      logoFile {
-        id
-      }
-      name
-      ownerID
-      revision
-      shortName
-      standardType
-      status
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-      version
-      controls {
-        totalCount
-        pageInfo {
-          startCursor
-          endCursor
-          hasPreviousPage
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
-    }
-  }
+mutation CreateStandard ($input: CreateStandardInput!, $logoFile: Upload) {
+	createStandard(input: $input, logoFile: $logoFile) {
+		standard {
+			createdAt
+			createdBy
+			description
+			domains
+			framework
+			freeToUse
+			governingBody
+			governingBodyLogoURL
+			id
+			isPublic
+			link
+			logoFile {
+				id
+			}
+			name
+			ownerID
+			revision
+			shortName
+			standardType
+			status
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			version
+			controls {
+				totalCount
+				pageInfo {
+					startCursor
+					endCursor
+					hasPreviousPage
+					hasNextPage
+				}
+				edges {
+					node {
+						id
+						refCode
+						description
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteStandard($deleteStandardId: ID!) {
-  deleteStandard(id: $deleteStandardId) {
-    deletedID
-  }
+mutation DeleteStandard ($deleteStandardId: ID!) {
+	deleteStandard(id: $deleteStandardId) {
+		deletedID
+	}
 }
-
 query GetAllStandards {
-  standards {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        domains
-        framework
-        freeToUse
-        governingBody
-        governingBodyLogoURL
-        id
-        isPublic
-        link
-        name
-        ownerID
-        revision
-        shortName
-        standardType
-        status
-        systemOwned
-        tags
-        updatedAt
-        updatedBy
-        version
-        controls {
-          totalCount
-          pageInfo {
-            startCursor
-            endCursor
-            hasPreviousPage
-            hasNextPage
-          }
-          edges {
-            node {
-              id
-              refCode
-              description
-            }
-          }
-        }
-      }
-    }
-  }
+	standards {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				domains
+				framework
+				freeToUse
+				governingBody
+				governingBodyLogoURL
+				id
+				isPublic
+				link
+				name
+				ownerID
+				revision
+				shortName
+				standardType
+				status
+				systemOwned
+				tags
+				updatedAt
+				updatedBy
+				version
+				controls {
+					totalCount
+					pageInfo {
+						startCursor
+						endCursor
+						hasPreviousPage
+						hasNextPage
+					}
+					edges {
+						node {
+							id
+							refCode
+							description
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetStandardByID($standardId: ID!) {
-  standard(id: $standardId) {
-    createdAt
-    createdBy
-    description
-    domains
-    framework
-    freeToUse
-    governingBody
-    governingBodyLogoURL
-    id
-    isPublic
-    link
-    name
-    ownerID
-    revision
-    shortName
-    standardType
-    status
-    systemOwned
-    tags
-    updatedAt
-    updatedBy
-    version
-    controls {
-      totalCount
-      pageInfo {
-        startCursor
-        endCursor
-        hasPreviousPage
-        hasNextPage
-      }
-      edges {
-        node {
-          id
-          refCode
-          description
-        }
-      }
-    }
-  }
+query GetStandardByID ($standardId: ID!) {
+	standard(id: $standardId) {
+		createdAt
+		createdBy
+		description
+		domains
+		framework
+		freeToUse
+		governingBody
+		governingBodyLogoURL
+		id
+		internalNotes
+		isPublic
+		link
+		logoFileID
+		name
+		ownerID
+		revision
+		shortName
+		standardType
+		status
+		systemInternalID
+		systemOwned
+		tags
+		updatedAt
+		updatedBy
+		version
+		controls {
+			totalCount
+			pageInfo {
+				startCursor
+				endCursor
+				hasPreviousPage
+				hasNextPage
+			}
+			edges {
+				node {
+					id
+					refCode
+					description
+				}
+			}
+		}
+	}
 }
-
-query GetStandards($first: Int, $last: Int, $where: StandardWhereInput) {
-  standards(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        domains
-        framework
-        freeToUse
-        governingBody
-        governingBodyLogoURL
-        id
-        isPublic
-        link
-        name
-        ownerID
-        revision
-        shortName
-        standardType
-        status
-        systemOwned
-        tags
-        updatedAt
-        updatedBy
-        version
-        controls {
-          totalCount
-          pageInfo {
-            startCursor
-            endCursor
-            hasPreviousPage
-            hasNextPage
-          }
-          edges {
-            node {
-              id
-              refCode
-              description
-            }
-          }
-        }
-      }
-    }
-  }
+query GetStandards ($first: Int, $last: Int, $where: StandardWhereInput) {
+	standards(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				domains
+				framework
+				freeToUse
+				governingBody
+				governingBodyLogoURL
+				id
+				isPublic
+				link
+				name
+				ownerID
+				revision
+				shortName
+				standardType
+				status
+				systemOwned
+				tags
+				updatedAt
+				updatedBy
+				version
+				controls {
+					totalCount
+					pageInfo {
+						startCursor
+						endCursor
+						hasPreviousPage
+						hasNextPage
+					}
+					edges {
+						node {
+							id
+							refCode
+							description
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!, $logoFile: Upload) {
-  updateStandard(id: $updateStandardId, input: $input, logoFile: $logoFile) {
-    standard {
-      createdAt
-      createdBy
-      description
-      domains
-      framework
-      freeToUse
-      governingBody
-      governingBodyLogoURL
-      id
-      isPublic
-      link
-      logoFile {
-        id
-      }
-      name
-      ownerID
-      revision
-      shortName
-      standardType
-      status
-      systemOwned
-      tags
-      updatedAt
-      updatedBy
-      version
-      controls {
-        totalCount
-        pageInfo {
-          startCursor
-          endCursor
-          hasPreviousPage
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
-    }
-  }
+mutation UpdateStandard ($updateStandardId: ID!, $input: UpdateStandardInput!, $logoFile: Upload) {
+	updateStandard(id: $updateStandardId, input: $input, logoFile: $logoFile) {
+		standard {
+			createdAt
+			createdBy
+			description
+			domains
+			framework
+			freeToUse
+			governingBody
+			governingBodyLogoURL
+			id
+			isPublic
+			link
+			logoFile {
+				id
+			}
+			name
+			ownerID
+			revision
+			shortName
+			standardType
+			status
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			version
+			controls {
+				totalCount
+				pageInfo {
+					startCursor
+					endCursor
+					hasPreviousPage
+					hasNextPage
+				}
+				edges {
+					node {
+						id
+						refCode
+						description
+					}
+				}
+			}
+		}
+	}
 }
