@@ -1244,9 +1244,9 @@ var (
 				},
 			},
 			{
-				Name:    "customtypeenum_name_owner_id",
+				Name:    "customtypeenum_name_object_type_field_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{CustomTypeEnumsColumns[12], CustomTypeEnumsColumns[17]},
+				Columns: []*schema.Column{CustomTypeEnumsColumns[12], CustomTypeEnumsColumns[10], CustomTypeEnumsColumns[11], CustomTypeEnumsColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
