@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookOnboarding runs on onboarding mutations to create the organization and settings
@@ -64,7 +65,7 @@ func HookOnboarding() ent.Hook {
 					OrganizationID: org.ID,
 				}, nil)
 				if err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to enqueue domain scanning job")
 				}
 			}
 
