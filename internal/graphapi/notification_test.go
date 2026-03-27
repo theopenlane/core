@@ -21,7 +21,7 @@ func TestMutationCreateNotification(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name: "happy path, create notification as admin",
+			name: "happy path, create notification as system admin",
 			request: testclient.CreateNotificationInput{
 				NotificationType: enums.NotificationTypeOrganization,
 				ObjectType:       "program",
@@ -30,19 +30,19 @@ func TestMutationCreateNotification(t *testing.T) {
 				OwnerID:          &testUser1.OrganizationID,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    systemAdminUser.UserCtx,
 		},
 		{
-			name: "not authorized, create notification as regular user",
+			name: "not authorized, create notification as member",
 			request: testclient.CreateNotificationInput{
 				NotificationType: enums.NotificationTypeOrganization,
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &testUser1.OrganizationID,
+				OwnerID:          &viewOnlyUser.OrganizationID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}

@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -36,4 +37,23 @@ func systemAdminCheck(ctx context.Context) error {
 
 	// if not a system admin, skip to the next rule
 	return privacy.Skip
+}
+
+// DenyMutationIfNotSystemAdmin denies a mutation if the user is not a system admin.
+// We already have the Allow version but it skips to the next available one
+// but in schemas like notification and potentially new ones, we strictly want
+// only admins and no fallthroughs
+func DenyMutationIfNotSystemAdmin() privacy.MutationRuleFunc {
+	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return privacy.Skip
+		}
+
+		if caller.HasInLineage(auth.CapSystemAdmin) {
+			return privacy.Skip
+		}
+
+		return generated.ErrPermissionDenied
+	})
 }

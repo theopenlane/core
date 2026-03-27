@@ -181,11 +181,11 @@ func (Notification) Annotations() []schema.Annotation {
 // Policy of the Notification
 func (Notification) Policy() ent.Policy {
 	return policy.NewPolicy(
+		// only allow requests from inside the server to add notifications but not other users
+		// or by system admins only
 		policy.WithMutationRules(
-			// only allow requests from inside the server to add notifications but not other users
-			// or by system admins only
 			rule.AllowIfContextAllowRule(),
-			rule.AllowMutationIfSystemAdmin(),
+			rule.DenyMutationIfNotSystemAdmin(),
 		),
 	)
 }
