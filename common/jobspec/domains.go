@@ -138,5 +138,5 @@ func (CreateDomainScanArgs) Kind() string { return "create_domain_scan_args" }
 
 // InsertOpts provides the default configuration when processing this job.
 func (CreateDomainScanArgs) InsertOpts() river.InsertOpts {
-	return river.InsertOpts{Queue: QueueTrustcenter}
+	return river.InsertOpts{Queue: QueueCompliance}
 }
