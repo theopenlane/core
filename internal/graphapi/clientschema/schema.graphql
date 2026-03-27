@@ -44361,6 +44361,15 @@ type Mutation {
 		id: ID!
 	): NoteDeletePayload!
 	"""
+	Create a new notification
+	"""
+	createNotification(
+		"""
+		values of the notification
+		"""
+		input: CreateNotificationInput!
+	): NotificationCreatePayload!
+	"""
 	Update an existing notification
 	"""
 	updateNotification(
@@ -48449,6 +48458,15 @@ type NotificationConnection {
 	totalCount: Int!
 }
 """
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+	"""
+	Created notification
+	"""
+	notification: Notification!
+}
+"""
 An edge in a connection.
 """
 type NotificationEdge {
@@ -48470,6 +48488,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
 	MENTION
 	EXPORT
 	STANDARD_UPDATE
+	DOMAIN_SCAN
 }
 """
 NotificationNotificationType is enum for the field notification_type

@@ -2,43 +2,46 @@ package enums
 
 import "io"
 
-// NotificationTopic represents the topic/category of a notification
+// NotificationTopic is a custom type representing the various states of NotificationTopic.
 type NotificationTopic string
 
 var (
-	// NotificationTopicTaskAssignment represents a task assignment notification
+	// NotificationTopicTaskAssignment indicates the task assignment.
 	NotificationTopicTaskAssignment NotificationTopic = "TASK_ASSIGNMENT"
-	// NotificationTopicApproval represents an approval notification
+	// NotificationTopicApproval indicates the approval.
 	NotificationTopicApproval NotificationTopic = "APPROVAL"
-	// NotificationTopicMention represents a mention notification (comments)
+	// NotificationTopicMention indicates the mention.
 	NotificationTopicMention NotificationTopic = "MENTION"
-	// NotificationTopicExport represents an export notification
+	// NotificationTopicExport indicates the export.
 	NotificationTopicExport NotificationTopic = "EXPORT"
-	// NotificationTopicStandardUpdate represents a standard update notification
+	// NotificationTopicStandardUpdate indicates the standard update.
 	NotificationTopicStandardUpdate NotificationTopic = "STANDARD_UPDATE"
-	// NotificationTopicInvalid represents an invalid notification topic
-	NotificationTopicInvalid NotificationTopic = "INVALID"
+	// NotificationTopicDomainScan indicates the domain scan.
+	NotificationTopicDomainScan NotificationTopic = "DOMAIN_SCAN"
+	// NotificationTopicInvalid is used when an unknown or unsupported value is provided.
+	NotificationTopicInvalid NotificationTopic = "NOTIFICATIONTOPIC_INVALID"
 )
 
 var notificationTopicValues = []NotificationTopic{
-	NotificationTopicTaskAssignment, NotificationTopicApproval,
-	NotificationTopicMention, NotificationTopicExport,
+	NotificationTopicTaskAssignment,
+	NotificationTopicApproval,
+	NotificationTopicMention,
+	NotificationTopicExport,
 	NotificationTopicStandardUpdate,
+	NotificationTopicDomainScan,
 }
 
-// Values returns a slice of strings that represents all the possible values of the NotificationTopic enum.
+// Values returns a slice of strings representing all valid NotificationTopic values.
 func (NotificationTopic) Values() []string { return stringValues(notificationTopicValues) }
 
-// String returns the NotificationTopic as a string
+// String returns the string representation of the NotificationTopic value.
 func (r NotificationTopic) String() string { return string(r) }
 
-// ToNotificationTopic returns the notification topic enum based on string input
-func ToNotificationTopic(r string) *NotificationTopic {
-	return parse(r, notificationTopicValues, &NotificationTopicInvalid)
-}
+// ToNotificationTopic converts a string to its corresponding NotificationTopic enum value.
+func ToNotificationTopic(r string) *NotificationTopic { return parse(r, notificationTopicValues, &NotificationTopicInvalid) }
 
-// MarshalGQL implement the Marshaler interface for gqlgen
+// MarshalGQL implements the gqlgen Marshaler interface.
 func (r NotificationTopic) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
-// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+// UnmarshalGQL implements the gqlgen Unmarshaler interface.
 func (r *NotificationTopic) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
