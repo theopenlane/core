@@ -3038,23 +3038,23 @@ func init() {
 	// finding.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	finding.DefaultSystemOwned = findingDescSystemOwned.Default.(bool)
 	// findingDescCategories is the schema descriptor for categories field.
-	findingDescCategories := findingFields[9].Descriptor()
+	findingDescCategories := findingFields[8].Descriptor()
 	// finding.DefaultCategories holds the default value on creation for the categories field.
 	finding.DefaultCategories = findingDescCategories.Default.([]string)
 	// findingDescOpen is the schema descriptor for open field.
-	findingDescOpen := findingFields[17].Descriptor()
+	findingDescOpen := findingFields[16].Descriptor()
 	// finding.DefaultOpen holds the default value on creation for the open field.
 	finding.DefaultOpen = findingDescOpen.Default.(bool)
 	// findingDescReferences is the schema descriptor for references field.
-	findingDescReferences := findingFields[26].Descriptor()
+	findingDescReferences := findingFields[25].Descriptor()
 	// finding.DefaultReferences holds the default value on creation for the references field.
 	finding.DefaultReferences = findingDescReferences.Default.([]string)
 	// findingDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findingDescStepsToReproduce := findingFields[27].Descriptor()
+	findingDescStepsToReproduce := findingFields[26].Descriptor()
 	// finding.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	finding.DefaultStepsToReproduce = findingDescStepsToReproduce.Default.([]string)
 	// findingDescTargets is the schema descriptor for targets field.
-	findingDescTargets := findingFields[28].Descriptor()
+	findingDescTargets := findingFields[27].Descriptor()
 	// finding.DefaultTargets holds the default value on creation for the targets field.
 	finding.DefaultTargets = findingDescTargets.Default.([]string)
 	// findingDescID is the schema descriptor for id field.
@@ -8527,23 +8527,23 @@ func init() {
 	// vulnerability.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerability.DefaultSystemOwned = vulnerabilityDescSystemOwned.Default.(bool)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.
-	vulnerabilityDescExternalID := vulnerabilityFields[3].Descriptor()
+	vulnerabilityDescExternalID := vulnerabilityFields[2].Descriptor()
 	// vulnerability.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	vulnerability.ExternalIDValidator = vulnerabilityDescExternalID.Validators[0].(func(string) error)
 	// vulnerabilityDescOpen is the schema descriptor for open field.
-	vulnerabilityDescOpen := vulnerabilityFields[17].Descriptor()
+	vulnerabilityDescOpen := vulnerabilityFields[16].Descriptor()
 	// vulnerability.DefaultOpen holds the default value on creation for the open field.
 	vulnerability.DefaultOpen = vulnerabilityDescOpen.Default.(bool)
 	// vulnerabilityDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityDescBlocking := vulnerabilityFields[18].Descriptor()
+	vulnerabilityDescBlocking := vulnerabilityFields[17].Descriptor()
 	// vulnerability.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerability.DefaultBlocking = vulnerabilityDescBlocking.Default.(bool)
 	// vulnerabilityDescReferences is the schema descriptor for references field.
-	vulnerabilityDescReferences := vulnerabilityFields[22].Descriptor()
+	vulnerabilityDescReferences := vulnerabilityFields[21].Descriptor()
 	// vulnerability.DefaultReferences holds the default value on creation for the references field.
 	vulnerability.DefaultReferences = vulnerabilityDescReferences.Default.([]string)
 	// vulnerabilityDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityDescImpacts := vulnerabilityFields[23].Descriptor()
+	vulnerabilityDescImpacts := vulnerabilityFields[22].Descriptor()
 	// vulnerability.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerability.DefaultImpacts = vulnerabilityDescImpacts.Default.([]string)
 	// vulnerabilityDescID is the schema descriptor for id field.

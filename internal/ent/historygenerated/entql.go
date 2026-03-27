@@ -1139,7 +1139,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findinghistory.FieldFindingStatusName:  {Type: field.TypeString, Column: findinghistory.FieldFindingStatusName},
 			findinghistory.FieldFindingStatusID:    {Type: field.TypeString, Column: findinghistory.FieldFindingStatusID},
 			findinghistory.FieldExternalID:         {Type: field.TypeString, Column: findinghistory.FieldExternalID},
-			findinghistory.FieldStatus:             {Type: field.TypeString, Column: findinghistory.FieldStatus},
 			findinghistory.FieldSecurityLevel:      {Type: field.TypeEnum, Column: findinghistory.FieldSecurityLevel},
 			findinghistory.FieldExternalOwnerID:    {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
 			findinghistory.FieldSource:             {Type: field.TypeString, Column: findinghistory.FieldSource},
@@ -2923,7 +2922,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusName},
 			vulnerabilityhistory.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusID},
 			vulnerabilityhistory.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
-			vulnerabilityhistory.FieldStatus:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
 			vulnerabilityhistory.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldSecurityLevel},
 			vulnerabilityhistory.FieldExternalID:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
 			vulnerabilityhistory.FieldCveID:                   {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
@@ -7804,11 +7802,6 @@ func (f *FindingHistoryFilter) WhereFindingStatusID(p entql.StringP) {
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldExternalID))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *FindingHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(findinghistory.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.
@@ -15574,11 +15567,6 @@ func (f *VulnerabilityHistoryFilter) WhereVulnerabilityStatusID(p entql.StringP)
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldExternalOwnerID))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *VulnerabilityHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(vulnerabilityhistory.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.

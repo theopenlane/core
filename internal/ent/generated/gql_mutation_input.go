@@ -9446,7 +9446,6 @@ type CreateFindingInput struct {
 	ScopeName            *string
 	FindingStatusName    *string
 	ExternalID           *string
-	Status               *string
 	ExternalOwnerID      *string
 	Source               *string
 	ResourceName         *string
@@ -9531,9 +9530,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -9740,8 +9736,6 @@ type UpdateFindingInput struct {
 	FindingStatusName          *string
 	ClearExternalID            bool
 	ExternalID                 *string
-	ClearStatus                bool
-	Status                     *string
 	ClearExternalOwnerID       bool
 	ExternalOwnerID            *string
 	ClearSource                bool
@@ -9933,12 +9927,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
-	}
-	if i.ClearStatus {
-		m.ClearStatus()
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -27238,7 +27226,6 @@ type CreateVulnerabilityInput struct {
 	ScopeName               *string
 	VulnerabilityStatusName *string
 	ExternalOwnerID         *string
-	Status                  *string
 	ExternalID              string
 	CveID                   *string
 	Source                  *string
@@ -27312,9 +27299,6 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.CveID; v != nil {
@@ -27486,8 +27470,6 @@ type UpdateVulnerabilityInput struct {
 	VulnerabilityStatusName      *string
 	ClearExternalOwnerID         bool
 	ExternalOwnerID              *string
-	ClearStatus                  bool
-	Status                       *string
 	ExternalID                   *string
 	ClearCveID                   bool
 	CveID                        *string
@@ -27651,12 +27633,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if i.ClearStatus {
-		m.ClearStatus()
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)

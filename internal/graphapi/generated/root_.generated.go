@@ -2199,7 +2199,6 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
-		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID   func(childComplexity int) int
@@ -6987,7 +6986,6 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
-		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
@@ -18283,13 +18281,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Finding.State(childComplexity), true
-
-	case "Finding.status":
-		if e.ComplexityRoot.Finding.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Finding.Status(childComplexity), true
 
 	case "Finding.stepsToReproduce":
 		if e.ComplexityRoot.Finding.StepsToReproduce == nil {
@@ -48305,13 +48296,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Vulnerability.SourceUpdatedAt(childComplexity), true
 
-	case "Vulnerability.status":
-		if e.ComplexityRoot.Vulnerability.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Vulnerability.Status(childComplexity), true
-
 	case "Vulnerability.subcontrols":
 		if e.ComplexityRoot.Vulnerability.Subcontrols == nil {
 			break
@@ -66331,10 +66315,6 @@ input CreateFindingInput {
   """
   externalID: String
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -69677,10 +69657,6 @@ input CreateVulnerabilityInput {
   owner of the vulnerability
   """
   externalOwnerID: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   external identifier from the integration source for the vulnerability
   """
@@ -81244,10 +81220,6 @@ type Finding implements Node {
   """
   externalID: String
   """
-  lifecycle status of the finding
-  """
-  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
-  """
   incoming source severity
   """
   securityLevel: FindingSecurityLevel
@@ -82694,24 +82666,6 @@ input FindingWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -126650,11 +126604,6 @@ input UpdateFindingInput {
   externalID: String
   clearExternalID: Boolean
   """
-  lifecycle status of the finding
-  """
-  status: String
-  clearStatus: Boolean
-  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -131438,11 +131387,6 @@ input UpdateVulnerabilityInput {
   externalOwnerID: String
   clearExternalOwnerID: Boolean
   """
-  lifecycle status of the vulnerability
-  """
-  status: String
-  clearStatus: Boolean
-  """
   external identifier from the integration source for the vulnerability
   """
   externalID: String
@@ -133320,10 +133264,6 @@ type Vulnerability implements Node {
   """
   lifecycle status of the vulnerability
   """
-  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
-  """
-  lifecycle status of the vulnerability
-  """
   securityLevel: VulnerabilitySecurityLevel
   """
   external identifier from the integration source for the vulnerability
@@ -134348,24 +134288,6 @@ input VulnerabilityWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   security_level field predicates
   """
