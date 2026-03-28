@@ -31,7 +31,7 @@ require (
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.8.0
 	github.com/didasy/tldr v0.7.0
-	github.com/elimity-com/scim v0.0.0-20260326153625-8304ef69cde7
+	github.com/elimity-com/scim v0.0.0-20260328082132-8c2ba6dc89f1
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.19.0
 	github.com/fsnotify/fsnotify v1.9.0
