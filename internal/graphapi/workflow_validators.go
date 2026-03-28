@@ -830,7 +830,6 @@ func validateTarget(t workflows.TargetConfig) error {
 	return nil
 }
 
-
 // validateWebhookActionParams validates webhook action parameters
 func validateWebhookActionParams(raw json.RawMessage, celCfg *workflows.Config) error {
 	if len(raw) == 0 {

@@ -25,7 +25,7 @@ var (
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // CredentialSchema holds the Azure service principal credentials for one installation
@@ -48,4 +48,11 @@ type InstallationMetadata struct {
 	ClientID string `json:"clientId,omitempty" jsonschema:"title=Client ID"`
 	// SubscriptionID is the Azure subscription identifier scoped to this installation
 	SubscriptionID string `json:"subscriptionId,omitempty" jsonschema:"title=Subscription ID"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.TenantID,
+	}
 }

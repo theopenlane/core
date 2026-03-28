@@ -24,9 +24,9 @@ import (
 )
 
 const (
-	testDefinitionID    = "def_01K0TEST000000000000000001"
-	testMessageTopic    = gala.TopicName("test.notification.message.send")
-	testOperationName   = "message.send"
+	testDefinitionID  = "def_01K0TEST000000000000000001"
+	testMessageTopic  = gala.TopicName("test.notification.message.send")
+	testOperationName = "message.send"
 )
 
 func notificationTestDefinition() types.Definition {

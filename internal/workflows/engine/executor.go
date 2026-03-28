@@ -106,7 +106,6 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 	return normalized, nil
 }
 
-
 // executeGatedAction creates workflow assignments for approval and review actions
 func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object, cfg gatedActionConfig) error {
 	allowCtx := wfworkflows.AllowContext(ctx)

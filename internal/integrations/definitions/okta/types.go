@@ -23,7 +23,7 @@ var (
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 	// Search is an optional Okta search expression applied server-side when listing users
 	Search string `json:"search,omitempty" jsonschema:"title=User Search Expression,description=Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."`
 	// EnableGroupSync controls whether group and membership records are collected
@@ -42,4 +42,11 @@ type CredentialSchema struct {
 type InstallationMetadata struct {
 	// OrgURL is the Okta organization URL configured for this installation
 	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalName: m.OrgURL,
+	}
 }

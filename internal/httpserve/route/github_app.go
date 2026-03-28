@@ -24,5 +24,5 @@ func registerGitHubAppWebhookHandler(router *Router) error {
 		Handler:     router.Handler.GitHubAppWebhookHandler,
 	}
 
-	return router.AddUnversionedHandlerRoute(config)
+	return router.AddV1HandlerRoute(config)
 }

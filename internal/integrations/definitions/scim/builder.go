@@ -14,7 +14,7 @@ func Builder() registry.Builder {
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Family:      "scim",
-				DisplayName: "SCIM Directory Sync",
+				DisplayName: "SCIM 2.0",
 				Description: "Synchronize directory objects through SCIM",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/scim/overview",
@@ -41,9 +41,9 @@ func Builder() registry.Builder {
 					Handle:       providerkit.StaticHandler(HealthCheck{}.Run),
 				},
 				{
-					Name:         DirectorySyncOperation.Name(),
+					Name:         directorySyncOperation.Name(),
 					Description:  "Synchronize directory state through SCIM",
-					Topic:        types.OperationTopic(DefinitionID.ID(), DirectorySyncOperation.Name()),
+					Topic:        types.OperationTopic(DefinitionID.ID(), directorySyncOperation.Name()),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Ingest: []types.IngestContract{

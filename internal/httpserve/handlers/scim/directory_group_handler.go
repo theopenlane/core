@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/elimity-com/scim"
-	scimschema "github.com/elimity-com/scim/schema"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -15,15 +14,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
 // DirectoryGroupHandler implements scim.ResourceHandler writing to DirectoryGroup instead of Group.
 // All records are scoped to the integration identified in the request context
-type DirectoryGroupHandler struct{}
-
-// NewDirectoryGroupHandler creates a new DirectoryGroupHandler
-func NewDirectoryGroupHandler() *DirectoryGroupHandler {
-	return &DirectoryGroupHandler{}
+type DirectoryGroupHandler struct {
+	// Runtime provides shared integration execution capabilities
+	Runtime *integrationsruntime.Runtime
 }
 
 // Create stores a new DirectoryGroup record derived from SCIM group attributes,
@@ -158,10 +156,7 @@ func (h *DirectoryGroupHandler) Patch(r *http.Request, id string, operations []s
 	}
 
 	patched := directoryGroupAttributesFromRecord(sr.BasePath, dg, currentMembers)
-	membersTouched, err := applyGroupPatchOperations(patched, operations)
-	if err != nil {
-		return scim.Resource{}, err
-	}
+	membersTouched := applyGroupPatchOperations(patched, operations)
 
 	if membersTouched {
 		if err := h.clearGroupMembers(ctx, client, dg.ID); err != nil {
@@ -204,14 +199,14 @@ func (h *DirectoryGroupHandler) Delete(r *http.Request, id string) error {
 }
 
 // syncDirectoryGroup upserts one SCIM directory group and its memberships through the inline operation path
-func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *generated.Client, sr *SCIMRequest, attributes scim.ResourceAttributes, action string) (*generated.DirectoryGroup, []*generated.DirectoryMembership, error) {
+func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *generated.Client, sr *Request, attributes scim.ResourceAttributes, action string) (*generated.DirectoryGroup, []*generated.DirectoryMembership, error) {
 	payloadSets, err := definitionscim.BuildDirectoryGroupPayloadSets(attributes, action)
 	if err != nil {
 		return nil, nil, handleIngestError(err, "directory group payload is invalid")
 	}
 
 	externalID := definitionscim.DirectoryGroupExternalID(attributes)
-	if err := ingestPayloadSets(ctx, client, sr, payloadSets); err != nil {
+	if err := ingestPayloadSets(ctx, client, h.Runtime, sr.Installation, payloadSets); err != nil {
 		return nil, nil, handleIngestError(err, "directory group payload is invalid")
 	}
 
@@ -253,115 +248,86 @@ func (h *DirectoryGroupHandler) loadGroupMembers(ctx context.Context, client *ge
 		All(ctx)
 }
 
-// applyGroupPatchOperations applies SCIM PATCH operations to group attributes before ingest
-func applyGroupPatchOperations(attributes scim.ResourceAttributes, operations []scim.PatchOperation) (bool, error) {
+// applyGroupPatchOperations applies SCIM PATCH operations to group attributes before ingest.
+// The library has already validated operations against the composed schema.
+// Returns true if any operation touched the members attribute, requiring membership reconciliation
+func applyGroupPatchOperations(attributes scim.ResourceAttributes, operations []scim.PatchOperation) bool {
 	membersTouched := false
 
 	for _, op := range operations {
 		switch strings.ToLower(op.Op) {
-		case scim.PatchOperationReplace:
-			membersTouched = applyGroupReplaceOp(attributes, op) || membersTouched
-		case scim.PatchOperationAdd:
-			membersTouched = applyGroupAddOp(attributes, op) || membersTouched
+		case scim.PatchOperationReplace, scim.PatchOperationAdd:
+			if isMembersPatchOp(op) {
+				membersTouched = true
+				applyMembersPatchOp(attributes, op)
+			} else {
+				applyPatchValue(attributes, op)
+				membersTouched = membersTouched || pathlessTouchesMembers(op)
+			}
 		case scim.PatchOperationRemove:
-			membersTouched = applyGroupRemoveOp(attributes, op) || membersTouched
-		default:
-			return false, fmt.Errorf("%w: unsupported patch operation %s", definitionscim.ErrInvalidAttributes, op.Op)
+			if isMembersPatchOp(op) {
+				membersTouched = true
+				removeMembersPatchOp(attributes, op)
+			} else {
+				removePatchValue(attributes, op)
+			}
 		}
 	}
 
-	return membersTouched, nil
+	return membersTouched
 }
 
-// applyGroupReplaceOp applies a SCIM PATCH replace operation to group attributes
-func applyGroupReplaceOp(attributes scim.ResourceAttributes, op scim.PatchOperation) bool {
-	pathStr := ""
+// isMembersPatchOp returns true if the patch operation targets the members attribute
+func isMembersPatchOp(op scim.PatchOperation) bool {
+	if op.Path == nil {
+		return false
+	}
+
+	return strings.EqualFold(op.Path.AttributePath.AttributeName, "members")
+}
+
+// pathlessTouchesMembers returns true if a pathless operation contains a members key
+func pathlessTouchesMembers(op scim.PatchOperation) bool {
 	if op.Path != nil {
-		pathStr = strings.ToLower(op.Path.String())
-	}
-
-	if pathStr == "" {
-		valueMap, ok := op.Value.(map[string]any)
-		if !ok {
-			return false
-		}
-
-		definitionscim.MergeSCIMMap(attributes, valueMap)
-
-		_, membersTouched := valueMap["members"]
-
-		return membersTouched
-	}
-
-	switch pathStr {
-	case "displayname":
-		if v, ok := op.Value.(string); ok && v != "" {
-			attributes["displayName"] = v
-		}
-	case "active":
-		if v, ok := op.Value.(bool); ok {
-			attributes["active"] = v
-		}
-	case "externalid":
-		if v, ok := op.Value.(string); ok && v != "" {
-			attributes["externalId"] = v
-		}
-	case "members":
-		attributes["members"] = memberRefsFromIDs("", definitionscim.ExtractMemberIDsFromValue(op.Value))
-		return true
-	}
-
-	return false
-}
-
-// applyGroupAddOp applies a SCIM PATCH add operation to group attributes
-func applyGroupAddOp(attributes scim.ResourceAttributes, op scim.PatchOperation) bool {
-	if op.Path == nil {
-		valueMap, ok := op.Value.(map[string]any)
-		if !ok {
-			return false
-		}
-
-		definitionscim.MergeSCIMMap(attributes, valueMap)
-
-		_, membersTouched := valueMap["members"]
-
-		return membersTouched
-	}
-
-	pathStr := strings.ToLower(op.Path.String())
-	if pathStr != "members" {
 		return false
 	}
 
-	current := definitionscim.ExtractMemberIDsFromValue(attributes["members"])
+	valueMap, ok := op.Value.(map[string]any)
+	if !ok {
+		return false
+	}
+
+	_, has := valueMap["members"]
+
+	return has
+}
+
+// applyMembersPatchOp handles add/replace for the members multi-valued attribute.
+// For replace, the value overwrites the current members list.
+// For add, the value is appended to the current members list
+func applyMembersPatchOp(attributes scim.ResourceAttributes, op scim.PatchOperation) {
 	additions := definitionscim.ExtractMemberIDsFromValue(op.Value)
-	attributes["members"] = memberRefsFromIDs("", append(current, additions...))
 
-	return len(additions) > 0
+	switch strings.ToLower(op.Op) {
+	case scim.PatchOperationReplace:
+		attributes["members"] = memberRefsFromIDs("", additions)
+	case scim.PatchOperationAdd:
+		current := definitionscim.ExtractMemberIDsFromValue(attributes["members"])
+		attributes["members"] = memberRefsFromIDs("", append(current, additions...))
+	}
 }
 
-// applyGroupRemoveOp applies a SCIM PATCH remove operation to group attributes
-func applyGroupRemoveOp(attributes scim.ResourceAttributes, op scim.PatchOperation) bool {
-	if op.Path == nil {
-		return false
-	}
-
-	pathStr := strings.ToLower(op.Path.String())
-	if pathStr != "members" {
-		return false
-	}
-
+// removeMembersPatchOp handles remove for the members multi-valued attribute.
+// With no value, all members are removed. With a value, only the specified members are removed
+func removeMembersPatchOp(attributes scim.ResourceAttributes, op scim.PatchOperation) {
 	removals := definitionscim.ExtractMemberIDsFromValue(op.Value)
 	if len(removals) == 0 {
 		delete(attributes, "members")
-		return true
+		return
 	}
 
 	current := definitionscim.ExtractMemberIDsFromValue(attributes["members"])
 	attributes["members"] = memberRefsFromIDs("", lo.Without(current, removals...))
-
-	return true
 }
 
 // directoryGroupToSCIMResource converts a DirectoryGroup entity and its memberships to a SCIM Resource
@@ -369,14 +335,14 @@ func directoryGroupToSCIMResource(basePath string, dg *generated.DirectoryGroup,
 	return buildSCIMResource(dg.ID, dg.ExternalID, dg.CreatedAt, dg.UpdatedAt, directoryGroupAttributesFromRecord(basePath, dg, memberships))
 }
 
-// directoryGroupAttributesFromRecord renders a DirectoryGroup as SCIM attributes for patching and delete ingest
+// directoryGroupAttributesFromRecord renders a DirectoryGroup as SCIM resource attributes.
+// Common attributes (id, externalId) are excluded as the library handles those via Resource fields
 func directoryGroupAttributesFromRecord(basePath string, dg *generated.DirectoryGroup, memberships []*generated.DirectoryMembership) scim.ResourceAttributes {
 	return scim.ResourceAttributes{
-		scimschema.CommonAttributeID: dg.ID,
-		"externalId":                 dg.ExternalID,
-		"displayName":                dg.DisplayName,
-		"members":                    memberRefsFromMemberships(basePath, memberships),
-		"active":                     dg.Status == enums.DirectoryGroupStatusActive,
+		"externalId":  dg.ExternalID,
+		"displayName": dg.DisplayName,
+		"members":     memberRefsFromMemberships(basePath, memberships),
+		"active":      dg.Status == enums.DirectoryGroupStatusActive,
 	}
 }
 

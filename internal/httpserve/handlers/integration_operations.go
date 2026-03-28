@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"time"
 
 	echo "github.com/theopenlane/echox"
 
@@ -43,9 +44,24 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(req.DefinitionID)
-	if !ok || !def.Active {
-		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+	if req.IntegrationID == "" {
+		return h.BadRequest(ctx, rout.MissingField("integrationID"), openapiCtx)
+	}
+
+	installationRec, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, caller.OrganizationID, req.IntegrationID, "")
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+	}
+
+	def, ok := h.IntegrationsRuntime.Registry().Definition(installationRec.DefinitionID)
+	if !ok {
+		logx.FromContext(requestCtx).Error().Str("definitionID", installationRec.DefinitionID).Msg("definition not found in registry")
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+	}
+
+	if !def.Active {
+		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
 	operationName := req.Body.Operation
@@ -73,19 +89,23 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		}
 	}
 
-	integrationID := req.IntegrationID
-
-	installationRec, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, caller.OrganizationID, integrationID, def.ID)
-	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
-	}
-
 	if inlineExecution {
 		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, installationRec, operation, nil, configDoc)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
 			return h.BadRequest(ctx, err, openapiCtx)
+		}
+
+		meta := installationRec.Metadata
+		if meta == nil {
+			meta = map[string]any{}
+		}
+
+		meta["lastSuccessfulHealthCheck"] = time.Now().UTC().Format(time.RFC3339)
+
+		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
+			SetMetadata(meta).Exec(queueCtx); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("integrationID", installationRec.ID).Msg("failed to persist health check timestamp")
 		}
 
 		return h.Success(ctx, IntegrationOperationResponse{

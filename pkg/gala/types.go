@@ -15,10 +15,12 @@ type Headers struct {
 	Tags []string `json:"tags,omitempty"`
 	// Listeners are the registered listener names for the topic, populated at dispatch time
 	Listeners []string `json:"listeners,omitempty"`
-	// Queue optionally overrides the River queue used for dispatch.
+	// Queue optionally overrides the River queue used for dispatch
 	Queue string `json:"queue,omitempty"`
-	// MaxAttempts optionally overrides River max attempts for this envelope.
+	// MaxAttempts optionally overrides River max attempts for this envelope
 	MaxAttempts int `json:"max_attempts,omitempty"`
+	// ScheduledAt defers execution until the specified time; nil means immediate
+	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
 }
 
 // Envelope is the durable event envelope

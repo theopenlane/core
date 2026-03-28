@@ -122,20 +122,6 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 	}, nil
 }
 
-// refreshAppInstall mints a new installation token from the stored installation ID
-func refreshAppInstall(ctx context.Context, cfg Config, credential types.CredentialSet) (types.CredentialSet, error) {
-	var cred githubAppCredential
-	if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
-		return types.CredentialSet{}, ErrCredentialDecode
-	}
-
-	if cred.InstallationID == 0 {
-		return types.CredentialSet{}, ErrInstallationIDMissing
-	}
-
-	return mintCredential(ctx, cfg, cred.InstallationID)
-}
-
 // disconnectInstallationID extracts the installation ID from the credential or installation metadata
 func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
 	cred, ok, err := gitHubAppCredential.Resolve(req.Credentials)

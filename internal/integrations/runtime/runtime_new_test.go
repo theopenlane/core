@@ -45,9 +45,8 @@ func TestNewMinimalConfig(t *testing.T) {
 	})
 
 	_, err = New(Config{
-		Gala:                  g,
-		Registry:              reg,
-
+		Gala:     g,
+		Registry: reg,
 	})
 	if err == nil {
 		return
@@ -68,10 +67,9 @@ func TestNewWithRegistryOverride(t *testing.T) {
 	})
 
 	rt, err := New(Config{
-		Gala:                  g,
-		Registry:              reg,
-		Keystore:              &keystore.Store{},
-
+		Gala:     g,
+		Registry: reg,
+		Keystore: &keystore.Store{},
 	})
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
@@ -110,10 +108,9 @@ func TestNewWithInMemoryAuthState(t *testing.T) {
 	g := newTestGala(t)
 
 	rt, err := New(Config{
-		Gala:                  g,
-		Registry:              registry.New(),
-		Keystore:              &keystore.Store{},
-
+		Gala:     g,
+		Registry: registry.New(),
+		Keystore: &keystore.Store{},
 	})
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
@@ -141,10 +138,9 @@ func TestNewWithBuildersNoRegistry(t *testing.T) {
 	})
 
 	rt, err := New(Config{
-		Gala:                  g,
-		DefinitionBuilders:    []registry.Builder{builder},
-		Keystore:              &keystore.Store{},
-
+		Gala:               g,
+		DefinitionBuilders: []registry.Builder{builder},
+		Keystore:           &keystore.Store{},
 	})
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)

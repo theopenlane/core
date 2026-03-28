@@ -252,53 +252,53 @@ func TestEnvelopeIncludedByFilters(t *testing.T) {
 	}
 
 	tests := []struct {
-		name                  string
+		name                   string
 		installationFilterExpr string
 		mappingFilterExpr      string
-		wantMatch             bool
-		wantErr               bool
+		wantMatch              bool
+		wantErr                bool
 	}{
 		{
-			name:                  "both empty passes",
+			name:                   "both empty passes",
 			installationFilterExpr: "",
 			mappingFilterExpr:      "",
-			wantMatch:             true,
+			wantMatch:              true,
 		},
 		{
-			name:                  "installation filter matches",
+			name:                   "installation filter matches",
 			installationFilterExpr: `resource == "users"`,
 			mappingFilterExpr:      "",
-			wantMatch:             true,
+			wantMatch:              true,
 		},
 		{
-			name:                  "installation filter rejects",
+			name:                   "installation filter rejects",
 			installationFilterExpr: `resource == "groups"`,
 			mappingFilterExpr:      "",
-			wantMatch:             false,
+			wantMatch:              false,
 		},
 		{
-			name:                  "mapping filter matches",
+			name:                   "mapping filter matches",
 			installationFilterExpr: "",
 			mappingFilterExpr:      `action == "create"`,
-			wantMatch:             true,
+			wantMatch:              true,
 		},
 		{
-			name:                  "mapping filter rejects",
+			name:                   "mapping filter rejects",
 			installationFilterExpr: "",
 			mappingFilterExpr:      `action == "delete"`,
-			wantMatch:             false,
+			wantMatch:              false,
 		},
 		{
-			name:                  "both filters match",
+			name:                   "both filters match",
 			installationFilterExpr: `resource == "users"`,
 			mappingFilterExpr:      `action == "create"`,
-			wantMatch:             true,
+			wantMatch:              true,
 		},
 		{
-			name:                  "installation matches mapping rejects",
+			name:                   "installation matches mapping rejects",
 			installationFilterExpr: `resource == "users"`,
 			mappingFilterExpr:      `action == "delete"`,
-			wantMatch:             false,
+			wantMatch:              false,
 		},
 	}
 

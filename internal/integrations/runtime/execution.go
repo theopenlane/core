@@ -12,8 +12,61 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+// ReconcileOperations emits the first reconciliation envelope for an installation,
+// starting the adaptive scheduling cycle that dispatches all non-inline operations
+func (r *Runtime) ReconcileOperations(ctx context.Context, installation *ent.Integration) error {
+	receipt := r.Gala().EmitWithHeaders(ctx, types.TopicFromType[operations.ReconcileEnvelope](), operations.ReconcileEnvelope{
+		InstallationID: installation.ID,
+		DefinitionID:   installation.DefinitionID,
+	}, gala.Headers{
+		Properties: map[string]string{
+			"installation_id": installation.ID,
+			"definition_id":   installation.DefinitionID,
+		},
+	})
+
+	return receipt.Err
+}
+
+// HandleReconcile processes one reconciliation cycle by dispatching all non-inline
+// operations for the installation and returning the count dispatched as the delta
+func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	def, ok := r.Registry().Definition(envelope.DefinitionID)
+	if !ok {
+		return 0, ErrDefinitionNotFound
+	}
+
+	var (
+		dispatched int
+		errs       []error
+	)
+
+	for _, op := range def.Operations {
+		if op.Policy.Inline {
+			continue
+		}
+
+		_, err := r.Dispatch(ctx, operations.DispatchRequest{
+			InstallationID: envelope.InstallationID,
+			Operation:      op.Name,
+			RunType:        enums.IntegrationRunTypeReconcile,
+		})
+		if err != nil {
+			errs = append(errs, err)
+			continue
+		}
+
+		dispatched++
+	}
+
+	return dispatched, errors.Join(errs...)
+}
 
 // ExecuteOperation runs one integration operation inline without run tracking
 func (r *Runtime) ExecuteOperation(ctx context.Context, installation *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
@@ -66,6 +119,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		Source: integrationgenerated.IntegrationIngestSourceOperation,
 		RunID:  envelope.RunID,
 	}
+
 	if envelope.WorkflowMeta != nil {
 		ingestOptions.Source = integrationgenerated.IntegrationIngestSourceWorkflow
 		ingestOptions.WorkflowMeta = envelope.WorkflowMeta

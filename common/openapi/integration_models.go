@@ -44,10 +44,27 @@ type IntegrationConfig struct {
 	ClientConfig json.RawMessage `json:"clientConfig,omitempty"`
 }
 
+// IntegrationInstallationIdentity is the normalized, provider-agnostic installation identity
+// surfaced in the GraphQL metadata field for UI display
+type IntegrationInstallationIdentity struct {
+	// ExternalName is the human-readable name of the external entity
+	// (e.g. Slack workspace name, Azure tenant display name, Google Workspace domain)
+	ExternalName string `json:"externalName,omitempty"`
+	// ExternalID is the machine identifier for the external entity
+	// (e.g. Slack team ID, Azure tenant ID, AWS account ID, GitHub installation ID)
+	ExternalID string `json:"externalId,omitempty"`
+	// CredentialRef is the credential method used to set up the integration
+	CredentialRef string `json:"credentialRef,omitempty"`
+	// LastSuccessfulHealthCheck is the RFC3339 timestamp of the last successful validation operation
+	LastSuccessfulHealthCheck string `json:"lastSuccessfulHealthCheck,omitempty"`
+}
+
 // IntegrationInstallationMetadata stores stable, non-secret installation identity metadata
 type IntegrationInstallationMetadata struct {
 	// Attributes is the provider-defined installation metadata payload
 	Attributes json.RawMessage `json:"attributes,omitempty"`
+	// Display is the normalized installation identity for UI rendering
+	Display IntegrationInstallationIdentity `json:"display,omitzero"`
 }
 
 // IntegrationProviderState stores provider-specific integration state captured during auth and config

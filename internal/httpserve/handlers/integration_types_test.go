@@ -127,40 +127,6 @@ func TestIntegrationAuthStartRequestValidate(t *testing.T) {
 	}
 }
 
-func TestRefreshInstallationCredentialRequestValidate(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name    string
-		req     RefreshInstallationCredentialRequest
-		wantErr bool
-	}{
-		{
-			name:    "missing installation ID",
-			req:     RefreshInstallationCredentialRequest{},
-			wantErr: true,
-		},
-		{
-			name:    "valid",
-			req:     RefreshInstallationCredentialRequest{InstallationID: "01HXYZ1234567890ABCDEFGHJ"},
-			wantErr: false,
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			err := tc.req.Validate()
-			if tc.wantErr {
-				require.Error(t, err)
-			} else {
-				require.NoError(t, err)
-			}
-		})
-	}
-}
-
 func TestVerifyWebhookHMACSHA256(t *testing.T) {
 	t.Parallel()
 

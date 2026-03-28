@@ -208,4 +208,3 @@ func EnsureSCIMMap(target map[string]any, key string) map[string]any {
 
 	return child
 }
-

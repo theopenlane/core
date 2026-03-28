@@ -72,9 +72,12 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	resp := IntegrationConfigResponse{
-		Reply:          rout.Reply{Success: true},
-		Provider:       def.ID,
-		InstallationID: installationRec.ID,
+		Reply:                rout.Reply{Success: true},
+		Provider:             def.ID,
+		InstallationID:       installationRec.ID,
+		HealthStatus:         "ok",
+		HealthSummary:        "Validation passed during configuration",
+		InstallationMetadata: installationRec.InstallationMetadata.Attributes,
 	}
 
 	var primaryWebhookURL string

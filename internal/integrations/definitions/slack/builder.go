@@ -33,13 +33,12 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:         slackCredential.ID(),
 					Name:        "Slack OAuth Credential",
-					Description: "OAuth credential used to access the Slack workspace.",
-					Schema:      slackCredentialSchema,
+					Description: "OAuth credential used to access the Slack workspace",
 				},
 				{
 					Ref:         slackBotTokenCredential.ID(),
 					Name:        "Slack Bot Token",
-					Description: "User-provisioned bot token from a custom Slack app.",
+					Description: "User-provisioned bot token from a custom Slack app",
 					Schema:      slackBotTokenCredentialSchema,
 				},
 			},
@@ -47,7 +46,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					CredentialRef:       slackCredential.ID(),
 					Name:                "Slack OAuth",
-					Description:         "Connect your Slack workspace using OAuth.",
+					Description:         "Connect your Slack workspace via OAuth",
 					CredentialRefs:      []types.CredentialSlotID{slackCredential.ID()},
 					ClientRefs:          []types.ClientID{slackClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
@@ -69,7 +68,7 @@ func Builder(cfg Config) registry.Builder {
 								"team:read",
 								"users:read",
 								"users:read.email",
-								"users:profile:read",
+								"users.profile:read",
 							},
 						},
 						Material: func(material auth.OAuthMaterial) (slackCred, error) {

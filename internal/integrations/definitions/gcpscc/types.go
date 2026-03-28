@@ -35,7 +35,7 @@ const (
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // CredentialSchema holds the GCP SCC credentials for one installation
@@ -101,4 +101,11 @@ type InstallationMetadata struct {
 	SourceIDs []string `json:"sourceIds,omitempty" jsonschema:"title=SCC Source IDs"`
 	// ServiceAccountEmail is the service account email extracted from the configured key when available
 	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty" jsonschema:"title=Service Account Email"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.OrganizationID,
+	}
 }

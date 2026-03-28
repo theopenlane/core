@@ -18,8 +18,6 @@ type OAuthRegistrationOptions[T any] struct {
 	Material func(OAuthMaterial) (T, error)
 	// TokenView derives the token view from the definition-local credential payload
 	TokenView func(T) (*types.TokenView, error)
-	// Refresh optionally refreshes the typed credential; when nil, refresh is a no-op that preserves the stored credential
-	Refresh func(context.Context, OAuthConfig, T) (T, error)
 	// EncodeCredentialError is returned when the typed credential cannot be serialized
 	EncodeCredentialError error
 	// DecodeCredentialError is returned when the stored credential cannot be deserialized
@@ -56,36 +54,6 @@ func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegis
 			return types.AuthCompleteResult{
 				Credential: types.CredentialSet{Data: data},
 			}, nil
-		},
-		Refresh: func(ctx context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
-			if opts.Refresh == nil {
-				return credential, nil
-			}
-
-			var typedCredential T
-			if err := jsonx.UnmarshalIfPresent(credential.Data, &typedCredential); err != nil {
-				if opts.DecodeCredentialError != nil {
-					return types.CredentialSet{}, opts.DecodeCredentialError
-				}
-
-				return types.CredentialSet{}, err
-			}
-
-			refreshedCredential, err := opts.Refresh(ctx, opts.Config, typedCredential)
-			if err != nil {
-				return types.CredentialSet{}, err
-			}
-
-			data, err := jsonx.ToRawMessage(refreshedCredential)
-			if err != nil {
-				if opts.EncodeCredentialError != nil {
-					return types.CredentialSet{}, opts.EncodeCredentialError
-				}
-
-				return types.CredentialSet{}, err
-			}
-
-			return types.CredentialSet{Data: data}, nil
 		},
 		TokenView: func(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
 			var typedCredential T

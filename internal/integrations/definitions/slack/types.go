@@ -15,7 +15,7 @@ var (
 	// installation is the typed installation metadata handle for the Slack definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the OAuth connection
-	slackCredentialSchema, slackCredential = providerkit.CredentialSchema[slackCred]()
+	_, slackCredential = providerkit.CredentialSchema[slackCred]()
 	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
 	slackBotTokenCredentialSchema, slackBotTokenCredential = providerkit.CredentialSchema[slackBotTokenCred]()
 	// slackClient is the client ref for the Slack Web API client used by this definition
@@ -47,7 +47,7 @@ type slackBotTokenCred struct {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // InstallationMetadata holds the stable Slack workspace identity for one installation
@@ -56,4 +56,12 @@ type InstallationMetadata struct {
 	TeamID string `json:"teamId,omitempty" jsonschema:"title=Team ID"`
 	// TeamName is the Slack workspace display name
 	TeamName string `json:"teamName,omitempty" jsonschema:"title=Team Name"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalName: m.TeamName,
+		ExternalID:   m.TeamID,
+	}
 }

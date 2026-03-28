@@ -371,9 +371,6 @@ func (f *fakeAuthFlow) registration(credentialRef types.CredentialSlotID) *types
 
 			return f.completeResult, f.completeErr
 		},
-		Refresh: func(_ context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
-			return credential, nil
-		},
 		TokenView: func(_ context.Context, _ types.CredentialSet) (*types.TokenView, error) {
 			return nil, nil
 		},

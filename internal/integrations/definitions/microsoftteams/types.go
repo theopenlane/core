@@ -37,11 +37,18 @@ type teamsCred struct {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // InstallationMetadata holds the stable Microsoft tenant identity for one Teams installation
 type InstallationMetadata struct {
 	// TenantID is the Microsoft Entra tenant identifier extracted from the access token when available
 	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.TenantID,
+	}
 }

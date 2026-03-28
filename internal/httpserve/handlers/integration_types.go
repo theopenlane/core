@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"time"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -35,10 +34,8 @@ type IntegrationOperationBody struct {
 
 // IntegrationOperationPayload is the request type for running an integration operation.
 type IntegrationOperationPayload struct {
-	// DefinitionID is the canonical integration definition ID from the path.
-	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
-	// IntegrationID scopes the operation to a specific installation record.
-	IntegrationID string `query:"integration_id,omitempty" description:"Optional installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// IntegrationID is the installation record to run the operation against.
+	IntegrationID string `param:"integrationID" description:"Integration installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// Body holds the operation name and optional configuration.
 	Body IntegrationOperationBody `json:"body"`
 }
@@ -50,24 +47,20 @@ type IntegrationConfigResponse struct {
 	Provider string `json:"provider"`
 	// InstallationID is the installation record ID that was created or updated.
 	InstallationID string `json:"installationId"`
+	// HealthStatus is the result of the inline validation health check.
+	// "ok" indicates the health check passed during configuration.
+	HealthStatus string `json:"healthStatus,omitempty"`
+	// HealthSummary is a human-readable description of the health check result.
+	HealthSummary string `json:"healthSummary,omitempty"`
+	// InstallationMetadata is the provider-specific installation identity metadata
+	// resolved during configuration (e.g. Slack team name, GitHub org, AWS account).
+	InstallationMetadata json.RawMessage `json:"installationMetadata,omitempty"`
 	// WebhookEndpointURL is the user-facing webhook or SCIM endpoint URL when the definition declares webhooks.
 	// This value is only populated on initial creation and should be captured by the caller.
 	WebhookEndpointURL string `json:"webhookEndpointUrl,omitempty"`
 	// WebhookSecret is the shared secret for authenticating inbound webhook or SCIM deliveries.
 	// This value is only populated on initial creation and should be captured by the caller.
 	WebhookSecret string `json:"webhookSecret,omitempty"`
-}
-
-// IntegrationTokenResponse is the response containing a refreshed integration access token.
-// Token fields are flattened directly onto the response.
-type IntegrationTokenResponse struct {
-	rout.Reply
-	// Provider is the integration definition ID.
-	Provider string `json:"provider"`
-	// AccessToken is the OAuth access token.
-	AccessToken string `json:"accessToken"`
-	// ExpiresAt is the token expiry timestamp when available.
-	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 }
 
 // IntegrationOperationResponse is the response after executing or queuing a provider operation.
@@ -135,31 +128,16 @@ var ExampleIntegrationAuthStartRequest = IntegrationAuthStartRequest{
 	DefinitionID: "def_01K0SLACK000000000000000001",
 }
 
-// RefreshInstallationCredentialRequest is the request for refreshing an installation's auth tokens.
-type RefreshInstallationCredentialRequest struct {
-	// InstallationID is the installation to refresh credentials for.
-	InstallationID string `param:"id" json:"installationId" description:"Installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-}
-
-// Validate validates the RefreshInstallationCredentialRequest.
-func (r *RefreshInstallationCredentialRequest) Validate() error {
-	if r.InstallationID == "" {
-		return rout.NewMissingRequiredFieldError("installationId")
-	}
-
-	return nil
-}
-
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 	DefinitionID: "def_01K0GCPSCC00000000000000001",
 	Body:         json.RawMessage(`{"organizationId":"123456789","serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
-// ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.
+// ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation
 var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
-	DefinitionID: "def_01K0GHAPP000000000000000001",
+	IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 	Body: IntegrationOperationBody{
-		Operation: "health.default",
+		Operation: "HealthCheck",
 	},
 }

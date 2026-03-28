@@ -30,7 +30,7 @@ var (
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 	// EnableGroupSync controls whether group and membership records are collected
 	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
 	// IncludeGuestUsers controls whether guest-type accounts are included in the sync
@@ -71,4 +71,12 @@ type InstallationMetadata struct {
 	DisplayName string `json:"displayName,omitempty" jsonschema:"title=Display Name"`
 	// VerifiedDomains is the list of verified domains for the tenant
 	VerifiedDomains []VerifiedDomain `json:"verifiedDomains,omitempty" jsonschema:"title=Verified Domains"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalName: m.DisplayName,
+		ExternalID:   m.TenantID,
+	}
 }

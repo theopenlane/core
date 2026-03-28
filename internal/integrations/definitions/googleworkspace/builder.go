@@ -34,7 +34,6 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         workspaceCredential.ID(),
 					Name:        "Google Workspace Credential",
 					Description: "OAuth credential used to access Google Workspace directory data.",
-					Schema:      workspaceCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -105,9 +104,9 @@ func Builder(cfg Config) registry.Builder {
 					Handle:       HealthCheck{}.Handle(),
 				},
 				{
-					Name:         DirectorySyncOperation.Name(),
+					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:        types.OperationTopic(definitionID.ID(), DirectorySyncOperation.Name()),
+					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
 					ClientRef:    workspaceClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Ingest: []types.IngestContract{

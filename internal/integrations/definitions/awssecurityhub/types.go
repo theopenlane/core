@@ -32,7 +32,7 @@ var (
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }
 
 // AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs shared by the service clients
@@ -83,4 +83,11 @@ type InstallationMetadata struct {
 	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
 	// UsesSourceCredential reports whether a static source credential is persisted alongside the assume-role configuration
 	UsesSourceCredential bool `json:"usesSourceCredential,omitempty" jsonschema:"title=Uses Source Credential"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.AccountID,
+	}
 }

@@ -118,6 +118,10 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 		insertOpts.MaxAttempts = envelope.Headers.MaxAttempts
 	}
 
+	if envelope.Headers.ScheduledAt != nil {
+		insertOpts.ScheduledAt = *envelope.Headers.ScheduledAt
+	}
+
 	meta, err := json.Marshal(riverJobMetadata{
 		Topic:      string(envelope.Topic),
 		EventID:    string(envelope.ID),

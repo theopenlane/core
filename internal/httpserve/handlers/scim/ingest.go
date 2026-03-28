@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	integrationops "github.com/theopenlane/core/internal/integrations/operations"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -20,7 +21,7 @@ const (
 )
 
 // ingestPayloadSets routes SCIM directory payloads through the standard ingest path
-func ingestPayloadSets(ctx context.Context, client *generated.Client, sr *SCIMRequest, payloadSets []integrationtypes.IngestPayloadSet) error {
+func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integrationsruntime.Runtime, installation *generated.Integration, payloadSets []integrationtypes.IngestPayloadSet) error {
 	contracts := make([]integrationtypes.IngestContract, 0, len(payloadSets))
 	for _, ps := range payloadSets {
 		contracts = append(contracts, integrationtypes.IngestContract{Schema: ps.Schema})
@@ -29,10 +30,10 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, sr *SCIMRe
 	return integrationops.ProcessPayloadSets(
 		ctx,
 		integrationops.IngestContext{
-			Registry:     sr.Runtime.Registry(),
+			Registry:     rt.Registry(),
 			DB:           client,
-			Runtime:      sr.Runtime.Gala(),
-			Installation: sr.Installation,
+			Runtime:      rt.Gala(),
+			Installation: installation,
 		},
 		contracts,
 		payloadSets,

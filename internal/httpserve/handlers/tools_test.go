@@ -435,7 +435,6 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 					CredentialRef: testAuthCredentialRef,
 					Start:         testAuthStart,
 					Complete:      testAuthComplete,
-					Refresh:       testAuthRefresh,
 					TokenView:     testAuthTokenView,
 				},
 				Disconnect: &types.DisconnectRegistration{
@@ -488,22 +487,6 @@ func testAuthComplete(_ context.Context, callbackState json.RawMessage, input ty
 			Data: tokenData,
 		},
 	}, nil
-}
-
-func testAuthRefresh(_ context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
-	if len(credential.Data) == 0 {
-		return types.CredentialSet{}, errors.New("missing credential data")
-	}
-
-	expiry := time.Now().Add(2 * time.Hour)
-
-	refreshedData, _ := json.Marshal(map[string]any{
-		"access_token":  "refreshed-access-token",
-		"refresh_token": "test-refresh-token",
-		"expiry":        expiry,
-	})
-
-	return types.CredentialSet{Data: refreshedData}, nil
 }
 
 func testAuthTokenView(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {

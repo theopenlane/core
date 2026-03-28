@@ -249,7 +249,13 @@ func (r InstallationRef[T]) Resolve(ctx context.Context, req InstallationRequest
 		return IntegrationInstallationMetadata{}, false, err
 	}
 
-	return IntegrationInstallationMetadata{Attributes: raw}, true, nil
+	meta := IntegrationInstallationMetadata{Attributes: raw}
+
+	if identifiable, ok := any(typed).(InstallationIdentifiable); ok {
+		meta.Display = identifiable.InstallationIdentity()
+	}
+
+	return meta, true, nil
 }
 
 // Registration adapts the typed ref to the InstallationRegistration contract for use in a connection builder

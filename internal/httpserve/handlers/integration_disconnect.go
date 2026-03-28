@@ -35,7 +35,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapi)
 	}
 
-	record, err := h.IntegrationsRuntime.ResolveInstallation(userCtx, caller.OrganizationID, in.IntegrationID)
+	record, err := h.IntegrationsRuntime.ResolveIntegration(userCtx, caller.OrganizationID, in.IntegrationID, "")
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
@@ -43,7 +43,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(record.DefinitionID)
 	if !ok {
-		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
 	}
 
 	result, err := h.IntegrationsRuntime.Disconnect(userCtx, record)

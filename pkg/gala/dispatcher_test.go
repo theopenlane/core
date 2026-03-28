@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
@@ -292,6 +293,61 @@ func TestRiverDispatcherPassesHeaderMaxAttempts(t *testing.T) {
 
 	if client.lastOpts == nil || client.lastOpts.MaxAttempts != 7 {
 		t.Fatalf("expected max attempts override, got %#v", client.lastOpts)
+	}
+}
+
+func TestRiverDispatcherPassesHeaderScheduledAt(t *testing.T) {
+	client := &riverTestInsertClient{}
+	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+
+	scheduledAt := time.Date(2026, 4, 1, 12, 0, 0, 0, time.UTC)
+
+	envelope := Envelope{
+		ID:      NewEventID(),
+		Topic:   TopicName("gala.test.scheduled_at"),
+		Payload: []byte(`{"message":"hello"}`),
+		Headers: Headers{
+			ScheduledAt: &scheduledAt,
+		},
+	}
+
+	err = dispatcher.Dispatch(context.Background(), envelope)
+	if err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if client.lastOpts == nil || !client.lastOpts.ScheduledAt.Equal(scheduledAt) {
+		t.Fatalf("expected ScheduledAt %v, got %v", scheduledAt, client.lastOpts.ScheduledAt)
+	}
+}
+
+func TestRiverDispatcherOmitsScheduledAtWhenNil(t *testing.T) {
+	client := &riverTestInsertClient{}
+	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+
+	envelope := Envelope{
+		ID:      NewEventID(),
+		Topic:   TopicName("gala.test.no_scheduled_at"),
+		Payload: []byte(`{"message":"hello"}`),
+	}
+
+	err = dispatcher.Dispatch(context.Background(), envelope)
+	if err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if client.lastOpts == nil {
+		t.Fatal("expected insert opts to be set")
+	}
+
+	if !client.lastOpts.ScheduledAt.IsZero() {
+		t.Fatalf("expected zero ScheduledAt, got %v", client.lastOpts.ScheduledAt)
 	}
 }
 

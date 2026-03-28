@@ -41,7 +41,6 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         gitHubAppCredential.ID(),
 					Name:        "GitHub App Credential",
 					Description: "Installation credential managed by the GitHub App install flow.",
-					Schema:      gitHubAppCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -60,9 +59,6 @@ func Builder(cfg Config) registry.Builder {
 						},
 						Complete: func(ctx context.Context, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
 							return completeAppInstall(ctx, cfg, state, input)
-						},
-						Refresh: func(ctx context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
-							return refreshAppInstall(ctx, cfg, credential)
 						},
 						TokenView: tokenViewAppInstall,
 					},

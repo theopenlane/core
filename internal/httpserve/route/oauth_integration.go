@@ -48,27 +48,6 @@ func registerIntegrationAuthCallbackHandler(router *Router) error {
 	return router.AddV1HandlerRoute(config)
 }
 
-// registerRefreshIntegrationTokenHandler registers the handler to refresh integration tokens
-func registerRefreshIntegrationTokenHandler(router *Router) error {
-	if !integrationsEnabled(router) {
-		return nil
-	}
-
-	config := Config{
-		Path:        "/integrations/:definitionID/refresh",
-		Method:      http.MethodPost,
-		Name:        "RefreshIntegrationToken",
-		Description: "Refresh integration token",
-		Tags:        []string{"integrations"},
-		OperationID: "RefreshIntegrationToken",
-		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.RefreshIntegrationTokenHandler,
-	}
-
-	return router.AddV1HandlerRoute(config)
-}
-
 func registerIntegrationConfigHandler(router *Router) error {
 	if !integrationsEnabled(router) {
 		return nil
@@ -110,13 +89,34 @@ func registerIntegrationProvidersHandler(router *Router) error {
 	return router.AddV1HandlerRoute(config)
 }
 
+// registerIntegrationDisconnectHandler registers the handler to disconnect an installed integration
+func registerIntegrationDisconnectHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
+	config := Config{
+		Path:        "/integrations/:integrationID/disconnect",
+		Method:      http.MethodPost,
+		Name:        "DisconnectIntegration",
+		Description: "Disconnect an installed integration and clean up credentials",
+		Tags:        []string{"integrations"},
+		OperationID: "DisconnectIntegration",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.DisconnectIntegration,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}
+
 func registerIntegrationOperationHandler(router *Router) error {
 	if !integrationsEnabled(router) {
 		return nil
 	}
 
 	config := Config{
-		Path:        "/integrations/:definitionID/operations/run",
+		Path:        "/integrations/:integrationID/operations/run",
 		Method:      http.MethodPost,
 		Name:        "RunIntegrationOperation",
 		Description: "Execute a provider operation using stored credentials",

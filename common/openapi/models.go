@@ -2174,19 +2174,6 @@ type DeleteIntegrationRequest struct {
 	ID string `param:"id" description:"Integration ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// RefreshIntegrationTokenRequest is the request for refreshing integration tokens
-type RefreshIntegrationTokenRequest struct {
-	// Provider is the provider value.
-	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
-	// IntegrationID scopes refresh to a specific installed integration record.
-	IntegrationID string `query:"integration_id" description:"Optional integration ID for scoped token refresh" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-}
-
-// ExampleRefreshIntegrationTokenRequest is an example refresh integration token request for OpenAPI documentation
-var ExampleRefreshIntegrationTokenRequest = RefreshIntegrationTokenRequest{
-	Provider: "github",
-}
-
 // GetIntegrationStatusRequest is the request for checking integration status
 type GetIntegrationStatusRequest struct {
 	// Provider is the provider value.
@@ -2208,16 +2195,6 @@ func (r *DeleteIntegrationRequest) Validate() error {
 	r.ID = strings.TrimSpace(r.ID)
 	if r.ID == "" {
 		return errIntegrationIDRequired
-	}
-
-	return nil
-}
-
-// Validate validates the RefreshIntegrationTokenRequest
-func (r *RefreshIntegrationTokenRequest) Validate() error {
-	r.Provider = strings.TrimSpace(r.Provider)
-	if r.Provider == "" {
-		return errProviderRequired
 	}
 
 	return nil

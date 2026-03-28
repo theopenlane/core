@@ -9,11 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// ResolveInstallation resolves an integration by owner and integration ID
-func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, integrationID string) (*ent.Integration, error) {
-	return r.ResolveIntegration(ctx, ownerID, integrationID, "")
-}
-
 // ResolveIntegration resolves one integration by explicit ID with an optional definition cross-check
 func (r *Runtime) ResolveIntegration(ctx context.Context, ownerID, integrationID, definitionID string) (*ent.Integration, error) {
 	if integrationID == "" {

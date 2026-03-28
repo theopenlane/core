@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/oauth2"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
+	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -20,90 +20,6 @@ type testCredential struct {
 }
 
 var errDecodeTestCredential = errors.New("test: decode credential failed")
-
-// unmarshalableCredential always fails json.Marshal
-type unmarshalableCredential struct {
-	Bad chan struct{} `json:"bad"`
-}
-
-var errEncodeTestCredential = errors.New("test: encode credential failed")
-
-func TestOAuthRegistrationRefreshNilNoOp(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{AccessToken: mat.AccessToken}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{"access_token":"stored"}`)}
-
-	result, err := reg.Refresh(context.Background(), stored)
-	if err != nil {
-		t.Fatalf("Refresh() error = %v", err)
-	}
-
-	if string(result.Data) != string(stored.Data) {
-		t.Fatalf("Refresh() = %s, want %s", result.Data, stored.Data)
-	}
-}
-
-func TestOAuthRegistrationRefreshCallsRefreshFunc(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{AccessToken: mat.AccessToken}, nil
-		},
-		Refresh: func(_ context.Context, _ OAuthConfig, cred testCredential) (testCredential, error) {
-			return testCredential{AccessToken: "refreshed-" + cred.AccessToken}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{"access_token":"original","refresh_token":"rt"}`)}
-
-	result, err := reg.Refresh(context.Background(), stored)
-	if err != nil {
-		t.Fatalf("Refresh() error = %v", err)
-	}
-
-	var out testCredential
-	if err := json.Unmarshal(result.Data, &out); err != nil {
-		t.Fatalf("Unmarshal() error = %v", err)
-	}
-
-	if out.AccessToken != "refreshed-original" {
-		t.Fatalf("Refresh() access_token = %q, want %q", out.AccessToken, "refreshed-original")
-	}
-}
-
-func TestOAuthRegistrationRefreshBadStoredCredential(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef:         types.NewCredentialRef[testCredential]("test"),
-		Config:                testOAuthCfg,
-		DecodeCredentialError: errDecodeTestCredential,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-		Refresh: func(_ context.Context, _ OAuthConfig, cred testCredential) (testCredential, error) {
-			return cred, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{invalid`)}
-
-	_, err := reg.Refresh(context.Background(), stored)
-	if !errors.Is(err, errDecodeTestCredential) {
-		t.Fatalf("Refresh() error = %v, want %v", err, errDecodeTestCredential)
-	}
-}
 
 func TestOAuthRegistrationTokenViewReturnsToken(t *testing.T) {
 	t.Parallel()
@@ -341,52 +257,6 @@ func TestOAuthRegistrationCompleteCodeExchangeError(t *testing.T) {
 	}
 }
 
-func TestOAuthRegistrationRefreshFuncError(t *testing.T) {
-	t.Parallel()
-
-	errRefreshFailed := errors.New("test: refresh failed")
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-		Refresh: func(context.Context, OAuthConfig, testCredential) (testCredential, error) {
-			return testCredential{}, errRefreshFailed
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{"access_token":"at"}`)}
-
-	_, err := reg.Refresh(context.Background(), stored)
-	if !errors.Is(err, errRefreshFailed) {
-		t.Fatalf("Refresh() error = %v, want %v", err, errRefreshFailed)
-	}
-}
-
-func TestOAuthRegistrationRefreshBadCredentialNoCustomError(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-		Refresh: func(context.Context, OAuthConfig, testCredential) (testCredential, error) {
-			return testCredential{}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{invalid`)}
-
-	_, err := reg.Refresh(context.Background(), stored)
-	if err == nil {
-		t.Fatal("Refresh() expected error for invalid credential, got nil")
-	}
-}
-
 func TestOAuthRegistrationTokenViewBadCredentialCustomError(t *testing.T) {
 	t.Parallel()
 
@@ -429,52 +299,6 @@ func TestOAuthRegistrationTokenViewBadCredentialNoCustomError(t *testing.T) {
 	_, err := reg.TokenView(context.Background(), stored)
 	if err == nil {
 		t.Fatal("TokenView() expected error for invalid credential, got nil")
-	}
-}
-
-func TestOAuthRegistrationRefreshEncodeErrorCustom(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[unmarshalableCredential]{
-		CredentialRef:          types.NewCredentialRef[unmarshalableCredential]("test"),
-		Config:                 testOAuthCfg,
-		EncodeCredentialError:  errEncodeTestCredential,
-		Material: func(OAuthMaterial) (unmarshalableCredential, error) {
-			return unmarshalableCredential{}, nil
-		},
-		Refresh: func(context.Context, OAuthConfig, unmarshalableCredential) (unmarshalableCredential, error) {
-			return unmarshalableCredential{}, nil
-		},
-	})
-
-	// Valid JSON that decodes to unmarshalableCredential (bad field ignored), but re-encoding fails
-	stored := types.CredentialSet{Data: json.RawMessage(`{}`)}
-
-	_, err := reg.Refresh(context.Background(), stored)
-	if !errors.Is(err, errEncodeTestCredential) {
-		t.Fatalf("Refresh() error = %v, want %v", err, errEncodeTestCredential)
-	}
-}
-
-func TestOAuthRegistrationRefreshEncodeErrorNoCustom(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[unmarshalableCredential]{
-		CredentialRef: types.NewCredentialRef[unmarshalableCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(OAuthMaterial) (unmarshalableCredential, error) {
-			return unmarshalableCredential{}, nil
-		},
-		Refresh: func(context.Context, OAuthConfig, unmarshalableCredential) (unmarshalableCredential, error) {
-			return unmarshalableCredential{}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{}`)}
-
-	_, err := reg.Refresh(context.Background(), stored)
-	if err == nil {
-		t.Fatal("Refresh() expected encode error, got nil")
 	}
 }
 

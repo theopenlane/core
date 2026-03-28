@@ -10,16 +10,16 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
 	// SCIMAuthWebhook is the stable identity handle for the SCIM authentication webhook
 	SCIMAuthWebhook = types.NewWebhookRef("scim.auth")
-	// DirectorySyncOperation is the stable identity handle for the SCIM directory sync operation
-	directorySyncSchema, DirectorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-
+	// directorySyncSchema is the operation ref for the SCIM directory sync operation
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// healthCheckSchema is the operation ref for the SCIM health check operation
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 )
 
 // UserInput captures optional user-provided configuration for the SCIM integration
 type UserInput struct {
 	// Name is the human-readable label for this SCIM directory (e.g. "Okta Production")
-	Name string `json:"name,omitempty" jsonschema:"title=Directory Name,description=Human-readable label for this SCIM directory."`
+	Name string `json:"name,omitempty" jsonschema:"required,title=Directory Name,description=Human-readable label for this SCIM directory."`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }

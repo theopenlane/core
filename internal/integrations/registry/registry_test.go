@@ -485,8 +485,10 @@ func TestIndexWebhooksEventHandlerRequired(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noevthandler"},
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
-				Name:  "hooks",
-				Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) { return integrationtypes.WebhookReceivedEvent{}, nil },
+				Name: "hooks",
+				Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
+					return integrationtypes.WebhookReceivedEvent{}, nil
+				},
 				Events: []integrationtypes.WebhookEventRegistration{
 					{Name: "push", Topic: gala.TopicName("push")},
 				},
@@ -509,8 +511,10 @@ func TestWebhookRegistrationAndLookup(t *testing.T) {
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_webhooks"},
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
-				Name:  "github",
-				Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) { return integrationtypes.WebhookReceivedEvent{}, nil },
+				Name: "github",
+				Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
+					return integrationtypes.WebhookReceivedEvent{}, nil
+				},
 				Events: []integrationtypes.WebhookEventRegistration{
 					{
 						Name:   "push",

@@ -12,8 +12,8 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
 	// installation is the typed installation metadata handle for the GitHub App definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// gitHubAppCredentialSchema is the credential schema for GitHub App credentials
-	gitHubAppCredentialSchema, gitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
+	// gitHubAppCredential is the credential schema for GitHub App credentials
+	_, gitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	gitHubClient = types.NewClientRef[GraphQLClient]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
@@ -64,11 +64,18 @@ type githubAppCredential struct {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes
 type InstallationMetadata struct {
 	// InstallationID is the GitHub App installation identifier
 	InstallationID string `json:"installationId,omitempty" jsonschema:"title=installation ID"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.InstallationID,
+	}
 }

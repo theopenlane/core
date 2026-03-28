@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // BeginAuth starts one definition auth flow through the runtime-managed keymaker service
@@ -180,9 +181,47 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 	return r.saveInstallationMetadata(systemCtx, installation, metadata)
 }
 
-// saveInstallationMetadata persists installation metadata for one installation
+// saveInstallationMetadata persists installation metadata and syncs the normalized
+// display identity into the GraphQL-visible metadata map
 func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
-	return r.DB().Integration.UpdateOneID(installation.ID).SetInstallationMetadata(metadata).Exec(ctx)
+	displayMeta := displayMetadataOverlay(metadata.Display)
+	merged := mapx.DeepMergeMapAny(installation.Metadata, displayMeta)
+
+	if err := r.DB().Integration.UpdateOneID(installation.ID).
+		SetInstallationMetadata(metadata).
+		SetMetadata(merged).
+		Exec(ctx); err != nil {
+		return err
+	}
+
+	installation.InstallationMetadata = metadata
+	installation.Metadata = merged
+
+	return nil
+}
+
+// displayMetadataOverlay converts the normalized identity into a map overlay
+// suitable for merging into the GraphQL-visible metadata field
+func displayMetadataOverlay(display types.IntegrationInstallationIdentity) map[string]any {
+	overlay := make(map[string]any)
+
+	if display.ExternalName != "" {
+		overlay["externalName"] = display.ExternalName
+	}
+
+	if display.ExternalID != "" {
+		overlay["externalId"] = display.ExternalID
+	}
+
+	if display.CredentialRef != "" {
+		overlay["credentialRef"] = display.CredentialRef
+	}
+
+	if display.LastSuccessfulHealthCheck != "" {
+		overlay["lastSuccessfulHealthCheck"] = display.LastSuccessfulHealthCheck
+	}
+
+	return overlay
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -232,8 +271,10 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
+	var metadata types.IntegrationInstallationMetadata
+
 	if connection.Installation != nil {
-		metadata, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
+		resolved, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
 			Installation: installation,
 			Connection:   connection,
 			Credentials:  bindings,
@@ -244,14 +285,18 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 			return err
 		}
 
-		if !ok {
-			metadata = types.IntegrationInstallationMetadata{}
-		}
-
-		if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
-			return err
+		if ok {
+			metadata = resolved
 		}
 	}
+
+	metadata.Display.CredentialRef = credentialRef.String()
+
+	if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
+		return err
+	}
+
+	wasFirstConnection := installation.Status == enums.IntegrationStatusPending
 
 	if err := r.DB().Integration.UpdateOneID(installation.ID).
 		SetStatus(enums.IntegrationStatusConnected).
@@ -261,7 +306,17 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	installation.Status = enums.IntegrationStatusConnected
 
-	return r.reconcileInstallationWebhooks(systemCtx, installation, "")
+	if err := r.reconcileInstallationWebhooks(systemCtx, installation, ""); err != nil {
+		return err
+	}
+
+	if wasFirstConnection {
+		if err := r.ReconcileOperations(systemCtx, installation); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // resolveConnectionFromState resolves the connection persisted in provider state for an installation

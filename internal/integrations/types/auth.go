@@ -74,9 +74,6 @@ type AuthStartFunc func(ctx context.Context, input json.RawMessage) (AuthStartRe
 // AuthCompleteFunc finalizes an auth flow and returns the resulting credential
 type AuthCompleteFunc func(ctx context.Context, state json.RawMessage, input AuthCallbackInput) (AuthCompleteResult, error)
 
-// AuthRefreshFunc refreshes a persisted credential and returns the updated credential
-type AuthRefreshFunc func(ctx context.Context, credential CredentialSet) (CredentialSet, error)
-
 // AuthTokenViewFunc produces a read-only token view from a persisted credential
 type AuthTokenViewFunc func(ctx context.Context, credential CredentialSet) (*TokenView, error)
 
@@ -88,8 +85,6 @@ type AuthRegistration struct {
 	Start AuthStartFunc `json:"-"`
 	// Complete finalizes the auth flow and returns the resulting credential
 	Complete AuthCompleteFunc `json:"-"`
-	// Refresh refreshes a persisted credential
-	Refresh AuthRefreshFunc `json:"-"`
 	// TokenView produces a read-only token view from a persisted credential
 	TokenView AuthTokenViewFunc `json:"-"`
 }

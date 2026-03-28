@@ -60,15 +60,14 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		Operation:          req.Operation,
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
-		WorkflowMeta:       req.WorkflowMeta,
-	}, gala.Headers{
-		IdempotencyKey: runRecord.ID,
-		Properties: map[string]string{
-			"installation_id": installationRecord.ID,
-			"definition_id":   installationRecord.DefinitionID,
-			"operation":       req.Operation,
-		},
-	})
+		WorkflowMeta:       req.WorkflowMeta},
+		gala.Headers{IdempotencyKey: runRecord.ID,
+			Properties: map[string]string{
+				"installation_id": installationRecord.ID,
+				"definition_id":   installationRecord.DefinitionID,
+				"operation":       req.Operation,
+			},
+		})
 	if receipt.Err != nil {
 		if completeErr := CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
 			Status:  enums.IntegrationRunStatusFailed,

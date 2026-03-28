@@ -25,9 +25,9 @@ var (
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// AccountID is the Cloudflare account identifier used for account-scoped API calls
-	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID,description=Cloudflare account ID required for listing account members."`
+	AccountID string `json:"accountId,omitempty" jsonschema:"required,title=Account ID,description=Cloudflare account ID required for listing account members."`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }
 
 // CredentialSchema holds the Cloudflare API credentials for one installation
@@ -40,4 +40,11 @@ type CredentialSchema struct {
 type InstallationMetadata struct {
 	// AccountID is the Cloudflare account identifier used for account-scoped collection
 	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.AccountID,
+	}
 }

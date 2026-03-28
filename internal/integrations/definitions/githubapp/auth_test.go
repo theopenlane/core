@@ -173,18 +173,6 @@ func TestFlowTokenViewEmptyData(t *testing.T) {
 	require.Nil(t, view.ExpiresAt)
 }
 
-// TestFlowRefreshMissingInstallationID verifies Refresh fails when credential has no installation ID
-func TestFlowRefreshMissingInstallationID(t *testing.T) {
-	t.Parallel()
-
-	cred := githubAppCredential{AppID: 1, AccessToken: "old"}
-	data, err := jsonx.ToRawMessage(cred)
-	require.NoError(t, err)
-
-	_, err = refreshAppInstall(context.Background(), Config{AppID: "1", PrivateKey: testPrivateKey(t)}, types.CredentialSet{Data: data})
-	require.ErrorIs(t, err, ErrInstallationIDMissing)
-}
-
 // TestFlowCompleteURLPath verifies the installation token request hits the expected API path
 func TestFlowCompleteURLPath(t *testing.T) {
 	t.Parallel()

@@ -174,7 +174,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule()); err != nil {
 		return nil, err
 	}
 
