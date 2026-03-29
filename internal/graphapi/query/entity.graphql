@@ -108,6 +108,9 @@ query GetAllEntities {
         createdBy
         description
         displayName
+        lastReviewedAt
+        reviewedBy
+        nextReviewAt
         status
         domains
         notes {
@@ -144,6 +147,9 @@ query GetEntities($where: EntityWhereInput) {
         displayName
         status
         domains
+        lastReviewedAt
+        reviewedBy
+        nextReviewAt
         notes {
           edges {
             node {
@@ -174,6 +180,9 @@ query GetEntityByID($entityId: ID!) {
     createdBy
     description
     displayName
+    lastReviewedAt
+    reviewedBy
+    nextReviewAt
     status
     domains
     notes {
@@ -218,6 +227,9 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
       createdBy
       description
       displayName
+      lastReviewedAt
+      reviewedBy
+      nextReviewAt
       status
       domains
       notes {
