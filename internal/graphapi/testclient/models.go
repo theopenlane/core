@@ -6263,6 +6263,8 @@ type CreateDirectoryAccountInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_account
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directoryName,omitempty"`
 	// stable identifier from the directory system
@@ -6297,12 +6299,22 @@ type CreateDirectoryAccountInput struct {
 	LastSeenIP *string `json:"lastSeenIP,omitempty"`
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt *time.Time `json:"lastLoginAt,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt *time.Time `json:"observedAt,omitempty"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion        *string  `json:"sourceVersion,omitempty"`
 	OwnerID              *string  `json:"ownerID,omitempty"`
@@ -6327,6 +6339,8 @@ type CreateDirectoryGroupInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_group
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"externalID"`
 	// primary group email address, when applicable
@@ -6343,12 +6357,22 @@ type CreateDirectoryGroupInput struct {
 	ExternalSharingAllowed *bool `json:"externalSharingAllowed,omitempty"`
 	// member count reported by the directory
 	MemberCount *int64 `json:"memberCount,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt *time.Time `json:"observedAt,omitempty"`
 	// hash of the normalized payload for diffing
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion        *string  `json:"sourceVersion,omitempty"`
 	OwnerID              *string  `json:"ownerID,omitempty"`
@@ -6367,14 +6391,20 @@ type CreateDirectoryMembershipInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_membership
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// membership role reported by the provider
 	Role *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	// mechanism used to populate the membership (api, scim, csv, etc)
 	Source *string `json:"source,omitempty"`
 	// first time the membership was detected
 	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this record was created
 	ObservedAt *time.Time `json:"observedAt,omitempty"`
 	// sync run identifier that most recently confirmed this membership
@@ -6400,6 +6430,8 @@ type CreateDirectorySyncRunInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_sync_run
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// current state of the sync run
 	Status *enums.DirectorySyncRunStatus `json:"status,omitempty"`
 	// time the sync started
@@ -10184,6 +10216,8 @@ type DirectoryAccount struct {
 	DirectorySyncRunID *string `json:"directorySyncRunID,omitempty"`
 	// optional platform associated with this directory account
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// deduplicated identity holder linked to this directory account
 	IdentityHolderID *string `json:"identityHolderID,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
@@ -10222,12 +10256,22 @@ type DirectoryAccount struct {
 	LastSeenIP *string `json:"lastSeenIP,omitempty"`
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt *time.Time `json:"lastLoginAt,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt time.Time `json:"observedAt"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash string `json:"profileHash"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// object storage file identifier that holds the raw upstream payload
 	RawProfileFileID *string `json:"rawProfileFileID,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
@@ -10516,6 +10560,22 @@ type DirectoryAccountWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// identity_holder_id field predicates
 	IdentityHolderID             *string  `json:"identityHolderID,omitempty"`
 	IdentityHolderIdneq          *string  `json:"identityHolderIDNEQ,omitempty"`
@@ -10777,6 +10837,50 @@ type DirectoryAccountWhereInput struct {
 	LastLoginAtLte    *time.Time   `json:"lastLoginAtLTE,omitempty"`
 	LastLoginAtIsNil  *bool        `json:"lastLoginAtIsNil,omitempty"`
 	LastLoginAtNotNil *bool        `json:"lastLoginAtNotNil,omitempty"`
+	// first_seen_at field predicates
+	FirstSeenAt       *time.Time   `json:"firstSeenAt,omitempty"`
+	FirstSeenAtNeq    *time.Time   `json:"firstSeenAtNEQ,omitempty"`
+	FirstSeenAtIn     []*time.Time `json:"firstSeenAtIn,omitempty"`
+	FirstSeenAtNotIn  []*time.Time `json:"firstSeenAtNotIn,omitempty"`
+	FirstSeenAtGt     *time.Time   `json:"firstSeenAtGT,omitempty"`
+	FirstSeenAtGte    *time.Time   `json:"firstSeenAtGTE,omitempty"`
+	FirstSeenAtLt     *time.Time   `json:"firstSeenAtLT,omitempty"`
+	FirstSeenAtLte    *time.Time   `json:"firstSeenAtLTE,omitempty"`
+	FirstSeenAtIsNil  *bool        `json:"firstSeenAtIsNil,omitempty"`
+	FirstSeenAtNotNil *bool        `json:"firstSeenAtNotNil,omitempty"`
+	// last_seen_at field predicates
+	LastSeenAt       *time.Time   `json:"lastSeenAt,omitempty"`
+	LastSeenAtNeq    *time.Time   `json:"lastSeenAtNEQ,omitempty"`
+	LastSeenAtIn     []*time.Time `json:"lastSeenAtIn,omitempty"`
+	LastSeenAtNotIn  []*time.Time `json:"lastSeenAtNotIn,omitempty"`
+	LastSeenAtGt     *time.Time   `json:"lastSeenAtGT,omitempty"`
+	LastSeenAtGte    *time.Time   `json:"lastSeenAtGTE,omitempty"`
+	LastSeenAtLt     *time.Time   `json:"lastSeenAtLT,omitempty"`
+	LastSeenAtLte    *time.Time   `json:"lastSeenAtLTE,omitempty"`
+	LastSeenAtIsNil  *bool        `json:"lastSeenAtIsNil,omitempty"`
+	LastSeenAtNotNil *bool        `json:"lastSeenAtNotNil,omitempty"`
+	// added_at field predicates
+	AddedAt       *time.Time   `json:"addedAt,omitempty"`
+	AddedAtNeq    *time.Time   `json:"addedAtNEQ,omitempty"`
+	AddedAtIn     []*time.Time `json:"addedAtIn,omitempty"`
+	AddedAtNotIn  []*time.Time `json:"addedAtNotIn,omitempty"`
+	AddedAtGt     *time.Time   `json:"addedAtGT,omitempty"`
+	AddedAtGte    *time.Time   `json:"addedAtGTE,omitempty"`
+	AddedAtLt     *time.Time   `json:"addedAtLT,omitempty"`
+	AddedAtLte    *time.Time   `json:"addedAtLTE,omitempty"`
+	AddedAtIsNil  *bool        `json:"addedAtIsNil,omitempty"`
+	AddedAtNotNil *bool        `json:"addedAtNotNil,omitempty"`
+	// removed_at field predicates
+	RemovedAt       *time.Time   `json:"removedAt,omitempty"`
+	RemovedAtNeq    *time.Time   `json:"removedAtNEQ,omitempty"`
+	RemovedAtIn     []*time.Time `json:"removedAtIn,omitempty"`
+	RemovedAtNotIn  []*time.Time `json:"removedAtNotIn,omitempty"`
+	RemovedAtGt     *time.Time   `json:"removedAtGT,omitempty"`
+	RemovedAtGte    *time.Time   `json:"removedAtGTE,omitempty"`
+	RemovedAtLt     *time.Time   `json:"removedAtLT,omitempty"`
+	RemovedAtLte    *time.Time   `json:"removedAtLTE,omitempty"`
+	RemovedAtIsNil  *bool        `json:"removedAtIsNil,omitempty"`
+	RemovedAtNotNil *bool        `json:"removedAtNotNil,omitempty"`
 	// observed_at field predicates
 	ObservedAt      *time.Time   `json:"observedAt,omitempty"`
 	ObservedAtNeq   *time.Time   `json:"observedAtNEQ,omitempty"`
@@ -10880,6 +10984,8 @@ type DirectoryGroup struct {
 	IntegrationID string `json:"integrationID"`
 	// optional platform associated with this directory group
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// stable identifier from the directory system
@@ -10898,12 +11004,22 @@ type DirectoryGroup struct {
 	ExternalSharingAllowed *bool `json:"externalSharingAllowed,omitempty"`
 	// member count reported by the directory
 	MemberCount *int64 `json:"memberCount,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt time.Time `json:"observedAt"`
 	// hash of the normalized payload for diffing
 	ProfileHash string `json:"profileHash"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// object storage file identifier containing the raw upstream payload
 	RawProfileFileID *string `json:"rawProfileFileID,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
@@ -11169,6 +11285,22 @@ type DirectoryGroupWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// directory_sync_run_id field predicates
 	DirectorySyncRunID             *string  `json:"directorySyncRunID,omitempty"`
 	DirectorySyncRunIdneq          *string  `json:"directorySyncRunIDNEQ,omitempty"`
@@ -11255,6 +11387,50 @@ type DirectoryGroupWhereInput struct {
 	MemberCountLte    *int64  `json:"memberCountLTE,omitempty"`
 	MemberCountIsNil  *bool   `json:"memberCountIsNil,omitempty"`
 	MemberCountNotNil *bool   `json:"memberCountNotNil,omitempty"`
+	// first_seen_at field predicates
+	FirstSeenAt       *time.Time   `json:"firstSeenAt,omitempty"`
+	FirstSeenAtNeq    *time.Time   `json:"firstSeenAtNEQ,omitempty"`
+	FirstSeenAtIn     []*time.Time `json:"firstSeenAtIn,omitempty"`
+	FirstSeenAtNotIn  []*time.Time `json:"firstSeenAtNotIn,omitempty"`
+	FirstSeenAtGt     *time.Time   `json:"firstSeenAtGT,omitempty"`
+	FirstSeenAtGte    *time.Time   `json:"firstSeenAtGTE,omitempty"`
+	FirstSeenAtLt     *time.Time   `json:"firstSeenAtLT,omitempty"`
+	FirstSeenAtLte    *time.Time   `json:"firstSeenAtLTE,omitempty"`
+	FirstSeenAtIsNil  *bool        `json:"firstSeenAtIsNil,omitempty"`
+	FirstSeenAtNotNil *bool        `json:"firstSeenAtNotNil,omitempty"`
+	// last_seen_at field predicates
+	LastSeenAt       *time.Time   `json:"lastSeenAt,omitempty"`
+	LastSeenAtNeq    *time.Time   `json:"lastSeenAtNEQ,omitempty"`
+	LastSeenAtIn     []*time.Time `json:"lastSeenAtIn,omitempty"`
+	LastSeenAtNotIn  []*time.Time `json:"lastSeenAtNotIn,omitempty"`
+	LastSeenAtGt     *time.Time   `json:"lastSeenAtGT,omitempty"`
+	LastSeenAtGte    *time.Time   `json:"lastSeenAtGTE,omitempty"`
+	LastSeenAtLt     *time.Time   `json:"lastSeenAtLT,omitempty"`
+	LastSeenAtLte    *time.Time   `json:"lastSeenAtLTE,omitempty"`
+	LastSeenAtIsNil  *bool        `json:"lastSeenAtIsNil,omitempty"`
+	LastSeenAtNotNil *bool        `json:"lastSeenAtNotNil,omitempty"`
+	// added_at field predicates
+	AddedAt       *time.Time   `json:"addedAt,omitempty"`
+	AddedAtNeq    *time.Time   `json:"addedAtNEQ,omitempty"`
+	AddedAtIn     []*time.Time `json:"addedAtIn,omitempty"`
+	AddedAtNotIn  []*time.Time `json:"addedAtNotIn,omitempty"`
+	AddedAtGt     *time.Time   `json:"addedAtGT,omitempty"`
+	AddedAtGte    *time.Time   `json:"addedAtGTE,omitempty"`
+	AddedAtLt     *time.Time   `json:"addedAtLT,omitempty"`
+	AddedAtLte    *time.Time   `json:"addedAtLTE,omitempty"`
+	AddedAtIsNil  *bool        `json:"addedAtIsNil,omitempty"`
+	AddedAtNotNil *bool        `json:"addedAtNotNil,omitempty"`
+	// removed_at field predicates
+	RemovedAt       *time.Time   `json:"removedAt,omitempty"`
+	RemovedAtNeq    *time.Time   `json:"removedAtNEQ,omitempty"`
+	RemovedAtIn     []*time.Time `json:"removedAtIn,omitempty"`
+	RemovedAtNotIn  []*time.Time `json:"removedAtNotIn,omitempty"`
+	RemovedAtGt     *time.Time   `json:"removedAtGT,omitempty"`
+	RemovedAtGte    *time.Time   `json:"removedAtGTE,omitempty"`
+	RemovedAtLt     *time.Time   `json:"removedAtLT,omitempty"`
+	RemovedAtLte    *time.Time   `json:"removedAtLTE,omitempty"`
+	RemovedAtIsNil  *bool        `json:"removedAtIsNil,omitempty"`
+	RemovedAtNotNil *bool        `json:"removedAtNotNil,omitempty"`
 	// observed_at field predicates
 	ObservedAt      *time.Time   `json:"observedAt,omitempty"`
 	ObservedAtNeq   *time.Time   `json:"observedAtNEQ,omitempty"`
@@ -11347,6 +11523,8 @@ type DirectoryMembership struct {
 	IntegrationID string `json:"integrationID"`
 	// optional platform associated with this directory membership
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// directory account participating in this membership
@@ -11359,8 +11537,12 @@ type DirectoryMembership struct {
 	Source *string `json:"source,omitempty"`
 	// first time the membership was detected
 	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this record was created
 	ObservedAt time.Time `json:"observedAt"`
 	// sync run identifier that most recently confirmed this membership
@@ -11551,6 +11733,22 @@ type DirectoryMembershipWhereInput struct {
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
 	ScopeNameEqualFold    *string  `json:"scopeNameEqualFold,omitempty"`
 	ScopeNameContainsFold *string  `json:"scopeNameContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// role field predicates
 	Role       *enums.DirectoryMembershipRole  `json:"role,omitempty"`
 	RoleNeq    *enums.DirectoryMembershipRole  `json:"roleNEQ,omitempty"`
@@ -11596,6 +11794,28 @@ type DirectoryMembershipWhereInput struct {
 	LastSeenAtLte    *time.Time   `json:"lastSeenAtLTE,omitempty"`
 	LastSeenAtIsNil  *bool        `json:"lastSeenAtIsNil,omitempty"`
 	LastSeenAtNotNil *bool        `json:"lastSeenAtNotNil,omitempty"`
+	// added_at field predicates
+	AddedAt       *time.Time   `json:"addedAt,omitempty"`
+	AddedAtNeq    *time.Time   `json:"addedAtNEQ,omitempty"`
+	AddedAtIn     []*time.Time `json:"addedAtIn,omitempty"`
+	AddedAtNotIn  []*time.Time `json:"addedAtNotIn,omitempty"`
+	AddedAtGt     *time.Time   `json:"addedAtGT,omitempty"`
+	AddedAtGte    *time.Time   `json:"addedAtGTE,omitempty"`
+	AddedAtLt     *time.Time   `json:"addedAtLT,omitempty"`
+	AddedAtLte    *time.Time   `json:"addedAtLTE,omitempty"`
+	AddedAtIsNil  *bool        `json:"addedAtIsNil,omitempty"`
+	AddedAtNotNil *bool        `json:"addedAtNotNil,omitempty"`
+	// removed_at field predicates
+	RemovedAt       *time.Time   `json:"removedAt,omitempty"`
+	RemovedAtNeq    *time.Time   `json:"removedAtNEQ,omitempty"`
+	RemovedAtIn     []*time.Time `json:"removedAtIn,omitempty"`
+	RemovedAtNotIn  []*time.Time `json:"removedAtNotIn,omitempty"`
+	RemovedAtGt     *time.Time   `json:"removedAtGT,omitempty"`
+	RemovedAtGte    *time.Time   `json:"removedAtGTE,omitempty"`
+	RemovedAtLt     *time.Time   `json:"removedAtLT,omitempty"`
+	RemovedAtLte    *time.Time   `json:"removedAtLTE,omitempty"`
+	RemovedAtIsNil  *bool        `json:"removedAtIsNil,omitempty"`
+	RemovedAtNotNil *bool        `json:"removedAtNotNil,omitempty"`
 	// observed_at field predicates
 	ObservedAt      *time.Time   `json:"observedAt,omitempty"`
 	ObservedAtNeq   *time.Time   `json:"observedAtNEQ,omitempty"`
@@ -11645,6 +11865,8 @@ type DirectorySyncRun struct {
 	IntegrationID string `json:"integrationID"`
 	// optional platform associated with this sync run
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// current state of the sync run
 	Status enums.DirectorySyncRunStatus `json:"status"`
 	// time the sync started
@@ -11922,6 +12144,22 @@ type DirectorySyncRunWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// status field predicates
 	Status      *enums.DirectorySyncRunStatus  `json:"status,omitempty"`
 	StatusNeq   *enums.DirectorySyncRunStatus  `json:"statusNEQ,omitempty"`
@@ -39015,6 +39253,9 @@ type UpdateDirectoryAccountInput struct {
 	// the scope of the directory_account
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName      *string `json:"directoryName,omitempty"`
 	ClearDirectoryName *bool   `json:"clearDirectoryName,omitempty"`
@@ -39061,11 +39302,26 @@ type UpdateDirectoryAccountInput struct {
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt      *time.Time `json:"lastLoginAt,omitempty"`
 	ClearLastLoginAt *bool      `json:"clearLastLoginAt,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
+	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
+	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt      *time.Time `json:"addedAt,omitempty"`
+	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt      *time.Time `json:"removedAt,omitempty"`
+	ClearRemovedAt *bool      `json:"clearRemovedAt,omitempty"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile      map[string]any `json:"profile,omitempty"`
 	ClearProfile *bool          `json:"clearProfile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion              *string  `json:"sourceVersion,omitempty"`
 	ClearSourceVersion         *bool    `json:"clearSourceVersion,omitempty"`
@@ -39103,6 +39359,9 @@ type UpdateDirectoryGroupInput struct {
 	// the scope of the directory_group
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// primary group email address, when applicable
 	Email      *string `json:"email,omitempty"`
 	ClearEmail *bool   `json:"clearEmail,omitempty"`
@@ -39122,11 +39381,26 @@ type UpdateDirectoryGroupInput struct {
 	// member count reported by the directory
 	MemberCount      *int64 `json:"memberCount,omitempty"`
 	ClearMemberCount *bool  `json:"clearMemberCount,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
+	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
+	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt      *time.Time `json:"addedAt,omitempty"`
+	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt      *time.Time `json:"removedAt,omitempty"`
+	ClearRemovedAt *bool      `json:"clearRemovedAt,omitempty"`
 	// hash of the normalized payload for diffing
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile      map[string]any `json:"profile,omitempty"`
 	ClearProfile *bool          `json:"clearProfile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion              *string  `json:"sourceVersion,omitempty"`
 	ClearSourceVersion         *bool    `json:"clearSourceVersion,omitempty"`
@@ -39150,6 +39424,9 @@ type UpdateDirectoryMembershipInput struct {
 	// the scope of the directory_membership
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// membership role reported by the provider
 	Role      *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	ClearRole *bool                          `json:"clearRole,omitempty"`
@@ -39159,9 +39436,15 @@ type UpdateDirectoryMembershipInput struct {
 	// first time the membership was detected
 	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
 	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
 	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt      *time.Time `json:"addedAt,omitempty"`
+	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt      *time.Time `json:"removedAt,omitempty"`
+	ClearRemovedAt *bool      `json:"clearRemovedAt,omitempty"`
 	// sync run identifier that most recently confirmed this membership
 	LastConfirmedRunID      *string `json:"lastConfirmedRunID,omitempty"`
 	ClearLastConfirmedRunID *bool   `json:"clearLastConfirmedRunID,omitempty"`
@@ -39191,6 +39474,9 @@ type UpdateDirectorySyncRunInput struct {
 	// the scope of the directory_sync_run
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// current state of the sync run
 	Status *enums.DirectorySyncRunStatus `json:"status,omitempty"`
 	// time the sync started
@@ -48876,17 +49162,19 @@ func (e DNSVerificationOrderField) MarshalJSON() ([]byte, error) {
 type DirectoryAccountOrderField string
 
 const (
-	DirectoryAccountOrderFieldCreatedAt      DirectoryAccountOrderField = "created_at"
-	DirectoryAccountOrderFieldUpdatedAt      DirectoryAccountOrderField = "updated_at"
-	DirectoryAccountOrderFieldDirectoryName  DirectoryAccountOrderField = "directory_name"
-	DirectoryAccountOrderFieldExternalID     DirectoryAccountOrderField = "external_id"
-	DirectoryAccountOrderFieldCanonicalEmail DirectoryAccountOrderField = "canonical_email"
-	DirectoryAccountOrderFieldDisplayName    DirectoryAccountOrderField = "display_name"
+	DirectoryAccountOrderFieldCreatedAt           DirectoryAccountOrderField = "created_at"
+	DirectoryAccountOrderFieldUpdatedAt           DirectoryAccountOrderField = "updated_at"
+	DirectoryAccountOrderFieldDirectoryInstanceID DirectoryAccountOrderField = "directory_instance_id"
+	DirectoryAccountOrderFieldDirectoryName       DirectoryAccountOrderField = "directory_name"
+	DirectoryAccountOrderFieldExternalID          DirectoryAccountOrderField = "external_id"
+	DirectoryAccountOrderFieldCanonicalEmail      DirectoryAccountOrderField = "canonical_email"
+	DirectoryAccountOrderFieldDisplayName         DirectoryAccountOrderField = "display_name"
 )
 
 var AllDirectoryAccountOrderField = []DirectoryAccountOrderField{
 	DirectoryAccountOrderFieldCreatedAt,
 	DirectoryAccountOrderFieldUpdatedAt,
+	DirectoryAccountOrderFieldDirectoryInstanceID,
 	DirectoryAccountOrderFieldDirectoryName,
 	DirectoryAccountOrderFieldExternalID,
 	DirectoryAccountOrderFieldCanonicalEmail,
@@ -48895,7 +49183,7 @@ var AllDirectoryAccountOrderField = []DirectoryAccountOrderField{
 
 func (e DirectoryAccountOrderField) IsValid() bool {
 	switch e {
-	case DirectoryAccountOrderFieldCreatedAt, DirectoryAccountOrderFieldUpdatedAt, DirectoryAccountOrderFieldDirectoryName, DirectoryAccountOrderFieldExternalID, DirectoryAccountOrderFieldCanonicalEmail, DirectoryAccountOrderFieldDisplayName:
+	case DirectoryAccountOrderFieldCreatedAt, DirectoryAccountOrderFieldUpdatedAt, DirectoryAccountOrderFieldDirectoryInstanceID, DirectoryAccountOrderFieldDirectoryName, DirectoryAccountOrderFieldExternalID, DirectoryAccountOrderFieldCanonicalEmail, DirectoryAccountOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -48940,16 +49228,18 @@ func (e DirectoryAccountOrderField) MarshalJSON() ([]byte, error) {
 type DirectoryGroupOrderField string
 
 const (
-	DirectoryGroupOrderFieldCreatedAt   DirectoryGroupOrderField = "created_at"
-	DirectoryGroupOrderFieldUpdatedAt   DirectoryGroupOrderField = "updated_at"
-	DirectoryGroupOrderFieldExternalID  DirectoryGroupOrderField = "external_id"
-	DirectoryGroupOrderFieldEmail       DirectoryGroupOrderField = "email"
-	DirectoryGroupOrderFieldDisplayName DirectoryGroupOrderField = "display_name"
+	DirectoryGroupOrderFieldCreatedAt           DirectoryGroupOrderField = "created_at"
+	DirectoryGroupOrderFieldUpdatedAt           DirectoryGroupOrderField = "updated_at"
+	DirectoryGroupOrderFieldDirectoryInstanceID DirectoryGroupOrderField = "directory_instance_id"
+	DirectoryGroupOrderFieldExternalID          DirectoryGroupOrderField = "external_id"
+	DirectoryGroupOrderFieldEmail               DirectoryGroupOrderField = "email"
+	DirectoryGroupOrderFieldDisplayName         DirectoryGroupOrderField = "display_name"
 )
 
 var AllDirectoryGroupOrderField = []DirectoryGroupOrderField{
 	DirectoryGroupOrderFieldCreatedAt,
 	DirectoryGroupOrderFieldUpdatedAt,
+	DirectoryGroupOrderFieldDirectoryInstanceID,
 	DirectoryGroupOrderFieldExternalID,
 	DirectoryGroupOrderFieldEmail,
 	DirectoryGroupOrderFieldDisplayName,
@@ -48957,7 +49247,7 @@ var AllDirectoryGroupOrderField = []DirectoryGroupOrderField{
 
 func (e DirectoryGroupOrderField) IsValid() bool {
 	switch e {
-	case DirectoryGroupOrderFieldCreatedAt, DirectoryGroupOrderFieldUpdatedAt, DirectoryGroupOrderFieldExternalID, DirectoryGroupOrderFieldEmail, DirectoryGroupOrderFieldDisplayName:
+	case DirectoryGroupOrderFieldCreatedAt, DirectoryGroupOrderFieldUpdatedAt, DirectoryGroupOrderFieldDirectoryInstanceID, DirectoryGroupOrderFieldExternalID, DirectoryGroupOrderFieldEmail, DirectoryGroupOrderFieldDisplayName:
 		return true
 	}
 	return false

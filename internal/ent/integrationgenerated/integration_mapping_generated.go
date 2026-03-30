@@ -227,41 +227,49 @@ const (
 
 // Integration mapping keys for DirectoryAccount.
 const (
-	IntegrationMappingDirectoryAccountAccountType        = "accountType"
-	IntegrationMappingDirectoryAccountAvatarRemoteURL    = "avatarRemoteURL"
-	IntegrationMappingDirectoryAccountAvatarUpdatedAt    = "avatarUpdatedAt"
-	IntegrationMappingDirectoryAccountCanonicalEmail     = "canonicalEmail"
-	IntegrationMappingDirectoryAccountDepartment         = "department"
-	IntegrationMappingDirectoryAccountDirectoryName      = "directoryName"
-	IntegrationMappingDirectoryAccountDirectorySyncRunID = "directorySyncRunID"
-	IntegrationMappingDirectoryAccountDisplayName        = "displayName"
-	IntegrationMappingDirectoryAccountEnvironmentID      = "environmentID"
-	IntegrationMappingDirectoryAccountEnvironmentName    = "environmentName"
-	IntegrationMappingDirectoryAccountExternalID         = "externalID"
-	IntegrationMappingDirectoryAccountFamilyName         = "familyName"
-	IntegrationMappingDirectoryAccountGivenName          = "givenName"
-	IntegrationMappingDirectoryAccountIdentityHolderID   = "identityHolderID"
-	IntegrationMappingDirectoryAccountIntegrationID      = "integrationID"
-	IntegrationMappingDirectoryAccountJobTitle           = "jobTitle"
-	IntegrationMappingDirectoryAccountLastLoginAt        = "lastLoginAt"
-	IntegrationMappingDirectoryAccountLastSeenIP         = "lastSeenIP"
-	IntegrationMappingDirectoryAccountMfaState           = "mfaState"
-	IntegrationMappingDirectoryAccountObservedAt         = "observedAt"
-	IntegrationMappingDirectoryAccountOrganizationUnit   = "organizationUnit"
-	IntegrationMappingDirectoryAccountPlatformID         = "platformID"
-	IntegrationMappingDirectoryAccountProfile            = "profile"
-	IntegrationMappingDirectoryAccountProfileHash        = "profileHash"
-	IntegrationMappingDirectoryAccountScopeID            = "scopeID"
-	IntegrationMappingDirectoryAccountScopeName          = "scopeName"
-	IntegrationMappingDirectoryAccountSecondaryKey       = "secondaryKey"
-	IntegrationMappingDirectoryAccountSourceVersion      = "sourceVersion"
-	IntegrationMappingDirectoryAccountStatus             = "status"
-	IntegrationMappingDirectoryAccountTags               = "tags"
+	IntegrationMappingDirectoryAccountAccountType         = "accountType"
+	IntegrationMappingDirectoryAccountAddedAt             = "addedAt"
+	IntegrationMappingDirectoryAccountAvatarRemoteURL     = "avatarRemoteURL"
+	IntegrationMappingDirectoryAccountAvatarUpdatedAt     = "avatarUpdatedAt"
+	IntegrationMappingDirectoryAccountCanonicalEmail      = "canonicalEmail"
+	IntegrationMappingDirectoryAccountDepartment          = "department"
+	IntegrationMappingDirectoryAccountDirectoryInstanceID = "directoryInstanceID"
+	IntegrationMappingDirectoryAccountDirectoryName       = "directoryName"
+	IntegrationMappingDirectoryAccountDirectorySyncRunID  = "directorySyncRunID"
+	IntegrationMappingDirectoryAccountDisplayName         = "displayName"
+	IntegrationMappingDirectoryAccountEnvironmentID       = "environmentID"
+	IntegrationMappingDirectoryAccountEnvironmentName     = "environmentName"
+	IntegrationMappingDirectoryAccountExternalID          = "externalID"
+	IntegrationMappingDirectoryAccountFamilyName          = "familyName"
+	IntegrationMappingDirectoryAccountFirstSeenAt         = "firstSeenAt"
+	IntegrationMappingDirectoryAccountGivenName           = "givenName"
+	IntegrationMappingDirectoryAccountIdentityHolderID    = "identityHolderID"
+	IntegrationMappingDirectoryAccountIntegrationID       = "integrationID"
+	IntegrationMappingDirectoryAccountJobTitle            = "jobTitle"
+	IntegrationMappingDirectoryAccountLastLoginAt         = "lastLoginAt"
+	IntegrationMappingDirectoryAccountLastSeenAt          = "lastSeenAt"
+	IntegrationMappingDirectoryAccountLastSeenIP          = "lastSeenIP"
+	IntegrationMappingDirectoryAccountMetadata            = "metadata"
+	IntegrationMappingDirectoryAccountMfaState            = "mfaState"
+	IntegrationMappingDirectoryAccountObservedAt          = "observedAt"
+	IntegrationMappingDirectoryAccountOrganizationUnit    = "organizationUnit"
+	IntegrationMappingDirectoryAccountPlatformID          = "platformID"
+	IntegrationMappingDirectoryAccountProfile             = "profile"
+	IntegrationMappingDirectoryAccountProfileHash         = "profileHash"
+	IntegrationMappingDirectoryAccountRemovedAt           = "removedAt"
+	IntegrationMappingDirectoryAccountScopeID             = "scopeID"
+	IntegrationMappingDirectoryAccountScopeName           = "scopeName"
+	IntegrationMappingDirectoryAccountSecondaryKey        = "secondaryKey"
+	IntegrationMappingDirectoryAccountSourceVersion       = "sourceVersion"
+	IntegrationMappingDirectoryAccountStatus              = "status"
+	IntegrationMappingDirectoryAccountTags                = "tags"
 )
 
 // Integration mapping keys for DirectoryGroup.
 const (
+	IntegrationMappingDirectoryGroupAddedAt                = "addedAt"
 	IntegrationMappingDirectoryGroupClassification         = "classification"
+	IntegrationMappingDirectoryGroupDirectoryInstanceID    = "directoryInstanceID"
 	IntegrationMappingDirectoryGroupDirectorySyncRunID     = "directorySyncRunID"
 	IntegrationMappingDirectoryGroupDisplayName            = "displayName"
 	IntegrationMappingDirectoryGroupEmail                  = "email"
@@ -269,12 +277,16 @@ const (
 	IntegrationMappingDirectoryGroupEnvironmentName        = "environmentName"
 	IntegrationMappingDirectoryGroupExternalID             = "externalID"
 	IntegrationMappingDirectoryGroupExternalSharingAllowed = "externalSharingAllowed"
+	IntegrationMappingDirectoryGroupFirstSeenAt            = "firstSeenAt"
 	IntegrationMappingDirectoryGroupIntegrationID          = "integrationID"
+	IntegrationMappingDirectoryGroupLastSeenAt             = "lastSeenAt"
 	IntegrationMappingDirectoryGroupMemberCount            = "memberCount"
+	IntegrationMappingDirectoryGroupMetadata               = "metadata"
 	IntegrationMappingDirectoryGroupObservedAt             = "observedAt"
 	IntegrationMappingDirectoryGroupPlatformID             = "platformID"
 	IntegrationMappingDirectoryGroupProfile                = "profile"
 	IntegrationMappingDirectoryGroupProfileHash            = "profileHash"
+	IntegrationMappingDirectoryGroupRemovedAt              = "removedAt"
 	IntegrationMappingDirectoryGroupScopeID                = "scopeID"
 	IntegrationMappingDirectoryGroupScopeName              = "scopeName"
 	IntegrationMappingDirectoryGroupSourceVersion          = "sourceVersion"
@@ -284,22 +296,25 @@ const (
 
 // Integration mapping keys for DirectoryMembership.
 const (
-	IntegrationMappingDirectoryMembershipDirectoryAccountID = "directoryAccountID"
-	IntegrationMappingDirectoryMembershipDirectoryGroupID   = "directoryGroupID"
-	IntegrationMappingDirectoryMembershipDirectorySyncRunID = "directorySyncRunID"
-	IntegrationMappingDirectoryMembershipEnvironmentID      = "environmentID"
-	IntegrationMappingDirectoryMembershipEnvironmentName    = "environmentName"
-	IntegrationMappingDirectoryMembershipFirstSeenAt        = "firstSeenAt"
-	IntegrationMappingDirectoryMembershipIntegrationID      = "integrationID"
-	IntegrationMappingDirectoryMembershipLastConfirmedRunID = "lastConfirmedRunID"
-	IntegrationMappingDirectoryMembershipLastSeenAt         = "lastSeenAt"
-	IntegrationMappingDirectoryMembershipMetadata           = "metadata"
-	IntegrationMappingDirectoryMembershipObservedAt         = "observedAt"
-	IntegrationMappingDirectoryMembershipPlatformID         = "platformID"
-	IntegrationMappingDirectoryMembershipRole               = "role"
-	IntegrationMappingDirectoryMembershipScopeID            = "scopeID"
-	IntegrationMappingDirectoryMembershipScopeName          = "scopeName"
-	IntegrationMappingDirectoryMembershipSource             = "source"
+	IntegrationMappingDirectoryMembershipAddedAt             = "addedAt"
+	IntegrationMappingDirectoryMembershipDirectoryAccountID  = "directoryAccountID"
+	IntegrationMappingDirectoryMembershipDirectoryGroupID    = "directoryGroupID"
+	IntegrationMappingDirectoryMembershipDirectoryInstanceID = "directoryInstanceID"
+	IntegrationMappingDirectoryMembershipDirectorySyncRunID  = "directorySyncRunID"
+	IntegrationMappingDirectoryMembershipEnvironmentID       = "environmentID"
+	IntegrationMappingDirectoryMembershipEnvironmentName     = "environmentName"
+	IntegrationMappingDirectoryMembershipFirstSeenAt         = "firstSeenAt"
+	IntegrationMappingDirectoryMembershipIntegrationID       = "integrationID"
+	IntegrationMappingDirectoryMembershipLastConfirmedRunID  = "lastConfirmedRunID"
+	IntegrationMappingDirectoryMembershipLastSeenAt          = "lastSeenAt"
+	IntegrationMappingDirectoryMembershipMetadata            = "metadata"
+	IntegrationMappingDirectoryMembershipObservedAt          = "observedAt"
+	IntegrationMappingDirectoryMembershipPlatformID          = "platformID"
+	IntegrationMappingDirectoryMembershipRemovedAt           = "removedAt"
+	IntegrationMappingDirectoryMembershipRole                = "role"
+	IntegrationMappingDirectoryMembershipScopeID             = "scopeID"
+	IntegrationMappingDirectoryMembershipScopeName           = "scopeName"
+	IntegrationMappingDirectoryMembershipSource              = "source"
 )
 
 // Integration mapping keys for Entity.
@@ -1034,6 +1049,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "addedAt",
+				GoField:   "AddedAt",
+				EntField:  "added_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "avatarRemoteURL",
 				GoField:   "AvatarRemoteURL",
 				EntField:  "avatar_remote_url",
@@ -1064,6 +1088,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				InputKey:  "department",
 				GoField:   "Department",
 				EntField:  "department",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "directoryInstanceID",
+				GoField:   "DirectoryInstanceID",
+				EntField:  "directory_instance_id",
 				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
@@ -1133,6 +1166,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "firstSeenAt",
+				GoField:   "FirstSeenAt",
+				EntField:  "first_seen_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "givenName",
 				GoField:   "GivenName",
 				EntField:  "given_name",
@@ -1178,10 +1220,28 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "lastSeenAt",
+				GoField:   "LastSeenAt",
+				EntField:  "last_seen_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "lastSeenIP",
 				GoField:   "LastSeenIP",
 				EntField:  "last_seen_ip",
 				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "metadata",
+				GoField:   "Metadata",
+				EntField:  "metadata",
+				Type:      "json.RawMessage",
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
@@ -1241,6 +1301,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "removedAt",
+				GoField:   "RemovedAt",
+				EntField:  "removed_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "scopeID",
 				GoField:   "ScopeID",
 				EntField:  "scope_id",
@@ -1296,36 +1365,42 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"accountType":        {},
-			"avatarRemoteURL":    {},
-			"avatarUpdatedAt":    {},
-			"canonicalEmail":     {},
-			"department":         {},
-			"directoryName":      {},
-			"directorySyncRunID": {},
-			"displayName":        {},
-			"environmentID":      {},
-			"environmentName":    {},
-			"externalID":         {},
-			"familyName":         {},
-			"givenName":          {},
-			"identityHolderID":   {},
-			"integrationID":      {},
-			"jobTitle":           {},
-			"lastLoginAt":        {},
-			"lastSeenIP":         {},
-			"mfaState":           {},
-			"observedAt":         {},
-			"organizationUnit":   {},
-			"platformID":         {},
-			"profile":            {},
-			"profileHash":        {},
-			"scopeID":            {},
-			"scopeName":          {},
-			"secondaryKey":       {},
-			"sourceVersion":      {},
-			"status":             {},
-			"tags":               {},
+			"accountType":         {},
+			"addedAt":             {},
+			"avatarRemoteURL":     {},
+			"avatarUpdatedAt":     {},
+			"canonicalEmail":      {},
+			"department":          {},
+			"directoryInstanceID": {},
+			"directoryName":       {},
+			"directorySyncRunID":  {},
+			"displayName":         {},
+			"environmentID":       {},
+			"environmentName":     {},
+			"externalID":          {},
+			"familyName":          {},
+			"firstSeenAt":         {},
+			"givenName":           {},
+			"identityHolderID":    {},
+			"integrationID":       {},
+			"jobTitle":            {},
+			"lastLoginAt":         {},
+			"lastSeenAt":          {},
+			"lastSeenIP":          {},
+			"metadata":            {},
+			"mfaState":            {},
+			"observedAt":          {},
+			"organizationUnit":    {},
+			"platformID":          {},
+			"profile":             {},
+			"profileHash":         {},
+			"removedAt":           {},
+			"scopeID":             {},
+			"scopeName":           {},
+			"secondaryKey":        {},
+			"sourceVersion":       {},
+			"status":              {},
+			"tags":                {},
 		},
 		RequiredKeys: []string{
 			"externalID",
@@ -1346,11 +1421,29 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "DirectoryGroup",
 		Fields: []IntegrationMappingField{
 			{
+				InputKey:  "addedAt",
+				GoField:   "AddedAt",
+				EntField:  "added_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "classification",
 				GoField:   "Classification",
 				EntField:  "classification",
 				Type:      "string",
 				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "directoryInstanceID",
+				GoField:   "DirectoryInstanceID",
+				EntField:  "directory_instance_id",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
@@ -1418,6 +1511,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "firstSeenAt",
+				GoField:   "FirstSeenAt",
+				EntField:  "first_seen_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "integrationID",
 				GoField:   "IntegrationID",
 				EntField:  "integration_id",
@@ -1427,10 +1529,28 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "lastSeenAt",
+				GoField:   "LastSeenAt",
+				EntField:  "last_seen_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "memberCount",
 				GoField:   "MemberCount",
 				EntField:  "member_count",
 				Type:      "int",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "metadata",
+				GoField:   "Metadata",
+				EntField:  "metadata",
+				Type:      "json.RawMessage",
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
@@ -1468,6 +1588,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				EntField:  "profile_hash",
 				Type:      "string",
 				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "removedAt",
+				GoField:   "RemovedAt",
+				EntField:  "removed_at",
+				Type:      "time.Time",
+				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
@@ -1518,7 +1647,9 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			},
 		},
 		AllowedKeys: map[string]struct{}{
+			"addedAt":                {},
 			"classification":         {},
+			"directoryInstanceID":    {},
 			"directorySyncRunID":     {},
 			"displayName":            {},
 			"email":                  {},
@@ -1526,12 +1657,16 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"environmentName":        {},
 			"externalID":             {},
 			"externalSharingAllowed": {},
+			"firstSeenAt":            {},
 			"integrationID":          {},
+			"lastSeenAt":             {},
 			"memberCount":            {},
+			"metadata":               {},
 			"observedAt":             {},
 			"platformID":             {},
 			"profile":                {},
 			"profileHash":            {},
+			"removedAt":              {},
 			"scopeID":                {},
 			"scopeName":              {},
 			"sourceVersion":          {},
@@ -1557,6 +1692,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "DirectoryMembership",
 		Fields: []IntegrationMappingField{
 			{
+				InputKey:  "addedAt",
+				GoField:   "AddedAt",
+				EntField:  "added_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "directoryAccountID",
 				GoField:   "DirectoryAccountID",
 				EntField:  "directory_account_id",
@@ -1573,6 +1717,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				Required:  true,
 				UpsertKey: true,
 				LookupKey: true,
+			},
+			{
+				InputKey:  "directoryInstanceID",
+				GoField:   "DirectoryInstanceID",
+				EntField:  "directory_instance_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
 			},
 			{
 				InputKey:  "directorySyncRunID",
@@ -1665,6 +1818,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "removedAt",
+				GoField:   "RemovedAt",
+				EntField:  "removed_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "role",
 				GoField:   "Role",
 				EntField:  "role",
@@ -1702,22 +1864,25 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"directoryAccountID": {},
-			"directoryGroupID":   {},
-			"directorySyncRunID": {},
-			"environmentID":      {},
-			"environmentName":    {},
-			"firstSeenAt":        {},
-			"integrationID":      {},
-			"lastConfirmedRunID": {},
-			"lastSeenAt":         {},
-			"metadata":           {},
-			"observedAt":         {},
-			"platformID":         {},
-			"role":               {},
-			"scopeID":            {},
-			"scopeName":          {},
-			"source":             {},
+			"addedAt":             {},
+			"directoryAccountID":  {},
+			"directoryGroupID":    {},
+			"directoryInstanceID": {},
+			"directorySyncRunID":  {},
+			"environmentID":       {},
+			"environmentName":     {},
+			"firstSeenAt":         {},
+			"integrationID":       {},
+			"lastConfirmedRunID":  {},
+			"lastSeenAt":          {},
+			"metadata":            {},
+			"observedAt":          {},
+			"platformID":          {},
+			"removedAt":           {},
+			"role":                {},
+			"scopeID":             {},
+			"scopeName":           {},
+			"source":              {},
 		},
 		RequiredKeys: []string{
 			"directoryAccountID",

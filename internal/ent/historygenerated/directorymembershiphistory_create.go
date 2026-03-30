@@ -210,6 +210,20 @@ func (_c *DirectoryMembershipHistoryCreate) SetNillablePlatformID(v *string) *Di
 	return _c
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_c *DirectoryMembershipHistoryCreate) SetDirectoryInstanceID(v string) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetDirectoryInstanceID(v)
+	return _c
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableDirectoryInstanceID(v *string) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetDirectoryInstanceID(*v)
+	}
+	return _c
+}
+
 // SetDirectorySyncRunID sets the "directory_sync_run_id" field.
 func (_c *DirectoryMembershipHistoryCreate) SetDirectorySyncRunID(v string) *DirectoryMembershipHistoryCreate {
 	_c.mutation.SetDirectorySyncRunID(v)
@@ -280,6 +294,34 @@ func (_c *DirectoryMembershipHistoryCreate) SetLastSeenAt(v time.Time) *Director
 func (_c *DirectoryMembershipHistoryCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryMembershipHistoryCreate {
 	if v != nil {
 		_c.SetLastSeenAt(*v)
+	}
+	return _c
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_c *DirectoryMembershipHistoryCreate) SetAddedAt(v time.Time) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetAddedAt(v)
+	return _c
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableAddedAt(v *time.Time) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetAddedAt(*v)
+	}
+	return _c
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_c *DirectoryMembershipHistoryCreate) SetRemovedAt(v time.Time) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetRemovedAt(v)
+	return _c
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableRemovedAt(v *time.Time) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetRemovedAt(*v)
 	}
 	return _c
 }
@@ -543,6 +585,10 @@ func (_c *DirectoryMembershipHistoryCreate) createSpec() (*DirectoryMembershipHi
 		_spec.SetField(directorymembershiphistory.FieldPlatformID, field.TypeString, value)
 		_node.PlatformID = value
 	}
+	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorymembershiphistory.FieldDirectoryInstanceID, field.TypeString, value)
+		_node.DirectoryInstanceID = &value
+	}
 	if value, ok := _c.mutation.DirectorySyncRunID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldDirectorySyncRunID, field.TypeString, value)
 		_node.DirectorySyncRunID = value
@@ -570,6 +616,14 @@ func (_c *DirectoryMembershipHistoryCreate) createSpec() (*DirectoryMembershipHi
 	if value, ok := _c.mutation.LastSeenAt(); ok {
 		_spec.SetField(directorymembershiphistory.FieldLastSeenAt, field.TypeTime, value)
 		_node.LastSeenAt = &value
+	}
+	if value, ok := _c.mutation.AddedAt(); ok {
+		_spec.SetField(directorymembershiphistory.FieldAddedAt, field.TypeTime, value)
+		_node.AddedAt = &value
+	}
+	if value, ok := _c.mutation.RemovedAt(); ok {
+		_spec.SetField(directorymembershiphistory.FieldRemovedAt, field.TypeTime, value)
+		_node.RemovedAt = &value
 	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(directorymembershiphistory.FieldObservedAt, field.TypeTime, value)

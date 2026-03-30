@@ -52,6 +52,8 @@ type DirectoryMembershipHistory struct {
 	IntegrationID string `json:"integration_id,omitempty"`
 	// optional platform associated with this directory membership
 	PlatformID string `json:"platform_id,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// directory account participating in this membership
@@ -64,8 +66,12 @@ type DirectoryMembershipHistory struct {
 	Source *string `json:"source,omitempty"`
 	// first time the membership was detected
 	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt *time.Time `json:"added_at,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt *time.Time `json:"removed_at,omitempty"`
 	// time when this record was created
 	ObservedAt time.Time `json:"observed_at,omitempty"`
 	// sync run identifier that most recently confirmed this membership
@@ -84,9 +90,9 @@ func (*DirectoryMembershipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorymembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
+		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectoryInstanceID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
-		case directorymembershiphistory.FieldHistoryTime, directorymembershiphistory.FieldCreatedAt, directorymembershiphistory.FieldUpdatedAt, directorymembershiphistory.FieldFirstSeenAt, directorymembershiphistory.FieldLastSeenAt, directorymembershiphistory.FieldObservedAt:
+		case directorymembershiphistory.FieldHistoryTime, directorymembershiphistory.FieldCreatedAt, directorymembershiphistory.FieldUpdatedAt, directorymembershiphistory.FieldFirstSeenAt, directorymembershiphistory.FieldLastSeenAt, directorymembershiphistory.FieldAddedAt, directorymembershiphistory.FieldRemovedAt, directorymembershiphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -199,6 +205,13 @@ func (_m *DirectoryMembershipHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.PlatformID = value.String
 			}
+		case directorymembershiphistory.FieldDirectoryInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_instance_id", values[i])
+			} else if value.Valid {
+				_m.DirectoryInstanceID = new(string)
+				*_m.DirectoryInstanceID = value.String
+			}
 		case directorymembershiphistory.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field directory_sync_run_id", values[i])
@@ -243,6 +256,20 @@ func (_m *DirectoryMembershipHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.LastSeenAt = new(time.Time)
 				*_m.LastSeenAt = value.Time
+			}
+		case directorymembershiphistory.FieldAddedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field added_at", values[i])
+			} else if value.Valid {
+				_m.AddedAt = new(time.Time)
+				*_m.AddedAt = value.Time
+			}
+		case directorymembershiphistory.FieldRemovedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field removed_at", values[i])
+			} else if value.Valid {
+				_m.RemovedAt = new(time.Time)
+				*_m.RemovedAt = value.Time
 			}
 		case directorymembershiphistory.FieldObservedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -346,6 +373,11 @@ func (_m *DirectoryMembershipHistory) String() string {
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
+	if v := _m.DirectoryInstanceID; v != nil {
+		builder.WriteString("directory_instance_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)
 	builder.WriteString(", ")
@@ -370,6 +402,16 @@ func (_m *DirectoryMembershipHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.LastSeenAt; v != nil {
 		builder.WriteString("last_seen_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.AddedAt; v != nil {
+		builder.WriteString("added_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.RemovedAt; v != nil {
+		builder.WriteString("removed_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")

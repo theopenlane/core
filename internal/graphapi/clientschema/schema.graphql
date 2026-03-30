@@ -11736,6 +11736,10 @@ input CreateDirectoryAccountInput {
 	"""
 	scopeName: String
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
@@ -11804,6 +11808,22 @@ input CreateDirectoryAccountInput {
 	"""
 	lastLoginAt: Time
 	"""
+	time this account was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this account was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the account was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the account was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time
@@ -11815,6 +11835,10 @@ input CreateDirectoryAccountInput {
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
 	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
@@ -11849,6 +11873,10 @@ input CreateDirectoryGroupInput {
 	"""
 	scopeName: String
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	stable identifier from the directory system
 	"""
 	externalID: String!
@@ -11881,6 +11909,22 @@ input CreateDirectoryGroupInput {
 	"""
 	memberCount: Int
 	"""
+	time this group was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this group was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the group was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the group was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time
@@ -11892,6 +11936,10 @@ input CreateDirectoryGroupInput {
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
 	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
@@ -11918,6 +11966,10 @@ input CreateDirectoryMembershipInput {
 	"""
 	scopeName: String
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	membership role reported by the provider
 	"""
 	role: DirectoryMembershipDirectoryMembershipRole
@@ -11930,9 +11982,17 @@ input CreateDirectoryMembershipInput {
 	"""
 	firstSeenAt: Time
 	"""
-	most recent time the membership was detected
+	most recent time the membership was confirmed by directory ingest
 	"""
 	lastSeenAt: Time
+	"""
+	provider-reported time the membership was added in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the membership was removed from the source directory
+	"""
+	removedAt: Time
 	"""
 	time when this record was created
 	"""
@@ -11969,6 +12029,10 @@ input CreateDirectorySyncRunInput {
 	the scope of the directory_sync_run
 	"""
 	scopeName: String
+	"""
+	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
 	"""
 	current state of the sync run
 	"""
@@ -18177,6 +18241,10 @@ type DirectoryAccount implements Node {
 	"""
 	platformID: ID
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	deduplicated identity holder linked to this directory account
 	"""
 	identityHolderID: ID
@@ -18253,6 +18321,22 @@ type DirectoryAccount implements Node {
 	"""
 	lastLoginAt: Time
 	"""
+	time this account was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this account was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the account was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the account was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time!
@@ -18264,6 +18348,10 @@ type DirectoryAccount implements Node {
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
 	"""
 	object storage file identifier that holds the raw upstream payload
 	"""
@@ -18523,6 +18611,7 @@ Properties by which DirectoryAccount connections can be ordered.
 enum DirectoryAccountOrderField {
 	created_at
 	updated_at
+	directory_instance_id
 	directory_name
 	external_id
 	canonical_email
@@ -18780,6 +18869,24 @@ input DirectoryAccountWhereInput {
 	platformIDNotNil: Boolean
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
+	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
 	"""
 	identity_holder_id field predicates
 	"""
@@ -19080,6 +19187,58 @@ input DirectoryAccountWhereInput {
 	lastLoginAtIsNil: Boolean
 	lastLoginAtNotNil: Boolean
 	"""
+	first_seen_at field predicates
+	"""
+	firstSeenAt: Time
+	firstSeenAtNEQ: Time
+	firstSeenAtIn: [Time!]
+	firstSeenAtNotIn: [Time!]
+	firstSeenAtGT: Time
+	firstSeenAtGTE: Time
+	firstSeenAtLT: Time
+	firstSeenAtLTE: Time
+	firstSeenAtIsNil: Boolean
+	firstSeenAtNotNil: Boolean
+	"""
+	last_seen_at field predicates
+	"""
+	lastSeenAt: Time
+	lastSeenAtNEQ: Time
+	lastSeenAtIn: [Time!]
+	lastSeenAtNotIn: [Time!]
+	lastSeenAtGT: Time
+	lastSeenAtGTE: Time
+	lastSeenAtLT: Time
+	lastSeenAtLTE: Time
+	lastSeenAtIsNil: Boolean
+	lastSeenAtNotNil: Boolean
+	"""
+	added_at field predicates
+	"""
+	addedAt: Time
+	addedAtNEQ: Time
+	addedAtIn: [Time!]
+	addedAtNotIn: [Time!]
+	addedAtGT: Time
+	addedAtGTE: Time
+	addedAtLT: Time
+	addedAtLTE: Time
+	addedAtIsNil: Boolean
+	addedAtNotNil: Boolean
+	"""
+	removed_at field predicates
+	"""
+	removedAt: Time
+	removedAtNEQ: Time
+	removedAtIn: [Time!]
+	removedAtNotIn: [Time!]
+	removedAtGT: Time
+	removedAtGTE: Time
+	removedAtLT: Time
+	removedAtLTE: Time
+	removedAtIsNil: Boolean
+	removedAtNotNil: Boolean
+	"""
 	observed_at field predicates
 	"""
 	observedAt: Time
@@ -19232,6 +19391,10 @@ type DirectoryGroup implements Node {
 	"""
 	platformID: ID
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	sync run that produced this snapshot
 	"""
 	directorySyncRunID: ID!
@@ -19268,6 +19431,22 @@ type DirectoryGroup implements Node {
 	"""
 	memberCount: Int
 	"""
+	time this group was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this group was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the group was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the group was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time!
@@ -19279,6 +19458,10 @@ type DirectoryGroup implements Node {
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
 	"""
 	object storage file identifier containing the raw upstream payload
 	"""
@@ -19489,6 +19672,7 @@ Properties by which DirectoryGroup connections can be ordered.
 enum DirectoryGroupOrderField {
 	created_at
 	updated_at
+	directory_instance_id
 	external_id
 	email
 	display_name
@@ -19726,6 +19910,24 @@ input DirectoryGroupWhereInput {
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
 	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
+	"""
 	directory_sync_run_id field predicates
 	"""
 	directorySyncRunID: ID
@@ -19827,6 +20029,58 @@ input DirectoryGroupWhereInput {
 	memberCountLTE: Int
 	memberCountIsNil: Boolean
 	memberCountNotNil: Boolean
+	"""
+	first_seen_at field predicates
+	"""
+	firstSeenAt: Time
+	firstSeenAtNEQ: Time
+	firstSeenAtIn: [Time!]
+	firstSeenAtNotIn: [Time!]
+	firstSeenAtGT: Time
+	firstSeenAtGTE: Time
+	firstSeenAtLT: Time
+	firstSeenAtLTE: Time
+	firstSeenAtIsNil: Boolean
+	firstSeenAtNotNil: Boolean
+	"""
+	last_seen_at field predicates
+	"""
+	lastSeenAt: Time
+	lastSeenAtNEQ: Time
+	lastSeenAtIn: [Time!]
+	lastSeenAtNotIn: [Time!]
+	lastSeenAtGT: Time
+	lastSeenAtGTE: Time
+	lastSeenAtLT: Time
+	lastSeenAtLTE: Time
+	lastSeenAtIsNil: Boolean
+	lastSeenAtNotNil: Boolean
+	"""
+	added_at field predicates
+	"""
+	addedAt: Time
+	addedAtNEQ: Time
+	addedAtIn: [Time!]
+	addedAtNotIn: [Time!]
+	addedAtGT: Time
+	addedAtGTE: Time
+	addedAtLT: Time
+	addedAtLTE: Time
+	addedAtIsNil: Boolean
+	addedAtNotNil: Boolean
+	"""
+	removed_at field predicates
+	"""
+	removedAt: Time
+	removedAtNEQ: Time
+	removedAtIn: [Time!]
+	removedAtNotIn: [Time!]
+	removedAtGT: Time
+	removedAtGTE: Time
+	removedAtLT: Time
+	removedAtLTE: Time
+	removedAtIsNil: Boolean
+	removedAtNotNil: Boolean
 	"""
 	observed_at field predicates
 	"""
@@ -19961,6 +20215,10 @@ type DirectoryMembership implements Node {
 	"""
 	platformID: ID
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	sync run that produced this snapshot
 	"""
 	directorySyncRunID: ID!
@@ -19985,9 +20243,17 @@ type DirectoryMembership implements Node {
 	"""
 	firstSeenAt: Time
 	"""
-	most recent time the membership was detected
+	most recent time the membership was confirmed by directory ingest
 	"""
 	lastSeenAt: Time
+	"""
+	provider-reported time the membership was added in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the membership was removed from the source directory
+	"""
+	removedAt: Time
 	"""
 	time when this record was created
 	"""
@@ -20310,6 +20576,24 @@ input DirectoryMembershipWhereInput {
 	scopeNameEqualFold: String
 	scopeNameContainsFold: String
 	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
+	"""
 	role field predicates
 	"""
 	role: DirectoryMembershipDirectoryMembershipRole
@@ -20362,6 +20646,32 @@ input DirectoryMembershipWhereInput {
 	lastSeenAtLTE: Time
 	lastSeenAtIsNil: Boolean
 	lastSeenAtNotNil: Boolean
+	"""
+	added_at field predicates
+	"""
+	addedAt: Time
+	addedAtNEQ: Time
+	addedAtIn: [Time!]
+	addedAtNotIn: [Time!]
+	addedAtGT: Time
+	addedAtGTE: Time
+	addedAtLT: Time
+	addedAtLTE: Time
+	addedAtIsNil: Boolean
+	addedAtNotNil: Boolean
+	"""
+	removed_at field predicates
+	"""
+	removedAt: Time
+	removedAtNEQ: Time
+	removedAtIn: [Time!]
+	removedAtNotIn: [Time!]
+	removedAtGT: Time
+	removedAtGTE: Time
+	removedAtLT: Time
+	removedAtLTE: Time
+	removedAtIsNil: Boolean
+	removedAtNotNil: Boolean
 	"""
 	observed_at field predicates
 	"""
@@ -20430,6 +20740,10 @@ type DirectorySyncRun implements Node {
 	optional platform associated with this sync run
 	"""
 	platformID: ID
+	"""
+	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
 	"""
 	current state of the sync run
 	"""
@@ -20890,6 +21204,24 @@ input DirectorySyncRunWhereInput {
 	platformIDNotNil: Boolean
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
+	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -84633,6 +84965,11 @@ input UpdateDirectoryAccountInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
+	"""
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
@@ -84711,6 +85048,26 @@ input UpdateDirectoryAccountInput {
 	lastLoginAt: Time
 	clearLastLoginAt: Boolean
 	"""
+	time this account was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	clearFirstSeenAt: Boolean
+	"""
+	time this account was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	clearLastSeenAt: Boolean
+	"""
+	provider-reported time the account was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	clearAddedAt: Boolean
+	"""
+	provider-reported or locally-recorded time the account was removed from the source directory
+	"""
+	removedAt: Time
+	clearRemovedAt: Boolean
+	"""
 	hash of the normalized profile payload for change detection
 	"""
 	profileHash: String
@@ -84719,6 +85076,11 @@ input UpdateDirectoryAccountInput {
 	"""
 	profile: Map
 	clearProfile: Boolean
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
+	clearMetadata: Boolean
 	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
@@ -84766,6 +85128,11 @@ input UpdateDirectoryGroupInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
+	"""
 	primary group email address, when applicable
 	"""
 	email: String
@@ -84799,6 +85166,26 @@ input UpdateDirectoryGroupInput {
 	memberCount: Int
 	clearMemberCount: Boolean
 	"""
+	time this group was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	clearFirstSeenAt: Boolean
+	"""
+	time this group was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	clearLastSeenAt: Boolean
+	"""
+	provider-reported time the group was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	clearAddedAt: Boolean
+	"""
+	provider-reported or locally-recorded time the group was removed from the source directory
+	"""
+	removedAt: Time
+	clearRemovedAt: Boolean
+	"""
 	hash of the normalized payload for diffing
 	"""
 	profileHash: String
@@ -84807,6 +85194,11 @@ input UpdateDirectoryGroupInput {
 	"""
 	profile: Map
 	clearProfile: Boolean
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
+	clearMetadata: Boolean
 	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
@@ -84838,6 +85230,11 @@ input UpdateDirectoryMembershipInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
+	"""
 	membership role reported by the provider
 	"""
 	role: DirectoryMembershipDirectoryMembershipRole
@@ -84853,10 +85250,20 @@ input UpdateDirectoryMembershipInput {
 	firstSeenAt: Time
 	clearFirstSeenAt: Boolean
 	"""
-	most recent time the membership was detected
+	most recent time the membership was confirmed by directory ingest
 	"""
 	lastSeenAt: Time
 	clearLastSeenAt: Boolean
+	"""
+	provider-reported time the membership was added in the source directory
+	"""
+	addedAt: Time
+	clearAddedAt: Boolean
+	"""
+	provider-reported or locally-recorded time the membership was removed from the source directory
+	"""
+	removedAt: Time
+	clearRemovedAt: Boolean
 	"""
 	sync run identifier that most recently confirmed this membership
 	"""
@@ -84895,6 +85302,11 @@ input UpdateDirectorySyncRunInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
 	"""
 	current state of the sync run
 	"""

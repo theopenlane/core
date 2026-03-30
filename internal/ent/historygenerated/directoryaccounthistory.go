@@ -56,6 +56,8 @@ type DirectoryAccountHistory struct {
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// optional platform associated with this directory account
 	PlatformID string `json:"platform_id,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
 	// deduplicated identity holder linked to this directory account
 	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
@@ -94,12 +96,22 @@ type DirectoryAccountHistory struct {
 	LastSeenIP *string `json:"last_seen_ip,omitempty"`
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt *time.Time `json:"last_login_at,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt *time.Time `json:"added_at,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt *time.Time `json:"removed_at,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt time.Time `json:"observed_at,omitempty"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash string `json:"profile_hash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]interface{} `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// object storage file identifier that holds the raw upstream payload
 	RawProfileFileID *string `json:"raw_profile_file_id,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
@@ -112,13 +124,13 @@ func (*DirectoryAccountHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case directoryaccounthistory.FieldTags, directoryaccounthistory.FieldProfile:
+		case directoryaccounthistory.FieldTags, directoryaccounthistory.FieldProfile, directoryaccounthistory.FieldMetadata:
 			values[i] = new([]byte)
 		case directoryaccounthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
+		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldDirectoryInstanceID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
-		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldAvatarUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldObservedAt:
+		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldAvatarUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldFirstSeenAt, directoryaccounthistory.FieldLastSeenAt, directoryaccounthistory.FieldAddedAt, directoryaccounthistory.FieldRemovedAt, directoryaccounthistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -244,6 +256,13 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
 			} else if value.Valid {
 				_m.PlatformID = value.String
+			}
+		case directoryaccounthistory.FieldDirectoryInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_instance_id", values[i])
+			} else if value.Valid {
+				_m.DirectoryInstanceID = new(string)
+				*_m.DirectoryInstanceID = value.String
 			}
 		case directoryaccounthistory.FieldIdentityHolderID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -373,6 +392,34 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 				_m.LastLoginAt = new(time.Time)
 				*_m.LastLoginAt = value.Time
 			}
+		case directoryaccounthistory.FieldFirstSeenAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field first_seen_at", values[i])
+			} else if value.Valid {
+				_m.FirstSeenAt = new(time.Time)
+				*_m.FirstSeenAt = value.Time
+			}
+		case directoryaccounthistory.FieldLastSeenAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_seen_at", values[i])
+			} else if value.Valid {
+				_m.LastSeenAt = new(time.Time)
+				*_m.LastSeenAt = value.Time
+			}
+		case directoryaccounthistory.FieldAddedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field added_at", values[i])
+			} else if value.Valid {
+				_m.AddedAt = new(time.Time)
+				*_m.AddedAt = value.Time
+			}
+		case directoryaccounthistory.FieldRemovedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field removed_at", values[i])
+			} else if value.Valid {
+				_m.RemovedAt = new(time.Time)
+				*_m.RemovedAt = value.Time
+			}
 		case directoryaccounthistory.FieldObservedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
@@ -391,6 +438,14 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Profile); err != nil {
 					return fmt.Errorf("unmarshal field profile: %w", err)
+				}
+			}
+		case directoryaccounthistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
 		case directoryaccounthistory.FieldRawProfileFileID:
@@ -494,6 +549,11 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
+	if v := _m.DirectoryInstanceID; v != nil {
+		builder.WriteString("directory_instance_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	if v := _m.IdentityHolderID; v != nil {
 		builder.WriteString("identity_holder_id=")
 		builder.WriteString(*v)
@@ -579,6 +639,26 @@ func (_m *DirectoryAccountHistory) String() string {
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
+	if v := _m.FirstSeenAt; v != nil {
+		builder.WriteString("first_seen_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.LastSeenAt; v != nil {
+		builder.WriteString("last_seen_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.AddedAt; v != nil {
+		builder.WriteString("added_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.RemovedAt; v != nil {
+		builder.WriteString("removed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
 	builder.WriteString("observed_at=")
 	builder.WriteString(_m.ObservedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -587,6 +667,9 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("profile=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Profile))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
 	if v := _m.RawProfileFileID; v != nil {
 		builder.WriteString("raw_profile_file_id=")

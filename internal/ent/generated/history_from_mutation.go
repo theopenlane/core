@@ -4868,6 +4868,10 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetPlatformID(platformID)
 	}
 
+	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+	}
+
 	if identityHolderID, exists := m.IdentityHolderID(); exists {
 		create = create.SetNillableIdentityHolderID(&identityHolderID)
 	}
@@ -4944,6 +4948,22 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetNillableLastLoginAt(&lastLoginAt)
 	}
 
+	if firstSeenAt, exists := m.FirstSeenAt(); exists {
+		create = create.SetNillableFirstSeenAt(&firstSeenAt)
+	}
+
+	if lastSeenAt, exists := m.LastSeenAt(); exists {
+		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if addedAt, exists := m.AddedAt(); exists {
+		create = create.SetNillableAddedAt(&addedAt)
+	}
+
+	if removedAt, exists := m.RemovedAt(); exists {
+		create = create.SetNillableRemovedAt(&removedAt)
+	}
+
 	if observedAt, exists := m.ObservedAt(); exists {
 		create = create.SetObservedAt(observedAt)
 	}
@@ -4954,6 +4974,10 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if profile, exists := m.Profile(); exists {
 		create = create.SetProfile(profile)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
 	}
 
 	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
@@ -5079,6 +5103,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetPlatformID(directoryaccount.PlatformID)
 		}
 
+		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+		} else {
+			create = create.SetNillableDirectoryInstanceID(directoryaccount.DirectoryInstanceID)
+		}
+
 		if identityHolderID, exists := m.IdentityHolderID(); exists {
 			create = create.SetNillableIdentityHolderID(&identityHolderID)
 		} else {
@@ -5193,6 +5223,30 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableLastLoginAt(directoryaccount.LastLoginAt)
 		}
 
+		if firstSeenAt, exists := m.FirstSeenAt(); exists {
+			create = create.SetNillableFirstSeenAt(&firstSeenAt)
+		} else {
+			create = create.SetNillableFirstSeenAt(directoryaccount.FirstSeenAt)
+		}
+
+		if lastSeenAt, exists := m.LastSeenAt(); exists {
+			create = create.SetNillableLastSeenAt(&lastSeenAt)
+		} else {
+			create = create.SetNillableLastSeenAt(directoryaccount.LastSeenAt)
+		}
+
+		if addedAt, exists := m.AddedAt(); exists {
+			create = create.SetNillableAddedAt(&addedAt)
+		} else {
+			create = create.SetNillableAddedAt(directoryaccount.AddedAt)
+		}
+
+		if removedAt, exists := m.RemovedAt(); exists {
+			create = create.SetNillableRemovedAt(&removedAt)
+		} else {
+			create = create.SetNillableRemovedAt(directoryaccount.RemovedAt)
+		}
+
 		if observedAt, exists := m.ObservedAt(); exists {
 			create = create.SetObservedAt(observedAt)
 		} else {
@@ -5209,6 +5263,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetProfile(profile)
 		} else {
 			create = create.SetProfile(directoryaccount.Profile)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(directoryaccount.Metadata)
 		}
 
 		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
@@ -5272,6 +5332,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetIntegrationID(directoryaccount.IntegrationID).
 			SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID).
 			SetPlatformID(directoryaccount.PlatformID).
+			SetNillableDirectoryInstanceID(directoryaccount.DirectoryInstanceID).
 			SetNillableIdentityHolderID(directoryaccount.IdentityHolderID).
 			SetNillableDirectoryName(directoryaccount.DirectoryName).
 			SetExternalID(directoryaccount.ExternalID).
@@ -5291,9 +5352,14 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetMfaState(directoryaccount.MfaState).
 			SetNillableLastSeenIP(directoryaccount.LastSeenIP).
 			SetNillableLastLoginAt(directoryaccount.LastLoginAt).
+			SetNillableFirstSeenAt(directoryaccount.FirstSeenAt).
+			SetNillableLastSeenAt(directoryaccount.LastSeenAt).
+			SetNillableAddedAt(directoryaccount.AddedAt).
+			SetNillableRemovedAt(directoryaccount.RemovedAt).
 			SetObservedAt(directoryaccount.ObservedAt).
 			SetProfileHash(directoryaccount.ProfileHash).
 			SetProfile(directoryaccount.Profile).
+			SetMetadata(directoryaccount.Metadata).
 			SetNillableRawProfileFileID(directoryaccount.RawProfileFileID).
 			SetNillableSourceVersion(directoryaccount.SourceVersion).
 			Save(ctx)
@@ -5373,6 +5439,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetPlatformID(platformID)
 	}
 
+	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+	}
+
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 		create = create.SetDirectorySyncRunID(directorySyncRunID)
 	}
@@ -5409,6 +5479,22 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetMemberCount(memberCount)
 	}
 
+	if firstSeenAt, exists := m.FirstSeenAt(); exists {
+		create = create.SetNillableFirstSeenAt(&firstSeenAt)
+	}
+
+	if lastSeenAt, exists := m.LastSeenAt(); exists {
+		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if addedAt, exists := m.AddedAt(); exists {
+		create = create.SetNillableAddedAt(&addedAt)
+	}
+
+	if removedAt, exists := m.RemovedAt(); exists {
+		create = create.SetNillableRemovedAt(&removedAt)
+	}
+
 	if observedAt, exists := m.ObservedAt(); exists {
 		create = create.SetObservedAt(observedAt)
 	}
@@ -5419,6 +5505,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if profile, exists := m.Profile(); exists {
 		create = create.SetProfile(profile)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
 	}
 
 	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
@@ -5538,6 +5628,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetPlatformID(directorygroup.PlatformID)
 		}
 
+		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+		} else {
+			create = create.SetNillableDirectoryInstanceID(directorygroup.DirectoryInstanceID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -5592,6 +5688,30 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetMemberCount(directorygroup.MemberCount)
 		}
 
+		if firstSeenAt, exists := m.FirstSeenAt(); exists {
+			create = create.SetNillableFirstSeenAt(&firstSeenAt)
+		} else {
+			create = create.SetNillableFirstSeenAt(directorygroup.FirstSeenAt)
+		}
+
+		if lastSeenAt, exists := m.LastSeenAt(); exists {
+			create = create.SetNillableLastSeenAt(&lastSeenAt)
+		} else {
+			create = create.SetNillableLastSeenAt(directorygroup.LastSeenAt)
+		}
+
+		if addedAt, exists := m.AddedAt(); exists {
+			create = create.SetNillableAddedAt(&addedAt)
+		} else {
+			create = create.SetNillableAddedAt(directorygroup.AddedAt)
+		}
+
+		if removedAt, exists := m.RemovedAt(); exists {
+			create = create.SetNillableRemovedAt(&removedAt)
+		} else {
+			create = create.SetNillableRemovedAt(directorygroup.RemovedAt)
+		}
+
 		if observedAt, exists := m.ObservedAt(); exists {
 			create = create.SetObservedAt(observedAt)
 		} else {
@@ -5608,6 +5728,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetProfile(profile)
 		} else {
 			create = create.SetProfile(directorygroup.Profile)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(directorygroup.Metadata)
 		}
 
 		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
@@ -5670,6 +5796,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetScopeID(directorygroup.ScopeID).
 			SetIntegrationID(directorygroup.IntegrationID).
 			SetPlatformID(directorygroup.PlatformID).
+			SetNillableDirectoryInstanceID(directorygroup.DirectoryInstanceID).
 			SetDirectorySyncRunID(directorygroup.DirectorySyncRunID).
 			SetExternalID(directorygroup.ExternalID).
 			SetNillableEmail(directorygroup.Email).
@@ -5679,9 +5806,14 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetStatus(directorygroup.Status).
 			SetExternalSharingAllowed(directorygroup.ExternalSharingAllowed).
 			SetMemberCount(directorygroup.MemberCount).
+			SetNillableFirstSeenAt(directorygroup.FirstSeenAt).
+			SetNillableLastSeenAt(directorygroup.LastSeenAt).
+			SetNillableAddedAt(directorygroup.AddedAt).
+			SetNillableRemovedAt(directorygroup.RemovedAt).
 			SetObservedAt(directorygroup.ObservedAt).
 			SetProfileHash(directorygroup.ProfileHash).
 			SetProfile(directorygroup.Profile).
+			SetMetadata(directorygroup.Metadata).
 			SetNillableRawProfileFileID(directorygroup.RawProfileFileID).
 			SetNillableSourceVersion(directorygroup.SourceVersion).
 			Save(ctx)
@@ -5757,6 +5889,10 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetPlatformID(platformID)
 	}
 
+	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+	}
+
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 		create = create.SetDirectorySyncRunID(directorySyncRunID)
 	}
@@ -5783,6 +5919,14 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if lastSeenAt, exists := m.LastSeenAt(); exists {
 		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if addedAt, exists := m.AddedAt(); exists {
+		create = create.SetNillableAddedAt(&addedAt)
+	}
+
+	if removedAt, exists := m.RemovedAt(); exists {
+		create = create.SetNillableRemovedAt(&removedAt)
 	}
 
 	if observedAt, exists := m.ObservedAt(); exists {
@@ -5900,6 +6044,12 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetPlatformID(directorymembership.PlatformID)
 		}
 
+		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+		} else {
+			create = create.SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -5940,6 +6090,18 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetNillableLastSeenAt(&lastSeenAt)
 		} else {
 			create = create.SetNillableLastSeenAt(directorymembership.LastSeenAt)
+		}
+
+		if addedAt, exists := m.AddedAt(); exists {
+			create = create.SetNillableAddedAt(&addedAt)
+		} else {
+			create = create.SetNillableAddedAt(directorymembership.AddedAt)
+		}
+
+		if removedAt, exists := m.RemovedAt(); exists {
+			create = create.SetNillableRemovedAt(&removedAt)
+		} else {
+			create = create.SetNillableRemovedAt(directorymembership.RemovedAt)
 		}
 
 		if observedAt, exists := m.ObservedAt(); exists {
@@ -6007,6 +6169,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetScopeID(directorymembership.ScopeID).
 			SetIntegrationID(directorymembership.IntegrationID).
 			SetPlatformID(directorymembership.PlatformID).
+			SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID).
 			SetDirectorySyncRunID(directorymembership.DirectorySyncRunID).
 			SetDirectoryAccountID(directorymembership.DirectoryAccountID).
 			SetDirectoryGroupID(directorymembership.DirectoryGroupID).
@@ -6014,6 +6177,8 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetNillableSource(directorymembership.Source).
 			SetNillableFirstSeenAt(directorymembership.FirstSeenAt).
 			SetNillableLastSeenAt(directorymembership.LastSeenAt).
+			SetNillableAddedAt(directorymembership.AddedAt).
+			SetNillableRemovedAt(directorymembership.RemovedAt).
 			SetObservedAt(directorymembership.ObservedAt).
 			SetNillableLastConfirmedRunID(directorymembership.LastConfirmedRunID).
 			SetMetadata(directorymembership.Metadata).

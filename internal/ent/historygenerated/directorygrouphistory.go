@@ -54,6 +54,8 @@ type DirectoryGroupHistory struct {
 	IntegrationID string `json:"integration_id,omitempty"`
 	// optional platform associated with this directory group
 	PlatformID string `json:"platform_id,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// stable identifier from the directory system
@@ -72,12 +74,22 @@ type DirectoryGroupHistory struct {
 	ExternalSharingAllowed bool `json:"external_sharing_allowed,omitempty"`
 	// member count reported by the directory
 	MemberCount int `json:"member_count,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt *time.Time `json:"added_at,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt *time.Time `json:"removed_at,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt time.Time `json:"observed_at,omitempty"`
 	// hash of the normalized payload for diffing
 	ProfileHash string `json:"profile_hash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]interface{} `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// object storage file identifier containing the raw upstream payload
 	RawProfileFileID *string `json:"raw_profile_file_id,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
@@ -90,7 +102,7 @@ func (*DirectoryGroupHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case directorygrouphistory.FieldTags, directorygrouphistory.FieldProfile:
+		case directorygrouphistory.FieldTags, directorygrouphistory.FieldProfile, directorygrouphistory.FieldMetadata:
 			values[i] = new([]byte)
 		case directorygrouphistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -98,9 +110,9 @@ func (*DirectoryGroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygrouphistory.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
+		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectoryInstanceID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
-		case directorygrouphistory.FieldHistoryTime, directorygrouphistory.FieldCreatedAt, directorygrouphistory.FieldUpdatedAt, directorygrouphistory.FieldObservedAt:
+		case directorygrouphistory.FieldHistoryTime, directorygrouphistory.FieldCreatedAt, directorygrouphistory.FieldUpdatedAt, directorygrouphistory.FieldFirstSeenAt, directorygrouphistory.FieldLastSeenAt, directorygrouphistory.FieldAddedAt, directorygrouphistory.FieldRemovedAt, directorygrouphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -221,6 +233,13 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.PlatformID = value.String
 			}
+		case directorygrouphistory.FieldDirectoryInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_instance_id", values[i])
+			} else if value.Valid {
+				_m.DirectoryInstanceID = new(string)
+				*_m.DirectoryInstanceID = value.String
+			}
 		case directorygrouphistory.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field directory_sync_run_id", values[i])
@@ -277,6 +296,34 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.MemberCount = int(value.Int64)
 			}
+		case directorygrouphistory.FieldFirstSeenAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field first_seen_at", values[i])
+			} else if value.Valid {
+				_m.FirstSeenAt = new(time.Time)
+				*_m.FirstSeenAt = value.Time
+			}
+		case directorygrouphistory.FieldLastSeenAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_seen_at", values[i])
+			} else if value.Valid {
+				_m.LastSeenAt = new(time.Time)
+				*_m.LastSeenAt = value.Time
+			}
+		case directorygrouphistory.FieldAddedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field added_at", values[i])
+			} else if value.Valid {
+				_m.AddedAt = new(time.Time)
+				*_m.AddedAt = value.Time
+			}
+		case directorygrouphistory.FieldRemovedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field removed_at", values[i])
+			} else if value.Valid {
+				_m.RemovedAt = new(time.Time)
+				*_m.RemovedAt = value.Time
+			}
 		case directorygrouphistory.FieldObservedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
@@ -295,6 +342,14 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Profile); err != nil {
 					return fmt.Errorf("unmarshal field profile: %w", err)
+				}
+			}
+		case directorygrouphistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
 		case directorygrouphistory.FieldRawProfileFileID:
@@ -395,6 +450,11 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
+	if v := _m.DirectoryInstanceID; v != nil {
+		builder.WriteString("directory_instance_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)
 	builder.WriteString(", ")
@@ -426,6 +486,26 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString("member_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MemberCount))
 	builder.WriteString(", ")
+	if v := _m.FirstSeenAt; v != nil {
+		builder.WriteString("first_seen_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.LastSeenAt; v != nil {
+		builder.WriteString("last_seen_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.AddedAt; v != nil {
+		builder.WriteString("added_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.RemovedAt; v != nil {
+		builder.WriteString("removed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
 	builder.WriteString("observed_at=")
 	builder.WriteString(_m.ObservedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -434,6 +514,9 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("profile=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Profile))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
 	if v := _m.RawProfileFileID; v != nil {
 		builder.WriteString("raw_profile_file_id=")

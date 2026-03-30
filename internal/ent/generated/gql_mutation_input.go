@@ -5032,6 +5032,7 @@ type CreateDirectoryAccountInput struct {
 	Tags                 []string
 	EnvironmentName      *string
 	ScopeName            *string
+	DirectoryInstanceID  *string
 	DirectoryName        *string
 	ExternalID           string
 	SecondaryKey         *string
@@ -5049,9 +5050,14 @@ type CreateDirectoryAccountInput struct {
 	MfaState             *enums.DirectoryAccountMFAState
 	LastSeenIP           *string
 	LastLoginAt          *time.Time
+	FirstSeenAt          *time.Time
+	LastSeenAt           *time.Time
+	AddedAt              *time.Time
+	RemovedAt            *time.Time
 	ObservedAt           *time.Time
 	ProfileHash          *string
 	Profile              map[string]interface{}
+	Metadata             map[string]interface{}
 	SourceVersion        *string
 	OwnerID              *string
 	EnvironmentID        *string
@@ -5076,6 +5082,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
@@ -5126,6 +5135,18 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.LastLoginAt; v != nil {
 		m.SetLastLoginAt(*v)
 	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
@@ -5134,6 +5155,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if v := i.SourceVersion; v != nil {
 		m.SetSourceVersion(*v)
@@ -5188,6 +5212,8 @@ type UpdateDirectoryAccountInput struct {
 	EnvironmentName            *string
 	ClearScopeName             bool
 	ScopeName                  *string
+	ClearDirectoryInstanceID   bool
+	DirectoryInstanceID        *string
 	ClearDirectoryName         bool
 	DirectoryName              *string
 	ClearSecondaryKey          bool
@@ -5218,9 +5244,19 @@ type UpdateDirectoryAccountInput struct {
 	LastSeenIP                 *string
 	ClearLastLoginAt           bool
 	LastLoginAt                *time.Time
+	ClearFirstSeenAt           bool
+	FirstSeenAt                *time.Time
+	ClearLastSeenAt            bool
+	LastSeenAt                 *time.Time
+	ClearAddedAt               bool
+	AddedAt                    *time.Time
+	ClearRemovedAt             bool
+	RemovedAt                  *time.Time
 	ProfileHash                *string
 	ClearProfile               bool
 	Profile                    map[string]interface{}
+	ClearMetadata              bool
+	Metadata                   map[string]interface{}
 	ClearSourceVersion         bool
 	SourceVersion              *string
 	ClearOwner                 bool
@@ -5266,6 +5302,12 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearDirectoryName {
 		m.ClearDirectoryName()
@@ -5357,6 +5399,30 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.LastLoginAt; v != nil {
 		m.SetLastLoginAt(*v)
 	}
+	if i.ClearFirstSeenAt {
+		m.ClearFirstSeenAt()
+	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if i.ClearLastSeenAt {
+		m.ClearLastSeenAt()
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if i.ClearAddedAt {
+		m.ClearAddedAt()
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if i.ClearRemovedAt {
+		m.ClearRemovedAt()
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ProfileHash; v != nil {
 		m.SetProfileHash(*v)
 	}
@@ -5365,6 +5431,12 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearSourceVersion {
 		m.ClearSourceVersion()
@@ -5448,6 +5520,7 @@ type CreateDirectoryGroupInput struct {
 	Tags                   []string
 	EnvironmentName        *string
 	ScopeName              *string
+	DirectoryInstanceID    *string
 	ExternalID             string
 	Email                  *string
 	DisplayName            *string
@@ -5456,9 +5529,14 @@ type CreateDirectoryGroupInput struct {
 	Status                 *enums.DirectoryGroupStatus
 	ExternalSharingAllowed *bool
 	MemberCount            *int
+	FirstSeenAt            *time.Time
+	LastSeenAt             *time.Time
+	AddedAt                *time.Time
+	RemovedAt              *time.Time
 	ObservedAt             *time.Time
 	ProfileHash            *string
 	Profile                map[string]interface{}
+	Metadata               map[string]interface{}
 	SourceVersion          *string
 	OwnerID                *string
 	EnvironmentID          *string
@@ -5479,6 +5557,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.Email; v != nil {
@@ -5502,6 +5583,18 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.MemberCount; v != nil {
 		m.SetMemberCount(*v)
 	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
@@ -5510,6 +5603,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if v := i.SourceVersion; v != nil {
 		m.SetSourceVersion(*v)
@@ -5548,6 +5644,8 @@ type UpdateDirectoryGroupInput struct {
 	EnvironmentName             *string
 	ClearScopeName              bool
 	ScopeName                   *string
+	ClearDirectoryInstanceID    bool
+	DirectoryInstanceID         *string
 	ClearEmail                  bool
 	Email                       *string
 	ClearDisplayName            bool
@@ -5560,9 +5658,19 @@ type UpdateDirectoryGroupInput struct {
 	ExternalSharingAllowed      *bool
 	ClearMemberCount            bool
 	MemberCount                 *int
+	ClearFirstSeenAt            bool
+	FirstSeenAt                 *time.Time
+	ClearLastSeenAt             bool
+	LastSeenAt                  *time.Time
+	ClearAddedAt                bool
+	AddedAt                     *time.Time
+	ClearRemovedAt              bool
+	RemovedAt                   *time.Time
 	ProfileHash                 *string
 	ClearProfile                bool
 	Profile                     map[string]interface{}
+	ClearMetadata               bool
+	Metadata                    map[string]interface{}
 	ClearSourceVersion          bool
 	SourceVersion               *string
 	ClearOwner                  bool
@@ -5598,6 +5706,12 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearEmail {
 		m.ClearEmail()
@@ -5635,6 +5749,30 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.MemberCount; v != nil {
 		m.SetMemberCount(*v)
 	}
+	if i.ClearFirstSeenAt {
+		m.ClearFirstSeenAt()
+	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if i.ClearLastSeenAt {
+		m.ClearLastSeenAt()
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if i.ClearAddedAt {
+		m.ClearAddedAt()
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if i.ClearRemovedAt {
+		m.ClearRemovedAt()
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ProfileHash; v != nil {
 		m.SetProfileHash(*v)
 	}
@@ -5643,6 +5781,12 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearSourceVersion {
 		m.ClearSourceVersion()
@@ -5695,10 +5839,13 @@ func (c *DirectoryGroupUpdateOne) SetInput(i UpdateDirectoryGroupInput) *Directo
 type CreateDirectoryMembershipInput struct {
 	EnvironmentName      *string
 	ScopeName            *string
+	DirectoryInstanceID  *string
 	Role                 *enums.DirectoryMembershipRole
 	Source               *string
 	FirstSeenAt          *time.Time
 	LastSeenAt           *time.Time
+	AddedAt              *time.Time
+	RemovedAt            *time.Time
 	ObservedAt           *time.Time
 	LastConfirmedRunID   *string
 	Metadata             map[string]interface{}
@@ -5722,6 +5869,9 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
+	}
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
 	}
@@ -5733,6 +5883,12 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.LastSeenAt; v != nil {
 		m.SetLastSeenAt(*v)
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
@@ -5779,6 +5935,8 @@ type UpdateDirectoryMembershipInput struct {
 	EnvironmentName            *string
 	ClearScopeName             bool
 	ScopeName                  *string
+	ClearDirectoryInstanceID   bool
+	DirectoryInstanceID        *string
 	ClearRole                  bool
 	Role                       *enums.DirectoryMembershipRole
 	ClearSource                bool
@@ -5787,6 +5945,10 @@ type UpdateDirectoryMembershipInput struct {
 	FirstSeenAt                *time.Time
 	ClearLastSeenAt            bool
 	LastSeenAt                 *time.Time
+	ClearAddedAt               bool
+	AddedAt                    *time.Time
+	ClearRemovedAt             bool
+	RemovedAt                  *time.Time
 	ClearLastConfirmedRunID    bool
 	LastConfirmedRunID         *string
 	ClearMetadata              bool
@@ -5819,6 +5981,12 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
+	}
 	if i.ClearRole {
 		m.ClearRole()
 	}
@@ -5842,6 +6010,18 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.LastSeenAt; v != nil {
 		m.SetLastSeenAt(*v)
+	}
+	if i.ClearAddedAt {
+		m.ClearAddedAt()
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if i.ClearRemovedAt {
+		m.ClearRemovedAt()
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
 	}
 	if i.ClearLastConfirmedRunID {
 		m.ClearLastConfirmedRunID()
@@ -5909,6 +6089,7 @@ func (c *DirectoryMembershipUpdateOne) SetInput(i UpdateDirectoryMembershipInput
 type CreateDirectorySyncRunInput struct {
 	EnvironmentName     *string
 	ScopeName           *string
+	DirectoryInstanceID *string
 	Status              *enums.DirectorySyncRunStatus
 	StartedAt           *time.Time
 	CompletedAt         *time.Time
@@ -5934,6 +6115,9 @@ func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -5995,6 +6179,8 @@ type UpdateDirectorySyncRunInput struct {
 	EnvironmentName           *string
 	ClearScopeName            bool
 	ScopeName                 *string
+	ClearDirectoryInstanceID  bool
+	DirectoryInstanceID       *string
 	Status                    *enums.DirectorySyncRunStatus
 	StartedAt                 *time.Time
 	ClearCompletedAt          bool
@@ -6036,6 +6222,12 @@ func (i *UpdateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)

@@ -6198,6 +6198,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountHistoryOrderFieldDirectoryInstanceID orders DirectoryAccountHistory by directory_instance_id.
+	DirectoryAccountHistoryOrderFieldDirectoryInstanceID = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directoryaccounthistory.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccounthistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccounthistory.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryAccountHistoryOrderFieldDirectoryName orders DirectoryAccountHistory by directory_name.
 	DirectoryAccountHistoryOrderFieldDirectoryName = &DirectoryAccountHistoryOrderField{
 		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
@@ -6292,6 +6319,8 @@ func (f DirectoryAccountHistoryOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountHistoryOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryAccountHistoryOrderFieldDirectoryName.column:
 		str = "directory_name"
 	case DirectoryAccountHistoryOrderFieldExternalID.column:
@@ -6322,6 +6351,8 @@ func (f *DirectoryAccountHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountHistoryOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryAccountHistoryOrderFieldDirectoryInstanceID
 	case "directory_name":
 		*f = *DirectoryAccountHistoryOrderFieldDirectoryName
 	case "external_id":
@@ -6628,6 +6659,33 @@ var (
 			}
 		},
 	}
+	// DirectoryGroupHistoryOrderFieldDirectoryInstanceID orders DirectoryGroupHistory by directory_instance_id.
+	DirectoryGroupHistoryOrderFieldDirectoryInstanceID = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directorygrouphistory.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directorygrouphistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygrouphistory.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryGroupHistoryOrderFieldExternalID orders DirectoryGroupHistory by external_id.
 	DirectoryGroupHistoryOrderFieldExternalID = &DirectoryGroupHistoryOrderField{
 		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
@@ -6695,6 +6753,8 @@ func (f DirectoryGroupHistoryOrderField) String() string {
 		str = "created_at"
 	case DirectoryGroupHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryGroupHistoryOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryGroupHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryGroupHistoryOrderFieldEmail.column:
@@ -6723,6 +6783,8 @@ func (f *DirectoryGroupHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryGroupHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryGroupHistoryOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryGroupHistoryOrderFieldDirectoryInstanceID
 	case "external_id":
 		*f = *DirectoryGroupHistoryOrderFieldExternalID
 	case "email":

@@ -681,44 +681,50 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "DirectoryAccount",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			directoryaccount.FieldCreatedAt:          {Type: field.TypeTime, Column: directoryaccount.FieldCreatedAt},
-			directoryaccount.FieldUpdatedAt:          {Type: field.TypeTime, Column: directoryaccount.FieldUpdatedAt},
-			directoryaccount.FieldCreatedBy:          {Type: field.TypeString, Column: directoryaccount.FieldCreatedBy},
-			directoryaccount.FieldUpdatedBy:          {Type: field.TypeString, Column: directoryaccount.FieldUpdatedBy},
-			directoryaccount.FieldDisplayID:          {Type: field.TypeString, Column: directoryaccount.FieldDisplayID},
-			directoryaccount.FieldTags:               {Type: field.TypeJSON, Column: directoryaccount.FieldTags},
-			directoryaccount.FieldOwnerID:            {Type: field.TypeString, Column: directoryaccount.FieldOwnerID},
-			directoryaccount.FieldEnvironmentName:    {Type: field.TypeString, Column: directoryaccount.FieldEnvironmentName},
-			directoryaccount.FieldEnvironmentID:      {Type: field.TypeString, Column: directoryaccount.FieldEnvironmentID},
-			directoryaccount.FieldScopeName:          {Type: field.TypeString, Column: directoryaccount.FieldScopeName},
-			directoryaccount.FieldScopeID:            {Type: field.TypeString, Column: directoryaccount.FieldScopeID},
-			directoryaccount.FieldIntegrationID:      {Type: field.TypeString, Column: directoryaccount.FieldIntegrationID},
-			directoryaccount.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directoryaccount.FieldDirectorySyncRunID},
-			directoryaccount.FieldPlatformID:         {Type: field.TypeString, Column: directoryaccount.FieldPlatformID},
-			directoryaccount.FieldIdentityHolderID:   {Type: field.TypeString, Column: directoryaccount.FieldIdentityHolderID},
-			directoryaccount.FieldDirectoryName:      {Type: field.TypeString, Column: directoryaccount.FieldDirectoryName},
-			directoryaccount.FieldExternalID:         {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
-			directoryaccount.FieldSecondaryKey:       {Type: field.TypeString, Column: directoryaccount.FieldSecondaryKey},
-			directoryaccount.FieldCanonicalEmail:     {Type: field.TypeString, Column: directoryaccount.FieldCanonicalEmail},
-			directoryaccount.FieldDisplayName:        {Type: field.TypeString, Column: directoryaccount.FieldDisplayName},
-			directoryaccount.FieldAvatarRemoteURL:    {Type: field.TypeString, Column: directoryaccount.FieldAvatarRemoteURL},
-			directoryaccount.FieldAvatarLocalFileID:  {Type: field.TypeString, Column: directoryaccount.FieldAvatarLocalFileID},
-			directoryaccount.FieldAvatarUpdatedAt:    {Type: field.TypeTime, Column: directoryaccount.FieldAvatarUpdatedAt},
-			directoryaccount.FieldGivenName:          {Type: field.TypeString, Column: directoryaccount.FieldGivenName},
-			directoryaccount.FieldFamilyName:         {Type: field.TypeString, Column: directoryaccount.FieldFamilyName},
-			directoryaccount.FieldJobTitle:           {Type: field.TypeString, Column: directoryaccount.FieldJobTitle},
-			directoryaccount.FieldDepartment:         {Type: field.TypeString, Column: directoryaccount.FieldDepartment},
-			directoryaccount.FieldOrganizationUnit:   {Type: field.TypeString, Column: directoryaccount.FieldOrganizationUnit},
-			directoryaccount.FieldAccountType:        {Type: field.TypeEnum, Column: directoryaccount.FieldAccountType},
-			directoryaccount.FieldStatus:             {Type: field.TypeEnum, Column: directoryaccount.FieldStatus},
-			directoryaccount.FieldMfaState:           {Type: field.TypeEnum, Column: directoryaccount.FieldMfaState},
-			directoryaccount.FieldLastSeenIP:         {Type: field.TypeString, Column: directoryaccount.FieldLastSeenIP},
-			directoryaccount.FieldLastLoginAt:        {Type: field.TypeTime, Column: directoryaccount.FieldLastLoginAt},
-			directoryaccount.FieldObservedAt:         {Type: field.TypeTime, Column: directoryaccount.FieldObservedAt},
-			directoryaccount.FieldProfileHash:        {Type: field.TypeString, Column: directoryaccount.FieldProfileHash},
-			directoryaccount.FieldProfile:            {Type: field.TypeJSON, Column: directoryaccount.FieldProfile},
-			directoryaccount.FieldRawProfileFileID:   {Type: field.TypeString, Column: directoryaccount.FieldRawProfileFileID},
-			directoryaccount.FieldSourceVersion:      {Type: field.TypeString, Column: directoryaccount.FieldSourceVersion},
+			directoryaccount.FieldCreatedAt:           {Type: field.TypeTime, Column: directoryaccount.FieldCreatedAt},
+			directoryaccount.FieldUpdatedAt:           {Type: field.TypeTime, Column: directoryaccount.FieldUpdatedAt},
+			directoryaccount.FieldCreatedBy:           {Type: field.TypeString, Column: directoryaccount.FieldCreatedBy},
+			directoryaccount.FieldUpdatedBy:           {Type: field.TypeString, Column: directoryaccount.FieldUpdatedBy},
+			directoryaccount.FieldDisplayID:           {Type: field.TypeString, Column: directoryaccount.FieldDisplayID},
+			directoryaccount.FieldTags:                {Type: field.TypeJSON, Column: directoryaccount.FieldTags},
+			directoryaccount.FieldOwnerID:             {Type: field.TypeString, Column: directoryaccount.FieldOwnerID},
+			directoryaccount.FieldEnvironmentName:     {Type: field.TypeString, Column: directoryaccount.FieldEnvironmentName},
+			directoryaccount.FieldEnvironmentID:       {Type: field.TypeString, Column: directoryaccount.FieldEnvironmentID},
+			directoryaccount.FieldScopeName:           {Type: field.TypeString, Column: directoryaccount.FieldScopeName},
+			directoryaccount.FieldScopeID:             {Type: field.TypeString, Column: directoryaccount.FieldScopeID},
+			directoryaccount.FieldIntegrationID:       {Type: field.TypeString, Column: directoryaccount.FieldIntegrationID},
+			directoryaccount.FieldDirectorySyncRunID:  {Type: field.TypeString, Column: directoryaccount.FieldDirectorySyncRunID},
+			directoryaccount.FieldPlatformID:          {Type: field.TypeString, Column: directoryaccount.FieldPlatformID},
+			directoryaccount.FieldDirectoryInstanceID: {Type: field.TypeString, Column: directoryaccount.FieldDirectoryInstanceID},
+			directoryaccount.FieldIdentityHolderID:    {Type: field.TypeString, Column: directoryaccount.FieldIdentityHolderID},
+			directoryaccount.FieldDirectoryName:       {Type: field.TypeString, Column: directoryaccount.FieldDirectoryName},
+			directoryaccount.FieldExternalID:          {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
+			directoryaccount.FieldSecondaryKey:        {Type: field.TypeString, Column: directoryaccount.FieldSecondaryKey},
+			directoryaccount.FieldCanonicalEmail:      {Type: field.TypeString, Column: directoryaccount.FieldCanonicalEmail},
+			directoryaccount.FieldDisplayName:         {Type: field.TypeString, Column: directoryaccount.FieldDisplayName},
+			directoryaccount.FieldAvatarRemoteURL:     {Type: field.TypeString, Column: directoryaccount.FieldAvatarRemoteURL},
+			directoryaccount.FieldAvatarLocalFileID:   {Type: field.TypeString, Column: directoryaccount.FieldAvatarLocalFileID},
+			directoryaccount.FieldAvatarUpdatedAt:     {Type: field.TypeTime, Column: directoryaccount.FieldAvatarUpdatedAt},
+			directoryaccount.FieldGivenName:           {Type: field.TypeString, Column: directoryaccount.FieldGivenName},
+			directoryaccount.FieldFamilyName:          {Type: field.TypeString, Column: directoryaccount.FieldFamilyName},
+			directoryaccount.FieldJobTitle:            {Type: field.TypeString, Column: directoryaccount.FieldJobTitle},
+			directoryaccount.FieldDepartment:          {Type: field.TypeString, Column: directoryaccount.FieldDepartment},
+			directoryaccount.FieldOrganizationUnit:    {Type: field.TypeString, Column: directoryaccount.FieldOrganizationUnit},
+			directoryaccount.FieldAccountType:         {Type: field.TypeEnum, Column: directoryaccount.FieldAccountType},
+			directoryaccount.FieldStatus:              {Type: field.TypeEnum, Column: directoryaccount.FieldStatus},
+			directoryaccount.FieldMfaState:            {Type: field.TypeEnum, Column: directoryaccount.FieldMfaState},
+			directoryaccount.FieldLastSeenIP:          {Type: field.TypeString, Column: directoryaccount.FieldLastSeenIP},
+			directoryaccount.FieldLastLoginAt:         {Type: field.TypeTime, Column: directoryaccount.FieldLastLoginAt},
+			directoryaccount.FieldFirstSeenAt:         {Type: field.TypeTime, Column: directoryaccount.FieldFirstSeenAt},
+			directoryaccount.FieldLastSeenAt:          {Type: field.TypeTime, Column: directoryaccount.FieldLastSeenAt},
+			directoryaccount.FieldAddedAt:             {Type: field.TypeTime, Column: directoryaccount.FieldAddedAt},
+			directoryaccount.FieldRemovedAt:           {Type: field.TypeTime, Column: directoryaccount.FieldRemovedAt},
+			directoryaccount.FieldObservedAt:          {Type: field.TypeTime, Column: directoryaccount.FieldObservedAt},
+			directoryaccount.FieldProfileHash:         {Type: field.TypeString, Column: directoryaccount.FieldProfileHash},
+			directoryaccount.FieldProfile:             {Type: field.TypeJSON, Column: directoryaccount.FieldProfile},
+			directoryaccount.FieldMetadata:            {Type: field.TypeJSON, Column: directoryaccount.FieldMetadata},
+			directoryaccount.FieldRawProfileFileID:    {Type: field.TypeString, Column: directoryaccount.FieldRawProfileFileID},
+			directoryaccount.FieldSourceVersion:       {Type: field.TypeString, Column: directoryaccount.FieldSourceVersion},
 		},
 	}
 	graph.Nodes[15] = &sqlgraph.Node{
@@ -745,6 +751,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygroup.FieldScopeID:                {Type: field.TypeString, Column: directorygroup.FieldScopeID},
 			directorygroup.FieldIntegrationID:          {Type: field.TypeString, Column: directorygroup.FieldIntegrationID},
 			directorygroup.FieldPlatformID:             {Type: field.TypeString, Column: directorygroup.FieldPlatformID},
+			directorygroup.FieldDirectoryInstanceID:    {Type: field.TypeString, Column: directorygroup.FieldDirectoryInstanceID},
 			directorygroup.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygroup.FieldDirectorySyncRunID},
 			directorygroup.FieldExternalID:             {Type: field.TypeString, Column: directorygroup.FieldExternalID},
 			directorygroup.FieldEmail:                  {Type: field.TypeString, Column: directorygroup.FieldEmail},
@@ -754,9 +761,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygroup.FieldStatus:                 {Type: field.TypeEnum, Column: directorygroup.FieldStatus},
 			directorygroup.FieldExternalSharingAllowed: {Type: field.TypeBool, Column: directorygroup.FieldExternalSharingAllowed},
 			directorygroup.FieldMemberCount:            {Type: field.TypeInt, Column: directorygroup.FieldMemberCount},
+			directorygroup.FieldFirstSeenAt:            {Type: field.TypeTime, Column: directorygroup.FieldFirstSeenAt},
+			directorygroup.FieldLastSeenAt:             {Type: field.TypeTime, Column: directorygroup.FieldLastSeenAt},
+			directorygroup.FieldAddedAt:                {Type: field.TypeTime, Column: directorygroup.FieldAddedAt},
+			directorygroup.FieldRemovedAt:              {Type: field.TypeTime, Column: directorygroup.FieldRemovedAt},
 			directorygroup.FieldObservedAt:             {Type: field.TypeTime, Column: directorygroup.FieldObservedAt},
 			directorygroup.FieldProfileHash:            {Type: field.TypeString, Column: directorygroup.FieldProfileHash},
 			directorygroup.FieldProfile:                {Type: field.TypeJSON, Column: directorygroup.FieldProfile},
+			directorygroup.FieldMetadata:               {Type: field.TypeJSON, Column: directorygroup.FieldMetadata},
 			directorygroup.FieldRawProfileFileID:       {Type: field.TypeString, Column: directorygroup.FieldRawProfileFileID},
 			directorygroup.FieldSourceVersion:          {Type: field.TypeString, Column: directorygroup.FieldSourceVersion},
 		},
@@ -772,28 +784,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "DirectoryMembership",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			directorymembership.FieldCreatedAt:          {Type: field.TypeTime, Column: directorymembership.FieldCreatedAt},
-			directorymembership.FieldUpdatedAt:          {Type: field.TypeTime, Column: directorymembership.FieldUpdatedAt},
-			directorymembership.FieldCreatedBy:          {Type: field.TypeString, Column: directorymembership.FieldCreatedBy},
-			directorymembership.FieldUpdatedBy:          {Type: field.TypeString, Column: directorymembership.FieldUpdatedBy},
-			directorymembership.FieldDisplayID:          {Type: field.TypeString, Column: directorymembership.FieldDisplayID},
-			directorymembership.FieldOwnerID:            {Type: field.TypeString, Column: directorymembership.FieldOwnerID},
-			directorymembership.FieldEnvironmentName:    {Type: field.TypeString, Column: directorymembership.FieldEnvironmentName},
-			directorymembership.FieldEnvironmentID:      {Type: field.TypeString, Column: directorymembership.FieldEnvironmentID},
-			directorymembership.FieldScopeName:          {Type: field.TypeString, Column: directorymembership.FieldScopeName},
-			directorymembership.FieldScopeID:            {Type: field.TypeString, Column: directorymembership.FieldScopeID},
-			directorymembership.FieldIntegrationID:      {Type: field.TypeString, Column: directorymembership.FieldIntegrationID},
-			directorymembership.FieldPlatformID:         {Type: field.TypeString, Column: directorymembership.FieldPlatformID},
-			directorymembership.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directorymembership.FieldDirectorySyncRunID},
-			directorymembership.FieldDirectoryAccountID: {Type: field.TypeString, Column: directorymembership.FieldDirectoryAccountID},
-			directorymembership.FieldDirectoryGroupID:   {Type: field.TypeString, Column: directorymembership.FieldDirectoryGroupID},
-			directorymembership.FieldRole:               {Type: field.TypeEnum, Column: directorymembership.FieldRole},
-			directorymembership.FieldSource:             {Type: field.TypeString, Column: directorymembership.FieldSource},
-			directorymembership.FieldFirstSeenAt:        {Type: field.TypeTime, Column: directorymembership.FieldFirstSeenAt},
-			directorymembership.FieldLastSeenAt:         {Type: field.TypeTime, Column: directorymembership.FieldLastSeenAt},
-			directorymembership.FieldObservedAt:         {Type: field.TypeTime, Column: directorymembership.FieldObservedAt},
-			directorymembership.FieldLastConfirmedRunID: {Type: field.TypeString, Column: directorymembership.FieldLastConfirmedRunID},
-			directorymembership.FieldMetadata:           {Type: field.TypeJSON, Column: directorymembership.FieldMetadata},
+			directorymembership.FieldCreatedAt:           {Type: field.TypeTime, Column: directorymembership.FieldCreatedAt},
+			directorymembership.FieldUpdatedAt:           {Type: field.TypeTime, Column: directorymembership.FieldUpdatedAt},
+			directorymembership.FieldCreatedBy:           {Type: field.TypeString, Column: directorymembership.FieldCreatedBy},
+			directorymembership.FieldUpdatedBy:           {Type: field.TypeString, Column: directorymembership.FieldUpdatedBy},
+			directorymembership.FieldDisplayID:           {Type: field.TypeString, Column: directorymembership.FieldDisplayID},
+			directorymembership.FieldOwnerID:             {Type: field.TypeString, Column: directorymembership.FieldOwnerID},
+			directorymembership.FieldEnvironmentName:     {Type: field.TypeString, Column: directorymembership.FieldEnvironmentName},
+			directorymembership.FieldEnvironmentID:       {Type: field.TypeString, Column: directorymembership.FieldEnvironmentID},
+			directorymembership.FieldScopeName:           {Type: field.TypeString, Column: directorymembership.FieldScopeName},
+			directorymembership.FieldScopeID:             {Type: field.TypeString, Column: directorymembership.FieldScopeID},
+			directorymembership.FieldIntegrationID:       {Type: field.TypeString, Column: directorymembership.FieldIntegrationID},
+			directorymembership.FieldPlatformID:          {Type: field.TypeString, Column: directorymembership.FieldPlatformID},
+			directorymembership.FieldDirectoryInstanceID: {Type: field.TypeString, Column: directorymembership.FieldDirectoryInstanceID},
+			directorymembership.FieldDirectorySyncRunID:  {Type: field.TypeString, Column: directorymembership.FieldDirectorySyncRunID},
+			directorymembership.FieldDirectoryAccountID:  {Type: field.TypeString, Column: directorymembership.FieldDirectoryAccountID},
+			directorymembership.FieldDirectoryGroupID:    {Type: field.TypeString, Column: directorymembership.FieldDirectoryGroupID},
+			directorymembership.FieldRole:                {Type: field.TypeEnum, Column: directorymembership.FieldRole},
+			directorymembership.FieldSource:              {Type: field.TypeString, Column: directorymembership.FieldSource},
+			directorymembership.FieldFirstSeenAt:         {Type: field.TypeTime, Column: directorymembership.FieldFirstSeenAt},
+			directorymembership.FieldLastSeenAt:          {Type: field.TypeTime, Column: directorymembership.FieldLastSeenAt},
+			directorymembership.FieldAddedAt:             {Type: field.TypeTime, Column: directorymembership.FieldAddedAt},
+			directorymembership.FieldRemovedAt:           {Type: field.TypeTime, Column: directorymembership.FieldRemovedAt},
+			directorymembership.FieldObservedAt:          {Type: field.TypeTime, Column: directorymembership.FieldObservedAt},
+			directorymembership.FieldLastConfirmedRunID:  {Type: field.TypeString, Column: directorymembership.FieldLastConfirmedRunID},
+			directorymembership.FieldMetadata:            {Type: field.TypeJSON, Column: directorymembership.FieldMetadata},
 		},
 	}
 	graph.Nodes[17] = &sqlgraph.Node{
@@ -807,27 +822,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "DirectorySyncRun",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			directorysyncrun.FieldCreatedAt:         {Type: field.TypeTime, Column: directorysyncrun.FieldCreatedAt},
-			directorysyncrun.FieldUpdatedAt:         {Type: field.TypeTime, Column: directorysyncrun.FieldUpdatedAt},
-			directorysyncrun.FieldCreatedBy:         {Type: field.TypeString, Column: directorysyncrun.FieldCreatedBy},
-			directorysyncrun.FieldUpdatedBy:         {Type: field.TypeString, Column: directorysyncrun.FieldUpdatedBy},
-			directorysyncrun.FieldDisplayID:         {Type: field.TypeString, Column: directorysyncrun.FieldDisplayID},
-			directorysyncrun.FieldOwnerID:           {Type: field.TypeString, Column: directorysyncrun.FieldOwnerID},
-			directorysyncrun.FieldEnvironmentName:   {Type: field.TypeString, Column: directorysyncrun.FieldEnvironmentName},
-			directorysyncrun.FieldEnvironmentID:     {Type: field.TypeString, Column: directorysyncrun.FieldEnvironmentID},
-			directorysyncrun.FieldScopeName:         {Type: field.TypeString, Column: directorysyncrun.FieldScopeName},
-			directorysyncrun.FieldScopeID:           {Type: field.TypeString, Column: directorysyncrun.FieldScopeID},
-			directorysyncrun.FieldIntegrationID:     {Type: field.TypeString, Column: directorysyncrun.FieldIntegrationID},
-			directorysyncrun.FieldPlatformID:        {Type: field.TypeString, Column: directorysyncrun.FieldPlatformID},
-			directorysyncrun.FieldStatus:            {Type: field.TypeEnum, Column: directorysyncrun.FieldStatus},
-			directorysyncrun.FieldStartedAt:         {Type: field.TypeTime, Column: directorysyncrun.FieldStartedAt},
-			directorysyncrun.FieldCompletedAt:       {Type: field.TypeTime, Column: directorysyncrun.FieldCompletedAt},
-			directorysyncrun.FieldSourceCursor:      {Type: field.TypeString, Column: directorysyncrun.FieldSourceCursor},
-			directorysyncrun.FieldFullCount:         {Type: field.TypeInt, Column: directorysyncrun.FieldFullCount},
-			directorysyncrun.FieldDeltaCount:        {Type: field.TypeInt, Column: directorysyncrun.FieldDeltaCount},
-			directorysyncrun.FieldError:             {Type: field.TypeString, Column: directorysyncrun.FieldError},
-			directorysyncrun.FieldRawManifestFileID: {Type: field.TypeString, Column: directorysyncrun.FieldRawManifestFileID},
-			directorysyncrun.FieldStats:             {Type: field.TypeJSON, Column: directorysyncrun.FieldStats},
+			directorysyncrun.FieldCreatedAt:           {Type: field.TypeTime, Column: directorysyncrun.FieldCreatedAt},
+			directorysyncrun.FieldUpdatedAt:           {Type: field.TypeTime, Column: directorysyncrun.FieldUpdatedAt},
+			directorysyncrun.FieldCreatedBy:           {Type: field.TypeString, Column: directorysyncrun.FieldCreatedBy},
+			directorysyncrun.FieldUpdatedBy:           {Type: field.TypeString, Column: directorysyncrun.FieldUpdatedBy},
+			directorysyncrun.FieldDisplayID:           {Type: field.TypeString, Column: directorysyncrun.FieldDisplayID},
+			directorysyncrun.FieldOwnerID:             {Type: field.TypeString, Column: directorysyncrun.FieldOwnerID},
+			directorysyncrun.FieldEnvironmentName:     {Type: field.TypeString, Column: directorysyncrun.FieldEnvironmentName},
+			directorysyncrun.FieldEnvironmentID:       {Type: field.TypeString, Column: directorysyncrun.FieldEnvironmentID},
+			directorysyncrun.FieldScopeName:           {Type: field.TypeString, Column: directorysyncrun.FieldScopeName},
+			directorysyncrun.FieldScopeID:             {Type: field.TypeString, Column: directorysyncrun.FieldScopeID},
+			directorysyncrun.FieldIntegrationID:       {Type: field.TypeString, Column: directorysyncrun.FieldIntegrationID},
+			directorysyncrun.FieldPlatformID:          {Type: field.TypeString, Column: directorysyncrun.FieldPlatformID},
+			directorysyncrun.FieldDirectoryInstanceID: {Type: field.TypeString, Column: directorysyncrun.FieldDirectoryInstanceID},
+			directorysyncrun.FieldStatus:              {Type: field.TypeEnum, Column: directorysyncrun.FieldStatus},
+			directorysyncrun.FieldStartedAt:           {Type: field.TypeTime, Column: directorysyncrun.FieldStartedAt},
+			directorysyncrun.FieldCompletedAt:         {Type: field.TypeTime, Column: directorysyncrun.FieldCompletedAt},
+			directorysyncrun.FieldSourceCursor:        {Type: field.TypeString, Column: directorysyncrun.FieldSourceCursor},
+			directorysyncrun.FieldFullCount:           {Type: field.TypeInt, Column: directorysyncrun.FieldFullCount},
+			directorysyncrun.FieldDeltaCount:          {Type: field.TypeInt, Column: directorysyncrun.FieldDeltaCount},
+			directorysyncrun.FieldError:               {Type: field.TypeString, Column: directorysyncrun.FieldError},
+			directorysyncrun.FieldRawManifestFileID:   {Type: field.TypeString, Column: directorysyncrun.FieldRawManifestFileID},
+			directorysyncrun.FieldStats:               {Type: field.TypeJSON, Column: directorysyncrun.FieldStats},
 		},
 	}
 	graph.Nodes[18] = &sqlgraph.Node{
@@ -21790,6 +21806,11 @@ func (f *DirectoryAccountFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldPlatformID))
 }
 
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectoryAccountFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldDirectoryInstanceID))
+}
+
 // WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
 func (f *DirectoryAccountFilter) WhereIdentityHolderID(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldIdentityHolderID))
@@ -21885,6 +21906,26 @@ func (f *DirectoryAccountFilter) WhereLastLoginAt(p entql.TimeP) {
 	f.Where(p.Field(directoryaccount.FieldLastLoginAt))
 }
 
+// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
+func (f *DirectoryAccountFilter) WhereFirstSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccount.FieldFirstSeenAt))
+}
+
+// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
+func (f *DirectoryAccountFilter) WhereLastSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccount.FieldLastSeenAt))
+}
+
+// WhereAddedAt applies the entql time.Time predicate on the added_at field.
+func (f *DirectoryAccountFilter) WhereAddedAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccount.FieldAddedAt))
+}
+
+// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
+func (f *DirectoryAccountFilter) WhereRemovedAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccount.FieldRemovedAt))
+}
+
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
 func (f *DirectoryAccountFilter) WhereObservedAt(p entql.TimeP) {
 	f.Where(p.Field(directoryaccount.FieldObservedAt))
@@ -21898,6 +21939,11 @@ func (f *DirectoryAccountFilter) WhereProfileHash(p entql.StringP) {
 // WhereProfile applies the entql json.RawMessage predicate on the profile field.
 func (f *DirectoryAccountFilter) WhereProfile(p entql.BytesP) {
 	f.Where(p.Field(directoryaccount.FieldProfile))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *DirectoryAccountFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(directoryaccount.FieldMetadata))
 }
 
 // WhereRawProfileFileID applies the entql string predicate on the raw_profile_file_id field.
@@ -22183,6 +22229,11 @@ func (f *DirectoryGroupFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldPlatformID))
 }
 
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectoryGroupFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directorygroup.FieldDirectoryInstanceID))
+}
+
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryGroupFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldDirectorySyncRunID))
@@ -22228,6 +22279,26 @@ func (f *DirectoryGroupFilter) WhereMemberCount(p entql.IntP) {
 	f.Where(p.Field(directorygroup.FieldMemberCount))
 }
 
+// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
+func (f *DirectoryGroupFilter) WhereFirstSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directorygroup.FieldFirstSeenAt))
+}
+
+// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
+func (f *DirectoryGroupFilter) WhereLastSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directorygroup.FieldLastSeenAt))
+}
+
+// WhereAddedAt applies the entql time.Time predicate on the added_at field.
+func (f *DirectoryGroupFilter) WhereAddedAt(p entql.TimeP) {
+	f.Where(p.Field(directorygroup.FieldAddedAt))
+}
+
+// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
+func (f *DirectoryGroupFilter) WhereRemovedAt(p entql.TimeP) {
+	f.Where(p.Field(directorygroup.FieldRemovedAt))
+}
+
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
 func (f *DirectoryGroupFilter) WhereObservedAt(p entql.TimeP) {
 	f.Where(p.Field(directorygroup.FieldObservedAt))
@@ -22241,6 +22312,11 @@ func (f *DirectoryGroupFilter) WhereProfileHash(p entql.StringP) {
 // WhereProfile applies the entql json.RawMessage predicate on the profile field.
 func (f *DirectoryGroupFilter) WhereProfile(p entql.BytesP) {
 	f.Where(p.Field(directorygroup.FieldProfile))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *DirectoryGroupFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(directorygroup.FieldMetadata))
 }
 
 // WhereRawProfileFileID applies the entql string predicate on the raw_profile_file_id field.
@@ -22479,6 +22555,11 @@ func (f *DirectoryMembershipFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directorymembership.FieldPlatformID))
 }
 
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectoryMembershipFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directorymembership.FieldDirectoryInstanceID))
+}
+
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryMembershipFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorymembership.FieldDirectorySyncRunID))
@@ -22512,6 +22593,16 @@ func (f *DirectoryMembershipFilter) WhereFirstSeenAt(p entql.TimeP) {
 // WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
 func (f *DirectoryMembershipFilter) WhereLastSeenAt(p entql.TimeP) {
 	f.Where(p.Field(directorymembership.FieldLastSeenAt))
+}
+
+// WhereAddedAt applies the entql time.Time predicate on the added_at field.
+func (f *DirectoryMembershipFilter) WhereAddedAt(p entql.TimeP) {
+	f.Where(p.Field(directorymembership.FieldAddedAt))
+}
+
+// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
+func (f *DirectoryMembershipFilter) WhereRemovedAt(p entql.TimeP) {
+	f.Where(p.Field(directorymembership.FieldRemovedAt))
 }
 
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
@@ -22767,6 +22858,11 @@ func (f *DirectorySyncRunFilter) WhereIntegrationID(p entql.StringP) {
 // WherePlatformID applies the entql string predicate on the platform_id field.
 func (f *DirectorySyncRunFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directorysyncrun.FieldPlatformID))
+}
+
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectorySyncRunFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directorysyncrun.FieldDirectoryInstanceID))
 }
 
 // WhereStatus applies the entql string predicate on the status field.

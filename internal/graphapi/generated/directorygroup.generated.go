@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directo
 				return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 			case "externalID":
@@ -98,12 +100,22 @@ func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directo
 				return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
 			case "memberCount":
 				return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
+			case "firstSeenAt":
+				return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
+			case "lastSeenAt":
+				return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
 			case "profileHash":
 				return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
 			case "profile":
 				return ec.fieldContext_DirectoryGroup_profile(ctx, field)
+			case "metadata":
+				return ec.fieldContext_DirectoryGroup_metadata(ctx, field)
 			case "rawProfileFileID":
 				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
 			case "sourceVersion":
@@ -185,6 +197,8 @@ func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 			case "externalID":
@@ -203,12 +217,22 @@ func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
 			case "memberCount":
 				return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
+			case "firstSeenAt":
+				return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
+			case "lastSeenAt":
+				return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
 			case "profileHash":
 				return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
 			case "profile":
 				return ec.fieldContext_DirectoryGroup_profile(ctx, field)
+			case "metadata":
+				return ec.fieldContext_DirectoryGroup_metadata(ctx, field)
 			case "rawProfileFileID":
 				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
 			case "sourceVersion":
@@ -319,6 +343,8 @@ func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 			case "externalID":
@@ -337,12 +363,22 @@ func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
 			case "memberCount":
 				return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
+			case "firstSeenAt":
+				return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
+			case "lastSeenAt":
+				return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
 			case "profileHash":
 				return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
 			case "profile":
 				return ec.fieldContext_DirectoryGroup_profile(ctx, field)
+			case "metadata":
+				return ec.fieldContext_DirectoryGroup_metadata(ctx, field)
 			case "rawProfileFileID":
 				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
 			case "sourceVersion":

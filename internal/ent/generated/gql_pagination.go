@@ -7465,6 +7465,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldDirectoryInstanceID orders DirectoryAccount by directory_instance_id.
+	DirectoryAccountOrderFieldDirectoryInstanceID = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directoryaccount.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
 	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -7557,6 +7584,8 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryAccountOrderFieldDirectoryName.column:
 		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
@@ -7585,6 +7614,8 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryAccountOrderFieldDirectoryInstanceID
 	case "directory_name":
 		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
@@ -7918,6 +7949,33 @@ var (
 			}
 		},
 	}
+	// DirectoryGroupOrderFieldDirectoryInstanceID orders DirectoryGroup by directory_instance_id.
+	DirectoryGroupOrderFieldDirectoryInstanceID = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directorygroup.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directorygroup.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygroup.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryGroupOrderFieldExternalID orders DirectoryGroup by external_id.
 	DirectoryGroupOrderFieldExternalID = &DirectoryGroupOrderField{
 		Value: func(_m *DirectoryGroup) (ent.Value, error) {
@@ -7983,6 +8041,8 @@ func (f DirectoryGroupOrderField) String() string {
 		str = "created_at"
 	case DirectoryGroupOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryGroupOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryGroupOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryGroupOrderFieldEmail.column:
@@ -8009,6 +8069,8 @@ func (f *DirectoryGroupOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryGroupOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryGroupOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryGroupOrderFieldDirectoryInstanceID
 	case "external_id":
 		*f = *DirectoryGroupOrderFieldExternalID
 	case "email":

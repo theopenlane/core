@@ -14013,6 +14013,11 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, directoryaccount.FieldPlatformID)
 				fieldSeen[directoryaccount.FieldPlatformID] = struct{}{}
 			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directoryaccount.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDirectoryInstanceID)
+				fieldSeen[directoryaccount.FieldDirectoryInstanceID] = struct{}{}
+			}
 		case "identityHolderID":
 			if _, ok := fieldSeen[directoryaccount.FieldIdentityHolderID]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldIdentityHolderID)
@@ -14108,6 +14113,26 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, directoryaccount.FieldLastLoginAt)
 				fieldSeen[directoryaccount.FieldLastLoginAt] = struct{}{}
 			}
+		case "firstSeenAt":
+			if _, ok := fieldSeen[directoryaccount.FieldFirstSeenAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldFirstSeenAt)
+				fieldSeen[directoryaccount.FieldFirstSeenAt] = struct{}{}
+			}
+		case "lastSeenAt":
+			if _, ok := fieldSeen[directoryaccount.FieldLastSeenAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldLastSeenAt)
+				fieldSeen[directoryaccount.FieldLastSeenAt] = struct{}{}
+			}
+		case "addedAt":
+			if _, ok := fieldSeen[directoryaccount.FieldAddedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldAddedAt)
+				fieldSeen[directoryaccount.FieldAddedAt] = struct{}{}
+			}
+		case "removedAt":
+			if _, ok := fieldSeen[directoryaccount.FieldRemovedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldRemovedAt)
+				fieldSeen[directoryaccount.FieldRemovedAt] = struct{}{}
+			}
 		case "observedAt":
 			if _, ok := fieldSeen[directoryaccount.FieldObservedAt]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldObservedAt)
@@ -14122,6 +14147,11 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[directoryaccount.FieldProfile]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldProfile)
 				fieldSeen[directoryaccount.FieldProfile] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[directoryaccount.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldMetadata)
+				fieldSeen[directoryaccount.FieldMetadata] = struct{}{}
 			}
 		case "rawProfileFileID":
 			if _, ok := fieldSeen[directoryaccount.FieldRawProfileFileID]; !ok {
@@ -14649,6 +14679,11 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, directorygroup.FieldPlatformID)
 				fieldSeen[directorygroup.FieldPlatformID] = struct{}{}
 			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directorygroup.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDirectoryInstanceID)
+				fieldSeen[directorygroup.FieldDirectoryInstanceID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorygroup.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldDirectorySyncRunID)
@@ -14694,6 +14729,26 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, directorygroup.FieldMemberCount)
 				fieldSeen[directorygroup.FieldMemberCount] = struct{}{}
 			}
+		case "firstSeenAt":
+			if _, ok := fieldSeen[directorygroup.FieldFirstSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldFirstSeenAt)
+				fieldSeen[directorygroup.FieldFirstSeenAt] = struct{}{}
+			}
+		case "lastSeenAt":
+			if _, ok := fieldSeen[directorygroup.FieldLastSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldLastSeenAt)
+				fieldSeen[directorygroup.FieldLastSeenAt] = struct{}{}
+			}
+		case "addedAt":
+			if _, ok := fieldSeen[directorygroup.FieldAddedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldAddedAt)
+				fieldSeen[directorygroup.FieldAddedAt] = struct{}{}
+			}
+		case "removedAt":
+			if _, ok := fieldSeen[directorygroup.FieldRemovedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldRemovedAt)
+				fieldSeen[directorygroup.FieldRemovedAt] = struct{}{}
+			}
 		case "observedAt":
 			if _, ok := fieldSeen[directorygroup.FieldObservedAt]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldObservedAt)
@@ -14708,6 +14763,11 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[directorygroup.FieldProfile]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldProfile)
 				fieldSeen[directorygroup.FieldProfile] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[directorygroup.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldMetadata)
+				fieldSeen[directorygroup.FieldMetadata] = struct{}{}
 			}
 		case "rawProfileFileID":
 			if _, ok := fieldSeen[directorygroup.FieldRawProfileFileID]; !ok {
@@ -15167,6 +15227,11 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, directorymembership.FieldPlatformID)
 				fieldSeen[directorymembership.FieldPlatformID] = struct{}{}
 			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directorymembership.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectoryInstanceID)
+				fieldSeen[directorymembership.FieldDirectoryInstanceID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorymembership.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorymembership.FieldDirectorySyncRunID)
@@ -15201,6 +15266,16 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[directorymembership.FieldLastSeenAt]; !ok {
 				selectedFields = append(selectedFields, directorymembership.FieldLastSeenAt)
 				fieldSeen[directorymembership.FieldLastSeenAt] = struct{}{}
+			}
+		case "addedAt":
+			if _, ok := fieldSeen[directorymembership.FieldAddedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldAddedAt)
+				fieldSeen[directorymembership.FieldAddedAt] = struct{}{}
+			}
+		case "removedAt":
+			if _, ok := fieldSeen[directorymembership.FieldRemovedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldRemovedAt)
+				fieldSeen[directorymembership.FieldRemovedAt] = struct{}{}
 			}
 		case "observedAt":
 			if _, ok := fieldSeen[directorymembership.FieldObservedAt]; !ok {
@@ -15708,6 +15783,11 @@ func (_q *DirectorySyncRunQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[directorysyncrun.FieldPlatformID]; !ok {
 				selectedFields = append(selectedFields, directorysyncrun.FieldPlatformID)
 				fieldSeen[directorysyncrun.FieldPlatformID] = struct{}{}
+			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directorysyncrun.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldDirectoryInstanceID)
+				fieldSeen[directorysyncrun.FieldDirectoryInstanceID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[directorysyncrun.FieldStatus]; !ok {
