@@ -1261,7 +1261,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			finding.FieldFindingStatusName:  {Type: field.TypeString, Column: finding.FieldFindingStatusName},
 			finding.FieldFindingStatusID:    {Type: field.TypeString, Column: finding.FieldFindingStatusID},
 			finding.FieldExternalID:         {Type: field.TypeString, Column: finding.FieldExternalID},
-			finding.FieldStatus:             {Type: field.TypeString, Column: finding.FieldStatus},
 			finding.FieldSecurityLevel:      {Type: field.TypeEnum, Column: finding.FieldSecurityLevel},
 			finding.FieldExternalOwnerID:    {Type: field.TypeString, Column: finding.FieldExternalOwnerID},
 			finding.FieldSource:             {Type: field.TypeString, Column: finding.FieldSource},
@@ -3472,7 +3471,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusName},
 			vulnerability.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusID},
 			vulnerability.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
-			vulnerability.FieldStatus:                  {Type: field.TypeString, Column: vulnerability.FieldStatus},
 			vulnerability.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerability.FieldSecurityLevel},
 			vulnerability.FieldExternalID:              {Type: field.TypeString, Column: vulnerability.FieldExternalID},
 			vulnerability.FieldCveID:                   {Type: field.TypeString, Column: vulnerability.FieldCveID},
@@ -26287,11 +26285,6 @@ func (f *FindingFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldExternalID))
 }
 
-// WhereStatus applies the entql string predicate on the status field.
-func (f *FindingFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(finding.FieldStatus))
-}
-
 // WhereSecurityLevel applies the entql string predicate on the security_level field.
 func (f *FindingFilter) WhereSecurityLevel(p entql.StringP) {
 	f.Where(p.Field(finding.FieldSecurityLevel))
@@ -45574,11 +45567,6 @@ func (f *VulnerabilityFilter) WhereVulnerabilityStatusID(p entql.StringP) {
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldExternalOwnerID))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *VulnerabilityFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(vulnerability.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.

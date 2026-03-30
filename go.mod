@@ -31,7 +31,7 @@ require (
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.8.0
 	github.com/didasy/tldr v0.7.0
-	github.com/elimity-com/scim v0.0.0-20260324203233-74aeaa1a60d1
+	github.com/elimity-com/scim v0.0.0-20260328082132-8c2ba6dc89f1
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.19.0
 	github.com/fsnotify/fsnotify v1.9.0
@@ -80,7 +80,7 @@ require (
 	github.com/riverqueue/river v0.32.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.32.0
 	github.com/riverqueue/river/rivertype v0.32.0
-	github.com/rs/zerolog v1.34.0
+	github.com/rs/zerolog v1.35.0
 	github.com/samber/do/v2 v2.0.0
 	github.com/samber/lo v1.53.0
 	github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed
