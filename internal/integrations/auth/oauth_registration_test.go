@@ -19,64 +19,6 @@ type testCredential struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-var errDecodeTestCredential = errors.New("test: decode credential failed")
-
-func TestOAuthRegistrationTokenViewReturnsToken(t *testing.T) {
-	t.Parallel()
-
-	expiry := time.Now().Add(time.Hour).UTC()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-		TokenView: func(cred testCredential) (*types.TokenView, error) {
-			return &types.TokenView{
-				AccessToken: cred.AccessToken,
-				ExpiresAt:   &expiry,
-			}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{"access_token":"at-123"}`)}
-	view, err := reg.TokenView(context.Background(), stored)
-	if err != nil {
-		t.Fatalf("TokenView() error = %v", err)
-	}
-
-	if view == nil {
-		t.Fatal("TokenView() returned nil")
-	}
-
-	if view.AccessToken != "at-123" {
-		t.Fatalf("TokenView() token = %q, want %q", view.AccessToken, "at-123")
-	}
-}
-
-func TestOAuthRegistrationTokenViewNilFunc(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{"access_token":"at-123"}`)}
-	view, err := reg.TokenView(context.Background(), stored)
-	if err != nil {
-		t.Fatalf("TokenView() error = %v", err)
-	}
-
-	if view != nil {
-		t.Fatalf("TokenView() = %v, want nil", view)
-	}
-}
-
 func TestBuildOAuthMaterialToken(t *testing.T) {
 	t.Parallel()
 
@@ -254,51 +196,6 @@ func TestOAuthRegistrationCompleteCodeExchangeError(t *testing.T) {
 	_, err := reg.Complete(context.Background(), state, input)
 	if err == nil {
 		t.Fatal("Complete() expected error from code exchange, got nil")
-	}
-}
-
-func TestOAuthRegistrationTokenViewBadCredentialCustomError(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef:         types.NewCredentialRef[testCredential]("test"),
-		Config:                testOAuthCfg,
-		DecodeCredentialError: errDecodeTestCredential,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-		TokenView: func(cred testCredential) (*types.TokenView, error) {
-			return &types.TokenView{AccessToken: cred.AccessToken}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{invalid`)}
-
-	_, err := reg.TokenView(context.Background(), stored)
-	if !errors.Is(err, errDecodeTestCredential) {
-		t.Fatalf("TokenView() error = %v, want %v", err, errDecodeTestCredential)
-	}
-}
-
-func TestOAuthRegistrationTokenViewBadCredentialNoCustomError(t *testing.T) {
-	t.Parallel()
-
-	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
-		Config:        testOAuthCfg,
-		Material: func(mat OAuthMaterial) (testCredential, error) {
-			return testCredential{}, nil
-		},
-		TokenView: func(cred testCredential) (*types.TokenView, error) {
-			return &types.TokenView{AccessToken: cred.AccessToken}, nil
-		},
-	})
-
-	stored := types.CredentialSet{Data: json.RawMessage(`{invalid`)}
-
-	_, err := reg.TokenView(context.Background(), stored)
-	if err == nil {
-		t.Fatal("TokenView() expected error for invalid credential, got nil")
 	}
 }
 

@@ -49,19 +49,19 @@ func TestResolveKeymakerInstallationPassesThroughUnexpectedErrors(t *testing.T) 
 func TestResolveKeymakerInstallationReturnsRecord(t *testing.T) {
 	t.Parallel()
 
-	record, err := resolveKeymakerInstallation(context.Background(), "install-1", func(_ context.Context, ownerID, installationID, definitionID string) (*ent.Integration, error) {
+	record, err := resolveKeymakerInstallation(context.Background(), "install-1", func(_ context.Context, ownerID, integrationID, definitionID string) (*ent.Integration, error) {
 		if ownerID != "" {
 			t.Fatalf("expected empty ownerID, got %q", ownerID)
 		}
-		if installationID != "install-1" {
-			t.Fatalf("expected installationID install-1, got %q", installationID)
+		if integrationID != "install-1" {
+			t.Fatalf("expected integrationID install-1, got %q", integrationID)
 		}
 		if definitionID != "" {
 			t.Fatalf("expected empty definitionID, got %q", definitionID)
 		}
 
 		return &ent.Integration{
-			ID:           installationID,
+			ID:           integrationID,
 			OwnerID:      "org-1",
 			DefinitionID: "github-oauth",
 		}, nil

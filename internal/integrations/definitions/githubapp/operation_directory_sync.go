@@ -126,7 +126,7 @@ func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgN
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
-			return nil, normalizeGitHubAPIError(err)
+			return nil, ErrAPIRequest
 		}
 
 		orgs = append(orgs, query.Viewer.Organizations.Nodes...)
@@ -167,7 +167,7 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
-			return nil, normalizeGitHubAPIError(err)
+			return nil, ErrAPIRequest
 		}
 
 		members = append(members, query.Organization.MembersWithRole.Nodes...)

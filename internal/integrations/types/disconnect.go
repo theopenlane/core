@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 
 // DisconnectRequest bundles the inputs for executing a disconnect flow
 type DisconnectRequest struct {
-	// Installation is the installation record being disconnected
-	Installation *generated.Integration
+	// Integration is the installation record being disconnected
+	Integration *generated.Integration
 	// Connection is the resolved connection mode for this installation
 	Connection ConnectionRegistration
 	// Credentials are the persisted credentials participating in this connection mode

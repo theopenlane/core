@@ -45,19 +45,6 @@ type statePayload struct {
 	Token string `json:"token"`
 }
 
-// tokenViewAppInstall extracts the access token and expiry from a GitHub App credential
-func tokenViewAppInstall(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
-	var cred githubAppCredential
-	if err := jsonx.UnmarshalIfPresent(credential.Data, &cred); err != nil {
-		return nil, ErrCredentialDecode
-	}
-
-	return &types.TokenView{
-		AccessToken: cred.AccessToken,
-		ExpiresAt:   cred.Expiry,
-	}, nil
-}
-
 // startAppInstall generates the GitHub App installation URL and CSRF state token
 func startAppInstall(cfg Config) (types.AuthStartResult, error) {
 	if cfg.AppSlug == "" {
@@ -99,18 +86,18 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 		return types.AuthCompleteResult{}, ErrInstallationIDMissing
 	}
 
-	installationID, err := strconv.ParseInt(raw, 10, 64)
-	if err != nil || installationID == 0 {
+	integrationID, err := strconv.ParseInt(raw, 10, 64)
+	if err != nil || integrationID == 0 {
 		return types.AuthCompleteResult{}, ErrInstallationIDMissing
 	}
 
-	cred, err := mintCredential(ctx, cfg, installationID)
+	cred, err := mintCredential(ctx, cfg, integrationID)
 	if err != nil {
 		return types.AuthCompleteResult{}, err
 	}
 
 	installInput, err := jsonx.ToRawMessage(InstallationMetadata{
-		InstallationID: strconv.FormatInt(installationID, 10),
+		InstallationID: strconv.FormatInt(integrationID, 10),
 	})
 	if err != nil {
 		return types.AuthCompleteResult{}, ErrInstallationMetadataEncode
@@ -134,7 +121,7 @@ func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
 	}
 
 	var metadata InstallationMetadata
-	if err := jsonx.UnmarshalIfPresent(req.Installation.InstallationMetadata.Attributes, &metadata); err != nil {
+	if err := jsonx.UnmarshalIfPresent(req.Integration.InstallationMetadata.Attributes, &metadata); err != nil {
 		return 0, ErrInstallationMetadataDecode
 	}
 
@@ -142,16 +129,16 @@ func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
 		return 0, ErrInstallationIDMissing
 	}
 
-	installationID, err := strconv.ParseInt(metadata.InstallationID, 10, 64)
-	if err != nil || installationID == 0 {
+	integrationID, err := strconv.ParseInt(metadata.InstallationID, 10, 64)
+	if err != nil || integrationID == 0 {
 		return 0, ErrInstallationIDMissing
 	}
 
-	return installationID, nil
+	return integrationID, nil
 }
 
 // mintCredential mints an installation token and marshals it into a CredentialSet
-func mintCredential(ctx context.Context, cfg Config, installationID int64) (types.CredentialSet, error) {
+func mintCredential(ctx context.Context, cfg Config, integrationID int64) (types.CredentialSet, error) {
 	if cfg.AppID == "" {
 		return types.CredentialSet{}, ErrAppIDMissing
 	}
@@ -161,7 +148,7 @@ func mintCredential(ctx context.Context, cfg Config, installationID int64) (type
 		return types.CredentialSet{}, err
 	}
 
-	token, err := installationToken(ctx, cfg, installationID, jwtToken)
+	token, err := installationToken(ctx, cfg, integrationID, jwtToken)
 	if err != nil {
 		return types.CredentialSet{}, err
 	}
@@ -173,7 +160,7 @@ func mintCredential(ctx context.Context, cfg Config, installationID int64) (type
 
 	cred := githubAppCredential{
 		AppID:          appIDInt,
-		InstallationID: installationID,
+		InstallationID: integrationID,
 		AccessToken:    token.AccessToken,
 	}
 
@@ -238,13 +225,13 @@ func parseRSAPrivateKey(privateKey string) (*rsa.PrivateKey, error) {
 }
 
 // installationToken exchanges an app JWT for an installation access token
-func installationToken(ctx context.Context, cfg Config, installationID int64, jwtToken string) (*oauth2.Token, error) {
-	if installationID == 0 {
+func installationToken(ctx context.Context, cfg Config, integrationID int64, jwtToken string) (*oauth2.Token, error) {
+	if integrationID == 0 {
 		return nil, ErrInstallationIDMissing
 	}
 
 	client := installationTokenClient(ctx, cfg, jwtToken)
-	installationToken, _, err := client.Apps.CreateInstallationToken(ctx, installationID, &gh.InstallationTokenOptions{})
+	installationToken, _, err := client.Apps.CreateInstallationToken(ctx, integrationID, &gh.InstallationTokenOptions{})
 	if err != nil {
 		return nil, ErrInstallationTokenRequestFailed
 	}

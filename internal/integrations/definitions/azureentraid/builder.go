@@ -45,7 +45,7 @@ func Builder(cfg Config) registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{entraTenantCredential.ID()},
 					ClientRefs:          []types.ClientID{entraCredential.ID(), entraClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[entraIDCred]{
 						CredentialRef: entraTenantCredential,
 						Config: auth.OAuthConfig{
@@ -86,14 +86,7 @@ func Builder(cfg Config) registry.Builder {
 								TenantID:     tenantID,
 							}, nil
 						},
-						TokenView: func(cred entraIDCred) (*types.TokenView, error) {
-							return &types.TokenView{
-								AccessToken: cred.AccessToken,
-								ExpiresAt:   cred.Expiry,
-							}, nil
-						},
 						EncodeCredentialError: ErrCredentialEncode,
-						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: entraTenantCredential.ID(),
@@ -119,7 +112,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Verify Azure client credentials can acquire a token against Microsoft Graph",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    entraCredential.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       HealthCheck{}.Handle(),
@@ -128,9 +121,10 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Azure Entra ID users, groups, and memberships as directory accounts",
-					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    entraClient.ID(),
 					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

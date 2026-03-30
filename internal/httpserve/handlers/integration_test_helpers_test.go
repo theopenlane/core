@@ -1,12 +1,9 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
-	"time"
 
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
@@ -15,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/gala"
 )
 
 // HelperTestHealthCheck is the config type for the helper test health check operation
@@ -28,25 +24,20 @@ var (
 )
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
-// built from the given definition builders. Returns a restore function.
+// built from the given definition builders, backed by the suite's durable Gala instance.
+// Returns a restore function
 func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []registry.Builder) func() {
 	t.Helper()
 
 	original := suite.h.IntegrationsRuntime
 	originalConfig := suite.h.IntegrationsConfig
 
-	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
-		DispatchMode: gala.DispatchModeInMemory,
-		Enabled:      true,
-	})
-	assert.NoError(t, err)
-
 	credStore, err := keystore.NewStore(suite.db)
 	assert.NoError(t, err)
 
 	rt, err := runtime.New(runtime.Config{
 		DB:                 suite.db,
-		Gala:               galaInstance,
+		Gala:               suite.galaRuntime,
 		Keystore:           credStore,
 		DefinitionBuilders: builders,
 	})
@@ -55,7 +46,6 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []re
 	suite.h.IntegrationsRuntime = rt
 
 	return func() {
-		_ = galaInstance.Close()
 		suite.h.IntegrationsRuntime = original
 		suite.h.IntegrationsConfig = originalConfig
 	}
@@ -69,51 +59,6 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 	suite.h.IntegrationsConfig.GitHubApp = cfg
 
 	return restore
-}
-
-// withDurableGitHubAppIntegrationRuntime swaps the suite handler's IntegrationsRuntime for one
-// backed by a durable Gala instance with River workers, matching production dispatch behavior
-func (suite *HandlerTestSuite) withDurableGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config) func() {
-	t.Helper()
-
-	original := suite.h.IntegrationsRuntime
-	originalConfig := suite.h.IntegrationsConfig
-
-	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     suite.tf.URI,
-		QueueName:         "github_webhook_test",
-		WorkerCount:       5,
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond,
-	})
-	assert.NoError(t, err)
-
-	do.ProvideValue(galaInstance.Injector(), suite.db)
-
-	credStore, err := keystore.NewStore(suite.db)
-	assert.NoError(t, err)
-
-	rt, err := runtime.New(runtime.Config{
-		DB:                 suite.db,
-		Gala:               galaInstance,
-		Keystore:           credStore,
-		DefinitionBuilders: []registry.Builder{githubapp.Builder(cfg)},
-	})
-	assert.NoError(t, err)
-
-	assert.NoError(t, galaInstance.StartWorkers(context.Background()))
-
-	suite.h.IntegrationsRuntime = rt
-	suite.h.IntegrationsConfig.GitHubApp = cfg
-
-	return func() {
-		_ = galaInstance.StopWorkers(context.Background())
-		_ = galaInstance.Close()
-		suite.h.IntegrationsRuntime = original
-		suite.h.IntegrationsConfig = originalConfig
-	}
 }
 
 // githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests.

@@ -9,6 +9,7 @@ import (
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
+// this is here purely to drive the konaf output config constructs we use as a standard in this repo
 type Config struct {
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`

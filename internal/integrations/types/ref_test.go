@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import (
 	"encoding/json"
@@ -49,7 +49,8 @@ func TestOperationRefName(t *testing.T) {
 func TestOperationTopic(t *testing.T) {
 	t.Parallel()
 
-	got := OperationTopic("def_001", "health.default")
+	ref := NewDefinitionRef("def_001")
+	got := ref.OperationTopic("health.default")
 	want := "integration.def_001.health.default"
 	if string(got) != want {
 		t.Fatalf("OperationTopic() = %q, want %q", got, want)

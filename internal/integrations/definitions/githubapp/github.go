@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/shurcooL/githubv4"
 )
 
@@ -38,7 +39,12 @@ type pageInfo struct {
 // queryRepositories lists repositories accessible to the installation
 func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) ([]repositoryNode, error) {
 	repositories := make([]repositoryNode, 0)
-	pageSize = clampPageSize(pageSize)
+	if pageSize <= 0 {
+		pageSize = defaultPageSize
+	}
+
+	pageSize = lo.Clamp(pageSize, 1, maxPageSize)
+
 	var after *githubv4.String
 
 	for {
@@ -61,7 +67,7 @@ func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) 
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
-			return nil, normalizeGitHubAPIError(err)
+			return nil, ErrAPIRequest
 		}
 
 		repositories = append(repositories, query.Viewer.Repositories.Nodes...)
@@ -73,25 +79,4 @@ func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) 
 	}
 
 	return repositories, nil
-}
-
-// clampPageSize constrains page sizes to the supported GitHub API range
-func clampPageSize(value int) int {
-	switch {
-	case value <= 0:
-		return defaultPageSize
-	case value > maxPageSize:
-		return maxPageSize
-	default:
-		return value
-	}
-}
-
-// normalizeGitHubAPIError collapses provider-specific errors into integration errors
-func normalizeGitHubAPIError(err error) error {
-	if err == nil {
-		return nil
-	}
-
-	return ErrAPIRequest
 }

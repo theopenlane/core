@@ -1,10 +1,6 @@
-package types
+package types //nolint:revive
 
 import (
-	"encoding/json"
-
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/models"
 )
 
@@ -47,28 +43,4 @@ func (bindings CredentialBindings) With(ref CredentialSlotID, credential Credent
 	}
 
 	return append(out, CredentialBinding{Ref: ref, Credential: credential})
-}
-
-// CredentialRegistration declares how a definition accepts credentials
-type CredentialRegistration struct {
-	// Ref is the durable credential slot identifier
-	Ref CredentialSlotID `json:"ref"`
-	// Name is the user-facing credential slot name
-	Name string `json:"name,omitempty"`
-	// Description describes when this credential slot should be used
-	Description string `json:"description,omitempty"`
-	// Schema is the JSON schema used to collect credentials
-	Schema json.RawMessage `json:"schema,omitempty"`
-}
-
-// CredentialRegistration returns the credential registration for the given ref
-func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegistration, error) {
-	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return r.Ref == ref
-	})
-	if !found {
-		return CredentialRegistration{}, ErrCredentialRefNotFound
-	}
-
-	return reg, nil
 }

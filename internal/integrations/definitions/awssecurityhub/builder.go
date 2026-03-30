@@ -47,7 +47,7 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{awsAssumeRoleCredential.ID(), awsServiceAccountCredential.ID()},
 					ClientRefs:          []types.ClientID{securityHubClient.ID(), auditManagerClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: awsAssumeRoleCredential.ID(),
 						Description:   "Removes the stored IAM assume-role configuration from Openlane. If the cross-account IAM role is no longer needed, delete it from your AWS account.",
@@ -72,7 +72,7 @@ func Builder() registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Validate Security Hub access",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    securityHubClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       HealthCheck{}.Handle(),
@@ -81,9 +81,10 @@ func Builder() registry.Builder {
 				{
 					Name:         assessmentsCollectOperation.Name(),
 					Description:  "Collect AWS Audit Manager assessments as findings",
-					Topic:        types.OperationTopic(definitionID.ID(), assessmentsCollectOperation.Name()),
+					Topic:        definitionID.OperationTopic(assessmentsCollectOperation.Name()),
 					ClientRef:    auditManagerClient.ID(),
 					ConfigSchema: assessmentsCollectSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
@@ -94,9 +95,10 @@ func Builder() registry.Builder {
 				{
 					Name:         vulnerabilitiesCollectOperation.Name(),
 					Description:  "Collect AWS Security Hub findings for vulnerability ingestion",
-					Topic:        types.OperationTopic(definitionID.ID(), vulnerabilitiesCollectOperation.Name()),
+					Topic:        definitionID.OperationTopic(vulnerabilitiesCollectOperation.Name()),
 					ClientRef:    securityHubClient.ID(),
 					ConfigSchema: vulnerabilitiesCollectSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,

@@ -3,25 +3,26 @@ package operations
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
 // ReconcileEnvelope is the durable payload for a scheduled reconciliation cycle
 type ReconcileEnvelope struct {
-	// InstallationID is the target installation identifier
-	InstallationID string `json:"installationId"`
-	// DefinitionID is the integration definition identifier
-	DefinitionID string `json:"definitionId"`
+	types.ExecutionMetadata
 	// Schedule is the adaptive scheduling state carried across cycles
 	Schedule gala.ScheduleState `json:"schedule"`
 }
 
+// reconcileSchemaName is the type name derived from the JSON schema reflector
+var reconcileSchemaName = providerkit.SchemaID(providerkit.SchemaFrom[ReconcileEnvelope]())
+
 var (
-	// reconcileTopic is the Gala topic name for reconciliation envelopes
-	reconcileTopic = types.TopicFromType[ReconcileEnvelope]()
+	// ReconcileTopic is the Gala topic name for reconciliation envelopes
+	ReconcileTopic = gala.TopicName("integration." + reconcileSchemaName)
 	// reconcileListenerName is the Gala listener name for reconciliation handlers
-	reconcileListenerName = types.ListenerFromType[ReconcileEnvelope]()
+	reconcileListenerName = "integration." + reconcileSchemaName + ".handler"
 )
 
 // ReconcileHandler processes one reconciliation envelope and returns the number of
@@ -34,7 +35,7 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 		return ErrGalaRequired
 	}
 
-	topic := gala.Topic[ReconcileEnvelope]{Name: reconcileTopic}
+	topic := gala.Topic[ReconcileEnvelope]{Name: ReconcileTopic}
 
 	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[ReconcileEnvelope]{
 		Topic: topic,
@@ -44,17 +45,14 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 
 			next := schedule.Next(envelope.Schedule, delta, execErr)
 			scheduledAt := next.NextScheduledAt()
-
-			receipt := runtime.EmitWithHeaders(ctx.Context, reconcileTopic, ReconcileEnvelope{
-				InstallationID: envelope.InstallationID,
-				DefinitionID:   envelope.DefinitionID,
-				Schedule:       next},
-				gala.Headers{ScheduledAt: &scheduledAt,
-					Properties: map[string]string{
-						"installation_id": envelope.InstallationID,
-						"definition_id":   envelope.DefinitionID,
-					},
-				})
+			emitCtx := types.WithExecutionMetadata(ctx.Context, envelope.ExecutionMetadata)
+			receipt := runtime.EmitWithHeaders(emitCtx, ReconcileTopic, ReconcileEnvelope{
+				ExecutionMetadata: envelope.ExecutionMetadata,
+				Schedule:          next,
+			}, gala.Headers{
+				ScheduledAt: &scheduledAt,
+				Properties:  envelope.Properties(),
+			})
 
 			return receipt.Err
 		},

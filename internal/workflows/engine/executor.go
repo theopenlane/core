@@ -419,7 +419,7 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 			}
 		}
 
-		if err := e.dispatchTemplateIntegration(ctx, integrationRendered, params.OperationName); err != nil {
+		if err := e.dispatchTemplateIntegration(ctx, ownerID, integrationRendered, params.OperationName); err != nil {
 			return err
 		}
 	}

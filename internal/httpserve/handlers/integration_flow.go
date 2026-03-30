@@ -50,19 +50,24 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.InstallationID, def)
+	// if integrationID is empty, we assume this is a new installation and proceed to create a record that the auth flow can reference; if it is provided we will attempt to resolve and reuse the existing installation record for the auth flow
+	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.IntegrationID, def)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration")
+
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
+	// if we got optional config with the input, persist it
 	if !jsonx.IsEmptyRawMessage(in.UserInput) {
 		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialSlotID{}, nil, nil); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile user input")
+
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 	}
 
+	// we should basically never be trying to start auth flow without an integration record at this point
 	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
 		DefinitionID:   def.ID,
 		InstallationID: installationRec.ID,
@@ -70,6 +75,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 	})
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to begin auth flow")
+
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
@@ -78,6 +84,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 		"state":           begin.State,
 		"organization_id": caller.OrganizationID,
 	})
+
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
 	return h.Success(ctx, openapi.OAuthFlowResponse{
@@ -95,28 +102,23 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context, openapiCtx *Op
 
 	reqCtx := ctx.Request().Context()
 
-	callbackInput := normalizeIntegrationAuthCallbackInput(ctx.Request())
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("state cookie not found")
+
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
 	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("organization_id cookie not found")
+
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
 	}
 
-	caller, callerOk := auth.CallerFromContext(reqCtx)
-	if !callerOk || caller == nil {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
-	}
+	callbackInput := normalizeIntegrationAuthCallbackInput(ctx.Request())
 
-	if caller.OrganizationID != orgCookie.Value {
-		logx.FromContext(reqCtx).Error().Msg("callback organization mismatch")
-		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
-	}
+	reqCtx = auth.WithCaller(reqCtx, auth.NewWebhookCaller(orgCookie.Value))
 
 	if _, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
 		State:    stateCookie.Value,

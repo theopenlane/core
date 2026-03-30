@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 
 // InstallationRequest bundles the inputs used to resolve installation metadata
 type InstallationRequest struct {
-	// Installation is the target installation record
-	Installation *generated.Integration
+	// Integration is the target installation record
+	Integration *generated.Integration
 	// Connection is the resolved connection mode for the installation when available
 	Connection ConnectionRegistration
 	// Credentials lists all resolved credential bundles participating in the connection mode

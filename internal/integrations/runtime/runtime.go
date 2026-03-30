@@ -35,10 +35,21 @@ type Config struct {
 	CatalogConfig catalog.Config
 }
 
+// PostExecutionHook is called after HandleOperation completes with the processed
+// envelope and any execution error
+type PostExecutionHook func(ctx context.Context, envelope operations.Envelope, err error)
+
 // Runtime bundles the integrations services behind a do injector
 type Runtime struct {
 	// injector holds all wired integration dependencies
 	injector do.Injector
+	// postExecutionHook is an optional callback invoked after each HandleOperation call
+	postExecutionHook PostExecutionHook
+}
+
+// SetPostExecutionHook registers a callback invoked after each HandleOperation call
+func (r *Runtime) SetPostExecutionHook(hook PostExecutionHook) {
+	r.postExecutionHook = hook
 }
 
 // DB returns the Ent client from the injector
@@ -46,8 +57,8 @@ func (r *Runtime) DB() *ent.Client {
 	return do.MustInvoke[*ent.Client](r.injector)
 }
 
-// Keystore returns the credential store from the injector
-func (r *Runtime) Keystore() *keystore.Store {
+// keystore returns the credential store from the injector
+func (r *Runtime) keystore() *keystore.Store {
 	return do.MustInvoke[*keystore.Store](r.injector)
 }
 
@@ -56,8 +67,8 @@ func (r *Runtime) Gala() *gala.Gala {
 	return do.MustInvoke[*gala.Gala](r.injector)
 }
 
-// Keymaker returns the auth flow service from the injector
-func (r *Runtime) Keymaker() *keymaker.Service {
+// keymaker returns the auth flow service from the injector
+func (r *Runtime) keymaker() *keymaker.Service {
 	return do.MustInvoke[*keymaker.Service](r.injector)
 }
 
@@ -84,6 +95,17 @@ func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) 
 	}
 
 	return result, err
+}
+
+// registerContextCodecs registers the durable context codecs required by integration dispatch and ingest listeners
+func (r *Runtime) registerContextCodecs() error {
+	for _, codec := range operations.ContextCodecs() {
+		if err := r.Gala().ContextManager().Register(codec); err != nil && !errors.Is(err, gala.ErrContextCodecAlreadyRegistered) {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // normalizeDispatchError translates registry-level dispatch errors into runtime sentinel errors
@@ -123,6 +145,11 @@ func New(config Config) (*Runtime, error) {
 	do.ProvideValue(injector, config.DB)
 	do.ProvideValue(injector, config.Gala)
 	do.ProvideValue(injector, config.Keystore)
+
+	if err := rt.registerContextCodecs(); err != nil {
+		return nil, err
+	}
+
 	do.Provide(injector, func(do.Injector) (keymaker.AuthStateStore, error) {
 		if config.RedisClient != nil {
 			return keymaker.NewRedisAuthStateStore(config.RedisClient), nil
@@ -151,8 +178,8 @@ func New(config Config) (*Runtime, error) {
 		return registryInstance, nil
 	})
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
-		return keymaker.NewService(rt.Definition, func(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
-			installation, err := rt.ResolveIntegration(ctx, "", installationID, def.ID)
+		return keymaker.NewService(rt.Definition, func(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
+			installation, err := rt.ResolveIntegration(ctx, "", integrationID, def.ID)
 			if err != nil {
 				return err
 			}

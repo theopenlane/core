@@ -1,17 +1,34 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
 	"encoding/json"
 
+	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/gala"
 )
+
+// WorkflowMeta captures workflow linkage for a queued integration execution
+type WorkflowMeta struct {
+	// InstanceID identifies the workflow instance that queued the execution
+	InstanceID string `json:"instanceId,omitempty"`
+	// ActionKey identifies the workflow action key
+	ActionKey string `json:"actionKey,omitempty"`
+	// ActionIndex captures the zero-based action index
+	ActionIndex int `json:"actionIndex,omitempty"`
+	// ObjectID identifies the workflow object
+	ObjectID string `json:"objectId,omitempty"`
+	// ObjectType identifies the workflow object type
+	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
+}
 
 // ExecutionPolicy controls synchronous execution behavior for one operation
 type ExecutionPolicy struct {
 	// Inline indicates the operation should execute synchronously for direct API callers
 	Inline bool `json:"inline,omitempty"`
+	// Reconcile indicates the operation should be dispatched on a recurring schedule
+	Reconcile bool `json:"reconcile,omitempty"`
 }
 
 // IngestContract declares one ingest target emitted by an operation

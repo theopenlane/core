@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // slackUserPayload is the normalized payload for a Slack workspace user
@@ -56,8 +57,11 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
 	users, err := client.GetUsersContext(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")
 		return nil, ErrUsersFetchFailed
 	}
+
+	logx.FromContext(ctx).Info().Int("total_users", len(users)).Msg("slack directory sync: fetched users")
 
 	envelopes := make([]types.MappingEnvelope, 0, len(users))
 

@@ -41,9 +41,10 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.InstallationID, def)
+	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
+
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
@@ -55,6 +56,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, payload.CredentialRef, credential, nil); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("reconcile failed")
+
 		return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
@@ -65,6 +67,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			SetStatus(enums.IntegrationStatusConnected).
 			Exec(systemCtx); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
+
 			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
@@ -74,7 +77,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	resp := IntegrationConfigResponse{
 		Reply:                rout.Reply{Success: true},
 		Provider:             def.ID,
-		InstallationID:       installationRec.ID,
+		IntegrationID:        installationRec.ID,
 		HealthStatus:         "ok",
 		HealthSummary:        "Validation passed during configuration",
 		InstallationMetadata: installationRec.InstallationMetadata.Attributes,

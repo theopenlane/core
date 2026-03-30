@@ -3,7 +3,6 @@ package engine
 import (
 	"context"
 	"fmt"
-	"sync"
 	"time"
 
 	"github.com/samber/lo"
@@ -31,10 +30,6 @@ type WorkflowEngine struct {
 	gala *gala.Gala
 	// integrationRuntime provides integration definition resolution and execution.
 	integrationRuntime *integrationsruntime.Runtime
-	// integrationListenersOnce ensures integration listeners are registered exactly once.
-	integrationListenersOnce sync.Once
-	// integrationListenersErr captures any error from the one-time listener registration.
-	integrationListenersErr error
 	// observer is the observability observer for metrics and tracing
 	observer *observability.Observer
 	// config is the workflow configuration

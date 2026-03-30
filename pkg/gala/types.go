@@ -9,7 +9,7 @@ import (
 type Headers struct {
 	// IdempotencyKey identifies duplicate-safe processing scope
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
-	// Properties stores additional typed metadata projected to string values
+	// Properties stores additional metadata for UI visibility
 	Properties map[string]string `json:"properties,omitempty"`
 	// Tags are low-cardinality labels forwarded to the transport layer (e.g. River job tags)
 	Tags []string `json:"tags,omitempty"`

@@ -1,10 +1,11 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -27,20 +28,13 @@ func newNamedRef(name string) namedRef {
 }
 
 // Name returns the stable identifier for the ref
-func (r namedRef) Name() string { return r.name }
-
-// unmarshalJSON decodes a JSON document into the typed value using jsonx.UnmarshalIfPresent
-func unmarshalJSON[T any](raw json.RawMessage) (T, error) {
-	var out T
-	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
-		return out, err
-	}
-	return out, nil
+func (r namedRef) Name() string {
+	return r.name
 }
 
 // =========
 // Definitions
-// This is the only entity in here that uses plain string because its string identity is the canonical ID and we store it as a key used to perform lookups
+// This is the only entity in here that uses plain string because its string identity is the canonical ID
 // =========
 
 // DefinitionRef is the durable identity for one registered definition
@@ -57,6 +51,16 @@ func NewDefinitionRef(id string) DefinitionRef {
 // ID returns the durable definition identifier
 func (r DefinitionRef) ID() string {
 	return r.id
+}
+
+// OperationTopic returns the canonical gala topic for one definition operation
+func (r DefinitionRef) OperationTopic(name string) gala.TopicName {
+	return gala.TopicName("integration." + r.id + "." + name)
+}
+
+// WebhookEventTopic returns the canonical gala topic for one definition webhook event
+func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
+	return gala.TopicName("integration." + r.id + ".webhook." + name)
 }
 
 // =========
@@ -88,12 +92,14 @@ func (r CredentialSlotID) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON decodes a credential slot ID from its stable name string
 func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 	var name string
+
 	if err := json.Unmarshal(data, &name); err != nil {
 		return err
 	}
 
 	if name == "" {
 		*r = CredentialSlotID{}
+
 		return nil
 	}
 
@@ -132,6 +138,7 @@ func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) 
 	}
 
 	var out T
+
 	if err := json.Unmarshal(cred.Data, &out); err != nil {
 		return out, true, err
 	}
@@ -203,21 +210,9 @@ func NewOperationRef[T any](name string) OperationRef[T] {
 
 // UnmarshalConfig decodes a JSON operation config document into the typed config value
 func (r OperationRef[T]) UnmarshalConfig(raw json.RawMessage) (T, error) {
-	return unmarshalJSON[T](raw)
-}
+	var out T
 
-// =========
-// Webhooks
-// =========
-
-// WebhookRef is a handle for one registered webhook contract identity
-type WebhookRef struct {
-	namedRef
-}
-
-// NewWebhookRef creates a webhook contract identity handle
-func NewWebhookRef(name string) WebhookRef {
-	return WebhookRef{namedRef: newNamedRef(name)}
+	return out, jsonx.UnmarshalIfPresent(raw, &out)
 }
 
 // =========
@@ -267,6 +262,16 @@ func (r InstallationRef[T]) Registration() *InstallationRegistration {
 // Webhooks
 // =========
 
+// WebhookRef is a handle for one registered webhook contract identity
+type WebhookRef struct {
+	namedRef
+}
+
+// NewWebhookRef creates a webhook contract identity handle
+func NewWebhookRef(name string) WebhookRef {
+	return WebhookRef{namedRef: newNamedRef(name)}
+}
+
 // WebhookEventRef is a typed handle for one registered webhook event identity
 type WebhookEventRef[T any] struct {
 	namedRef
@@ -279,5 +284,6 @@ func NewWebhookEventRef[T any](name string) WebhookEventRef[T] {
 
 // UnmarshalPayload decodes a JSON webhook event payload into the typed payload value
 func (r WebhookEventRef[T]) UnmarshalPayload(raw json.RawMessage) (T, error) {
-	return unmarshalJSON[T](raw)
+	var out T
+	return out, jsonx.UnmarshalIfPresent(raw, &out)
 }

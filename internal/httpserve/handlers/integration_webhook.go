@@ -20,11 +20,11 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-const maxIntegrationWebhookBodyBytes = int64(1024 * 1024)
-
 const (
 	// integrationWebhookSignatureHeader is the HTTP header carrying the HMAC-SHA256 webhook signature
 	integrationWebhookSignatureHeader = "X-Webhook-Signature-256"
+	// maxIntegrationWebhookBodyBytes defines the maximum size of webhook payloads to prevent hex0rz
+	maxIntegrationWebhookBodyBytes = int64(1024 * 1024)
 )
 
 // IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event.
@@ -32,7 +32,7 @@ const (
 // which survives integration record replacement so external callers are not disrupted
 func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	if isRegistrationContext(ctx) {
-		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+		return nil
 	}
 
 	endpointID := ctx.PathParam("endpointID")
@@ -51,6 +51,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(webhookCtx, endpointID)
 	if err != nil {
 		if !ent.IsNotFound(err) {
+			// not finding a record vs. failing to query are different so branching that
 			logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to query integration webhook")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -66,24 +67,25 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	installation, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, "", persistedWebhook.IntegrationID, "")
+	integration, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, "", persistedWebhook.IntegrationID, "")
 	if err != nil {
-		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve installation")
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve integration")
 
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
 	// Re-set the caller now that the owning organization is known
-	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(installation.OwnerID))
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
 
-	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(installation.DefinitionID, persistedWebhook.Name)
+	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(integration.DefinitionID, persistedWebhook.Name)
 	if err != nil {
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, installation, webhookReg, persistedWebhook, payload, false)
+	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, integration, webhookReg, persistedWebhook, payload, false)
 }
 
+// readIntegrationWebhookPayload reads the request body up to a defined maximum size and returns an error if the body is empty or exceeds the limit
 func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
 	payload, err := io.ReadAll(http.MaxBytesReader(ctx.Response().Writer, ctx.Request().Body, maxIntegrationWebhookBodyBytes))
 	if err != nil {
@@ -97,8 +99,7 @@ func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
 	return payload, nil
 }
 
-// verifyWebhookHMACSHA256 validates an inbound webhook request using HMAC-SHA256.
-// The expected header format is "sha256=<hex-encoded HMAC>" in the X-Webhook-Signature-256 header
+// verifyWebhookHMACSHA256 validates an inbound webhook request header X-Webhook-Signature-256 header using HMAC-SHA256 (format is "sha256=<hex-encoded HMAC>")
 func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) error {
 	if secret == "" {
 		return errIntegrationWebhookSecretMissing
@@ -129,15 +130,17 @@ func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) e
 	return nil
 }
 
-func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, installation *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
+// handleResolvedIntegrationWebhook processes a webhook with a known integration and webhook registration
+func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, integration *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
 	requestCtx = logx.WithFields(requestCtx, logx.LogFields{
-		"integration_id": installation.ID,
+		"integration_id": integration.ID,
 		"webhook":        webhook.Name,
 	})
 
+	// this actually isn't skipping verification it's delegating to the app-level handler so it's preventing dual verification of the same payload
 	if !skipVerify && webhook.Verify != nil {
 		if err := webhook.Verify(types.WebhookInboundRequest{
-			Integration: installation,
+			Integration: integration,
 			Webhook:     persistedWebhook,
 			Request:     ctx.Request(),
 			Payload:     payload,
@@ -147,11 +150,13 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 	}
 
 	if webhook.Event == nil {
+		logx.FromContext(requestCtx).Error().Msg("webhook registration missing event resolver")
+
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
 	}
 
 	event, err := webhook.Event(types.WebhookInboundRequest{
-		Integration: installation,
+		Integration: integration,
 		Webhook:     persistedWebhook,
 		Request:     ctx.Request(),
 		Payload:     payload,
@@ -160,46 +165,35 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	if event.Name == "" {
+	if event.Name == "" || len(persistedWebhook.AllowedEvents) > 0 && !lo.Contains(persistedWebhook.AllowedEvents, event.Name) {
+		logx.FromContext(requestCtx).Debug().Str("event", event.Name).Msg("webhook event not in allowed list, skipped")
+		// event name is our contract for what events we accept; not having one means we return early with 200 to not trigger retries (even types unsupported)
 		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
-	}
-
-	if len(persistedWebhook.AllowedEvents) > 0 && !lo.Contains(persistedWebhook.AllowedEvents, event.Name) {
-		if err := h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "ignored", nil); err != nil {
-			logx.FromContext(requestCtx).Warn().Err(err).Str("event", event.Name).Msg("failed to finalize ignored webhook delivery")
-		}
-
-		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
-	}
-
-	if event.DeliveryID == "" {
-		logx.FromContext(requestCtx).Warn().Str("event", event.Name).Msg("webhook delivery missing idempotency key, skipping duplicate check")
 	}
 
 	duplicate, err := h.IntegrationsRuntime.PrepareWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Str("delivery_id", event.DeliveryID).Msg("failed to register webhook delivery")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	if duplicate {
-		if err := h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "duplicate", nil); err != nil {
-			logx.FromContext(requestCtx).Warn().Err(err).Str("delivery_id", event.DeliveryID).Msg("failed to finalize duplicate webhook delivery")
-		}
+		logx.FromContext(requestCtx).Debug().Str("delivery_id", event.DeliveryID).Msg("duplicate webhook delivery skipped")
 
 		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
 	}
 
-	if err := h.IntegrationsRuntime.DispatchWebhookEvent(requestCtx, installation, webhook.Name, event); err != nil {
-		_ = h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "failed", err)
-
+	if err := h.IntegrationsRuntime.DispatchWebhookEvent(requestCtx, integration, webhook.Name, event); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to dispatch webhook event")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	if err := h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "accepted", nil); err != nil {
-		logx.FromContext(requestCtx).Warn().Err(err).Str("event", event.Name).Msg("failed to finalize webhook delivery")
+		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to finalize webhook delivery")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)

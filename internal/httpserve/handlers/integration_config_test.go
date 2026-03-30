@@ -14,7 +14,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -66,10 +65,10 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	var resp handlers.IntegrationConfigResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, configTestProviderID, resp.Provider)
 
@@ -81,8 +80,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		OnlyX(testUser.UserCtx)
 
 	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
-	require.NoError(t, err)
-	require.True(t, ok)
+	assert.NoError(t, err)
+	assert.True(t, ok)
 	assert.Contains(t, string(credential.Data), "projectId")
 	assert.Equal(t, `payload.severity == "HIGH"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
 }
@@ -110,19 +109,19 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpoi
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	var resp handlers.IntegrationConfigResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 
 	assert.True(t, resp.Success)
 	assert.Equal(t, definitionscim.DefinitionID.ID(), resp.Provider)
-	assert.NotEmpty(t, resp.InstallationID)
+	assert.NotEmpty(t, resp.IntegrationID)
 	assert.NotEmpty(t, resp.WebhookSecret)
 	assert.True(t, strings.HasPrefix(resp.WebhookEndpointURL, "http://example.com/v1/integrations/scim/"))
 	assert.True(t, strings.HasSuffix(resp.WebhookEndpointURL, "/v2"))
 
-	stored := suite.db.Integration.GetX(testUser.UserCtx, resp.InstallationID)
+	stored := suite.db.Integration.GetX(testUser.UserCtx, resp.IntegrationID)
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 	assert.Equal(t, "Okta Production", stored.Name)
 
@@ -134,8 +133,8 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpoi
 		).
 		OnlyX(testUser.UserCtx)
 
-	require.NotNil(t, webhook.EndpointID)
-	require.NotNil(t, webhook.EndpointURL)
+	assert.NotNil(t, webhook.EndpointID)
+	assert.NotNil(t, webhook.EndpointURL)
 	assert.Equal(t, "/v1/integrations/scim/"+*webhook.EndpointID+"/v2", *webhook.EndpointURL)
 	assert.Equal(t, "http://example.com"+*webhook.EndpointURL, resp.WebhookEndpointURL)
 	assert.Equal(t, webhook.SecretToken, resp.WebhookSecret)
@@ -165,7 +164,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() {
@@ -192,7 +191,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectPayload() {
@@ -219,7 +218,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectP
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
@@ -243,7 +242,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Equal(t, http.StatusUnauthorized, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() {
@@ -266,21 +265,21 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
-		DefinitionID:   configTestProviderID,
-		CredentialRef:  configTestCredentialRef,
-		InstallationID: first.InstallationID,
-		Body:           json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
+		DefinitionID:  configTestProviderID,
+		CredentialRef: configTestCredentialRef,
+		IntegrationID: first.IntegrationID,
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
 	})
 
-	assert.Equal(t, first.InstallationID, second.InstallationID)
+	assert.Equal(t, first.IntegrationID, second.IntegrationID)
 
-	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
+	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
 	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
-	require.NoError(t, err)
-	require.True(t, ok)
+	assert.NoError(t, err)
+	assert.True(t, ok)
 
 	providerData, err := jsonx.ToMap(credential.Data)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, "updated-project", providerData["projectId"])
 }
 
@@ -304,23 +303,23 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	})
 
 	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
-		DefinitionID:   configTestProviderID,
-		InstallationID: first.InstallationID,
-		UserInput:      json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
+		DefinitionID:  configTestProviderID,
+		IntegrationID: first.IntegrationID,
+		UserInput:     json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
 	})
 
-	assert.Equal(t, first.InstallationID, second.InstallationID)
+	assert.Equal(t, first.IntegrationID, second.IntegrationID)
 
-	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
+	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
 	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
 	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
 
 	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
-	require.NoError(t, err)
-	require.True(t, ok)
+	assert.NoError(t, err)
+	assert.True(t, ok)
 
 	providerData, err := jsonx.ToMap(credential.Data)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, "initial-project", providerData["projectId"])
 	assert.Equal(t, "initial@example.iam.gserviceaccount.com", providerData["serviceAccountEmail"])
 }
@@ -348,9 +347,9 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 		SaveX(testUser.UserCtx)
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		DefinitionID:   definitionID,
-		InstallationID: rec.ID,
-		UserInput:      json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.actor == \"service-account\""})),
+		DefinitionID:  definitionID,
+		IntegrationID: rec.ID,
+		UserInput:     json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.actor == \"service-account\""})),
 	})
 
 	httpRec := httptest.NewRecorder()
@@ -358,7 +357,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(httpRec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, httpRec.Code)
+	assert.Equal(t, http.StatusOK, httpRec.Code)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, rec.ID)
 	assert.Equal(t, `payload.actor == "service-account"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
@@ -388,10 +387,10 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 	})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		DefinitionID:   configTestProviderID,
-		CredentialRef:  configTestCredentialRef,
-		InstallationID: other.InstallationID,
-		Body:           json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		DefinitionID:  configTestProviderID,
+		CredentialRef: configTestCredentialRef,
+		IntegrationID: other.IntegrationID,
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
@@ -399,7 +398,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoesNotPersistCredential() {
@@ -426,7 +425,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 
 	// A PENDING installation row must be created even when the health check fails.
 	// The credential must not be stored and the status must not advance to CONNECTED.
@@ -436,12 +435,12 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 			integration.DefinitionIDEQ(configTestProviderID),
 		).
 		All(testUser.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, records, 1, "expected one PENDING installation row after failed setup")
+	assert.NoError(t, err)
+	assert.Len(t, records, 1, "expected one PENDING installation row after failed setup")
 	assert.Equal(t, enums.IntegrationStatusPending, records[0].Status)
 
 	_, credOk, credErr := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, records[0], types.NewCredentialSlotID("config_test"))
-	require.NoError(t, credErr)
+	assert.NoError(t, credErr)
 	assert.False(t, credOk, "credential must not be stored after a failed health check")
 }
 
@@ -490,7 +489,7 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 				{
 					Name:         configHealthCheckOperation.Name(),
 					Description:  "Validate the config test installation",
-					Topic:        types.OperationTopic(definitionID, configHealthCheckOperation.Name()),
+					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(configHealthCheckOperation.Name()),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: configHealthSchema,
 					Handle:       healthHandler,
@@ -523,10 +522,10 @@ func performIntegrationConfigRequest(t *testing.T, suite *HandlerTestSuite, ctx 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+provider+"/config", bytes.NewReader(mustMarshalConfigPayload(t, payload)))
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(ctx))
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	var resp handlers.IntegrationConfigResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 
 	return resp
 }
@@ -535,7 +534,7 @@ func mustMarshalConfigPayload(t *testing.T, payload handlers.IntegrationConfigPa
 	t.Helper()
 
 	body, err := json.Marshal(payload)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	return body
 }
@@ -544,7 +543,7 @@ func mustMarshalJSON(t *testing.T, value any) []byte {
 	t.Helper()
 
 	body, err := json.Marshal(value)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	return body
 }
@@ -553,7 +552,7 @@ func decodeClientConfigField(t *testing.T, raw json.RawMessage, key string) stri
 	t.Helper()
 
 	document, err := jsonx.ToMap(raw)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	value, _ := document[key].(string)
 

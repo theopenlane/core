@@ -1,6 +1,11 @@
-package types
+package types //nolint:revive
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/samber/lo"
+	"github.com/theopenlane/core/pkg/jsonx"
+)
 
 // DefinitionSpec describes the catalog-visible metadata for one definition
 type DefinitionSpec struct {
@@ -58,4 +63,107 @@ type OperatorConfigRegistration struct {
 type UserInputRegistration struct {
 	// Schema is the JSON schema used to collect installation-scoped user input
 	Schema json.RawMessage `json:"schema,omitempty"`
+}
+
+// CredentialRegistration declares how a definition accepts credentials
+type CredentialRegistration struct {
+	// Ref is the durable credential slot identifier
+	Ref CredentialSlotID `json:"ref"`
+	// Name is the user-facing credential slot name
+	Name string `json:"name,omitempty"`
+	// Description describes when this credential slot should be used
+	Description string `json:"description,omitempty"`
+	// Schema is the JSON schema used to collect credentials
+	Schema json.RawMessage `json:"schema,omitempty"`
+}
+
+// ConnectionRegistration describes one connection mode for a definition
+type ConnectionRegistration struct {
+	// CredentialRef is the user-facing credential schema that selects this connection mode
+	CredentialRef CredentialSlotID `json:"credentialRef"`
+	// Name is the user-facing connection mode name
+	Name string `json:"name,omitempty"`
+	// Description explains what the connection mode does
+	Description string `json:"description,omitempty"`
+	// CredentialRefs lists the credential slots used by this connection mode
+	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
+	// ClientRefs lists the clients initialized by this connection mode
+	ClientRefs []ClientID `json:"-"`
+	// ValidationOperation names the operation used to validate credentials before persistence
+	ValidationOperation string `json:"validationOperation,omitempty"`
+	// Integration describes installation-scoped metadata derived by this connection mode
+	Integration *InstallationRegistration `json:"installation,omitempty"`
+	// Auth describes how this connection mode performs auth when supported
+	Auth *AuthRegistration `json:"auth,omitempty"`
+	// Disconnect describes how this connection mode tears down an installation
+	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
+}
+
+// CredentialRegistration returns the credential registration for the given ref
+func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegistration, error) {
+	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
+		return r.Ref == ref
+	})
+	if !found {
+		return CredentialRegistration{}, ErrCredentialRefNotFound
+	}
+
+	return reg, nil
+}
+
+// ConnectionRegistration returns the connection registration for the given credential slot
+func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
+	reg, found := lo.Find(d.Connections, func(r ConnectionRegistration) bool {
+		return r.CredentialRef == ref
+	})
+	if !found {
+		return ConnectionRegistration{}, ErrConnectionRefNotFound
+	}
+
+	return reg, nil
+}
+
+// DefinitionProviderState stores installation-scoped state for one definition
+type DefinitionProviderState struct {
+	// CredentialRef identifies which credential-schema-selected connection mode is active for the installation
+	CredentialRef CredentialSlotID `json:"credentialRef"`
+}
+
+// ProviderState returns the persisted provider state for this definition
+func (d Definition) ProviderState(state IntegrationProviderState) (DefinitionProviderState, error) {
+	if state.Providers == nil {
+		return DefinitionProviderState{}, nil
+	}
+
+	raw, ok := state.Providers[d.ID]
+	if !ok || len(raw) == 0 {
+		return DefinitionProviderState{}, nil
+	}
+
+	var out DefinitionProviderState
+	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
+		return DefinitionProviderState{}, err
+	}
+
+	return out, nil
+}
+
+// WithProviderState returns a copy of the installation provider state with this definition's state updated
+func (d Definition) WithProviderState(state IntegrationProviderState, next DefinitionProviderState) (IntegrationProviderState, error) {
+	raw, err := jsonx.ToRawMessage(next)
+	if err != nil {
+		return IntegrationProviderState{}, err
+	}
+
+	out := IntegrationProviderState{
+		Providers: map[string]json.RawMessage{},
+	}
+
+	for key, value := range state.Providers {
+		out.Providers[key] = jsonx.CloneRawMessage(value)
+	}
+
+	out.Providers[d.ID] = raw
+
+	return out, nil
 }

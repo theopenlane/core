@@ -32,12 +32,15 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 	}
 
 	if in.IntegrationID == "" {
+		logx.FromContext(userCtx).Error().Err(ErrIntegrationIDRequired).Msg("missing integrationID in request")
+
 		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapi)
 	}
 
 	record, err := h.IntegrationsRuntime.ResolveIntegration(userCtx, caller.OrganizationID, in.IntegrationID, "")
 	if err != nil {
-		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve installation")
+		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration record")
+
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
 	}
 
@@ -49,6 +52,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 	result, err := h.IntegrationsRuntime.Disconnect(userCtx, record)
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("disconnect failed")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
@@ -60,9 +64,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 	resp.RedirectURL = result.RedirectURL
 	resp.Details = result.Details
 
-	if !result.SkipLocalCleanup {
-		resp.DeletedID = record.ID
-	}
+	resp.DeletedID = record.ID
 
 	return h.Success(ctx, resp)
 }

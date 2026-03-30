@@ -9,7 +9,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -36,28 +35,28 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	rec := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(rec, req)
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	var resp handlers.IntegrationProvidersResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	require.Len(t, resp.Providers, 2)
+	assert.Len(t, resp.Providers, 2)
 
 	providers := map[string]types.Definition{}
 	for _, provider := range resp.Providers {
 		providers[provider.ID] = provider
 	}
 
-	gcpscc, ok := providers[configTestProviderID]
-	require.True(t, ok)
-	assert.True(t, gcpscc.Active)
-	assert.True(t, gcpscc.Visible)
-	assert.Len(t, gcpscc.CredentialRegistrations, 1)
-	assert.NotNil(t, gcpscc.CredentialRegistrations[0].Schema)
-	assert.NotNil(t, gcpscc.UserInput)
-	assert.Len(t, gcpscc.Operations, 1)
-	assert.Equal(t, configHealthCheckOperation.Name(), gcpscc.Operations[0].Name)
+	provider, ok := providers[configTestProviderID]
+	assert.True(t, ok)
+	assert.True(t, provider.Active)
+	assert.True(t, provider.Visible)
+	assert.Len(t, provider.CredentialRegistrations, 1)
+	assert.NotNil(t, provider.CredentialRegistrations[0].Schema)
+	assert.NotNil(t, provider.UserInput)
+	assert.Len(t, provider.Operations, 1)
+	assert.Equal(t, configHealthCheckOperation.Name(), provider.Operations[0].Name)
 
 	_, ok = providers["def_01K0TESTOTH00000000000001"]
-	require.True(t, ok)
+	assert.True(t, ok)
 }

@@ -2,15 +2,12 @@ package engine
 
 import (
 	"context"
-	"encoding/json"
 	"maps"
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -194,7 +191,7 @@ func (e *WorkflowEngine) loadNotificationTemplate(ctx context.Context, ownerID s
 }
 
 // dispatchTemplateIntegration dispatches the rendered template through its associated integration
-func (e *WorkflowEngine) dispatchTemplateIntegration(ctx context.Context, rendered *renderedNotificationTemplate, operationName string) error {
+func (e *WorkflowEngine) dispatchTemplateIntegration(ctx context.Context, ownerID string, rendered *renderedNotificationTemplate, operationName string) error {
 	if rendered == nil || rendered.Template == nil || rendered.Template.IntegrationID == "" {
 		return nil
 	}
@@ -205,20 +202,16 @@ func (e *WorkflowEngine) dispatchTemplateIntegration(ctx context.Context, render
 		return ErrIntegrationOperationCriteriaRequired
 	}
 
-	config := buildRenderedTemplateConfig(rendered)
-
-	configBytes, err := json.Marshal(config)
+	configBytes, err := jsonx.ToRawMessage(buildRenderedTemplateConfig(rendered))
 	if err != nil {
 		return err
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
-
-	_, err = e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
+	_, err = e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
+		OrgID:          ownerID,
 		InstallationID: rendered.Template.IntegrationID,
 		Operation:      operationName,
 		Config:         configBytes,
-		RunType:        enums.IntegrationRunTypeEvent,
 	})
 
 	return err

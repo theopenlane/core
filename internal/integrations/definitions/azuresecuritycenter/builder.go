@@ -41,7 +41,7 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{securityCenterCredential.ID()},
 					ClientRefs:          []types.ClientID{securityCenterClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: securityCenterCredential.ID(),
 						Description:   "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
@@ -60,7 +60,7 @@ func Builder() registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call Azure Security Center assessments API to verify access",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    securityCenterClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       HealthCheck{}.Handle(),
@@ -69,9 +69,10 @@ func Builder() registry.Builder {
 				{
 					Name:         assessmentsCollectOperation.Name(),
 					Description:  "Collect unhealthy security posture assessment findings for vulnerability ingestion",
-					Topic:        types.OperationTopic(definitionID.ID(), assessmentsCollectOperation.Name()),
+					Topic:        definitionID.OperationTopic(assessmentsCollectOperation.Name()),
 					ClientRef:    securityCenterClient.ID(),
 					ConfigSchema: assessmentsCollectSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
@@ -82,9 +83,10 @@ func Builder() registry.Builder {
 				{
 					Name:         subAssessmentsCollectOperation.Name(),
 					Description:  "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
-					Topic:        types.OperationTopic(definitionID.ID(), subAssessmentsCollectOperation.Name()),
+					Topic:        definitionID.OperationTopic(subAssessmentsCollectOperation.Name()),
 					ClientRef:    securityCenterClient.ID(),
 					ConfigSchema: subAssessmentsCollectSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,

@@ -16,12 +16,8 @@ type OAuthRegistrationOptions[T any] struct {
 	Config OAuthConfig
 	// Material maps shared OAuth material to the definition-local credential payload
 	Material func(OAuthMaterial) (T, error)
-	// TokenView derives the token view from the definition-local credential payload
-	TokenView func(T) (*types.TokenView, error)
 	// EncodeCredentialError is returned when the typed credential cannot be serialized
 	EncodeCredentialError error
-	// DecodeCredentialError is returned when the stored credential cannot be deserialized
-	DecodeCredentialError error
 }
 
 // OAuthRegistration adapts the shared OAuth transport flow to one definition-local auth registration
@@ -54,22 +50,6 @@ func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegis
 			return types.AuthCompleteResult{
 				Credential: types.CredentialSet{Data: data},
 			}, nil
-		},
-		TokenView: func(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
-			var typedCredential T
-			if err := jsonx.UnmarshalIfPresent(credential.Data, &typedCredential); err != nil {
-				if opts.DecodeCredentialError != nil {
-					return nil, opts.DecodeCredentialError
-				}
-
-				return nil, err
-			}
-
-			if opts.TokenView == nil {
-				return nil, nil
-			}
-
-			return opts.TokenView(typedCredential)
 		},
 	}
 }

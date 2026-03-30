@@ -93,7 +93,7 @@ type riverJobMetadata struct {
 	EventID string `json:"event_id"`
 	// Listeners are the registered listener names for the topic
 	Listeners []string `json:"listeners,omitempty"`
-	// Properties contains envelope header properties (entity_id, operation, mutation_type, etc.)
+	// Properties contains envelope header properties for UI visibility
 	Properties map[string]string `json:"properties,omitempty"`
 }
 

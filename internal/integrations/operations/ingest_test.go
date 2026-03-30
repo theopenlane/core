@@ -491,8 +491,8 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 
 	reg := registry.New()
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "nonexistent"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "nonexistent"},
 	}
 
 	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
@@ -512,8 +512,8 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 	})
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	// contracts say "contact", but payload set says "asset"
@@ -537,8 +537,8 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 	reg, _ := testDefinition(t, nil)
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	contracts := []types.IngestContract{{Schema: "totally_bogus_schema"}}
@@ -562,8 +562,8 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 	reg, _ := testDefinition(t, nil)
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
@@ -592,7 +592,7 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 
 	ic := IngestContext{
 		Registry: reg,
-		Installation: &ent.Integration{
+		Integration: &ent.Integration{
 			DefinitionID: "test-def",
 			Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{invalid`)},
 		},
@@ -619,8 +619,8 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 	})
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
@@ -657,8 +657,8 @@ func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
 	reg, _ := testDefinition(t, nil)
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
@@ -686,8 +686,8 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 	})
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
@@ -728,8 +728,8 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 	})
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
 	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
@@ -765,9 +765,9 @@ func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
 	})
 
 	ic := IngestContext{
-		Registry:     reg,
-		Installation: &ent.Integration{DefinitionID: "test-def"},
-		Runtime:      nil,
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Runtime:     nil,
 	}
 
 	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}

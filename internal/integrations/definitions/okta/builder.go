@@ -41,7 +41,7 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{oktaCredential.ID()},
 					ClientRefs:          []types.ClientID{oktaClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         integration.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: oktaCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
@@ -60,7 +60,7 @@ func Builder() registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call Okta user API to verify API token",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    oktaClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
@@ -69,9 +69,10 @@ func Builder() registry.Builder {
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Okta directory users, groups, and memberships as directory accounts",
-					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    oktaClient.ID(),
 					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

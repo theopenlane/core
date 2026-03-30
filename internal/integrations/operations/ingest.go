@@ -3,6 +3,7 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -18,7 +19,6 @@ import (
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
 	// DirectorySyncRunID groups all directory-related ingest records from one sync batch
-	// created at the start of processing and finalized when the batch completes
 	DirectorySyncRunID string
 	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory sync run after processing
 	SkipDirectorySyncRunFinalization bool
@@ -33,7 +33,19 @@ type IngestOptions struct {
 	// DeliveryID is the provider-assigned delivery identifier; used for deduplication
 	DeliveryID string
 	// WorkflowMeta carries workflow instance context
-	WorkflowMeta *WorkflowMeta
+	WorkflowMeta *types.WorkflowMeta
+}
+
+// IngestOptionsFromMetadata derives ingest options from execution metadata
+func IngestOptionsFromMetadata(source integrationgenerated.IntegrationIngestSource, m types.ExecutionMetadata) IngestOptions {
+	return IngestOptions{
+		Source:       source,
+		RunID:        m.RunID,
+		Webhook:      m.Webhook,
+		WebhookEvent: m.Event,
+		DeliveryID:   m.DeliveryID,
+		WorkflowMeta: m.Workflow,
+	}
 }
 
 // installationFilterConfig holds per-installation CEL filter configuration stored in the integration's client config
@@ -71,25 +83,25 @@ func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string
 	}
 
 	return applyPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-		return emitMappedRecord(handleCtx, ic.Runtime, ic.Installation, operationName, record, options)
+		return emitMappedRecord(handleCtx, ic.Runtime, ic.Integration, operationName, record, options)
 	})
 }
 
 // ProcessPayloadSets persists one batch of mapped payload sets synchronously
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	return applyPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-		return persistMappedRecord(handleCtx, ic.DB, ic.Installation, record.Schema, record.Payload)
+		return persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
 	})
 }
 
 // applyPayloadSets is the shared core for both async emit and sync persist paths
 func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
-	definition, ok := ic.Registry.Definition(ic.Installation.DefinitionID)
+	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
 	if !ok {
 		return ErrIngestDefinitionNotFound
 	}
 
-	installationFilterExpr, err := resolveInstallationFilterExpr(ic.Installation)
+	installationFilterExpr, err := resolveInstallationFilterExpr(ic.Integration)
 	if err != nil {
 		return ErrIngestInstallationFilterConfigInvalid
 	}
@@ -98,7 +110,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 
 	directorySyncRunID := options.DirectorySyncRunID
 	if directorySyncRunID == "" && directorySync {
-		directorySyncRunID, err = createDirectorySyncRun(ctx, ic.DB, ic.Installation)
+		directorySyncRunID, err = createDirectorySyncRun(ctx, ic.DB, ic.Integration)
 		if err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -108,33 +120,39 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 		ctx = withDirectorySyncRunID(ctx, directorySyncRunID)
 	}
 
-	shouldFinalizeDirectorySyncRun := directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization
-	if shouldFinalizeDirectorySyncRun {
+	if directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization {
 		defer func() {
-			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, err); finalizeErr != nil && err == nil {
-				err = finalizeErr
+			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, err); finalizeErr != nil {
+				err = errors.Join(err, finalizeErr)
 			}
 		}()
 	}
 
 	for _, payloadSet := range payloadSets {
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
-			return ErrIngestSchemaNotDeclared
+			err = ErrIngestSchemaNotDeclared
+
+			return err
 		}
+
 		if _, ok := integrationgenerated.IntegrationMappingSchemas[payloadSet.Schema]; !ok {
-			return ErrIngestSchemaNotFound
+			err = ErrIngestSchemaNotFound
+			return err
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
 			record, include, recordErr := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
 			if recordErr != nil {
-				return recordErr
+				err = recordErr
+
+				return err
 			}
+
 			if !include {
 				continue
 			}
 
-			if err := handle(ctx, record); err != nil {
+			if err = handle(ctx, record); err != nil {
 				return err
 			}
 		}

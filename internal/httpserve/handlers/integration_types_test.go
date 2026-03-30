@@ -1,5 +1,3 @@
-//go:build test
-
 package handlers
 
 import (
@@ -11,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -77,9 +74,9 @@ func TestIntegrationConfigPayloadValidate(t *testing.T) {
 
 			err := tc.payload.Validate()
 			if tc.wantErr {
-				require.Error(t, err)
+				assert.Error(t, err)
 			} else {
-				require.NoError(t, err)
+				assert.NoError(t, err)
 			}
 		})
 	}
@@ -119,9 +116,9 @@ func TestIntegrationAuthStartRequestValidate(t *testing.T) {
 
 			err := tc.req.Validate()
 			if tc.wantErr {
-				require.Error(t, err)
+				assert.Error(t, err)
 			} else {
-				require.NoError(t, err)
+				assert.NoError(t, err)
 			}
 		})
 	}

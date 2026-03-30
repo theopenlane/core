@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import openapi "github.com/theopenlane/core/common/openapi"
 
@@ -14,8 +14,7 @@ type IntegrationInstallationIdentity = openapi.IntegrationInstallationIdentity
 // IntegrationProviderState stores provider-specific state captured during auth and config
 type IntegrationProviderState = openapi.IntegrationProviderState
 
-// InstallationIdentifiable is implemented by provider InstallationMetadata types
-// to produce normalized display identity for the UI
+// InstallationIdentifiable producs normalized display identity for the UI
 type InstallationIdentifiable interface {
 	// InstallationIdentity returns the normalized identity fields for UI display
 	InstallationIdentity() IntegrationInstallationIdentity

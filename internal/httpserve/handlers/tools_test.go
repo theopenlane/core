@@ -110,6 +110,7 @@ type HandlerTestSuite struct {
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
 	sharedPool           *gala.Pool
+	galaRuntime          *gala.Gala
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
@@ -177,6 +178,22 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		gala.WithWorkers(100), //nolint:mnd
 		gala.WithPoolName("ent_client_pool"),
 	)
+
+	// shared durable gala runtime for integration tests
+	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     suite.tf.URI,
+		QueueName:         "handler_integration_test",
+		WorkerCount:       5, //nolint:mnd
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+	})
+	assert.NoError(suite.T(), err)
+
+	assert.NoError(suite.T(), galaInstance.StartWorkers(context.Background()))
+
+	suite.galaRuntime = galaInstance
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
@@ -247,7 +264,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
-	suite.configureIntegrationOAuthRuntime(ctx)
+	suite.configureIntegrationOAuthRuntime()
 	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
 		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
 	}
@@ -348,11 +365,21 @@ func (suite *HandlerTestSuite) ClearTestData() {
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
+	if suite.galaRuntime != nil {
+		_ = suite.galaRuntime.StopWorkers(context.Background())
+		_ = suite.galaRuntime.Close()
+	}
+
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
 	err := suite.ofgaTF.TeardownFixture()
 	assert.NoError(suite.T(), err)
+}
+
+// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+func (suite *HandlerTestSuite) WaitForEvents() {
+	suite.galaRuntime.WaitIdle()
 }
 
 func setupRouter() (*route.Router, error) {
@@ -389,20 +416,14 @@ const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
 var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 
-// configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition.
-func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Context) {
-	galaInstance, err := gala.NewGala(ctx, gala.Config{
-		DispatchMode: gala.DispatchModeInMemory,
-		Enabled:      true,
-	})
-	assert.NoError(suite.T(), err)
-
+// configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
+func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
 	credStore, err := keystore.NewStore(suite.db)
 	assert.NoError(suite.T(), err)
 
 	rt, err := runtime.New(runtime.Config{
 		DB:                 suite.db,
-		Gala:               galaInstance,
+		Gala:               suite.galaRuntime,
 		Keystore:           credStore,
 		DefinitionBuilders: []registry.Builder{registry.Builder(buildTestOAuthDefinition)},
 	})
@@ -435,7 +456,6 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 					CredentialRef: testAuthCredentialRef,
 					Start:         testAuthStart,
 					Complete:      testAuthComplete,
-					TokenView:     testAuthTokenView,
 				},
 				Disconnect: &types.DisconnectRegistration{
 					CredentialRef: testAuthCredentialRef,
@@ -487,27 +507,6 @@ func testAuthComplete(_ context.Context, callbackState json.RawMessage, input ty
 			Data: tokenData,
 		},
 	}, nil
-}
-
-func testAuthTokenView(_ context.Context, credential types.CredentialSet) (*types.TokenView, error) {
-	var parsed map[string]any
-	if err := json.Unmarshal(credential.Data, &parsed); err != nil {
-		return nil, err
-	}
-
-	tv := &types.TokenView{}
-	if at, ok := parsed["access_token"].(string); ok {
-		tv.AccessToken = at
-	}
-
-	if expiryStr, ok := parsed["expiry"].(string); ok {
-		expiry, err := time.Parse(time.RFC3339Nano, expiryStr)
-		if err == nil {
-			tv.ExpiresAt = &expiry
-		}
-	}
-
-	return tv, nil
 }
 
 // mockStripeClient creates a new stripe client with mock backend

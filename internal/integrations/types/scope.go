@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ const (
 	ScopeVariablePayload = "payload"
 	// ScopeVariableResource identifies the resource variable in scope expressions
 	ScopeVariableResource = "resource"
-	// ScopeVariableDefinition identifies the definition slug variable in scope expressions (named "provider" for CEL expression compatibility)
+	// ScopeVariableDefinition identifies the definition ID variable in scope expressions (named "provider" for CEL expression compatibility)
 	ScopeVariableDefinition = "provider"
 	// ScopeVariableOperation identifies the operation name variable in scope expressions
 	ScopeVariableOperation = "operation"
@@ -31,7 +31,7 @@ type ScopeVars struct {
 	Payload json.RawMessage
 	// Resource contains resource identity values
 	Resource string
-	// Definition identifies the definition by slug, falling back to canonical ID when slug is absent (exposed as "provider" in CEL)
+	// Definition identifies the definition by canonical ID (exposed as "provider" in CEL)
 	Definition string
 	// Operation contains operation name values
 	Operation string

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent/privacy"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -102,6 +103,25 @@ func ShouldSkipEventEmission(ctx context.Context) bool {
 // It also sets the internal request marker so FGA checks are bypassed.
 func AllowContext(ctx context.Context) context.Context {
 	return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
+}
+
+// AllowContextForOrg returns an allow context scoped to the supplied organization.
+func AllowContextForOrg(ctx context.Context, orgID string) context.Context {
+	allowCtx := AllowContext(ctx)
+	if orgID == "" {
+		return allowCtx
+	}
+
+	caller, ok := auth.CallerFromContext(allowCtx)
+	if !ok || caller == nil {
+		return allowCtx
+	}
+
+	scoped := *caller
+	scoped.OrganizationID = orgID
+	scoped.OrganizationIDs = lo.Uniq(append([]string{orgID}, caller.OrgIDs()...))
+
+	return auth.WithCaller(allowCtx, &scoped)
 }
 
 // AllowBypassContext sets workflow bypass and allow decision for internal workflow operations.

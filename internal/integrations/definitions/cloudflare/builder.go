@@ -41,7 +41,7 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{cloudflareCredential.ID()},
 					ClientRefs:          []types.ClientID{cloudflareClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: cloudflareCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
@@ -60,7 +60,7 @@ func Builder() registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Verify Cloudflare API token via /user/tokens/verify",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    cloudflareClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       HealthCheck{}.Handle(),
@@ -69,9 +69,10 @@ func Builder() registry.Builder {
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect account members as directory accounts",
-					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    cloudflareClient.ID(),
 					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

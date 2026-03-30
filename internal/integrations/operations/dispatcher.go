@@ -9,17 +9,18 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Dispatch validates and enqueues one operation execution request
 func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
-	if req.InstallationID == "" || req.Operation == "" {
+	if req.IntegrationID == "" || req.Operation == "" {
 		return DispatchResult{}, ErrDispatchInputInvalid
 	}
 
-	installationRecord, err := db.Integration.Get(ctx, req.InstallationID)
+	installationRecord, err := db.Integration.Get(ctx, req.IntegrationID)
 	if err != nil {
 		return DispatchResult{}, err
 	}
@@ -43,7 +44,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
-		InstallationID:     req.InstallationID,
+		IntegrationID:      req.IntegrationID,
 		Operation:          req.Operation,
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
@@ -53,21 +54,42 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return DispatchResult{}, err
 	}
 
-	receipt := runtime.EmitWithHeaders(ctx, operation.Topic, Envelope{
-		RunID:              runRecord.ID,
-		InstallationID:     installationRecord.ID,
-		DefinitionID:       installationRecord.DefinitionID,
-		Operation:          req.Operation,
+	metadata := types.ExecutionMetadata{
+		OwnerID:       installationRecord.OwnerID,
+		IntegrationID: installationRecord.ID,
+		DefinitionID:  installationRecord.DefinitionID,
+		Operation:     req.Operation,
+		RunID:         runRecord.ID,
+		RunType:       runType,
+		Workflow:      req.Workflow,
+	}
+
+	// Inherit webhook/event context from the parent execution when dispatching
+	// from a webhook handler so the envelope carries the triggering event identity
+	if existing, ok := types.ExecutionMetadataFromContext(ctx); ok {
+		if metadata.Webhook == "" {
+			metadata.Webhook = existing.Webhook
+		}
+
+		if metadata.Event == "" {
+			metadata.Event = existing.Event
+		}
+
+		if metadata.DeliveryID == "" {
+			metadata.DeliveryID = existing.DeliveryID
+		}
+	}
+
+	emitCtx := types.WithExecutionMetadata(ctx, metadata)
+	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
+		ExecutionMetadata:  metadata,
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
-		WorkflowMeta:       req.WorkflowMeta},
-		gala.Headers{IdempotencyKey: runRecord.ID,
-			Properties: map[string]string{
-				"installation_id": installationRecord.ID,
-				"definition_id":   installationRecord.DefinitionID,
-				"operation":       req.Operation,
-			},
-		})
+	}, gala.Headers{
+		IdempotencyKey: runRecord.ID,
+		Properties:     metadata.Properties(),
+	})
+
 	if receipt.Err != nil {
 		if completeErr := CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
 			Status:  enums.IntegrationRunStatusFailed,

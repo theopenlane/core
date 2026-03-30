@@ -9,7 +9,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -42,10 +41,10 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	var resp openmodels.DeleteIntegrationResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, integrationID, resp.DeletedID)
 	assert.Contains(t, resp.Message, "GitHub")
@@ -56,7 +55,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 			integration.DefinitionIDEQ(disconnectTestDefinitionID),
 		).
 		Count(testUser.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Zero(t, count)
 }
 
@@ -76,7 +75,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
 // createTestIntegration creates an integration record in the DB and saves a test credential
@@ -88,14 +87,14 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 		SetName(definitionID).
 		SetDefinitionID(definitionID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
 	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, githubTestCredentialRef, &credential, nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	return rec.ID
 }
@@ -112,5 +111,5 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationUnauthorized() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Equal(t, http.StatusUnauthorized, rec.Code)
 }

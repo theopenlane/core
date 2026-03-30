@@ -7,14 +7,14 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// WithClient adapts a typed client-backed function to a request handler
+// WithClient adapts a typed client-backed function to a request handler with an ugly signature but saves the call sites
 func WithClient[C, R any](ref types.ClientRef[C], run func(context.Context, C) (R, error)) func(context.Context, types.OperationRequest) (R, error) {
 	return WithClientRequest(ref, func(ctx context.Context, _ types.OperationRequest, client C) (R, error) {
 		return run(ctx, client)
 	})
 }
 
-// WithClientRequest adapts a typed client-backed function that also needs the full operation request
+// WithClientRequest adapts a typed client-backed function + takes the full operation request (also ugly, but good for call sites)
 func WithClientRequest[C, R any](ref types.ClientRef[C], run func(context.Context, types.OperationRequest, C) (R, error)) func(context.Context, types.OperationRequest) (R, error) {
 	return func(ctx context.Context, request types.OperationRequest) (R, error) {
 		client, err := ref.Cast(request.Client)

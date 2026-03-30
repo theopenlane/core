@@ -41,7 +41,7 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{sccCredential.ID()},
 					ClientRefs:          []types.ClientID{sccClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: sccCredential.ID(),
 						Description:   "Removes the stored service account credentials from Openlane. If the GCP service account is no longer needed, delete it from your Google Cloud project.",
@@ -60,7 +60,7 @@ func Builder() registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Verify GCP SCC access",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    sccClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       HealthCheck{}.Handle(),
@@ -69,9 +69,10 @@ func Builder() registry.Builder {
 				{
 					Name:         findingsCollectOperation.Name(),
 					Description:  "Collect GCP Security Command Center findings for vulnerability ingestion",
-					Topic:        types.OperationTopic(definitionID.ID(), findingsCollectOperation.Name()),
+					Topic:        definitionID.OperationTopic(findingsCollectOperation.Name()),
 					ClientRef:    sccClient.ID(),
 					ConfigSchema: findingsCollectSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,

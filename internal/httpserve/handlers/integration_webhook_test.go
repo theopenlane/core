@@ -89,7 +89,7 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 					Events: []types.WebhookEventRegistration{
 						{
 							Name:  webhookAlertCreatedEvent.Name(),
-							Topic: types.WebhookEventTopic(definitionID, webhookAlertCreatedEvent.Name()),
+							Topic: types.NewDefinitionRef(definitionID).WebhookEventTopic(webhookAlertCreatedEvent.Name()),
 							Handle: func(context.Context, types.WebhookHandleRequest) error {
 								return nil
 							},
@@ -101,7 +101,7 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 				{
 					Name:         webhookHealthCheckOperation.Name(),
 					Description:  "Health check",
-					Topic:        types.OperationTopic(definitionID, webhookHealthCheckOperation.Name()),
+					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(webhookHealthCheckOperation.Name()),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: webhookHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {

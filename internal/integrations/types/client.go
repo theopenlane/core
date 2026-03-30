@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 
 // ClientBuildRequest bundles the inputs for building one installation-scoped client
 type ClientBuildRequest struct {
-	// Installation is the target installation record
-	Installation *generated.Integration
+	// Integration is the target installation record
+	Integration *generated.Integration
 	// Credentials lists all resolved credential bundles for this client by slot ref
 	Credentials CredentialBindings
 	// Config is the client-specific configuration payload

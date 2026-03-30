@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestWithDirectorySyncRunID(t *testing.T) {
@@ -125,7 +126,7 @@ func TestBuildIngestMetadata(t *testing.T) {
 		t.Parallel()
 
 		options := IngestOptions{
-			WorkflowMeta: &WorkflowMeta{
+			WorkflowMeta: &types.WorkflowMeta{
 				InstanceID:  "wf-001",
 				ActionKey:   "action-key",
 				ActionIndex: 3,

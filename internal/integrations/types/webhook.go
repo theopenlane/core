@@ -1,4 +1,4 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
@@ -77,8 +77,8 @@ type WebhookEventRegistration struct {
 type WebhookRegistration struct {
 	// Name is the stable webhook identifier within the definition
 	Name string `json:"name"`
-	// EndpointURLTemplate overrides the persisted endpoint URL path.
-	// Use "{endpointID}" as the placeholder for the generated endpoint identifier.
+	// EndpointURLTemplate overrides the persisted endpoint URL path
+	// Use "{endpointID}" as the placeholder for the generated endpoint identifier
 	EndpointURLTemplate string `json:"endpointUrlTemplate,omitempty"`
 	// Verify authenticates the inbound webhook request
 	Verify WebhookVerifyFunc `json:"-"`

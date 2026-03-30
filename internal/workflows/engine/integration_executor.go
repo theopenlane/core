@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/utils/contextx"
@@ -74,8 +73,8 @@ type IntegrationQueueRequest struct {
 	ForceClientRebuild bool
 	// RunType identifies the integration run type
 	RunType enums.IntegrationRunType
-	// WorkflowMeta links the operation to a workflow action
-	WorkflowMeta *operations.WorkflowMeta
+	// Workflow links the operation to a workflow action
+	Workflow *types.WorkflowMeta
 }
 
 // IntegrationQueueResult captures queue results
@@ -90,68 +89,50 @@ type IntegrationQueueResult struct {
 
 // integrationOpContext captures common integration operation log fields
 type integrationOpContext struct {
-	definitionID   string
-	operation      string
-	installationID string
+	definitionID  string
+	operation     string
+	integrationID string
 }
 
 // MarshalZerologObject implements zerolog.LogObjectMarshaler for integrationOpContext
 func (c integrationOpContext) MarshalZerologObject(e *zerolog.Event) {
 	e.Str("definition_id", c.definitionID).Str("operation", c.operation)
-	if c.installationID != "" {
-		e.Str("installation_id", c.installationID)
+	if c.integrationID != "" {
+		e.Str("installation_id", c.integrationID)
 	}
 }
 
 // logIntegrationScopeSkipped logs a debug event when an integration action is skipped by scope evaluation
-func logIntegrationScopeSkipped(ctx context.Context, definitionID, operation, installationID, scopeExpression string) {
+func logIntegrationScopeSkipped(ctx context.Context, definitionID, operation, integrationID, scopeExpression string) {
 	logx.FromContext(ctx).Debug().
-		EmbedObject(integrationOpContext{definitionID: definitionID, operation: operation, installationID: installationID}).
+		EmbedObject(integrationOpContext{definitionID: definitionID, operation: operation, integrationID: integrationID}).
 		Str("scope_expression", scopeExpression).
 		Msg("integration action skipped by scope condition")
 }
 
-// SetIntegrationDeps attaches integration dependencies and registers per-operation listeners
+// SetIntegrationDeps attaches integration dependencies and registers a post-execution
+// hook so the workflow engine receives completion signals from integration operations
 func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
-	if deps.Runtime != nil {
-		e.integrationRuntime = deps.Runtime
-
-		evaluator, err := NewIntegrationScopeEvaluator()
-		if err != nil {
-			return err
-		}
-
-		e.scopeEvaluator = evaluator
-	}
-
-	if e.integrationRuntime == nil {
+	if deps.Runtime == nil {
 		return nil
 	}
 
-	if e.gala == nil {
-		return nil
+	e.integrationRuntime = deps.Runtime
+
+	evaluator, err := NewIntegrationScopeEvaluator()
+	if err != nil {
+		return err
 	}
 
-	// Register one listener per operation topic; each listener executes the operation
-	// via the executor and emits workflow action completed when workflow meta is present.
-	// sync.Once ensures idempotent registration even if SetIntegrationDeps is called concurrently.
-	e.integrationListenersOnce.Do(func() {
-		for _, op := range e.integrationRuntime.Registry().Listeners() {
-			operation := op // capture for closure
-			if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[operations.Envelope]{
-				Topic: gala.Topic[operations.Envelope]{Name: operation.Topic},
-				Name:  fmt.Sprintf("engine.integrations.%s", operation.Topic),
-				Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
-					return e.handleIntegrationOperation(ctx, envelope)
-				},
-			}); err != nil {
-				e.integrationListenersErr = err
-				return
-			}
+	e.scopeEvaluator = evaluator
+
+	e.integrationRuntime.SetPostExecutionHook(func(ctx context.Context, envelope operations.Envelope, execErr error) {
+		if envelope.Workflow != nil {
+			e.emitWorkflowActionCompleted(ctx, envelope, execErr)
 		}
 	})
 
-	return e.integrationListenersErr
+	return nil
 }
 
 // QueueIntegrationOperation resolves the installation and dispatches the operation
@@ -169,7 +150,7 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 		return IntegrationQueueResult{}, ErrIntegrationOperationCriteriaRequired
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := workflows.AllowContextForOrg(ctx, orgID)
 
 	installationRecord, err := e.integrationRuntime.ResolveIntegration(allowCtx, orgID, req.InstallationID, req.DefinitionID)
 	if err != nil {
@@ -190,12 +171,12 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	result, err := e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
-		InstallationID:     installationRecord.ID,
+		IntegrationID:      installationRecord.ID,
 		Operation:          req.Operation,
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
 		RunType:            runType,
-		WorkflowMeta:       req.WorkflowMeta,
+		Workflow:           req.Workflow,
 	})
 	if err != nil {
 		return IntegrationQueueResult{}, err
@@ -233,7 +214,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		orgID = integCaller.OrganizationID
 	}
 
-	meta := &operations.WorkflowMeta{
+	meta := &types.WorkflowMeta{
 		InstanceID:  instance.ID,
 		ActionKey:   action.Key,
 		ActionIndex: actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key),
@@ -254,7 +235,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		ScopeResource:      params.ScopeResource,
 		ForceClientRebuild: params.ForceClientRebuild,
 		RunType:            enums.IntegrationRunTypeEvent,
-		WorkflowMeta:       meta,
+		Workflow:           meta,
 	})
 	if err != nil {
 		if errors.Is(err, ErrIntegrationScopeConditionFalse) {
@@ -268,30 +249,13 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 	return nil
 }
 
-// handleIntegrationOperation executes an integration operation and emits workflow action completed when applicable
-func (e *WorkflowEngine) handleIntegrationOperation(ctx gala.HandlerContext, envelope operations.Envelope) error {
-	if e.integrationRuntime == nil {
-		return ErrIntegrationOperationsRequired
-	}
-
-	systemCtx := workflows.AllowContext(ctx.Context)
-
-	execErr := e.integrationRuntime.HandleOperation(systemCtx, envelope)
-
-	if envelope.WorkflowMeta != nil {
-		e.emitWorkflowActionCompleted(systemCtx, envelope, execErr)
-	}
-
-	return execErr
-}
-
 // emitWorkflowActionCompleted emits a completion event after an integration run finishes
 func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelope operations.Envelope, execErr error) {
-	if e.gala == nil || envelope.WorkflowMeta == nil {
+	if e.gala == nil || envelope.Workflow == nil {
 		return
 	}
 
-	meta := envelope.WorkflowMeta
+	meta := envelope.Workflow
 
 	actionPayload := gala.WorkflowActionCompletedPayload{
 		InstanceID:  meta.InstanceID,

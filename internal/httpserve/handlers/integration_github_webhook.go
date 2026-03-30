@@ -29,11 +29,15 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 
 	payload, err := readIntegrationWebhookPayload(ctx)
 	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to read webhook payload")
+
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
 	webhook, err := h.IntegrationsRuntime.Registry().Webhook(githubapp.DefinitionID.ID(), githubapp.InstallationEventsWebhook.Name())
 	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Msg("failed to resolve webhook from registry")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
@@ -53,6 +57,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 	installation, err := h.resolveGitHubAppWebhookInstallation(webhookCtx, payload)
 	if err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve github app webhook installation")
+
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 

@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -17,28 +18,14 @@ type IngestContext struct {
 	DB *ent.Client
 	// Runtime is the Gala instance used for async emit; nil on the synchronous persist path
 	Runtime *gala.Gala
-	// Installation is the integration record being ingested into
-	Installation *ent.Integration
-}
-
-// WorkflowMeta carries optional workflow linkage for workflow-triggered operations
-type WorkflowMeta struct {
-	// InstanceID identifies the workflow instance that triggered the operation
-	InstanceID string `json:"instanceId"`
-	// ActionKey identifies the workflow action key
-	ActionKey string `json:"actionKey"`
-	// ActionIndex captures the workflow action index
-	ActionIndex int `json:"actionIndex"`
-	// ObjectID identifies the workflow object
-	ObjectID string `json:"objectId"`
-	// ObjectType identifies the workflow object type
-	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
+	// Integration is the integration record being ingested into
+	Integration *ent.Integration
 }
 
 // DispatchRequest describes one requested operation dispatch
 type DispatchRequest struct {
-	// InstallationID is the target installation identifier
-	InstallationID string
+	// IntegrationID is the target installation identifier
+	IntegrationID string
 	// Operation is the definition-local operation identifier
 	Operation string
 	// Config is the operation configuration payload
@@ -47,8 +34,8 @@ type DispatchRequest struct {
 	ForceClientRebuild bool
 	// RunType is the integration run type recorded for the dispatch
 	RunType enums.IntegrationRunType
-	// WorkflowMeta carries optional workflow linkage for workflow-triggered operations
-	WorkflowMeta *WorkflowMeta
+	// Workflow carries optional workflow linkage for workflow-triggered operations
+	Workflow *types.WorkflowMeta
 }
 
 // DispatchResult captures the queued run metadata
@@ -63,16 +50,7 @@ type DispatchResult struct {
 
 // WebhookEnvelope is the durable payload emitted for one inbound integration webhook event
 type WebhookEnvelope struct {
-	// IntegrationID is the installation identifier that received the webhook
-	IntegrationID string `json:"integrationId"`
-	// DefinitionID is the integration definition identifier
-	DefinitionID string `json:"definitionId"`
-	// Webhook is the webhook name within the definition
-	Webhook string `json:"webhook"`
-	// Event is the normalized event name within the webhook
-	Event string `json:"event"`
-	// DeliveryID is the provider-assigned delivery identifier for deduplication
-	DeliveryID string `json:"deliveryId,omitempty"`
+	types.ExecutionMetadata
 	// Payload is the raw webhook request body
 	Payload json.RawMessage `json:"payload"`
 	// Headers contains the inbound HTTP request headers
@@ -81,18 +59,9 @@ type WebhookEnvelope struct {
 
 // Envelope is the payload emitted to the operation topic
 type Envelope struct {
-	// RunID is the persisted run identifier
-	RunID string `json:"runId"`
-	// InstallationID is the target installation identifier
-	InstallationID string `json:"installationId"`
-	// DefinitionID is the target definition identifier
-	DefinitionID string `json:"definitionId"`
-	// Operation is the definition-local operation identifier
-	Operation string `json:"operation"`
+	types.ExecutionMetadata
 	// Config is the operation configuration payload
 	Config json.RawMessage `json:"config,omitempty"`
 	// ForceClientRebuild requests client cache bypass
 	ForceClientRebuild bool `json:"forceClientRebuild,omitempty"`
-	// WorkflowMeta carries optional workflow linkage for workflow-triggered operations
-	WorkflowMeta *WorkflowMeta `json:"workflowMeta,omitempty"`
 }

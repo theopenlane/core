@@ -18,6 +18,7 @@ import (
 )
 
 // OAuthConfig describes OAuth2 or OIDC endpoint configuration for an integration auth flow
+// each individual provider will have their own respective fields (like ClientID, ClientSecret) so these aren't duplications
 type OAuthConfig struct {
 	// ClientID is the OAuth application client identifier
 	ClientID string
@@ -29,7 +30,7 @@ type OAuthConfig struct {
 	TokenURL string
 	// DiscoveryURL is the OIDC issuer URL used for endpoint discovery
 	DiscoveryURL string
-	// RedirectURL is the callback URL registered with the OAuth provider
+	// RedirectURL is typically the callback URL registered with the OAuth provider
 	RedirectURL string
 	// Scopes lists the OAuth scopes to request
 	Scopes []string
@@ -144,14 +145,16 @@ func buildRelyingParty(ctx context.Context, cfg OAuthConfig) (rp.RelyingParty, e
 
 // buildOAuthMaterial constructs an OAuthMaterial from an oauth2 token and optional OIDC claims
 func buildOAuthMaterial(token *oauth2.Token, claims *oidc.IDTokenClaims) (OAuthMaterial, error) {
-	mat := OAuthMaterial{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-	}
+	var mat OAuthMaterial
 
-	if !token.Expiry.IsZero() {
-		exp := token.Expiry.UTC()
-		mat.Expiry = &exp
+	if token != nil {
+		mat.AccessToken = token.AccessToken
+		mat.RefreshToken = token.RefreshToken
+
+		if !token.Expiry.IsZero() {
+			exp := token.Expiry.UTC()
+			mat.Expiry = &exp
+		}
 	}
 
 	if claims != nil {

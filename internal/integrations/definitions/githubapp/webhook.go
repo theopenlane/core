@@ -56,7 +56,7 @@ type githubWebhookEnvelope struct {
 	// Action is the event action sub-type (e.g. "created", "dismissed")
 	Action string `json:"action"`
 	// installation identifies the GitHub App installation that sent the event
-	Installation *githubWebhookInstallation `json:"installation"`
+	Integration *githubWebhookInstallation `json:"installation"`
 	// Repository is the repository the event originated from, if any
 	Repository *githubWebhookRepository `json:"repository"`
 	// Alert is the raw alert payload for security alert event types
@@ -228,9 +228,9 @@ func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.Webh
 
 	githubOrg := ""
 	githubAccountType := ""
-	if envelope.Installation != nil && envelope.Installation.Account != nil {
-		githubOrg = envelope.Installation.Account.Login
-		githubAccountType = envelope.Installation.Account.Type
+	if envelope.Integration != nil && envelope.Integration.Account != nil {
+		githubOrg = envelope.Integration.Account.Login
+		githubAccountType = envelope.Integration.Account.Type
 	}
 
 	message, err := slacknotify.RenderGitHubAppInstallMessage(githubOrg, githubAccountType, openlaneOrgName, request.Integration.OwnerID)

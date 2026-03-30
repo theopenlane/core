@@ -44,7 +44,7 @@ func Builder(cfg Config) registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{workspaceCredential.ID()},
 					ClientRefs:          []types.ClientID{workspaceClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{
@@ -70,14 +70,7 @@ func Builder(cfg Config) registry.Builder {
 								Expiry:       material.Expiry,
 							}, nil
 						},
-						TokenView: func(cred googleWorkspaceCred) (*types.TokenView, error) {
-							return &types.TokenView{
-								AccessToken: cred.AccessToken,
-								ExpiresAt:   cred.Expiry,
-							}, nil
-						},
 						EncodeCredentialError: ErrCredentialEncode,
-						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: workspaceCredential.ID(),
@@ -97,7 +90,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call Google Admin SDK users.list to verify the workspace token",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    workspaceClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
@@ -106,9 +99,10 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    workspaceClient.ID(),
 					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

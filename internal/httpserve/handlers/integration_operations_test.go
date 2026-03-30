@@ -74,7 +74,7 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				{
 					Name:         opTestHealthCheckOperation.Name(),
 					Description:  "Validate the test credential",
-					Topic:        types.OperationTopic(definitionID, opTestHealthCheckOperation.Name()),
+					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestHealthCheckOperation.Name()),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: opTestHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
@@ -84,7 +84,7 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				{
 					Name:         opTestRepoSyncOperation.Name(),
 					Description:  "Sync repositories",
-					Topic:        types.OperationTopic(definitionID, opTestRepoSyncOperation.Name()),
+					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestRepoSyncOperation.Name()),
 					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
 					ConfigSchema: opTestRepoSyncSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
@@ -94,7 +94,7 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				{
 					Name:         opTestValidatedOperation.Name(),
 					Description:  "Operation with config schema",
-					Topic:        types.OperationTopic(definitionID, opTestValidatedOperation.Name()),
+					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestValidatedOperation.Name()),
 					ConfigSchema: opTestValidatedSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {

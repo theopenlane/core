@@ -50,7 +50,7 @@ func Builder(cfg Config) registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{slackCredential.ID()},
 					ClientRefs:          []types.ClientID{slackClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[slackCred]{
 						CredentialRef: slackCredential,
 						Config: auth.OAuthConfig{
@@ -78,14 +78,7 @@ func Builder(cfg Config) registry.Builder {
 								Expiry:       material.Expiry,
 							}, nil
 						},
-						TokenView: func(cred slackCred) (*types.TokenView, error) {
-							return &types.TokenView{
-								AccessToken: cred.AccessToken,
-								ExpiresAt:   cred.Expiry,
-							}, nil
-						},
 						EncodeCredentialError: ErrCredentialEncode,
-						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: slackCredential.ID(),
@@ -99,7 +92,7 @@ func Builder(cfg Config) registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{slackBotTokenCredential.ID()},
 					ClientRefs:          []types.ClientID{slackClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: slackBotTokenCredential.ID(),
 						Description:   "Removes the stored bot token from Openlane. To fully revoke access, delete or regenerate the token in your Slack app under OAuth & Permissions.",
@@ -118,7 +111,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
@@ -127,7 +120,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         messageSendOperation.Name(),
 					Description:  "Send a Slack message via chat.postMessage",
-					Topic:        types.OperationTopic(definitionID.ID(), messageSendOperation.Name()),
+					Topic:        definitionID.OperationTopic(messageSendOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),
@@ -135,9 +128,10 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect workspace users as directory accounts",
-					Topic:        types.OperationTopic(definitionID.ID(), directorySyncOperation.Name()),
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

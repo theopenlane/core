@@ -34,13 +34,13 @@ type Store struct {
 const defaultClientPoolTTL = 5 * time.Minute
 
 type clientCacheKey struct {
-	installationID string
-	clientID       types.ClientID
-	digest         string
+	integrationID string
+	clientID      types.ClientID
+	digest        string
 }
 
 func (k clientCacheKey) String() string {
-	return k.installationID + ":" + k.clientID.String() + ":" + k.digest
+	return k.integrationID + ":" + k.clientID.String() + ":" + k.digest
 }
 
 // NewStore constructs the credential store backed by the supplied Ent client
@@ -134,8 +134,8 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 }
 
 // SaveInstallationCredential loads the installation record by ID and upserts one credential slot
-func (s *Store) SaveInstallationCredential(ctx context.Context, installationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
-	if installationID == "" {
+func (s *Store) SaveInstallationCredential(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
+	if integrationID == "" {
 		return ErrInstallationIDRequired
 	}
 	if credentialRef == (types.CredentialSlotID{}) {
@@ -144,7 +144,7 @@ func (s *Store) SaveInstallationCredential(ctx context.Context, installationID s
 
 	systemCtx := integrationSystemContext(ctx)
 
-	installation, err := s.db.Integration.Get(systemCtx, installationID)
+	installation, err := s.db.Integration.Get(systemCtx, integrationID)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return ErrCredentialNotFound
@@ -157,21 +157,21 @@ func (s *Store) SaveInstallationCredential(ctx context.Context, installationID s
 }
 
 // DeleteCredential removes all credentials for one installation by identifier
-func (s *Store) DeleteCredential(ctx context.Context, installationID string) error {
-	if installationID == "" {
+func (s *Store) DeleteCredential(ctx context.Context, integrationID string) error {
+	if integrationID == "" {
 		return ErrInstallationIDRequired
 	}
 
 	systemCtx := integrationSystemContext(ctx)
 
 	_, err := s.db.Hush.Delete().
-		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installationID))).
+		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID))).
 		Exec(systemCtx)
 	if err != nil {
 		return err
 	}
 
-	s.InvalidateClients(installationID)
+	s.InvalidateClients(integrationID)
 
 	return nil
 }
@@ -179,9 +179,9 @@ func (s *Store) DeleteCredential(ctx context.Context, installationID string) err
 // BuildClient resolves one named client for an installation using explicit credential bundles
 func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, registration types.ClientRegistration, credentials types.CredentialBindings, config json.RawMessage, force bool) (any, error) {
 	cacheKey := clientCacheKey{
-		installationID: installation.ID,
-		clientID:       registration.Ref,
-		digest:         clientCacheDigest(credentials, config),
+		integrationID: installation.ID,
+		clientID:      registration.Ref,
+		digest:        clientCacheDigest(credentials, config),
 	}
 
 	if force {
@@ -191,9 +191,9 @@ func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, 
 	}
 
 	client, err := registration.Build(ctx, types.ClientBuildRequest{
-		Installation: installation,
-		Credentials:  cloneCredentialBindings(credentials),
-		Config:       jsonx.CloneRawMessage(config),
+		Integration: installation,
+		Credentials: cloneCredentialBindings(credentials),
+		Config:      jsonx.CloneRawMessage(config),
 	})
 	if err != nil {
 		return nil, err
@@ -206,10 +206,10 @@ func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, 
 }
 
 // InvalidateClients drops all pooled clients for one installation
-func (s *Store) InvalidateClients(installationID string) {
+func (s *Store) InvalidateClients(integrationID string) {
 	s.mu.Lock()
-	keys := s.clientKeys[installationID]
-	delete(s.clientKeys, installationID)
+	keys := s.clientKeys[integrationID]
+	delete(s.clientKeys, integrationID)
 	s.mu.Unlock()
 
 	for key := range keys {
@@ -222,11 +222,11 @@ func (s *Store) trackClientKey(key clientCacheKey) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.clientKeys[key.installationID] == nil {
-		s.clientKeys[key.installationID] = map[clientCacheKey]struct{}{}
+	if s.clientKeys[key.integrationID] == nil {
+		s.clientKeys[key.integrationID] = map[clientCacheKey]struct{}{}
 	}
 
-	s.clientKeys[key.installationID][key] = struct{}{}
+	s.clientKeys[key.integrationID][key] = struct{}{}
 }
 
 // clientCacheDigest computes a hash digest for a set of credentials and config
@@ -266,8 +266,8 @@ func cloneCredentialBindings(credentials types.CredentialBindings) types.Credent
 }
 
 // activeCredentialRecord returns the active credential record for an installation and credential ref
-func (s *Store) activeCredentialRecord(ctx context.Context, installationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
-	records, err := s.activeCredentialRecords(ctx, installationID, []types.CredentialSlotID{credentialRef})
+func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
+	records, err := s.activeCredentialRecords(ctx, integrationID, []types.CredentialSlotID{credentialRef})
 	if err != nil {
 		return nil, false, err
 	}
@@ -281,9 +281,9 @@ func (s *Store) activeCredentialRecord(ctx context.Context, installationID strin
 }
 
 // activeCredentialRecords returns all active credential records for an installation and credential refs
-func (s *Store) activeCredentialRecords(ctx context.Context, installationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
-	query := s.db.Hush.Query().
-		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(installationID)))
+// Credentials are keyed by Hush.SecretName which stores the CredentialSlotID as a unique discriminator
+func (s *Store) activeCredentialRecords(ctx context.Context, integrationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
+	query := s.db.Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
 
 	if len(credentialRefs) > 0 {
 		secretNames := make([]string, 0, len(credentialRefs))

@@ -16,7 +16,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
@@ -61,7 +60,7 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -73,7 +72,7 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
@@ -94,7 +93,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":1001}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -105,18 +104,18 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	verifiedAtValue, ok := updated.Metadata["githubWebhookVerifiedAt"]
-	require.True(t, ok)
+	assert.True(t, ok)
 	verifiedAtString, ok := verifiedAtValue.(string)
-	require.True(t, ok)
-	require.NotEmpty(t, verifiedAtString)
+	assert.True(t, ok)
+	assert.NotEmpty(t, verifiedAtString)
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
@@ -137,7 +136,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":1004}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -148,10 +147,10 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	_, hasMetadata := updated.Metadata["githubWebhookVerifiedAt"]
 	assert.False(t, hasMetadata)
@@ -171,7 +170,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	err := suite.db.Organization.UpdateOneID(user.OrganizationID).
 		SetDisplayName("Acme Security").
 		Exec(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1002"})
 	_, err = suite.db.Integration.Create().
@@ -180,7 +179,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	recorder := newSlackWebhookRecorder(t)
 	defer recorder.Close()
@@ -199,13 +198,13 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
 	bodies := recorder.Bodies()
-	require.Len(t, bodies, 1)
+	assert.Len(t, bodies, 1)
 
 	text := slackMessageText(t, bodies[0])
 	expected := renderGitHubAppInstallTemplate(t, map[string]any{
@@ -236,7 +235,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	payload := []byte(`{"action":"created","installation":{"id":1003},"repository":{"full_name":"acme/repo"},"alert":{"number":1}}`)
 	deliveryID := "delivery-dup-1"
@@ -249,7 +248,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 
 	firstRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(firstRec, firstReq)
-	require.Equal(t, http.StatusOK, firstRec.Code)
+	assert.Equal(t, http.StatusOK, firstRec.Code)
 
 	secondReq := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	secondReq.Header.Set("X-GitHub-Event", "dependabot_alert")
@@ -259,7 +258,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 
 	secondRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(secondRec, secondReq)
-	require.Equal(t, http.StatusOK, secondRec.Code)
+	assert.Equal(t, http.StatusOK, secondRec.Code)
 
 	dedupeCount, err := suite.db.IntegrationWebhook.Query().
 		Where(
@@ -268,8 +267,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 			integrationwebhook.ExternalEventIDEQ(deliveryID),
 		).
 		Count(user.UserCtx)
-	require.NoError(t, err)
-	require.Equal(t, 1, dedupeCount)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, dedupeCount)
 }
 
 type slackWebhookRecorder struct {
@@ -335,8 +334,8 @@ func slackMessageText(t *testing.T, requestBody string) string {
 	var payload struct {
 		Text string `json:"text"`
 	}
-	require.NoError(t, json.Unmarshal([]byte(requestBody), &payload))
-	require.NotEmpty(t, payload.Text)
+	assert.NoError(t, json.Unmarshal([]byte(requestBody), &payload))
+	assert.NotEmpty(t, payload.Text)
 
 	return payload.Text
 }
@@ -345,10 +344,10 @@ func renderGitHubAppInstallTemplate(t *testing.T, data map[string]any) string {
 	t.Helper()
 
 	tmpl, err := template.ParseFS(slacktemplates.Templates, slacktemplates.GitHubAppInstallName)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	var rendered strings.Builder
-	require.NoError(t, tmpl.Execute(&rendered, data))
+	assert.NoError(t, tmpl.Execute(&rendered, data))
 
 	return rendered.String()
 }
@@ -372,7 +371,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgA}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	installAttrsOrgB, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7002"})
 	integrationB, err := suite.db.Integration.Create().
@@ -381,7 +380,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgB}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// Send a ping webhook for installation 7002 (Org B) — should resolve to integrationB
 	payloadB := []byte(`{"zen":"keep it logically awesome","installation":{"id":7002}}`)
@@ -392,19 +391,19 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	recB := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recB, reqB)
-	require.Equal(t, http.StatusOK, recB.Code)
+	assert.Equal(t, http.StatusOK, recB.Code)
 
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
 	// Verify integrationB was updated with webhook verification metadata
 	updatedB, err := suite.db.Integration.Get(user.UserCtx, integrationB.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	_, hasBVerified := updatedB.Metadata["githubWebhookVerifiedAt"]
 	assert.True(t, hasBVerified, "integration B should have verification metadata")
 
 	// Verify integrationA was NOT updated
 	updatedA, err := suite.db.Integration.Get(user.UserCtx, integrationA.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	_, hasAVerified := updatedA.Metadata["githubWebhookVerifiedAt"]
 	assert.False(t, hasAVerified, "integration A should not have verification metadata")
 
@@ -417,12 +416,12 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	recA := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recA, reqA)
-	require.Equal(t, http.StatusOK, recA.Code)
+	assert.Equal(t, http.StatusOK, recA.Code)
 
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
 	updatedA, err = suite.db.Integration.Get(user.UserCtx, integrationA.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	_, hasAVerified = updatedA.Metadata["githubWebhookVerifiedAt"]
 	assert.True(t, hasAVerified, "integration A should now have verification metadata")
 }
@@ -430,7 +429,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerability() {
 	t := suite.T()
 
-	restore := suite.withDurableGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
 	suite.registerGitHubAppWebhookRoute()
@@ -445,7 +444,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	payload := []byte(`{
 		"action": "created",
@@ -476,7 +475,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
@@ -487,8 +486,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 			vulnerability.ExternalID("github:acme/web-app:dependabot:42"),
 		).
 		All(user.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, vulns, 1, "expected exactly one vulnerability record")
+	assert.NoError(t, err)
+	assert.Len(t, vulns, 1, "expected exactly one vulnerability record")
 
 	vuln := vulns[0]
 	assert.Equal(t, "github", vuln.Source)
@@ -504,7 +503,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVulnerability() {
 	t := suite.T()
 
-	restore := suite.withDurableGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
 	suite.registerGitHubAppWebhookRoute()
@@ -519,7 +518,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// First delivery: alert in OPEN state
 	payloadOpen := []byte(`{
@@ -550,7 +549,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 
 	recOpen := httptest.NewRecorder()
 	suite.e.ServeHTTP(recOpen, reqOpen)
-	require.Equal(t, http.StatusOK, recOpen.Code)
+	assert.Equal(t, http.StatusOK, recOpen.Code)
 
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
@@ -561,8 +560,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 			vulnerability.ExternalID("github:acme/api:dependabot:99"),
 		).
 		All(user.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, vulns, 1)
+	assert.NoError(t, err)
+	assert.Len(t, vulns, 1)
 	assert.Equal(t, "critical", vulns[0].Severity)
 
 	originalID := vulns[0].ID
@@ -596,7 +595,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 
 	recFixed := httptest.NewRecorder()
 	suite.e.ServeHTTP(recFixed, reqFixed)
-	require.Equal(t, http.StatusOK, recFixed.Code)
+	assert.Equal(t, http.StatusOK, recFixed.Code)
 
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
@@ -607,8 +606,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 			vulnerability.ExternalID("github:acme/api:dependabot:99"),
 		).
 		All(user.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, vulns, 1, "should still be one record after upsert")
+	assert.NoError(t, err)
+	assert.Len(t, vulns, 1, "should still be one record after upsert")
 	assert.Equal(t, originalID, vulns[0].ID, "record ID should be unchanged after upsert")
 	assert.Equal(t, "fixed", vulns[0].Status, "status should be updated to fixed")
 }
@@ -616,7 +615,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulnerabilitiesToSameOrg() {
 	t := suite.T()
 
-	restore := suite.withDurableGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
 	suite.registerGitHubAppWebhookRoute()
@@ -632,7 +631,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgA}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	installAttrsOrgB, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "9002"})
 	_, err = suite.db.Integration.Create().
@@ -641,7 +640,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgB}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// Send dependabot alert from Org Alpha (installation 9001)
 	payloadA := []byte(`{
@@ -672,7 +671,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 
 	recA := httptest.NewRecorder()
 	suite.e.ServeHTTP(recA, reqA)
-	require.Equal(t, http.StatusOK, recA.Code)
+	assert.Equal(t, http.StatusOK, recA.Code)
 
 	// Send dependabot alert from Org Beta (installation 9002)
 	payloadB := []byte(`{
@@ -703,7 +702,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 
 	recB := httptest.NewRecorder()
 	suite.e.ServeHTTP(recB, reqB)
-	require.Equal(t, http.StatusOK, recB.Code)
+	assert.Equal(t, http.StatusOK, recB.Code)
 
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
@@ -714,8 +713,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 			vulnerability.ExternalID("github:alpha-org/service:dependabot:10"),
 		).
 		All(user.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, vulnA, 1)
+	assert.NoError(t, err)
+	assert.Len(t, vulnA, 1)
 	assert.Equal(t, "medium", vulnA[0].Severity)
 	assert.Equal(t, "alpha-org/service", vulnA[0].ExternalOwnerID)
 	assert.Equal(t, "CVE-2026-11111", vulnA[0].CveID)
@@ -726,8 +725,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 			vulnerability.ExternalID("github:beta-org/platform:dependabot:5"),
 		).
 		All(user.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, vulnB, 1)
+	assert.NoError(t, err)
+	assert.Len(t, vulnB, 1)
 	assert.Equal(t, "low", vulnB[0].Severity)
 	assert.Equal(t, "beta-org/platform", vulnB[0].ExternalOwnerID)
 	assert.Equal(t, "CVE-2026-22222", vulnB[0].CveID)

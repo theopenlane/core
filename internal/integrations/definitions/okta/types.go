@@ -10,13 +10,15 @@ import (
 var (
 	// definitionID is the stable identifier for the Okta integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
-	// installation is the typed installation metadata handle for the Okta definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// integration is the typed installation metadata handle for the Okta definition
+	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// oktaCredential is the auth-managed credential slot used by the Okta client
 	oktaCredentialSchema, oktaCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// oktaClient is the client ref for the Okta API client used by this definition
-	oktaClient                                  = types.NewClientRef[*oktagosdk.APIClient]()
-	healthCheckSchema, healthCheckOperation     = providerkit.OperationSchema[HealthCheck]()
+	oktaClient = types.NewClientRef[*oktagosdk.APIClient]()
+	// healthCheckSchema is the operation ref for the Okta health check operation
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	// directorySyncSchema is the operation ref for the Okta directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 

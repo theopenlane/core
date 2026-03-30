@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -51,7 +52,7 @@ func (m MessageSend) Handle() types.OperationHandler {
 
 // Run sends a Slack message via chat.postMessage
 func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOperation) (json.RawMessage, error) {
-	destinations := slackMessageDestinations(cfg)
+	destinations := lo.Uniq(lo.Compact(append([]string{cfg.Channel}, cfg.Destinations...)))
 	if len(destinations) == 0 {
 		return nil, ErrChannelMissing
 	}
@@ -112,29 +113,4 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOp
 	}
 
 	return providerkit.EncodeResult(result, ErrResultEncode)
-}
-
-// slackMessageDestinations returns a deduplicated ordered list of target channel IDs from the operation config
-func slackMessageDestinations(cfg MessageSendOperation) []string {
-	destinations := make([]string, 0, len(cfg.Destinations)+1)
-	seen := make(map[string]struct{}, len(cfg.Destinations)+1)
-
-	appendDestination := func(value string) {
-		if value == "" {
-			return
-		}
-		if _, ok := seen[value]; ok {
-			return
-		}
-
-		seen[value] = struct{}{}
-		destinations = append(destinations, value)
-	}
-
-	appendDestination(cfg.Channel)
-	for _, destination := range cfg.Destinations {
-		appendDestination(destination)
-	}
-
-	return destinations
 }

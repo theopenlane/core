@@ -44,7 +44,7 @@ func Builder(cfg Config) registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{teamsCredential.ID()},
 					ClientRefs:          []types.ClientID{teamsClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					Installation:        installation.Registration(),
+					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						CredentialRef: teamsCredential,
 						Config: auth.OAuthConfig{
@@ -66,14 +66,7 @@ func Builder(cfg Config) registry.Builder {
 								Expiry:       material.Expiry,
 							}, nil
 						},
-						TokenView: func(cred teamsCred) (*types.TokenView, error) {
-							return &types.TokenView{
-								AccessToken: cred.AccessToken,
-								ExpiresAt:   cred.Expiry,
-							}, nil
-						},
 						EncodeCredentialError: ErrCredentialEncode,
-						DecodeCredentialError: ErrCredentialDecode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: teamsCredential.ID(),
@@ -93,7 +86,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call Graph /me to verify Teams access",
-					Topic:        types.OperationTopic(definitionID.ID(), healthCheckOperation.Name()),
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    teamsClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
@@ -102,7 +95,7 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         messageSendOperation.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        types.OperationTopic(definitionID.ID(), messageSendOperation.Name()),
+					Topic:        definitionID.OperationTopic(messageSendOperation.Name()),
 					ClientRef:    teamsClient.ID(),
 					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),

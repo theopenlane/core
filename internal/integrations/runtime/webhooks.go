@@ -22,15 +22,15 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one installation
-func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, installation *ent.Integration, previousIntegrationID string) error {
-	def, err := r.resolveDefinitionForInstallation(installation)
+// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration
+func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration *ent.Integration, previousIntegrationID string) error {
+	def, err := r.resolveDefinitionForInstallation(integration)
 	if err != nil {
 		return err
 	}
 
 	db := r.DB()
-	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(installation.ID), integrationwebhook.ExternalEventIDIsNil()).All(ctx)
+	existing, err := db.IntegrationWebhook.Query().Where(integrationwebhook.IntegrationIDEQ(integration.ID), integrationwebhook.ExternalEventIDIsNil()).All(ctx)
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, installatio
 	}
 
 	for _, webhook := range def.Webhooks {
-		if _, err := r.ensureWebhook(ctx, installation, webhook, previousIntegrationID); err != nil {
+		if _, err := r.ensureWebhook(ctx, integration, webhook, previousIntegrationID); err != nil {
 			return err
 		}
 	}
@@ -116,9 +116,9 @@ func (r *Runtime) ResolveWebhookByEndpoint(ctx context.Context, endpointID strin
 		Only(ctx)
 }
 
-// EnsureWebhook returns the persisted webhook row for one installation and definition webhook
-func (r *Runtime) EnsureWebhook(ctx context.Context, installation *ent.Integration, webhookName string, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
-	def, err := r.resolveDefinitionForInstallation(installation)
+// EnsureWebhook returns the persisted webhook row for one integration and definition webhook
+func (r *Runtime) EnsureWebhook(ctx context.Context, integration *ent.Integration, webhookName string, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
+	def, err := r.resolveDefinitionForInstallation(integration)
 	if err != nil {
 		return nil, err
 	}
@@ -130,36 +130,36 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, installation *ent.Integrati
 		return nil, registry.ErrWebhookNotFound
 	}
 
-	return r.ensureWebhook(ctx, installation, webhook, previousIntegrationID)
+	return r.ensureWebhook(ctx, integration, webhook, previousIntegrationID)
 }
 
 // DispatchWebhookEvent emits one normalized integration webhook event through Gala
-func (r *Runtime) DispatchWebhookEvent(ctx context.Context, installation *ent.Integration, webhookName string, event types.WebhookReceivedEvent) error {
-	if installation == nil {
+func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Integration, webhookName string, event types.WebhookReceivedEvent) error {
+	if integration == nil {
 		return ErrInstallationRequired
 	}
 
-	registration, err := r.Registry().WebhookEvent(installation.DefinitionID, webhookName, event.Name)
+	registration, err := r.Registry().WebhookEvent(integration.DefinitionID, webhookName, event.Name)
 	if err != nil {
 		return err
 	}
 
-	receipt := r.Gala().EmitWithHeaders(ctx, registration.Topic, operations.WebhookEnvelope{
-		IntegrationID: installation.ID,
-		DefinitionID:  installation.DefinitionID,
+	metadata := types.ExecutionMetadata{
+		OwnerID:       integration.OwnerID,
+		IntegrationID: integration.ID,
+		DefinitionID:  integration.DefinitionID,
 		Webhook:       webhookName,
 		Event:         event.Name,
 		DeliveryID:    event.DeliveryID,
-		Payload:       jsonx.CloneRawMessage(event.Payload),
-		Headers:       maps.Clone(event.Headers),
+	}
+
+	receipt := r.Gala().EmitWithHeaders(types.WithExecutionMetadata(ctx, metadata), registration.Topic, operations.WebhookEnvelope{
+		ExecutionMetadata: metadata,
+		Payload:           jsonx.CloneRawMessage(event.Payload),
+		Headers:           maps.Clone(event.Headers),
 	}, gala.Headers{
 		IdempotencyKey: event.DeliveryID,
-		Properties: map[string]string{
-			"integration_id": installation.ID,
-			"definition_id":  installation.DefinitionID,
-			"webhook":        webhookName,
-			"event":          event.Name,
-		},
+		Properties:     metadata.Properties(),
 	})
 
 	return receipt.Err
@@ -167,27 +167,23 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, installation *ent.In
 
 // HandleWebhookEvent processes one emitted integration webhook envelope
 func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
-	// Webhook event handlers are system-level operations; the privacy bypass set by the
-	// HTTP handler is not captured by context codecs in durable dispatch mode
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	installation, err := r.ResolveIntegration(ctx, "", envelope.IntegrationID, envelope.DefinitionID)
+	ctx, integration, metadata, err := r.bootstrapHandlerContext(ctx, envelope.ExecutionMetadata)
 	if err != nil {
 		return err
 	}
 
-	webhook, err := r.EnsureWebhook(ctx, installation, envelope.Webhook, "")
+	webhook, err := r.EnsureWebhook(ctx, integration, envelope.Webhook, "")
 	if err != nil {
 		return err
 	}
 
-	registration, err := r.Registry().WebhookEvent(installation.DefinitionID, envelope.Webhook, envelope.Event)
+	registration, err := r.Registry().WebhookEvent(integration.DefinitionID, envelope.Webhook, envelope.Event)
 	if err != nil {
 		return err
 	}
 
 	return registration.Handle(ctx, types.WebhookHandleRequest{
-		Integration: installation,
+		Integration: integration,
 		Webhook:     webhook,
 		DB:          r.DB(),
 		Event: types.WebhookReceivedEvent{
@@ -198,34 +194,29 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		},
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
 			return operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
-				Registry:     r.Registry(),
-				DB:           r.DB(),
-				Runtime:      r.Gala(),
-				Installation: installation,
-			}, envelope.Webhook, registration.Ingest, payloadSets, operations.IngestOptions{
-				Source:       integrationgenerated.IntegrationIngestSourceWebhook,
-				Webhook:      envelope.Webhook,
-				WebhookEvent: envelope.Event,
-				DeliveryID:   envelope.DeliveryID,
-			})
+				Registry:    r.Registry(),
+				DB:          r.DB(),
+				Runtime:     r.Gala(),
+				Integration: integration,
+			}, envelope.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceWebhook, metadata))
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {
 			_, dispatchErr := r.Dispatch(dispatchCtx, operations.DispatchRequest{
-				InstallationID: installation.ID,
-				Operation:      operation,
-				Config:         jsonx.CloneRawMessage(config),
-				RunType:        enums.IntegrationRunTypeEvent,
+				IntegrationID: integration.ID,
+				Operation:     operation,
+				Config:        jsonx.CloneRawMessage(config),
+				RunType:       enums.IntegrationRunTypeWebhook,
 			})
 
 			return dispatchErr
 		},
 		CleanupInstallation: func(cleanupCtx context.Context) error {
-			return r.cleanupInstallation(privacy.DecisionContext(cleanupCtx, privacy.Allow), installation.ID)
+			return r.cleanupInstallation(privacy.DecisionContext(cleanupCtx, privacy.Allow), integration.ID)
 		},
 	})
 }
 
-// ensureWebhook creates or updates the persisted webhook row for one installation and webhook registration
+// ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration
 func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
@@ -267,10 +258,11 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	row := rows[0]
 	endpointURL := webhookEndpointURL(registration, lo.FromPtr(row.EndpointID))
 
-	// Remove duplicates that should not exist
+	// remove duplicates that should not exist
 	duplicateIDs := lo.FilterMap(rows, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
 		return candidate.ID, candidate.ID != row.ID
 	})
+
 	if len(duplicateIDs) > 0 {
 		if _, err := db.IntegrationWebhook.Delete().
 			Where(integrationwebhook.IDIn(duplicateIDs...)).
@@ -290,6 +282,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	return update.Save(ctx)
 }
 
+// webhookEndpointURL is a small constructor that allows us to override if required but otherwise return a consistent pattern for the route
 func webhookEndpointURL(registration types.WebhookRegistration, endpointID string) string {
 	if registration.EndpointURLTemplate == "" {
 		return "/v1/integrations/webhook/" + endpointID

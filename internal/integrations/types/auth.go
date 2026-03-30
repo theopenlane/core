@@ -1,10 +1,25 @@
-package types
+package types //nolint:revive
 
 import (
 	"context"
 	"encoding/json"
-	"time"
 )
+
+// AuthStartFunc initiates an auth flow and returns the redirect URL and opaque state
+type AuthStartFunc func(ctx context.Context, input json.RawMessage) (AuthStartResult, error)
+
+// AuthCompleteFunc finalizes an auth flow and returns the resulting credential
+type AuthCompleteFunc func(ctx context.Context, state json.RawMessage, input AuthCallbackInput) (AuthCompleteResult, error)
+
+// AuthRegistration describes how one connection mode starts and completes auth
+type AuthRegistration struct {
+	// CredentialRef identifies which credential slot receives the auth result
+	CredentialRef CredentialSlotID `json:"credentialRef"`
+	// Start initiates the auth flow
+	Start AuthStartFunc `json:"-"`
+	// Complete finalizes the auth flow and returns the resulting credential
+	Complete AuthCompleteFunc `json:"-"`
+}
 
 // AuthStartResult captures the output of an auth start function
 type AuthStartResult struct {
@@ -20,14 +35,6 @@ type AuthCompleteResult struct {
 	Credential CredentialSet `json:"credential"`
 	// InstallationInput is optional installation-scoped input captured during auth completion
 	InstallationInput json.RawMessage `json:"installationInput,omitempty"`
-}
-
-// TokenView is a read-only view of a credential's active token and expiry
-type TokenView struct {
-	// AccessToken is the active access token
-	AccessToken string `json:"accessToken,omitempty"`
-	// ExpiresAt is the token expiry timestamp when available
-	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 }
 
 // AuthCallbackValue captures one callback parameter and its values
@@ -66,25 +73,4 @@ func (i AuthCallbackInput) Values(name string) []string {
 	}
 
 	return nil
-}
-
-// AuthStartFunc initiates an auth flow and returns the redirect URL and opaque state
-type AuthStartFunc func(ctx context.Context, input json.RawMessage) (AuthStartResult, error)
-
-// AuthCompleteFunc finalizes an auth flow and returns the resulting credential
-type AuthCompleteFunc func(ctx context.Context, state json.RawMessage, input AuthCallbackInput) (AuthCompleteResult, error)
-
-// AuthTokenViewFunc produces a read-only token view from a persisted credential
-type AuthTokenViewFunc func(ctx context.Context, credential CredentialSet) (*TokenView, error)
-
-// AuthRegistration describes how one connection mode starts and completes auth
-type AuthRegistration struct {
-	// CredentialRef identifies which credential slot receives the auth result
-	CredentialRef CredentialSlotID `json:"credentialRef"`
-	// Start initiates the auth flow
-	Start AuthStartFunc `json:"-"`
-	// Complete finalizes the auth flow and returns the resulting credential
-	Complete AuthCompleteFunc `json:"-"`
-	// TokenView produces a read-only token view from a persisted credential
-	TokenView AuthTokenViewFunc `json:"-"`
 }

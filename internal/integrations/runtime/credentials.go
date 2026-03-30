@@ -20,36 +20,36 @@ import (
 
 // BeginAuth starts one definition auth flow through the runtime-managed keymaker service
 func (r *Runtime) BeginAuth(ctx context.Context, req keymaker.BeginRequest) (keymaker.BeginResponse, error) {
-	return r.Keymaker().BeginAuth(ctx, req)
+	return r.keymaker().BeginAuth(ctx, req)
 }
 
 // CompleteAuth completes one definition auth flow through the runtime-managed keymaker service
 func (r *Runtime) CompleteAuth(ctx context.Context, req keymaker.CompleteRequest) (keymaker.CompleteResult, error) {
-	return r.Keymaker().CompleteAuth(ctx, req)
+	return r.keymaker().CompleteAuth(ctx, req)
 }
 
 // LoadCredential resolves one persisted credential slot for one installation
 func (r *Runtime) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
-	return r.Keystore().LoadCredential(ctx, installation, credentialRef)
+	return r.keystore().LoadCredential(ctx, installation, credentialRef)
 }
 
-// LoadCredentials resolves the requested credential slots for one installation
-func (r *Runtime) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
-	return r.Keystore().LoadCredentials(ctx, installation, credentialRefs)
+// loadCredentials resolves the requested credential slots for one installation
+func (r *Runtime) loadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
+	return r.keystore().LoadCredentials(ctx, installation, credentialRefs)
 }
 
-// DeleteCredential removes credentials for one installation identifier and evicts cached clients
-func (r *Runtime) DeleteCredential(ctx context.Context, installationID string) error {
-	return r.Keystore().DeleteCredential(ctx, installationID)
+// deleteCredential removes credentials for one installation identifier and evicts cached clients
+func (r *Runtime) deleteCredential(ctx context.Context, integrationID string) error {
+	return r.keystore().DeleteCredential(ctx, integrationID)
 }
 
 // cleanupInstallation removes credentials and the installation record for one installation
-func (r *Runtime) cleanupInstallation(ctx context.Context, installationID string) error {
-	if err := r.Keystore().DeleteCredential(ctx, installationID); err != nil {
+func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string) error {
+	if err := r.deleteCredential(ctx, integrationID); err != nil {
 		return err
 	}
 
-	return r.DB().Integration.DeleteOneID(installationID).Exec(ctx)
+	return r.DB().Integration.DeleteOneID(integrationID).Exec(ctx)
 }
 
 // Disconnect executes the teardown flow for one installation
@@ -67,16 +67,16 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 	var result types.DisconnectResult
 
 	if err == nil && connection.Disconnect != nil && connection.Disconnect.Disconnect != nil {
-		credentials, loadErr := r.connectionCredentials(ctx, installation, connection)
+		credentials, loadErr := r.loadCredentials(ctx, installation, connection.CredentialRefs)
 		if loadErr != nil {
 			return types.DisconnectResult{}, loadErr
 		}
 
 		result, err = connection.Disconnect.Disconnect(ctx, types.DisconnectRequest{
-			Installation: installation,
-			Connection:   connection,
-			Credentials:  credentials,
-			Config:       installation.Config,
+			Integration: installation,
+			Connection:  connection,
+			Credentials: credentials,
+			Config:      installation.Config,
 		})
 		if err != nil {
 			return types.DisconnectResult{}, err
@@ -155,20 +155,20 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		return err
 	}
 
-	bindings, err := r.connectionCredentials(systemCtx, installation, connection)
+	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
 	if err != nil {
 		return err
 	}
 
-	if connection.Installation == nil {
+	if connection.Integration == nil {
 		return nil
 	}
 
-	metadata, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
-		Installation: installation,
-		Connection:   connection,
-		Credentials:  bindings,
-		Config:       installation.Config,
+	metadata, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
+		Integration: installation,
+		Connection:  connection,
+		Credentials: bindings,
+		Config:      installation.Config,
 	})
 	if err != nil {
 		return err
@@ -184,8 +184,8 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 // saveInstallationMetadata persists installation metadata and syncs the normalized
 // display identity into the GraphQL-visible metadata map
 func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
-	displayMeta := displayMetadataOverlay(metadata.Display)
-	merged := mapx.DeepMergeMapAny(installation.Metadata, displayMeta)
+	displayMeta, _ := jsonx.ToMap(metadata.Display)
+	merged := mapx.DeepMergeMapAny(installation.Metadata, mapx.PruneMapZeroAny(displayMeta))
 
 	if err := r.DB().Integration.UpdateOneID(installation.ID).
 		SetInstallationMetadata(metadata).
@@ -198,30 +198,6 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 	installation.Metadata = merged
 
 	return nil
-}
-
-// displayMetadataOverlay converts the normalized identity into a map overlay
-// suitable for merging into the GraphQL-visible metadata field
-func displayMetadataOverlay(display types.IntegrationInstallationIdentity) map[string]any {
-	overlay := make(map[string]any)
-
-	if display.ExternalName != "" {
-		overlay["externalName"] = display.ExternalName
-	}
-
-	if display.ExternalID != "" {
-		overlay["externalId"] = display.ExternalID
-	}
-
-	if display.CredentialRef != "" {
-		overlay["credentialRef"] = display.CredentialRef
-	}
-
-	if display.LastSuccessfulHealthCheck != "" {
-		overlay["lastSuccessfulHealthCheck"] = display.LastSuccessfulHealthCheck
-	}
-
-	return overlay
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -240,7 +216,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	bindings, err := r.connectionCredentials(ctx, installation, connection)
+	bindings, err := r.loadCredentials(ctx, installation, connection.CredentialRefs)
 	if err != nil {
 		return err
 	}
@@ -263,7 +239,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	if err := r.Keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
+	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
 		return err
 	}
 
@@ -273,13 +249,13 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	var metadata types.IntegrationInstallationMetadata
 
-	if connection.Installation != nil {
-		resolved, ok, err := connection.Installation.Resolve(systemCtx, types.InstallationRequest{
-			Installation: installation,
-			Connection:   connection,
-			Credentials:  bindings,
-			Config:       installation.Config,
-			Input:        installationInput,
+	if connection.Integration != nil {
+		resolved, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
+			Integration: installation,
+			Connection:  connection,
+			Credentials: bindings,
+			Config:      installation.Config,
+			Input:       installationInput,
 		})
 		if err != nil {
 			return err
@@ -311,7 +287,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	}
 
 	if wasFirstConnection {
-		if err := r.ReconcileOperations(systemCtx, installation); err != nil {
+		if err := r.reconcileOperations(systemCtx, installation); err != nil {
 			return err
 		}
 	}
@@ -381,11 +357,6 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 	}
 
 	return connection, nil
-}
-
-// connectionCredentials loads all credentials for a connection
-func (r *Runtime) connectionCredentials(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration) (types.CredentialBindings, error) {
-	return r.LoadCredentials(ctx, installation, connection.CredentialRefs)
 }
 
 // persistConnectionState updates the provider state for an installation with a new credential reference

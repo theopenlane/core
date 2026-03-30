@@ -9,72 +9,68 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
+// IntegrationConfigPayload is the request type for configuring a non-OAuth provider
 type IntegrationConfigPayload struct {
-	// DefinitionID is the canonical integration definition ID from the path.
+	// DefinitionID is the canonical integration definition ID from the path
 	DefinitionID string `param:"definitionID" description:"Integration definition ID" example:"def_01K0GCPSCC00000000000000001"`
-	// InstallationID is the optional existing installation to update credentials on.
-	// When omitted a new installation is created.
-	InstallationID string `json:"installationId,omitempty"`
-	// CredentialRef selects which credential slot is being configured.
+	// IntegrationID is the optional existing installation to update credentials on; when omitted we create a new integration
+	IntegrationID string `json:"integrationId,omitempty"`
+	// CredentialRef selects which credential slot is being configured
 	CredentialRef types.CredentialSlotID `json:"credentialRef"`
-	// Body holds the provider-specific credential fields as a raw JSON object.
+	// Body holds the provider-specific credential fields as a raw JSON object
 	Body json.RawMessage `json:"body"`
-	// UserInput holds optional installation-scoped provider configuration.
+	// UserInput holds optional installation-scoped provider configuration
 	UserInput json.RawMessage `json:"userInput,omitempty"`
 }
 
-// IntegrationOperationBody is the request body for triggering a provider operation.
+// IntegrationOperationBody is the request body for triggering a provider operation
 type IntegrationOperationBody struct {
-	// Operation is the operation identifier.
+	// Operation is the operation identifier
 	Operation string `json:"operation"`
-	// Config holds optional operation-specific configuration as a raw JSON object.
+	// Config holds optional operation-specific configuration as a raw JSON object
 	Config json.RawMessage `json:"config,omitempty"`
 }
 
-// IntegrationOperationPayload is the request type for running an integration operation.
+// IntegrationOperationPayload is the request type for running an integration operation
 type IntegrationOperationPayload struct {
-	// IntegrationID is the installation record to run the operation against.
+	// IntegrationID is the installation record to run the operation against
 	IntegrationID string `param:"integrationID" description:"Integration installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-	// Body holds the operation name and optional configuration.
+	// Body holds the operation name and optional configuration
 	Body IntegrationOperationBody `json:"body"`
 }
 
-// IntegrationConfigResponse is the response after successfully configuring a provider.
+// IntegrationConfigResponse is the response after successfully configuring a provider
 type IntegrationConfigResponse struct {
 	rout.Reply
-	// Provider is the configured definition ID.
+	// Provider is the configured definition ID
 	Provider string `json:"provider"`
-	// InstallationID is the installation record ID that was created or updated.
-	InstallationID string `json:"installationId"`
-	// HealthStatus is the result of the inline validation health check.
-	// "ok" indicates the health check passed during configuration.
+	// IntegrationID is the installation record ID that was created or updated
+	IntegrationID string `json:"integrationId"`
+	// HealthStatus is the result of the inline validation health check
 	HealthStatus string `json:"healthStatus,omitempty"`
-	// HealthSummary is a human-readable description of the health check result.
+	// HealthSummary is a human-readable description of the health check result
 	HealthSummary string `json:"healthSummary,omitempty"`
-	// InstallationMetadata is the provider-specific installation identity metadata
-	// resolved during configuration (e.g. Slack team name, GitHub org, AWS account).
+	// InstallationMetadata is the provider-specific installation identity metadata resolved during configuration (e.g. Slack team name, GitHub org, AWS account)
 	InstallationMetadata json.RawMessage `json:"installationMetadata,omitempty"`
-	// WebhookEndpointURL is the user-facing webhook or SCIM endpoint URL when the definition declares webhooks.
-	// This value is only populated on initial creation and should be captured by the caller.
+	// WebhookEndpointURL is the user-facing webhook or SCIM endpoint URL when the definition declares webhooks
 	WebhookEndpointURL string `json:"webhookEndpointUrl,omitempty"`
-	// WebhookSecret is the shared secret for authenticating inbound webhook or SCIM deliveries.
-	// This value is only populated on initial creation and should be captured by the caller.
+	// WebhookSecret is the shared secret for authenticating inbound webhook or SCIM deliveries
+	// This value is only populated on initial creation and should be captured by the caller
 	WebhookSecret string `json:"webhookSecret,omitempty"`
 }
 
-// IntegrationOperationResponse is the response after executing or queuing a provider operation.
+// IntegrationOperationResponse is the response after executing or queuing a provider operation
 type IntegrationOperationResponse struct {
 	rout.Reply
-	// Provider is the integration definition ID.
+	// Provider is the integration definition ID
 	Provider string `json:"provider"`
-	// Operation is the operation identifier that was executed.
+	// Operation is the operation identifier that was executed
 	Operation string `json:"operation"`
-	// Status is the operation result status (e.g. ok, queued, error).
+	// Status is the operation result status (e.g. ok, queued, error)
 	Status string `json:"status"`
-	// Summary is a human-readable description of the result.
+	// Summary is a human-readable description of the result
 	Summary string `json:"summary,omitempty"`
-	// Details holds structured result data specific to the operation.
+	// Details holds structured result data specific to the operation
 	Details json.RawMessage `json:"details,omitempty"`
 }
 
@@ -87,14 +83,13 @@ type IntegrationProvidersResponse struct {
 
 // IntegrationAuthStartRequest is the request type for starting an integration auth flow
 type IntegrationAuthStartRequest struct {
-	// DefinitionID is the canonical integration definition identifier.
+	// DefinitionID is the canonical integration definition identifier
 	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
-	// InstallationID is the optional existing installation to start the auth flow for.
-	// When omitted a new installation is created.
-	InstallationID string `json:"installationId,omitempty"`
-	// CredentialRef selects which credential-schema-defined connection is being activated.
+	// IntegrationID is the existing installation to start the auth flow for; when omitted a new installation is created
+	IntegrationID string `json:"integrationId,omitempty"`
+	// CredentialRef selects which credential-schema-defined connection is being activated
 	CredentialRef types.CredentialSlotID `json:"credentialRef"`
-	// UserInput holds optional installation-scoped provider configuration.
+	// UserInput holds optional installation-scoped provider configuration
 	UserInput json.RawMessage `json:"userInput,omitempty"`
 }
 

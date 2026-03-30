@@ -141,38 +141,6 @@ func TestFlowCompleteMissingInstallationID(t *testing.T) {
 	require.ErrorIs(t, err, ErrInstallationIDMissing)
 }
 
-// TestFlowTokenViewDecodesCredential verifies TokenView returns the token and expiry from credential data
-func TestFlowTokenViewDecodesCredential(t *testing.T) {
-	t.Parallel()
-
-	expiry := time.Date(2099, 6, 15, 12, 0, 0, 0, time.UTC)
-	cred := githubAppCredential{
-		AppID:          1,
-		InstallationID: 2,
-		AccessToken:    "ghs_viewtest",
-		Expiry:         &expiry,
-	}
-
-	data, err := jsonx.ToRawMessage(cred)
-	require.NoError(t, err)
-
-	view, err := tokenViewAppInstall(context.Background(), types.CredentialSet{Data: data})
-	require.NoError(t, err)
-	require.Equal(t, "ghs_viewtest", view.AccessToken)
-	require.NotNil(t, view.ExpiresAt)
-	require.Equal(t, expiry, *view.ExpiresAt)
-}
-
-// TestFlowTokenViewEmptyData verifies TokenView returns empty values when credential data is nil
-func TestFlowTokenViewEmptyData(t *testing.T) {
-	t.Parallel()
-
-	view, err := tokenViewAppInstall(context.Background(), types.CredentialSet{})
-	require.NoError(t, err)
-	require.Empty(t, view.AccessToken)
-	require.Nil(t, view.ExpiresAt)
-}
-
 // TestFlowCompleteURLPath verifies the installation token request hits the expected API path
 func TestFlowCompleteURLPath(t *testing.T) {
 	t.Parallel()
