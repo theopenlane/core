@@ -6134,6 +6134,8 @@ func init() {
 	review.Hooks[11] = reviewMixinHooks9[0]
 
 	review.Hooks[12] = reviewHooks[0]
+
+	review.Hooks[13] = reviewHooks[1]
 	reviewMixinInters1 := reviewMixin[1].Interceptors()
 	reviewMixinInters5 := reviewMixin[5].Interceptors()
 	review.Interceptors[0] = reviewMixinInters1[0]
