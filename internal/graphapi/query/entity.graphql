@@ -97,74 +97,6 @@ mutation DeleteEntity ($deleteEntityId: ID!) {
 	}
 }
 query GetAllEntities {
-<<<<<<< HEAD
-  entities {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        displayName
-        lastReviewedAt
-        reviewedBy
-        nextReviewAt
-        status
-        domains
-        notes {
-          edges {
-            node {
-              text
-              updatedAt
-              updatedBy
-            }
-          }
-        }
-        entityType {
-          id
-          name
-        }
-        id
-        name
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-||||||| e02b0cd32
-  entities {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        displayName
-        status
-        domains
-        notes {
-          edges {
-            node {
-              text
-              updatedAt
-              updatedBy
-            }
-          }
-        }
-        entityType {
-          id
-          name
-        }
-        id
-        name
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-=======
 	entities {
 		edges {
 			node {
@@ -196,80 +128,7 @@ query GetAllEntities {
 			}
 		}
 	}
->>>>>>> origin/main
 }
-<<<<<<< HEAD
-
-query GetEntities($where: EntityWhereInput) {
-  entities(where: $where) {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        displayName
-        status
-        domains
-        lastReviewedAt
-        reviewedBy
-        nextReviewAt
-        notes {
-          edges {
-            node {
-              text
-              updatedAt
-              updatedBy
-            }
-          }
-        }
-        entityType {
-          id
-          name
-        }
-        id
-        name
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-||||||| e02b0cd32
-
-query GetEntities($where: EntityWhereInput) {
-  entities(where: $where) {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        displayName
-        status
-        domains
-        notes {
-          edges {
-            node {
-              text
-              updatedAt
-              updatedBy
-            }
-          }
-        }
-        entityType {
-          id
-          name
-        }
-        id
-        name
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-=======
 query GetEntities ($where: EntityWhereInput) {
 	entities(where: $where) {
 		edges {
@@ -302,98 +161,7 @@ query GetEntities ($where: EntityWhereInput) {
 			}
 		}
 	}
->>>>>>> origin/main
 }
-<<<<<<< HEAD
-
-query GetEntityByID($entityId: ID!) {
-  entity(id: $entityId) {
-    createdAt
-    createdBy
-    description
-    displayName
-    lastReviewedAt
-    reviewedBy
-    nextReviewAt
-    status
-    domains
-    notes {
-      edges {
-        node {
-          text
-          updatedAt
-          updatedBy
-        }
-      }
-    }
-    entityType {
-      id
-      name
-    }
-    id
-    name
-    ownerID
-    contacts {
-      edges {
-        node {
-          id
-          fullName
-          email
-          title
-          company
-          address
-          phoneNumber
-        }
-      }
-    }
-    tags
-    updatedAt
-    updatedBy
-  }
-||||||| e02b0cd32
-
-query GetEntityByID($entityId: ID!) {
-  entity(id: $entityId) {
-    createdAt
-    createdBy
-    description
-    displayName
-    status
-    domains
-    notes {
-      edges {
-        node {
-          text
-          updatedAt
-          updatedBy
-        }
-      }
-    }
-    entityType {
-      id
-      name
-    }
-    id
-    name
-    ownerID
-    contacts {
-      edges {
-        node {
-          id
-          fullName
-          email
-          title
-          company
-          address
-          phoneNumber
-        }
-      }
-    }
-    tags
-    updatedAt
-    updatedBy
-  }
-=======
 query GetEntityByID ($entityId: ID!) {
 	entity(id: $entityId) {
 		annualSpend
@@ -482,76 +250,7 @@ query GetEntityByID ($entityId: ID!) {
 			}
 		}
 	}
->>>>>>> origin/main
 }
-<<<<<<< HEAD
-
-mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
-  updateEntity(id: $updateEntityId, input: $input) {
-    entity {
-      createdAt
-      createdBy
-      description
-      displayName
-      lastReviewedAt
-      reviewedBy
-      nextReviewAt
-      status
-      domains
-      notes {
-        edges {
-          node {
-            text
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      entityType {
-        id
-        name
-      }
-      id
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-||||||| e02b0cd32
-
-mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
-  updateEntity(id: $updateEntityId, input: $input) {
-    entity {
-      createdAt
-      createdBy
-      description
-      displayName
-      status
-      domains
-      notes {
-        edges {
-          node {
-            text
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      entityType {
-        id
-        name
-      }
-      id
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-=======
 mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
 	updateEntity(id: $updateEntityId, input: $input) {
 		entity {
@@ -629,5 +328,4 @@ mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
 			}
 		}
 	}
->>>>>>> origin/main
 }

@@ -34,22 +34,11 @@ func getNextReviewDate(frequency enums.Frequency, lastReviewedAt models.DateTime
 	}
 }
 
-// HookReviewFiles runs on review mutations to check for uploaded files
-func HookReviewFiles() ent.Hook {
+// HookReviews runs on review mutations to process and update the entities tied to the review
+func HookReviews() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
+
 		return hook.ReviewFunc(func(ctx context.Context, m *generated.ReviewMutation) (generated.Value, error) {
-			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "reviewFiles")
-				if err != nil {
-					return nil, err
-				}
-
-				m.AddFileIDs(fileIDs...)
-			}
-
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -122,6 +111,27 @@ func HookReviewFiles() ent.Hook {
 			}
 
 			return v, nil
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+// HookReviewFiles runs on review mutations to check for uploaded files
+func HookReviewFiles() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.ReviewFunc(func(ctx context.Context, m *generated.ReviewMutation) (generated.Value, error) {
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				var err error
+
+				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "reviewFiles")
+				if err != nil {
+					return nil, err
+				}
+
+				m.AddFileIDs(fileIDs...)
+			}
+
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
