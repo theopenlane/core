@@ -338,6 +338,10 @@ func (_c *CustomDomainHistoryCreate) defaults() error {
 		v := customdomainhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.DomainType(); !ok {
+		v := customdomainhistory.DefaultDomainType
+		_c.mutation.SetDomainType(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomainhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized customdomainhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -366,6 +370,9 @@ func (_c *CustomDomainHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.MappableDomainID(); !ok {
 		return &ValidationError{Name: "mappable_domain_id", err: errors.New(`historygenerated: missing required field "CustomDomainHistory.mappable_domain_id"`)}
+	}
+	if _, ok := _c.mutation.DomainType(); !ok {
+		return &ValidationError{Name: "domain_type", err: errors.New(`historygenerated: missing required field "CustomDomainHistory.domain_type"`)}
 	}
 	if v, ok := _c.mutation.DomainType(); ok {
 		if err := customdomainhistory.DomainTypeValidator(v); err != nil {

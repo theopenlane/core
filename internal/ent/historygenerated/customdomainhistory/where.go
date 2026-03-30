@@ -1223,16 +1223,6 @@ func DomainTypeNotIn(vs ...enums.CustomDomainType) predicate.CustomDomainHistory
 	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldDomainType, v...))
 }
 
-// DomainTypeIsNil applies the IsNil predicate on the "domain_type" field.
-func DomainTypeIsNil() predicate.CustomDomainHistory {
-	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldDomainType))
-}
-
-// DomainTypeNotNil applies the NotNil predicate on the "domain_type" field.
-func DomainTypeNotNil() predicate.CustomDomainHistory {
-	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldDomainType))
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.CustomDomainHistory) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.AndPredicates(predicates...))

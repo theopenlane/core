@@ -151,10 +151,12 @@ var (
 	DefaultID func() string
 )
 
+const DefaultDomainType enums.CustomDomainType = "UNKNOWN"
+
 // DomainTypeValidator is a validator for the "domain_type" field enum values. It is called by the builders before save.
 func DomainTypeValidator(dt enums.CustomDomainType) error {
 	switch dt.String() {
-	case "PREVIEW", "EXTERNAL":
+	case "PREVIEW", "EXTERNAL", "UNKNOWN":
 		return nil
 	default:
 		return fmt.Errorf("customdomain: invalid enum value for domain_type field: %q", dt)

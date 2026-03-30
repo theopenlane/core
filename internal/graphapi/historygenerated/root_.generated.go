@@ -27382,7 +27382,7 @@ type CustomDomainHistory implements Node {
   """
   the type of this custom domain
   """
-  domainType: CustomDomainHistoryCustomDomainType
+  domainType: CustomDomainHistoryCustomDomainType!
 }
 """
 A connection to a list of items.
@@ -27407,6 +27407,7 @@ CustomDomainHistoryCustomDomainType is enum for the field domain_type
 enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
   PREVIEW
   EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -27706,8 +27707,6 @@ input CustomDomainHistoryWhereInput {
   domainTypeNEQ: CustomDomainHistoryCustomDomainType
   domainTypeIn: [CustomDomainHistoryCustomDomainType!]
   domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
-  domainTypeIsNil: Boolean
-  domainTypeNotNil: Boolean
 }
 type DNSVerificationHistory implements Node {
   id: ID!

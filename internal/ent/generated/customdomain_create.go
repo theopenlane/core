@@ -312,6 +312,10 @@ func (_c *CustomDomainCreate) defaults() error {
 		v := customdomain.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.DomainType(); !ok {
+		v := customdomain.DefaultDomainType
+		_c.mutation.SetDomainType(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultID (forgotten import generated/runtime?)")
@@ -339,6 +343,9 @@ func (_c *CustomDomainCreate) check() error {
 		if err := customdomain.MappableDomainIDValidator(v); err != nil {
 			return &ValidationError{Name: "mappable_domain_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.mappable_domain_id": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.DomainType(); !ok {
+		return &ValidationError{Name: "domain_type", err: errors.New(`generated: missing required field "CustomDomain.domain_type"`)}
 	}
 	if v, ok := _c.mutation.DomainType(); ok {
 		if err := customdomain.DomainTypeValidator(v); err != nil {

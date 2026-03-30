@@ -9122,10 +9122,10 @@ type CustomDomain struct {
 	// the ID of the trust center the domain belongs to, if applicable
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// the type of this custom domain
-	DomainType      *enums.CustomDomainType `json:"domainType,omitempty"`
-	Owner           *Organization           `json:"owner,omitempty"`
-	MappableDomain  *MappableDomain         `json:"mappableDomain"`
-	DNSVerification *DNSVerification        `json:"dnsVerification,omitempty"`
+	DomainType      enums.CustomDomainType `json:"domainType"`
+	Owner           *Organization          `json:"owner,omitempty"`
+	MappableDomain  *MappableDomain        `json:"mappableDomain"`
+	DNSVerification *DNSVerification       `json:"dnsVerification,omitempty"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -9385,12 +9385,10 @@ type CustomDomainWhereInput struct {
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// domain_type field predicates
-	DomainType       *enums.CustomDomainType  `json:"domainType,omitempty"`
-	DomainTypeNeq    *enums.CustomDomainType  `json:"domainTypeNEQ,omitempty"`
-	DomainTypeIn     []enums.CustomDomainType `json:"domainTypeIn,omitempty"`
-	DomainTypeNotIn  []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
-	DomainTypeIsNil  *bool                    `json:"domainTypeIsNil,omitempty"`
-	DomainTypeNotNil *bool                    `json:"domainTypeNotNil,omitempty"`
+	DomainType      *enums.CustomDomainType  `json:"domainType,omitempty"`
+	DomainTypeNeq   *enums.CustomDomainType  `json:"domainTypeNEQ,omitempty"`
+	DomainTypeIn    []enums.CustomDomainType `json:"domainTypeIn,omitempty"`
+	DomainTypeNotIn []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -38715,15 +38713,12 @@ type UpdateCustomDomainInput struct {
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the ID of the trust center the domain belongs to, if applicable
-	TrustCenterID      *string `json:"trustCenterID,omitempty"`
-	ClearTrustCenterID *bool   `json:"clearTrustCenterID,omitempty"`
-	// the type of this custom domain
-	DomainType           *enums.CustomDomainType `json:"domainType,omitempty"`
-	ClearDomainType      *bool                   `json:"clearDomainType,omitempty"`
-	OwnerID              *string                 `json:"ownerID,omitempty"`
-	ClearOwner           *bool                   `json:"clearOwner,omitempty"`
-	DNSVerificationID    *string                 `json:"dnsVerificationID,omitempty"`
-	ClearDNSVerification *bool                   `json:"clearDNSVerification,omitempty"`
+	TrustCenterID        *string `json:"trustCenterID,omitempty"`
+	ClearTrustCenterID   *bool   `json:"clearTrustCenterID,omitempty"`
+	OwnerID              *string `json:"ownerID,omitempty"`
+	ClearOwner           *bool   `json:"clearOwner,omitempty"`
+	DNSVerificationID    *string `json:"dnsVerificationID,omitempty"`
+	ClearDNSVerification *bool   `json:"clearDNSVerification,omitempty"`
 }
 
 // UpdateCustomTypeEnumInput is used for update CustomTypeEnum object.

@@ -1078,16 +1078,6 @@ func DomainTypeNotIn(vs ...enums.CustomDomainType) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldNotIn(FieldDomainType, v...))
 }
 
-// DomainTypeIsNil applies the IsNil predicate on the "domain_type" field.
-func DomainTypeIsNil() predicate.CustomDomain {
-	return predicate.CustomDomain(sql.FieldIsNull(FieldDomainType))
-}
-
-// DomainTypeNotNil applies the NotNil predicate on the "domain_type" field.
-func DomainTypeNotNil() predicate.CustomDomain {
-	return predicate.CustomDomain(sql.FieldNotNull(FieldDomainType))
-}
-
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.CustomDomain {
 	return predicate.CustomDomain(func(s *sql.Selector) {

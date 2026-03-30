@@ -76,10 +76,9 @@ func (CustomDomain) Fields() []ent.Field {
 			Comment("the ID of the trust center the domain belongs to, if applicable").
 			Optional(),
 		field.Enum("domain_type").
-			// optional because of existing data
-			// but will be validated in hook
-			Optional().
 			Immutable().
+			// because of pre existing data.
+			Default(enums.CustomDomainTypeUnknown.String()).
 			Comment("the type of this custom domain").
 			GoType(enums.CustomDomainType("")),
 	}

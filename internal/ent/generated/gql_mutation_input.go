@@ -4480,8 +4480,6 @@ type UpdateCustomDomainInput struct {
 	SystemInternalID      *string
 	ClearTrustCenterID    bool
 	TrustCenterID         *string
-	ClearDomainType       bool
-	DomainType            *enums.CustomDomainType
 	ClearOwner            bool
 	OwnerID               *string
 	ClearDNSVerification  bool
@@ -4516,12 +4514,6 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
-	}
-	if i.ClearDomainType {
-		m.ClearDomainType()
-	}
-	if v := i.DomainType; v != nil {
-		m.SetDomainType(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

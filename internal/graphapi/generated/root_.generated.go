@@ -69924,7 +69924,7 @@ type CustomDomain implements Node {
   """
   the type of this custom domain
   """
-  domainType: CustomDomainCustomDomainType
+  domainType: CustomDomainCustomDomainType!
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -69952,6 +69952,7 @@ CustomDomainCustomDomainType is enum for the field domain_type
 enum CustomDomainCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
   PREVIEW
   EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -70206,8 +70207,6 @@ input CustomDomainWhereInput {
   domainTypeNEQ: CustomDomainCustomDomainType
   domainTypeIn: [CustomDomainCustomDomainType!]
   domainTypeNotIn: [CustomDomainCustomDomainType!]
-  domainTypeIsNil: Boolean
-  domainTypeNotNil: Boolean
   """
   owner edge predicates
   """
@@ -125151,11 +125150,6 @@ input UpdateCustomDomainInput {
   """
   trustCenterID: String
   clearTrustCenterID: Boolean
-  """
-  the type of this custom domain
-  """
-  domainType: CustomDomainCustomDomainType
-  clearDomainType: Boolean
   ownerID: ID
   clearOwner: Boolean
   dnsVerificationID: ID
