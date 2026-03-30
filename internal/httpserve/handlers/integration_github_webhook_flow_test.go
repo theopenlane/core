@@ -609,7 +609,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	assert.NoError(t, err)
 	assert.Len(t, vulns, 1, "should still be one record after upsert")
 	assert.Equal(t, originalID, vulns[0].ID, "record ID should be unchanged after upsert")
-	assert.Equal(t, "fixed", vulns[0].Status, "status should be updated to fixed")
+	assert.Equal(t, "fixed", vulns[0].VulnerabilityStatusName, "status should be updated to fixed")
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulnerabilitiesToSameOrg() {

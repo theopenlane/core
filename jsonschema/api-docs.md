@@ -31,6 +31,119 @@ Config contains the configuration for the core server
 |[**shortlinks**](#shortlinks)|`object`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "server": {
+        "tls": {},
+        "cors": {
+            "prefixes": {}
+        },
+        "secure": {},
+        "cachecontrol": {
+            "nocacheheaders": {}
+        },
+        "mime": {},
+        "graphpool": {},
+        "csrfprotection": {}
+    },
+    "entconfig": {
+        "summarizer": {
+            "llm": {
+                "anthropic": {},
+                "cloudflare": {},
+                "openai": {}
+            }
+        },
+        "modules": {},
+        "emailvalidation": {
+            "allowedemailtypes": {}
+        },
+        "billing": {},
+        "notifications": {}
+    },
+    "auth": {
+        "token": {
+            "keys": {},
+            "redis": {
+                "config": {}
+            },
+            "apitokens": {
+                "keys": {}
+            }
+        },
+        "providers": {
+            "github": {},
+            "google": {},
+            "webauthn": {}
+        }
+    },
+    "authz": {
+        "credentials": {}
+    },
+    "db": {},
+    "jobqueue": {
+        "riverconf": {
+            "Logger": {},
+            "PeriodicJobs": [
+                {}
+            ],
+            "Queues": {},
+            "Test": {},
+            "Workers": {}
+        },
+        "metrics": {}
+    },
+    "redis": {},
+    "email": {
+        "urls": {}
+    },
+    "sessions": {},
+    "totp": {},
+    "ratelimit": {
+        "options": [
+            {}
+        ]
+    },
+    "objectstorage": {
+        "providers": {
+            "s3": {
+                "credentials": {}
+            },
+            "r2": {
+                "credentials": {}
+            },
+            "disk": {
+                "credentials": {}
+            },
+            "database": {
+                "credentials": {}
+            }
+        }
+    },
+    "subscription": {
+        "stripewebhooksecrets": {}
+    },
+    "keywatcher": {},
+    "slack": {},
+    "integrations": {
+        "githubapp": {},
+        "slack": {},
+        "googleworkspace": {},
+        "azureentraid": {},
+        "microsoftteams": {}
+    },
+    "workflows": {
+        "cel": {},
+        "gala": {}
+    },
+    "campaignwebhook": {},
+    "cloudflare": {},
+    "shortlinks": {}
+}
+```
+
 <a name="server"></a>
 ## server: object
 
@@ -67,6 +180,24 @@ Server settings for the echo server
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "tls": {},
+    "cors": {
+        "prefixes": {}
+    },
+    "secure": {},
+    "cachecontrol": {
+        "nocacheheaders": {}
+    },
+    "mime": {},
+    "graphpool": {},
+    "csrfprotection": {}
+}
+```
+
 <a name="servertls"></a>
 ### server\.tls: object
 
@@ -99,6 +230,14 @@ Config holds the cors configuration settings
 |**cookieinsecure**|`boolean`|CookieInsecure sets the cookie to be insecure<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "prefixes": {}
+}
+```
+
 <a name="servercorsprefixes"></a>
 #### server\.cors\.prefixes: object
 
@@ -106,7 +245,14 @@ Config holds the cors configuration settings
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**Additional Properties**](#servercorsprefixesadditionalproperties)|`string[]`|||
 
+<a name="servercorsprefixesadditionalproperties"></a>
+##### server\.cors\.prefixes\.additionalProperties: array
+
+**Items**
+
+**Item Type:** `string`  
 <a name="servercorsalloworigins"></a>
 #### server\.cors\.alloworigins: array
 
@@ -149,6 +295,14 @@ Config is the config values for the cache-control middleware
 |[**etagheaders**](#servercachecontroletagheaders)|`string[]`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "nocacheheaders": {}
+}
+```
+
 <a name="servercachecontrolnocacheheaders"></a>
 #### server\.cachecontrol\.nocacheheaders: object
 
@@ -156,6 +310,7 @@ Config is the config values for the cache-control middleware
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**Additional Properties**|`string`|||
 
 <a name="servercachecontroletagheaders"></a>
 #### server\.cachecontrol\.etagheaders: array
@@ -231,6 +386,26 @@ Config holds the configuration for the ent server
 |[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "summarizer": {
+        "llm": {
+            "anthropic": {},
+            "cloudflare": {},
+            "openai": {}
+        }
+    },
+    "modules": {},
+    "emailvalidation": {
+        "allowedemailtypes": {}
+    },
+    "billing": {},
+    "notifications": {}
+}
+```
+
 <a name="entconfigentitytypes"></a>
 ### entconfig\.entitytypes: array
 
@@ -252,6 +427,18 @@ Config holds configuration for the text summarization functionality
 |**maximumsentences**|`integer`|MaximumSentences specifies the maximum number of sentences in the summary<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "llm": {
+        "anthropic": {},
+        "cloudflare": {},
+        "openai": {}
+    }
+}
+```
+
 <a name="entconfigsummarizerllm"></a>
 #### entconfig\.summarizer\.llm: object
 
@@ -268,6 +455,16 @@ LLM contains configuration for multiple LLM providers
 |[**openai**](#entconfigsummarizerllmopenai)|`object`|OpenAIConfig contains OpenAI specific configuration<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "anthropic": {},
+    "cloudflare": {},
+    "openai": {}
+}
+```
+
 <a name="entconfigsummarizerllmanthropic"></a>
 ##### entconfig\.summarizer\.llm\.anthropic: object
 
@@ -349,6 +546,14 @@ EmailVerificationConfig is the configuration for email verification
 |[**allowedemailtypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "allowedemailtypes": {}
+}
+```
+
 <a name="entconfigemailvalidationallowedemailtypes"></a>
 #### entconfig\.emailvalidation\.allowedemailtypes: object
 
@@ -413,6 +618,27 @@ Auth settings including oauth2 providers and token configuration
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "token": {
+        "keys": {},
+        "redis": {
+            "config": {}
+        },
+        "apitokens": {
+            "keys": {}
+        }
+    },
+    "providers": {
+        "github": {},
+        "google": {},
+        "webauthn": {}
+    }
+}
+```
+
 <a name="authtoken"></a>
 ### auth\.token: object
 
@@ -437,6 +663,20 @@ Auth settings including oauth2 providers and token configuration
 |**trustcenterndarequestaccessduration**|`integer`||no|
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "keys": {},
+    "redis": {
+        "config": {}
+    },
+    "apitokens": {
+        "keys": {}
+    }
+}
+```
+
 <a name="authtokenkeys"></a>
 #### auth\.token\.keys: object
 
@@ -444,6 +684,7 @@ Auth settings including oauth2 providers and token configuration
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**Additional Properties**|`string`|||
 
 <a name="authtokenredis"></a>
 #### auth\.token\.redis: object
@@ -457,6 +698,14 @@ Auth settings including oauth2 providers and token configuration
 |**blacklistprefix**|`string`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "config": {}
+}
+```
+
 <a name="authtokenredisconfig"></a>
 ##### auth\.token\.redis\.config: object
 
@@ -494,6 +743,14 @@ Auth settings including oauth2 providers and token configuration
 |**prefix**|`string`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "keys": {}
+}
+```
+
 <a name="authtokenapitokenskeys"></a>
 ##### auth\.token\.apitokens\.keys: object
 
@@ -501,7 +758,19 @@ Auth settings including oauth2 providers and token configuration
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**Additional Properties**](#authtokenapitokenskeysadditionalproperties)|`object`|||
 
+<a name="authtokenapitokenskeysadditionalproperties"></a>
+###### auth\.token\.apitokens\.keys\.additionalProperties: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**secret**|`string`|||
+|**status**|`string`|||
+
+**Additional Properties:** not allowed  
 <a name="authsupportedproviders"></a>
 ### auth\.supportedproviders: array
 
@@ -524,6 +793,16 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**webauthn**](#authproviderswebauthn)|`object`||yes|
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "github": {},
+    "google": {},
+    "webauthn": {}
+}
+```
+
 <a name="authprovidersgithub"></a>
 #### auth\.providers\.github: object
 
@@ -606,6 +885,14 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**maxbatchwritesize**|`integer`|maximum number of writes per batch in a transaction<br/>|no|
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {}
+}
+```
+
 <a name="authzcredentials"></a>
 ### authz\.credentials: object
 
@@ -655,6 +942,23 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**metrics**](#jobqueuemetrics)|`object`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "riverconf": {
+        "Logger": {},
+        "PeriodicJobs": [
+            {}
+        ],
+        "Queues": {},
+        "Test": {},
+        "Workers": {}
+    },
+    "metrics": {}
+}
+```
+
 <a name="jobqueueriverconf"></a>
 ### jobqueue\.riverconf: object
 
@@ -693,6 +997,20 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "Logger": {},
+    "PeriodicJobs": [
+        {}
+    ],
+    "Queues": {},
+    "Test": {},
+    "Workers": {}
+}
+```
+
 <a name="jobqueueriverconfjobinsertmiddleware"></a>
 #### jobqueue\.riverconf\.JobInsertMiddleware: array
 
@@ -719,6 +1037,14 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 **Items**
 
+**Example**
+
+```json
+[
+    {}
+]
+```
+
 <a name="jobqueueriverconfqueues"></a>
 #### jobqueue\.riverconf\.Queues: object
 
@@ -726,7 +1052,20 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**Additional Properties**](#jobqueueriverconfqueuesadditionalproperties)|`object`|||
 
+<a name="jobqueueriverconfqueuesadditionalproperties"></a>
+##### jobqueue\.riverconf\.Queues\.additionalProperties: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**FetchCooldown**|`integer`|||
+|**FetchPollInterval**|`integer`|||
+|**MaxWorkers**|`integer`|||
+
+**Additional Properties:** not allowed  
 <a name="jobqueueriverconftest"></a>
 #### jobqueue\.riverconf\.Test: object
 
@@ -802,6 +1141,14 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**templatespath**|`string`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "urls": {}
+}
+```
+
 <a name="emailurls"></a>
 ### email\.urls: object
 
@@ -875,10 +1222,28 @@ Config defines the configuration settings for the rate limiter middleware.
 |**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "options": [
+        {}
+    ]
+}
+```
+
 <a name="ratelimitoptions"></a>
 ### ratelimit\.options: array
 
 **Items**
+
+**Example**
+
+```json
+[
+    {}
+]
+```
 
 <a name="ratelimitheaders"></a>
 ### ratelimit\.headers: array
@@ -904,6 +1269,27 @@ ProviderConfig contains configuration for object storage providers
 |[**providers**](#objectstorageproviders)|`object`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "providers": {
+        "s3": {
+            "credentials": {}
+        },
+        "r2": {
+            "credentials": {}
+        },
+        "disk": {
+            "credentials": {}
+        },
+        "database": {
+            "credentials": {}
+        }
+    }
+}
+```
+
 <a name="objectstoragekeys"></a>
 ### objectstorage\.keys: array
 
@@ -923,6 +1309,25 @@ ProviderConfig contains configuration for object storage providers
 |[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "s3": {
+        "credentials": {}
+    },
+    "r2": {
+        "credentials": {}
+    },
+    "disk": {
+        "credentials": {}
+    },
+    "database": {
+        "credentials": {}
+    }
+}
+```
+
 <a name="objectstorageproviderss3"></a>
 #### objectstorage\.providers\.s3: object
 
@@ -943,6 +1348,14 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |[**credentials**](#objectstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {}
+}
+```
+
 <a name="objectstorageproviderss3credentials"></a>
 ##### objectstorage\.providers\.s3\.credentials: object
 
@@ -980,6 +1393,14 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |[**credentials**](#objectstorageprovidersr2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {}
+}
+```
+
 <a name="objectstorageprovidersr2credentials"></a>
 ##### objectstorage\.providers\.r2\.credentials: object
 
@@ -1017,6 +1438,14 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {}
+}
+```
+
 <a name="objectstorageprovidersdiskcredentials"></a>
 ##### objectstorage\.providers\.disk\.credentials: object
 
@@ -1054,6 +1483,14 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {}
+}
+```
+
 <a name="objectstorageprovidersdatabasecredentials"></a>
 ##### objectstorage\.providers\.database\.credentials: object
 
@@ -1090,6 +1527,14 @@ ProviderCredentials contains credentials for a storage provider
 |**stripewebhookdiscardapiversion**|`string`|StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "stripewebhooksecrets": {}
+}
+```
+
 <a name="subscriptionstripewebhooksecrets"></a>
 ### subscription\.stripewebhooksecrets: object
 
@@ -1097,6 +1542,7 @@ ProviderCredentials contains credentials for a storage provider
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**Additional Properties**|`string`|||
 
 <a name="subscriptionstripewebhookevents"></a>
 ### subscription\.stripewebhookevents: array
@@ -1144,11 +1590,21 @@ Slack contains settings for Slack notifications
 |[**slack**](#integrationsslack)|`object`|||
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
-|[**gcpscc**](#integrationsgcpscc)|`object`|||
-|[**oidcgeneric**](#integrationsoidcgeneric)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "githubapp": {},
+    "slack": {},
+    "googleworkspace": {},
+    "azureentraid": {},
+    "microsoftteams": {}
+}
+```
+
 <a name="integrationsgithubapp"></a>
 ### integrations\.githubapp: object
 
@@ -1198,39 +1654,6 @@ Slack contains settings for Slack notifications
 |**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationsgcpscc"></a>
-### integrations\.gcpscc: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**audience**|`string`|||
-|**serviceaccount**|`string`|||
-|**subjecttokentype**|`string`|||
-|[**scopes**](#integrationsgcpsccscopes)|`string[]`|||
-|**tokenlifetime**|`integer`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationsgcpsccscopes"></a>
-#### integrations\.gcpscc\.scopes: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationsoidcgeneric"></a>
-### integrations\.oidcgeneric: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**clientid**|`string`|||
-|**clientsecret**|`string`|||
-|**discoveryurl**|`string`|||
-|**redirecturl**|`string`|||
-
-**Additional Properties:** not allowed  
 <a name="integrationsmicrosoftteams"></a>
 ### integrations\.microsoftteams: object
 
@@ -1255,6 +1678,15 @@ Slack contains settings for Slack notifications
 |[**gala**](#workflowsgala)|`object`|||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "cel": {},
+    "gala": {}
+}
+```
+
 <a name="workflowscel"></a>
 ### workflows\.cel: object
 
@@ -1336,3 +1768,4 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**endpointurl**|`string`|||
 
 **Additional Properties:** not allowed  
+

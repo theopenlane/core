@@ -1093,38 +1093,6 @@ data:
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl | quote }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrations.gcpscc }}
-      gcpscc:
-        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.audience }}
-        audience: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.audience | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.serviceaccount }}
-        serviceaccount: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.serviceaccount | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.subjecttokentype }}
-        subjecttokentype: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.subjecttokentype | quote }}
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.gcpscc.scopes | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        scopes:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.gcpscc.tokenlifetime }}
-        tokenlifetime: {{ .Values.openlane.coreConfiguration.integrations.gcpscc.tokenlifetime | quote }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric }}
-      oidcgeneric:
-        {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.oidcgeneric.clientid | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric.discoveryurl }}
-        discoveryurl: {{ .Values.openlane.coreConfiguration.integrations.oidcgeneric.discoveryurl | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.oidcgeneric.redirecturl }}
-        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidcgeneric.redirecturl | quote }}
-        {{- end }}
-      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams }}
       microsoftteams:
         {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid }}

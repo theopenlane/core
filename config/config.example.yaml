@@ -171,12 +171,6 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: ""
-    gcpscc:
-        audience: ""
-        scopes: null
-        serviceaccount: ""
-        subjecttokentype: ""
-        tokenlifetime: 0
     githubapp:
         appid: ""
         appslug: ""
@@ -189,11 +183,6 @@ integrations:
     microsoftteams:
         clientid: ""
         clientsecret: ""
-        redirecturl: ""
-    oidcgeneric:
-        clientid: ""
-        clientsecret: ""
-        discoveryurl: ""
         redirecturl: ""
     slack:
         clientid: ""

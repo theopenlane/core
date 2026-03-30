@@ -11,7 +11,7 @@ var mapExprFinding = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: `'name' in payload ? payload.name : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: "resource"},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityStatus, Expr: `'state' in payload ? payload.state : ""`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'state' in payload ? payload.state : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `'severity' in payload && payload.severity != "SEVERITY_UNSPECIFIED" ? payload.severity : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'category' in payload && payload.category != "" ? payload.category : ('canonical_name' in payload && payload.canonical_name != "" ? payload.canonical_name : ('name' in payload ? payload.name : ""))`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},

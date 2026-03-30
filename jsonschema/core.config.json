@@ -128,12 +128,6 @@
         "azureentraid": {
           "$ref": "#/$defs/azureentraid.Config"
         },
-        "gcpscc": {
-          "$ref": "#/$defs/gcpscc.Config"
-        },
-        "oidcgeneric": {
-          "$ref": "#/$defs/oidcgeneric.Config"
-        },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
         }
@@ -738,27 +732,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "gcpscc.Config": {
-      "properties": {
-        "audience": {
-          "type": "string"
-        },
-        "serviceaccount": {
-          "type": "string"
-        },
-        "subjecttokentype": {
-          "type": "string"
-        },
-        "scopes": {
-          "$ref": "#/$defs/[]string"
-        },
-        "tokenlifetime": {
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "github.ProviderConfig": {
       "properties": {
         "clientid": {
@@ -972,24 +945,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines the config for Mime middleware"
-    },
-    "oidcgeneric.Config": {
-      "properties": {
-        "clientid": {
-          "type": "string"
-        },
-        "clientsecret": {
-          "type": "string"
-        },
-        "discoveryurl": {
-          "type": "string"
-        },
-        "redirecturl": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
     },
     "ratelimit.Config": {
       "properties": {

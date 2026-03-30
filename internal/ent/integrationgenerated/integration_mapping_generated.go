@@ -398,7 +398,6 @@ const (
 	IntegrationMappingFindingSource             = "source"
 	IntegrationMappingFindingSourceUpdatedAt    = "sourceUpdatedAt"
 	IntegrationMappingFindingState              = "state"
-	IntegrationMappingFindingStatus             = "status"
 	IntegrationMappingFindingStepsToReproduce   = "stepsToReproduce"
 	IntegrationMappingFindingSystemInternalID   = "systemInternalID"
 	IntegrationMappingFindingTags               = "tags"
@@ -470,7 +469,6 @@ const (
 	IntegrationMappingVulnerabilitySeverity                = "severity"
 	IntegrationMappingVulnerabilitySource                  = "source"
 	IntegrationMappingVulnerabilitySourceUpdatedAt         = "sourceUpdatedAt"
-	IntegrationMappingVulnerabilityStatus                  = "status"
 	IntegrationMappingVulnerabilitySummary                 = "summary"
 	IntegrationMappingVulnerabilitySystemInternalID        = "systemInternalID"
 	IntegrationMappingVulnerabilityTags                    = "tags"
@@ -2614,15 +2612,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  false,
-				UpsertKey: false,
-				LookupKey: false,
-			},
-			{
 				InputKey:  "stepsToReproduce",
 				GoField:   "StepsToReproduce",
 				EntField:  "steps_to_reproduce",
@@ -2726,7 +2715,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"source":             {},
 			"sourceUpdatedAt":    {},
 			"state":              {},
-			"status":             {},
 			"stepsToReproduce":   {},
 			"systemInternalID":   {},
 			"tags":               {},
@@ -3289,15 +3277,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  false,
-				UpsertKey: false,
-				LookupKey: false,
-			},
-			{
 				InputKey:  "summary",
 				GoField:   "Summary",
 				EntField:  "summary",
@@ -3393,7 +3372,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"severity":                {},
 			"source":                  {},
 			"sourceUpdatedAt":         {},
-			"status":                  {},
 			"summary":                 {},
 			"systemInternalID":        {},
 			"tags":                    {},

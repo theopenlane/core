@@ -543,16 +543,6 @@ coreConfiguration:
     azureentraid:
       clientid: ""  # @schema type:string
       redirecturl: ""  # @schema type:string
-    gcpscc:
-      audience: ""  # @schema type:string
-      serviceaccount: ""  # @schema type:string
-      subjecttokentype: ""  # @schema type:string
-      scopes: []
-      tokenlifetime: "0s"  # @schema type:integer
-    oidcgeneric:
-      clientid: ""  # @schema type:string
-      discoveryurl: ""  # @schema type:string
-      redirecturl: ""  # @schema type:string
     microsoftteams:
       clientid: ""  # @schema type:string
       redirecturl: ""  # @schema type:string
@@ -943,14 +933,6 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_AZUREENTRAID_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-azureentraid-clientsecret"  # @schema type:string
-    # -- core-integrations-oidcgeneric-clientsecret secret configuration
-    core-integrations-oidcgeneric-clientsecret:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.oidcgeneric.clientsecret
-      secretKey: "CORE_INTEGRATIONS_OIDCGENERIC_CLIENTSECRET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-oidcgeneric-clientsecret"  # @schema type:string
     # -- core-integrations-microsoftteams-clientsecret secret configuration
     core-integrations-microsoftteams-clientsecret:
       # -- Enable this external secret

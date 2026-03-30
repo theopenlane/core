@@ -25,20 +25,8 @@
               "resolver_key": {
                 "type": "string"
               },
-              "channel": {
-                "type": "string",
-                "enum": [
-                  "IN_APP",
-                  "SLACK",
-                  "TEAMS",
-                  "EMAIL"
-                ]
-              },
               "destination": {
                 "type": "string"
-              },
-              "config": {
-                "type": "object"
               }
             },
             "additionalProperties": false,
@@ -136,13 +124,8 @@
           "type": "string",
           "description": "Optional scope resource identity exposed to scope_expression evaluation"
         },
-        "force_refresh": {
-          "type": "boolean",
-          "description": "Request a provider-side refresh"
-        },
-        "client_force": {
-          "type": "boolean",
-          "description": "Request a client-side refresh"
+        "force_client_rebuild": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
@@ -173,47 +156,25 @@
               "resolver_key": {
                 "type": "string"
               },
-              "channel": {
-                "type": "string",
-                "enum": [
-                  "IN_APP",
-                  "SLACK",
-                  "TEAMS",
-                  "EMAIL"
-                ]
-              },
               "destination": {
                 "type": "string"
-              },
-              "config": {
-                "type": "object"
               }
             },
             "additionalProperties": false,
             "type": "object"
           },
           "type": "array",
-          "description": "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications and CHANNEL for direct external channel sends"
-        },
-        "channels": {
-          "items": {
-            "type": "string",
-            "enum": [
-              "IN_APP",
-              "SLACK",
-              "TEAMS",
-              "EMAIL"
-            ],
-            "description": "Notification delivery channel"
-          },
-          "type": "array",
-          "description": "Notification delivery channels (IN_APP, SLACK, EMAIL)"
+          "description": "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications"
         },
         "template_id": {
           "type": "string"
         },
         "template_key": {
           "type": "string"
+        },
+        "operation_name": {
+          "type": "string",
+          "description": "Integration operation to invoke when the template has an integration_id"
         },
         "topic": {
           "type": "string",
@@ -235,7 +196,7 @@
       "additionalProperties": false,
       "type": "object",
       "title": "NotificationActionParams",
-      "description": "Parameters for NOTIFY actions that send notifications to users and direct channel destinations"
+      "description": "Parameters for NOTIFY actions that send notifications to users"
     },
     "ReviewActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -260,20 +221,8 @@
               "resolver_key": {
                 "type": "string"
               },
-              "channel": {
-                "type": "string",
-                "enum": [
-                  "IN_APP",
-                  "SLACK",
-                  "TEAMS",
-                  "EMAIL"
-                ]
-              },
               "destination": {
                 "type": "string"
-              },
-              "config": {
-                "type": "object"
               }
             },
             "additionalProperties": false,
@@ -313,7 +262,7 @@
             "RESOLVER",
             "CHANNEL"
           ],
-          "description": "Target type: USER (specific user), GROUP (group members), ROLE (role holders), RESOLVER (dynamic resolution), or CHANNEL (direct external destination)"
+          "description": "Target type: USER (specific user), GROUP (group members), ROLE (role holders), or RESOLVER (dynamic resolution)"
         },
         "id": {
           "type": "string",
@@ -323,23 +272,8 @@
           "type": "string",
           "description": "The resolver key for dynamic target resolution (required for RESOLVER type)"
         },
-        "channel": {
-          "type": "string",
-          "enum": [
-            "IN_APP",
-            "SLACK",
-            "TEAMS",
-            "EMAIL"
-          ],
-          "description": "Notification delivery channel for CHANNEL targets (required for CHANNEL type)"
-        },
         "destination": {
-          "type": "string",
-          "description": "External destination identifier for CHANNEL targets (required for CHANNEL type)"
-        },
-        "config": {
-          "type": "object",
-          "description": "Optional provider-specific message settings for CHANNEL targets"
+          "type": "string"
         }
       },
       "additionalProperties": false,
