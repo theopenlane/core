@@ -251,9 +251,9 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	assert.NoError(suite.T(), err)
 
 	rt, err := runtime.New(runtime.Config{
-		DB:                 suite.galaDB,
-		Gala:               suite.galaRuntime,
-		Keystore:           credStore,
+		DB:       suite.galaDB,
+		Gala:     suite.galaRuntime,
+		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
 			registry.Builder(buildTestOAuthDefinition),
 			githubapp.Builder(defaultGitHubAppSpec()),

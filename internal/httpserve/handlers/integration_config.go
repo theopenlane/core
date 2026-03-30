@@ -90,6 +90,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(systemCtx, installationRec, registration.Name, "")
 		if webhookErr != nil {
 			logx.FromContext(requestCtx).Error().Err(webhookErr).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
+
 			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
 		}
 

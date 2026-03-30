@@ -10,14 +10,10 @@
       integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.12.3/dist/css/bootstrap5.min.css"
-    />
     <style>
       .providers-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
         gap: 1.5rem;
         width: 100%;
       }
@@ -82,6 +78,21 @@
         flex-direction: column;
         gap: 0.75rem;
       }
+      .provider-connections {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .connection-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem;
+        background: #f8fafc;
+      }
+      .connection-card.active {
+        border-color: #0d6efd;
+        background: #eff6ff;
+      }
       .provider-operations {
         border-top: 1px solid #e2e8f0;
         padding-top: 0.75rem;
@@ -136,10 +147,6 @@
       .operation-hint {
         font-size: 0.8rem;
         color: #64748b;
-      }
-      .operation-force {
-        font-size: 0.85rem;
-        color: #475569;
       }
       .operation-run-btn {
         align-self: flex-start;
@@ -224,17 +231,17 @@
         background: #d1f1e0;
         color: #0f5132;
       }
-      .status-configured {
-        background: #cdeed8;
-        color: #0f5132;
-      }
-      .status-expired {
+      .status-pending {
         background: #fff3cd;
         color: #664d03;
       }
-      .status-invalid {
+      .status-errored {
         background: #f8d7da;
         color: #842029;
+      }
+      .status-disabled {
+        background: #e2e3e5;
+        color: #495057;
       }
       .status-disconnected {
         background: #e2e3e5;
@@ -259,6 +266,34 @@
         background: #d7e8ff;
         color: #0b3d91;
       }
+      .log-warning {
+        background: #fff3cd;
+        color: #664d03;
+      }
+      .webhook-info {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem;
+        background: #f0fdf4;
+        font-size: 0.85rem;
+      }
+      .webhook-info code {
+        word-break: break-all;
+      }
+      .detail-panel {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem;
+        background: #f8fafc;
+        font-size: 0.85rem;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      .detail-panel pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
@@ -281,7 +316,7 @@
 
           <section class="mt-4">
             <div class="d-flex justify-content-between align-items-center">
-              <h2 class="mb-3">Configured Integrations</h2>
+              <h2 class="mb-3">Installed Integrations</h2>
               <button class="btn btn-outline-secondary btn-sm" id="refreshIntegrations">Refresh List</button>
             </div>
             <div id="integrationsList" class="mb-4">
@@ -306,7 +341,7 @@
             </div>
             <div
               id="activityLog"
-              style="max-height: 320px; overflow-y: auto; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 12px;"
+              style="max-height: 400px; overflow-y: auto; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 12px;"
             ></div>
           </section>
         </div>
@@ -336,37 +371,20 @@
       const apiBase = "http://localhost:17608";
       let authToken = null;
       let userInfo = null;
-      const providerMetadata = new Map();
-      let activeConfigProvider = null;
+
+      // provider definitions keyed by definition ID
+      const providerDefinitions = new Map();
+
+      // installed integrations keyed by definition ID -> integration record
+      const installedIntegrations = new Map();
+
+      // modal state
+      let activeConfigDefinitionID = null;
+      let activeCredentialRef = null;
       let activeCredentialSchema = null;
       let configModalForm = null;
-      const integrationSecretsQuery = `
-        query ($kind: String!) {
-          integrations(where: { kind: $kind }) {
-            edges {
-              node {
-                id
-                secrets {
-                  edges {
-                    node {
-                      id
-                      secretName
-                      description
-                      kind
-                      expiresAt
-                      lastUsedAt
-                      credentialSet
-                      metadata
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `;
 
-      const providerDomId = (name) => name.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+      const safeDomId = (value) => value.replace(/[^a-z0-9_-]/gi, "_");
       const toTitleCase = (value = "") =>
         value
           .toString()
@@ -375,9 +393,142 @@
           .trim()
           .replace(/\b\w/g, (char) => char.toUpperCase());
 
+      // -----------------------------------------------------------------------
+      // Logging
+      // -----------------------------------------------------------------------
+      function log(message, type = "info") {
+        const container = document.getElementById("activityLog");
+        const entry = document.createElement("div");
+        entry.className = `log-entry log-${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        container.appendChild(entry);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function logJSON(label, data, type = "info") {
+        log(`${label}: ${JSON.stringify(data, null, 2)}`, type);
+      }
+
+      // -----------------------------------------------------------------------
+      // HTTP helpers
+      // -----------------------------------------------------------------------
+      function getCSRFToken() {
+        const cookieName = "ol.csrf-token";
+        return document.cookie
+          .split(";")
+          .map((c) => c.trim().split("="))
+          .find(([name]) => name === cookieName)?.[1] || null;
+      }
+
+      async function makeRequest(path, options = {}) {
+        const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+        const method = (options.method || "GET").toUpperCase();
+        if (authToken) {
+          headers["Authorization"] = `Bearer ${authToken}`;
+        }
+        if (method !== "GET" && !path.includes("/login")) {
+          const csrf = getCSRFToken();
+          if (csrf) {
+            headers["X-CSRF-Token"] = csrf;
+          }
+        }
+        return fetch(`${apiBase}${path}`, {
+          ...options,
+          method,
+          headers,
+          credentials: "include",
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // Authentication
+      // -----------------------------------------------------------------------
+      async function loginWithSeedUser() {
+        try {
+          log("Attempting login with seeded user", "info");
+          const response = await fetch(`${apiBase}/v1/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              username: "mitb@theopenlane.io",
+              password: "mattisthebest1234",
+            }),
+          });
+          if (!response.ok) {
+            log(`Login failed: ${await response.text()}`, "error");
+            return false;
+          }
+          const data = await response.json();
+          if (data.success && data.access_token) {
+            authToken = data.access_token;
+            log("Login successful", "success");
+            return true;
+          }
+          log("Unexpected login response format", "error");
+          return false;
+        } catch (err) {
+          log(`Login error: ${err.message}`, "error");
+          return false;
+        }
+      }
+
+      async function ensureAuthenticated() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const sessionToken = params.get("session");
+          if (sessionToken) {
+            authToken = sessionToken;
+            log("Adopted session token from query param", "info");
+          }
+
+          if (!authToken) {
+            const loggedIn = await loginWithSeedUser();
+            if (!loggedIn) {
+              document.getElementById("authStatus").className =
+                "alert alert-warning d-flex justify-content-between align-items-center";
+              document.getElementById("authStatusText").innerHTML =
+                'Authentication required. <button class="btn btn-sm btn-primary ms-2" onclick="loginWithSeedUser().then(ok => ok && initialize())">Login</button>';
+              document.getElementById("loginButton").classList.remove("d-none");
+              return false;
+            }
+          }
+
+          const response = await makeRequest("/query", {
+            method: "POST",
+            body: JSON.stringify({ query: "{ self { id displayName email } }" }),
+          });
+          if (!response.ok) {
+            log(`Auth check failed: HTTP ${response.status}`, "error");
+            return false;
+          }
+          const data = await response.json();
+          if (!data?.data?.self) {
+            log("Auth check failed: no self payload", "error");
+            return false;
+          }
+          userInfo = data.data.self;
+          document.getElementById("authStatus").className =
+            "alert alert-success d-flex justify-content-between align-items-center";
+          document.getElementById("authStatusText").innerHTML =
+            `Authenticated as <strong>${userInfo.displayName}</strong> (${userInfo.email})`;
+          document.getElementById("loginButton").classList.add("d-none");
+          log(`Authenticated as ${userInfo.displayName}`, "success");
+          return true;
+        } catch (err) {
+          log(`Auth check error: ${err.message}`, "error");
+          return false;
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // Credential form helpers
+      // -----------------------------------------------------------------------
       function inferInputType(prop = {}) {
         if (prop.type === "integer" || prop.type === "number") return "number";
         if (prop.format === "password" || prop.secret === true) return "password";
+        const name = (prop.title || "").toLowerCase();
+        if (name.includes("secret") || name.includes("token") || name.includes("password") || name.includes("key")) return "password";
         if (prop.format === "email") return "email";
         if (prop.format === "uri" || prop.format === "url") return "url";
         return "text";
@@ -399,7 +550,6 @@
             input.checked = Boolean(prop.default);
           }
           wrapper.appendChild(input);
-
           const label = document.createElement("label");
           label.className = "form-check-label";
           label.setAttribute("for", fieldId);
@@ -411,7 +561,6 @@
             label.appendChild(star);
           }
           wrapper.appendChild(label);
-
           if (prop.description) {
             const hint = document.createElement("small");
             hint.className = "form-text";
@@ -523,7 +672,7 @@
         if (keys.length === 0) {
           const empty = document.createElement("p");
           empty.className = "config-form__empty mb-0";
-          empty.textContent = "This provider does not require credential inputs.";
+          empty.textContent = "This credential slot does not require inputs.";
           form.appendChild(empty);
           return form;
         }
@@ -582,18 +731,23 @@
         return values;
       }
 
-      function openConfigModal(providerName) {
-        const provider = providerMetadata.get(providerName);
-        if (!provider?.credentialsSchema) {
-          log(`Provider ${providerName} does not expose a credential schema`, "error");
+      // -----------------------------------------------------------------------
+      // Config modal
+      // -----------------------------------------------------------------------
+      function openConfigModal(definitionID, credentialRef, credentialSchema) {
+        const def = providerDefinitions.get(definitionID);
+        if (!def) {
+          log(`Definition ${definitionID} not found`, "error");
           return;
         }
-        activeConfigProvider = providerName;
-        activeCredentialSchema = provider.credentialsSchema;
+        activeConfigDefinitionID = definitionID;
+        activeCredentialRef = credentialRef;
+        activeCredentialSchema = credentialSchema;
         const modal = document.getElementById("configModal");
-        document.getElementById("configModalTitle").textContent = `Configure ${provider.displayName || provider.name}`;
-        document.getElementById("configModalSubtitle").textContent =
-          provider.labels?.vendor ? `Vendor: ${provider.labels.vendor}` : "";
+        document.getElementById("configModalTitle").textContent = `Configure ${def.spec.displayName}`;
+        document.getElementById("configModalSubtitle").textContent = credentialRef
+          ? `Credential: ${credentialRef}`
+          : "";
         const container = document.getElementById("configEditorContainer");
         container.innerHTML = "";
         configModalForm = renderCredentialForm(activeCredentialSchema);
@@ -608,12 +762,13 @@
           configModalForm.remove();
           configModalForm = null;
         }
-        activeConfigProvider = null;
+        activeConfigDefinitionID = null;
+        activeCredentialRef = null;
         activeCredentialSchema = null;
       }
 
       async function submitConfiguration() {
-        if (!activeConfigProvider || !configModalForm || !activeCredentialSchema) {
+        if (!activeConfigDefinitionID || !configModalForm || !activeCredentialSchema) {
           log("No provider selected for configuration", "error");
           return;
         }
@@ -623,17 +778,26 @@
         }
         const submitButton = document.getElementById("configModalSubmit");
         try {
-          const providerName = activeConfigProvider;
-          if (!providerName) {
-            throw new Error("No provider selected");
+          const definitionID = activeConfigDefinitionID;
+          const credentialRef = activeCredentialRef;
+          const body = collectCredentialValues(configModalForm, activeCredentialSchema);
+
+          // check if there is an existing installation for this definition
+          const existingIntegration = installedIntegrations.get(definitionID);
+          const payload = {
+            body,
+            credentialRef: credentialRef || undefined,
+          };
+          if (existingIntegration) {
+            payload.integrationId = existingIntegration.id;
           }
-          const payload = { payload: collectCredentialValues(configModalForm, activeCredentialSchema) };
+
           if (submitButton) {
             submitButton.disabled = true;
             submitButton.textContent = "Submitting...";
           }
-          log(`Submitting configuration for ${providerName}`, "info");
-          const response = await makeRequest(`/v1/integrations/${providerName}/config`, {
+          log(`Submitting configuration for ${definitionID} (credentialRef: ${credentialRef || "none"})`, "info");
+          const response = await makeRequest(`/v1/integrations/${definitionID}/config`, {
             method: "POST",
             body: JSON.stringify(payload),
           });
@@ -642,10 +806,16 @@
           if (!result?.success) {
             throw new Error("Configuration response did not indicate success");
           }
-          log(`Configuration saved for ${providerName}`, "success");
+          log(`Configuration saved: integrationId=${result.integrationId}, health=${result.healthStatus}`, "success");
+          if (result.installationMetadata) {
+            logJSON("Installation metadata", result.installationMetadata, "info");
+          }
+          if (result.webhookEndpointUrl) {
+            log(`Webhook endpoint: ${result.webhookEndpointUrl}`, "info");
+            log(`Webhook secret: ${result.webhookSecret}`, "warning");
+          }
           closeConfigModal();
-          await handleStatus(providerName);
-          await loadIntegrations();
+          await loadInstallations();
         } catch (err) {
           log(`Failed to save configuration: ${err.message}`, "error");
         } finally {
@@ -656,144 +826,39 @@
         }
       }
 
-      function log(message, type = "info") {
-        const container = document.getElementById("activityLog");
-        const entry = document.createElement("div");
-        entry.className = `log-entry log-${type}`;
-        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-        container.appendChild(entry);
-        container.scrollTop = container.scrollHeight;
-      }
-
-      function getCSRFToken() {
-        const cookieName = "ol.csrf-token";
-        return document.cookie
-          .split(";")
-          .map((c) => c.trim().split("="))
-          .find(([name]) => name === cookieName)?.[1] || null;
-      }
-
-      async function makeRequest(path, options = {}) {
-        const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
-        const method = (options.method || "GET").toUpperCase();
-        if (authToken) {
-          headers["Authorization"] = `Bearer ${authToken}`;
-        }
-        if (method !== "GET" && !path.includes("/login")) {
-          const csrf = getCSRFToken();
-          if (csrf) {
-            headers["X-CSRF-Token"] = csrf;
-          }
-        }
-        return fetch(`${apiBase}${path}`, {
-          ...options,
-          method,
-          headers,
-          credentials: "include",
-        });
-      }
-
-      async function loginWithSeedUser() {
-        try {
-          log("Attempting login with seeded user", "info");
-          const response = await fetch(`${apiBase}/v1/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({
-              username: "mitb@theopenlane.io",
-              password: "mattisthebest1234",
-            }),
-          });
-          if (!response.ok) {
-            log(`Login failed: ${await response.text()}`, "error");
-            return false;
-          }
-          const data = await response.json();
-          if (data.success && data.access_token) {
-            authToken = data.access_token;
-            log("Login successful", "success");
-            return true;
-          }
-          log("Unexpected login response format", "error");
-          return false;
-        } catch (err) {
-          log(`Login error: ${err.message}`, "error");
-          return false;
-        }
-      }
-
-      async function ensureAuthenticated() {
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const sessionToken = params.get("session");
-          if (sessionToken) {
-            authToken = sessionToken;
-            log("Adopted session token from query param", "info");
-          }
-
-          if (!authToken) {
-            const loggedIn = await loginWithSeedUser();
-            if (!loggedIn) {
-              document.getElementById("authStatus").className =
-                "alert alert-warning d-flex justify-content-between align-items-center";
-              document.getElementById("authStatusText").innerHTML =
-                'Authentication required. <button class="btn btn-sm btn-primary ms-2" onclick="loginWithSeedUser().then(ok => ok && initialize())">Login</button>';
-              document.getElementById("loginButton").classList.remove("d-none");
-              return false;
-            }
-          }
-
-          const response = await makeRequest("/query", {
-            method: "POST",
-            body: JSON.stringify({ query: "{ self { id displayName email } }" }),
-          });
-          if (!response.ok) {
-            log(`Auth check failed: HTTP ${response.status}`, "error");
-            return false;
-          }
-          const data = await response.json();
-          if (!data?.data?.self) {
-            log("Auth check failed: no self payload", "error");
-            return false;
-          }
-          userInfo = data.data.self;
-          document.getElementById("authStatus").className =
-            "alert alert-success d-flex justify-content-between align-items-center";
-          document.getElementById("authStatusText").innerHTML =
-            `Authenticated as <strong>${userInfo.displayName}</strong> (${userInfo.email})`;
-          document.getElementById("loginButton").classList.add("d-none");
-          log(`Authenticated as ${userInfo.displayName}`, "success");
-          return true;
-        } catch (err) {
-          log(`Auth check error: ${err.message}`, "error");
-          return false;
-        }
-      }
-
-      function updateProviderStatus(provider, status, tokenValid = false, tokenExpired = false) {
-        const badge = document.getElementById(`${providerDomId(provider)}-status`);
+      // -----------------------------------------------------------------------
+      // Provider status badge
+      // -----------------------------------------------------------------------
+      function updateProviderStatusBadge(definitionID, status) {
+        const badge = document.getElementById(`${safeDomId(definitionID)}-status`);
         if (!badge) return;
         badge.className = "status-badge";
         switch (status) {
-          case "connected":
-            badge.classList.add(tokenExpired ? "status-expired" : "status-connected");
-            badge.textContent = tokenExpired ? "Token Expired" : "Connected";
+          case "CONNECTED":
+            badge.classList.add("status-connected");
+            badge.textContent = "Connected";
             break;
-          case "configured":
-            badge.classList.add("status-configured");
-            badge.textContent = "Configured";
+          case "PENDING":
+            badge.classList.add("status-pending");
+            badge.textContent = "Pending";
             break;
-          case "invalid":
-            badge.classList.add("status-invalid");
-            badge.textContent = "Invalid";
+          case "ERRORED":
+            badge.classList.add("status-errored");
+            badge.textContent = "Errored";
+            break;
+          case "DISABLED":
+            badge.classList.add("status-disabled");
+            badge.textContent = "Disabled";
             break;
           default:
             badge.classList.add("status-disconnected");
-            badge.textContent = "Disconnected";
+            badge.textContent = "Not Installed";
         }
       }
 
+      // -----------------------------------------------------------------------
+      // Fetch providers from registry
+      // -----------------------------------------------------------------------
       async function fetchProviders() {
         try {
           log("Fetching provider library", "info");
@@ -808,6 +873,9 @@
         }
       }
 
+      // -----------------------------------------------------------------------
+      // Render provider cards
+      // -----------------------------------------------------------------------
       function renderProviders(providers) {
         const container = document.getElementById("providersContainer");
         container.innerHTML = "";
@@ -816,51 +884,59 @@
           return;
         }
 
-        providerMetadata.clear();
-        providerMetadata.clear();
+        providerDefinitions.clear();
         providers
           .slice()
-          .sort((a, b) => (a.displayName || a.name).localeCompare(b.displayName || b.name))
-          .forEach((provider) => {
-            if (provider?.active === false) {
-              return;
-            }
-            providerMetadata.set(provider.name, provider);
-            const name = provider.name || provider.displayName;
-            const id = providerDomId(name);
+          .sort((a, b) => (a.spec?.displayName || "").localeCompare(b.spec?.displayName || ""))
+          .forEach((definition) => {
+            if (definition?.spec?.active === false) return;
+
+            providerDefinitions.set(definition.spec.id, definition);
+            const defID = definition.spec.id;
+            const domID = safeDomId(defID);
             const card = document.createElement("div");
             card.className = "integration-card";
-            const initials = (provider.displayName || provider.name || "??").slice(0, 2).toUpperCase();
-            const logo = provider.logoUrl
-              ? `<div class="provider-logo"><img src="${provider.logoUrl}" alt="${provider.displayName || provider.name} logo" loading="lazy" onerror="this.onerror=null;this.remove();this.parentElement.textContent='${initials}';" /></div>`
+
+            const displayName = definition.spec.displayName || defID;
+            const initials = displayName.slice(0, 2).toUpperCase();
+            const logo = definition.spec.logoUrl
+              ? `<div class="provider-logo"><img src="${definition.spec.logoUrl}" alt="${displayName} logo" loading="lazy" onerror="this.onerror=null;this.remove();this.parentElement.textContent='${initials}';" /></div>`
               : `<div class="provider-logo text-uppercase fw-bold">${initials}</div>`;
-            const vendorLabel = provider.labels?.vendor || provider.category || "Integration";
-            const docsLink = provider.docsUrl
-              ? `<a class="btn btn-sm btn-outline-secondary docs-link" href="${provider.docsUrl}" target="_blank" rel="noopener noreferrer">Docs ↗</a>`
+            const category = definition.spec.category || "Integration";
+            const docsLink = definition.spec.docsUrl
+              ? `<a class="btn btn-sm btn-outline-secondary docs-link" href="${definition.spec.docsUrl}" target="_blank" rel="noopener noreferrer">Docs</a>`
               : "";
+            const tags = (definition.spec.tags || []).map((t) => `<span class="badge bg-light text-dark me-1">${t}</span>`).join("");
+
             card.innerHTML = `
               <div class="provider-header">
                 ${logo}
                 <div class="provider-info">
-                  <h3 class="mb-1">${provider.displayName || provider.name}</h3>
-                  <small class="text-muted text-uppercase">${vendorLabel}</small>
+                  <h3 class="mb-1">${displayName}</h3>
+                  <small class="text-muted text-uppercase">${category}</small>
                 </div>
                 <div class="provider-meta text-end">
-                  ${docsLink || ""}
-                  <span class="status-badge status-disconnected" id="${id}-status">Disconnected</span>
+                  ${docsLink}
+                  <span class="status-badge status-disconnected" id="${domID}-status">Not Installed</span>
                 </div>
               </div>
               <div class="provider-body">
-                <small class="text-muted mb-0">Authentication: ${(provider.authType || "unknown").toUpperCase()}</small>
+                ${definition.spec.description ? `<small class="text-muted">${definition.spec.description}</small>` : ""}
+                ${tags ? `<div>${tags}</div>` : ""}
+                <small class="text-muted">Definition ID: <code>${defID}</code></small>
               </div>
-              <div class="provider-operations d-none" id="${id}-operations"></div>
-              <div class="provider-actions d-grid gap-2" id="${id}-actions"></div>
+              <div class="provider-connections" id="${domID}-connections"></div>
+              <div class="provider-operations d-none" id="${domID}-operations"></div>
+              <div class="provider-actions d-grid gap-2" id="${domID}-actions"></div>
+              <div class="d-none" id="${domID}-details"></div>
             `;
 
             container.appendChild(card);
 
-            const actions = card.querySelector(`#${id}-actions`);
-            const operationsPanel = card.querySelector(`#${id}-operations`);
+            const connectionsPanel = card.querySelector(`#${domID}-connections`);
+            const operationsPanel = card.querySelector(`#${domID}-operations`);
+            const actions = card.querySelector(`#${domID}-actions`);
+
             const addButton = (label, style, handler) => {
               const btn = document.createElement("button");
               btn.type = "button";
@@ -871,14 +947,89 @@
               return btn;
             };
 
-            if (Array.isArray(provider.operations) && provider.operations.length) {
+            // --- Connection modes ---
+            if (Array.isArray(definition.connections) && definition.connections.length) {
+              const heading = document.createElement("div");
+              heading.className = "operation-heading mb-1";
+              heading.textContent = "Connection Modes";
+              connectionsPanel.appendChild(heading);
+
+              definition.connections.forEach((conn) => {
+                const connCard = document.createElement("div");
+                connCard.className = "connection-card";
+                const refName = conn.credentialRef || "default";
+                const connName = conn.name || toTitleCase(refName);
+                const connDesc = conn.description || "";
+                const hasAuth = conn.auth != null;
+
+                connCard.innerHTML = `
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <strong>${connName}</strong>
+                    <span class="badge ${hasAuth ? "bg-primary" : "bg-secondary"}">${hasAuth ? "Auth Flow" : "Credential Config"}</span>
+                  </div>
+                  ${connDesc ? `<small class="text-muted d-block mb-2">${connDesc}</small>` : ""}
+                  <small class="text-muted">credentialRef: <code>${refName}</code></small>
+                `;
+
+                const connActions = document.createElement("div");
+                connActions.className = "d-flex gap-2 mt-2";
+
+                if (hasAuth) {
+                  const authBtn = document.createElement("button");
+                  authBtn.type = "button";
+                  authBtn.className = "btn btn-sm btn-dark";
+                  authBtn.textContent = "Start Auth Flow";
+                  authBtn.addEventListener("click", () => handleAuthFlow(defID, refName));
+                  connActions.appendChild(authBtn);
+                }
+
+                // find matching credential registration for the schema
+                const credReg = (definition.credentialRegistrations || []).find(
+                  (cr) => cr.ref === refName
+                );
+                if (credReg?.schema) {
+                  const configBtn = document.createElement("button");
+                  configBtn.type = "button";
+                  configBtn.className = "btn btn-sm btn-primary";
+                  configBtn.textContent = "Configure Credentials";
+                  configBtn.addEventListener("click", () => {
+                    let schema = credReg.schema;
+                    if (typeof schema === "string") {
+                      try { schema = JSON.parse(schema); } catch (_) {}
+                    }
+                    openConfigModal(defID, refName, schema);
+                  });
+                  connActions.appendChild(configBtn);
+                }
+
+                connCard.appendChild(connActions);
+                connectionsPanel.appendChild(connCard);
+              });
+            } else if (Array.isArray(definition.credentialRegistrations) && definition.credentialRegistrations.length) {
+              // no connections declared but credential registrations exist: render direct config buttons
+              definition.credentialRegistrations.forEach((credReg) => {
+                const refName = credReg.ref || "default";
+                if (credReg.schema) {
+                  addButton(`Configure: ${credReg.name || refName}`, "primary", () => {
+                    let schema = credReg.schema;
+                    if (typeof schema === "string") {
+                      try { schema = JSON.parse(schema); } catch (_) {}
+                    }
+                    openConfigModal(defID, refName, schema);
+                  });
+                }
+              });
+            }
+
+            // --- Operations ---
+            if (Array.isArray(definition.operations) && definition.operations.length) {
               operationsPanel.classList.remove("d-none");
               const heading = document.createElement("div");
               heading.className = "operation-heading";
               heading.textContent = "Operations";
               operationsPanel.appendChild(heading);
 
-              provider.operations.forEach((operation) => {
+              definition.operations.forEach((operation) => {
                 const opRow = document.createElement("div");
                 opRow.className = "operation-row";
 
@@ -888,9 +1039,11 @@
                 title.className = "operation-title";
                 title.textContent = operation.name;
                 titleLine.appendChild(title);
+
+                const policyLabel = operation.policy?.inline ? "inline" : "async";
                 const kind = document.createElement("span");
                 kind.className = "operation-kind";
-                kind.textContent = operation.kind || "operation";
+                kind.textContent = policyLabel;
                 titleLine.appendChild(kind);
                 opRow.appendChild(titleLine);
 
@@ -905,7 +1058,7 @@
                 controls.className = "operation-controls";
 
                 let configInput = null;
-                if (operation.configSchema && Object.keys(operation.configSchema).length > 0) {
+                if (operation.configSchema && typeof operation.configSchema === "object" && Object.keys(operation.configSchema).length > 0) {
                   configInput = document.createElement("textarea");
                   configInput.className = "form-control form-control-sm";
                   configInput.rows = 3;
@@ -918,30 +1071,12 @@
                   controls.appendChild(hint);
                 }
 
-                const forceWrapper = document.createElement("label");
-                forceWrapper.className = "form-check form-switch operation-force";
-                const forceInput = document.createElement("input");
-                forceInput.type = "checkbox";
-                forceInput.className = "form-check-input";
-                forceInput.checked = false;
-                forceWrapper.appendChild(forceInput);
-                const forceText = document.createElement("span");
-                forceText.className = "ms-2";
-                forceText.textContent = "Force fresh credentials";
-                forceWrapper.appendChild(forceText);
-                controls.appendChild(forceWrapper);
-
                 const runBtn = document.createElement("button");
                 runBtn.type = "button";
                 runBtn.className = "btn btn-sm btn-success operation-run-btn";
                 runBtn.textContent = "Run Operation";
                 runBtn.addEventListener("click", () =>
-                  handleOperation(
-                    provider.name,
-                    operation.name,
-                    configInput ? configInput.value : "",
-                    forceInput.checked,
-                  ),
+                  handleOperation(defID, operation.name, configInput ? configInput.value : ""),
                 );
                 controls.appendChild(runBtn);
 
@@ -950,130 +1085,78 @@
               });
             }
 
-            if (provider.credentialsSchema) {
-              addButton("Submit Configuration", "primary", () => openConfigModal(provider.name));
+            // --- Webhooks info ---
+            if (Array.isArray(definition.webhooks) && definition.webhooks.length) {
+              const whInfo = document.createElement("div");
+              whInfo.className = "operation-hint mt-1";
+              whInfo.textContent = `Webhooks: ${definition.webhooks.map((w) => w.name).join(", ")}`;
+              operationsPanel.appendChild(whInfo);
+              if (operationsPanel.classList.contains("d-none")) {
+                operationsPanel.classList.remove("d-none");
+              }
             }
 
-            if (provider.authType === "oauth2" || provider.authType === "oidc") {
-              addButton("Start OAuth Flow", "dark", () => handleOAuth(provider.name));
-              addButton("Refresh Token", "outline-warning", () => handleRefresh(provider.name));
-            }
-
-            if (provider.authType === "githubapp" || provider.name === "githubapp") {
-              addButton("Start GitHub App Install", "dark", () => handleGitHubAppInstall(provider.name));
-              addButton("Run GitHub App Health", "outline-success", () =>
-                handleOperation(provider.name, "health.default", "", false),
-              );
-            }
-
-            addButton("Check Status", "outline-secondary", () => handleStatus(provider.name));
-            addButton("Disconnect Integration", "outline-danger", () => handleDisconnect(provider.name));
+            // --- Common actions ---
+            addButton("Disconnect", "outline-danger", () => handleDisconnect(defID));
           });
       }
 
-      async function handleOAuth(provider) {
-        const meta = providerMetadata.get(provider);
-        if (meta?.oauth?.authUrl && meta?.oauth?.clientId && meta?.oauth?.redirectUri) {
-          const params = new URLSearchParams({
-            client_id: meta.oauth.clientId,
-            response_type: "code",
-            redirect_uri: meta.oauth.redirectUri,
-            scope: (meta.oauth.scopes || []).join(" "),
-            state: btoa(JSON.stringify({ provider, ts: Date.now() })),
-          });
-          if (meta.oauth.authParams) {
-            Object.entries(meta.oauth.authParams).forEach(([key, value]) => params.set(key, value));
-          }
-          const authorizeUrl = `${meta.oauth.authUrl}?${params.toString()}`;
-          log(`Redirecting to ${meta.displayName || provider} OAuth flow`, "info");
-          window.location.href = authorizeUrl;
-          return;
-        }
+      // -----------------------------------------------------------------------
+      // Auth flow: POST /v1/integrations/auth/start
+      // -----------------------------------------------------------------------
+      async function handleAuthFlow(definitionID, credentialRef) {
         try {
-          const payload = { provider };
-          log(`Starting OAuth flow for ${provider}`, "info");
-          const response = await makeRequest("/v1/integrations/oauth/start", {
+          const existingIntegration = installedIntegrations.get(definitionID);
+          const payload = {
+            definitionId: definitionID,
+            credentialRef: credentialRef,
+          };
+          if (existingIntegration) {
+            payload.integrationId = existingIntegration.id;
+          }
+
+          log(`Starting auth flow for ${definitionID} (credentialRef: ${credentialRef})`, "info");
+          const response = await makeRequest("/v1/integrations/auth/start", {
             method: "POST",
             body: JSON.stringify(payload),
           });
           if (!response.ok) throw new Error(await response.text());
           const data = await response.json();
           if (!data.authUrl) throw new Error("Provider did not return an authUrl");
+          log(`Auth URL received, redirecting...`, "info");
           window.location.href = data.authUrl;
         } catch (err) {
-          log(`OAuth start failed: ${err.message}`, "error");
+          log(`Auth flow start failed: ${err.message}`, "error");
         }
       }
 
-      async function handleGitHubAppInstall(provider) {
-        try {
-          log(`Starting GitHub App install for ${provider}`, "info");
-          const response = await makeRequest("/v1/integrations/github/app/install", {
-            method: "POST",
-            body: JSON.stringify({}),
-          });
-          if (!response.ok) throw new Error(await response.text());
-          const data = await response.json();
-          if (!data?.installUrl) throw new Error("Install URL missing from response");
-          window.location.href = data.installUrl;
-        } catch (err) {
-          log(`GitHub App install failed: ${err.message}`, "error");
+      // -----------------------------------------------------------------------
+      // Operations: POST /v1/integrations/{integrationID}/operations/run
+      // -----------------------------------------------------------------------
+      async function handleOperation(definitionID, operationName, rawConfig) {
+        const integration = installedIntegrations.get(definitionID);
+        if (!integration) {
+          log(`No installed integration for ${definitionID} - configure or auth first`, "error");
+          return;
         }
-      }
 
-      async function handleStatus(provider) {
-        try {
-          log(`Checking status for ${provider}`, "info");
-          const response = await makeRequest("/query", {
-            method: "POST",
-            body: JSON.stringify({ query: integrationSecretsQuery, variables: { kind: provider } }),
-          });
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const payload = await response.json();
-          const integration = payload?.data?.integrations?.edges?.[0]?.node;
-          if (!integration) {
-            updateProviderStatus(provider, "disconnected");
-            return;
-          }
-          const secrets = integration.secrets?.edges?.map((edge) => edge.node) || [];
-          const tokenMatchers = [/access_token/i, /api_token/i, /token/i];
-          const primarySecret =
-            tokenMatchers
-              .map((regex) => secrets.find((secret) => regex.test(secret?.secretName || "")))
-              .find(Boolean) || null;
-          const expirationSource =
-            primarySecret?.expiresAt ||
-            primarySecret?.metadata?.expiresAt ||
-            secrets.find((secret) => (secret?.secretName || "").includes("_expires_at"))?.metadata?.expiresAt ||
-            null;
-          const expired = expirationSource ? new Date(expirationSource) < new Date() : false;
-          const status = primarySecret ? (expired ? "expired" : "connected") : secrets.length ? "configured" : "disconnected";
-          updateProviderStatus(provider, status, Boolean(primarySecret), expired);
-        } catch (err) {
-          log(`Status check failed: ${err.message}`, "error");
-          updateProviderStatus(provider, "disconnected");
-        }
-      }
-
-      async function handleOperation(provider, operation, rawConfig, force) {
-        let config = {};
+        let config = undefined;
         if (rawConfig && rawConfig.trim()) {
           try {
             config = JSON.parse(rawConfig);
           } catch (err) {
-            log(`Invalid config JSON for ${operation}: ${err.message}`, "error");
+            log(`Invalid config JSON for ${operationName}: ${err.message}`, "error");
             return;
           }
         }
         try {
-          log(`Running ${operation} for ${provider}`, "info");
-          const response = await makeRequest(`/v1/integrations/${provider}/operations/run`, {
+          log(`Running ${operationName} on integration ${integration.id}`, "info");
+          const response = await makeRequest(`/v1/integrations/${integration.id}/operations/run`, {
             method: "POST",
             body: JSON.stringify({
-              payload: {
-                operation,
-                config,
-                force: Boolean(force),
+              body: {
+                operation: operationName,
+                config: config,
               },
             }),
           });
@@ -1083,100 +1166,135 @@
           }
           const data = raw ? JSON.parse(raw) : {};
           const status = (data.status || "unknown").toUpperCase();
-          const summary = data.summary || data.message || "No summary returned";
-          const logType = data.success === false || status !== "OK" ? "warning" : "success";
-          log(`Operation ${operation} (${status}): ${summary}`, logType);
+          const summary = data.summary || "No summary returned";
+          const logType = data.success === false || (status !== "OK" && status !== "QUEUED") ? "warning" : "success";
+          log(`Operation ${operationName} (${status}): ${summary}`, logType);
           if (data.details) {
-            log(`Details: ${JSON.stringify(data.details)}`, "info");
+            logJSON(`${operationName} details`, data.details, "info");
           }
         } catch (err) {
-          log(`Operation ${operation} failed: ${err.message}`, "error");
+          log(`Operation ${operationName} failed: ${err.message}`, "error");
         }
       }
 
-      async function handleRefresh(provider) {
+      // -----------------------------------------------------------------------
+      // Disconnect: POST /v1/integrations/{integrationID}/disconnect
+      // -----------------------------------------------------------------------
+      async function handleDisconnect(definitionID) {
+        const integration = installedIntegrations.get(definitionID);
+        if (!integration) {
+          log(`No installed integration for ${definitionID}`, "info");
+          updateProviderStatusBadge(definitionID, null);
+          return;
+        }
         try {
-          const response = await makeRequest(`/v1/integrations/${provider}/refresh`, {
+          log(`Disconnecting integration ${integration.id} (${definitionID})`, "info");
+          const response = await makeRequest(`/v1/integrations/${integration.id}/disconnect`, {
             method: "POST",
           });
           if (!response.ok) throw new Error(await response.text());
-          log(`Trigger refresh succeeded for ${provider}`, "success");
-          await handleStatus(provider);
-        } catch (err) {
-          log(`Refresh failed: ${err.message}`, "error");
-        }
-      }
-
-      async function handleDisconnect(provider) {
-        try {
-          const lookup = await makeRequest("/query", {
-            method: "POST",
-            body: JSON.stringify({
-              query: "query ($kind: String!) { integrations(where: { kind: $kind }) { edges { node { id } } } }",
-              variables: { kind: provider },
-            }),
-          });
-          if (!lookup.ok) throw new Error(`lookup failed: HTTP ${lookup.status}`);
-          const data = await lookup.json();
-          const id = data?.data?.integrations?.edges?.[0]?.node?.id;
-          if (!id) {
-            log(`No integration to delete for ${provider}`, "info");
-            updateProviderStatus(provider, "disconnected");
-            return;
+          const data = await response.json();
+          log(`Disconnected: ${data.message || "success"} (deletedId: ${data.deletedId || "n/a"})`, "success");
+          if (data.redirectUrl) {
+            log(`Provider cleanup URL: ${data.redirectUrl}`, "info");
           }
-          const response = await makeRequest("/query", {
-            method: "POST",
-            body: JSON.stringify({
-              query: "mutation ($id: ID!) { deleteIntegration(id: $id) { deletedID } }",
-              variables: { id },
-            }),
-          });
-          if (!response.ok) throw new Error(`delete failed: HTTP ${response.status}`);
-          log(`Integration deleted for ${provider}`, "success");
-          updateProviderStatus(provider, "disconnected");
-          await loadIntegrations();
+          if (data.details) {
+            logJSON("Disconnect details", data.details, "info");
+          }
+          updateProviderStatusBadge(definitionID, null);
+          await loadInstallations();
         } catch (err) {
           log(`Disconnect failed: ${err.message}`, "error");
         }
       }
 
-      async function loadIntegrations() {
-        log("Loading configured integrations", "info");
+      // -----------------------------------------------------------------------
+      // Load installed integrations via GraphQL
+      // -----------------------------------------------------------------------
+      async function loadInstallations() {
+        log("Loading installed integrations", "info");
         try {
           const container = document.getElementById("integrationsList");
           const response = await makeRequest("/query", {
             method: "POST",
-            body: JSON.stringify({ query: "{ integrations { edges { node { id name kind description updatedAt } } } }" }),
+            body: JSON.stringify({
+              query: `{
+                integrations {
+                  edges {
+                    node {
+                      id
+                      name
+                      definitionID
+                      status
+                      description
+                      kind
+                      updatedAt
+                      metadata
+                    }
+                  }
+                }
+              }`,
+            }),
           });
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const data = await response.json();
           const items = data?.data?.integrations?.edges || [];
+
+          // rebuild installed map
+          installedIntegrations.clear();
+          items.forEach(({ node }) => {
+            if (node.definitionID) {
+              installedIntegrations.set(node.definitionID, node);
+            }
+          });
+
+          // update status badges for all known definitions
+          for (const [defID] of providerDefinitions) {
+            const inst = installedIntegrations.get(defID);
+            updateProviderStatusBadge(defID, inst?.status || null);
+          }
+
           if (items.length === 0) {
-            container.innerHTML = '<div class="text-center text-muted">No integrations configured</div>';
+            container.innerHTML = '<div class="text-center text-muted">No integrations installed</div>';
             return;
           }
           container.innerHTML = items
-            .map(({ node }) => `
-              <div class="card mb-2">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                      <h6 class="card-title mb-1">${node.name}</h6>
-                      <small class="text-muted">Provider: ${node.kind}</small>
+            .map(({ node }) => {
+              const statusClass =
+                node.status === "CONNECTED"
+                  ? "text-success"
+                  : node.status === "ERRORED"
+                    ? "text-danger"
+                    : "text-warning";
+              return `
+                <div class="card mb-2">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="card-title mb-1">${node.name}</h6>
+                        <small class="text-muted">Definition: <code>${node.definitionID || node.kind || "unknown"}</code></small>
+                      </div>
+                      <div class="text-end">
+                        <span class="${statusClass} fw-semibold">${node.status || "UNKNOWN"}</span><br/>
+                        <small class="text-muted">ID: ${node.id}</small>
+                      </div>
                     </div>
-                    <small class="text-muted">ID: ${node.id}</small>
+                    ${node.description ? `<p class="card-text mt-2 mb-1">${node.description}</p>` : ""}
+                    <small class="text-muted">Updated ${new Date(node.updatedAt).toLocaleString()}</small>
+                    ${node.metadata ? `<details class="mt-1"><summary class="text-muted" style="font-size:0.85rem;cursor:pointer">Metadata</summary><pre style="font-size:0.8rem;max-height:150px;overflow:auto">${JSON.stringify(node.metadata, null, 2)}</pre></details>` : ""}
                   </div>
-                  <p class="card-text mt-2 mb-1">${node.description || "No description"}</p>
-                  <small class="text-muted">Updated ${new Date(node.updatedAt).toLocaleString()}</small>
                 </div>
-              </div>
-            `)
+              `;
+            })
             .join("");
         } catch (err) {
           log(`Failed to load integrations: ${err.message}`, "error");
         }
       }
 
+      // -----------------------------------------------------------------------
+      // OAuth callback notice
+      // -----------------------------------------------------------------------
       function handleOAuthCallback() {
         const params = new URLSearchParams(window.location.search);
         const provider = params.get("provider");
@@ -1188,17 +1306,18 @@
           <div class="alert ${status === "success" ? "alert-success" : "alert-danger"} alert-dismissible fade show">
             <strong>${status === "success" ? "Integration Connected" : "Integration Error"}:</strong>
             ${decodeURIComponent(message || provider)}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
           </div>
         `;
       }
 
-      async function loadProvidersAndStatus() {
+      // -----------------------------------------------------------------------
+      // Initialize
+      // -----------------------------------------------------------------------
+      async function loadProvidersAndInstallations() {
         const providers = await fetchProviders();
         renderProviders(providers);
-        for (const provider of providers) {
-          await handleStatus(provider.name);
-        }
+        await loadInstallations();
       }
 
       async function initialize() {
@@ -1209,8 +1328,7 @@
           log("Authentication required before continuing", "error");
           return;
         }
-        await loadProvidersAndStatus();
-        await loadIntegrations();
+        await loadProvidersAndInstallations();
         log("Initialization complete", "success");
       }
 
@@ -1219,8 +1337,8 @@
         document.getElementById("loginButton").addEventListener("click", () => {
           loginWithSeedUser().then((ok) => ok && initialize());
         });
-        document.getElementById("refreshProviders").addEventListener("click", loadProvidersAndStatus);
-        document.getElementById("refreshIntegrations").addEventListener("click", loadIntegrations);
+        document.getElementById("refreshProviders").addEventListener("click", loadProvidersAndInstallations);
+        document.getElementById("refreshIntegrations").addEventListener("click", loadInstallations);
         document.getElementById("clearLog").addEventListener("click", () => {
           document.getElementById("activityLog").innerHTML = "";
         });

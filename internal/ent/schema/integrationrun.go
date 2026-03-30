@@ -179,6 +179,7 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationRun](r,
 				withOrganizationOwnerServiceOnly(true),
+				withParents(Integration{}),
 			),
 		},
 	}.getMixins(r)
@@ -206,7 +207,11 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 // Policy of the IntegrationRun.
 func (IntegrationRun) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
 		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),
 		),
 	)

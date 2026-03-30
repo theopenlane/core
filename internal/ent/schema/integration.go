@@ -217,6 +217,9 @@ func (i Integration) Mixin() []ent.Mixin {
 // Policy of the Integration
 func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),
