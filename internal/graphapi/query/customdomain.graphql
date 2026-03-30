@@ -1,218 +1,233 @@
-mutation CreateBulkCSVCustomDomain($input: Upload!) {
-  createBulkCSVCustomDomain(input: $input) {
-    customDomains {
-      cnameRecord
-      createdAt
-      createdBy
-      dnsVerificationID
-      id
-      mappableDomainID
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkCustomDomain($input: [CreateCustomDomainInput!]) {
-  createBulkCustomDomain(input: $input) {
-    customDomains {
-      cnameRecord
-      createdAt
-      createdBy
-      dnsVerificationID
-      id
-      mappableDomainID
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateCustomDomain($input: CreateCustomDomainInput!) {
-  createCustomDomain(input: $input) {
-    customDomain {
-      cnameRecord
-      createdAt
-      createdBy
-      dnsVerificationID
-      dnsVerification {
-        id
-        dnsTxtRecord
-        dnsTxtValue
-        dnsVerificationStatus
-      }
-      id
-      mappableDomainID
+mutation CreateBulkCSVCustomDomain ($input: Upload!) {
+	createBulkCSVCustomDomain(input: $input) {
+		customDomains {
+			cnameRecord
+			createdAt
+			createdBy
+			dnsVerificationID
       domainType
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+			id
+			internalNotes
+			mappableDomainID
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteCustomDomain($deleteCustomDomainId: ID!) {
-  deleteCustomDomain(id: $deleteCustomDomainId) {
-    deletedID
-  }
+mutation CreateBulkCustomDomain ($input: [CreateCustomDomainInput!]) {
+	createBulkCustomDomain(input: $input) {
+		customDomains {
+			cnameRecord
+			createdAt
+			createdBy
+			dnsVerificationID
+      domainType
+			id
+			internalNotes
+			mappableDomainID
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
+mutation CreateCustomDomain ($input: CreateCustomDomainInput!) {
+	createCustomDomain(input: $input) {
+		customDomain {
+			cnameRecord
+			createdAt
+			createdBy
+			dnsVerificationID
+      domainType
+			id
+			internalNotes
+			mappableDomainID
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+			dnsVerification {
+				id
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+			}
+		}
+	}
+}
+mutation DeleteCustomDomain ($deleteCustomDomainId: ID!) {
+	deleteCustomDomain(id: $deleteCustomDomainId) {
+		deletedID
+	}
+}
 query GetAllCustomDomains {
-  customDomains {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        cnameRecord
-        createdAt
-        createdBy
+	customDomains {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cnameRecord
+				createdAt
+				createdBy
+				dnsVerificationID
+				dnsVerification {
+					id
+					dnsTxtRecord
+					dnsTxtValue
+					dnsVerificationStatus
+					dnsVerificationStatusReason
+					acmeChallengePath
+					expectedAcmeChallengeValue
+					acmeChallengeStatus
+					acmeChallengeStatusReason
+					cloudflareHostnameID
+				}
         domainType
-        dnsVerificationID
-        dnsVerification {
-          id
-          dnsTxtRecord
-          dnsTxtValue
-          dnsVerificationStatus
-          dnsVerificationStatusReason
-          acmeChallengePath
-          expectedAcmeChallengeValue
-          acmeChallengeStatus
-          acmeChallengeStatusReason
-          cloudflareHostnameID
-        }
-        mappableDomain {
-          id
-          name
-          zoneID
-        }
-        id
-        mappableDomainID
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+				mappableDomain {
+					id
+					name
+					zoneID
+				}
+				id
+				mappableDomainID
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetCustomDomainByID($customDomainId: ID!) {
-  customDomain(id: $customDomainId) {
-    cnameRecord
-    createdAt
-    createdBy
+query GetCustomDomainByID ($customDomainId: ID!) {
+	customDomain(id: $customDomainId) {
+		cnameRecord
+		createdAt
+		createdBy
+		dnsVerificationID
     domainType
-    dnsVerificationID
-    dnsVerification {
-      id
-      dnsTxtRecord
-      dnsTxtValue
-      dnsVerificationStatus
-      dnsVerificationStatusReason
-      acmeChallengePath
-      expectedAcmeChallengeValue
-      acmeChallengeStatus
-      acmeChallengeStatusReason
-      cloudflareHostnameID
-    }
-    id
-    mappableDomain {
-      id
-      name
-      zoneID
-    }
-    ownerID
-    tags
-    updatedAt
-    updatedBy
-  }
+		id
+		internalNotes
+		mappableDomainID
+		ownerID
+		systemInternalID
+		systemOwned
+		tags
+		trustCenterID
+		updatedAt
+		updatedBy
+		dnsVerification {
+			id
+			dnsTxtRecord
+			dnsTxtValue
+			dnsVerificationStatus
+			dnsVerificationStatusReason
+			acmeChallengePath
+			expectedAcmeChallengeValue
+			acmeChallengeStatus
+			acmeChallengeStatusReason
+			cloudflareHostnameID
+		}
+		mappableDomain {
+			id
+			name
+			zoneID
+		}
+	}
 }
-
-query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) {
-  customDomains(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        cnameRecord
-        createdAt
-        createdBy
+query GetCustomDomains ($first: Int, $last: Int, $where: CustomDomainWhereInput) {
+	customDomains(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cnameRecord
+				createdAt
+				createdBy
+				dnsVerificationID
+				dnsVerification {
+					id
+					dnsTxtRecord
+					dnsTxtValue
+					dnsVerificationStatus
+				}
         domainType
-        dnsVerificationID
-        dnsVerification {
-          id
-          dnsTxtRecord
-          dnsTxtValue
-          dnsVerificationStatus
-        }
-        id
-        mappableDomainID
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+				id
+				mappableDomainID
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDomainInput!) {
-  updateCustomDomain(id: $updateCustomDomainId, input: $input) {
-    customDomain {
-      cnameRecord
-      createdAt
-      createdBy
+mutation UpdateCustomDomain ($updateCustomDomainId: ID!, $input: UpdateCustomDomainInput!) {
+	updateCustomDomain(id: $updateCustomDomainId, input: $input) {
+		customDomain {
+			cnameRecord
+			createdAt
+			createdBy
+			dnsVerificationID
+			id
+			internalNotes
+			mappableDomainID
+			ownerID
+			systemInternalID
+			systemOwned
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+			dnsVerification {
+				id
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+			}
       domainType
-      dnsVerificationID
-      dnsVerification {
-        id
-        dnsTxtRecord
-        dnsTxtValue
-        dnsVerificationStatus
-      }
-      id
-      mappableDomainID
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+		}
+	}
 }
-
-mutation ValidateCustomDomain($validateCustomDomainId: ID!) {
-  validateCustomDomain(id: $validateCustomDomainId) {
-    customDomain {
-      cnameRecord
-      id
-      dnsVerificationID
+mutation ValidateCustomDomain ($validateCustomDomainId: ID!) {
+	validateCustomDomain(id: $validateCustomDomainId) {
+		customDomain {
+			cnameRecord
+			id
+			dnsVerificationID
+			dnsVerification {
+				id
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+				dnsVerificationStatusReason
+				acmeChallengePath
+				expectedAcmeChallengeValue
+				acmeChallengeStatus
+				acmeChallengeStatusReason
+			}
       domainType
-      dnsVerification {
-        id
-        dnsTxtRecord
-        dnsTxtValue
-        dnsVerificationStatus
-        dnsVerificationStatusReason
-        acmeChallengePath
-        expectedAcmeChallengeValue
-        acmeChallengeStatus
-        acmeChallengeStatusReason
-      }
-    }
-  }
+		}
+	}
 }

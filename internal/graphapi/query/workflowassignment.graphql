@@ -1,126 +1,128 @@
 query GetAllWorkflowAssignments {
-  workflowAssignments {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        actorGroupID
-        actorUserID
-        assignmentKey
-        createdAt
-        createdBy
-        decidedAt
-        displayID
-        id
-        label
-        metadata
-        notes
-        ownerID
-        required
-        role
-        status
-        tags
-        updatedAt
-        updatedBy
-        workflowInstanceID
-        workflowAssignmentTargets {
-          edges {
-            node {
-              id
-              targetType
-              targetUserID
-              targetGroupID
-              resolverKey
-            }
-          }
-        }
-      }
-    }
-  }
+	workflowAssignments {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				actorGroupID
+				actorUserID
+				assignmentKey
+				createdAt
+				createdBy
+				decidedAt
+				displayID
+				id
+				label
+				metadata
+				notes
+				ownerID
+				required
+				role
+				status
+				tags
+				updatedAt
+				updatedBy
+				workflowInstanceID
+				workflowAssignmentTargets {
+					edges {
+						node {
+							id
+							targetType
+							targetUserID
+							targetGroupID
+							resolverKey
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetWorkflowAssignmentByID($workflowAssignmentId: ID!) {
-  workflowAssignment(id: $workflowAssignmentId) {
-    actorGroupID
-    actorUserID
-    assignmentKey
-    createdAt
-    createdBy
-    decidedAt
-    displayID
-    id
-    label
-    metadata
-    notes
-    ownerID
-    required
-    role
-    status
-    tags
-    updatedAt
-    updatedBy
-    workflowInstanceID
-    workflowAssignmentTargets {
-      edges {
-        node {
-          id
-          targetType
-          targetUserID
-          targetGroupID
-          resolverKey
-        }
-      }
-    }
-  }
+query GetWorkflowAssignmentByID ($workflowAssignmentId: ID!) {
+	workflowAssignment(id: $workflowAssignmentId) {
+		actorGroupID
+		actorUserID
+		approvalMetadata
+		assignmentKey
+		createdAt
+		createdBy
+		decidedAt
+		displayID
+		dueAt
+		id
+		invalidationMetadata
+		label
+		metadata
+		notes
+		ownerID
+		rejectionMetadata
+		required
+		role
+		status
+		tags
+		updatedAt
+		updatedBy
+		workflowInstanceID
+		workflowAssignmentTargets {
+			edges {
+				node {
+					id
+					targetType
+					targetUserID
+					targetGroupID
+					resolverKey
+				}
+			}
+		}
+	}
 }
-
-query GetWorkflowAssignments($first: Int, $last: Int, $where: WorkflowAssignmentWhereInput) {
-  workflowAssignments(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        actorGroupID
-        actorUserID
-        assignmentKey
-        createdAt
-        createdBy
-        decidedAt
-        displayID
-        id
-        label
-        metadata
-        notes
-        ownerID
-        required
-        role
-        status
-        tags
-        updatedAt
-        updatedBy
-        workflowInstanceID
-        workflowAssignmentTargets {
-          edges {
-            node {
-              id
-              targetType
-              targetUserID
-              targetGroupID
-              resolverKey
-            }
-          }
-        }
-      }
-    }
-  }
+query GetWorkflowAssignments ($first: Int, $last: Int, $where: WorkflowAssignmentWhereInput) {
+	workflowAssignments(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				actorGroupID
+				actorUserID
+				assignmentKey
+				createdAt
+				createdBy
+				decidedAt
+				displayID
+				id
+				label
+				metadata
+				notes
+				ownerID
+				required
+				role
+				status
+				tags
+				updatedAt
+				updatedBy
+				workflowInstanceID
+				workflowAssignmentTargets {
+					edges {
+						node {
+							id
+							targetType
+							targetUserID
+							targetGroupID
+							resolverKey
+						}
+					}
+				}
+			}
+		}
+	}
 }

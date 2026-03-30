@@ -1,13 +1,14 @@
-mutation CreateOnboarding($input: CreateOnboardingInput!) {
-  createOnboarding(input: $input) {
-    onboarding {
-      companyDetails
-      companyName
-      domains
-      compliance
-      id
-      organizationID
-      userDetails
-    }
-  }
+mutation CreateOnboarding ($input: CreateOnboardingInput!) {
+	createOnboarding(input: $input) {
+		onboarding {
+			companyDetails
+			companyName
+			compliance
+			demoRequested
+			domains
+			id
+			organizationID
+			userDetails
+		}
+	}
 }

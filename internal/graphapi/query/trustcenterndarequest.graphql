@@ -1,209 +1,206 @@
-
-mutation CreateBulkCSVTrustCenterNDARequest($input: Upload!) {
-  createBulkCSVTrustCenterNDARequest(input: $input) {
-    trustCenterNDARequests {
-      accessLevel
-      companyName
-      createdAt
-      createdBy
-      email
-      firstName
-      id
-      lastName
-      reason
-      status
-      tags
-      trustCenterID
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVTrustCenterNDARequest ($input: Upload!) {
+	createBulkCSVTrustCenterNDARequest(input: $input) {
+		trustCenterNDARequests {
+			accessLevel
+			approvedAt
+			approvedByUserID
+			companyName
+			createdAt
+			createdBy
+			documentDataID
+			email
+			fileID
+			firstName
+			id
+			lastName
+			reason
+			signedAt
+			status
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateBulkTrustCenterNDARequest($input: [CreateTrustCenterNDARequestInput!]) {
-  createBulkTrustCenterNDARequest(input: $input) {
-    trustCenterNDARequests {
-      accessLevel
-      companyName
-      createdAt
-      createdBy
-      email
-      firstName
-      id
-      lastName
-      reason
-      status
-      tags
-      trustCenterID
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkTrustCenterNDARequest ($input: [CreateTrustCenterNDARequestInput!]) {
+	createBulkTrustCenterNDARequest(input: $input) {
+		trustCenterNDARequests {
+			accessLevel
+			approvedAt
+			approvedByUserID
+			companyName
+			createdAt
+			createdBy
+			documentDataID
+			email
+			fileID
+			firstName
+			id
+			lastName
+			reason
+			signedAt
+			status
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateTrustCenterNDARequest($input: CreateTrustCenterNDARequestInput!) {
-  createTrustCenterNDARequest(input: $input) {
-    trustCenterNDARequest {
-      accessLevel
-      companyName
-      createdAt
-      createdBy
-      email
-      firstName
-      id
-      lastName
-      reason
-      status
-      tags
-      trustCenterID
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateTrustCenterNDARequest ($input: CreateTrustCenterNDARequestInput!) {
+	createTrustCenterNDARequest(input: $input) {
+		trustCenterNDARequest {
+			accessLevel
+			approvedAt
+			approvedByUserID
+			companyName
+			createdAt
+			createdBy
+			documentDataID
+			email
+			fileID
+			firstName
+			id
+			lastName
+			reason
+			signedAt
+			status
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteTrustCenterNDARequest($deleteTrustCenterNDARequestId: ID!) {
-  deleteTrustCenterNDARequest(id: $deleteTrustCenterNDARequestId) {
-    deletedID
-  }
+mutation DeleteBulkTrustCenterNDARequest ($ids: [ID!]!) {
+	deleteBulkTrustCenterNDARequest(ids: $ids) {
+		deletedIDs
+	}
 }
-
-query GetAllTrustCenterNDARequests($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestOrder!]){
-  trustCenterNdaRequests(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        accessLevel
-        companyName
-        createdAt
-        createdBy
-        email
-        firstName
-        id
-        lastName
-        reason
-        status
-        tags
-        trustCenterID
-        updatedAt
-        updatedBy
-        approvedAt
-        signedAt
-        documentDataID
-        fileID
-      }
-    }
-  }
+mutation DeleteTrustCenterNDARequest ($deleteTrustCenterNDARequestId: ID!) {
+	deleteTrustCenterNDARequest(id: $deleteTrustCenterNDARequestId) {
+		deletedID
+	}
 }
-query GetTrustCenterNDARequestByID($trustCenterNDARequestId: ID!) {
-  trustCenterNDARequest(id: $trustCenterNDARequestId) {
-    accessLevel
-    companyName
-    createdAt
-    createdBy
-    email
-    firstName
-    id
-    lastName
-    reason
-    status
-    tags
-    trustCenterID
-    updatedAt
-    updatedBy
-    approvedAt
-    signedAt
-    documentDataID
-    fileID
-  }
+query GetAllTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestOrder!]) {
+	trustCenterNdaRequests(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				accessLevel
+				approvedAt
+				approvedByUserID
+				companyName
+				createdAt
+				createdBy
+				documentDataID
+				email
+				fileID
+				firstName
+				id
+				lastName
+				reason
+				signedAt
+				status
+				tags
+				trustCenterID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetTrustCenterNDARequests($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestOrder!], $where: TrustCenterNDARequestWhereInput) {
-  trustCenterNdaRequests(
-      first: $first
-      last: $last
-      after: $after
-      before: $before
-      orderBy: $orderBy
-      where: $where
-    ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        accessLevel
-        companyName
-        createdAt
-        createdBy
-        email
-        firstName
-        id
-        lastName
-        reason
-        status
-        tags
-        trustCenterID
-        updatedAt
-        updatedBy
-        approvedAt
-        signedAt
-        documentDataID
-        fileID
-      }
-    }
-  }
+query GetTrustCenterNDARequestByID ($trustCenterNDARequestId: ID!) {
+	trustCenterNDARequest(id: $trustCenterNDARequestId) {
+		accessLevel
+		approvedAt
+		approvedByUserID
+		companyName
+		createdAt
+		createdBy
+		documentDataID
+		email
+		fileID
+		firstName
+		id
+		lastName
+		reason
+		signedAt
+		status
+		tags
+		trustCenterID
+		updatedAt
+		updatedBy
+	}
 }
-mutation UpdateTrustCenterNDARequest($updateTrustCenterNDARequestId: ID!, $input: UpdateTrustCenterNDARequestInput!) {
-  updateTrustCenterNDARequest(id: $updateTrustCenterNDARequestId, input: $input) {
-    trustCenterNDARequest {
-      accessLevel
-      companyName
-      createdAt
-      createdBy
-      email
-      firstName
-      id
-      lastName
-      reason
-      status
-      tags
-      trustCenterID
-      updatedAt
-      updatedBy
-      approvedAt
-      signedAt
-      documentDataID
-      fileID
-    }
-  }
+query GetTrustCenterNDARequests ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestOrder!], $where: TrustCenterNDARequestWhereInput) {
+	trustCenterNdaRequests(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				accessLevel
+				approvedAt
+				approvedByUserID
+				companyName
+				createdAt
+				createdBy
+				documentDataID
+				email
+				fileID
+				firstName
+				id
+				lastName
+				reason
+				signedAt
+				status
+				tags
+				trustCenterID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-
-mutation DeleteBulkTrustCenterNDARequest($ids: [ID!]!) {
-  deleteBulkTrustCenterNDARequest(ids: $ids) {
-    deletedIDs
-  }
+mutation RequestNewTrustCenterToken ($email: String!) {
+	requestNewTrustCenterToken(email: $email) {
+		success
+	}
 }
-
-mutation RequestNewTrustCenterToken($email: String!) {
-  requestNewTrustCenterToken(email: $email) {
-    success
-  }
+mutation UpdateTrustCenterNDARequest ($updateTrustCenterNDARequestId: ID!, $input: UpdateTrustCenterNDARequestInput!) {
+	updateTrustCenterNDARequest(id: $updateTrustCenterNDARequestId, input: $input) {
+		trustCenterNDARequest {
+			accessLevel
+			approvedAt
+			approvedByUserID
+			companyName
+			createdAt
+			createdBy
+			documentDataID
+			email
+			fileID
+			firstName
+			id
+			lastName
+			reason
+			signedAt
+			status
+			tags
+			trustCenterID
+			updatedAt
+			updatedBy
+		}
+	}
 }

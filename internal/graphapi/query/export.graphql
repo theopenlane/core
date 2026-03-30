@@ -1,147 +1,145 @@
-mutation CreateExport($input: CreateExportInput!) {
-  createExport(input: $input) {
-    export {
-      createdAt
-      createdBy
-      exportType
-      format
-      id
-      fields
-      filters
-      ownerID
-      requestorID
-      errorMessage
-      status
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateExport ($input: CreateExportInput!) {
+	createExport(input: $input) {
+		export {
+			createdAt
+			createdBy
+			errorMessage
+			exportMetadata
+			exportType
+			fields
+			filters
+			format
+			id
+			mode
+			ownerID
+			requestorID
+			status
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteBulkExport($ids: [ID!]!) {
-  deleteBulkExport(ids: $ids) {
-    deletedIDs
-  }
+mutation DeleteBulkExport ($ids: [ID!]!) {
+	deleteBulkExport(ids: $ids) {
+		deletedIDs
+	}
 }
-
-mutation DeleteExport($deleteExportId: ID!) {
-  deleteExport(id: $deleteExportId) {
-    deletedID
-  }
+mutation DeleteExport ($deleteExportId: ID!) {
+	deleteExport(id: $deleteExportId) {
+		deletedID
+	}
 }
-
 query GetAllExports {
-  exports {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        exportType
-        id
-        format
-        fields
-        ownerID
-        requestorID
-        errorMessage
-        filters
-        status
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	exports {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				id
+				format
+				fields
+				ownerID
+				requestorID
+				errorMessage
+				filters
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetExportByID($exportId: ID!) {
-  export(id: $exportId) {
-    createdAt
-    createdBy
-    exportType
-    id
-    errorMessage
-    ownerID
-    filters
-    requestorID
-    status
-    fields
-    updatedAt
-    format
-    updatedBy
-    files {
-      edges {
-        node {
-          id
-          storagePath
-          storageScheme
-          storageVolume
-        }
-      }
-    }
-  }
+query GetExportByID ($exportId: ID!) {
+	export(id: $exportId) {
+		createdAt
+		createdBy
+		errorMessage
+		exportMetadata
+		exportType
+		fields
+		filters
+		format
+		id
+		mode
+		ownerID
+		requestorID
+		status
+		updatedAt
+		updatedBy
+		files {
+			edges {
+				node {
+					id
+					storagePath
+					storageScheme
+					storageVolume
+				}
+			}
+		}
+	}
 }
-
-query GetExports($first: Int, $last: Int, $where: ExportWhereInput) {
-  exports(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        exportType
-        errorMessage
-        id
-        filters
-        format
-        ownerID
-        requestorID
-        status
-        fields
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetExports ($first: Int, $last: Int, $where: ExportWhereInput) {
+	exports(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				errorMessage
+				id
+				filters
+				format
+				ownerID
+				requestorID
+				status
+				fields
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
-  updateExport(id: $id, input: $input, exportFiles: $exportFiles) {
-    export {
-      createdAt
-      createdBy
-      exportType
-      id
-      errorMessage
-      ownerID
-      filters
-      fields
-      requestorID
-      status
-      format
-      updatedAt
-      updatedBy
-      files {
-        edges {
-          node {
-            id
-            storagePath
-            storageScheme
-            storageVolume
-          }
-        }
-      }
-    }
-  }
+mutation UpdateExport ($id: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
+	updateExport(id: $id, input: $input, exportFiles: $exportFiles) {
+		export {
+			createdAt
+			createdBy
+			exportType
+			id
+			errorMessage
+			ownerID
+			filters
+			fields
+			requestorID
+			status
+			format
+			updatedAt
+			updatedBy
+			files {
+				edges {
+					node {
+						id
+						storagePath
+						storageScheme
+						storageVolume
+					}
+				}
+			}
+		}
+	}
 }

@@ -1,137 +1,150 @@
 query GetAllOrganizationSettings {
-  organizationSettings {
-    edges {
-      node {
-        allowedEmailDomains
-        allowMatchingDomainsAutojoin
-        billingAddress
-        billingContact
-        billingEmail
-        billingPhone
-        createdAt
-        createdBy
-        domains
-        geoLocation
-        id
-        tags
-        taxIdentifier
-        updatedAt
-        updatedBy
-        identityProviderAuthTested
-        identityProvider
-        identityProviderEntityID
-        identityProviderLoginEnforced
-        oidcDiscoveryEndpoint
-        identityProviderClientSecret
-        identityProviderMetadataEndpoint
-        complianceWebhookToken
-        organization {
-          id
-          displayName
-        }
-      }
-    }
-  }
+	organizationSettings {
+		edges {
+			node {
+				allowedEmailDomains
+				allowMatchingDomainsAutojoin
+				billingAddress
+				billingContact
+				billingEmail
+				billingPhone
+				createdAt
+				createdBy
+				domains
+				geoLocation
+				id
+				tags
+				taxIdentifier
+				updatedAt
+				updatedBy
+				identityProviderAuthTested
+				identityProvider
+				identityProviderEntityID
+				identityProviderLoginEnforced
+				oidcDiscoveryEndpoint
+				identityProviderClientSecret
+				identityProviderMetadataEndpoint
+				complianceWebhookToken
+				organization {
+					id
+					displayName
+				}
+			}
+		}
+	}
 }
-
-query GetOrganizationSettingByID($organizationSettingId: ID!) {
-  organizationSetting(id: $organizationSettingId) {
-    allowedEmailDomains
-    allowMatchingDomainsAutojoin
-    billingAddress
-    billingContact
-    billingEmail
-    billingPhone
-    createdAt
-    createdBy
-    domains
-    geoLocation
-    id
-    tags
-    taxIdentifier
-    updatedAt
-    updatedBy
-    identityProvider
-    identityProviderEntityID
-    identityProviderLoginEnforced
-    oidcDiscoveryEndpoint
-    identityProviderClientSecret
-    identityProviderMetadataEndpoint
-    identityProviderAuthTested
-    complianceWebhookToken
-    organization {
-      id
-      displayName
-    }
-  }
+query GetOrganizationSettingByID ($organizationSettingId: ID!) {
+	organizationSetting(id: $organizationSettingId) {
+		allowMatchingDomainsAutojoin
+		allowedEmailDomains
+		billingAddress
+		billingContact
+		billingEmail
+		billingNotificationsEnabled
+		billingPhone
+		complianceWebhookToken
+		createdAt
+		createdBy
+		domains
+		geoLocation
+		id
+		identityProvider
+		identityProviderAuthTested
+		identityProviderClientID
+		identityProviderClientSecret
+		identityProviderEntityID
+		identityProviderLoginEnforced
+		identityProviderMetadataEndpoint
+		multifactorAuthEnforced
+		oidcDiscoveryEndpoint
+		organizationID
+		paymentMethodAdded
+		samlCert
+		samlIssuer
+		samlSigninURL
+		tags
+		taxIdentifier
+		updatedAt
+		updatedBy
+		organization {
+			id
+			displayName
+		}
+	}
 }
-
-query GetOrganizationSettings($where: OrganizationSettingWhereInput!) {
-  organizationSettings(where: $where) {
-    edges {
-      node {
-        allowedEmailDomains
-        allowMatchingDomainsAutojoin
-        billingAddress
-        billingContact
-        billingEmail
-        billingPhone
-        createdAt
-        createdBy
-        domains
-        geoLocation
-        id
-        tags
-        taxIdentifier
-        updatedAt
-        updatedBy
-        identityProvider
-        identityProviderEntityID
-        identityProviderLoginEnforced
-        oidcDiscoveryEndpoint
-        identityProviderClientSecret
-        identityProviderMetadataEndpoint
-        identityProviderAuthTested
-        complianceWebhookToken
-        organization {
-          id
-          displayName
-        }
-      }
-    }
-  }
+query GetOrganizationSettings ($where: OrganizationSettingWhereInput!) {
+	organizationSettings(where: $where) {
+		edges {
+			node {
+				allowedEmailDomains
+				allowMatchingDomainsAutojoin
+				billingAddress
+				billingContact
+				billingEmail
+				billingPhone
+				createdAt
+				createdBy
+				domains
+				geoLocation
+				id
+				tags
+				taxIdentifier
+				updatedAt
+				updatedBy
+				identityProvider
+				identityProviderEntityID
+				identityProviderLoginEnforced
+				oidcDiscoveryEndpoint
+				identityProviderClientSecret
+				identityProviderMetadataEndpoint
+				identityProviderAuthTested
+				complianceWebhookToken
+				organization {
+					id
+					displayName
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
-  updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
-    organizationSetting {
-      allowedEmailDomains
-      allowMatchingDomainsAutojoin
-      billingAddress
-      billingContact
-      billingEmail
-      billingPhone
-      createdAt
-      createdBy
-      domains
-      geoLocation
-      id
-      tags
-      taxIdentifier
-      updatedAt
-      updatedBy
-      identityProvider
-      identityProviderEntityID
-      identityProviderLoginEnforced
-      oidcDiscoveryEndpoint
-      identityProviderClientSecret
-      identityProviderMetadataEndpoint
-      complianceWebhookToken
-      identityProviderAuthTested
-      organization {
-        id
-        displayName
-      }
-    }
-  }
+mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
+	updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
+		organizationSetting {
+			allowMatchingDomainsAutojoin
+			allowedEmailDomains
+			billingAddress
+			billingContact
+			billingEmail
+			billingNotificationsEnabled
+			billingPhone
+			complianceWebhookToken
+			createdAt
+			createdBy
+			domains
+			geoLocation
+			id
+			identityProvider
+			identityProviderAuthTested
+			identityProviderClientID
+			identityProviderClientSecret
+			identityProviderEntityID
+			identityProviderLoginEnforced
+			identityProviderMetadataEndpoint
+			multifactorAuthEnforced
+			oidcDiscoveryEndpoint
+			organizationID
+			paymentMethodAdded
+			samlCert
+			samlIssuer
+			samlSigninURL
+			tags
+			taxIdentifier
+			updatedAt
+			updatedBy
+			organization {
+				id
+				displayName
+			}
+		}
+	}
 }

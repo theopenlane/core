@@ -1,69 +1,66 @@
-
-
 query GetAllTrustCenterDocHistories {
-  trustCenterDocHistories {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        trustCenterDocKindName
-        createdAt
-        createdBy
-        fileID
-        historyTime
-        id
-        operation
-        originalFileID
-        ref
-        standardID
-        tags
-        title
-        trustCenterID
-        updatedAt
-        updatedBy
-        visibility
-        watermarkStatus
-        watermarkingEnabled
-      }
-    }
-  }
+	trustCenterDocHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				trustCenterDocKindName
+				createdAt
+				createdBy
+				fileID
+				historyTime
+				id
+				operation
+				originalFileID
+				ref
+				standardID
+				tags
+				title
+				trustCenterID
+				updatedAt
+				updatedBy
+				visibility
+				watermarkStatus
+				watermarkingEnabled
+			}
+		}
+	}
 }
-
-query GetTrustCenterDocHistories($first: Int, $last: Int, $where: TrustCenterDocHistoryWhereInput) {
-  trustCenterDocHistories(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        trustCenterDocKindName
-        createdAt
-        createdBy
-        fileID
-        historyTime
-        id
-        operation
-        originalFileID
-        ref
-        standardID
-        tags
-        title
-        trustCenterID
-        updatedAt
-        updatedBy
-        visibility
-        watermarkStatus
-        watermarkingEnabled
-      }
-    }
-  }
+query GetTrustCenterDocHistories ($first: Int, $last: Int, $where: TrustCenterDocHistoryWhereInput) {
+	trustCenterDocHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				trustCenterDocKindName
+				createdAt
+				createdBy
+				fileID
+				historyTime
+				id
+				operation
+				originalFileID
+				ref
+				standardID
+				tags
+				title
+				trustCenterID
+				updatedAt
+				updatedBy
+				visibility
+				watermarkStatus
+				watermarkingEnabled
+			}
+		}
+	}
 }
