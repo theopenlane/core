@@ -135,7 +135,7 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/image v0.35.0 // indirect
+	golang.org/x/image v0.38.0 // indirect
 	golang.org/x/term v0.41.0 // indirect
 )
 
