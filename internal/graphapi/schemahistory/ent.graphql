@@ -6065,6 +6065,10 @@ type CustomDomainHistory implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainHistoryCustomDomainType
 }
 """
 A connection to a list of items.
@@ -6082,6 +6086,13 @@ type CustomDomainHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainHistoryCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
 }
 """
 An edge in a connection.
@@ -6374,6 +6385,15 @@ input CustomDomainHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainHistoryCustomDomainType
+  domainTypeNEQ: CustomDomainHistoryCustomDomainType
+  domainTypeIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeIsNil: Boolean
+  domainTypeNotNil: Boolean
 }
 type DNSVerificationHistory implements Node {
   id: ID!

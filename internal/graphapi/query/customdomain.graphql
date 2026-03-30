@@ -47,6 +47,7 @@ mutation CreateCustomDomain($input: CreateCustomDomainInput!) {
       }
       id
       mappableDomainID
+      domainType
       ownerID
       tags
       updatedAt
@@ -75,6 +76,7 @@ query GetAllCustomDomains {
         cnameRecord
         createdAt
         createdBy
+        domainType
         dnsVerificationID
         dnsVerification {
           id
@@ -109,6 +111,7 @@ query GetCustomDomainByID($customDomainId: ID!) {
     cnameRecord
     createdAt
     createdBy
+    domainType
     dnsVerificationID
     dnsVerification {
       id
@@ -149,6 +152,7 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
         cnameRecord
         createdAt
         createdBy
+        domainType
         dnsVerificationID
         dnsVerification {
           id
@@ -173,6 +177,7 @@ mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDoma
       cnameRecord
       createdAt
       createdBy
+      domainType
       dnsVerificationID
       dnsVerification {
         id
@@ -196,6 +201,7 @@ mutation ValidateCustomDomain($validateCustomDomainId: ID!) {
       cnameRecord
       id
       dnsVerificationID
+      domainType
       dnsVerification {
         id
         dnsTxtRecord

@@ -2559,6 +2559,11 @@ func (_q *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, customdomainhistory.FieldTrustCenterID)
 				fieldSeen[customdomainhistory.FieldTrustCenterID] = struct{}{}
 			}
+		case "domainType":
+			if _, ok := fieldSeen[customdomainhistory.FieldDomainType]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldDomainType)
+				fieldSeen[customdomainhistory.FieldDomainType] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

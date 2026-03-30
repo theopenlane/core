@@ -495,6 +495,7 @@ type ComplexityRoot struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DNSVerificationID func(childComplexity int) int
+		DomainType        func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		InternalNotes     func(childComplexity int) int
@@ -5812,6 +5813,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomDomainHistory.DNSVerificationID(childComplexity), true
+
+	case "CustomDomainHistory.domainType":
+		if e.ComplexityRoot.CustomDomainHistory.DomainType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainHistory.DomainType(childComplexity), true
 
 	case "CustomDomainHistory.historyTime":
 		if e.ComplexityRoot.CustomDomainHistory.HistoryTime == nil {
@@ -27371,6 +27379,10 @@ type CustomDomainHistory implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainHistoryCustomDomainType
 }
 """
 A connection to a list of items.
@@ -27388,6 +27400,13 @@ type CustomDomainHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainHistoryCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
 }
 """
 An edge in a connection.
@@ -27680,6 +27699,15 @@ input CustomDomainHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainHistoryCustomDomainType
+  domainTypeNEQ: CustomDomainHistoryCustomDomainType
+  domainTypeIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeIsNil: Boolean
+  domainTypeNotNil: Boolean
 }
 type DNSVerificationHistory implements Node {
   id: ID!

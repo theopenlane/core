@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -243,6 +244,20 @@ func (_c *CustomDomainHistoryCreate) SetNillableTrustCenterID(v *string) *Custom
 	return _c
 }
 
+// SetDomainType sets the "domain_type" field.
+func (_c *CustomDomainHistoryCreate) SetDomainType(v enums.CustomDomainType) *CustomDomainHistoryCreate {
+	_c.mutation.SetDomainType(v)
+	return _c
+}
+
+// SetNillableDomainType sets the "domain_type" field if the given value is not nil.
+func (_c *CustomDomainHistoryCreate) SetNillableDomainType(v *enums.CustomDomainType) *CustomDomainHistoryCreate {
+	if v != nil {
+		_c.SetDomainType(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomDomainHistoryCreate) SetID(v string) *CustomDomainHistoryCreate {
 	_c.mutation.SetID(v)
@@ -352,6 +367,11 @@ func (_c *CustomDomainHistoryCreate) check() error {
 	if _, ok := _c.mutation.MappableDomainID(); !ok {
 		return &ValidationError{Name: "mappable_domain_id", err: errors.New(`historygenerated: missing required field "CustomDomainHistory.mappable_domain_id"`)}
 	}
+	if v, ok := _c.mutation.DomainType(); ok {
+		if err := customdomainhistory.DomainTypeValidator(v); err != nil {
+			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`historygenerated: validator failed for field "CustomDomainHistory.domain_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -459,6 +479,10 @@ func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgra
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(customdomainhistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
+	}
+	if value, ok := _c.mutation.DomainType(); ok {
+		_spec.SetField(customdomainhistory.FieldDomainType, field.TypeEnum, value)
+		_node.DomainType = value
 	}
 	return _node, _spec
 }

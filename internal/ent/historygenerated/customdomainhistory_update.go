@@ -363,6 +363,9 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
 	}
+	if _u.mutation.DomainTypeCleared() {
+		_spec.ClearField(customdomainhistory.FieldDomainType, field.TypeEnum)
+	}
 	_spec.Node.Schema = _u.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -745,6 +748,9 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
+	}
+	if _u.mutation.DomainTypeCleared() {
+		_spec.ClearField(customdomainhistory.FieldDomainType, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

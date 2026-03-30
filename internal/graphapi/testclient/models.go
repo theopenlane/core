@@ -6099,10 +6099,12 @@ type CreateCustomDomainInput struct {
 	// the name of the custom domain
 	CnameRecord string `json:"cnameRecord"`
 	// the ID of the trust center the domain belongs to, if applicable
-	TrustCenterID     *string `json:"trustCenterID,omitempty"`
-	OwnerID           *string `json:"ownerID,omitempty"`
-	MappableDomainID  string  `json:"mappableDomainID"`
-	DNSVerificationID *string `json:"dnsVerificationID,omitempty"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// the type of this custom domain
+	DomainType        *enums.CustomDomainType `json:"domainType,omitempty"`
+	OwnerID           *string                 `json:"ownerID,omitempty"`
+	MappableDomainID  string                  `json:"mappableDomainID"`
+	DNSVerificationID *string                 `json:"dnsVerificationID,omitempty"`
 }
 
 // CreateCustomTypeEnumInput is used for create CustomTypeEnum object.
@@ -9118,10 +9120,12 @@ type CustomDomain struct {
 	// The ID of the dns verification record
 	DNSVerificationID *string `json:"dnsVerificationID,omitempty"`
 	// the ID of the trust center the domain belongs to, if applicable
-	TrustCenterID   *string          `json:"trustCenterID,omitempty"`
-	Owner           *Organization    `json:"owner,omitempty"`
-	MappableDomain  *MappableDomain  `json:"mappableDomain"`
-	DNSVerification *DNSVerification `json:"dnsVerification,omitempty"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// the type of this custom domain
+	DomainType      *enums.CustomDomainType `json:"domainType,omitempty"`
+	Owner           *Organization           `json:"owner,omitempty"`
+	MappableDomain  *MappableDomain         `json:"mappableDomain"`
+	DNSVerification *DNSVerification        `json:"dnsVerification,omitempty"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -9380,6 +9384,13 @@ type CustomDomainWhereInput struct {
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// domain_type field predicates
+	DomainType       *enums.CustomDomainType  `json:"domainType,omitempty"`
+	DomainTypeNeq    *enums.CustomDomainType  `json:"domainTypeNEQ,omitempty"`
+	DomainTypeIn     []enums.CustomDomainType `json:"domainTypeIn,omitempty"`
+	DomainTypeNotIn  []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
+	DomainTypeIsNil  *bool                    `json:"domainTypeIsNil,omitempty"`
+	DomainTypeNotNil *bool                    `json:"domainTypeNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -38704,12 +38715,15 @@ type UpdateCustomDomainInput struct {
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the ID of the trust center the domain belongs to, if applicable
-	TrustCenterID        *string `json:"trustCenterID,omitempty"`
-	ClearTrustCenterID   *bool   `json:"clearTrustCenterID,omitempty"`
-	OwnerID              *string `json:"ownerID,omitempty"`
-	ClearOwner           *bool   `json:"clearOwner,omitempty"`
-	DNSVerificationID    *string `json:"dnsVerificationID,omitempty"`
-	ClearDNSVerification *bool   `json:"clearDNSVerification,omitempty"`
+	TrustCenterID      *string `json:"trustCenterID,omitempty"`
+	ClearTrustCenterID *bool   `json:"clearTrustCenterID,omitempty"`
+	// the type of this custom domain
+	DomainType           *enums.CustomDomainType `json:"domainType,omitempty"`
+	ClearDomainType      *bool                   `json:"clearDomainType,omitempty"`
+	OwnerID              *string                 `json:"ownerID,omitempty"`
+	ClearOwner           *bool                   `json:"clearOwner,omitempty"`
+	DNSVerificationID    *string                 `json:"dnsVerificationID,omitempty"`
+	ClearDNSVerification *bool                   `json:"clearDNSVerification,omitempty"`
 }
 
 // UpdateCustomTypeEnumInput is used for update CustomTypeEnum object.

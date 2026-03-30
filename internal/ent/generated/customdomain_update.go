@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -224,6 +225,26 @@ func (_u *CustomDomainUpdate) ClearTrustCenterID() *CustomDomainUpdate {
 	return _u
 }
 
+// SetDomainType sets the "domain_type" field.
+func (_u *CustomDomainUpdate) SetDomainType(v enums.CustomDomainType) *CustomDomainUpdate {
+	_u.mutation.SetDomainType(v)
+	return _u
+}
+
+// SetNillableDomainType sets the "domain_type" field if the given value is not nil.
+func (_u *CustomDomainUpdate) SetNillableDomainType(v *enums.CustomDomainType) *CustomDomainUpdate {
+	if v != nil {
+		_u.SetDomainType(*v)
+	}
+	return _u
+}
+
+// ClearDomainType clears the value of the "domain_type" field.
+func (_u *CustomDomainUpdate) ClearDomainType() *CustomDomainUpdate {
+	_u.mutation.ClearDomainType()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *CustomDomainUpdate) SetOwner(v *Organization) *CustomDomainUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -295,6 +316,11 @@ func (_u *CustomDomainUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CustomDomainUpdate) check() error {
+	if v, ok := _u.mutation.DomainType(); ok {
+		if err := customdomain.DomainTypeValidator(v); err != nil {
+			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.domain_type": %w`, err)}
+		}
+	}
 	if _u.mutation.MappableDomainCleared() && len(_u.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
@@ -380,6 +406,12 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomain.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DomainType(); ok {
+		_spec.SetField(customdomain.FieldDomainType, field.TypeEnum, value)
+	}
+	if _u.mutation.DomainTypeCleared() {
+		_spec.ClearField(customdomain.FieldDomainType, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -657,6 +689,26 @@ func (_u *CustomDomainUpdateOne) ClearTrustCenterID() *CustomDomainUpdateOne {
 	return _u
 }
 
+// SetDomainType sets the "domain_type" field.
+func (_u *CustomDomainUpdateOne) SetDomainType(v enums.CustomDomainType) *CustomDomainUpdateOne {
+	_u.mutation.SetDomainType(v)
+	return _u
+}
+
+// SetNillableDomainType sets the "domain_type" field if the given value is not nil.
+func (_u *CustomDomainUpdateOne) SetNillableDomainType(v *enums.CustomDomainType) *CustomDomainUpdateOne {
+	if v != nil {
+		_u.SetDomainType(*v)
+	}
+	return _u
+}
+
+// ClearDomainType clears the value of the "domain_type" field.
+func (_u *CustomDomainUpdateOne) ClearDomainType() *CustomDomainUpdateOne {
+	_u.mutation.ClearDomainType()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *CustomDomainUpdateOne) SetOwner(v *Organization) *CustomDomainUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -741,6 +793,11 @@ func (_u *CustomDomainUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CustomDomainUpdateOne) check() error {
+	if v, ok := _u.mutation.DomainType(); ok {
+		if err := customdomain.DomainTypeValidator(v); err != nil {
+			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.domain_type": %w`, err)}
+		}
+	}
 	if _u.mutation.MappableDomainCleared() && len(_u.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
@@ -843,6 +900,12 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomain.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DomainType(); ok {
+		_spec.SetField(customdomain.FieldDomainType, field.TypeEnum, value)
+	}
+	if _u.mutation.DomainTypeCleared() {
+		_spec.ClearField(customdomain.FieldDomainType, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
