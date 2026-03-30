@@ -268,7 +268,7 @@ func TestQueryTasks(t *testing.T) {
 				}
 			}
 
-			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, nil, tc.orderBy)
+			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, tc.orderBy, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
@@ -449,7 +449,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 				after = startCursorDue
 			}
 
-			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, nil, tc.orderBy)
+			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, tc.orderBy, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
@@ -636,7 +636,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 				after = startCursorDue
 			}
 
-			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, nil, tc.orderBy)
+			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, tc.orderBy, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 

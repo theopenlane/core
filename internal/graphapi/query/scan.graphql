@@ -1,147 +1,230 @@
-mutation CreateBulkCSVScan($input: Upload!) {
-  createBulkCSVScan(input: $input) {
-    scans {
-      createdAt
-      createdBy
-      id
-      metadata
-      ownerID
-      scanType
-      status
-      tags
-      target
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVScan ($input: Upload!) {
+	createBulkCSVScan(input: $input) {
+		scans {
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
+			createdAt
+			createdBy
+			environmentID
+			environmentName
+			generatedByPlatformID
+			id
+			metadata
+			nextScanRunAt
+			ownerID
+			performedBy
+			performedByGroupID
+			performedByUserID
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
+			scanDate
+			scanSchedule
+			scanType
+			scopeID
+			scopeName
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+			vulnerabilityIds
+		}
+	}
 }
-
-mutation CreateBulkScan($input: [CreateScanInput!]) {
-  createBulkScan(input: $input) {
-    scans {
-      createdAt
-      createdBy
-      id
-      metadata
-      ownerID
-      scanType
-      status
-      tags
-      target
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkScan ($input: [CreateScanInput!]) {
+	createBulkScan(input: $input) {
+		scans {
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
+			createdAt
+			createdBy
+			environmentID
+			environmentName
+			generatedByPlatformID
+			id
+			metadata
+			nextScanRunAt
+			ownerID
+			performedBy
+			performedByGroupID
+			performedByUserID
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
+			scanDate
+			scanSchedule
+			scanType
+			scopeID
+			scopeName
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+			vulnerabilityIds
+		}
+	}
 }
-
-mutation CreateScan($input: CreateScanInput!) {
-  createScan(input: $input) {
-    scan {
-      createdAt
-      createdBy
-      id
-      metadata
-      ownerID
-      scanType
-      status
-      tags
-      target
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateScan ($input: CreateScanInput!) {
+	createScan(input: $input) {
+		scan {
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
+			createdAt
+			createdBy
+			environmentID
+			environmentName
+			generatedByPlatformID
+			id
+			metadata
+			nextScanRunAt
+			ownerID
+			performedBy
+			performedByGroupID
+			performedByUserID
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
+			scanDate
+			scanSchedule
+			scanType
+			scopeID
+			scopeName
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+			vulnerabilityIds
+		}
+	}
 }
-
-mutation DeleteScan($deleteScanId: ID!) {
-  deleteScan(id: $deleteScanId) {
-    deletedID
-  }
+mutation DeleteScan ($deleteScanId: ID!) {
+	deleteScan(id: $deleteScanId) {
+		deletedID
+	}
 }
-
 query GetAllScans {
-  scans {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        id
-        metadata
-        ownerID
-        scanType
-        status
-        tags
-        target
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	scans {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				metadata
+				ownerID
+				scanType
+				status
+				tags
+				target
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetScanByID($scanId: ID!) {
-  scan(id: $scanId) {
-    createdAt
-    createdBy
-    id
-    metadata
-    ownerID
-    scanType
-    status
-    tags
-    target
-    updatedAt
-    updatedBy
-  }
+query GetScanByID ($scanId: ID!) {
+	scan(id: $scanId) {
+		assignedTo
+		assignedToGroupID
+		assignedToUserID
+		createdAt
+		createdBy
+		environmentID
+		environmentName
+		generatedByPlatformID
+		id
+		metadata
+		nextScanRunAt
+		ownerID
+		performedBy
+		performedByGroupID
+		performedByUserID
+		reviewedBy
+		reviewedByGroupID
+		reviewedByUserID
+		scanDate
+		scanSchedule
+		scanType
+		scopeID
+		scopeName
+		status
+		tags
+		target
+		updatedAt
+		updatedBy
+		vulnerabilityIds
+	}
 }
-
-query GetScans($first: Int, $last: Int, $where: ScanWhereInput) {
-  scans(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        id
-        metadata
-        ownerID
-        scanType
-        status
-        tags
-        target
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetScans ($first: Int, $last: Int, $where: ScanWhereInput) {
+	scans(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				metadata
+				ownerID
+				scanType
+				status
+				tags
+				target
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-mutation UpdateScan($updateScanId: ID!, $input: UpdateScanInput!) {
-  updateScan(id: $updateScanId, input: $input) {
-    scan {
-      createdAt
-      createdBy
-      id
-      metadata
-      ownerID
-      scanType
-      status
-      tags
-      target
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
+	updateScan(id: $updateScanId, input: $input) {
+		scan {
+			assignedTo
+			assignedToGroupID
+			assignedToUserID
+			createdAt
+			createdBy
+			environmentID
+			environmentName
+			generatedByPlatformID
+			id
+			metadata
+			nextScanRunAt
+			ownerID
+			performedBy
+			performedByGroupID
+			performedByUserID
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
+			scanDate
+			scanSchedule
+			scanType
+			scopeID
+			scopeName
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+			vulnerabilityIds
+		}
+	}
 }

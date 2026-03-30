@@ -299,7 +299,5 @@ func (d DirectoryAccount) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.IntegrationMappingSchema().
-			UpsertKeys("external_id", "canonical_email"),
 	}
 }

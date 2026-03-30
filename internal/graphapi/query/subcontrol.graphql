@@ -1,311 +1,409 @@
-mutation CreateBulkCSVSubcontrol($input: Upload!) {
-  createBulkCSVSubcontrol(input: $input) {
-    subcontrols {
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlID
-      controlQuestions
-      subcontrolKindName
-      createdAt
-      createdBy
-      description
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkCSVSubcontrol ($input: Upload!) {
+	createBulkCSVSubcontrol(input: $input) {
+		subcontrols {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlID
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			source
+			sourceName
+			status
+			subcategory
+			subcontrolKindID
+			subcontrolKindName
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
-  createBulkSubcontrol(input: $input) {
-    subcontrols {
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlID
-      controlQuestions
-      subcontrolKindName
-      createdAt
-      createdBy
-      description
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
+	createBulkSubcontrol(input: $input) {
+		subcontrols {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlID
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			source
+			sourceName
+			status
+			subcategory
+			subcontrolKindID
+			subcontrolKindName
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
-  createSubcontrol(input: $input) {
-    subcontrol {
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlID
-      controlQuestions
-      subcontrolKindName
-      createdAt
-      createdBy
-      description
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
+	createSubcontrol(input: $input) {
+		subcontrol {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlID
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			source
+			sourceName
+			status
+			subcategory
+			subcontrolKindID
+			subcontrolKindName
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation DeleteSubcontrol($deleteSubcontrolId: ID!) {
-  deleteSubcontrol(id: $deleteSubcontrolId) {
-    deletedID
-  }
+mutation DeleteSubcontrol ($deleteSubcontrolId: ID!) {
+	deleteSubcontrol(id: $deleteSubcontrolId) {
+		deletedID
+	}
 }
-
 query GetAllSubcontrols {
-  subcontrols {
-    edges {
-      node {
-        assessmentMethods
-        assessmentObjectives
-        category
-        categoryID
-        controlID
-        controlQuestions
-        subcontrolKindName
-        createdAt
-        createdBy
-        description
-        displayID
-        exampleEvidence
-        id
-        implementationGuidance
-        mappedCategories
-        ownerID
-        refCode
-        references
-        referenceFramework
-        source
-        status
-        subcategory
-        tags
-        updatedAt
-        updatedBy
-        control {
-          id
-          displayID
-          refCode
-          description
-        }
-        controlOwner {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+	subcontrols {
+		edges {
+			node {
+				assessmentMethods
+				assessmentObjectives
+				category
+				categoryID
+				controlID
+				controlQuestions
+				subcontrolKindName
+				createdAt
+				createdBy
+				description
+				displayID
+				exampleEvidence
+				id
+				implementationGuidance
+				mappedCategories
+				ownerID
+				refCode
+				references
+				referenceFramework
+				source
+				status
+				subcategory
+				tags
+				updatedAt
+				updatedBy
+				control {
+					id
+					displayID
+					refCode
+					description
+				}
+				controlOwner {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetSubcontrolByID($subcontrolId: ID!) {
-  subcontrol(id: $subcontrolId) {
-    assessmentMethods
-    assessmentObjectives
-    category
-    categoryID
-    controlID
-    controlQuestions
-    subcontrolKindName
-    createdAt
-    createdBy
-    description
-    displayID
-    exampleEvidence
-    id
-    implementationGuidance
-    mappedCategories
-    ownerID
-    refCode
-    references
-    referenceFramework
-    source
-    status
-    subcategory
-    tags
-    updatedAt
-    updatedBy
-    control {
-      id
-      displayID
-      refCode
-      description
-    }
-    controlOwner {
-      id
-      name
-    }
-    delegate {
-      id
-      name
-    }
-  }
+query GetSubcontrolByID ($subcontrolId: ID!) {
+	subcontrol(id: $subcontrolId) {
+		aliases
+		assessmentMethods
+		assessmentObjectives
+		auditorReferenceID
+		category
+		categoryID
+		controlID
+		controlOwnerID
+		controlQuestions
+		createdAt
+		createdBy
+		delegateID
+		description
+		descriptionJSON
+		displayID
+		evidenceRequests
+		exampleEvidence
+		externalUUID
+		id
+		implementationDescription
+		implementationGuidance
+		implementationStatus
+		internalNotes
+		mappedCategories
+		ownerID
+		publicRepresentation
+		refCode
+		referenceFramework
+		referenceFrameworkRevision
+		referenceID
+		references
+		responsiblePartyID
+		source
+		sourceName
+		status
+		subcategory
+		subcontrolKindID
+		subcontrolKindName
+		systemInternalID
+		systemOwned
+		tags
+		testingProcedures
+		title
+		updatedAt
+		updatedBy
+		workflowEligibleMarker
+		control {
+			id
+			displayID
+			refCode
+			description
+		}
+		controlOwner {
+			id
+			name
+		}
+		delegate {
+			id
+			name
+		}
+	}
 }
-
-query GetSubcontrols($where: SubcontrolWhereInput) {
-  subcontrols(where: $where) {
-    edges {
-      node {
-        assessmentMethods
-        assessmentObjectives
-        category
-        categoryID
-        controlID
-        controlQuestions
-        subcontrolKindName
-        createdAt
-        createdBy
-        description
-        displayID
-        exampleEvidence
-        id
-        implementationGuidance
-        mappedCategories
-        ownerID
-        refCode
-        references
-        referenceFramework
-        source
-        status
-        subcategory
-        tags
-        updatedAt
-        updatedBy
-        control {
-          id
-          displayID
-          refCode
-          description
-        }
-        controlOwner {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetSubcontrols ($where: SubcontrolWhereInput) {
+	subcontrols(where: $where) {
+		edges {
+			node {
+				assessmentMethods
+				assessmentObjectives
+				category
+				categoryID
+				controlID
+				controlQuestions
+				subcontrolKindName
+				createdAt
+				createdBy
+				description
+				displayID
+				exampleEvidence
+				id
+				implementationGuidance
+				mappedCategories
+				ownerID
+				refCode
+				references
+				referenceFramework
+				source
+				status
+				subcategory
+				tags
+				updatedAt
+				updatedBy
+				control {
+					id
+					displayID
+					refCode
+					description
+				}
+				controlOwner {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
-  updateSubcontrol(id: $updateSubcontrolId, input: $input) {
-    subcontrol {
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlID
-      controlQuestions
-      subcontrolKindName
-      createdAt
-      createdBy
-      description
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      control {
-        id
-        displayID
-        refCode
-        description
-      }
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
+	updateSubcontrol(id: $updateSubcontrolId, input: $input) {
+		subcontrol {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlID
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			source
+			sourceName
+			status
+			subcategory
+			subcontrolKindID
+			subcontrolKindName
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			control {
+				id
+				displayID
+				refCode
+				description
+			}
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }

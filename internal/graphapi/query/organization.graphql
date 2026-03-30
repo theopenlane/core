@@ -1,468 +1,455 @@
-mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Upload) {
-  createOrganization(input: $input, avatarFile: $avatarFile) {
-    organization {
-      id
-      name
-      displayName
-      description
-      personalOrg
-      tags
-      avatarRemoteURL
-      avatarLocalFileID
-      avatarFile {
-        presignedURL
-      }
-      createdAt
-      updatedAt
-      setting {
-        id
-        allowedEmailDomains
-        allowMatchingDomainsAutojoin
-        createdAt
-        updatedAt
-        createdBy
-        updatedBy
-        domains
-        billingContact
-        billingEmail
-        billingPhone
-        billingAddress
-        taxIdentifier
-        tags
-      }
-      parent {
-        id
-        name
-      }
-      children {
-        edges {
-          node {
-            id
-            name
-            displayName
-            description
-          }
-        }
-      }
-    }
-  }
+mutation CreateOrganization ($input: CreateOrganizationInput!, $avatarFile: Upload) {
+	createOrganization(input: $input, avatarFile: $avatarFile) {
+		organization {
+			id
+			name
+			displayName
+			description
+			personalOrg
+			tags
+			avatarRemoteURL
+			avatarLocalFileID
+			avatarFile {
+				presignedURL
+			}
+			createdAt
+			updatedAt
+			setting {
+				id
+				allowedEmailDomains
+				allowMatchingDomainsAutojoin
+				createdAt
+				updatedAt
+				createdBy
+				updatedBy
+				domains
+				billingContact
+				billingEmail
+				billingPhone
+				billingAddress
+				taxIdentifier
+				tags
+			}
+			parent {
+				id
+				name
+			}
+			children {
+				edges {
+					node {
+						id
+						name
+						displayName
+						description
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateOrganizationWithMembers($organizationInput: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
-  createOrganizationWithMembers(
-    organizationInput: $organizationInput
-    members: $members
-  ) {
-    organization {
-      id
-      name
-      displayName
-      setting {
-        id
-        allowedEmailDomains
-        allowMatchingDomainsAutojoin
-        createdAt
-        updatedAt
-        createdBy
-        updatedBy
-        domains
-        billingContact
-        billingEmail
-        billingPhone
-        billingAddress
-        taxIdentifier
-        geoLocation
-        tags
-      }
-      members {
-        totalCount
-        edges {
-          node {
-            id
-            role
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation CreateOrganizationWithMembers ($organizationInput: CreateOrganizationInput!, $members: [OrgMembersInput!]) {
+	createOrganizationWithMembers(organizationInput: $organizationInput, members: $members) {
+		organization {
+			id
+			name
+			displayName
+			setting {
+				id
+				allowedEmailDomains
+				allowMatchingDomainsAutojoin
+				createdAt
+				updatedAt
+				createdBy
+				updatedBy
+				domains
+				billingContact
+				billingEmail
+				billingPhone
+				billingAddress
+				taxIdentifier
+				geoLocation
+				tags
+			}
+			members {
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteOrganization($deleteOrganizationId: ID!) {
-  deleteOrganization(id: $deleteOrganizationId) {
-    deletedID
-  }
+mutation DeleteOrganization ($deleteOrganizationId: ID!) {
+	deleteOrganization(id: $deleteOrganizationId) {
+		deletedID
+	}
 }
-
 query GetAllOrganizations {
-  organizations {
-    edges {
-      node {
-        id
-        name
-        displayName
-        description
-        personalOrg
-        tags
-        parent {
-          id
-          name
-        }
-        children {
-          edges {
-            node {
-              id
-              name
-              displayName
-              description
-            }
-          }
-        }
-        members {
-          totalCount
-          edges {
-            node {
-              id
-              role
-              user {
-                id
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-        setting {
-          id
-          allowedEmailDomains
-          allowMatchingDomainsAutojoin
-          createdAt
-          updatedAt
-          createdBy
-          updatedBy
-          domains
-          billingContact
-          billingEmail
-          billingPhone
-          billingAddress
-          taxIdentifier
-          geoLocation
-          tags
-        }
-        orgSubscriptions {
-          stripeSubscriptionStatus
-          active
-          id
-        }
-        createdAt
-        updatedAt
-      }
-    }
-  }
+	organizations {
+		edges {
+			node {
+				id
+				name
+				displayName
+				description
+				personalOrg
+				tags
+				parent {
+					id
+					name
+				}
+				children {
+					edges {
+						node {
+							id
+							name
+							displayName
+							description
+						}
+					}
+				}
+				members {
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+				setting {
+					id
+					allowedEmailDomains
+					allowMatchingDomainsAutojoin
+					createdAt
+					updatedAt
+					createdBy
+					updatedBy
+					domains
+					billingContact
+					billingEmail
+					billingPhone
+					billingAddress
+					taxIdentifier
+					geoLocation
+					tags
+				}
+				orgSubscriptions {
+					stripeSubscriptionStatus
+					active
+					id
+				}
+				createdAt
+				updatedAt
+			}
+		}
+	}
 }
-
-query GetOrganizationByID($organizationId: ID!) {
-  organization(id: $organizationId) {
-    id
-    name
-    displayName
-    description
-    personalOrg
-    tags
-    avatarRemoteURL
-    avatarLocalFileID
-    parent {
-      id
-      name
-    }
-    children {
-      edges {
-        node {
-          id
-          name
-          displayName
-          description
-        }
-      }
-    }
-    members {
-      totalCount
-      edges {
-        node {
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
-          }
-        }
-      }
-    }
-    setting {
-      id
-      allowedEmailDomains
-      allowMatchingDomainsAutojoin
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      domains
-      billingContact
-      billingEmail
-      billingPhone
-      billingAddress
-      taxIdentifier
-      geoLocation
-      tags
-    }
-    orgSubscriptions {
-      stripeSubscriptionStatus
-      active
-      id
-    }
-    controlCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    programCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    procedureCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    internalPolicyCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    controlObjectiveCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    narrativeCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    riskCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    templateCreators {
-      edges {
-        node {
-          id
-          displayID
-          name
-          displayName
-        }
-      }
-    }
-    createdAt
-    createdBy
-    updatedAt
-    updatedBy
-  }
+query GetOrganizationByID ($organizationId: ID!) {
+	organization(id: $organizationId) {
+		avatarLocalFileID
+		avatarRemoteURL
+		avatarUpdatedAt
+		createdAt
+		createdBy
+		dedicatedDb
+		description
+		displayName
+		id
+		name
+		personalOrg
+		stripeCustomerID
+		tags
+		updatedAt
+		updatedBy
+		parent {
+			id
+			name
+		}
+		children {
+			edges {
+				node {
+					id
+					name
+					displayName
+					description
+				}
+			}
+		}
+		members {
+			totalCount
+			edges {
+				node {
+					id
+					role
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
+			}
+		}
+		setting {
+			id
+			allowedEmailDomains
+			allowMatchingDomainsAutojoin
+			createdAt
+			updatedAt
+			createdBy
+			updatedBy
+			domains
+			billingContact
+			billingEmail
+			billingPhone
+			billingAddress
+			taxIdentifier
+			geoLocation
+			tags
+		}
+		orgSubscriptions {
+			stripeSubscriptionStatus
+			active
+			id
+		}
+		controlCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		programCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		procedureCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		internalPolicyCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		controlObjectiveCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		narrativeCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		riskCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+		templateCreators {
+			edges {
+				node {
+					id
+					displayID
+					name
+					displayName
+				}
+			}
+		}
+	}
 }
-
-query GetOrganizations($where: OrganizationWhereInput) {
-  organizations(where: $where) {
-    edges {
-      node {
-        id
-        name
-        displayName
-        description
-        personalOrg
-        tags
-        parent {
-          id
-          name
-        }
-        children {
-          edges {
-            node {
-              id
-              name
-              displayName
-              description
-            }
-          }
-        }
-        members {
-          totalCount
-          edges {
-            node {
-              id
-              role
-              userID
-            }
-          }
-        }
-        setting {
-          id
-          allowedEmailDomains
-          allowMatchingDomainsAutojoin
-          domains
-          billingContact
-          billingEmail
-          billingPhone
-          billingAddress
-          taxIdentifier
-          tags
-        }
-        orgSubscriptions {
-          stripeSubscriptionStatus
-          active
-          id
-        }
-        createdAt
-        updatedAt
-      }
-    }
-  }
+query GetOrganizations ($where: OrganizationWhereInput) {
+	organizations(where: $where) {
+		edges {
+			node {
+				id
+				name
+				displayName
+				description
+				personalOrg
+				tags
+				parent {
+					id
+					name
+				}
+				children {
+					edges {
+						node {
+							id
+							name
+							displayName
+							description
+						}
+					}
+				}
+				members {
+					totalCount
+					edges {
+						node {
+							id
+							role
+							userID
+						}
+					}
+				}
+				setting {
+					id
+					allowedEmailDomains
+					allowMatchingDomainsAutojoin
+					domains
+					billingContact
+					billingEmail
+					billingPhone
+					billingAddress
+					taxIdentifier
+					tags
+				}
+				orgSubscriptions {
+					stripeSubscriptionStatus
+					active
+					id
+				}
+				createdAt
+				updatedAt
+			}
+		}
+	}
 }
-
-mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload) {
-  updateOrganization(
-    id: $updateOrganizationId
-    input: $input
-    avatarFile: $avatarFile
-  ) {
-    organization {
-      id
-      name
-      displayName
-      description
-      personalOrg
-      avatarLocalFileID
-      avatarRemoteURL
-      avatarFile {
-        presignedURL
-      }
-      tags
-      members {
-        totalCount
-        edges {
-          node {
-            id
-            role
-            userID
-          }
-        }
-      }
-      setting {
-        id
-        allowedEmailDomains
-        allowMatchingDomainsAutojoin
-        createdAt
-        updatedAt
-        createdBy
-        updatedBy
-        domains
-        billingContact
-        billingEmail
-        billingPhone
-        billingAddress
-        taxIdentifier
-        geoLocation
-        tags
-      }
-      orgSubscriptions {
-        stripeSubscriptionStatus
-        active
-        id
-      }
-      programCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-      procedureCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-    }
-  }
+mutation TransferOrganizationOwnership ($newOwnerEmail: String!) {
+	transferOrganizationOwnership(newOwnerEmail: $newOwnerEmail) {
+		organization {
+			id
+			name
+			displayName
+			members {
+				totalCount
+				edges {
+					node {
+						id
+						role
+						userID
+					}
+				}
+			}
+		}
+		invitationSent
+	}
 }
-
-mutation TransferOrganizationOwnership($newOwnerEmail: String!) {
-  transferOrganizationOwnership(
-    newOwnerEmail: $newOwnerEmail
-  ) {
-    organization {
-      id
-      name
-      displayName
-      members {
-        totalCount
-        edges {
-          node {
-            id
-            role
-            userID
-          }
-        }
-      }
-    }
-    invitationSent
-  }
+mutation UpdateOrganization ($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload) {
+	updateOrganization(id: $updateOrganizationId, input: $input, avatarFile: $avatarFile) {
+		organization {
+			id
+			name
+			displayName
+			description
+			personalOrg
+			avatarLocalFileID
+			avatarRemoteURL
+			avatarFile {
+				presignedURL
+			}
+			tags
+			members {
+				totalCount
+				edges {
+					node {
+						id
+						role
+						userID
+					}
+				}
+			}
+			setting {
+				id
+				allowedEmailDomains
+				allowMatchingDomainsAutojoin
+				createdAt
+				updatedAt
+				createdBy
+				updatedBy
+				domains
+				billingContact
+				billingEmail
+				billingPhone
+				billingAddress
+				taxIdentifier
+				geoLocation
+				tags
+			}
+			orgSubscriptions {
+				stripeSubscriptionStatus
+				active
+				id
+			}
+			programCreators {
+				edges {
+					node {
+						id
+						displayID
+						name
+						displayName
+					}
+				}
+			}
+			procedureCreators {
+				edges {
+					node {
+						id
+						displayID
+						name
+						displayName
+					}
+				}
+			}
+		}
+	}
 }

@@ -1,466 +1,559 @@
-mutation CreateBulkCSVTask($input: Upload!) {
-  createBulkCSVTask(input: $input) {
-    tasks {
-      assignee {
-        id
-        firstName
-        lastName
-      }
-      assigner {
-        id
-        firstName
-        lastName
-      }
-      completed
-      createdAt
-      createdBy
-      details
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      due
-      id
-      displayID
-      status
-      tags
-      title
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVTask ($input: Upload!) {
+	createBulkCSVTask(input: $input) {
+		tasks {
+			assigneeID
+			assignerID
+			completed
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			displayID
+			due
+			environmentID
+			environmentName
+			externalReferenceURL
+			externalUUID
+			id
+			idempotencyKey
+			ownerID
+			parentTaskID
+			scopeID
+			scopeName
+			status
+			systemGenerated
+			tags
+			taskKindID
+			taskKindName
+			title
+			updatedAt
+			updatedBy
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateBulkTask($input: [CreateTaskInput!]) {
-  createBulkTask(input: $input) {
-    tasks {
-      assignee {
-        id
-        firstName
-        lastName
-      }
-      assigner {
-        id
-        firstName
-        lastName
-      }
-      completed
-      createdAt
-      createdBy
-      details
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      due
-      id
-      displayID
-      status
-      tags
-      title
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkTask ($input: [CreateTaskInput!]) {
+	createBulkTask(input: $input) {
+		tasks {
+			assigneeID
+			assignerID
+			completed
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			displayID
+			due
+			environmentID
+			environmentName
+			externalReferenceURL
+			externalUUID
+			id
+			idempotencyKey
+			ownerID
+			parentTaskID
+			scopeID
+			scopeName
+			status
+			systemGenerated
+			tags
+			taskKindID
+			taskKindName
+			title
+			updatedAt
+			updatedBy
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateTask($input: CreateTaskInput!) {
-  createTask(input: $input) {
-    task {
-      assignee {
-        id
-        firstName
-        lastName
-      }
-      assigner {
-        id
-        firstName
-        lastName
-      }
-      completed
-      createdAt
-      createdBy
-      details
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      due
-      id
-      ownerID
-      displayID
-      status
-      tags
-      title
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateTask ($input: CreateTaskInput!) {
+	createTask(input: $input) {
+		task {
+			assigneeID
+			assignerID
+			completed
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			displayID
+			due
+			environmentID
+			environmentName
+			externalReferenceURL
+			externalUUID
+			id
+			idempotencyKey
+			ownerID
+			parentTaskID
+			scopeID
+			scopeName
+			status
+			systemGenerated
+			tags
+			taskKindID
+			taskKindName
+			title
+			updatedAt
+			updatedBy
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteTask($deleteTaskId: ID!) {
-  deleteTask(id: $deleteTaskId) {
-    deletedID
-  }
+mutation DeleteTask ($deleteTaskId: ID!) {
+	deleteTask(id: $deleteTaskId) {
+		deletedID
+	}
 }
-
-query GetAllTasks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TaskOrder!]) {
-  tasks(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        assignee {
-          id
-          firstName
-          lastName
-        }
-        assigner {
-          id
-          firstName
-          lastName
-        }
-        owner {
-          id
-          name
-        }
-        completed
-        createdAt
-        createdBy
-        details
-        comments {
-          edges {
-            node {
-              id
-              displayID
-              text
-              createdAt
-              createdBy
-              updatedAt
-              updatedBy
-              files {
-                edges {
-                  node {
-                    id
-                    storagePath
-                    storageScheme
-                    storageVolume
-                  }
-                }
-              }
-            }
-          }
-        }
-        due
-        id
-        displayID
-        status
-        tags
-        title
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TaskOrder!]) {
+	tasks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assigneeID
+				assignerID
+				completed
+				createdAt
+				createdBy
+				details
+				detailsJSON
+				displayID
+				due
+				environmentID
+				environmentName
+				externalReferenceURL
+				externalUUID
+				id
+				idempotencyKey
+				ownerID
+				parentTaskID
+				scopeID
+				scopeName
+				status
+				systemGenerated
+				tags
+				taskKindID
+				taskKindName
+				title
+				updatedAt
+				updatedBy
+				assignee {
+					id
+					firstName
+					lastName
+				}
+				assigner {
+					id
+					firstName
+					lastName
+				}
+				owner {
+					id
+					name
+				}
+				comments {
+					edges {
+						node {
+							id
+							displayID
+							text
+							createdAt
+							createdBy
+							updatedAt
+							updatedBy
+							files {
+								edges {
+									node {
+										id
+										storagePath
+										storageScheme
+										storageVolume
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetTaskByID($taskId: ID!) {
-  task(id: $taskId) {
-    assignee {
-      id
-      firstName
-      lastName
-    }
-    assigner {
-      id
-      firstName
-      lastName
-    }
-    owner {
-      id
-      name
-    }
-    completed
-    createdAt
-    createdBy
-    details
-    comments {
-      edges {
-        node {
-          id
-          displayID
-          text
-          createdAt
-          createdBy
-          updatedAt
-          updatedBy
-          files {
-            edges {
-              node {
-                id
-                storagePath
-                storageScheme
-                storageVolume
-              }
-            }
-          }
-        }
-      }
-    }
-    due
-    id
-    displayID
-    status
-    tags
-    title
-    updatedAt
-    updatedBy
-  }
+query GetTaskByID ($taskId: ID!) {
+	task(id: $taskId) {
+		assigneeID
+		assignerID
+		completed
+		createdAt
+		createdBy
+		details
+		detailsJSON
+		displayID
+		due
+		environmentID
+		environmentName
+		externalReferenceURL
+		externalUUID
+		id
+		idempotencyKey
+		ownerID
+		parentTaskID
+		scopeID
+		scopeName
+		status
+		systemGenerated
+		tags
+		taskKindID
+		taskKindName
+		title
+		updatedAt
+		updatedBy
+		assignee {
+			id
+			firstName
+			lastName
+		}
+		assigner {
+			id
+			firstName
+			lastName
+		}
+		owner {
+			id
+			name
+		}
+		comments {
+			edges {
+				node {
+					id
+					displayID
+					text
+					createdAt
+					createdBy
+					updatedAt
+					updatedBy
+					files {
+						edges {
+							node {
+								id
+								storagePath
+								storageScheme
+								storageVolume
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetTasks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: TaskWhereInput, $orderBy: [TaskOrder!]) {
-  tasks(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    where: $where
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        assignee {
-          id
-          firstName
-          lastName
-        }
-        assigner {
-          id
-          firstName
-          lastName
-        }
-        completed
-        createdAt
-        createdBy
-        details
-        comments {
-          edges {
-            node {
-              id
-              displayID
-              text
-              createdAt
-              createdBy
-              updatedAt
-              updatedBy
-              files {
-                edges {
-                  node {
-                    id
-                    storagePath
-                    storageScheme
-                    storageVolume
-                  }
-                }
-              }
-            }
-          }
-        }
-        due
-        id
-        displayID
-        status
-        tags
-        title
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TaskOrder!], $where: TaskWhereInput) {
+	tasks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assigneeID
+				assignerID
+				completed
+				createdAt
+				createdBy
+				details
+				detailsJSON
+				displayID
+				due
+				environmentID
+				environmentName
+				externalReferenceURL
+				externalUUID
+				id
+				idempotencyKey
+				ownerID
+				parentTaskID
+				scopeID
+				scopeName
+				status
+				systemGenerated
+				tags
+				taskKindID
+				taskKindName
+				title
+				updatedAt
+				updatedBy
+				assignee {
+					id
+					firstName
+					lastName
+				}
+				assigner {
+					id
+					firstName
+					lastName
+				}
+				comments {
+					edges {
+						node {
+							id
+							displayID
+							text
+							createdAt
+							createdBy
+							updatedAt
+							updatedBy
+							files {
+								edges {
+									node {
+										id
+										storagePath
+										storageScheme
+										storageVolume
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateBulkTask($ids: [ID!]!, $input: UpdateTaskInput!) {
-  updateBulkTask(ids: $ids, input: $input) {
-    tasks {
-      assignee {
-        id
-        firstName
-        lastName
-      }
-      assigner {
-        id
-        firstName
-        lastName
-      }
-      completed
-      createdAt
-      createdBy
-      details
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      due
-      id
-      displayID
-      status
-      tags
-      title
-      updatedAt
-      updatedBy
-    }
-    updatedIDs
-  }
+mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
+	updateBulkTask(ids: $ids, input: $input) {
+		tasks {
+			assigneeID
+			assignerID
+			completed
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			displayID
+			due
+			environmentID
+			environmentName
+			externalReferenceURL
+			externalUUID
+			id
+			idempotencyKey
+			ownerID
+			parentTaskID
+			scopeID
+			scopeName
+			status
+			systemGenerated
+			tags
+			taskKindID
+			taskKindName
+			title
+			updatedAt
+			updatedBy
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+		}
+		updatedIDs
+	}
 }
-
-mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
-  updateTask(id: $updateTaskId, input: $input) {
-    task {
-      assignee {
-        id
-        firstName
-        lastName
-      }
-      assigner {
-        id
-        firstName
-        lastName
-      }
-      completed
-      createdAt
-      createdBy
-      details
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      due
-      id
-      displayID
-      status
-      tags
-      title
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
+	updateTask(id: $updateTaskId, input: $input) {
+		task {
+			assigneeID
+			assignerID
+			completed
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			displayID
+			due
+			environmentID
+			environmentName
+			externalReferenceURL
+			externalUUID
+			id
+			idempotencyKey
+			ownerID
+			parentTaskID
+			scopeID
+			scopeName
+			status
+			systemGenerated
+			tags
+			taskKindID
+			taskKindName
+			title
+			updatedAt
+			updatedBy
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
-  updateTaskComment(
-    id: $updateTaskCommentId
-    input: $input
-    noteFiles: $noteFiles
-  ) {
-    task {
-      assignee {
-        id
-        firstName
-        lastName
-      }
-      assigner {
-        id
-        firstName
-        lastName
-      }
-      completed
-      createdAt
-      createdBy
-      details
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-            files {
-              edges {
-                node {
-                  id
-                  storagePath
-                  storageScheme
-                  storageVolume
-                }
-              }
-            }
-          }
-        }
-      }
-      due
-      id
-      displayID
-      status
-      tags
-      title
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateTaskComment ($updateTaskCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateTaskComment(id: $updateTaskCommentId, input: $input, noteFiles: $noteFiles) {
+		task {
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			completed
+			createdAt
+			createdBy
+			details
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
+					}
+				}
+			}
+			due
+			id
+			displayID
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
 }

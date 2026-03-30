@@ -1,669 +1,814 @@
-mutation CreateBulkControl($input: [CreateControlInput!]) {
-  createBulkControl(input: $input) {
-    controls {
-      aliases
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlQuestions
-      controlKindName
-      createdAt
-      createdBy
-      description
-      descriptionJSON
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      standardID
-      status
-      subcategory
-      tags
-      testingProcedures
-      evidenceRequests
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVControl ($input: Upload!) {
+	createBulkCSVControl(input: $input) {
+		controls {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlKindID
+			controlKindName
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			environmentID
+			environmentName
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			isTrustCenterControl
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			scopeID
+			scopeName
+			source
+			sourceName
+			standardID
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			trustCenterVisibility
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+		}
+	}
 }
-
-mutation CreateBulkCSVControl($input: Upload!) {
-  createBulkCSVControl(input: $input) {
-    controls {
-      aliases
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlQuestions
-      controlKindName
-      createdAt
-      createdBy
-      description
-      descriptionJSON
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      standardID
-      status
-      subcategory
-      tags
-      testingProcedures
-      evidenceRequests
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkControl ($input: [CreateControlInput!]) {
+	createBulkControl(input: $input) {
+		controls {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlKindID
+			controlKindName
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			environmentID
+			environmentName
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			isTrustCenterControl
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			scopeID
+			scopeName
+			source
+			sourceName
+			standardID
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			trustCenterVisibility
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+		}
+	}
 }
-
-mutation CreateControl($input: CreateControlInput!) {
-  createControl(input: $input) {
-    control {
-      aliases
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlQuestions
-      controlKindName
-      createdAt
-      createdBy
-      description
-      descriptionJSON
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      testingProcedures
-      evidenceRequests
-      source
-      standardID
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      controlImplementations {
-        edges {
-          node {
-            id
-            details
-            status
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
+mutation CreateControl ($input: CreateControlInput!) {
+	createControl(input: $input) {
+		control {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlKindID
+			controlKindName
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			environmentID
+			environmentName
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			isTrustCenterControl
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			scopeID
+			scopeName
+			source
+			sourceName
+			standardID
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			trustCenterVisibility
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			controlImplementations {
+				edges {
+					node {
+						id
+						details
+						status
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteBulkControl($ids: [ID!]!) {
-  deleteBulkControl(ids: $ids) {
-    deletedIDs
-  }
+mutation DeleteBulkControl ($ids: [ID!]!) {
+	deleteBulkControl(ids: $ids) {
+		deletedIDs
+	}
 }
-
-mutation DeleteControl($deleteControlId: ID!) {
-  deleteControl(id: $deleteControlId) {
-    deletedID
-  }
+mutation DeleteControl ($deleteControlId: ID!) {
+	deleteControl(id: $deleteControlId) {
+		deletedID
+	}
 }
-
 query GetAllControls {
-  controls {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        aliases
-        assessmentMethods
-        assessmentObjectives
-        category
-        categoryID
-        controlQuestions
-        controlKindName
-        createdAt
-        createdBy
-        description
-        descriptionJSON
-        displayID
-        exampleEvidence
-        id
-        implementationGuidance
-        mappedCategories
-        ownerID
-        refCode
-        references
-        referenceFramework
-        testingProcedures
-        evidenceRequests
-        source
-        standardID
-        status
-        subcategory
-        tags
-        updatedAt
-        updatedBy
-        controlOwner {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-        standard {
-          id
-          name
-          shortName
-          governingBody
-        }
-        subcontrols {
-          edges {
-            node {
-              id
-              refCode
-              referenceFramework
-            }
-          }
-        }
-        controlImplementations {
-          edges {
-            node {
-              id
-              details
-              status
-            }
-          }
-        }
-        programs {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+	controls {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				aliases
+				assessmentMethods
+				assessmentObjectives
+				category
+				categoryID
+				controlQuestions
+				controlKindName
+				createdAt
+				createdBy
+				description
+				descriptionJSON
+				displayID
+				exampleEvidence
+				id
+				implementationGuidance
+				mappedCategories
+				ownerID
+				refCode
+				references
+				referenceFramework
+				testingProcedures
+				evidenceRequests
+				source
+				standardID
+				status
+				subcategory
+				tags
+				updatedAt
+				updatedBy
+				controlOwner {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+				standard {
+					id
+					name
+					shortName
+					governingBody
+				}
+				subcontrols {
+					edges {
+						node {
+							id
+							refCode
+							referenceFramework
+						}
+					}
+				}
+				controlImplementations {
+					edges {
+						node {
+							id
+							details
+							status
+						}
+					}
+				}
+				programs {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetControlByID($controlId: ID!) {
-  control(id: $controlId) {
-    aliases
-    assessmentMethods
-    assessmentObjectives
-    category
-    categoryID
-    controlQuestions
-    controlKindName
-    createdAt
-    createdBy
-    description
-    descriptionJSON
-    displayID
-    exampleEvidence
-    id
-    implementationGuidance
-    mappedCategories
-    ownerID
-    refCode
-    references
-    referenceFramework
-    source
-    standardID
-    status
-    subcategory
-    tags
-    testingProcedures
-    evidenceRequests
-    updatedAt
-    updatedBy
-    controlOwner {
-      id
-      name
-    }
-    delegate {
-      id
-      name
-    }
-    standard {
-      id
-      name
-      shortName
-      governingBody
-    }
-    subcontrols {
-      edges {
-        node {
-          id
-          refCode
-          referenceFramework
-        }
-      }
-    }
-    controlImplementations {
-      edges {
-        node {
-          id
-          details
-          status
-        }
-      }
-    }
-    programs {
-      edges {
-        node {
-          id
-          displayID
-          name
-        }
-      }
-    }
-    editors {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    blockedGroups {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetControlByID ($controlId: ID!) {
+	control(id: $controlId) {
+		aliases
+		assessmentMethods
+		assessmentObjectives
+		auditorReferenceID
+		category
+		categoryID
+		controlKindID
+		controlKindName
+		controlOwnerID
+		controlQuestions
+		createdAt
+		createdBy
+		delegateID
+		description
+		descriptionJSON
+		displayID
+		environmentID
+		environmentName
+		evidenceRequests
+		exampleEvidence
+		externalUUID
+		id
+		implementationDescription
+		implementationGuidance
+		implementationStatus
+		internalNotes
+		isTrustCenterControl
+		mappedCategories
+		ownerID
+		publicRepresentation
+		refCode
+		referenceFramework
+		referenceFrameworkRevision
+		referenceID
+		references
+		responsiblePartyID
+		scopeID
+		scopeName
+		source
+		sourceName
+		standardID
+		status
+		subcategory
+		systemInternalID
+		systemOwned
+		tags
+		testingProcedures
+		title
+		trustCenterVisibility
+		updatedAt
+		updatedBy
+		workflowEligibleMarker
+		controlOwner {
+			id
+			name
+		}
+		delegate {
+			id
+			name
+		}
+		standard {
+			id
+			name
+			shortName
+			governingBody
+		}
+		subcontrols {
+			edges {
+				node {
+					id
+					refCode
+					referenceFramework
+				}
+			}
+		}
+		controlImplementations {
+			edges {
+				node {
+					id
+					details
+					status
+				}
+			}
+		}
+		programs {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!]) {
-  controls(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    where: $where
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        aliases
-        assessmentMethods
-        assessmentObjectives
-        category
-        categoryID
-        controlQuestions
-        controlKindName
-        createdAt
-        createdBy
-        description
-        descriptionJSON
-        displayID
-        exampleEvidence
-        id
-        implementationGuidance
-        mappedCategories
-        ownerID
-        refCode
-        references
-        referenceFramework
-        source
-        standardID
-        status
-        subcategory
-        tags
-        testingProcedures
-        evidenceRequests
-        updatedAt
-        updatedBy
-        controlOwner {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-        standard {
-          id
-          name
-          shortName
-          governingBody
-        }
-        subcontrols {
-          edges {
-            node {
-              id
-              refCode
-              referenceFramework
-            }
-          }
-        }
-        controlImplementations {
-          edges {
-            node {
-              id
-              details
-              status
-            }
-          }
-        }
-        programs {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ControlOrder!], $where: ControlWhereInput) {
+	controls(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				aliases
+				assessmentMethods
+				assessmentObjectives
+				auditorReferenceID
+				category
+				categoryID
+				controlKindID
+				controlKindName
+				controlOwnerID
+				controlQuestions
+				createdAt
+				createdBy
+				delegateID
+				description
+				descriptionJSON
+				displayID
+				environmentID
+				environmentName
+				evidenceRequests
+				exampleEvidence
+				externalUUID
+				id
+				implementationDescription
+				implementationGuidance
+				implementationStatus
+				internalNotes
+				isTrustCenterControl
+				mappedCategories
+				ownerID
+				publicRepresentation
+				refCode
+				referenceFramework
+				referenceFrameworkRevision
+				referenceID
+				references
+				responsiblePartyID
+				scopeID
+				scopeName
+				source
+				sourceName
+				standardID
+				status
+				subcategory
+				systemInternalID
+				systemOwned
+				tags
+				testingProcedures
+				title
+				trustCenterVisibility
+				updatedAt
+				updatedBy
+				workflowEligibleMarker
+				controlOwner {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+				standard {
+					id
+					name
+					shortName
+					governingBody
+				}
+				subcontrols {
+					edges {
+						node {
+							id
+							refCode
+							referenceFramework
+						}
+					}
+				}
+				controlImplementations {
+					edges {
+						node {
+							id
+							details
+							status
+						}
+					}
+				}
+				programs {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
-  updateBulkControl(ids: $ids, input: $input) {
-    controls {
-      aliases
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlQuestions
-      controlKindName
-      createdAt
-      createdBy
-      description
-      descriptionJSON
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      standardID
-      status
-      subcategory
-      tags
-      testingProcedures
-      evidenceRequests
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      controlImplementations {
-        edges {
-          node {
-            id
-            details
-            status
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-    updatedIDs
-  }
+mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
+	updateBulkControl(ids: $ids, input: $input) {
+		controls {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlKindID
+			controlKindName
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			environmentID
+			environmentName
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			isTrustCenterControl
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			scopeID
+			scopeName
+			source
+			sourceName
+			standardID
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			trustCenterVisibility
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			controlImplementations {
+				edges {
+					node {
+						id
+						details
+						status
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+		updatedIDs
+	}
 }
-
-mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
-  updateControl(id: $updateControlId, input: $input) {
-    control {
-      aliases
-      assessmentMethods
-      assessmentObjectives
-      category
-      categoryID
-      controlQuestions
-      controlKindName
-      createdAt
-      createdBy
-      description
-      descriptionJSON
-      displayID
-      exampleEvidence
-      id
-      implementationGuidance
-      mappedCategories
-      ownerID
-      refCode
-      references
-      referenceFramework
-      source
-      standardID
-      status
-      subcategory
-      tags
-      testingProcedures
-      evidenceRequests
-      updatedAt
-      updatedBy
-      controlOwner {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-      standard {
-        id
-        name
-        shortName
-        governingBody
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            refCode
-            referenceFramework
-          }
-        }
-      }
-      controlImplementations {
-        edges {
-          node {
-            id
-            details
-            status
-          }
-        }
-      }
-      discussions {
-        edges {
-          node {
-            id
-            externalID
-            comments {
-              edges {
-                node {
-                  id
-                  displayID
-                  text
-                  createdAt
-                  createdBy
-                  updatedAt
-                  updatedBy
-                }
-              }
-            }
-          }
-        }
-      }
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
+mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
+	updateControl(id: $updateControlId, input: $input) {
+		control {
+			aliases
+			assessmentMethods
+			assessmentObjectives
+			auditorReferenceID
+			category
+			categoryID
+			controlKindID
+			controlKindName
+			controlOwnerID
+			controlQuestions
+			createdAt
+			createdBy
+			delegateID
+			description
+			descriptionJSON
+			displayID
+			environmentID
+			environmentName
+			evidenceRequests
+			exampleEvidence
+			externalUUID
+			id
+			implementationDescription
+			implementationGuidance
+			implementationStatus
+			internalNotes
+			isTrustCenterControl
+			mappedCategories
+			ownerID
+			publicRepresentation
+			refCode
+			referenceFramework
+			referenceFrameworkRevision
+			referenceID
+			references
+			responsiblePartyID
+			scopeID
+			scopeName
+			source
+			sourceName
+			standardID
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			testingProcedures
+			title
+			trustCenterVisibility
+			updatedAt
+			updatedBy
+			workflowEligibleMarker
+			controlOwner {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+			standard {
+				id
+				name
+				shortName
+				governingBody
+			}
+			subcontrols {
+				edges {
+					node {
+						id
+						refCode
+						referenceFramework
+					}
+				}
+			}
+			controlImplementations {
+				edges {
+					node {
+						id
+						details
+						status
+					}
+				}
+			}
+			discussions {
+				edges {
+					node {
+						id
+						externalID
+						comments {
+							edges {
+								node {
+									id
+									displayID
+									text
+									createdAt
+									createdBy
+									updatedAt
+									updatedBy
+								}
+							}
+						}
+					}
+				}
+			}
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
 }

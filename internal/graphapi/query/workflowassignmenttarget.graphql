@@ -1,74 +1,73 @@
 query GetAllWorkflowAssignmentTargets {
-  workflowAssignmentTargets {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        displayID
-        id
-        ownerID
-        resolverKey
-        tags
-        targetGroupID
-        targetType
-        targetUserID
-        updatedAt
-        updatedBy
-        workflowAssignmentID
-      }
-    }
-  }
+	workflowAssignmentTargets {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				ownerID
+				resolverKey
+				tags
+				targetGroupID
+				targetType
+				targetUserID
+				updatedAt
+				updatedBy
+				workflowAssignmentID
+			}
+		}
+	}
 }
-query GetWorkflowAssignmentTargetByID($workflowAssignmentTargetId: ID!) {
-  workflowAssignmentTarget(id: $workflowAssignmentTargetId) {
-    createdAt
-    createdBy
-    displayID
-    id
-    ownerID
-    resolverKey
-    tags
-    targetGroupID
-    targetType
-    targetUserID
-    updatedAt
-    updatedBy
-    workflowAssignmentID
-  }
+query GetWorkflowAssignmentTargetByID ($workflowAssignmentTargetId: ID!) {
+	workflowAssignmentTarget(id: $workflowAssignmentTargetId) {
+		createdAt
+		createdBy
+		displayID
+		id
+		ownerID
+		resolverKey
+		tags
+		targetGroupID
+		targetType
+		targetUserID
+		updatedAt
+		updatedBy
+		workflowAssignmentID
+	}
 }
-
-query GetWorkflowAssignmentTargets($first: Int, $last: Int, $where: WorkflowAssignmentTargetWhereInput) {
-  workflowAssignmentTargets(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        displayID
-        id
-        ownerID
-        resolverKey
-        tags
-        targetGroupID
-        targetType
-        targetUserID
-        updatedAt
-        updatedBy
-        workflowAssignmentID
-      }
-    }
-  }
+query GetWorkflowAssignmentTargets ($first: Int, $last: Int, $where: WorkflowAssignmentTargetWhereInput) {
+	workflowAssignmentTargets(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				ownerID
+				resolverKey
+				tags
+				targetGroupID
+				targetType
+				targetUserID
+				updatedAt
+				updatedBy
+				workflowAssignmentID
+			}
+		}
+	}
 }

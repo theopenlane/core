@@ -1,656 +1,665 @@
-mutation CreateBulkCSVProgram($input: Upload!) {
-  createBulkCSVProgram(input: $input) {
-    programs {
-      auditorReadComments
-      auditorReady
-      auditorWriteComments
-      auditFirm
-      auditor
-      auditorEmail
-      createdAt
-      createdBy
-      description
-      frameworkName
-      endDate
-      id
-      displayID
-      name
-      ownerID
-      startDate
-      status
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVProgram ($input: Upload!) {
+	createBulkCSVProgram(input: $input) {
+		programs {
+			auditFirm
+			auditor
+			auditorEmail
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			displayID
+			endDate
+			externalUUID
+			frameworkName
+			id
+			name
+			ownerID
+			programKindID
+			programKindName
+			programOwnerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateBulkProgram($input: [CreateProgramInput!]) {
-  createBulkProgram(input: $input) {
-    programs {
-      auditorReadComments
-      auditorReady
-      auditorWriteComments
-      auditFirm
-      auditor
-      auditorEmail
-      createdAt
-      createdBy
-      description
-      frameworkName
-      endDate
-      id
-      displayID
-      name
-      ownerID
-      startDate
-      status
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
+	createBulkProgram(input: $input) {
+		programs {
+			auditFirm
+			auditor
+			auditorEmail
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			displayID
+			endDate
+			externalUUID
+			frameworkName
+			id
+			name
+			ownerID
+			programKindID
+			programKindName
+			programOwnerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateControlWithSubcontrols($input: CreateControlWithSubcontrolsInput!) {
-  createControlWithSubcontrols(input: $input) {
-    control {
-      id
-      refCode
-      subcontrols {
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-    }
-  }
+mutation CreateControlWithSubcontrols ($input: CreateControlWithSubcontrolsInput!) {
+	createControlWithSubcontrols(input: $input) {
+		control {
+			id
+			refCode
+			subcontrols {
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateFullProgram($input: CreateFullProgramInput!) {
-  createFullProgram(input: $input) {
-    program {
-      name
-      id
-      displayID
-      frameworkName
-      auditFirm
-      auditor
-      auditorEmail
-      members {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      controls {
-        edges {
-          node {
-            id
-            refCode
-            subcontrols {
-              edges {
-                node {
-                  id
-                  refCode
-                }
-              }
-            }
-          }
-        }
-      }
-      risks {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      internalPolicies {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      procedures {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-    }
-  }
+mutation CreateFullProgram ($input: CreateFullProgramInput!) {
+	createFullProgram(input: $input) {
+		program {
+			name
+			id
+			displayID
+			frameworkName
+			auditFirm
+			auditor
+			auditorEmail
+			members {
+				edges {
+					node {
+						id
+					}
+				}
+			}
+			controls {
+				edges {
+					node {
+						id
+						refCode
+						subcontrols {
+							edges {
+								node {
+									id
+									refCode
+								}
+							}
+						}
+					}
+				}
+			}
+			risks {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateFullProgramReturnIDs($input: CreateFullProgramInput!) {
-  createFullProgram(input: $input) {
-    program {
-      id
-      controls {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
+mutation CreateFullProgramReturnIDs ($input: CreateFullProgramInput!) {
+	createFullProgram(input: $input) {
+		program {
+			id
+			controls {
+				edges {
+					node {
+						id
+					}
+				}
+			}
+		}
+	}
 }
-
-
-mutation CreateProgram($input: CreateProgramInput!) {
-  createProgram(input: $input) {
-    program {
-      auditorReadComments
-      auditorReady
-      auditorWriteComments
-      auditFirm
-      auditor
-      auditorEmail
-      createdAt
-      createdBy
-      description
-      frameworkName
-      endDate
-      id
-      displayID
-      name
-      ownerID
-      startDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      procedures {
-        edges {
-          node {
-            createdAt
-            createdBy
-            details
-            id
-            displayID
-            name
-            status
-            tags
-            updatedAt
-            updatedBy
-            revision
-          }
-        }
-      }
-      internalPolicies {
-        edges {
-          node {
-            createdAt
-            createdBy
-            details
-            id
-            displayID
-            name
-            status
-            tags
-            updatedAt
-            updatedBy
-            revision
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      viewers {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
+mutation CreateProgram ($input: CreateProgramInput!) {
+	createProgram(input: $input) {
+		program {
+			auditFirm
+			auditor
+			auditorEmail
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			displayID
+			endDate
+			externalUUID
+			frameworkName
+			id
+			name
+			ownerID
+			programKindID
+			programKindName
+			programOwnerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+			procedures {
+				edges {
+					node {
+						createdAt
+						createdBy
+						details
+						id
+						displayID
+						name
+						status
+						tags
+						updatedAt
+						updatedBy
+						revision
+					}
+				}
+			}
+			internalPolicies {
+				edges {
+					node {
+						createdAt
+						createdBy
+						details
+						id
+						displayID
+						name
+						status
+						tags
+						updatedAt
+						updatedBy
+						revision
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
-  createProgramWithMembers(input: $input) {
-    program {
-      name
-      id
-      displayID
-      frameworkName
-      auditFirm
-      auditor
-      auditorEmail
-      members {
-        edges {
-          node {
-            id
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation CreateProgramWithMembers ($input: CreateProgramWithMembersInput!) {
+	createProgramWithMembers(input: $input) {
+		program {
+			name
+			id
+			displayID
+			frameworkName
+			auditFirm
+			auditor
+			auditorEmail
+			members {
+				edges {
+					node {
+						id
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteProgram($deleteProgramId: ID!) {
-  deleteProgram(id: $deleteProgramId) {
-    deletedID
-  }
+mutation DeleteProgram ($deleteProgramId: ID!) {
+	deleteProgram(id: $deleteProgramId) {
+		deletedID
+	}
 }
-
 query GetAllPrograms {
-  programs {
-    edges {
-      node {
-        auditorReadComments
-        auditorReady
-        auditorWriteComments
-        auditFirm
-        auditor
-        auditorEmail
-        createdAt
-        createdBy
-        description
-        frameworkName
-        endDate
-        id
-        displayID
-        name
-        ownerID
-        startDate
-        status
-        tags
-        updatedAt
-        updatedBy
-        procedures {
-          edges {
-            node {
-              createdAt
-              createdBy
-              details
-              id
-              displayID
-              name
-              status
-              tags
-              updatedAt
-              updatedBy
-              revision
-            }
-          }
-        }
-        internalPolicies {
-          edges {
-            node {
-              createdAt
-              createdBy
-              details
-              id
-              displayID
-              name
-              status
-              tags
-              updatedAt
-              updatedBy
-              revision
-            }
-          }
-        }
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        viewers {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        members {
-          edges {
-            node {
-              id
-              user {
-                id
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	programs {
+		edges {
+			node {
+				auditorReadComments
+				auditorReady
+				auditorWriteComments
+				auditFirm
+				auditor
+				auditorEmail
+				createdAt
+				createdBy
+				description
+				frameworkName
+				endDate
+				id
+				displayID
+				name
+				ownerID
+				startDate
+				status
+				tags
+				updatedAt
+				updatedBy
+				procedures {
+					edges {
+						node {
+							createdAt
+							createdBy
+							details
+							id
+							displayID
+							name
+							status
+							tags
+							updatedAt
+							updatedBy
+							revision
+						}
+					}
+				}
+				internalPolicies {
+					edges {
+						node {
+							createdAt
+							createdBy
+							details
+							id
+							displayID
+							name
+							status
+							tags
+							updatedAt
+							updatedBy
+							revision
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				members {
+					edges {
+						node {
+							id
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetProgramByID($programId: ID!) {
-  program(id: $programId) {
-    auditorReadComments
-    auditorReady
-    auditorWriteComments
-    auditFirm
-    auditor
-    auditorEmail
-    createdAt
-    createdBy
-    description
-    frameworkName
-    endDate
-    id
-    displayID
-    name
-    ownerID
-    startDate
-    status
-    tags
-    updatedAt
-    updatedBy
-    procedures {
-      edges {
-        node {
-          createdAt
-          createdBy
-          details
-          id
-          displayID
-          name
-          status
-          tags
-          updatedAt
-          updatedBy
-          revision
-        }
-      }
-    }
-    internalPolicies {
-      edges {
-        node {
-          createdAt
-          createdBy
-          details
-          id
-          displayID
-          name
-          status
-          tags
-          updatedAt
-          updatedBy
-          revision
-        }
-      }
-    }
-    editors {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    viewers {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    blockedGroups {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    members {
-      edges {
-        node {
-          id
-          user {
-            id
-            firstName
-            lastName
-          }
-        }
-      }
-    }
-  }
+query GetProgramByID ($programId: ID!) {
+	program(id: $programId) {
+		auditFirm
+		auditor
+		auditorEmail
+		auditorReadComments
+		auditorReady
+		auditorWriteComments
+		createdAt
+		createdBy
+		description
+		displayID
+		endDate
+		externalUUID
+		frameworkName
+		id
+		name
+		ownerID
+		programKindID
+		programKindName
+		programOwnerID
+		startDate
+		status
+		tags
+		updatedAt
+		updatedBy
+		procedures {
+			edges {
+				node {
+					createdAt
+					createdBy
+					details
+					id
+					displayID
+					name
+					status
+					tags
+					updatedAt
+					updatedBy
+					revision
+				}
+			}
+		}
+		internalPolicies {
+			edges {
+				node {
+					createdAt
+					createdBy
+					details
+					id
+					displayID
+					name
+					status
+					tags
+					updatedAt
+					updatedBy
+					revision
+				}
+			}
+		}
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		viewers {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		members {
+			edges {
+				node {
+					id
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetPrograms($where: ProgramWhereInput) {
-  programs(where: $where) {
-    edges {
-      node {
-        auditorReadComments
-        auditorReady
-        auditorWriteComments
-        auditFirm
-        auditor
-        auditorEmail
-        createdAt
-        createdBy
-        description
-        frameworkName
-        endDate
-        id
-        displayID
-        name
-        ownerID
-        startDate
-        status
-        tags
-        updatedAt
-        updatedBy
-        procedures {
-          edges {
-            node {
-              createdAt
-              createdBy
-              details
-              id
-              displayID
-              name
-              status
-              tags
-              updatedAt
-              updatedBy
-              revision
-            }
-          }
-        }
-        internalPolicies {
-          edges {
-            node {
-              createdAt
-              createdBy
-              details
-              id
-              displayID
-              name
-              status
-              tags
-              updatedAt
-              updatedBy
-              revision
-            }
-          }
-        }
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        viewers {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        members {
-          edges {
-            node {
-              id
-              user {
-                id
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+query GetPrograms ($where: ProgramWhereInput) {
+	programs(where: $where) {
+		edges {
+			node {
+				auditorReadComments
+				auditorReady
+				auditorWriteComments
+				auditFirm
+				auditor
+				auditorEmail
+				createdAt
+				createdBy
+				description
+				frameworkName
+				endDate
+				id
+				displayID
+				name
+				ownerID
+				startDate
+				status
+				tags
+				updatedAt
+				updatedBy
+				procedures {
+					edges {
+						node {
+							createdAt
+							createdBy
+							details
+							id
+							displayID
+							name
+							status
+							tags
+							updatedAt
+							updatedBy
+							revision
+						}
+					}
+				}
+				internalPolicies {
+					edges {
+						node {
+							createdAt
+							createdBy
+							details
+							id
+							displayID
+							name
+							status
+							tags
+							updatedAt
+							updatedBy
+							revision
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				members {
+					edges {
+						node {
+							id
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
-  updateProgram(id: $updateProgramId, input: $input) {
-    program {
-      auditorReadComments
-      auditorReady
-      auditorWriteComments
-      auditFirm
-      auditor
-      auditorEmail
-      createdAt
-      createdBy
-      description
-      frameworkName
-      endDate
-      id
-      name
-      ownerID
-      startDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      procedures {
-        edges {
-          node {
-            createdAt
-            createdBy
-            details
-            id
-            displayID
-            name
-            status
-            tags
-            updatedAt
-            updatedBy
-            revision
-          }
-        }
-      }
-      internalPolicies {
-        edges {
-          node {
-            createdAt
-            createdBy
-            details
-            id
-            displayID
-            name
-            status
-            tags
-            updatedAt
-            updatedBy
-            revision
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      viewers {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      members {
-        edges {
-          node {
-            id
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
+	updateProgram(id: $updateProgramId, input: $input) {
+		program {
+			auditFirm
+			auditor
+			auditorEmail
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			displayID
+			endDate
+			externalUUID
+			frameworkName
+			id
+			name
+			ownerID
+			programKindID
+			programKindName
+			programOwnerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+			procedures {
+				edges {
+					node {
+						createdAt
+						createdBy
+						details
+						id
+						displayID
+						name
+						status
+						tags
+						updatedAt
+						updatedBy
+						revision
+					}
+				}
+			}
+			internalPolicies {
+				edges {
+					node {
+						createdAt
+						createdBy
+						details
+						id
+						displayID
+						name
+						status
+						tags
+						updatedAt
+						updatedBy
+						revision
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			members {
+				edges {
+					node {
+						id
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }

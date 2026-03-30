@@ -1,93 +1,102 @@
 query GetAllUserSettings {
-  userSettings {
-    edges {
-      node {
-        id
-        silencedAt
-        status
-        defaultOrg {
-          id
-          name
-          personalOrg
-        }
-        tags
-        locked
-        isTfaEnabled
-        emailConfirmed
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	userSettings {
+		edges {
+			node {
+				id
+				silencedAt
+				status
+				defaultOrg {
+					id
+					name
+					personalOrg
+				}
+				tags
+				locked
+				isTfaEnabled
+				emailConfirmed
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetUserSettingByID($userSettingId: ID!) {
-  userSetting(id: $userSettingId) {
-    id
-    silencedAt
-    status
-    defaultOrg {
-      id
-      name
-      personalOrg
-    }
-    tags
-    locked
-    isTfaEnabled
-    emailConfirmed
-    createdAt
-    createdBy
-    updatedAt
-    updatedBy
-  }
+query GetUserSettingByID ($userSettingId: ID!) {
+	userSetting(id: $userSettingId) {
+		createdAt
+		createdBy
+		delegateEndAt
+		delegateStartAt
+		delegateUserID
+		emailConfirmed
+		id
+		isTfaEnabled
+		isWebauthnAllowed
+		locked
+		silencedAt
+		status
+		suspendedAt
+		tags
+		updatedAt
+		updatedBy
+		userID
+		defaultOrg {
+			id
+			name
+			personalOrg
+		}
+	}
 }
-
-query GetUserSettings($where: UserSettingWhereInput!) {
-  userSettings(where: $where) {
-    edges {
-      node {
-        id
-        silencedAt
-        status
-        defaultOrg {
-          id
-          name
-          personalOrg
-        }
-        tags
-        locked
-        isTfaEnabled
-        emailConfirmed
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetUserSettings ($where: UserSettingWhereInput!) {
+	userSettings(where: $where) {
+		edges {
+			node {
+				id
+				silencedAt
+				status
+				defaultOrg {
+					id
+					name
+					personalOrg
+				}
+				tags
+				locked
+				isTfaEnabled
+				emailConfirmed
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-mutation UpdateUserSetting($updateUserSettingId: ID!, $input: UpdateUserSettingInput!) {
-  updateUserSetting(id: $updateUserSettingId, input: $input) {
-    userSetting {
-      id
-      silencedAt
-      status
-      defaultOrg {
-        id
-        name
-        personalOrg
-      }
-      tags
-      locked
-      isTfaEnabled
-      emailConfirmed
-      createdAt
-      createdBy
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateUserSetting ($updateUserSettingId: ID!, $input: UpdateUserSettingInput!) {
+	updateUserSetting(id: $updateUserSettingId, input: $input) {
+		userSetting {
+			createdAt
+			createdBy
+			delegateEndAt
+			delegateStartAt
+			delegateUserID
+			emailConfirmed
+			id
+			isTfaEnabled
+			isWebauthnAllowed
+			locked
+			silencedAt
+			status
+			suspendedAt
+			tags
+			updatedAt
+			updatedBy
+			userID
+			defaultOrg {
+				id
+				name
+				personalOrg
+			}
+		}
+	}
 }
