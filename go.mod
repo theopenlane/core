@@ -64,7 +64,7 @@ require (
 	github.com/labstack/gommon v0.4.2
 	github.com/lestrrat-go/httprc/v3 v3.0.5
 	github.com/lestrrat-go/jwx/v3 v3.0.13
-	github.com/lib/pq v1.12.0
+	github.com/lib/pq v1.12.1
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
@@ -93,7 +93,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
 	github.com/theopenlane/entx v0.24.0
-	github.com/theopenlane/go-client v0.8.8
+	github.com/theopenlane/go-client v0.8.9
 	github.com/theopenlane/gqlgen-plugins v0.14.6
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.27.5
@@ -179,7 +179,7 @@ require (
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/boombuler/barcode v1.1.0 // indirect
 	github.com/brunoga/deep v1.3.1 // indirect
-	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
