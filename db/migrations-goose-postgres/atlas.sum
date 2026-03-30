@@ -1,4 +1,4 @@
-h1:Br7L9Y/uqYOKbJv+1cBKcaEL7kVn7Om/i4o9BQltQ0w=
+h1:lmF4kHgFQXH/qHxDCSy4hg/oCNGFyQSghoNqRsGd7B8=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -86,3 +86,5 @@ h1:Br7L9Y/uqYOKbJv+1cBKcaEL7kVn7Om/i4o9BQltQ0w=
 20260326211019_enums_unique_history.sql h1:ENnbdM3/v7OOy58cb8Mp0RwGakiPsaA5G3uDOe7cWrE=
 20260327195342_drop_finding_vulnerability_status.sql h1:NWeT5DdXeay8oeKA7/CxEOF251Vhc9Qo/w5LbmpsjFY=
 20260327195354_drop_finding_vulnerability_status_history.sql h1:jC7y8jmhFbzxQrAt9wgtmV6y/U5CI5Dh6r8xxEj+ayQ=
+20260330015143_custom_domain_domain_type.sql h1:B8bL8dZsnI6G3t5old0QrAFBr03L9E2XtUE+4LFRCYw=
+20260330015156_custom_domain_domain_type_history.sql h1:E7TdvejZg9uVfUxL3imcuFKHOVPVu/nylUAImIHYYjo=
