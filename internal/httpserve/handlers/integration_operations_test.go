@@ -24,8 +24,9 @@ import (
 )
 
 const (
-	operationTestDefinitionID = "def_01K0TESTOPS00000000000001"
-	operationTestPath         = "/v1/integrations/:definitionID/operations"
+	operationTestDefinitionID       = "def_01K0TESTOPS00000000000001"
+	operationTestInlineDefinitionID = "def_01K0TESTOPS00000000000002"
+	operationTestPath               = "/v1/integrations/:definitionID/operations"
 )
 
 // OperationTestHealthCheck is the config type for the test health check operation
@@ -152,13 +153,13 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 	op.OperationID = "RunIntegrationOperationInlinePolicy"
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
 
-	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, true)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestInlineDefinitionID, true)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
+	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestInlineDefinitionID)
 
 	body, err := json.Marshal(handlers.IntegrationOperationPayload{
 		IntegrationID: integrationID,
@@ -168,7 +169,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 	})
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestInlineDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 
 	rec := httptest.NewRecorder()

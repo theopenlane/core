@@ -13,7 +13,6 @@ import (
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -196,9 +195,6 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() 
 
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
-
-	restore := suite.withDefinitionRuntime(t, []registry.Builder{registry.Builder(buildTestOAuthDefinition)})
-	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})

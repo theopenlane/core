@@ -237,7 +237,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 		Save(user.UserCtx)
 	assert.NoError(t, err)
 
-	payload := []byte(`{"action":"created","installation":{"id":1003},"repository":{"full_name":"acme/repo"},"alert":{"number":1}}`)
+	payload := []byte(`{"action":"created","installation":{"id":1003},"repository":{"full_name":"acme/repo"},"alert":{"number":1,"state":"OPEN","html_url":"https://github.com/acme/repo/security/dependabot/1","created_at":"2026-03-01T00:00:00Z","updated_at":"2026-03-01T00:00:00Z","security_advisory":{"ghsa_id":"GHSA-0000-0000-dup1","cve_id":"CVE-2026-00001","severity":"low","summary":"Dup test","description":"Dup test"}}}`)
 	deliveryID := "delivery-dup-1"
 
 	firstReq := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))

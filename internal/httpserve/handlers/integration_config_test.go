@@ -28,7 +28,10 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-const configTestProviderID = "def_01K0TESTCFG00000000000001"
+const (
+	configTestProviderID           = "def_01K0TESTCFG00000000000001"
+	configTestFailHealthProviderID = "def_01K0TESTCFG00000000000002"
+)
 
 // ConfigTestHealthCheck is the config type for the config test health check operation
 type ConfigTestHealthCheck struct{}
@@ -408,20 +411,20 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	op.OperationID = "ConfigureIntegrationProviderHealthFailure"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, true)})
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestFailHealthProviderID, true)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
-		DefinitionID:  configTestProviderID,
+		DefinitionID:  configTestFailHealthProviderID,
 		CredentialRef: configTestCredentialRef,
 		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
 
 	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestFailHealthProviderID+"/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
@@ -432,7 +435,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	records, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(testUser.OrganizationID),
-			integration.DefinitionIDEQ(configTestProviderID),
+			integration.DefinitionIDEQ(configTestFailHealthProviderID),
 		).
 		All(testUser.UserCtx)
 	assert.NoError(t, err)

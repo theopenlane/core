@@ -18,6 +18,7 @@ import (
 	"github.com/stripe/stripe-go/v84"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/samber/do/v2"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -37,6 +38,8 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -97,6 +100,8 @@ type HandlerTestSuite struct {
 	suite.Suite
 	e                    *echo.Echo
 	db                   *ent.Client
+	galaDB               *ent.Client
+	sharedIntegrationsRT *runtime.Runtime
 	api                  *testclient.TestClient
 	h                    *handlers.Handler
 	router               *route.Router
@@ -194,6 +199,81 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	assert.NoError(suite.T(), galaInstance.StartWorkers(context.Background()))
 
 	suite.galaRuntime = galaInstance
+
+	// suite-scoped ent client for gala listeners — stays open for the entire suite
+	// so durable job handlers never reference a closed connection
+	hc, err := entdb.NewTestHistoryClient(context.Background(), suite.tf)
+	assert.NoError(suite.T(), err)
+
+	galaSessionConfig := sessions.NewSessionConfig(
+		suite.sharedSessionManager,
+		sessions.WithPersistence(suite.sharedRedisClient),
+	)
+
+	galaSessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
+
+	galaMockBackend := new(mocks.MockStripeBackend)
+	galaMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	galaMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	galaEntitlements, err := entitlements.NewStripeClient(
+		entitlements.WithAPIKey("sk_test_gala"),
+		entitlements.WithConfig(entitlements.Config{Enabled: true}),
+		entitlements.WithBackends(&stripe.Backends{
+			API:     galaMockBackend,
+			Connect: galaMockBackend,
+			Uploads: galaMockBackend,
+		}),
+	)
+	assert.NoError(suite.T(), err)
+
+	galaOpts := []ent.Option{
+		ent.Authz(*suite.sharedFGAClient),
+		ent.Emailer(&emailtemplates.Config{CompanyName: "Meow Inc."}),
+		ent.TokenManager(suite.sharedTokenManager),
+		ent.SessionConfig(&galaSessionConfig),
+		ent.EntConfig(&entconfig.Config{Modules: entconfig.Modules{Enabled: true, UseSandbox: true}}),
+		ent.TOTP(suite.sharedOTPManager),
+		ent.Pool(suite.sharedPool),
+		ent.EntitlementManager(galaEntitlements),
+		ent.HistoryClient(hc),
+	}
+
+	galaJobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
+
+	galaDB, err := entdb.NewTestClient(context.Background(), suite.tf, galaJobOpts, nil, galaOpts)
+	assert.NoError(suite.T(), err)
+
+	suite.galaDB = galaDB
+
+	// single integration runtime for the entire suite — listeners registered once
+	credStore, err := keystore.NewStore(suite.galaDB)
+	assert.NoError(suite.T(), err)
+
+	rt, err := runtime.New(runtime.Config{
+		DB:                 suite.galaDB,
+		Gala:               suite.galaRuntime,
+		Keystore:           credStore,
+		DefinitionBuilders: []registry.Builder{
+			registry.Builder(buildTestOAuthDefinition),
+			githubapp.Builder(defaultGitHubAppSpec()),
+			configTestDefinitionBuilder(configTestProviderID, false),
+			configTestDefinitionBuilder(configTestFailHealthProviderID, true),
+			configTestDefinitionBuilder("def_01K0TESTOTH00000000000001", false),
+			definitionscim.Builder(),
+			webhookTestDefinitionBuilder(webhookTestDefinitionID),
+			githubTestDefinitionBuilder(disconnectTestDefinitionID),
+			operationTestDefinitionBuilder(operationTestDefinitionID, false),
+			operationTestDefinitionBuilder(operationTestInlineDefinitionID, true),
+			userInputOnlyTestDefinitionBuilder("def_01K0TESTUIONLY000000000001"),
+		},
+	})
+	assert.NoError(suite.T(), err)
+
+	suite.sharedIntegrationsRT = rt
+
+	// provide ent client to gala's injector so ingest listeners can resolve it
+	do.ProvideValue(suite.galaRuntime.Injector(), suite.galaDB)
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
@@ -370,6 +450,10 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 		_ = suite.galaRuntime.Close()
 	}
 
+	if suite.galaDB != nil {
+		_ = suite.galaDB.CloseAll()
+	}
+
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
@@ -418,18 +502,7 @@ var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
-	credStore, err := keystore.NewStore(suite.db)
-	assert.NoError(suite.T(), err)
-
-	rt, err := runtime.New(runtime.Config{
-		DB:                 suite.db,
-		Gala:               suite.galaRuntime,
-		Keystore:           credStore,
-		DefinitionBuilders: []registry.Builder{registry.Builder(buildTestOAuthDefinition)},
-	})
-	assert.NoError(suite.T(), err)
-
-	suite.h.IntegrationsRuntime = rt
+	suite.h.IntegrationsRuntime = suite.sharedIntegrationsRT
 }
 
 func buildTestOAuthDefinition() (types.Definition, error) {

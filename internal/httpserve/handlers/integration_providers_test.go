@@ -40,7 +40,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	var resp handlers.IntegrationProvidersResponse
 	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Len(t, resp.Providers, 2)
+	assert.GreaterOrEqual(t, len(resp.Providers), 2)
 
 	providers := map[string]types.Definition{}
 	for _, provider := range resp.Providers {
