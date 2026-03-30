@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -136,4 +138,11 @@ func (EmailBranding) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the EmailBranding
+func (c EmailBranding) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }

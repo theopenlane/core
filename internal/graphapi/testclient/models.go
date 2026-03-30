@@ -6452,6 +6452,9 @@ type CreateEmailTemplateInput struct {
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                map[string]any `json:"defaults,omitempty"`
 	OwnerID                 *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs         []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs               []string       `json:"editorIDs,omitempty"`
+	ViewerIDs               []string       `json:"viewerIDs,omitempty"`
 	EmailBrandingID         *string        `json:"emailBrandingID,omitempty"`
 	IntegrationID           *string        `json:"integrationID,omitempty"`
 	WorkflowDefinitionID    *string        `json:"workflowDefinitionID,omitempty"`
@@ -12865,6 +12868,9 @@ type EmailTemplate struct {
 	// workflow instance associated with this template
 	WorkflowInstanceID    *string                         `json:"workflowInstanceID,omitempty"`
 	Owner                 *Organization                   `json:"owner,omitempty"`
+	BlockedGroups         *GroupConnection                `json:"blockedGroups"`
+	Editors               *GroupConnection                `json:"editors"`
+	Viewers               *GroupConnection                `json:"viewers"`
 	EmailBranding         *EmailBranding                  `json:"emailBranding,omitempty"`
 	Integration           *Integration                    `json:"integration,omitempty"`
 	WorkflowDefinition    *WorkflowDefinition             `json:"workflowDefinition,omitempty"`
@@ -13220,12 +13226,10 @@ type EmailTemplateWhereInput struct {
 	VersionLt    *int64  `json:"versionLT,omitempty"`
 	VersionLte   *int64  `json:"versionLTE,omitempty"`
 	// template_context field predicates
-	TemplateContext       *enums.TemplateContext  `json:"templateContext,omitempty"`
-	TemplateContextNeq    *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
-	TemplateContextIn     []enums.TemplateContext `json:"templateContextIn,omitempty"`
-	TemplateContextNotIn  []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
-	TemplateContextIsNil  *bool                   `json:"templateContextIsNil,omitempty"`
-	TemplateContextNotNil *bool                   `json:"templateContextNotNil,omitempty"`
+	TemplateContext      *enums.TemplateContext  `json:"templateContext,omitempty"`
+	TemplateContextNeq   *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
+	TemplateContextIn    []enums.TemplateContext `json:"templateContextIn,omitempty"`
+	TemplateContextNotIn []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
 	// email_branding_id field predicates
 	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
 	EmailBrandingIdneq          *string  `json:"emailBrandingIDNEQ,omitempty"`
@@ -13293,6 +13297,15 @@ type EmailTemplateWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// email_branding edge predicates
 	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
 	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
@@ -23930,12 +23943,10 @@ type NotificationTemplateWhereInput struct {
 	VersionLt    *int64  `json:"versionLT,omitempty"`
 	VersionLte   *int64  `json:"versionLTE,omitempty"`
 	// template_context field predicates
-	TemplateContext       *enums.TemplateContext  `json:"templateContext,omitempty"`
-	TemplateContextNeq    *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
-	TemplateContextIn     []enums.TemplateContext `json:"templateContextIn,omitempty"`
-	TemplateContextNotIn  []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
-	TemplateContextIsNil  *bool                   `json:"templateContextIsNil,omitempty"`
-	TemplateContextNotNil *bool                   `json:"templateContextNotNil,omitempty"`
+	TemplateContext      *enums.TemplateContext  `json:"templateContext,omitempty"`
+	TemplateContextNeq   *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
+	TemplateContextIn    []enums.TemplateContext `json:"templateContextIn,omitempty"`
+	TemplateContextNotIn []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -39202,11 +39213,19 @@ type UpdateEmailTemplateInput struct {
 	// template version
 	Version *int64 `json:"version,omitempty"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext      *enums.TemplateContext `json:"templateContext,omitempty"`
-	ClearTemplateContext *bool                  `json:"clearTemplateContext,omitempty"`
+	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                      map[string]any `json:"defaults,omitempty"`
 	ClearDefaults                 *bool          `json:"clearDefaults,omitempty"`
+	AddBlockedGroupIDs            []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs         []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups            *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                  []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs               []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors                  *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs                  []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs               []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers                  *bool          `json:"clearViewers,omitempty"`
 	EmailBrandingID               *string        `json:"emailBrandingID,omitempty"`
 	ClearEmailBranding            *bool          `json:"clearEmailBranding,omitempty"`
 	IntegrationID                 *string        `json:"integrationID,omitempty"`
@@ -40917,8 +40936,7 @@ type UpdateNotificationTemplateInput struct {
 	// template version
 	Version *int64 `json:"version,omitempty"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext      *enums.TemplateContext `json:"templateContext,omitempty"`
-	ClearTemplateContext *bool                  `json:"clearTemplateContext,omitempty"`
+	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                map[string]any `json:"defaults,omitempty"`
 	ClearDefaults           *bool          `json:"clearDefaults,omitempty"`

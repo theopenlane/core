@@ -114,6 +114,12 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailTemplate_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailTemplate_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
@@ -250,6 +256,12 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailTemplate_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailTemplate_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
@@ -386,6 +398,12 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailTemplate_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailTemplate_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
@@ -522,6 +540,12 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_EmailTemplate_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_EmailTemplate_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":

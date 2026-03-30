@@ -1743,16 +1743,6 @@ func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.EmailTemplateHi
 	return predicate.EmailTemplateHistory(sql.FieldNotIn(FieldTemplateContext, v...))
 }
 
-// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
-func TemplateContextIsNil() predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldTemplateContext))
-}
-
-// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
-func TemplateContextNotNil() predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldNotNull(FieldTemplateContext))
-}
-
 // DefaultsIsNil applies the IsNil predicate on the "defaults" field.
 func DefaultsIsNil() predicate.EmailTemplateHistory {
 	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldDefaults))

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -412,12 +413,6 @@ func (_u *EmailTemplateUpdate) SetNillableTemplateContext(v *enums.TemplateConte
 	return _u
 }
 
-// ClearTemplateContext clears the value of the "template_context" field.
-func (_u *EmailTemplateUpdate) ClearTemplateContext() *EmailTemplateUpdate {
-	_u.mutation.ClearTemplateContext()
-	return _u
-}
-
 // SetDefaults sets the "defaults" field.
 func (_u *EmailTemplateUpdate) SetDefaults(v map[string]interface{}) *EmailTemplateUpdate {
 	_u.mutation.SetDefaults(v)
@@ -510,6 +505,51 @@ func (_u *EmailTemplateUpdate) ClearWorkflowInstanceID() *EmailTemplateUpdate {
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *EmailTemplateUpdate) AddBlockedGroupIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *EmailTemplateUpdate) AddBlockedGroups(v ...*Group) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *EmailTemplateUpdate) AddEditorIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *EmailTemplateUpdate) AddEditors(v ...*Group) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (_u *EmailTemplateUpdate) AddViewerIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (_u *EmailTemplateUpdate) AddViewers(v ...*Group) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddViewerIDs(ids...)
+}
+
 // SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
 func (_u *EmailTemplateUpdate) SetEmailBranding(v *EmailBranding) *EmailTemplateUpdate {
 	return _u.SetEmailBrandingID(v.ID)
@@ -578,6 +618,69 @@ func (_u *EmailTemplateUpdate) AddFiles(v ...*File) *EmailTemplateUpdate {
 // Mutation returns the EmailTemplateMutation object of the builder.
 func (_u *EmailTemplateUpdate) Mutation() *EmailTemplateMutation {
 	return _u.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *EmailTemplateUpdate) ClearBlockedGroups() *EmailTemplateUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *EmailTemplateUpdate) RemoveBlockedGroupIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *EmailTemplateUpdate) RemoveBlockedGroups(v ...*Group) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *EmailTemplateUpdate) ClearEditors() *EmailTemplateUpdate {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *EmailTemplateUpdate) RemoveEditorIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *EmailTemplateUpdate) RemoveEditors(v ...*Group) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (_u *EmailTemplateUpdate) ClearViewers() *EmailTemplateUpdate {
+	_u.mutation.ClearViewers()
+	return _u
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (_u *EmailTemplateUpdate) RemoveViewerIDs(ids ...string) *EmailTemplateUpdate {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (_u *EmailTemplateUpdate) RemoveViewers(v ...*Group) *EmailTemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
@@ -880,14 +983,155 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if value, ok := _u.mutation.TemplateContext(); ok {
 		_spec.SetField(emailtemplate.FieldTemplateContext, field.TypeEnum, value)
 	}
-	if _u.mutation.TemplateContextCleared() {
-		_spec.ClearField(emailtemplate.FieldTemplateContext, field.TypeEnum)
-	}
 	if value, ok := _u.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplate.FieldDefaults, field.TypeJSON, value)
 	}
 	if _u.mutation.DefaultsCleared() {
 		_spec.ClearField(emailtemplate.FieldDefaults, field.TypeJSON)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EmailBrandingCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1554,12 +1798,6 @@ func (_u *EmailTemplateUpdateOne) SetNillableTemplateContext(v *enums.TemplateCo
 	return _u
 }
 
-// ClearTemplateContext clears the value of the "template_context" field.
-func (_u *EmailTemplateUpdateOne) ClearTemplateContext() *EmailTemplateUpdateOne {
-	_u.mutation.ClearTemplateContext()
-	return _u
-}
-
 // SetDefaults sets the "defaults" field.
 func (_u *EmailTemplateUpdateOne) SetDefaults(v map[string]interface{}) *EmailTemplateUpdateOne {
 	_u.mutation.SetDefaults(v)
@@ -1652,6 +1890,51 @@ func (_u *EmailTemplateUpdateOne) ClearWorkflowInstanceID() *EmailTemplateUpdate
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *EmailTemplateUpdateOne) AddBlockedGroupIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *EmailTemplateUpdateOne) AddBlockedGroups(v ...*Group) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *EmailTemplateUpdateOne) AddEditorIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *EmailTemplateUpdateOne) AddEditors(v ...*Group) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (_u *EmailTemplateUpdateOne) AddViewerIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.AddViewerIDs(ids...)
+	return _u
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (_u *EmailTemplateUpdateOne) AddViewers(v ...*Group) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddViewerIDs(ids...)
+}
+
 // SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
 func (_u *EmailTemplateUpdateOne) SetEmailBranding(v *EmailBranding) *EmailTemplateUpdateOne {
 	return _u.SetEmailBrandingID(v.ID)
@@ -1720,6 +2003,69 @@ func (_u *EmailTemplateUpdateOne) AddFiles(v ...*File) *EmailTemplateUpdateOne {
 // Mutation returns the EmailTemplateMutation object of the builder.
 func (_u *EmailTemplateUpdateOne) Mutation() *EmailTemplateMutation {
 	return _u.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *EmailTemplateUpdateOne) ClearBlockedGroups() *EmailTemplateUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *EmailTemplateUpdateOne) RemoveBlockedGroupIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *EmailTemplateUpdateOne) RemoveBlockedGroups(v ...*Group) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *EmailTemplateUpdateOne) ClearEditors() *EmailTemplateUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *EmailTemplateUpdateOne) RemoveEditorIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *EmailTemplateUpdateOne) RemoveEditors(v ...*Group) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (_u *EmailTemplateUpdateOne) ClearViewers() *EmailTemplateUpdateOne {
+	_u.mutation.ClearViewers()
+	return _u
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (_u *EmailTemplateUpdateOne) RemoveViewerIDs(ids ...string) *EmailTemplateUpdateOne {
+	_u.mutation.RemoveViewerIDs(ids...)
+	return _u
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (_u *EmailTemplateUpdateOne) RemoveViewers(v ...*Group) *EmailTemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveViewerIDs(ids...)
 }
 
 // ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
@@ -2052,14 +2398,155 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 	if value, ok := _u.mutation.TemplateContext(); ok {
 		_spec.SetField(emailtemplate.FieldTemplateContext, field.TypeEnum, value)
 	}
-	if _u.mutation.TemplateContextCleared() {
-		_spec.ClearField(emailtemplate.FieldTemplateContext, field.TypeEnum)
-	}
 	if value, ok := _u.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplate.FieldDefaults, field.TypeJSON, value)
 	}
 	if _u.mutation.DefaultsCleared() {
 		_spec.ClearField(emailtemplate.FieldDefaults, field.TypeJSON)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EmailBrandingCleared() {
 		edge := &sqlgraph.EdgeSpec{

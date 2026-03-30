@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // EmailBrandingHistory holds the schema definition for the EmailBrandingHistory entity.
@@ -36,6 +37,11 @@ func (EmailBrandingHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "email_branding",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -108,6 +114,6 @@ func (EmailBrandingHistory) Policy() ent.Policy {
 // Interceptors of the EmailBrandingHistory
 func (EmailBrandingHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

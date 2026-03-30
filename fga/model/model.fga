@@ -199,6 +199,13 @@ type organization
 
     define sla_definition_creator: [group#member]
     define can_create_sla_definition: can_edit or sla_definition_creator
+
+    define email_branding_creator: [group#member]
+    define can_create_email_branding: can_edit or email_branding_creator
+
+    define email_template_creator: [group#member]
+    define can_create_email_template: can_edit or email_template_creator
+
     # additional relations
     define user_in_context: [user]
 
@@ -960,7 +967,7 @@ type workflow_definition
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization]
     define admin: [user, service] or can_delete from parent
-    define viewer: [group#member] or editor 
+    define viewer: [group#member] or editor
     define editor: [group#member, organization#owner] or can_edit from parent
     define blocked: [user, group#member]
 

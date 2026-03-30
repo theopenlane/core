@@ -11,6 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -124,7 +125,6 @@ func (EmailTemplate) Fields() []ent.Field {
 		field.Enum("template_context").
 			Comment("runtime data context defining available variable keys for this template").
 			GoType(enums.TemplateContext("")).
-			Optional().
 			Annotations(
 				entgql.OrderField("TEMPLATE_CONTEXT"),
 			),
@@ -216,6 +216,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins(e)
 }
@@ -237,12 +238,17 @@ func (EmailTemplate) Hooks() []ent.Hook {
 // Policy of the EmailTemplate.
 func (EmailTemplate) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the EmailTemplate
+func (c EmailTemplate) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }

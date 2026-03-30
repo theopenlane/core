@@ -374,14 +374,6 @@ func (_c *EmailTemplateHistoryCreate) SetTemplateContext(v enums.TemplateContext
 	return _c
 }
 
-// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
-func (_c *EmailTemplateHistoryCreate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateHistoryCreate {
-	if v != nil {
-		_c.SetTemplateContext(*v)
-	}
-	return _c
-}
-
 // SetDefaults sets the "defaults" field.
 func (_c *EmailTemplateHistoryCreate) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryCreate {
 	_c.mutation.SetDefaults(v)
@@ -585,6 +577,9 @@ func (_c *EmailTemplateHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`historygenerated: missing required field "EmailTemplateHistory.version"`)}
+	}
+	if _, ok := _c.mutation.TemplateContext(); !ok {
+		return &ValidationError{Name: "template_context", err: errors.New(`historygenerated: missing required field "EmailTemplateHistory.template_context"`)}
 	}
 	if v, ok := _c.mutation.TemplateContext(); ok {
 		if err := emailtemplatehistory.TemplateContextValidator(v); err != nil {

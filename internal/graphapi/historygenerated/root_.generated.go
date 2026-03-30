@@ -31262,7 +31262,7 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext
+  templateContext: EmailTemplateHistoryTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -31734,8 +31734,6 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
   """
   email_branding_id field predicates
   """

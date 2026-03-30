@@ -407,12 +407,6 @@ func (_u *EmailTemplateHistoryUpdate) SetNillableTemplateContext(v *enums.Templa
 	return _u
 }
 
-// ClearTemplateContext clears the value of the "template_context" field.
-func (_u *EmailTemplateHistoryUpdate) ClearTemplateContext() *EmailTemplateHistoryUpdate {
-	_u.mutation.ClearTemplateContext()
-	return _u
-}
-
 // SetDefaults sets the "defaults" field.
 func (_u *EmailTemplateHistoryUpdate) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryUpdate {
 	_u.mutation.SetDefaults(v)
@@ -713,9 +707,6 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.TemplateContext(); ok {
 		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
-	}
-	if _u.mutation.TemplateContextCleared() {
-		_spec.ClearField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)
@@ -1144,12 +1135,6 @@ func (_u *EmailTemplateHistoryUpdateOne) SetNillableTemplateContext(v *enums.Tem
 	return _u
 }
 
-// ClearTemplateContext clears the value of the "template_context" field.
-func (_u *EmailTemplateHistoryUpdateOne) ClearTemplateContext() *EmailTemplateHistoryUpdateOne {
-	_u.mutation.ClearTemplateContext()
-	return _u
-}
-
 // SetDefaults sets the "defaults" field.
 func (_u *EmailTemplateHistoryUpdateOne) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryUpdateOne {
 	_u.mutation.SetDefaults(v)
@@ -1480,9 +1465,6 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if value, ok := _u.mutation.TemplateContext(); ok {
 		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
-	}
-	if _u.mutation.TemplateContextCleared() {
-		_spec.ClearField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)

@@ -96,6 +96,12 @@ type EmailTemplate struct {
 type EmailTemplateEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// EmailBranding holds the value of the email_branding edge.
 	EmailBranding *EmailBranding `json:"email_branding,omitempty"`
 	// Integration holds the value of the integration edge.
@@ -112,10 +118,13 @@ type EmailTemplateEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [11]map[string]int
 
+	namedBlockedGroups         map[string][]*Group
+	namedEditors               map[string][]*Group
+	namedViewers               map[string][]*Group
 	namedCampaigns             map[string][]*Campaign
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedFiles                 map[string][]*File
@@ -132,12 +141,39 @@ func (e EmailTemplateEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmailTemplateEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmailTemplateEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmailTemplateEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // EmailBrandingOrErr returns the EmailBranding value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EmailTemplateEdges) EmailBrandingOrErr() (*EmailBranding, error) {
 	if e.EmailBranding != nil {
 		return e.EmailBranding, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: emailbranding.Label}
 	}
 	return nil, &NotLoadedError{edge: "email_branding"}
@@ -148,7 +184,7 @@ func (e EmailTemplateEdges) EmailBrandingOrErr() (*EmailBranding, error) {
 func (e EmailTemplateEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -159,7 +195,7 @@ func (e EmailTemplateEdges) IntegrationOrErr() (*Integration, error) {
 func (e EmailTemplateEdges) WorkflowDefinitionOrErr() (*WorkflowDefinition, error) {
 	if e.WorkflowDefinition != nil {
 		return e.WorkflowDefinition, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: workflowdefinition.Label}
 	}
 	return nil, &NotLoadedError{edge: "workflow_definition"}
@@ -170,7 +206,7 @@ func (e EmailTemplateEdges) WorkflowDefinitionOrErr() (*WorkflowDefinition, erro
 func (e EmailTemplateEdges) WorkflowInstanceOrErr() (*WorkflowInstance, error) {
 	if e.WorkflowInstance != nil {
 		return e.WorkflowInstance, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: workflowinstance.Label}
 	}
 	return nil, &NotLoadedError{edge: "workflow_instance"}
@@ -179,7 +215,7 @@ func (e EmailTemplateEdges) WorkflowInstanceOrErr() (*WorkflowInstance, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[8] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -188,7 +224,7 @@ func (e EmailTemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[9] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -197,7 +233,7 @@ func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplat
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[10] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -453,6 +489,21 @@ func (_m *EmailTemplate) QueryOwner() *OrganizationQuery {
 	return NewEmailTemplateClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the EmailTemplate entity.
+func (_m *EmailTemplate) QueryBlockedGroups() *GroupQuery {
+	return NewEmailTemplateClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the EmailTemplate entity.
+func (_m *EmailTemplate) QueryEditors() *GroupQuery {
+	return NewEmailTemplateClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the EmailTemplate entity.
+func (_m *EmailTemplate) QueryViewers() *GroupQuery {
+	return NewEmailTemplateClient(_m.config).QueryViewers(_m)
+}
+
 // QueryEmailBranding queries the "email_branding" edge of the EmailTemplate entity.
 func (_m *EmailTemplate) QueryEmailBranding() *EmailBrandingQuery {
 	return NewEmailTemplateClient(_m.config).QueryEmailBranding(_m)
@@ -609,6 +660,78 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString(_m.WorkflowInstanceID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *EmailTemplate) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *EmailTemplate) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *EmailTemplate) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *EmailTemplate) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *EmailTemplate) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *EmailTemplate) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedCampaigns returns the Campaigns named value or an error if the edge was not

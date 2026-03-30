@@ -1848,16 +1848,6 @@ func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.NotificationTem
 	return predicate.NotificationTemplate(sql.FieldNotIn(FieldTemplateContext, v...))
 }
 
-// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
-func TemplateContextIsNil() predicate.NotificationTemplate {
-	return predicate.NotificationTemplate(sql.FieldIsNull(FieldTemplateContext))
-}
-
-// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
-func TemplateContextNotNil() predicate.NotificationTemplate {
-	return predicate.NotificationTemplate(sql.FieldNotNull(FieldTemplateContext))
-}
-
 // DefaultsIsNil applies the IsNil predicate on the "defaults" field.
 func DefaultsIsNil() predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldIsNull(FieldDefaults))

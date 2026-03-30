@@ -489,12 +489,6 @@ func (_u *NotificationTemplateUpdate) SetNillableTemplateContext(v *enums.Templa
 	return _u
 }
 
-// ClearTemplateContext clears the value of the "template_context" field.
-func (_u *NotificationTemplateUpdate) ClearTemplateContext() *NotificationTemplateUpdate {
-	_u.mutation.ClearTemplateContext()
-	return _u
-}
-
 // SetDefaults sets the "defaults" field.
 func (_u *NotificationTemplateUpdate) SetDefaults(v map[string]interface{}) *NotificationTemplateUpdate {
 	_u.mutation.SetDefaults(v)
@@ -1434,12 +1428,6 @@ func (_u *NotificationTemplateUpdateOne) SetNillableTemplateContext(v *enums.Tem
 	if v != nil {
 		_u.SetTemplateContext(*v)
 	}
-	return _u
-}
-
-// ClearTemplateContext clears the value of the "template_context" field.
-func (_u *NotificationTemplateUpdateOne) ClearTemplateContext() *NotificationTemplateUpdateOne {
-	_u.mutation.ClearTemplateContext()
 	return _u
 }
 
