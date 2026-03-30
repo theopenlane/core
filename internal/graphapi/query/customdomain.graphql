@@ -5,7 +5,7 @@ mutation CreateBulkCSVCustomDomain ($input: Upload!) {
 			createdAt
 			createdBy
 			dnsVerificationID
-      domainType
+			domainType
 			id
 			internalNotes
 			mappableDomainID
@@ -26,7 +26,7 @@ mutation CreateBulkCustomDomain ($input: [CreateCustomDomainInput!]) {
 			createdAt
 			createdBy
 			dnsVerificationID
-      domainType
+			domainType
 			id
 			internalNotes
 			mappableDomainID
@@ -47,7 +47,7 @@ mutation CreateCustomDomain ($input: CreateCustomDomainInput!) {
 			createdAt
 			createdBy
 			dnsVerificationID
-      domainType
+			domainType
 			id
 			internalNotes
 			mappableDomainID
@@ -99,7 +99,7 @@ query GetAllCustomDomains {
 					acmeChallengeStatusReason
 					cloudflareHostnameID
 				}
-        domainType
+				domainType
 				mappableDomain {
 					id
 					name
@@ -121,7 +121,7 @@ query GetCustomDomainByID ($customDomainId: ID!) {
 		createdAt
 		createdBy
 		dnsVerificationID
-    domainType
+		domainType
 		id
 		internalNotes
 		mappableDomainID
@@ -172,7 +172,7 @@ query GetCustomDomains ($first: Int, $last: Int, $where: CustomDomainWhereInput)
 					dnsTxtValue
 					dnsVerificationStatus
 				}
-        domainType
+				domainType
 				id
 				mappableDomainID
 				ownerID
@@ -190,6 +190,7 @@ mutation UpdateCustomDomain ($updateCustomDomainId: ID!, $input: UpdateCustomDom
 			createdAt
 			createdBy
 			dnsVerificationID
+			domainType
 			id
 			internalNotes
 			mappableDomainID
@@ -206,7 +207,6 @@ mutation UpdateCustomDomain ($updateCustomDomainId: ID!, $input: UpdateCustomDom
 				dnsTxtValue
 				dnsVerificationStatus
 			}
-      domainType
 		}
 	}
 }
@@ -227,7 +227,7 @@ mutation ValidateCustomDomain ($validateCustomDomainId: ID!) {
 				acmeChallengeStatus
 				acmeChallengeStatusReason
 			}
-      domainType
+			domainType
 		}
 	}
 }
