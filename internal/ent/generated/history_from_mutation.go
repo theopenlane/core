@@ -9002,10 +9002,6 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetExternalID(externalID)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	if securityLevel, exists := m.SecurityLevel(); exists {
 		create = create.SetSecurityLevel(securityLevel)
 	}
@@ -9295,12 +9291,6 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetExternalID(finding.ExternalID)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(finding.Status)
-		}
-
 		if securityLevel, exists := m.SecurityLevel(); exists {
 			create = create.SetSecurityLevel(securityLevel)
 		} else {
@@ -9571,7 +9561,6 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFindingStatusName(finding.FindingStatusName).
 			SetFindingStatusID(finding.FindingStatusID).
 			SetExternalID(finding.ExternalID).
-			SetStatus(finding.Status).
 			SetSecurityLevel(finding.SecurityLevel).
 			SetExternalOwnerID(finding.ExternalOwnerID).
 			SetSource(finding.Source).
@@ -24950,10 +24939,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetExternalOwnerID(externalOwnerID)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	if securityLevel, exists := m.SecurityLevel(); exists {
 		create = create.SetSecurityLevel(securityLevel)
 	}
@@ -25211,12 +25196,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetExternalOwnerID(vulnerability.ExternalOwnerID)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(vulnerability.Status)
-		}
-
 		if securityLevel, exists := m.SecurityLevel(); exists {
 			create = create.SetSecurityLevel(securityLevel)
 		} else {
@@ -25439,7 +25418,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetVulnerabilityStatusName(vulnerability.VulnerabilityStatusName).
 			SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
-			SetStatus(vulnerability.Status).
 			SetSecurityLevel(vulnerability.SecurityLevel).
 			SetExternalID(vulnerability.ExternalID).
 			SetCveID(vulnerability.CveID).

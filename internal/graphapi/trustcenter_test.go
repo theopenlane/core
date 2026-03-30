@@ -889,6 +889,22 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
+	// create another trust center control for another trust center to ensure only controls for the queried trust center are returned in the frontend query
+	dbCtx2 := setContext(testUser2.UserCtx, suite.client.db)
+	tcControlForAnotherOrg, err := suite.client.db.Control.Create().
+		SetRefCode("OTS-TC-" + ulids.New().String()).
+		SetTitle("Trust Center Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetOwnerID(testUser2.OrganizationID).
+		Save(dbCtx2)
+	assert.NilError(t, err)
+
+	_, err = suite.client.api.UpdateControl(testUser2.UserCtx, tcControlForAnotherOrg.ID, testclient.UpdateControlInput{
+		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
+	})
+	assert.NilError(t, err)
+
 	t.Run("anonymous user frontend query returns all child objects with controls present", func(t *testing.T) {
 		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID)
 
@@ -926,6 +942,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 
 	// Cleanup Trust Center Children
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: tcControl.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: tcControlForAnotherOrg.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, ID: entity1.CreateTrustCenterEntity.TrustCenterEntity.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: faqResp.CreateTrustCenterFaq.TrustCenterFaq.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.NoteDeleteOne]{client: suite.client.db.Note, ID: postID}).MustDelete(testUser.UserCtx, t)

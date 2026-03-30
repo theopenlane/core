@@ -20,6 +20,26 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
+// CreateNotification is the resolver for the createNotification field.
+func (r *mutationResolver) CreateNotification(ctx context.Context, input generated.CreateNotificationInput) (*model.NotificationCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).Notification.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notification"})
+	}
+
+	return &model.NotificationCreatePayload{
+		Notification: res,
+	}, nil
+}
+
 // is the resolver for the updateNotification field.
 func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, input generated.UpdateNotificationInput) (*model.NotificationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Notification.Get(ctx, id)

@@ -26241,11 +26241,6 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, finding.FieldExternalID)
 				fieldSeen[finding.FieldExternalID] = struct{}{}
 			}
-		case "status":
-			if _, ok := fieldSeen[finding.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, finding.FieldStatus)
-				fieldSeen[finding.FieldStatus] = struct{}{}
-			}
 		case "securityLevel":
 			if _, ok := fieldSeen[finding.FieldSecurityLevel]; !ok {
 				selectedFields = append(selectedFields, finding.FieldSecurityLevel)
@@ -81450,11 +81445,6 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[vulnerability.FieldExternalOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerability.FieldExternalOwnerID)
 				fieldSeen[vulnerability.FieldExternalOwnerID] = struct{}{}
-			}
-		case "status":
-			if _, ok := fieldSeen[vulnerability.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, vulnerability.FieldStatus)
-				fieldSeen[vulnerability.FieldStatus] = struct{}{}
 			}
 		case "securityLevel":
 			if _, ok := fieldSeen[vulnerability.FieldSecurityLevel]; !ok {

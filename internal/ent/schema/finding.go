@@ -57,14 +57,6 @@ func (Finding) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
 			),
-		field.String("status").
-			Comment("lifecycle status of the finding").
-			Annotations(
-				entgql.Directives(
-					entgql.Deprecated("Use `finding_status_name` instead."),
-				),
-			).
-			Optional(),
 		field.Enum("security_level").
 			Comment("incoming source severity").
 			GoType(enums.SecurityLevel("")).

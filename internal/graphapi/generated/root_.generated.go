@@ -2199,7 +2199,6 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
-		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID   func(childComplexity int) int
@@ -3440,6 +3439,7 @@ type ComplexityRoot struct {
 		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateNotification                   func(childComplexity int, input generated.CreateNotificationInput) int
 		CreateNotificationPreference         func(childComplexity int, input generated.CreateNotificationPreferenceInput) int
 		CreateNotificationTemplate           func(childComplexity int, input generated.CreateNotificationTemplateInput) int
 		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
@@ -3974,6 +3974,10 @@ type ComplexityRoot struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	NotificationCreatePayload struct {
+		Notification func(childComplexity int) int
 	}
 
 	NotificationEdge struct {
@@ -6982,7 +6986,6 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
-		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
@@ -18279,13 +18282,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Finding.State(childComplexity), true
 
-	case "Finding.status":
-		if e.ComplexityRoot.Finding.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Finding.Status(childComplexity), true
-
 	case "Finding.stepsToReproduce":
 		if e.ComplexityRoot.Finding.StepsToReproduce == nil {
 			break
@@ -25634,6 +25630,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateNarrative(childComplexity, args["input"].(generated.CreateNarrativeInput)), true
 
+	case "Mutation.createNotification":
+		if e.ComplexityRoot.Mutation.CreateNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateNotification(childComplexity, args["input"].(generated.CreateNotificationInput)), true
+
 	case "Mutation.createNotificationPreference":
 		if e.ComplexityRoot.Mutation.CreateNotificationPreference == nil {
 			break
@@ -31101,6 +31109,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationConnection.TotalCount(childComplexity), true
+
+	case "NotificationCreatePayload.notification":
+		if e.ComplexityRoot.NotificationCreatePayload.Notification == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationCreatePayload.Notification(childComplexity), true
 
 	case "NotificationEdge.cursor":
 		if e.ComplexityRoot.NotificationEdge.Cursor == nil {
@@ -48280,13 +48295,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Vulnerability.SourceUpdatedAt(childComplexity), true
-
-	case "Vulnerability.status":
-		if e.ComplexityRoot.Vulnerability.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Vulnerability.Status(childComplexity), true
 
 	case "Vulnerability.subcontrols":
 		if e.ComplexityRoot.Vulnerability.Subcontrols == nil {
@@ -66307,10 +66315,6 @@ input CreateFindingInput {
   """
   externalID: String
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -69653,10 +69657,6 @@ input CreateVulnerabilityInput {
   owner of the vulnerability
   """
   externalOwnerID: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   external identifier from the integration source for the vulnerability
   """
@@ -81220,10 +81220,6 @@ type Finding implements Node {
   """
   externalID: String
   """
-  lifecycle status of the finding
-  """
-  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
-  """
   incoming source severity
   """
   securityLevel: FindingSecurityLevel
@@ -82670,24 +82666,6 @@ input FindingWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -93830,6 +93808,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   MENTION
   EXPORT
   STANDARD_UPDATE
+  DOMAIN_SCAN
 }
 """
 NotificationNotificationType is enum for the field notification_type
@@ -126625,11 +126604,6 @@ input UpdateFindingInput {
   externalID: String
   clearExternalID: Boolean
   """
-  lifecycle status of the finding
-  """
-  status: String
-  clearStatus: Boolean
-  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -131413,11 +131387,6 @@ input UpdateVulnerabilityInput {
   externalOwnerID: String
   clearExternalOwnerID: Boolean
   """
-  lifecycle status of the vulnerability
-  """
-  status: String
-  clearStatus: Boolean
-  """
   external identifier from the integration source for the vulnerability
   """
   externalID: String
@@ -133295,10 +133264,6 @@ type Vulnerability implements Node {
   """
   lifecycle status of the vulnerability
   """
-  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
-  """
-  lifecycle status of the vulnerability
-  """
   securityLevel: VulnerabilitySecurityLevel
   """
   external identifier from the integration source for the vulnerability
@@ -134323,24 +134288,6 @@ input VulnerabilityWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -142010,6 +141957,15 @@ type NoteDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/notification.graphql", Input: `extend type Mutation{
     """
+    Create a new notification
+    """
+    createNotification(
+        """
+        values of the notification
+        """
+        input: CreateNotificationInput!
+    ): NotificationCreatePayload!
+    """
     Update an existing notification
     """
     updateNotification(
@@ -142052,6 +142008,16 @@ type ActionNotificationsReadPayload {
     Updated notification IDs
     """
     readIDs: [ID]!
+}
+
+"""
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+    """
+    Created notification
+    """
+    notification: Notification!
 }`, BuiltIn: false},
 	{Name: "../schema/notificationpreference.graphql", Input: `extend type Query {
     """

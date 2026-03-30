@@ -60,8 +60,6 @@ type Finding struct {
 	FindingStatusID string `json:"finding_status_id,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
-	// lifecycle status of the finding
-	Status string `json:"status,omitempty"`
 	// incoming source severity
 	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// the owner of the finding
@@ -481,7 +479,7 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case finding.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldOwnerID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldStatus, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
+		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldOwnerID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -623,12 +621,6 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
 			} else if value.Valid {
 				_m.ExternalID = value.String
-			}
-		case finding.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				_m.Status = value.String
 			}
 		case finding.FieldSecurityLevel:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1089,9 +1081,6 @@ func (_m *Finding) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(_m.Status)
 	builder.WriteString(", ")
 	builder.WriteString("security_level=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
