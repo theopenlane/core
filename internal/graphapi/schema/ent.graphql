@@ -10526,6 +10526,10 @@ input CreateCustomDomainInput {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainCustomDomainType
   ownerID: ID
   mappableDomainID: ID!
   dnsVerificationID: ID
@@ -15249,6 +15253,10 @@ type CustomDomain implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainCustomDomainType!
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -15269,6 +15277,14 @@ type CustomDomainConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -15516,6 +15532,13 @@ input CustomDomainWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainCustomDomainType
+  domainTypeNEQ: CustomDomainCustomDomainType
+  domainTypeIn: [CustomDomainCustomDomainType!]
+  domainTypeNotIn: [CustomDomainCustomDomainType!]
   """
   owner edge predicates
   """

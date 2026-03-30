@@ -1006,6 +1006,7 @@ type ComplexityRoot struct {
 		CreatedBy         func(childComplexity int) int
 		DNSVerification   func(childComplexity int) int
 		DNSVerificationID func(childComplexity int) int
+		DomainType        func(childComplexity int) int
 		ID                func(childComplexity int) int
 		InternalNotes     func(childComplexity int) int
 		MappableDomain    func(childComplexity int) int
@@ -12271,6 +12272,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomDomain.DNSVerificationID(childComplexity), true
+
+	case "CustomDomain.domainType":
+		if e.ComplexityRoot.CustomDomain.DomainType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomain.DomainType(childComplexity), true
 
 	case "CustomDomain.id":
 		if e.ComplexityRoot.CustomDomain.ID == nil {
@@ -65186,6 +65194,10 @@ input CreateCustomDomainInput {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainCustomDomainType
   ownerID: ID
   mappableDomainID: ID!
   dnsVerificationID: ID
@@ -69909,6 +69921,10 @@ type CustomDomain implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainCustomDomainType!
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -69929,6 +69945,14 @@ type CustomDomainConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -70176,6 +70200,13 @@ input CustomDomainWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainCustomDomainType
+  domainTypeNEQ: CustomDomainCustomDomainType
+  domainTypeIn: [CustomDomainCustomDomainType!]
+  domainTypeNotIn: [CustomDomainCustomDomainType!]
   """
   owner edge predicates
   """

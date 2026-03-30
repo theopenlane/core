@@ -11494,6 +11494,10 @@ input CreateCustomDomainInput {
 	the ID of the trust center the domain belongs to, if applicable
 	"""
 	trustCenterID: String
+	"""
+	the type of this custom domain
+	"""
+	domainType: CustomDomainCustomDomainType
 	ownerID: ID
 	mappableDomainID: ID!
 	dnsVerificationID: ID
@@ -16362,6 +16366,10 @@ type CustomDomain implements Node {
 	the ID of the trust center the domain belongs to, if applicable
 	"""
 	trustCenterID: String
+	"""
+	the type of this custom domain
+	"""
+	domainType: CustomDomainCustomDomainType!
 	owner: Organization
 	mappableDomain: MappableDomain!
 	dnsVerification: DNSVerification
@@ -16422,6 +16430,14 @@ type CustomDomainCreatePayload {
 	Created customDomain
 	"""
 	customDomain: CustomDomain!
+}
+"""
+CustomDomainCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+	PREVIEW
+	EXTERNAL
+	UNKNOWN
 }
 """
 Return response for deleteCustomDomain mutation
@@ -16696,6 +16712,13 @@ input CustomDomainWhereInput {
 	trustCenterIDNotNil: Boolean
 	trustCenterIDEqualFold: String
 	trustCenterIDContainsFold: String
+	"""
+	domain_type field predicates
+	"""
+	domainType: CustomDomainCustomDomainType
+	domainTypeNEQ: CustomDomainCustomDomainType
+	domainTypeIn: [CustomDomainCustomDomainType!]
+	domainTypeNotIn: [CustomDomainCustomDomainType!]
 	"""
 	owner edge predicates
 	"""
