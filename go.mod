@@ -93,7 +93,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
 	github.com/theopenlane/entx v0.24.0
-	github.com/theopenlane/go-client v0.8.9
+	github.com/theopenlane/go-client v0.9.0
 	github.com/theopenlane/gqlgen-plugins v0.14.6
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.27.5
