@@ -61,6 +61,13 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Annotations(
 				entx.IntegrationMappingField().FromIntegration(),
 			),
+		field.String("directory_instance_id").
+			Comment("stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("directory_instance_id"),
+			),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
@@ -119,6 +126,34 @@ func (DirectoryGroup) Fields() []ent.Field {
 		field.Int("member_count").
 			Comment("member count reported by the directory").
 			Optional(),
+		field.Time("first_seen_at").
+			Comment("time this group was first observed by Openlane from directory ingest").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("last_seen_at").
+			Comment("time this group was most recently confirmed by directory ingest").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("added_at").
+			Comment("provider-reported time the group was added or provisioned in the source directory").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("removed_at").
+			Comment("provider-reported or locally-recorded time the group was removed from the source directory").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Time("observed_at").
 			Comment("time when this snapshot was recorded").
 			Default(time.Now).
@@ -129,6 +164,12 @@ func (DirectoryGroup) Fields() []ent.Field {
 		field.JSON("profile", map[string]any{}).
 			Comment("flattened attribute bag used for filtering/diffing").
 			Optional(),
+		field.JSON("metadata", map[string]any{}).
+			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("raw_profile_file_id").
 			Comment("object storage file identifier containing the raw upstream payload").
 			Optional().
@@ -203,6 +244,8 @@ func (DirectoryGroup) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "external_id", "directory_sync_run_id").
 			Unique(),
+		index.Fields("directory_instance_id", "external_id"),
+		index.Fields("directory_instance_id", "email"),
 		index.Fields("platform_id", "external_id"),
 		index.Fields("directory_sync_run_id", "email"),
 		index.Fields("integration_id", "email"),
