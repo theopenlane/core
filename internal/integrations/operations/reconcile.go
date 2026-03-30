@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ReconcileEnvelope is the durable payload for a scheduled reconciliation cycle
@@ -42,6 +43,10 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 		Name:  reconcileListenerName,
 		Handle: func(ctx gala.HandlerContext, envelope ReconcileEnvelope) error {
 			delta, execErr := handle(ctx.Context, envelope)
+
+			if execErr != nil {
+				logx.FromContext(ctx.Context).Warn().Err(execErr).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Int("error_streak", envelope.Schedule.ErrorStreak+1).Msg("reconcile cycle failed, scheduling retry with backoff")
+			}
 
 			next := schedule.Next(envelope.Schedule, delta, execErr)
 			scheduledAt := next.NextScheduledAt()

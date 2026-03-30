@@ -3790,7 +3790,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "operation_name", Type: field.TypeString, Nullable: true},
 		{Name: "operation_kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"SYNC", "PUSH", "PULL", "WEBHOOK", "SCHEDULED"}},
-		{Name: "run_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SCHEDULED", "WEBHOOK", "EVENT"}},
+		{Name: "run_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SCHEDULED", "WEBHOOK", "EVENT", "RECONCILE"}},
 		{Name: "operation_config", Type: field.TypeJSON, Nullable: true},
 		{Name: "mapping_version", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "RUNNING", "SUCCESS", "FAILED", "CANCELLED"}, Default: "PENDING"},

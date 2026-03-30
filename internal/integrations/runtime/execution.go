@@ -107,6 +107,8 @@ type reconcileOutput struct {
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
 	ctx, installation, metadata, err := r.bootstrapHandlerContext(ctx, envelope.ExecutionMetadata)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Msg("reconcile bootstrap failed")
+
 		return 0, err
 	}
 

@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/utils/contextx"
 )
 
-// directorySyncRunIDKey is the context key for storing the directory sync run ID
 var directorySyncRunIDKey = contextx.NewKey[string]()
 
 // withDirectorySyncRunID returns ctx with the directory sync run ID stored for downstream ingest handlers
@@ -29,12 +28,9 @@ func directorySyncRunIDFromContext(ctx context.Context) string {
 
 // schemaRegistration wires one ingest schema to its Gala listener, async emit, and sync persist functions
 type schemaRegistration struct {
-	// register attaches the Gala listener for this schema
 	register func(runtime *gala.Gala) error
-	// emit decodes and emits one ingest record asynchronously via Gala
-	emit func(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error
-	// persist decodes and persists one ingest record synchronously
-	persist func(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error
+	emit     func(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, metadata integrationgenerated.IntegrationIngestMetadata, headers gala.Headers, payload json.RawMessage) error
+	persist  func(ctx context.Context, db *ent.Client, integration *ent.Integration, payload json.RawMessage) error
 }
 
 // ingestSchemaOrder defines the registration order for ingest schema listeners
@@ -229,7 +225,7 @@ func persistMappedRecord(ctx context.Context, db *ent.Client, integration *ent.I
 	return registration.persist(ctx, db, integration, payload)
 }
 
-// emitTyped decodes one typed ingest input, applies schema-specific preparation, and emits the wrapped Gala event
+// emitTyped decodes one typed ingest input, applies schema-specific preparation, and emits the wrapped Gala event.
 func emitTyped[TInput any, TEvent any](
 	ctx context.Context,
 	runtime *gala.Gala,
@@ -253,7 +249,7 @@ func emitTyped[TInput any, TEvent any](
 	return receipt.Err
 }
 
-// persistTyped decodes one typed ingest input, applies schema-specific preparation, and persists it synchronously
+// persistTyped decodes one typed ingest input, applies schema-specific preparation, and persists it synchronously.
 func persistTyped[TInput any](
 	ctx context.Context,
 	db *ent.Client,
@@ -272,7 +268,7 @@ func persistTyped[TInput any](
 	return persist(ctx, db, integration, input)
 }
 
-// handleIngestRequested resolves the ent client and installation, then delegates to the typed persist function
+// handleIngestRequested resolves the ent client and installation, then delegates to the typed persist function.
 func handleIngestRequested[TInput any](
 	ctx gala.HandlerContext,
 	integrationID string,
@@ -292,7 +288,7 @@ func handleIngestRequested[TInput any](
 	return persist(ctx.Context, db, integration, input)
 }
 
-// buildSchemaRegistration assembles one ingest schema registration from shared generic helpers and schema-specific closures
+// buildSchemaRegistration assembles one ingest schema registration from shared generic helpers and schema-specific closures.
 func buildSchemaRegistration[TInput any, TEvent any](
 	topic gala.Topic[TEvent],
 	prepare func(context.Context, TInput, *ent.Integration) TInput,
@@ -342,11 +338,11 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 	}
 
 	if options.WorkflowMeta != nil {
-		metadata.WorkflowInstanceID = options.WorkflowMeta.InstanceID
-		metadata.WorkflowActionKey = options.WorkflowMeta.ActionKey
+		metadata.WorkflowInstanceID  = options.WorkflowMeta.InstanceID
+		metadata.WorkflowActionKey   = options.WorkflowMeta.ActionKey
 		metadata.WorkflowActionIndex = options.WorkflowMeta.ActionIndex
-		metadata.WorkflowObjectID = options.WorkflowMeta.ObjectID
-		metadata.WorkflowObjectType = string(options.WorkflowMeta.ObjectType)
+		metadata.WorkflowObjectID    = options.WorkflowMeta.ObjectID
+		metadata.WorkflowObjectType  = string(options.WorkflowMeta.ObjectType)
 	}
 
 	return metadata
@@ -379,7 +375,7 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 	}
 }
 
-// prepareAssetInput applies integration-scoped defaults before emit or sync persistence
+// prepareAssetInput applies integration-scoped defaults before emit or sync persistence.
 func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
 
 	input = integrationgenerated.PrepareAssetInput(input, integration)
@@ -387,7 +383,7 @@ func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integratio
 	return input
 }
 
-// prepareContactInput applies integration-scoped defaults before emit or sync persistence
+// prepareContactInput applies integration-scoped defaults before emit or sync persistence.
 func prepareContactInput(_ context.Context, input ent.CreateContactInput, integration *ent.Integration) ent.CreateContactInput {
 
 	input = integrationgenerated.PrepareContactInput(input, integration)
@@ -399,7 +395,7 @@ func prepareContactInput(_ context.Context, input ent.CreateContactInput, integr
 	return input
 }
 
-// prepareDirectoryAccountInput applies integration-scoped defaults before emit or sync persistence
+// prepareDirectoryAccountInput applies integration-scoped defaults before emit or sync persistence.
 func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectoryAccountInput, integration *ent.Integration) ent.CreateDirectoryAccountInput {
 
 	input = integrationgenerated.PrepareDirectoryAccountInput(input, integration)
@@ -417,7 +413,7 @@ func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectory
 	return input
 }
 
-// prepareDirectoryGroupInput applies integration-scoped defaults before emit or sync persistence
+// prepareDirectoryGroupInput applies integration-scoped defaults before emit or sync persistence.
 func prepareDirectoryGroupInput(ctx context.Context, input ent.CreateDirectoryGroupInput, integration *ent.Integration) ent.CreateDirectoryGroupInput {
 
 	input = integrationgenerated.PrepareDirectoryGroupInput(input, integration)
@@ -435,7 +431,7 @@ func prepareDirectoryGroupInput(ctx context.Context, input ent.CreateDirectoryGr
 	return input
 }
 
-// prepareDirectoryMembershipInput applies integration-scoped defaults before emit or sync persistence
+// prepareDirectoryMembershipInput applies integration-scoped defaults before emit or sync persistence.
 func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirectoryMembershipInput, integration *ent.Integration) ent.CreateDirectoryMembershipInput {
 
 	input = integrationgenerated.PrepareDirectoryMembershipInput(input, integration)
@@ -453,7 +449,7 @@ func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirect
 	return input
 }
 
-// prepareEntityInput applies integration-scoped defaults before emit or sync persistence
+// prepareEntityInput applies integration-scoped defaults before emit or sync persistence.
 func prepareEntityInput(_ context.Context, input ent.CreateEntityInput, integration *ent.Integration) ent.CreateEntityInput {
 
 	input = integrationgenerated.PrepareEntityInput(input, integration)
@@ -461,7 +457,7 @@ func prepareEntityInput(_ context.Context, input ent.CreateEntityInput, integrat
 	return input
 }
 
-// prepareFindingInput applies integration-scoped defaults before emit or sync persistence
+// prepareFindingInput applies integration-scoped defaults before emit or sync persistence.
 func prepareFindingInput(_ context.Context, input ent.CreateFindingInput, integration *ent.Integration) ent.CreateFindingInput {
 
 	input = integrationgenerated.PrepareFindingInput(input, integration)
@@ -469,7 +465,7 @@ func prepareFindingInput(_ context.Context, input ent.CreateFindingInput, integr
 	return input
 }
 
-// prepareRiskInput applies integration-scoped defaults before emit or sync persistence
+// prepareRiskInput applies integration-scoped defaults before emit or sync persistence.
 func prepareRiskInput(_ context.Context, input ent.CreateRiskInput, integration *ent.Integration) ent.CreateRiskInput {
 
 	input = integrationgenerated.PrepareRiskInput(input, integration)
@@ -477,7 +473,7 @@ func prepareRiskInput(_ context.Context, input ent.CreateRiskInput, integration 
 	return input
 }
 
-// prepareVulnerabilityInput applies integration-scoped defaults before emit or sync persistence
+// prepareVulnerabilityInput applies integration-scoped defaults before emit or sync persistence.
 func prepareVulnerabilityInput(_ context.Context, input ent.CreateVulnerabilityInput, integration *ent.Integration) ent.CreateVulnerabilityInput {
 
 	input = integrationgenerated.PrepareVulnerabilityInput(input, integration)
