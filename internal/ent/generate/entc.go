@@ -343,10 +343,6 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			genhooks.WithCSVPackageName("csvgenerated"),
 			genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
 			genhooks.WithCSVGenerateAllWrappers(true)),
-		genhooks.GenIntegrationMappingSchema(
-			genhooks.WithIntegrationMappingOutputDir(integrationGeneratedPath),
-			genhooks.WithIntegrationMappingPackageName("integrationgenerated"),
-		),
 		accessMapExt.Hook(),
 		exportenums.New().Hook(),
 		workflowGenExt.Hook(),

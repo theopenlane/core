@@ -1,59 +1,56 @@
-
-
 query GetAllTrustCenterEntityHistories {
-  trustCenterEntityHistories {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        entityTypeID
-        historyTime
-        id
-        logoFileID
-        name
-        operation
-        ref
-        trustCenterID
-        updatedAt
-        updatedBy
-        url
-      }
-    }
-  }
+	trustCenterEntityHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				entityTypeID
+				historyTime
+				id
+				logoFileID
+				name
+				operation
+				ref
+				trustCenterID
+				updatedAt
+				updatedBy
+				url
+			}
+		}
+	}
 }
-
-query GetTrustCenterEntityHistories($first: Int, $last: Int, $where: TrustCenterEntityHistoryWhereInput) {
-  trustCenterEntityHistories(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        entityTypeID
-        historyTime
-        id
-        logoFileID
-        name
-        operation
-        ref
-        trustCenterID
-        updatedAt
-        updatedBy
-        url
-      }
-    }
-  }
+query GetTrustCenterEntityHistories ($first: Int, $last: Int, $where: TrustCenterEntityHistoryWhereInput) {
+	trustCenterEntityHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				entityTypeID
+				historyTime
+				id
+				logoFileID
+				name
+				operation
+				ref
+				trustCenterID
+				updatedAt
+				updatedBy
+				url
+			}
+		}
+	}
 }

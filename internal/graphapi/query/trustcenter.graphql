@@ -1,489 +1,498 @@
-mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
-  createTrustCenter(input: $input) {
-    trustCenter {
-      createdAt
-      createdBy
-      customDomainID
-      id
-      ownerID
-      slug
-      tags
-      updatedAt
-      updatedBy
-      customDomain {
-        cnameRecord
-        dnsVerificationID
-      }
-      watermarkConfig {
-        id
-        text
-      }
-      previewDomain {
-        cnameRecord
-        dnsVerificationID
-      }
-      setting {
-        id
-        overview
-        title
-        primaryColor
-        logoRemoteURL
-        logoLocalFileID
-        logoFile {
-          presignedURL
-        }
-        faviconRemoteURL
-        faviconLocalFileID
-        faviconFile {
-          presignedURL
-        }
-        themeMode
-        font
-        foregroundColor
-        backgroundColor
-        accentColor
-      }
-      previewSetting {
-        id
-        overview
-        title
-        primaryColor
-        logoRemoteURL
-        logoLocalFileID
-        logoFile {
-          presignedURL
-        }
-        faviconRemoteURL
-        faviconLocalFileID
-        faviconFile {
-          presignedURL
-        }
-        themeMode
-        font
-        foregroundColor
-        backgroundColor
-        accentColor
-      }
-    }
-  }
+mutation CreateTrustCenter ($input: CreateTrustCenterInput!) {
+	createTrustCenter(input: $input) {
+		trustCenter {
+			createdAt
+			createdBy
+			customDomainID
+			id
+			ownerID
+			pirschAccessLink
+			pirschDomainID
+			pirschIdentificationCode
+			previewDomainID
+			previewStatus
+			slug
+			subprocessorURL
+			tags
+			updatedAt
+			updatedBy
+			customDomain {
+				cnameRecord
+				dnsVerificationID
+			}
+			watermarkConfig {
+				id
+				text
+			}
+			previewDomain {
+				cnameRecord
+				dnsVerificationID
+			}
+			setting {
+				id
+				overview
+				title
+				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
+			}
+			previewSetting {
+				id
+				overview
+				title
+				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
+			}
+		}
+	}
 }
-
-mutation DeleteTrustCenter($deleteTrustCenterId: ID!) {
-  deleteTrustCenter(id: $deleteTrustCenterId) {
-    deletedID
-  }
+mutation DeleteTrustCenter ($deleteTrustCenterId: ID!) {
+	deleteTrustCenter(id: $deleteTrustCenterId) {
+		deletedID
+	}
 }
-
 query GetAllTrustCenters {
-  trustCenters {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        customDomain {
-          cnameRecord
-          dnsVerificationID
-        }
-        customDomainID
-        previewDomain {
-          cnameRecord
-          dnsVerificationID
-        }
-        id
-        ownerID
-        slug
-        tags
-        updatedAt
-        updatedBy
-        setting {
-          id
-          overview
-          title
-          primaryColor
-          logoRemoteURL
-          logoLocalFileID
-          logoFile {
-            presignedURL
-          }
-          faviconRemoteURL
-          faviconLocalFileID
-          faviconFile {
-            presignedURL
-          }
-          themeMode
-          font
-          foregroundColor
-          backgroundColor
-          accentColor
-        }
-        posts {
-          edges {
-            node {
-              id
-              text
-            }
-          }
-        }
-        trustCenterEntities {
-          edges {
-            node {
-              id
-              name
-              logoFile {
-                id
-                base64
-                presignedURL
-              }
-            }
-          }
-        }
-        trustCenterSubprocessors {
-          edges {
-            node {
-              id
-              subprocessor {
-                name
-                description
-                logoFile {
-                  base64
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	trustCenters {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				customDomain {
+					cnameRecord
+					dnsVerificationID
+				}
+				customDomainID
+				previewDomain {
+					cnameRecord
+					dnsVerificationID
+				}
+				id
+				ownerID
+				slug
+				tags
+				updatedAt
+				updatedBy
+				setting {
+					id
+					overview
+					title
+					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					faviconRemoteURL
+					faviconLocalFileID
+					faviconFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
+				}
+				posts {
+					edges {
+						node {
+							id
+							text
+						}
+					}
+				}
+				trustCenterEntities {
+					edges {
+						node {
+							id
+							name
+							logoFile {
+								id
+								base64
+								presignedURL
+							}
+						}
+					}
+				}
+				trustCenterSubprocessors {
+					edges {
+						node {
+							id
+							subprocessor {
+								name
+								description
+								logoFile {
+									base64
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetTrustCenterByID($trustCenterId: ID!) {
-  trustCenter(id: $trustCenterId) {
-    createdAt
-    createdBy
-    customDomainID
-    previewDomainID
-    id
-    ownerID
-    pirschDomainID
-    pirschIdentificationCode
-    slug
-    tags
-    updatedAt
-    updatedBy
-    customDomain {
-      cnameRecord
-      dnsVerificationID
-    }
-    setting {
-      id
-      overview
-      title
-      primaryColor
-      logoRemoteURL
-      logoLocalFileID
-      logoFile {
-        presignedURL
-      }
-      faviconRemoteURL
-      faviconLocalFileID
-      faviconFile {
-        presignedURL
-      }
-      themeMode
-      font
-      foregroundColor
-      backgroundColor
-      accentColor
-    }
-    posts {
-      edges {
-        node {
-          id
-          text
-        }
-      }
-    }
-    trustCenterEntities {
-      edges {
-        node {
-          id
-          name
-          logoFile {
-            id
-            base64
-            presignedURL
-          }
-        }
-      }
-    }
-    trustCenterSubprocessors {
-      edges {
-        node {
-          id
-          subprocessor {
-            name
-            description
-            logoFile {
-              base64
-            }
-          }
-        }
-      }
-    }
-  }
+query GetTrustCenterByID ($trustCenterId: ID!) {
+	trustCenter(id: $trustCenterId) {
+		createdAt
+		createdBy
+		customDomainID
+		id
+		ownerID
+		pirschAccessLink
+		pirschDomainID
+		pirschIdentificationCode
+		previewDomainID
+		previewStatus
+		slug
+		subprocessorURL
+		tags
+		updatedAt
+		updatedBy
+		customDomain {
+			cnameRecord
+			dnsVerificationID
+		}
+		setting {
+			id
+			overview
+			title
+			primaryColor
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			faviconRemoteURL
+			faviconLocalFileID
+			faviconFile {
+				presignedURL
+			}
+			themeMode
+			font
+			foregroundColor
+			backgroundColor
+			accentColor
+		}
+		posts {
+			edges {
+				node {
+					id
+					text
+				}
+			}
+		}
+		trustCenterEntities {
+			edges {
+				node {
+					id
+					name
+					logoFile {
+						id
+						base64
+						presignedURL
+					}
+				}
+			}
+		}
+		trustCenterSubprocessors {
+			edges {
+				node {
+					id
+					subprocessor {
+						name
+						description
+						logoFile {
+							base64
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
 query GetTrustCenterFrontendQuery {
-  trustCenters {
-    edges {
-      node {
-        id
-        slug
-        customDomain {
-          cnameRecord
-        }
-        previewDomain {
-          cnameRecord
-        }
-        setting {
-          id
-          title
-          overview
-          accentColor
-          backgroundColor
-          themeMode
-          primaryColor
-          secondaryForegroundColor
-          secondaryBackgroundColor
-          font
-          foregroundColor
-          logoRemoteURL
-          logoFile {
-            base64
-          }
-          faviconFile {
-            base64
-          }
-        }
-        previewSetting {
-          id
-          title
-          overview
-          accentColor
-          backgroundColor
-          themeMode
-          primaryColor
-          secondaryForegroundColor
-          secondaryBackgroundColor
-          font
-          foregroundColor
-          logoRemoteURL
-          logoFile {
-            base64
-          }
-          faviconFile {
-            base64
-          }
-        }
-        trustCenterCompliances {
-          edges {
-            node {
-              id
-              tags
-              standard {
-                description
-                name
-                id
-                shortName
-                logoFile {
-                  base64
-                }
-                governingBodyLogoURL
-              }
-            }
-          }
-        }
-        trustCenterSubprocessors {
-          edges {
-            node {
-              id
-              countries
-              trustCenterSubprocessorKindName
-              subprocessor {
-                name
-                logoFile {
-                  base64
-                  presignedURL
-                }
-                logoRemoteURL
-              }
-            }
-          }
-        }
-        trustCenterEntities {
-          edges {
-            node {
-              id
-              name
-              logoFile {
-                base64
-              }
-              url
-            }
-          }
-        }
-        trustCenterDocs(orderBy: [{field: created_at, direction: DESC}]) {
-          edges {
-            node {
-              id
-              title
-              tags
-              visibility
-              trustCenterDocKindName
-              tags
-              standard {
-                id
-                shortName
-              }
-            }
-          }
-        }
-        posts(orderBy: [{field: created_at, direction: DESC}]) {
-          edges {
-            node {
-              id
-              text
-              updatedAt
-            }
-          }
-        }
-        trustCenterFaqs {
-          edges {
-            node {
-              referenceLink
-              id
-              noteID
-              note {
-                id
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  controls {
-    edges {
-      node {
-        id
-        refCode
-      }
-    }
-  }
+	trustCenters {
+		edges {
+			node {
+				id
+				slug
+				customDomain {
+					cnameRecord
+				}
+				previewDomain {
+					cnameRecord
+				}
+				setting {
+					id
+					title
+					overview
+					accentColor
+					backgroundColor
+					themeMode
+					primaryColor
+					secondaryForegroundColor
+					secondaryBackgroundColor
+					font
+					foregroundColor
+					logoRemoteURL
+					logoFile {
+						base64
+					}
+					faviconFile {
+						base64
+					}
+				}
+				previewSetting {
+					id
+					title
+					overview
+					accentColor
+					backgroundColor
+					themeMode
+					primaryColor
+					secondaryForegroundColor
+					secondaryBackgroundColor
+					font
+					foregroundColor
+					logoRemoteURL
+					logoFile {
+						base64
+					}
+					faviconFile {
+						base64
+					}
+				}
+				trustCenterCompliances {
+					edges {
+						node {
+							id
+							tags
+							standard {
+								description
+								name
+								id
+								shortName
+								logoFile {
+									base64
+								}
+								governingBodyLogoURL
+							}
+						}
+					}
+				}
+				trustCenterSubprocessors {
+					edges {
+						node {
+							id
+							countries
+							trustCenterSubprocessorKindName
+							subprocessor {
+								name
+								logoFile {
+									base64
+									presignedURL
+								}
+								logoRemoteURL
+							}
+						}
+					}
+				}
+				trustCenterEntities {
+					edges {
+						node {
+							id
+							name
+							logoFile {
+								base64
+							}
+							url
+						}
+					}
+				}
+				trustCenterDocs(orderBy: [{field:created_at,direction:DESC}]) {
+					edges {
+						node {
+							id
+							title
+							tags
+							visibility
+							trustCenterDocKindName
+							tags
+							standard {
+								id
+								shortName
+							}
+						}
+					}
+				}
+				posts(orderBy: [{field:created_at,direction:DESC}]) {
+					edges {
+						node {
+							id
+							text
+							updatedAt
+						}
+					}
+				}
+				trustCenterFaqs {
+					edges {
+						node {
+							referenceLink
+							id
+							noteID
+							note {
+								id
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	controls {
+		edges {
+			node {
+				id
+				refCode
+			}
+		}
+	}
 }
-
-query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
-  trustCenters(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        customDomainID
-        previewDomainID
-        id
-        ownerID
-        slug
-        tags
-        updatedAt
-        updatedBy
-        customDomain {
-          cnameRecord
-          dnsVerificationID
-        }
-        setting {
-          id
-          overview
-          title
-          primaryColor
-          logoRemoteURL
-          logoLocalFileID
-          logoFile {
-            presignedURL
-          }
-          faviconRemoteURL
-          faviconLocalFileID
-          faviconFile {
-            presignedURL
-          }
-          themeMode
-          font
-          foregroundColor
-          backgroundColor
-          accentColor
-        }
-      }
-    }
-  }
+query GetTrustCenters ($first: Int, $last: Int, $where: TrustCenterWhereInput) {
+	trustCenters(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				customDomainID
+				previewDomainID
+				id
+				ownerID
+				slug
+				tags
+				updatedAt
+				updatedBy
+				customDomain {
+					cnameRecord
+					dnsVerificationID
+				}
+				setting {
+					id
+					overview
+					title
+					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					faviconRemoteURL
+					faviconLocalFileID
+					faviconFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
-  updateTrustCenter(id: $updateTrustCenterId, input: $input) {
-    trustCenter {
-      createdAt
-      createdBy
-      customDomainID
-      id
-      ownerID
-      slug
-      tags
-      updatedAt
-      updatedBy
-      customDomain {
-        cnameRecord
-        dnsVerificationID
-      }
-      setting {
-        id
-        overview
-        title
-        primaryColor
-        logoRemoteURL
-        logoLocalFileID
-        logoFile {
-          presignedURL
-        }
-        faviconRemoteURL
-        faviconLocalFileID
-        faviconFile {
-          presignedURL
-        }
-        themeMode
-        font
-        foregroundColor
-        backgroundColor
-        accentColor
-      }
-      posts {
-        edges {
-          node {
-            text
-          }
-        }
-      }
-    }
-  }
+mutation UpdateTrustCenter ($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
+	updateTrustCenter(id: $updateTrustCenterId, input: $input) {
+		trustCenter {
+			createdAt
+			createdBy
+			customDomainID
+			id
+			ownerID
+			pirschAccessLink
+			pirschDomainID
+			pirschIdentificationCode
+			previewDomainID
+			previewStatus
+			slug
+			subprocessorURL
+			tags
+			updatedAt
+			updatedBy
+			customDomain {
+				cnameRecord
+				dnsVerificationID
+			}
+			setting {
+				id
+				overview
+				title
+				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
+			}
+			posts {
+				edges {
+					node {
+						text
+					}
+				}
+			}
+		}
+	}
 }

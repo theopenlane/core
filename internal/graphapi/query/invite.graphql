@@ -1,121 +1,135 @@
-mutation CreateBulkCSVInvite($input: Upload!) {
-  createBulkCSVInvite(input: $input) {
-    invites {
-      expires
-      id
-      recipient
-      requestorID
-      role
-      sendAttempts
-      status
-    }
-  }
+mutation CreateBulkCSVInvite ($input: Upload!) {
+	createBulkCSVInvite(input: $input) {
+		invites {
+			createdAt
+			createdBy
+			expires
+			id
+			ownerID
+			ownershipTransfer
+			recipient
+			requestorID
+			role
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateBulkInvite($input: [CreateInviteInput!]) {
-  createBulkInvite(input: $input) {
-    invites {
-      expires
-      id
-      recipient
-      requestorID
-      role
-      sendAttempts
-      status
-    }
-  }
+mutation CreateBulkInvite ($input: [CreateInviteInput!]) {
+	createBulkInvite(input: $input) {
+		invites {
+			createdAt
+			createdBy
+			expires
+			id
+			ownerID
+			ownershipTransfer
+			recipient
+			requestorID
+			role
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateInvite($input: CreateInviteInput!) {
-  createInvite(input: $input) {
-    invite {
-      expires
-      id
-      recipient
-      requestorID
-      role
-      sendAttempts
-      status
-      owner {
-        id
-      }
-      groups {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
+mutation CreateInvite ($input: CreateInviteInput!) {
+	createInvite(input: $input) {
+		invite {
+			createdAt
+			createdBy
+			expires
+			id
+			ownerID
+			ownershipTransfer
+			recipient
+			requestorID
+			role
+			sendAttempts
+			status
+			updatedAt
+			updatedBy
+			owner {
+				id
+			}
+			groups {
+				edges {
+					node {
+						id
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteInvite($deleteInviteId: ID!) {
-  deleteInvite(id: $deleteInviteId) {
-    deletedID
-  }
+mutation DeleteInvite ($deleteInviteId: ID!) {
+	deleteInvite(id: $deleteInviteId) {
+		deletedID
+	}
 }
-
 query GetAllInvites {
-  invites {
-    edges {
-      node {
-        id
-        recipient
-        role
-        status
-        groups {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-      }
-    }
-  }
+	invites {
+		edges {
+			node {
+				id
+				recipient
+				role
+				status
+				groups {
+					edges {
+						node {
+							id
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetInviteByID($inviteId: ID!) {
-  invite(id: $inviteId) {
-    expires
-    id
-    recipient
-    requestorID
-    role
-    sendAttempts
-    status
-    owner {
-      displayName
-      id
-      name
-    }
-    createdAt
-    createdBy
-    updatedAt
-    updatedBy
-  }
+query GetInviteByID ($inviteId: ID!) {
+	invite(id: $inviteId) {
+		createdAt
+		createdBy
+		expires
+		id
+		ownerID
+		ownershipTransfer
+		recipient
+		requestorID
+		role
+		sendAttempts
+		status
+		updatedAt
+		updatedBy
+		owner {
+			displayName
+			id
+			name
+		}
+	}
 }
-
-query InvitesByOrgID($where: InviteWhereInput) {
-  invites(where: $where) {
-    edges {
-      node {
-        owner {
-          id
-          invites {
-            edges {
-              node {
-                recipient
-                requestorID
-                role
-                sendAttempts
-                status
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+query InvitesByOrgID ($where: InviteWhereInput) {
+	invites(where: $where) {
+		edges {
+			node {
+				owner {
+					id
+					invites {
+						edges {
+							node {
+								recipient
+								requestorID
+								role
+								sendAttempts
+								status
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
