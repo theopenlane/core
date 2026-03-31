@@ -4434,6 +4434,7 @@ type CreateCustomDomainInput struct {
 	SystemInternalID  *string
 	CnameRecord       string
 	TrustCenterID     *string
+	DomainType        *enums.CustomDomainType
 	OwnerID           *string
 	MappableDomainID  string
 	DNSVerificationID *string
@@ -4453,6 +4454,9 @@ func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	m.SetCnameRecord(i.CnameRecord)
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.DomainType; v != nil {
+		m.SetDomainType(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6648,10 +6652,13 @@ type CreateEmailTemplateInput struct {
 	Metadata                map[string]interface{}
 	Active                  *bool
 	Version                 *int
-	TemplateContext         *enums.TemplateContext
+	TemplateContext         enums.TemplateContext
 	Defaults                map[string]interface{}
 	OwnerID                 *string
-	EmailBrandingID         *string
+	BlockedGroupIDs         []string
+	EditorIDs               []string
+	ViewerIDs               []string
+	EmailBrandingIDs        []string
 	IntegrationID           *string
 	WorkflowDefinitionID    *string
 	WorkflowInstanceID      *string
@@ -6709,17 +6716,24 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.TemplateContext; v != nil {
-		m.SetTemplateContext(*v)
-	}
+	m.SetTemplateContext(i.TemplateContext)
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.EmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
@@ -6777,12 +6791,21 @@ type UpdateEmailTemplateInput struct {
 	Metadata                      map[string]interface{}
 	Active                        *bool
 	Version                       *int
-	ClearTemplateContext          bool
 	TemplateContext               *enums.TemplateContext
 	ClearDefaults                 bool
 	Defaults                      map[string]interface{}
+	ClearBlockedGroups            bool
+	AddBlockedGroupIDs            []string
+	RemoveBlockedGroupIDs         []string
+	ClearEditors                  bool
+	AddEditorIDs                  []string
+	RemoveEditorIDs               []string
+	ClearViewers                  bool
+	AddViewerIDs                  []string
+	RemoveViewerIDs               []string
 	ClearEmailBranding            bool
-	EmailBrandingID               *string
+	AddEmailBrandingIDs           []string
+	RemoveEmailBrandingIDs        []string
 	ClearIntegration              bool
 	IntegrationID                 *string
 	ClearWorkflowDefinition       bool
@@ -6886,9 +6909,6 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearTemplateContext {
-		m.ClearTemplateContext()
-	}
 	if v := i.TemplateContext; v != nil {
 		m.SetTemplateContext(*v)
 	}
@@ -6898,11 +6918,41 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
 	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
 	if i.ClearEmailBranding {
 		m.ClearEmailBranding()
 	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
+	if v := i.AddEmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
+	}
+	if v := i.RemoveEmailBrandingIDs; len(v) > 0 {
+		m.RemoveEmailBrandingIDs(v...)
 	}
 	if i.ClearIntegration {
 		m.ClearIntegration()

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -209,6 +210,20 @@ func (_c *CustomDomainCreate) SetNillableTrustCenterID(v *string) *CustomDomainC
 	return _c
 }
 
+// SetDomainType sets the "domain_type" field.
+func (_c *CustomDomainCreate) SetDomainType(v enums.CustomDomainType) *CustomDomainCreate {
+	_c.mutation.SetDomainType(v)
+	return _c
+}
+
+// SetNillableDomainType sets the "domain_type" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillableDomainType(v *enums.CustomDomainType) *CustomDomainCreate {
+	if v != nil {
+		_c.SetDomainType(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomDomainCreate) SetID(v string) *CustomDomainCreate {
 	_c.mutation.SetID(v)
@@ -297,6 +312,10 @@ func (_c *CustomDomainCreate) defaults() error {
 		v := customdomain.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.DomainType(); !ok {
+		v := customdomain.DefaultDomainType
+		_c.mutation.SetDomainType(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultID (forgotten import generated/runtime?)")
@@ -323,6 +342,14 @@ func (_c *CustomDomainCreate) check() error {
 	if v, ok := _c.mutation.MappableDomainID(); ok {
 		if err := customdomain.MappableDomainIDValidator(v); err != nil {
 			return &ValidationError{Name: "mappable_domain_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.mappable_domain_id": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.DomainType(); !ok {
+		return &ValidationError{Name: "domain_type", err: errors.New(`generated: missing required field "CustomDomain.domain_type"`)}
+	}
+	if v, ok := _c.mutation.DomainType(); ok {
+		if err := customdomain.DomainTypeValidator(v); err != nil {
+			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.domain_type": %w`, err)}
 		}
 	}
 	if len(_c.mutation.MappableDomainIDs()) == 0 {
@@ -411,6 +438,10 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(customdomain.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
+	}
+	if value, ok := _c.mutation.DomainType(); ok {
+		_spec.SetField(customdomain.FieldDomainType, field.TypeEnum, value)
+		_node.DomainType = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -603,6 +603,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomain.FieldMappableDomainID:  {Type: field.TypeString, Column: customdomain.FieldMappableDomainID},
 			customdomain.FieldDNSVerificationID: {Type: field.TypeString, Column: customdomain.FieldDNSVerificationID},
 			customdomain.FieldTrustCenterID:     {Type: field.TypeString, Column: customdomain.FieldTrustCenterID},
+			customdomain.FieldDomainType:        {Type: field.TypeEnum, Column: customdomain.FieldDomainType},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -944,7 +945,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplate.FieldVersion:              {Type: field.TypeInt, Column: emailtemplate.FieldVersion},
 			emailtemplate.FieldTemplateContext:      {Type: field.TypeEnum, Column: emailtemplate.FieldTemplateContext},
 			emailtemplate.FieldDefaults:             {Type: field.TypeJSON, Column: emailtemplate.FieldDefaults},
-			emailtemplate.FieldEmailBrandingID:      {Type: field.TypeString, Column: emailtemplate.FieldEmailBrandingID},
 			emailtemplate.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplate.FieldIntegrationID},
 			emailtemplate.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplate.FieldWorkflowDefinitionID},
 			emailtemplate.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: emailtemplate.FieldWorkflowInstanceID},
@@ -6382,10 +6382,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"email_templates",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 		},
 		"EmailBranding",
@@ -6404,12 +6404,48 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.BlockedGroupsTable,
+			Columns: []string{emailtemplate.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"EmailTemplate",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.EditorsTable,
+			Columns: []string{emailtemplate.EditorsColumn},
+			Bidi:    false,
+		},
+		"EmailTemplate",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.ViewersTable,
+			Columns: []string{emailtemplate.ViewersColumn},
+			Bidi:    false,
+		},
+		"EmailTemplate",
+		"Group",
+	)
+	graph.MustAddE(
 		"email_branding",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   emailtemplate.EmailBrandingTable,
-			Columns: []string{emailtemplate.EmailBrandingColumn},
+			Columns: emailtemplate.EmailBrandingPrimaryKey,
 			Bidi:    false,
 		},
 		"EmailTemplate",
@@ -21132,6 +21168,11 @@ func (f *CustomDomainFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(customdomain.FieldTrustCenterID))
 }
 
+// WhereDomainType applies the entql string predicate on the domain_type field.
+func (f *CustomDomainFilter) WhereDomainType(p entql.StringP) {
+	f.Where(p.Field(customdomain.FieldDomainType))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *CustomDomainFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -23623,11 +23664,6 @@ func (f *EmailTemplateFilter) WhereDefaults(p entql.BytesP) {
 	f.Where(p.Field(emailtemplate.FieldDefaults))
 }
 
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *EmailTemplateFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(emailtemplate.FieldEmailBrandingID))
-}
-
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *EmailTemplateFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(emailtemplate.FieldIntegrationID))
@@ -23651,6 +23687,48 @@ func (f *EmailTemplateFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *EmailTemplateFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *EmailTemplateFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *EmailTemplateFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *EmailTemplateFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *EmailTemplateFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *EmailTemplateFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *EmailTemplateFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

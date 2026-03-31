@@ -577,6 +577,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomainhistory.FieldMappableDomainID:  {Type: field.TypeString, Column: customdomainhistory.FieldMappableDomainID},
 			customdomainhistory.FieldDNSVerificationID: {Type: field.TypeString, Column: customdomainhistory.FieldDNSVerificationID},
 			customdomainhistory.FieldTrustCenterID:     {Type: field.TypeString, Column: customdomainhistory.FieldTrustCenterID},
+			customdomainhistory.FieldDomainType:        {Type: field.TypeEnum, Column: customdomainhistory.FieldDomainType},
 		},
 	}
 	graph.Nodes[11] = &sqlgraph.Node{
@@ -879,7 +880,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplatehistory.FieldVersion:              {Type: field.TypeInt, Column: emailtemplatehistory.FieldVersion},
 			emailtemplatehistory.FieldTemplateContext:      {Type: field.TypeEnum, Column: emailtemplatehistory.FieldTemplateContext},
 			emailtemplatehistory.FieldDefaults:             {Type: field.TypeJSON, Column: emailtemplatehistory.FieldDefaults},
-			emailtemplatehistory.FieldEmailBrandingID:      {Type: field.TypeString, Column: emailtemplatehistory.FieldEmailBrandingID},
 			emailtemplatehistory.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplatehistory.FieldIntegrationID},
 			emailtemplatehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowDefinitionID},
 			emailtemplatehistory.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowInstanceID},
@@ -5344,6 +5344,11 @@ func (f *CustomDomainHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(customdomainhistory.FieldTrustCenterID))
 }
 
+// WhereDomainType applies the entql string predicate on the domain_type field.
+func (f *CustomDomainHistoryFilter) WhereDomainType(p entql.StringP) {
+	f.Where(p.Field(customdomainhistory.FieldDomainType))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *DNSVerificationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -6652,11 +6657,6 @@ func (f *EmailTemplateHistoryFilter) WhereTemplateContext(p entql.StringP) {
 // WhereDefaults applies the entql json.RawMessage predicate on the defaults field.
 func (f *EmailTemplateHistoryFilter) WhereDefaults(p entql.BytesP) {
 	f.Where(p.Field(emailtemplatehistory.FieldDefaults))
-}
-
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *EmailTemplateHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(emailtemplatehistory.FieldEmailBrandingID))
 }
 
 // WhereIntegrationID applies the entql string predicate on the integration_id field.

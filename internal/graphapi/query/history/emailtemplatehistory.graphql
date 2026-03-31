@@ -15,7 +15,6 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				createdBy
 				defaults
 				description
-				emailBrandingID
 				format
 				historyTime
 				id
@@ -42,6 +41,7 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				version
 				workflowDefinitionID
 				workflowInstanceID
+				emailBrandingID
 			}
 		}
 	}
@@ -63,7 +63,6 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				createdBy
 				defaults
 				description
-				emailBrandingID
 				format
 				historyTime
 				id
@@ -90,6 +89,7 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				version
 				workflowDefinitionID
 				workflowInstanceID
+				emailBrandingID
 			}
 		}
 	}

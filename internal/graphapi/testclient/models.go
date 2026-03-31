@@ -6101,10 +6101,12 @@ type CreateCustomDomainInput struct {
 	// the name of the custom domain
 	CnameRecord string `json:"cnameRecord"`
 	// the ID of the trust center the domain belongs to, if applicable
-	TrustCenterID     *string `json:"trustCenterID,omitempty"`
-	OwnerID           *string `json:"ownerID,omitempty"`
-	MappableDomainID  string  `json:"mappableDomainID"`
-	DNSVerificationID *string `json:"dnsVerificationID,omitempty"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// the type of this custom domain
+	DomainType        *enums.CustomDomainType `json:"domainType,omitempty"`
+	OwnerID           *string                 `json:"ownerID,omitempty"`
+	MappableDomainID  string                  `json:"mappableDomainID"`
+	DNSVerificationID *string                 `json:"dnsVerificationID,omitempty"`
 }
 
 // CreateCustomTypeEnumInput is used for create CustomTypeEnum object.
@@ -6448,11 +6450,14 @@ type CreateEmailTemplateInput struct {
 	// template version
 	Version *int64 `json:"version,omitempty"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
+	TemplateContext enums.TemplateContext `json:"templateContext"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                map[string]any `json:"defaults,omitempty"`
 	OwnerID                 *string        `json:"ownerID,omitempty"`
-	EmailBrandingID         *string        `json:"emailBrandingID,omitempty"`
+	BlockedGroupIDs         []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs               []string       `json:"editorIDs,omitempty"`
+	ViewerIDs               []string       `json:"viewerIDs,omitempty"`
+	EmailBrandingIDs        []string       `json:"emailBrandingIDs,omitempty"`
 	IntegrationID           *string        `json:"integrationID,omitempty"`
 	WorkflowDefinitionID    *string        `json:"workflowDefinitionID,omitempty"`
 	WorkflowInstanceID      *string        `json:"workflowInstanceID,omitempty"`
@@ -9120,10 +9125,12 @@ type CustomDomain struct {
 	// The ID of the dns verification record
 	DNSVerificationID *string `json:"dnsVerificationID,omitempty"`
 	// the ID of the trust center the domain belongs to, if applicable
-	TrustCenterID   *string          `json:"trustCenterID,omitempty"`
-	Owner           *Organization    `json:"owner,omitempty"`
-	MappableDomain  *MappableDomain  `json:"mappableDomain"`
-	DNSVerification *DNSVerification `json:"dnsVerification,omitempty"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// the type of this custom domain
+	DomainType      enums.CustomDomainType `json:"domainType"`
+	Owner           *Organization          `json:"owner,omitempty"`
+	MappableDomain  *MappableDomain        `json:"mappableDomain"`
+	DNSVerification *DNSVerification       `json:"dnsVerification,omitempty"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -9382,6 +9389,11 @@ type CustomDomainWhereInput struct {
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// domain_type field predicates
+	DomainType      *enums.CustomDomainType  `json:"domainType,omitempty"`
+	DomainTypeNeq   *enums.CustomDomainType  `json:"domainTypeNEQ,omitempty"`
+	DomainTypeIn    []enums.CustomDomainType `json:"domainTypeIn,omitempty"`
+	DomainTypeNotIn []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -12846,11 +12858,9 @@ type EmailTemplate struct {
 	// template version
 	Version int64 `json:"version"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
+	TemplateContext enums.TemplateContext `json:"templateContext"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults map[string]any `json:"defaults,omitempty"`
-	// email branding configuration to apply for this template
-	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
 	// integration used to deliver emails for this template
 	IntegrationID *string `json:"integrationID,omitempty"`
 	// workflow definition associated with this template
@@ -12858,7 +12868,10 @@ type EmailTemplate struct {
 	// workflow instance associated with this template
 	WorkflowInstanceID    *string                         `json:"workflowInstanceID,omitempty"`
 	Owner                 *Organization                   `json:"owner,omitempty"`
-	EmailBranding         *EmailBranding                  `json:"emailBranding,omitempty"`
+	BlockedGroups         *GroupConnection                `json:"blockedGroups"`
+	Editors               *GroupConnection                `json:"editors"`
+	Viewers               *GroupConnection                `json:"viewers"`
+	EmailBranding         []*EmailBranding                `json:"emailBranding,omitempty"`
 	Integration           *Integration                    `json:"integration,omitempty"`
 	WorkflowDefinition    *WorkflowDefinition             `json:"workflowDefinition,omitempty"`
 	WorkflowInstance      *WorkflowInstance               `json:"workflowInstance,omitempty"`
@@ -13213,28 +13226,10 @@ type EmailTemplateWhereInput struct {
 	VersionLt    *int64  `json:"versionLT,omitempty"`
 	VersionLte   *int64  `json:"versionLTE,omitempty"`
 	// template_context field predicates
-	TemplateContext       *enums.TemplateContext  `json:"templateContext,omitempty"`
-	TemplateContextNeq    *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
-	TemplateContextIn     []enums.TemplateContext `json:"templateContextIn,omitempty"`
-	TemplateContextNotIn  []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
-	TemplateContextIsNil  *bool                   `json:"templateContextIsNil,omitempty"`
-	TemplateContextNotNil *bool                   `json:"templateContextNotNil,omitempty"`
-	// email_branding_id field predicates
-	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
-	EmailBrandingIdneq          *string  `json:"emailBrandingIDNEQ,omitempty"`
-	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
-	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
-	EmailBrandingIdgt           *string  `json:"emailBrandingIDGT,omitempty"`
-	EmailBrandingIdgte          *string  `json:"emailBrandingIDGTE,omitempty"`
-	EmailBrandingIdlt           *string  `json:"emailBrandingIDLT,omitempty"`
-	EmailBrandingIdlte          *string  `json:"emailBrandingIDLTE,omitempty"`
-	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
-	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
-	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
-	EmailBrandingIDIsNil        *bool    `json:"emailBrandingIDIsNil,omitempty"`
-	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
-	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
-	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
+	TemplateContext      *enums.TemplateContext  `json:"templateContext,omitempty"`
+	TemplateContextNeq   *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
+	TemplateContextIn    []enums.TemplateContext `json:"templateContextIn,omitempty"`
+	TemplateContextNotIn []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
 	// integration_id field predicates
 	IntegrationID             *string  `json:"integrationID,omitempty"`
 	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
@@ -13286,6 +13281,15 @@ type EmailTemplateWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// email_branding edge predicates
 	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
 	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
@@ -39195,12 +39199,21 @@ type UpdateEmailTemplateInput struct {
 	// template version
 	Version *int64 `json:"version,omitempty"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext      *enums.TemplateContext `json:"templateContext,omitempty"`
-	ClearTemplateContext *bool                  `json:"clearTemplateContext,omitempty"`
+	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                      map[string]any `json:"defaults,omitempty"`
 	ClearDefaults                 *bool          `json:"clearDefaults,omitempty"`
-	EmailBrandingID               *string        `json:"emailBrandingID,omitempty"`
+	AddBlockedGroupIDs            []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs         []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups            *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                  []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs               []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors                  *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs                  []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs               []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers                  *bool          `json:"clearViewers,omitempty"`
+	AddEmailBrandingIDs           []string       `json:"addEmailBrandingIDs,omitempty"`
+	RemoveEmailBrandingIDs        []string       `json:"removeEmailBrandingIDs,omitempty"`
 	ClearEmailBranding            *bool          `json:"clearEmailBranding,omitempty"`
 	IntegrationID                 *string        `json:"integrationID,omitempty"`
 	ClearIntegration              *bool          `json:"clearIntegration,omitempty"`

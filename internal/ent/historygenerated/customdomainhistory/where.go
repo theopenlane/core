@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -1190,6 +1191,36 @@ func TrustCenterIDEqualFold(v string) predicate.CustomDomainHistory {
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
 func TrustCenterIDContainsFold(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// DomainTypeEQ applies the EQ predicate on the "domain_type" field.
+func DomainTypeEQ(v enums.CustomDomainType) predicate.CustomDomainHistory {
+	vc := v
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldDomainType, vc))
+}
+
+// DomainTypeNEQ applies the NEQ predicate on the "domain_type" field.
+func DomainTypeNEQ(v enums.CustomDomainType) predicate.CustomDomainHistory {
+	vc := v
+	return predicate.CustomDomainHistory(sql.FieldNEQ(FieldDomainType, vc))
+}
+
+// DomainTypeIn applies the In predicate on the "domain_type" field.
+func DomainTypeIn(vs ...enums.CustomDomainType) predicate.CustomDomainHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomainHistory(sql.FieldIn(FieldDomainType, v...))
+}
+
+// DomainTypeNotIn applies the NotIn predicate on the "domain_type" field.
+func DomainTypeNotIn(vs ...enums.CustomDomainType) predicate.CustomDomainHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldDomainType, v...))
 }
 
 // And groups predicates with the AND operator between them.

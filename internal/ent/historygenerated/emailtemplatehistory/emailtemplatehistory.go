@@ -80,8 +80,6 @@ const (
 	FieldTemplateContext = "template_context"
 	// FieldDefaults holds the string denoting the defaults field in the database.
 	FieldDefaults = "defaults"
-	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
-	FieldEmailBrandingID = "email_branding_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
 	// FieldWorkflowDefinitionID holds the string denoting the workflow_definition_id field in the database.
@@ -125,7 +123,6 @@ var Columns = []string{
 	FieldVersion,
 	FieldTemplateContext,
 	FieldDefaults,
-	FieldEmailBrandingID,
 	FieldIntegrationID,
 	FieldWorkflowDefinitionID,
 	FieldWorkflowInstanceID,
@@ -340,11 +337,6 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 // ByTemplateContext orders the results by the template_context field.
 func ByTemplateContext(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTemplateContext, opts...).ToFunc()
-}
-
-// ByEmailBrandingID orders the results by the email_branding_id field.
-func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
 }
 
 // ByIntegrationID orders the results by the integration_id field.

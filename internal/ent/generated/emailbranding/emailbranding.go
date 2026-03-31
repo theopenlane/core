@@ -107,13 +107,11 @@ const (
 	CampaignsInverseTable = "campaigns"
 	// CampaignsColumn is the table column denoting the campaigns relation/edge.
 	CampaignsColumn = "email_branding_id"
-	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
-	EmailTemplatesTable = "email_templates"
+	// EmailTemplatesTable is the table that holds the email_templates relation/edge. The primary key declared below.
+	EmailTemplatesTable = "email_branding_email_templates"
 	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
 	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
 	EmailTemplatesInverseTable = "email_templates"
-	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
-	EmailTemplatesColumn = "email_branding_id"
 )
 
 // Columns holds all SQL columns for emailbranding fields.
@@ -140,6 +138,12 @@ var Columns = []string{
 	FieldFontFamily,
 	FieldIsDefault,
 }
+
+var (
+	// EmailTemplatesPrimaryKey and EmailTemplatesColumn2 are the table columns denoting the
+	// primary key for the email_templates relation (M2M).
+	EmailTemplatesPrimaryKey = []string{"email_branding_id", "email_template_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -426,7 +430,7 @@ func newEmailTemplatesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EmailTemplatesTable, EmailTemplatesPrimaryKey...),
 	)
 }
 

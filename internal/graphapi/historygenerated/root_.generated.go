@@ -495,6 +495,7 @@ type ComplexityRoot struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DNSVerificationID func(childComplexity int) int
+		DomainType        func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		InternalNotes     func(childComplexity int) int
@@ -793,7 +794,6 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
-		EmailBrandingID      func(childComplexity int) int
 		Format               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -5813,6 +5813,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.CustomDomainHistory.DNSVerificationID(childComplexity), true
 
+	case "CustomDomainHistory.domainType":
+		if e.ComplexityRoot.CustomDomainHistory.DomainType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainHistory.DomainType(childComplexity), true
+
 	case "CustomDomainHistory.historyTime":
 		if e.ComplexityRoot.CustomDomainHistory.HistoryTime == nil {
 			break
@@ -7394,13 +7401,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Description(childComplexity), true
-
-	case "EmailTemplateHistory.emailBrandingID":
-		if e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID(childComplexity), true
 
 	case "EmailTemplateHistory.format":
 		if e.ComplexityRoot.EmailTemplateHistory.Format == nil {
@@ -27371,6 +27371,10 @@ type CustomDomainHistory implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainHistoryCustomDomainType!
 }
 """
 A connection to a list of items.
@@ -27388,6 +27392,14 @@ type CustomDomainHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainHistoryCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -27680,6 +27692,13 @@ input CustomDomainHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainHistoryCustomDomainType
+  domainTypeNEQ: CustomDomainHistoryCustomDomainType
+  domainTypeIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
 }
 type DNSVerificationHistory implements Node {
   id: ID!
@@ -31235,15 +31254,11 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext
+  templateContext: EmailTemplateHistoryTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: String
   """
   integration used to deliver emails for this template
   """
@@ -31707,26 +31722,6 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   integration_id field predicates
   """

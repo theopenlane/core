@@ -528,6 +528,7 @@ var (
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "domain_type", Type: field.TypeEnum, Enums: []string{"PREVIEW", "EXTERNAL", "UNKNOWN"}, Default: "UNKNOWN"},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{
@@ -860,9 +861,8 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "version", Type: field.TypeInt, Default: 1},
-		{Name: "template_context", Type: field.TypeEnum, Nullable: true, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
+		{Name: "template_context", Type: field.TypeEnum, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
 		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
-		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_instance_id", Type: field.TypeString, Nullable: true},

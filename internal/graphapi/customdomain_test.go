@@ -5,11 +5,13 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryCustomDomainByID(t *testing.T) {
@@ -231,6 +233,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.request.CnameRecord, resp.CreateCustomDomain.CustomDomain.CnameRecord))
 			assert.Check(t, is.Equal(tc.request.MappableDomainID, resp.CreateCustomDomain.CustomDomain.MappableDomainID))
+			assert.Check(t, is.Equal(resp.CreateCustomDomain.CustomDomain.DomainType, enums.CustomDomainTypeExternal))
 
 			// Clean up
 			(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateCustomDomain.CustomDomain.ID}).MustDelete(tc.ctx, t)

@@ -912,10 +912,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "email_branding": {
-	ObjectType:      "email_branding",
+}, "blocked_groups": {
+	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "email_branding": {
+	ObjectType:      "email_branding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "integration": {
 	ObjectType:      "integration",
 	SkipEditCheck:   true,

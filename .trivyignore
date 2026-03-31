@@ -1,0 +1,6 @@
+## https://github.com/testcontainers/testcontainers-go/issues/3614
+## requires a lot of changes since docker/docker updated import paths to 
+## moby/moby, so waiting until this is fixed.
+## 
+## this is also a transient dependency for us
+CVE-2026-34040

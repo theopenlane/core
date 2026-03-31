@@ -6,6 +6,9 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
@@ -14,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // HookCustomDomain runs on create mutations
@@ -22,6 +24,11 @@ func HookCreateCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
+				domainType, ok := m.DomainType()
+				if !ok || domainType == enums.CustomDomainTypeUnknown {
+					m.SetDomainType(enums.CustomDomainTypeExternal)
+				}
+
 				v, err := next.Mutate(ctx, m)
 				if err != nil {
 					return v, err

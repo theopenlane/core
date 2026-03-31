@@ -969,30 +969,30 @@ func (_u *EmailBrandingUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.EmailTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
+		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
+		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1000,16 +1000,16 @@ func (_u *EmailBrandingUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if nodes := _u.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
+		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2002,30 +2002,30 @@ func (_u *EmailBrandingUpdateOne) sqlSave(ctx context.Context) (_node *EmailBran
 	}
 	if _u.mutation.EmailTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
+		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
+		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2033,16 +2033,16 @@ func (_u *EmailBrandingUpdateOne) sqlSave(ctx context.Context) (_node *EmailBran
 	}
 	if nodes := _u.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
+		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

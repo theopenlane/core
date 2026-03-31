@@ -8267,11 +8267,11 @@ func (c *EmailBrandingClient) QueryEmailTemplates(_m *EmailBranding) *EmailTempl
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.EmailTemplatesTable, emailbranding.EmailTemplatesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, emailbranding.EmailTemplatesTable, emailbranding.EmailTemplatesPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8432,6 +8432,63 @@ func (c *EmailTemplateClient) QueryOwner(_m *EmailTemplate) *OrganizationQuery {
 	return query
 }
 
+// QueryBlockedGroups queries the blocked_groups edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryBlockedGroups(_m *EmailTemplate) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.BlockedGroupsTable, emailtemplate.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryEditors(_m *EmailTemplate) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.EditorsTable, emailtemplate.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryViewers(_m *EmailTemplate) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.ViewersTable, emailtemplate.ViewersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEmailBranding queries the email_branding edge of a EmailTemplate.
 func (c *EmailTemplateClient) QueryEmailBranding(_m *EmailTemplate) *EmailBrandingQuery {
 	query := (&EmailBrandingClient{config: c.config}).Query()
@@ -8440,11 +8497,11 @@ func (c *EmailTemplateClient) QueryEmailBranding(_m *EmailTemplate) *EmailBrandi
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
 			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

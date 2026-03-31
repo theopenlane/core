@@ -2559,6 +2559,11 @@ func (_q *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, customdomainhistory.FieldTrustCenterID)
 				fieldSeen[customdomainhistory.FieldTrustCenterID] = struct{}{}
 			}
+		case "domainType":
+			if _, ok := fieldSeen[customdomainhistory.FieldDomainType]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldDomainType)
+				fieldSeen[customdomainhistory.FieldDomainType] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -4170,11 +4175,6 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[emailtemplatehistory.FieldDefaults]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldDefaults)
 				fieldSeen[emailtemplatehistory.FieldDefaults] = struct{}{}
-			}
-		case "emailBrandingID":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldEmailBrandingID)
-				fieldSeen[emailtemplatehistory.FieldEmailBrandingID] = struct{}{}
 			}
 		case "integrationID":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldIntegrationID]; !ok {

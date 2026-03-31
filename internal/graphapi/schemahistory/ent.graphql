@@ -6065,6 +6065,10 @@ type CustomDomainHistory implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainHistoryCustomDomainType!
 }
 """
 A connection to a list of items.
@@ -6082,6 +6086,14 @@ type CustomDomainHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainHistoryCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -6374,6 +6386,13 @@ input CustomDomainHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainHistoryCustomDomainType
+  domainTypeNEQ: CustomDomainHistoryCustomDomainType
+  domainTypeIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
 }
 type DNSVerificationHistory implements Node {
   id: ID!
@@ -9929,15 +9948,11 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext
+  templateContext: EmailTemplateHistoryTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: String
   """
   integration used to deliver emails for this template
   """
@@ -10401,26 +10416,6 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   integration_id field predicates
   """

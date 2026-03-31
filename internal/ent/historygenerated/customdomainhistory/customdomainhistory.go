@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -55,6 +56,8 @@ const (
 	FieldDNSVerificationID = "dns_verification_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldDomainType holds the string denoting the domain_type field in the database.
+	FieldDomainType = "domain_type"
 	// Table holds the table name of the customdomainhistory in the database.
 	Table = "custom_domain_history"
 )
@@ -80,6 +83,7 @@ var Columns = []string{
 	FieldMappableDomainID,
 	FieldDNSVerificationID,
 	FieldTrustCenterID,
+	FieldDomainType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -124,6 +128,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("customdomainhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultDomainType enums.CustomDomainType = "UNKNOWN"
+
+// DomainTypeValidator is a validator for the "domain_type" field enum values. It is called by the builders before save.
+func DomainTypeValidator(dt enums.CustomDomainType) error {
+	switch dt.String() {
+	case "PREVIEW", "EXTERNAL", "UNKNOWN":
+		return nil
+	default:
+		return fmt.Errorf("customdomainhistory: invalid enum value for domain_type field: %q", dt)
 	}
 }
 
@@ -220,9 +236,21 @@ func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
+// ByDomainType orders the results by the domain_type field.
+func ByDomainType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDomainType, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.CustomDomainType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.CustomDomainType)(nil)
+	// enums.CustomDomainType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.CustomDomainType)(nil)
 )

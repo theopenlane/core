@@ -4272,6 +4272,10 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if domainType, exists := m.DomainType(); exists {
+		create = create.SetDomainType(domainType)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4393,6 +4397,12 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetTrustCenterID(customdomain.TrustCenterID)
 		}
 
+		if domainType, exists := m.DomainType(); exists {
+			create = create.SetDomainType(domainType)
+		} else {
+			create = create.SetDomainType(customdomain.DomainType)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4443,6 +4453,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetMappableDomainID(customdomain.MappableDomainID).
 			SetDNSVerificationID(customdomain.DNSVerificationID).
 			SetTrustCenterID(customdomain.TrustCenterID).
+			SetDomainType(customdomain.DomainType).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6830,10 +6841,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetDefaults(defaults)
 	}
 
-	if emailBrandingID, exists := m.EmailBrandingID(); exists {
-		create = create.SetEmailBrandingID(emailBrandingID)
-	}
-
 	if integrationID, exists := m.IntegrationID(); exists {
 		create = create.SetIntegrationID(integrationID)
 	}
@@ -7039,12 +7046,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetDefaults(emailtemplate.Defaults)
 		}
 
-		if emailBrandingID, exists := m.EmailBrandingID(); exists {
-			create = create.SetEmailBrandingID(emailBrandingID)
-		} else {
-			create = create.SetEmailBrandingID(emailtemplate.EmailBrandingID)
-		}
-
 		if integrationID, exists := m.IntegrationID(); exists {
 			create = create.SetIntegrationID(integrationID)
 		} else {
@@ -7125,7 +7126,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetVersion(emailtemplate.Version).
 			SetTemplateContext(emailtemplate.TemplateContext).
 			SetDefaults(emailtemplate.Defaults).
-			SetEmailBrandingID(emailtemplate.EmailBrandingID).
 			SetIntegrationID(emailtemplate.IntegrationID).
 			SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID).
 			SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID).

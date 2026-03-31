@@ -2189,6 +2189,7 @@ func init() {
 	emailtemplateMixinHooks3 := emailtemplateMixin[3].Hooks()
 	emailtemplateMixinHooks5 := emailtemplateMixin[5].Hooks()
 	emailtemplateMixinHooks6 := emailtemplateMixin[6].Hooks()
+	emailtemplateMixinHooks7 := emailtemplateMixin[7].Hooks()
 	emailtemplateHooks := schema.EmailTemplate{}.Hooks()
 
 	emailtemplate.Hooks[1] = emailtemplateMixinHooks0[0]
@@ -2205,7 +2206,13 @@ func init() {
 
 	emailtemplate.Hooks[7] = emailtemplateMixinHooks6[1]
 
-	emailtemplate.Hooks[8] = emailtemplateHooks[0]
+	emailtemplate.Hooks[8] = emailtemplateMixinHooks7[0]
+
+	emailtemplate.Hooks[9] = emailtemplateMixinHooks7[1]
+
+	emailtemplate.Hooks[10] = emailtemplateMixinHooks7[2]
+
+	emailtemplate.Hooks[11] = emailtemplateHooks[0]
 	emailtemplateMixinInters1 := emailtemplateMixin[1].Interceptors()
 	emailtemplateMixinInters5 := emailtemplateMixin[5].Interceptors()
 	emailtemplate.Interceptors[0] = emailtemplateMixinInters1[0]

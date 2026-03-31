@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -51,6 +52,8 @@ type CustomDomain struct {
 	DNSVerificationID string `json:"dns_verification_id,omitempty"`
 	// the ID of the trust center the domain belongs to, if applicable
 	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// the type of this custom domain
+	DomainType enums.CustomDomainType `json:"domain_type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomDomainQuery when eager-loading is set.
 	Edges                           CustomDomainEdges `json:"edges"`
@@ -116,7 +119,7 @@ func (*CustomDomain) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case customdomain.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case customdomain.FieldID, customdomain.FieldCreatedBy, customdomain.FieldUpdatedBy, customdomain.FieldDeletedBy, customdomain.FieldOwnerID, customdomain.FieldInternalNotes, customdomain.FieldSystemInternalID, customdomain.FieldCnameRecord, customdomain.FieldMappableDomainID, customdomain.FieldDNSVerificationID, customdomain.FieldTrustCenterID:
+		case customdomain.FieldID, customdomain.FieldCreatedBy, customdomain.FieldUpdatedBy, customdomain.FieldDeletedBy, customdomain.FieldOwnerID, customdomain.FieldInternalNotes, customdomain.FieldSystemInternalID, customdomain.FieldCnameRecord, customdomain.FieldMappableDomainID, customdomain.FieldDNSVerificationID, customdomain.FieldTrustCenterID, customdomain.FieldDomainType:
 			values[i] = new(sql.NullString)
 		case customdomain.FieldCreatedAt, customdomain.FieldUpdatedAt, customdomain.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -239,6 +242,12 @@ func (_m *CustomDomain) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
 			}
+		case customdomain.FieldDomainType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field domain_type", values[i])
+			} else if value.Valid {
+				_m.DomainType = enums.CustomDomainType(value.String)
+			}
 		case customdomain.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_custom_domains", values[i])
@@ -352,6 +361,9 @@ func (_m *CustomDomain) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("domain_type=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DomainType))
 	builder.WriteByte(')')
 	return builder.String()
 }
