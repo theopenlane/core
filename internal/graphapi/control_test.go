@@ -2959,6 +2959,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetTitle("Trust Center Public Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
+		SetPublicRepresentation("p123").
 		SetOwnerID(testUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
@@ -2976,6 +2977,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetTitle("Trust Center Hidden Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
+		SetPublicRepresentation("p1234").
 		SetOwnerID(testUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
