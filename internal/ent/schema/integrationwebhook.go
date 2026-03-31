@@ -178,7 +178,7 @@ func (w IntegrationWebhook) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationWebhook](w,
 				withParents(Integration{}),
-				withOrganizationOwner(true),
+				withOrganizationOwnerServiceOnly(true),
 			),
 		},
 	}.getMixins(w)
