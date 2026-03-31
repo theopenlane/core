@@ -11111,13 +11111,16 @@ input CreateEmailTemplateInput {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext
+  templateContext: EmailTemplateTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
   ownerID: ID
-  emailBrandingID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  emailBrandingIDs: [ID!]
   integrationID: ID
   workflowDefinitionID: ID
   workflowInstanceID: ID
@@ -20816,15 +20819,11 @@ type EmailTemplate implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext
+  templateContext: EmailTemplateTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: ID
   """
   integration used to deliver emails for this template
   """
@@ -20838,7 +20837,100 @@ type EmailTemplate implements Node {
   """
   workflowInstanceID: ID
   owner: Organization
-  emailBranding: EmailBranding
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  emailBranding: [EmailBranding!]
   integration: Integration
   workflowDefinition: WorkflowDefinition
   workflowInstance: WorkflowInstance
@@ -21341,26 +21433,6 @@ input EmailTemplateWhereInput {
   templateContextNEQ: EmailTemplateTemplateContext
   templateContextIn: [EmailTemplateTemplateContext!]
   templateContextNotIn: [EmailTemplateTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: ID
-  emailBrandingIDNEQ: ID
-  emailBrandingIDIn: [ID!]
-  emailBrandingIDNotIn: [ID!]
-  emailBrandingIDGT: ID
-  emailBrandingIDGTE: ID
-  emailBrandingIDLT: ID
-  emailBrandingIDLTE: ID
-  emailBrandingIDContains: ID
-  emailBrandingIDHasPrefix: ID
-  emailBrandingIDHasSuffix: ID
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: ID
-  emailBrandingIDContainsFold: ID
   """
   integration_id field predicates
   """
@@ -21420,6 +21492,21 @@ input EmailTemplateWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   email_branding edge predicates
   """
@@ -71181,13 +71268,22 @@ input UpdateEmailTemplateInput {
   runtime data context defining available variable keys for this template
   """
   templateContext: EmailTemplateTemplateContext
-  clearTemplateContext: Boolean
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
   clearDefaults: Boolean
-  emailBrandingID: ID
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addEmailBrandingIDs: [ID!]
+  removeEmailBrandingIDs: [ID!]
   clearEmailBranding: Boolean
   integrationID: ID
   clearIntegration: Boolean

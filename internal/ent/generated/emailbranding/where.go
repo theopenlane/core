@@ -1568,11 +1568,11 @@ func HasEmailTemplates() predicate.EmailBranding {
 	return predicate.EmailBranding(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, EmailTemplatesTable, EmailTemplatesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1583,7 +1583,7 @@ func HasEmailTemplatesWith(preds ...predicate.EmailTemplate) predicate.EmailBran
 		step := newEmailTemplatesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

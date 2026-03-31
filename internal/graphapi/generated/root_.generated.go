@@ -1614,14 +1614,15 @@ type ComplexityRoot struct {
 
 	EmailTemplate struct {
 		Active                func(childComplexity int) int
+		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BodyTemplate          func(childComplexity int) int
 		Campaigns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
 		Defaults              func(childComplexity int) int
 		Description           func(childComplexity int) int
+		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EmailBranding         func(childComplexity int) int
-		EmailBrandingID       func(childComplexity int) int
 		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Format                func(childComplexity int) int
 		ID                    func(childComplexity int) int
@@ -1647,6 +1648,7 @@ type ComplexityRoot struct {
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		Version               func(childComplexity int) int
+		Viewers               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowDefinition    func(childComplexity int) int
 		WorkflowDefinitionID  func(childComplexity int) int
 		WorkflowInstance      func(childComplexity int) int
@@ -15025,6 +15027,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.Active(childComplexity), true
 
+	case "EmailTemplate.blockedGroups":
+		if e.ComplexityRoot.EmailTemplate.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_EmailTemplate_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.EmailTemplate.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "EmailTemplate.bodyTemplate":
 		if e.ComplexityRoot.EmailTemplate.BodyTemplate == nil {
 			break
@@ -15072,19 +15086,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.Description(childComplexity), true
 
+	case "EmailTemplate.editors":
+		if e.ComplexityRoot.EmailTemplate.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_EmailTemplate_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.EmailTemplate.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "EmailTemplate.emailBranding":
 		if e.ComplexityRoot.EmailTemplate.EmailBranding == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EmailTemplate.EmailBranding(childComplexity), true
-
-	case "EmailTemplate.emailBrandingID":
-		if e.ComplexityRoot.EmailTemplate.EmailBrandingID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.EmailBrandingID(childComplexity), true
 
 	case "EmailTemplate.files":
 		if e.ComplexityRoot.EmailTemplate.Files == nil {
@@ -15270,6 +15289,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.Version(childComplexity), true
+
+	case "EmailTemplate.viewers":
+		if e.ComplexityRoot.EmailTemplate.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_EmailTemplate_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.EmailTemplate.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "EmailTemplate.workflowDefinition":
 		if e.ComplexityRoot.EmailTemplate.WorkflowDefinition == nil {
@@ -65779,13 +65810,16 @@ input CreateEmailTemplateInput {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext
+  templateContext: EmailTemplateTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
   ownerID: ID
-  emailBrandingID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  emailBrandingIDs: [ID!]
   integrationID: ID
   workflowDefinitionID: ID
   workflowInstanceID: ID
@@ -75484,15 +75518,11 @@ type EmailTemplate implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext
+  templateContext: EmailTemplateTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: ID
   """
   integration used to deliver emails for this template
   """
@@ -75506,7 +75536,100 @@ type EmailTemplate implements Node {
   """
   workflowInstanceID: ID
   owner: Organization
-  emailBranding: EmailBranding
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  emailBranding: [EmailBranding!]
   integration: Integration
   workflowDefinition: WorkflowDefinition
   workflowInstance: WorkflowInstance
@@ -76009,26 +76132,6 @@ input EmailTemplateWhereInput {
   templateContextNEQ: EmailTemplateTemplateContext
   templateContextIn: [EmailTemplateTemplateContext!]
   templateContextNotIn: [EmailTemplateTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: ID
-  emailBrandingIDNEQ: ID
-  emailBrandingIDIn: [ID!]
-  emailBrandingIDNotIn: [ID!]
-  emailBrandingIDGT: ID
-  emailBrandingIDGTE: ID
-  emailBrandingIDLT: ID
-  emailBrandingIDLTE: ID
-  emailBrandingIDContains: ID
-  emailBrandingIDHasPrefix: ID
-  emailBrandingIDHasSuffix: ID
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: ID
-  emailBrandingIDContainsFold: ID
   """
   integration_id field predicates
   """
@@ -76088,6 +76191,21 @@ input EmailTemplateWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   email_branding edge predicates
   """
@@ -125849,13 +125967,22 @@ input UpdateEmailTemplateInput {
   runtime data context defining available variable keys for this template
   """
   templateContext: EmailTemplateTemplateContext
-  clearTemplateContext: Boolean
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
   clearDefaults: Boolean
-  emailBrandingID: ID
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addEmailBrandingIDs: [ID!]
+  removeEmailBrandingIDs: [ID!]
   clearEmailBranding: Boolean
   integrationID: ID
   clearIntegration: Boolean

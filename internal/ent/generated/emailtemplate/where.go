@@ -173,11 +173,6 @@ func Version(v int) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldVersion, v))
 }
 
-// EmailBrandingID applies equality check predicate on the "email_branding_id" field. It's identical to EmailBrandingIDEQ.
-func EmailBrandingID(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldEQ(FieldEmailBrandingID, v))
-}
-
 // IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
 func IntegrationID(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldIntegrationID, v))
@@ -1598,16 +1593,6 @@ func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldNotIn(FieldTemplateContext, v...))
 }
 
-// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
-func TemplateContextIsNil() predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldIsNull(FieldTemplateContext))
-}
-
-// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
-func TemplateContextNotNil() predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldNotNull(FieldTemplateContext))
-}
-
 // DefaultsIsNil applies the IsNil predicate on the "defaults" field.
 func DefaultsIsNil() predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldIsNull(FieldDefaults))
@@ -1616,81 +1601,6 @@ func DefaultsIsNil() predicate.EmailTemplate {
 // DefaultsNotNil applies the NotNil predicate on the "defaults" field.
 func DefaultsNotNil() predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldNotNull(FieldDefaults))
-}
-
-// EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
-func EmailBrandingIDEQ(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldEQ(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDNEQ applies the NEQ predicate on the "email_branding_id" field.
-func EmailBrandingIDNEQ(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldNEQ(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDIn applies the In predicate on the "email_branding_id" field.
-func EmailBrandingIDIn(vs ...string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldIn(FieldEmailBrandingID, vs...))
-}
-
-// EmailBrandingIDNotIn applies the NotIn predicate on the "email_branding_id" field.
-func EmailBrandingIDNotIn(vs ...string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldNotIn(FieldEmailBrandingID, vs...))
-}
-
-// EmailBrandingIDGT applies the GT predicate on the "email_branding_id" field.
-func EmailBrandingIDGT(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldGT(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDGTE applies the GTE predicate on the "email_branding_id" field.
-func EmailBrandingIDGTE(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldGTE(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDLT applies the LT predicate on the "email_branding_id" field.
-func EmailBrandingIDLT(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldLT(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDLTE applies the LTE predicate on the "email_branding_id" field.
-func EmailBrandingIDLTE(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldLTE(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDContains applies the Contains predicate on the "email_branding_id" field.
-func EmailBrandingIDContains(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldContains(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDHasPrefix applies the HasPrefix predicate on the "email_branding_id" field.
-func EmailBrandingIDHasPrefix(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldHasPrefix(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDHasSuffix applies the HasSuffix predicate on the "email_branding_id" field.
-func EmailBrandingIDHasSuffix(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldHasSuffix(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDIsNil applies the IsNil predicate on the "email_branding_id" field.
-func EmailBrandingIDIsNil() predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldIsNull(FieldEmailBrandingID))
-}
-
-// EmailBrandingIDNotNil applies the NotNil predicate on the "email_branding_id" field.
-func EmailBrandingIDNotNil() predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldNotNull(FieldEmailBrandingID))
-}
-
-// EmailBrandingIDEqualFold applies the EqualFold predicate on the "email_branding_id" field.
-func EmailBrandingIDEqualFold(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldEqualFold(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDContainsFold applies the ContainsFold predicate on the "email_branding_id" field.
-func EmailBrandingIDContainsFold(v string) predicate.EmailTemplate {
-	return predicate.EmailTemplate(sql.FieldContainsFold(FieldEmailBrandingID, v))
 }
 
 // IntegrationIDEQ applies the EQ predicate on the "integration_id" field.
@@ -1947,16 +1857,103 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.EmailTemplate {
 	})
 }
 
+// HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.
+func HasBlockedGroups() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBlockedGroupsWith applies the HasEdge predicate on the "blocked_groups" edge with a given conditions (other predicates).
+func HasBlockedGroupsWith(preds ...predicate.Group) predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := newBlockedGroupsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEditors applies the HasEdge predicate on the "editors" edge.
+func HasEditors() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEditorsWith applies the HasEdge predicate on the "editors" edge with a given conditions (other predicates).
+func HasEditorsWith(preds ...predicate.Group) predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := newEditorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasViewers applies the HasEdge predicate on the "viewers" edge.
+func HasViewers() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasViewersWith applies the HasEdge predicate on the "viewers" edge with a given conditions (other predicates).
+func HasViewersWith(preds ...predicate.Group) predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := newViewersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEmailBranding applies the HasEdge predicate on the "email_branding" edge.
 func HasEmailBranding() predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, EmailBrandingTable, EmailBrandingPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1967,7 +1964,7 @@ func HasEmailBrandingWith(preds ...predicate.EmailBranding) predicate.EmailTempl
 		step := newEmailBrandingStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

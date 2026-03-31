@@ -1,4 +1,4 @@
-h1:Gfs4+kT+ZvDWGi6wllRKD+iyxgKr4/QTOKW0BFS9fE0=
+h1:qV7ucqL4zlRvQBYptt9SlNfwFC+fpz6gKafCXvTggvw=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -88,3 +88,5 @@ h1:Gfs4+kT+ZvDWGi6wllRKD+iyxgKr4/QTOKW0BFS9fE0=
 20260327195327_drop_finding_vulnerability_status_history.sql h1:MtF6P4jrvTl0oCP4LHBfmfvS3jyzlyQOZvVCN6kvM3c=
 20260330144617_custom_domain_domaintype.sql h1:rLK8ETh6tiGSfxpjY1kvrCVSXf1kbY2fBq86TbyizGg=
 20260330144627_custom_domain_domaintype_history.sql h1:yam5Bl8LOSiTduiDsVE5UkahrwQYSoKLM7CvfIJzows=
+20260331055416_branding_tempaltes.sql h1:FmsQAaZhIHv/Vy4gOpr/iBuKOv/MkV9g5nXJe5cCs2w=
+20260331055418_branding_tempaltes_history.sql h1:PvFQXM+99GYPfkmuuo34Kk75U0ubT2s7yWZLM0a7Esk=

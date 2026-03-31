@@ -794,7 +794,6 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
-		EmailBrandingID      func(childComplexity int) int
 		Format               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -7402,13 +7401,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Description(childComplexity), true
-
-	case "EmailTemplateHistory.emailBrandingID":
-		if e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID(childComplexity), true
 
 	case "EmailTemplateHistory.format":
 		if e.ComplexityRoot.EmailTemplateHistory.Format == nil {
@@ -31262,15 +31254,11 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext
+  templateContext: EmailTemplateHistoryTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: String
   """
   integration used to deliver emails for this template
   """
@@ -31734,26 +31722,6 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   integration_id field predicates
   """
