@@ -35,7 +35,7 @@ func HookControlTrustcenter() ent.Hook {
 					return nil, ErrTrustCenterControlNoPublicRepresentation
 				}
 
-				if !standardExists || standardID == "" {
+				if standardExists && standardID != "" {
 					return nil, ErrTrustCenterControlNoStandardRequired
 				}
 
@@ -57,7 +57,7 @@ func HookControlTrustcenter() ent.Hook {
 						return nil, err
 					}
 
-					if oldStandardID == "" {
+					if oldStandardID != "" {
 						return nil, ErrTrustCenterControlNoStandardRequired
 					}
 				}
