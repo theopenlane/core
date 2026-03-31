@@ -863,7 +863,6 @@ var (
 		{Name: "version", Type: field.TypeInt, Default: 1},
 		{Name: "template_context", Type: field.TypeEnum, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
 		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
-		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_instance_id", Type: field.TypeString, Nullable: true},

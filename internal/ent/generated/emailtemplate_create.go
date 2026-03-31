@@ -352,20 +352,6 @@ func (_c *EmailTemplateCreate) SetDefaults(v map[string]interface{}) *EmailTempl
 	return _c
 }
 
-// SetEmailBrandingID sets the "email_branding_id" field.
-func (_c *EmailTemplateCreate) SetEmailBrandingID(v string) *EmailTemplateCreate {
-	_c.mutation.SetEmailBrandingID(v)
-	return _c
-}
-
-// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
-func (_c *EmailTemplateCreate) SetNillableEmailBrandingID(v *string) *EmailTemplateCreate {
-	if v != nil {
-		_c.SetEmailBrandingID(*v)
-	}
-	return _c
-}
-
 // SetIntegrationID sets the "integration_id" field.
 func (_c *EmailTemplateCreate) SetIntegrationID(v string) *EmailTemplateCreate {
 	_c.mutation.SetIntegrationID(v)
@@ -472,9 +458,19 @@ func (_c *EmailTemplateCreate) AddViewers(v ...*Group) *EmailTemplateCreate {
 	return _c.AddViewerIDs(ids...)
 }
 
-// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
-func (_c *EmailTemplateCreate) SetEmailBranding(v *EmailBranding) *EmailTemplateCreate {
-	return _c.SetEmailBrandingID(v.ID)
+// AddEmailBrandingIDs adds the "email_branding" edge to the EmailBranding entity by IDs.
+func (_c *EmailTemplateCreate) AddEmailBrandingIDs(ids ...string) *EmailTemplateCreate {
+	_c.mutation.AddEmailBrandingIDs(ids...)
+	return _c
+}
+
+// AddEmailBranding adds the "email_branding" edges to the EmailBranding entity.
+func (_c *EmailTemplateCreate) AddEmailBranding(v ...*EmailBranding) *EmailTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEmailBrandingIDs(ids...)
 }
 
 // SetIntegration sets the "integration" edge to the Integration entity.
@@ -886,20 +882,19 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 	}
 	if nodes := _c.mutation.EmailBrandingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   emailtemplate.EmailBrandingTable,
-			Columns: []string{emailtemplate.EmailBrandingColumn},
+			Columns: emailtemplate.EmailBrandingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
+		edge.Schema = _c.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.EmailBrandingID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {

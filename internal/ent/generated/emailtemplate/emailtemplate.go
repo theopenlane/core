@@ -72,8 +72,6 @@ const (
 	FieldTemplateContext = "template_context"
 	// FieldDefaults holds the string denoting the defaults field in the database.
 	FieldDefaults = "defaults"
-	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
-	FieldEmailBrandingID = "email_branding_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
 	// FieldWorkflowDefinitionID holds the string denoting the workflow_definition_id field in the database.
@@ -132,13 +130,11 @@ const (
 	ViewersInverseTable = "groups"
 	// ViewersColumn is the table column denoting the viewers relation/edge.
 	ViewersColumn = "email_template_viewers"
-	// EmailBrandingTable is the table that holds the email_branding relation/edge.
-	EmailBrandingTable = "email_templates"
+	// EmailBrandingTable is the table that holds the email_branding relation/edge. The primary key declared below.
+	EmailBrandingTable = "email_branding_email_templates"
 	// EmailBrandingInverseTable is the table name for the EmailBranding entity.
 	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
 	EmailBrandingInverseTable = "email_brandings"
-	// EmailBrandingColumn is the table column denoting the email_branding relation/edge.
-	EmailBrandingColumn = "email_branding_id"
 	// IntegrationTable is the table that holds the integration relation/edge.
 	IntegrationTable = "email_templates"
 	// IntegrationInverseTable is the table name for the Integration entity.
@@ -213,11 +209,16 @@ var Columns = []string{
 	FieldVersion,
 	FieldTemplateContext,
 	FieldDefaults,
-	FieldEmailBrandingID,
 	FieldIntegrationID,
 	FieldWorkflowDefinitionID,
 	FieldWorkflowInstanceID,
 }
+
+var (
+	// EmailBrandingPrimaryKey and EmailBrandingColumn2 are the table columns denoting the
+	// primary key for the email_branding relation (M2M).
+	EmailBrandingPrimaryKey = []string{"email_branding_id", "email_template_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -411,11 +412,6 @@ func ByTemplateContext(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTemplateContext, opts...).ToFunc()
 }
 
-// ByEmailBrandingID orders the results by the email_branding_id field.
-func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
-}
-
 // ByIntegrationID orders the results by the integration_id field.
 func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
@@ -480,10 +476,17 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByEmailBrandingField orders the results by email_branding field.
-func ByEmailBrandingField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByEmailBrandingCount orders the results by email_branding count.
+func ByEmailBrandingCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newEmailBrandingStep(), opts...)
+	}
+}
+
+// ByEmailBranding orders the results by email_branding terms.
+func ByEmailBranding(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -581,7 +584,7 @@ func newEmailBrandingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailBrandingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, EmailBrandingTable, EmailBrandingPrimaryKey...),
 	)
 }
 func newIntegrationStep() *sqlgraph.Step {

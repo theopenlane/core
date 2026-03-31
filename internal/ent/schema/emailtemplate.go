@@ -134,9 +134,6 @@ func (EmailTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.String("email_branding_id").
-			Comment("email branding configuration to apply for this template").
-			Optional(),
 		field.String("integration_id").
 			Comment("integration used to deliver emails for this template").
 			Optional(),
@@ -164,14 +161,7 @@ func (EmailTemplate) Indexes() []ent.Index {
 // Edges of the EmailTemplate.
 func (e EmailTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: e,
-			edgeSchema: EmailBranding{},
-			field:      "email_branding_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(EmailBranding{}.Name()),
-			},
-		}),
+		defaultEdgeFrom(e, EmailBranding{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: e,
 			edgeSchema: Integration{},

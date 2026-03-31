@@ -8267,11 +8267,11 @@ func (c *EmailBrandingClient) QueryEmailTemplates(_m *EmailBranding) *EmailTempl
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.EmailTemplatesTable, emailbranding.EmailTemplatesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, emailbranding.EmailTemplatesTable, emailbranding.EmailTemplatesPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8497,11 +8497,11 @@ func (c *EmailTemplateClient) QueryEmailBranding(_m *EmailTemplate) *EmailBrandi
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
 			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingPrimaryKey...),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

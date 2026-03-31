@@ -1623,7 +1623,6 @@ type ComplexityRoot struct {
 		Description           func(childComplexity int) int
 		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EmailBranding         func(childComplexity int) int
-		EmailBrandingID       func(childComplexity int) int
 		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Format                func(childComplexity int) int
 		ID                    func(childComplexity int) int
@@ -15105,13 +15104,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.EmailBranding(childComplexity), true
-
-	case "EmailTemplate.emailBrandingID":
-		if e.ComplexityRoot.EmailTemplate.EmailBrandingID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.EmailBrandingID(childComplexity), true
 
 	case "EmailTemplate.files":
 		if e.ComplexityRoot.EmailTemplate.Files == nil {
@@ -65818,7 +65810,7 @@ input CreateEmailTemplateInput {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext
+  templateContext: EmailTemplateTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -65827,7 +65819,7 @@ input CreateEmailTemplateInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  emailBrandingID: ID
+  emailBrandingIDs: [ID!]
   integrationID: ID
   workflowDefinitionID: ID
   workflowInstanceID: ID
@@ -75526,15 +75518,11 @@ type EmailTemplate implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext
+  templateContext: EmailTemplateTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: ID
   """
   integration used to deliver emails for this template
   """
@@ -75641,7 +75629,7 @@ type EmailTemplate implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  emailBranding: EmailBranding
+  emailBranding: [EmailBranding!]
   integration: Integration
   workflowDefinition: WorkflowDefinition
   workflowInstance: WorkflowInstance
@@ -76144,24 +76132,6 @@ input EmailTemplateWhereInput {
   templateContextNEQ: EmailTemplateTemplateContext
   templateContextIn: [EmailTemplateTemplateContext!]
   templateContextNotIn: [EmailTemplateTemplateContext!]
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: ID
-  emailBrandingIDNEQ: ID
-  emailBrandingIDIn: [ID!]
-  emailBrandingIDNotIn: [ID!]
-  emailBrandingIDGT: ID
-  emailBrandingIDGTE: ID
-  emailBrandingIDLT: ID
-  emailBrandingIDLTE: ID
-  emailBrandingIDContains: ID
-  emailBrandingIDHasPrefix: ID
-  emailBrandingIDHasSuffix: ID
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: ID
-  emailBrandingIDContainsFold: ID
   """
   integration_id field predicates
   """
@@ -95163,6 +95133,8 @@ input NotificationTemplateWhereInput {
   templateContextNEQ: NotificationTemplateTemplateContext
   templateContextIn: [NotificationTemplateTemplateContext!]
   templateContextNotIn: [NotificationTemplateTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   owner edge predicates
   """
@@ -126009,7 +125981,8 @@ input UpdateEmailTemplateInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
-  emailBrandingID: ID
+  addEmailBrandingIDs: [ID!]
+  removeEmailBrandingIDs: [ID!]
   clearEmailBranding: Boolean
   integrationID: ID
   clearIntegration: Boolean
@@ -128308,6 +128281,7 @@ input UpdateNotificationTemplateInput {
   runtime data context defining available variable keys for this template
   """
   templateContext: NotificationTemplateTemplateContext
+  clearTemplateContext: Boolean
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """

@@ -945,7 +945,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplate.FieldVersion:              {Type: field.TypeInt, Column: emailtemplate.FieldVersion},
 			emailtemplate.FieldTemplateContext:      {Type: field.TypeEnum, Column: emailtemplate.FieldTemplateContext},
 			emailtemplate.FieldDefaults:             {Type: field.TypeJSON, Column: emailtemplate.FieldDefaults},
-			emailtemplate.FieldEmailBrandingID:      {Type: field.TypeString, Column: emailtemplate.FieldEmailBrandingID},
 			emailtemplate.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplate.FieldIntegrationID},
 			emailtemplate.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplate.FieldWorkflowDefinitionID},
 			emailtemplate.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: emailtemplate.FieldWorkflowInstanceID},
@@ -6383,10 +6382,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"email_templates",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 		},
 		"EmailBranding",
@@ -6443,10 +6442,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"email_branding",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   emailtemplate.EmailBrandingTable,
-			Columns: []string{emailtemplate.EmailBrandingColumn},
+			Columns: emailtemplate.EmailBrandingPrimaryKey,
 			Bidi:    false,
 		},
 		"EmailTemplate",
@@ -23663,11 +23662,6 @@ func (f *EmailTemplateFilter) WhereTemplateContext(p entql.StringP) {
 // WhereDefaults applies the entql json.RawMessage predicate on the defaults field.
 func (f *EmailTemplateFilter) WhereDefaults(p entql.BytesP) {
 	f.Where(p.Field(emailtemplate.FieldDefaults))
-}
-
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *EmailTemplateFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(emailtemplate.FieldEmailBrandingID))
 }
 
 // WhereIntegrationID applies the entql string predicate on the integration_id field.

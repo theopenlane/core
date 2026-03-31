@@ -65,6 +65,7 @@ type SchemaConfig struct {
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
 	EmailBranding                      string // EmailBranding table.
+	EmailBrandingEmailTemplates        string // EmailBranding-email_templates->EmailTemplate table.
 	EmailTemplate                      string // EmailTemplate table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.

@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -78,8 +77,6 @@ type EmailTemplate struct {
 	TemplateContext enums.TemplateContext `json:"template_context,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults map[string]interface{} `json:"defaults,omitempty"`
-	// email branding configuration to apply for this template
-	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// integration used to deliver emails for this template
 	IntegrationID string `json:"integration_id,omitempty"`
 	// workflow definition associated with this template
@@ -103,7 +100,7 @@ type EmailTemplateEdges struct {
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
 	// EmailBranding holds the value of the email_branding edge.
-	EmailBranding *EmailBranding `json:"email_branding,omitempty"`
+	EmailBranding []*EmailBranding `json:"email_branding,omitempty"`
 	// Integration holds the value of the integration edge.
 	Integration *Integration `json:"integration,omitempty"`
 	// WorkflowDefinition holds the value of the workflow_definition edge.
@@ -125,6 +122,7 @@ type EmailTemplateEdges struct {
 	namedBlockedGroups         map[string][]*Group
 	namedEditors               map[string][]*Group
 	namedViewers               map[string][]*Group
+	namedEmailBranding         map[string][]*EmailBranding
 	namedCampaigns             map[string][]*Campaign
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedFiles                 map[string][]*File
@@ -169,12 +167,10 @@ func (e EmailTemplateEdges) ViewersOrErr() ([]*Group, error) {
 }
 
 // EmailBrandingOrErr returns the EmailBranding value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e EmailTemplateEdges) EmailBrandingOrErr() (*EmailBranding, error) {
-	if e.EmailBranding != nil {
+// was not loaded in eager-loading.
+func (e EmailTemplateEdges) EmailBrandingOrErr() ([]*EmailBranding, error) {
+	if e.loadedTypes[4] {
 		return e.EmailBranding, nil
-	} else if e.loadedTypes[4] {
-		return nil, &NotFoundError{label: emailbranding.Label}
 	}
 	return nil, &NotLoadedError{edge: "email_branding"}
 }
@@ -250,7 +246,7 @@ func (*EmailTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldEmailBrandingID, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID:
+		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID:
 			values[i] = new(sql.NullString)
 		case emailtemplate.FieldCreatedAt, emailtemplate.FieldUpdatedAt, emailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -447,12 +443,6 @@ func (_m *EmailTemplate) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field defaults: %w", err)
 				}
 			}
-		case emailtemplate.FieldEmailBrandingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
-			} else if value.Valid {
-				_m.EmailBrandingID = value.String
-			}
 		case emailtemplate.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
@@ -647,9 +637,6 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString("defaults=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Defaults))
 	builder.WriteString(", ")
-	builder.WriteString("email_branding_id=")
-	builder.WriteString(_m.EmailBrandingID)
-	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
 	builder.WriteString(", ")
@@ -731,6 +718,30 @@ func (_m *EmailTemplate) appendNamedViewers(name string, edges ...*Group) {
 		_m.Edges.namedViewers[name] = []*Group{}
 	} else {
 		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
+}
+
+// NamedEmailBranding returns the EmailBranding named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *EmailTemplate) NamedEmailBranding(name string) ([]*EmailBranding, error) {
+	if _m.Edges.namedEmailBranding == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEmailBranding[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *EmailTemplate) appendNamedEmailBranding(name string, edges ...*EmailBranding) {
+	if _m.Edges.namedEmailBranding == nil {
+		_m.Edges.namedEmailBranding = make(map[string][]*EmailBranding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEmailBranding[name] = []*EmailBranding{}
+	} else {
+		_m.Edges.namedEmailBranding[name] = append(_m.Edges.namedEmailBranding[name], edges...)
 	}
 }
 

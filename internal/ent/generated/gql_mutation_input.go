@@ -6654,7 +6654,7 @@ type CreateEmailTemplateInput struct {
 	BlockedGroupIDs         []string
 	EditorIDs               []string
 	ViewerIDs               []string
-	EmailBrandingID         *string
+	EmailBrandingIDs        []string
 	IntegrationID           *string
 	WorkflowDefinitionID    *string
 	WorkflowInstanceID      *string
@@ -6728,8 +6728,8 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
+	if v := i.EmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
@@ -6800,7 +6800,8 @@ type UpdateEmailTemplateInput struct {
 	AddViewerIDs                  []string
 	RemoveViewerIDs               []string
 	ClearEmailBranding            bool
-	EmailBrandingID               *string
+	AddEmailBrandingIDs           []string
+	RemoveEmailBrandingIDs        []string
 	ClearIntegration              bool
 	IntegrationID                 *string
 	ClearWorkflowDefinition       bool
@@ -6943,8 +6944,11 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if i.ClearEmailBranding {
 		m.ClearEmailBranding()
 	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
+	if v := i.AddEmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
+	}
+	if v := i.RemoveEmailBrandingIDs; len(v) > 0 {
+		m.RemoveEmailBrandingIDs(v...)
 	}
 	if i.ClearIntegration {
 		m.ClearIntegration()
@@ -15073,6 +15077,7 @@ type UpdateNotificationTemplateInput struct {
 	Metadata                map[string]interface{}
 	Active                  *bool
 	Version                 *int
+	ClearTemplateContext    bool
 	TemplateContext         *enums.TemplateContext
 	ClearDefaults           bool
 	Defaults                map[string]interface{}
@@ -15178,6 +15183,9 @@ func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
+	}
+	if i.ClearTemplateContext {
+		m.ClearTemplateContext()
 	}
 	if v := i.TemplateContext; v != nil {
 		m.SetTemplateContext(*v)

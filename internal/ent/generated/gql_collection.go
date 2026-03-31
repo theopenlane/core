@@ -16903,9 +16903,13 @@ func (_q *EmailBrandingQuery) collectField(ctx context.Context, oneNode bool, op
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(emailbranding.EmailTemplatesColumn), ids...))
+							joinT := sql.Table(emailbranding.EmailTemplatesTable)
+							s.Join(joinT).On(s.C(emailtemplate.FieldID), joinT.C(emailbranding.EmailTemplatesPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(emailbranding.EmailTemplatesPrimaryKey[0]), ids...))
+							s.Select(joinT.C(emailbranding.EmailTemplatesPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(emailbranding.EmailTemplatesPrimaryKey[0]))
 						})
-						if err := query.GroupBy(emailbranding.EmailTemplatesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -16950,7 +16954,7 @@ func (_q *EmailBrandingQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(emailbranding.EmailTemplatesColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(emailbranding.EmailTemplatesPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -17428,14 +17432,12 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				path  = append(path, alias)
 				query = (&EmailBrandingClient{config: _q.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, emailbrandingImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, emailbrandingImplementors)...); err != nil {
 				return err
 			}
-			_q.withEmailBranding = query
-			if _, ok := fieldSeen[emailtemplate.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldEmailBrandingID)
-				fieldSeen[emailtemplate.FieldEmailBrandingID] = struct{}{}
-			}
+			_q.WithNamedEmailBranding(alias, func(wq *EmailBrandingQuery) {
+				*wq = *query
+			})
 
 		case "integration":
 			var (
@@ -17872,11 +17874,6 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[emailtemplate.FieldDefaults]; !ok {
 				selectedFields = append(selectedFields, emailtemplate.FieldDefaults)
 				fieldSeen[emailtemplate.FieldDefaults] = struct{}{}
-			}
-		case "emailBrandingID":
-			if _, ok := fieldSeen[emailtemplate.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldEmailBrandingID)
-				fieldSeen[emailtemplate.FieldEmailBrandingID] = struct{}{}
 			}
 		case "integrationID":
 			if _, ok := fieldSeen[emailtemplate.FieldIntegrationID]; !ok {

@@ -8,15 +8,18 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/samber/lo"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryEmailTemplate(t *testing.T) {
-	// create an emailTemplate to be queried using testUser1
+	// create an email template to be queried using testUser1
 	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// add test cases for querying the EmailTemplate
+	// add test cases for querying the email template
 	testCases := []struct {
 		name     string
 		queryID  string
@@ -79,283 +82,369 @@ func TestQueryEmailTemplate(t *testing.T) {
 	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-// func TestQueryEmailTemplates(t *testing.T) {
-// 	// create multiple EmailTemplates to be queried using testUser1
-// 	EmailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	EmailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestQueryEmailTemplates(t *testing.T) {
+	// create multiple email templates to be queried using testUser1
+	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-// 	testCases := []struct {
-// 		name            string
-// 		client          *testclient.TestClient
-// 		ctx             context.Context
-// 		expectedResults int
-// 	}{
-// 		{
-// 			name:            "happy path",
-// 			client:          suite.client.api,
-// 			ctx:             testUser1.UserCtx,
-// 			expectedResults: 2,
-// 		},
-// 		{
-// 			name:            "happy path, using read only user of the same org",
-// 			client:          suite.client.api,
-// 			ctx:             viewOnlyUser.UserCtx,
-// 			expectedResults: 2,
-// 		},
-// 		{
-// 			name:            "happy path, using api token",
-// 			client:          suite.client.apiWithToken,
-// 			ctx:             context.Background(),
-// 			expectedResults: 2,
-// 		},
-// 		{
-// 			name:            "happy path, using pat",
-// 			client:          suite.client.apiWithPAT,
-// 			ctx:             context.Background(),
-// 			expectedResults: 2,
-// 		},
-// 		{
-// 			name:            "another user, no EmailTemplates should be returned",
-// 			client:          suite.client.api,
-// 			ctx:             testUser2.UserCtx,
-// 			expectedResults: 0,
-// 		},
-// 	}
+	testCases := []struct {
+		name            string
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedResults int
+	}{
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: 2,
+		},
+		{
+			name:            "happy path, using read only user of the same org",
+			client:          suite.client.api,
+			ctx:             viewOnlyUser.UserCtx,
+			expectedResults: 2,
+		},
+		{
+			name:            "happy path, using api token",
+			client:          suite.client.apiWithToken,
+			ctx:             context.Background(),
+			expectedResults: 2,
+		},
+		{
+			name:            "happy path, using pat",
+			client:          suite.client.apiWithPAT,
+			ctx:             context.Background(),
+			expectedResults: 2,
+		},
+		{
+			name:            "another user, no email templates should be returned",
+			client:          suite.client.api,
+			ctx:             testUser2.UserCtx,
+			expectedResults: 0,
+		},
+	}
 
-// 	for _, tc := range testCases {
-// 		t.Run("List "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.GetAllEmailTemplates(tc.ctx)
-// 			assert.NilError(t, err)
-// 			assert.Assert(t, resp != nil)
+	for _, tc := range testCases {
+		t.Run("List "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetAllEmailTemplates(tc.ctx, nil, nil, nil, nil, nil)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-// 			assert.Check(t, is.Len(resp.EmailTemplates.Edges, tc.expectedResults))
-// 		})
-// 	}
+			assert.Check(t, is.Len(resp.EmailTemplates.Edges, tc.expectedResults))
+		})
+	}
 
-// 	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, IDs: []string{EmailTemplate1.ID, EmailTemplate2.ID}}).MustDelete(testUser1.UserCtx, t)
-// }
+	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, IDs: []string{emailTemplate1.ID, emailTemplate2.ID}}).MustDelete(testUser1.UserCtx, t)
+}
 
-// func TestMutationCreateEmailTemplate(t *testing.T) {
-// 	testCases := []struct {
-// 		name        string
-// 		request     testclient.CreateEmailTemplateInput
-// 		client      *testclient.TestClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:    "happy path, minimal input",
-// 			request: testclient.CreateEmailTemplateInput{
-// 				// add minimal input for the EmailTemplate
-// 			},
-// 			client: suite.client.api,
-// 			ctx:    testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:    "happy path, all input",
-// 			request: testclient.CreateEmailTemplateInput{
-// 				// add all input for the EmailTemplate
-// 			},
-// 			client: suite.client.api,
-// 			ctx:    testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:    "happy path, using pat",
-// 			request: testclient.CreateEmailTemplateInput{
-// 				// add input for the EmailTemplate
-// 			},
-// 			client: suite.client.apiWithPAT,
-// 			ctx:    context.Background(),
-// 		},
-// 		{
-// 			name:    "happy path, using api token",
-// 			request: testclient.CreateEmailTemplateInput{
-// 				// add input for the EmailTemplate
-// 			},
-// 			client: suite.client.apiWithToken,
-// 			ctx:    context.Background(),
-// 		},
-// 		{
-// 			name:    "user not authorized, not enough permissions",
-// 			request: testclient.CreateEmailTemplateInput{
-// 				// add all input for the EmailTemplate
-// 			},
-// 			client:      suite.client.api,
-// 			ctx:         viewOnlyUser.UserCtx,
-// 			expectedErr: notAuthorizedErrorMsg,
-// 		},
-// 		// add additional test cases for the EmailTemplate
-// 		//   - add test cases for required fields not being provided
-// 		//   - add test cases for invalid input
-// 		{
-// 			name:        "missing required field",
-// 			request:     testclient.CreateEmailTemplateInput{},
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: "value is less than the required length",
-// 		},
-// 	}
+func TestMutationCreateEmailTemplate(t *testing.T) {
+	testCases := []struct {
+		name        string
+		request     testclient.CreateEmailTemplateInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "happy path, minimal input",
+			request: testclient.CreateEmailTemplateInput{
+				Key:             "email_key_" + ulids.New().String(),
+				Name:            "Email Template Name " + ulids.New().String(),
+				TemplateContext: enums.TemplateContextCampaignRecipient,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, all input",
+			request: testclient.CreateEmailTemplateInput{
+				Key:               "email_key_" + ulids.New().String(),
+				Name:              "Email Template Name " + ulids.New().String(),
+				TemplateContext:   enums.TemplateContextTransactional,
+				Description:       lo.ToPtr("This is a description for the email template"),
+				SubjectTemplate:   lo.ToPtr("subject template for {{.CampaignName}}"),
+				PreheaderTemplate: lo.ToPtr("preheader template for {{.CampaignName}}"),
+				BodyTemplate:      lo.ToPtr("body template for {{.Recipient}}"),
+				Active:            lo.ToPtr(false),
+				Version:           lo.ToPtr(int64(1)),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, using pat",
+			request: testclient.CreateEmailTemplateInput{
+				Key:             "email_key_" + ulids.New().String(),
+				Name:            "Email Template Name " + ulids.New().String(),
+				TemplateContext: enums.TemplateContextTransactional,
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, using api token",
+			request: testclient.CreateEmailTemplateInput{
+				Key:             "email_key_" + ulids.New().String(),
+				Name:            "Email Template Name " + ulids.New().String(),
+				TemplateContext: enums.TemplateContextCampaignRecipient,
+			},
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
+		},
+		{
+			name: "user not authorized, not enough permissions",
+			request: testclient.CreateEmailTemplateInput{
+				Key:             "email_key_" + ulids.New().String(),
+				Name:            "Email Template Name " + ulids.New().String(),
+				TemplateContext: enums.TemplateContextCampaignRecipient,
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "missing required field, template context",
+			request: testclient.CreateEmailTemplateInput{
+				Key:  "email_key_" + ulids.New().String(),
+				Name: "Email Template Name " + ulids.New().String(),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "is not a valid EmailTemplateTemplateContext",
+		},
+		{
+			name: "missing required field, key",
+			request: testclient.CreateEmailTemplateInput{
+				Name:            "Email Template Name " + ulids.New().String(),
+				TemplateContext: enums.TemplateContextCampaignRecipient,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "value is less than the required length",
+		},
+		{
+			name: "missing required field, name",
+			request: testclient.CreateEmailTemplateInput{
+				Key:             "email_key_" + ulids.New().String(),
+				TemplateContext: enums.TemplateContextCampaignRecipient,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "value is less than the required length",
+		},
+	}
 
-// 	for _, tc := range testCases {
-// 		t.Run("Create "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.CreateEmailTemplate(tc.ctx, tc.request)
-// 			if tc.expectedErr != "" {
-// 				assert.ErrorContains(t, err, tc.expectedErr)
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateEmailTemplate(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
-// 				return
-// 			}
+				return
+			}
 
-// 			assert.NilError(t, err)
-// 			assert.Assert(t, resp != nil)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-// 			// check required fields
+			assert.Check(t, is.Equal(tc.request.Key, resp.CreateEmailTemplate.EmailTemplate.Key))
+			assert.Check(t, is.Equal(tc.request.Name, resp.CreateEmailTemplate.EmailTemplate.Name))
+			assert.Check(t, is.Equal(tc.request.TemplateContext, resp.CreateEmailTemplate.EmailTemplate.TemplateContext))
 
-// 			// check optional fields with if checks if they were provided or not
+			if tc.request.Description != nil {
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateEmailTemplate.EmailTemplate.Description))
+			} else {
+				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.Description, ""))
+			}
 
-// 			// cleanup each EmailTemplate created
-// 			(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: resp.CreateEmailTemplate.EmailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
-// 		})
-// 	}
-// }
+			if tc.request.SubjectTemplate != nil {
+				assert.Check(t, is.Equal(*tc.request.SubjectTemplate, *resp.CreateEmailTemplate.EmailTemplate.SubjectTemplate))
+			} else {
+				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.SubjectTemplate, ""))
+			}
 
-// func TestMutationUpdateEmailTemplate(t *testing.T) {
-// 	EmailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+			if tc.request.PreheaderTemplate != nil {
+				assert.Check(t, is.Equal(*tc.request.PreheaderTemplate, *resp.CreateEmailTemplate.EmailTemplate.PreheaderTemplate))
+			} else {
+				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.PreheaderTemplate, ""))
+			}
 
-// 	testCases := []struct {
-// 		name        string
-// 		request     testclient.UpdateEmailTemplateInput
-// 		client      *testclient.TestClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:    "happy path, update field",
-// 			request: testclient.UpdateEmailTemplateInput{
-// 				// add field to update
-// 			},
-// 			client: suite.client.api,
-// 			ctx:    testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:    "happy path, update multiple fields",
-// 			request: testclient.UpdateEmailTemplateInput{
-// 				// add fields to update
-// 			},
-// 			client: suite.client.apiWithPAT,
-// 			ctx:    context.Background(),
-// 		},
-// 		// add additional test update cases for the EmailTemplate
-// 		{
-// 			name:    "update not allowed, not enough permissions",
-// 			request: testclient.UpdateEmailTemplateInput{
-// 				// add field to update
-// 			},
-// 			client:      suite.client.api,
-// 			ctx:         viewOnlyUser.UserCtx,
-// 			expectedErr: notAuthorizedErrorMsg,
-// 		},
-// 		{
-// 			name:    "update not allowed, no permissions",
-// 			request: testclient.UpdateEmailTemplateInput{
-// 				// add field to update
-// 			},
-// 			client:      suite.client.api,
-// 			ctx:         testUser2.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 	}
+			if tc.request.BodyTemplate != nil {
+				assert.Check(t, is.Equal(*tc.request.BodyTemplate, *resp.CreateEmailTemplate.EmailTemplate.BodyTemplate))
+			} else {
+				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.BodyTemplate, ""))
+			}
 
-// 	for _, tc := range testCases {
-// 		t.Run("Update "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.UpdateEmailTemplate(tc.ctx, EmailTemplate.ID, tc.request)
-// 			if tc.expectedErr != "" {
-// 				assert.ErrorContains(t, err, tc.expectedErr)
+			if tc.request.Active != nil {
+				assert.Check(t, is.Equal(*tc.request.Active, resp.CreateEmailTemplate.EmailTemplate.Active))
+			} else {
+				assert.Check(t, resp.CreateEmailTemplate.EmailTemplate.Active == true) // default value is true
+			}
 
-// 				return
-// 			}
+			if tc.request.Version != nil {
+				assert.Check(t, is.Equal(*tc.request.Version, resp.CreateEmailTemplate.EmailTemplate.Version))
+			} else {
+				assert.Check(t, resp.CreateEmailTemplate.EmailTemplate.Version == 1) // default value is 1 (incremented on each update, but should start at 1 on create)
+			}
 
-// 			assert.NilError(t, err)
-// 			assert.Assert(t, resp != nil)
-// 			// add checks for the updated fields if they were set in the request
-// 		})
-// 	}
+			// cleanup each email template created
+			(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: resp.CreateEmailTemplate.EmailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+		})
+	}
+}
 
-// 	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: EmailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
-// }
+func TestMutationUpdateEmailTemplate(t *testing.T) {
+	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-// func TestMutationDeleteEmailTemplate(t *testing.T) {
-// 	// create EmailTemplates to be deleted
-// 	EmailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	EmailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	EmailTemplate3 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testCases := []struct {
+		name        string
+		request     testclient.UpdateEmailTemplateInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "happy path, update field",
+			request: testclient.UpdateEmailTemplateInput{
+				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, update multiple fields",
+			request: testclient.UpdateEmailTemplateInput{
+				Name:            lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+				Description:     lo.ToPtr("Updated description for the email template"),
+				SubjectTemplate: lo.ToPtr("updated subject template for {{.CampaignName}}"),
+				Active:          lo.ToPtr(false),
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "update not allowed, not enough permissions",
+			request: testclient.UpdateEmailTemplateInput{
+				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "update not allowed, no permissions",
+			request: testclient.UpdateEmailTemplateInput{
+				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+	}
 
-// 	testCases := []struct {
-// 		name        string
-// 		idToDelete  string
-// 		client      *testclient.TestClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:        "not found, delete",
-// 			idToDelete:  EmailTemplate1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser2.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 		{
-// 			name:        "not authorized, delete",
-// 			idToDelete:  EmailTemplate1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         viewOnlyUser.UserCtx,
-// 			expectedErr: notAuthorizedErrorMsg,
-// 		},
-// 		{
-// 			name:       "happy path, delete",
-// 			idToDelete: EmailTemplate1.ID,
-// 			client:     suite.client.api,
-// 			ctx:        testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:        "already deleted, not found",
-// 			idToDelete:  EmailTemplate1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: "not found",
-// 		},
-// 		{
-// 			name:       "happy path, delete using personal access token",
-// 			idToDelete: EmailTemplate2.ID,
-// 			client:     suite.client.apiWithPAT,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:       "happy path, delete using api token",
-// 			idToDelete: EmailTemplate3.ID,
-// 			client:     suite.client.apiWithToken,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:        "unknown id, not found",
-// 			idToDelete:  ulids.New().String(),
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 	}
+	for _, tc := range testCases {
+		t.Run("Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateEmailTemplate(tc.ctx, emailTemplate.ID, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
-// 	for _, tc := range testCases {
-// 		t.Run("Delete "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.DeleteEmailTemplate(tc.ctx, tc.idToDelete)
-// 			if tc.expectedErr != "" {
-// 				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
 
-// 				return
-// 			}
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-// 			assert.NilError(t, err)
-// 			assert.Assert(t, resp != nil)
-// 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteEmailTemplate.DeletedID))
-// 		})
-// 	}
-// }
+			if tc.request.Name != nil {
+				assert.Check(t, is.Equal(*tc.request.Name, resp.UpdateEmailTemplate.EmailTemplate.Name))
+			}
+			if tc.request.Description != nil {
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateEmailTemplate.EmailTemplate.Description))
+			}
+			if tc.request.SubjectTemplate != nil {
+				assert.Check(t, is.Equal(*tc.request.SubjectTemplate, *resp.UpdateEmailTemplate.EmailTemplate.SubjectTemplate))
+			}
+			if tc.request.Active != nil {
+				assert.Check(t, is.Equal(*tc.request.Active, resp.UpdateEmailTemplate.EmailTemplate.Active))
+			}
+		})
+	}
+
+	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationDeleteEmailTemplate(t *testing.T) {
+	// create email templates to be deleted
+	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate3 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name        string
+		idToDelete  string
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "not found, delete",
+			idToDelete:  emailTemplate1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:        "not authorized, delete",
+			idToDelete:  emailTemplate1.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:       "happy path, delete",
+			idToDelete: emailTemplate1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  emailTemplate1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete using personal access token",
+			idToDelete: emailTemplate2.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
+		},
+		{
+			name:       "happy path, delete using api token",
+			idToDelete: emailTemplate3.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
+		},
+		{
+			name:        "unknown id, not found",
+			idToDelete:  ulids.New().String(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteEmailTemplate(tc.ctx, tc.idToDelete)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteEmailTemplate.DeletedID))
+		})
+	}
+}

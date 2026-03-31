@@ -880,7 +880,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplatehistory.FieldVersion:              {Type: field.TypeInt, Column: emailtemplatehistory.FieldVersion},
 			emailtemplatehistory.FieldTemplateContext:      {Type: field.TypeEnum, Column: emailtemplatehistory.FieldTemplateContext},
 			emailtemplatehistory.FieldDefaults:             {Type: field.TypeJSON, Column: emailtemplatehistory.FieldDefaults},
-			emailtemplatehistory.FieldEmailBrandingID:      {Type: field.TypeString, Column: emailtemplatehistory.FieldEmailBrandingID},
 			emailtemplatehistory.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplatehistory.FieldIntegrationID},
 			emailtemplatehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowDefinitionID},
 			emailtemplatehistory.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowInstanceID},
@@ -6658,11 +6657,6 @@ func (f *EmailTemplateHistoryFilter) WhereTemplateContext(p entql.StringP) {
 // WhereDefaults applies the entql json.RawMessage predicate on the defaults field.
 func (f *EmailTemplateHistoryFilter) WhereDefaults(p entql.BytesP) {
 	f.Where(p.Field(emailtemplatehistory.FieldDefaults))
-}
-
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *EmailTemplateHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(emailtemplatehistory.FieldEmailBrandingID))
 }
 
 // WhereIntegrationID applies the entql string predicate on the integration_id field.

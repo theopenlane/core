@@ -3427,12 +3427,16 @@ func (_m *EmailTemplate) Viewers(
 	return _m.QueryViewers().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *EmailTemplate) EmailBranding(ctx context.Context) (*EmailBranding, error) {
-	result, err := _m.Edges.EmailBrandingOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryEmailBranding().Only(ctx)
+func (_m *EmailTemplate) EmailBranding(ctx context.Context) (result []*EmailBranding, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = _m.NamedEmailBranding(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = _m.Edges.EmailBrandingOrErr()
 	}
-	return result, MaskNotFound(err)
+	if IsNotLoaded(err) {
+		result, err = _m.QueryEmailBranding().All(ctx)
+	}
+	return result, err
 }
 
 func (_m *EmailTemplate) Integration(ctx context.Context) (*Integration, error) {

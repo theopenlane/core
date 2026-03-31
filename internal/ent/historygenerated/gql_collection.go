@@ -4176,11 +4176,6 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldDefaults)
 				fieldSeen[emailtemplatehistory.FieldDefaults] = struct{}{}
 			}
-		case "emailBrandingID":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldEmailBrandingID)
-				fieldSeen[emailtemplatehistory.FieldEmailBrandingID] = struct{}{}
-			}
 		case "integrationID":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldIntegrationID]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldIntegrationID)

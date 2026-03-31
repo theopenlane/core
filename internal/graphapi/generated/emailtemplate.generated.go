@@ -104,8 +104,6 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
 			case "defaults":
 				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
 			case "workflowDefinitionID":
@@ -246,8 +244,6 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
 			case "defaults":
 				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
 			case "workflowDefinitionID":
@@ -388,8 +384,6 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
 			case "defaults":
 				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
 			case "workflowDefinitionID":
@@ -530,8 +524,6 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
 			case "defaults":
 				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_EmailTemplate_emailBrandingID(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
 			case "workflowDefinitionID":

@@ -1936,6 +1936,7 @@ type EmailBrandingBuilder struct {
 	client *client
 
 	// Fields
+	Name         string
 	PrimaryColor string
 }
 
@@ -2675,11 +2676,16 @@ func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 func (e *EmailBrandingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailBranding {
 	ctx = setContext(ctx, e.client.db)
 
+	if e.Name == "" {
+		e.Name = gofakeit.Company() + " Email Branding"
+	}
+
 	if e.PrimaryColor == "" {
 		e.PrimaryColor = gofakeit.HexColor()
 	}
 
 	emailBranding, err := e.client.db.EmailBranding.Create().
+		SetName(e.Name).
 		SetPrimaryColor(e.PrimaryColor).
 		Save(ctx)
 	requireNoError(t, err)

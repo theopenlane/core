@@ -1972,7 +1972,6 @@ var (
 		{Name: "version", Type: field.TypeInt, Default: 1},
 		{Name: "template_context", Type: field.TypeEnum, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
 		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
-		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
@@ -1985,32 +1984,26 @@ var (
 		PrimaryKey: []*schema.Column{EmailTemplatesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "email_templates_email_brandings_email_templates",
-				Columns:    []*schema.Column{EmailTemplatesColumns[27]},
-				RefColumns: []*schema.Column{EmailBrandingsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "email_templates_integrations_email_templates",
-				Columns:    []*schema.Column{EmailTemplatesColumns[28]},
+				Columns:    []*schema.Column{EmailTemplatesColumns[27]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "email_templates_organizations_email_templates",
-				Columns:    []*schema.Column{EmailTemplatesColumns[29]},
+				Columns:    []*schema.Column{EmailTemplatesColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "email_templates_workflow_definitions_email_templates",
-				Columns:    []*schema.Column{EmailTemplatesColumns[30]},
+				Columns:    []*schema.Column{EmailTemplatesColumns[29]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "email_templates_workflow_instances_email_templates",
-				Columns:    []*schema.Column{EmailTemplatesColumns[31]},
+				Columns:    []*schema.Column{EmailTemplatesColumns[30]},
 				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2019,7 +2012,7 @@ var (
 			{
 				Name:    "emailtemplate_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EmailTemplatesColumns[29]},
+				Columns: []*schema.Column{EmailTemplatesColumns[28]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2027,7 +2020,7 @@ var (
 			{
 				Name:    "emailtemplate_owner_id_key",
 				Unique:  true,
-				Columns: []*schema.Column{EmailTemplatesColumns[29], EmailTemplatesColumns[11]},
+				Columns: []*schema.Column{EmailTemplatesColumns[28], EmailTemplatesColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -9534,6 +9527,31 @@ var (
 			},
 		},
 	}
+	// EmailBrandingEmailTemplatesColumns holds the columns for the "email_branding_email_templates" table.
+	EmailBrandingEmailTemplatesColumns = []*schema.Column{
+		{Name: "email_branding_id", Type: field.TypeString},
+		{Name: "email_template_id", Type: field.TypeString},
+	}
+	// EmailBrandingEmailTemplatesTable holds the schema information for the "email_branding_email_templates" table.
+	EmailBrandingEmailTemplatesTable = &schema.Table{
+		Name:       "email_branding_email_templates",
+		Columns:    EmailBrandingEmailTemplatesColumns,
+		PrimaryKey: []*schema.Column{EmailBrandingEmailTemplatesColumns[0], EmailBrandingEmailTemplatesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "email_branding_email_templates_email_branding_id",
+				Columns:    []*schema.Column{EmailBrandingEmailTemplatesColumns[0]},
+				RefColumns: []*schema.Column{EmailBrandingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "email_branding_email_templates_email_template_id",
+				Columns:    []*schema.Column{EmailBrandingEmailTemplatesColumns[1]},
+				RefColumns: []*schema.Column{EmailTemplatesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// EntityBlockedGroupsColumns holds the columns for the "entity_blocked_groups" table.
 	EntityBlockedGroupsColumns = []*schema.Column{
 		{Name: "entity_id", Type: field.TypeString},
@@ -13252,6 +13270,7 @@ var (
 		ControlObjectiveViewersTable,
 		ControlObjectiveTasksTable,
 		DocumentDataFilesTable,
+		EmailBrandingEmailTemplatesTable,
 		EntityBlockedGroupsTable,
 		EntityEditorsTable,
 		EntityViewersTable,
@@ -13507,11 +13526,10 @@ func init() {
 	DocumentDataTable.ForeignKeys[2].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[3].RefTable = TemplatesTable
 	EmailBrandingsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	EmailTemplatesTable.ForeignKeys[0].RefTable = EmailBrandingsTable
-	EmailTemplatesTable.ForeignKeys[1].RefTable = IntegrationsTable
-	EmailTemplatesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	EmailTemplatesTable.ForeignKeys[3].RefTable = WorkflowDefinitionsTable
-	EmailTemplatesTable.ForeignKeys[4].RefTable = WorkflowInstancesTable
+	EmailTemplatesTable.ForeignKeys[0].RefTable = IntegrationsTable
+	EmailTemplatesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	EmailTemplatesTable.ForeignKeys[2].RefTable = WorkflowDefinitionsTable
+	EmailTemplatesTable.ForeignKeys[3].RefTable = WorkflowInstancesTable
 	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
 	EntitiesTable.ForeignKeys[0].RefTable = UsersTable
 	EntitiesTable.ForeignKeys[1].RefTable = GroupsTable
@@ -14013,6 +14031,8 @@ func init() {
 	ControlObjectiveTasksTable.ForeignKeys[1].RefTable = TasksTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
 	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
+	EmailBrandingEmailTemplatesTable.ForeignKeys[0].RefTable = EmailBrandingsTable
+	EmailBrandingEmailTemplatesTable.ForeignKeys[1].RefTable = EmailTemplatesTable
 	EntityBlockedGroupsTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	EntityEditorsTable.ForeignKeys[0].RefTable = EntitiesTable

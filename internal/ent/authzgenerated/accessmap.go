@@ -926,8 +926,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "email_branding": {
 	ObjectType:      "email_branding",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "integration": {
 	ObjectType:      "integration",
 	SkipEditCheck:   true,

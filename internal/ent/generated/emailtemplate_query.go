@@ -52,6 +52,7 @@ type EmailTemplateQuery struct {
 	withNamedBlockedGroups         map[string]*GroupQuery
 	withNamedEditors               map[string]*GroupQuery
 	withNamedViewers               map[string]*GroupQuery
+	withNamedEmailBranding         map[string]*EmailBrandingQuery
 	withNamedCampaigns             map[string]*CampaignQuery
 	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
 	withNamedFiles                 map[string]*FileQuery
@@ -205,11 +206,11 @@ func (_q *EmailTemplateQuery) QueryEmailBranding() *EmailBrandingQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, selector),
 			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -846,8 +847,9 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		}
 	}
 	if query := _q.withEmailBranding; query != nil {
-		if err := _q.loadEmailBranding(ctx, query, nodes, nil,
-			func(n *EmailTemplate, e *EmailBranding) { n.Edges.EmailBranding = e }); err != nil {
+		if err := _q.loadEmailBranding(ctx, query, nodes,
+			func(n *EmailTemplate) { n.Edges.EmailBranding = []*EmailBranding{} },
+			func(n *EmailTemplate, e *EmailBranding) { n.Edges.EmailBranding = append(n.Edges.EmailBranding, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -910,6 +912,13 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *EmailTemplate) { n.appendNamedViewers(name) },
 			func(n *EmailTemplate, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmailBranding {
+		if err := _q.loadEmailBranding(ctx, query, nodes,
+			func(n *EmailTemplate) { n.appendNamedEmailBranding(name) },
+			func(n *EmailTemplate, e *EmailBranding) { n.appendNamedEmailBranding(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1065,30 +1074,63 @@ func (_q *EmailTemplateQuery) loadViewers(ctx context.Context, query *GroupQuery
 	return nil
 }
 func (_q *EmailTemplateQuery) loadEmailBranding(ctx context.Context, query *EmailBrandingQuery, nodes []*EmailTemplate, init func(*EmailTemplate), assign func(*EmailTemplate, *EmailBranding)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*EmailTemplate)
-	for i := range nodes {
-		fk := nodes[i].EmailBrandingID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*EmailTemplate)
+	nids := make(map[string]map[*EmailTemplate]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(emailtemplate.EmailBrandingTable)
+		joinT.Schema(_q.schemaConfig.EmailBrandingEmailTemplates)
+		s.Join(joinT).On(s.C(emailbranding.FieldID), joinT.C(emailtemplate.EmailBrandingPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(emailtemplate.EmailBrandingPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(emailtemplate.EmailBrandingPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(emailbranding.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*EmailTemplate]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*EmailBranding](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "email_branding_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "email_branding" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -1305,9 +1347,6 @@ func (_q *EmailTemplateQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(emailtemplate.FieldOwnerID)
 		}
-		if _q.withEmailBranding != nil {
-			_spec.Node.AddColumnOnce(emailtemplate.FieldEmailBrandingID)
-		}
 		if _q.withIntegration != nil {
 			_spec.Node.AddColumnOnce(emailtemplate.FieldIntegrationID)
 		}
@@ -1424,6 +1463,20 @@ func (_q *EmailTemplateQuery) WithNamedViewers(name string, opts ...func(*GroupQ
 		_q.withNamedViewers = make(map[string]*GroupQuery)
 	}
 	_q.withNamedViewers[name] = query
+	return _q
+}
+
+// WithNamedEmailBranding tells the query-builder to eager-load the nodes that are connected to the "email_branding"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailTemplateQuery) WithNamedEmailBranding(name string, opts ...func(*EmailBrandingQuery)) *EmailTemplateQuery {
+	query := (&EmailBrandingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmailBranding == nil {
+		_q.withNamedEmailBranding = make(map[string]*EmailBrandingQuery)
+	}
+	_q.withNamedEmailBranding[name] = query
 	return _q
 }
 

@@ -6841,10 +6841,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetDefaults(defaults)
 	}
 
-	if emailBrandingID, exists := m.EmailBrandingID(); exists {
-		create = create.SetEmailBrandingID(emailBrandingID)
-	}
-
 	if integrationID, exists := m.IntegrationID(); exists {
 		create = create.SetIntegrationID(integrationID)
 	}
@@ -7050,12 +7046,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetDefaults(emailtemplate.Defaults)
 		}
 
-		if emailBrandingID, exists := m.EmailBrandingID(); exists {
-			create = create.SetEmailBrandingID(emailBrandingID)
-		} else {
-			create = create.SetEmailBrandingID(emailtemplate.EmailBrandingID)
-		}
-
 		if integrationID, exists := m.IntegrationID(); exists {
 			create = create.SetIntegrationID(integrationID)
 		} else {
@@ -7136,7 +7126,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetVersion(emailtemplate.Version).
 			SetTemplateContext(emailtemplate.TemplateContext).
 			SetDefaults(emailtemplate.Defaults).
-			SetEmailBrandingID(emailtemplate.EmailBrandingID).
 			SetIntegrationID(emailtemplate.IntegrationID).
 			SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID).
 			SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID).

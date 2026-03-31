@@ -9954,10 +9954,6 @@ type EmailTemplateHistory implements Node {
   """
   defaults: Map
   """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: String
-  """
   integration used to deliver emails for this template
   """
   integrationID: String
@@ -10420,24 +10416,6 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   integration_id field predicates
   """

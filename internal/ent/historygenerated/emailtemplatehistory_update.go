@@ -419,26 +419,6 @@ func (_u *EmailTemplateHistoryUpdate) ClearDefaults() *EmailTemplateHistoryUpdat
 	return _u
 }
 
-// SetEmailBrandingID sets the "email_branding_id" field.
-func (_u *EmailTemplateHistoryUpdate) SetEmailBrandingID(v string) *EmailTemplateHistoryUpdate {
-	_u.mutation.SetEmailBrandingID(v)
-	return _u
-}
-
-// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
-func (_u *EmailTemplateHistoryUpdate) SetNillableEmailBrandingID(v *string) *EmailTemplateHistoryUpdate {
-	if v != nil {
-		_u.SetEmailBrandingID(*v)
-	}
-	return _u
-}
-
-// ClearEmailBrandingID clears the value of the "email_branding_id" field.
-func (_u *EmailTemplateHistoryUpdate) ClearEmailBrandingID() *EmailTemplateHistoryUpdate {
-	_u.mutation.ClearEmailBrandingID()
-	return _u
-}
-
 // SetIntegrationID sets the "integration_id" field.
 func (_u *EmailTemplateHistoryUpdate) SetIntegrationID(v string) *EmailTemplateHistoryUpdate {
 	_u.mutation.SetIntegrationID(v)
@@ -713,12 +693,6 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.DefaultsCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldDefaults, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.EmailBrandingID(); ok {
-		_spec.SetField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString, value)
-	}
-	if _u.mutation.EmailBrandingIDCleared() {
-		_spec.ClearField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IntegrationID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldIntegrationID, field.TypeString, value)
@@ -1147,26 +1121,6 @@ func (_u *EmailTemplateHistoryUpdateOne) ClearDefaults() *EmailTemplateHistoryUp
 	return _u
 }
 
-// SetEmailBrandingID sets the "email_branding_id" field.
-func (_u *EmailTemplateHistoryUpdateOne) SetEmailBrandingID(v string) *EmailTemplateHistoryUpdateOne {
-	_u.mutation.SetEmailBrandingID(v)
-	return _u
-}
-
-// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
-func (_u *EmailTemplateHistoryUpdateOne) SetNillableEmailBrandingID(v *string) *EmailTemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmailBrandingID(*v)
-	}
-	return _u
-}
-
-// ClearEmailBrandingID clears the value of the "email_branding_id" field.
-func (_u *EmailTemplateHistoryUpdateOne) ClearEmailBrandingID() *EmailTemplateHistoryUpdateOne {
-	_u.mutation.ClearEmailBrandingID()
-	return _u
-}
-
 // SetIntegrationID sets the "integration_id" field.
 func (_u *EmailTemplateHistoryUpdateOne) SetIntegrationID(v string) *EmailTemplateHistoryUpdateOne {
 	_u.mutation.SetIntegrationID(v)
@@ -1471,12 +1425,6 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if _u.mutation.DefaultsCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldDefaults, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.EmailBrandingID(); ok {
-		_spec.SetField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString, value)
-	}
-	if _u.mutation.EmailBrandingIDCleared() {
-		_spec.ClearField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IntegrationID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldIntegrationID, field.TypeString, value)
