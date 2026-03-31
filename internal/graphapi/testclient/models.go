@@ -6003,41 +6003,43 @@ type CreateControlInput struct {
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// visibility of the control on the trust center, controls the publishing state for trust center display
-	TrustCenterVisibility    *enums.TrustCenterControlVisibility `json:"trustCenterVisibility,omitempty"`
-	EvidenceIDs              []string                            `json:"evidenceIDs,omitempty"`
-	ControlObjectiveIDs      []string                            `json:"controlObjectiveIDs,omitempty"`
-	TaskIDs                  []string                            `json:"taskIDs,omitempty"`
-	NarrativeIDs             []string                            `json:"narrativeIDs,omitempty"`
-	RiskIDs                  []string                            `json:"riskIDs,omitempty"`
-	ActionPlanIDs            []string                            `json:"actionPlanIDs,omitempty"`
-	ProcedureIDs             []string                            `json:"procedureIDs,omitempty"`
-	InternalPolicyIDs        []string                            `json:"internalPolicyIDs,omitempty"`
-	CommentIDs               []string                            `json:"commentIDs,omitempty"`
-	DiscussionIDs            []string                            `json:"discussionIDs,omitempty"`
-	ControlOwnerID           *string                             `json:"controlOwnerID,omitempty"`
-	DelegateID               *string                             `json:"delegateID,omitempty"`
-	ResponsiblePartyID       *string                             `json:"responsiblePartyID,omitempty"`
-	ReviewIDs                []string                            `json:"reviewIDs,omitempty"`
-	RemediationIDs           []string                            `json:"remediationIDs,omitempty"`
-	ScanIDs                  []string                            `json:"scanIDs,omitempty"`
-	OwnerID                  *string                             `json:"ownerID,omitempty"`
-	BlockedGroupIDs          []string                            `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                []string                            `json:"editorIDs,omitempty"`
-	ControlKindID            *string                             `json:"controlKindID,omitempty"`
-	EnvironmentID            *string                             `json:"environmentID,omitempty"`
-	ScopeID                  *string                             `json:"scopeID,omitempty"`
-	StandardID               *string                             `json:"standardID,omitempty"`
-	ProgramIDs               []string                            `json:"programIDs,omitempty"`
-	PlatformIDs              []string                            `json:"platformIDs,omitempty"`
-	AssetIDs                 []string                            `json:"assetIDs,omitempty"`
-	EntityIDs                []string                            `json:"entityIDs,omitempty"`
-	IdentityHolderIDs        []string                            `json:"identityHolderIDs,omitempty"`
-	CampaignIDs              []string                            `json:"campaignIDs,omitempty"`
-	FindingIDs               []string                            `json:"findingIDs,omitempty"`
-	ControlImplementationIDs []string                            `json:"controlImplementationIDs,omitempty"`
-	SubcontrolIDs            []string                            `json:"subcontrolIDs,omitempty"`
-	ScheduledJobIDs          []string                            `json:"scheduledJobIDs,omitempty"`
-	WorkflowObjectRefIDs     []string                            `json:"workflowObjectRefIDs,omitempty"`
+	TrustCenterVisibility *enums.TrustCenterControlVisibility `json:"trustCenterVisibility,omitempty"`
+	// indicates the control is derived from the trust center standard, set by the system during control clone
+	IsTrustCenterControl     *bool    `json:"isTrustCenterControl,omitempty"`
+	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
+	ControlObjectiveIDs      []string `json:"controlObjectiveIDs,omitempty"`
+	TaskIDs                  []string `json:"taskIDs,omitempty"`
+	NarrativeIDs             []string `json:"narrativeIDs,omitempty"`
+	RiskIDs                  []string `json:"riskIDs,omitempty"`
+	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
+	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
+	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
+	CommentIDs               []string `json:"commentIDs,omitempty"`
+	DiscussionIDs            []string `json:"discussionIDs,omitempty"`
+	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
+	DelegateID               *string  `json:"delegateID,omitempty"`
+	ResponsiblePartyID       *string  `json:"responsiblePartyID,omitempty"`
+	ReviewIDs                []string `json:"reviewIDs,omitempty"`
+	RemediationIDs           []string `json:"remediationIDs,omitempty"`
+	ScanIDs                  []string `json:"scanIDs,omitempty"`
+	OwnerID                  *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs          []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                []string `json:"editorIDs,omitempty"`
+	ControlKindID            *string  `json:"controlKindID,omitempty"`
+	EnvironmentID            *string  `json:"environmentID,omitempty"`
+	ScopeID                  *string  `json:"scopeID,omitempty"`
+	StandardID               *string  `json:"standardID,omitempty"`
+	ProgramIDs               []string `json:"programIDs,omitempty"`
+	PlatformIDs              []string `json:"platformIDs,omitempty"`
+	AssetIDs                 []string `json:"assetIDs,omitempty"`
+	EntityIDs                []string `json:"entityIDs,omitempty"`
+	IdentityHolderIDs        []string `json:"identityHolderIDs,omitempty"`
+	CampaignIDs              []string `json:"campaignIDs,omitempty"`
+	FindingIDs               []string `json:"findingIDs,omitempty"`
+	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
+	ScheduledJobIDs          []string `json:"scheduledJobIDs,omitempty"`
+	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateControlObjectiveInput is used for create ControlObjective object.
