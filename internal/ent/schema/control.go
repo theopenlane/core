@@ -80,7 +80,6 @@ func (Control) Fields() []ent.Field {
 		field.Bool("is_trust_center_control").
 			Default(false).
 			Optional().
-			Immutable().
 			Comment("indicates the control is derived from the trust center standard, set by the system during control clone"),
 	}
 

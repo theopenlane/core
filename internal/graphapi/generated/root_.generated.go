@@ -125050,6 +125050,11 @@ input UpdateControlInput {
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
   clearTrustCenterVisibility: Boolean
+  """
+  indicates the control is derived from the trust center standard, set by the system during control clone
+  """
+  isTrustCenterControl: Boolean
+  clearIsTrustCenterControl: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean

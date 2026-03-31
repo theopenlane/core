@@ -21,8 +21,8 @@ import (
 func HookControlTrustcenter() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
-			_, ok := m.IsTrustCenterControl()
-			if !ok {
+			val, ok := m.IsTrustCenterControl()
+			if !ok || !val {
 				return next.Mutate(ctx, m)
 			}
 

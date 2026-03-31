@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
@@ -3052,4 +3053,160 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	// cleanup
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationCreateControlTrustCenter(t *testing.T) {
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	tt := []struct {
+		name        string
+		request     testclient.CreateControlInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "fail, isTrustCenterControl is true but no public representation",
+			request: testclient.CreateControlInput{
+				RefCode:              "TC-1",
+				IsTrustCenterControl: lo.ToPtr(true),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrTrustCenterControlNoPublicRepresentation.Error(),
+		},
+		{
+			name: "fail, isTrustCenterControl is true with standard id but has public representation",
+			request: testclient.CreateControlInput{
+				RefCode:              "TC-2",
+				IsTrustCenterControl: lo.ToPtr(true),
+				PublicRepresentation: lo.ToPtr("This is a public representation"),
+				StandardID:           &publicStandard.ID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrTrustCenterControlNoStandardRequired.Error(),
+		},
+		{
+			name: "happy path, isTrustCenterControl is true with public representation but no standard id",
+			request: testclient.CreateControlInput{
+				RefCode:              "TC-3",
+				IsTrustCenterControl: lo.ToPtr(true),
+				PublicRepresentation: lo.ToPtr("This is a public representation"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+	}
+
+	controlIDsToDelete := []string{}
+
+	for _, tc := range tt {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateControl(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+			assert.Check(t, is.Equal(*tc.request.IsTrustCenterControl, *resp.CreateControl.Control.IsTrustCenterControl))
+			assert.Check(t, is.Equal(*tc.request.PublicRepresentation, *resp.CreateControl.Control.PublicRepresentation))
+
+			controlIDsToDelete = append(controlIDsToDelete, resp.CreateControl.Control.ID)
+		})
+	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+func TestMutationUpdateControlTrustCenterControlValidation(t *testing.T) {
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	controlWithPublicRep := (&ControlBuilder{
+		client:               suite.client,
+		PublicRepresentation: "Original public representation",
+	}).MustNew(testUser1.UserCtx, t)
+
+	controlWithStandardID := (&ControlBuilder{
+		client:     suite.client,
+		StandardID: standard.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	controlWithBoth := (&ControlBuilder{
+		client:               suite.client,
+		PublicRepresentation: "Another public representation",
+		StandardID:           standard.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name        string
+		request     testclient.UpdateControlInput
+		controlID   string
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "fail, update to trust center control but control has no public representation",
+			request: testclient.UpdateControlInput{
+				IsTrustCenterControl: lo.ToPtr(true),
+			},
+			controlID:   controlWithStandardID.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrTrustCenterControlNoPublicRepresentation.Error(),
+		},
+		{
+			name: "fail, update to trust center control but control has standard id",
+			request: testclient.UpdateControlInput{
+				IsTrustCenterControl: lo.ToPtr(true),
+				PublicRepresentation: lo.ToPtr("New public representation"),
+			},
+			controlID:   controlWithStandardID.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrTrustCenterControlNoStandardRequired.Error(),
+		},
+		{
+			name: "fail, update to trust center control but control has both public rep and standard id",
+			request: testclient.UpdateControlInput{
+				IsTrustCenterControl: lo.ToPtr(true),
+			},
+			controlID:   controlWithBoth.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: hooks.ErrTrustCenterControlNoStandardRequired.Error(),
+		},
+		{
+			name: "happy path, update to trust center control with public rep and no standard",
+			request: testclient.UpdateControlInput{
+				IsTrustCenterControl: lo.ToPtr(true),
+			},
+			controlID: controlWithPublicRep.ID,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateControl(tc.ctx, tc.controlID, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+			assert.Check(t, is.Equal(*tc.request.IsTrustCenterControl, *resp.UpdateControl.Control.IsTrustCenterControl))
+		})
+	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlWithPublicRep.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlWithStandardID.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlWithBoth.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
 }
