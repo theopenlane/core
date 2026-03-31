@@ -141,7 +141,7 @@ func (EmailBranding) Policy() ent.Policy {
 }
 
 // Annotations of the EmailBranding
-func (c EmailBranding) Annotations() []schema.Annotation {
+func (EmailBranding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 	}
