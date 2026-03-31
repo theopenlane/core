@@ -2831,6 +2831,7 @@ type CreateControlInput struct {
 	WorkflowEligibleMarker     *bool
 	RefCode                    string
 	TrustCenterVisibility      *enums.TrustCenterControlVisibility
+	IsTrustCenterControl       *bool
 	EvidenceIDs                []string
 	ControlObjectiveIDs        []string
 	TaskIDs                    []string
@@ -2974,6 +2975,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	m.SetRefCode(i.RefCode)
 	if v := i.TrustCenterVisibility; v != nil {
 		m.SetTrustCenterVisibility(*v)
+	}
+	if v := i.IsTrustCenterControl; v != nil {
+		m.SetIsTrustCenterControl(*v)
 	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
@@ -3168,6 +3172,8 @@ type UpdateControlInput struct {
 	RefCode                         *string
 	ClearTrustCenterVisibility      bool
 	TrustCenterVisibility           *enums.TrustCenterControlVisibility
+	ClearIsTrustCenterControl       bool
+	IsTrustCenterControl            *bool
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
 	RemoveEvidenceIDs               []string
@@ -3506,6 +3512,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.TrustCenterVisibility; v != nil {
 		m.SetTrustCenterVisibility(*v)
+	}
+	if i.ClearIsTrustCenterControl {
+		m.ClearIsTrustCenterControl()
+	}
+	if v := i.IsTrustCenterControl; v != nil {
+		m.SetIsTrustCenterControl(*v)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()

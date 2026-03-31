@@ -274,6 +274,7 @@ type ControlBuilder struct {
 	ControlOwnerID          string
 	ControlEditorGroupID    string
 	ControlImplementationID string
+	PublicRepresentation    string
 	// AllFields will set all direct fields on the control with random data
 	AllFields   bool
 	Category    string
@@ -1367,6 +1368,10 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.Aliases != nil {
 		mutation.SetAliases(c.Aliases)
+	}
+
+	if c.PublicRepresentation != "" {
+		mutation.SetPublicRepresentation(c.PublicRepresentation)
 	}
 
 	control, err := mutation.

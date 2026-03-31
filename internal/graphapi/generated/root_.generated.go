@@ -65098,6 +65098,10 @@ input CreateControlInput {
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
+  """
+  indicates the control is derived from the trust center standard, set by the system during control clone
+  """
+  isTrustCenterControl: Boolean
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -125046,6 +125050,11 @@ input UpdateControlInput {
   """
   trustCenterVisibility: ControlTrustCenterControlVisibility
   clearTrustCenterVisibility: Boolean
+  """
+  indicates the control is derived from the trust center standard, set by the system during control clone
+  """
+  isTrustCenterControl: Boolean
+  clearIsTrustCenterControl: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean

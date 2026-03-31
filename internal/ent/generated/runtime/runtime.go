@@ -992,6 +992,8 @@ func init() {
 	control.Hooks[17] = controlHooks[0]
 
 	control.Hooks[18] = controlHooks[1]
+
+	control.Hooks[19] = controlHooks[2]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters5 := controlMixin[5].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()

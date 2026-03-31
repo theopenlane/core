@@ -9,12 +9,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -79,10 +80,6 @@ func (Control) Fields() []ent.Field {
 		field.Bool("is_trust_center_control").
 			Default(false).
 			Optional().
-			Immutable().
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			).
 			Comment("indicates the control is derived from the trust center standard, set by the system during control clone"),
 	}
 
@@ -225,6 +222,7 @@ func (Control) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookControlReferenceFramework(),
 		hooks.HookControlTrustCenterVisibility(),
+		hooks.HookControlTrustcenter(),
 	}
 }
 
