@@ -4465,6 +4465,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Platform",
 	)
 	graph.MustAddE(
+		"integration",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+		},
+		"Asset",
+		"Integration",
+	)
+	graph.MustAddE(
 		"connected_assets",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -9095,6 +9107,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Integration",
 		"ActionPlan",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"Asset",
 	)
 	graph.MustAddE(
 		"directory_accounts",
@@ -18785,6 +18809,20 @@ func (f *AssetFilter) WhereHasSourcePlatform() {
 // WhereHasSourcePlatformWith applies a predicate to check if query has an edge source_platform with a given conditions (other predicates).
 func (f *AssetFilter) WhereHasSourcePlatformWith(preds ...predicate.Platform) {
 	f.Where(entql.HasEdgeWith("source_platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegration applies a predicate to check if query has an edge integration.
+func (f *AssetFilter) WhereHasIntegration() {
+	f.Where(entql.HasEdge("integration"))
+}
+
+// WhereHasIntegrationWith applies a predicate to check if query has an edge integration with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasIntegrationWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integration", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -29559,6 +29597,20 @@ func (f *IntegrationFilter) WhereHasActionPlans() {
 // WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
 func (f *IntegrationFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
 	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *IntegrationFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

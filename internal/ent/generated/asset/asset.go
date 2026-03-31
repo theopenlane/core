@@ -158,6 +158,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeSourcePlatform holds the string denoting the source_platform edge name in mutations.
 	EdgeSourcePlatform = "source_platform"
+	// EdgeIntegration holds the string denoting the integration edge name in mutations.
+	EdgeIntegration = "integration"
 	// EdgeConnectedAssets holds the string denoting the connected_assets edge name in mutations.
 	EdgeConnectedAssets = "connected_assets"
 	// EdgeConnectedFrom holds the string denoting the connected_from edge name in mutations.
@@ -299,6 +301,13 @@ const (
 	SourcePlatformInverseTable = "platforms"
 	// SourcePlatformColumn is the table column denoting the source_platform relation/edge.
 	SourcePlatformColumn = "source_platform_id"
+	// IntegrationTable is the table that holds the integration relation/edge.
+	IntegrationTable = "assets"
+	// IntegrationInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationInverseTable = "integrations"
+	// IntegrationColumn is the table column denoting the integration relation/edge.
+	IntegrationColumn = "integration_id"
 	// ConnectedAssetsTable is the table that holds the connected_assets relation/edge. The primary key declared below.
 	ConnectedAssetsTable = "asset_connected_assets"
 	// ConnectedFromTable is the table that holds the connected_from relation/edge. The primary key declared below.
@@ -919,6 +928,13 @@ func BySourcePlatformField(field string, opts ...sql.OrderTermOption) OrderOptio
 	}
 }
 
+// ByIntegrationField orders the results by integration field.
+func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByConnectedAssetsCount orders the results by connected_assets count.
 func ByConnectedAssetsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1091,6 +1107,13 @@ func newSourcePlatformStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SourcePlatformInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, SourcePlatformTable, SourcePlatformColumn),
+	)
+}
+func newIntegrationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 	)
 }
 func newConnectedAssetsStep() *sqlgraph.Step {

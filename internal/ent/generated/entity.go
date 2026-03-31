@@ -144,7 +144,7 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contract_renewal_at,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]interface{} `json:"vendor_metadata,omitempty"`
-	// URL of the logo
+	// The logo file id for the entity
 	LogoFileID *string `json:"logo_file_id,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID string `json:"external_id,omitempty"`

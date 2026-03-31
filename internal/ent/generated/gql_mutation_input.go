@@ -1203,7 +1203,6 @@ type CreateAssetInput struct {
 	PurchaseDate                *models.DateTime
 	Cpe                         *string
 	Categories                  []string
-	IntegrationID               *string
 	ObservedAt                  *models.DateTime
 	OwnerID                     *string
 	BlockedGroupIDs             []string
@@ -1226,6 +1225,7 @@ type CreateAssetInput struct {
 	IdentityHolderIDs           []string
 	ControlIDs                  []string
 	SourcePlatformID            *string
+	IntegrationID               *string
 	ConnectedAssetIDs           []string
 	ConnectedFromIDs            []string
 }
@@ -1314,9 +1314,6 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.Categories; v != nil {
 		m.SetCategories(v)
 	}
-	if v := i.IntegrationID; v != nil {
-		m.SetIntegrationID(*v)
-	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
@@ -1382,6 +1379,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.SourcePlatformID; v != nil {
 		m.SetSourcePlatformID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
 	}
 	if v := i.ConnectedAssetIDs; len(v) > 0 {
 		m.AddConnectedAssetIDs(v...)
@@ -1454,8 +1454,6 @@ type UpdateAssetInput struct {
 	ClearCategories                  bool
 	Categories                       []string
 	AppendCategories                 []string
-	ClearIntegrationID               bool
-	IntegrationID                    *string
 	ClearObservedAt                  bool
 	ObservedAt                       *models.DateTime
 	ClearBlockedGroups               bool
@@ -1681,12 +1679,6 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if i.AppendCategories != nil {
 		m.AppendCategories(i.Categories)
-	}
-	if i.ClearIntegrationID {
-		m.ClearIntegrationID()
-	}
-	if v := i.IntegrationID; v != nil {
-		m.SetIntegrationID(*v)
 	}
 	if i.ClearObservedAt {
 		m.ClearObservedAt()

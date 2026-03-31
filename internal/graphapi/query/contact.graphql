@@ -6,8 +6,11 @@ mutation CreateBulkCSVContact ($input: Upload!) {
 			createdAt
 			createdBy
 			email
+			externalID
 			fullName
 			id
+			integrationID
+			observedAt
 			ownerID
 			phoneNumber
 			status
@@ -26,8 +29,11 @@ mutation CreateBulkContact ($input: [CreateContactInput!]) {
 			createdAt
 			createdBy
 			email
+			externalID
 			fullName
 			id
+			integrationID
+			observedAt
 			ownerID
 			phoneNumber
 			status
@@ -46,8 +52,11 @@ mutation CreateContact ($input: CreateContactInput!) {
 			createdAt
 			createdBy
 			email
+			externalID
 			fullName
 			id
+			integrationID
+			observedAt
 			ownerID
 			phoneNumber
 			status
@@ -92,8 +101,11 @@ query GetContactByID ($contactId: ID!) {
 		createdAt
 		createdBy
 		email
+		externalID
 		fullName
 		id
+		integrationID
+		observedAt
 		ownerID
 		phoneNumber
 		status
@@ -133,8 +145,11 @@ mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
 			createdAt
 			createdBy
 			email
+			externalID
 			fullName
 			id
+			integrationID
+			observedAt
 			ownerID
 			phoneNumber
 			status
@@ -154,8 +169,11 @@ mutation UpdateContact ($updateContactId: ID!, $input: UpdateContactInput!) {
 			createdAt
 			createdBy
 			email
+			externalID
 			fullName
 			id
+			integrationID
+			observedAt
 			ownerID
 			phoneNumber
 			status

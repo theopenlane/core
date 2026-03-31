@@ -391,6 +391,7 @@ type ComplexityRoot struct {
 		ID                          func(childComplexity int) int
 		Identifier                  func(childComplexity int) int
 		IdentityHolders             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		Integration                 func(childComplexity int) int
 		IntegrationID               func(childComplexity int) int
 		InternalNotes               func(childComplexity int) int
 		InternalOwner               func(childComplexity int) int
@@ -2720,6 +2721,7 @@ type ComplexityRoot struct {
 
 	Integration struct {
 		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DefinitionID             func(childComplexity int) int
@@ -9164,6 +9166,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Asset.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Asset.integration":
+		if e.ComplexityRoot.Asset.Integration == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Asset.Integration(childComplexity), true
 
 	case "Asset.integrationID":
 		if e.ComplexityRoot.Asset.IntegrationID == nil {
@@ -21000,6 +21009,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "Integration.assets":
+		if e.ComplexityRoot.Integration.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Integration.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
 	case "Integration.createdAt":
 		if e.ComplexityRoot.Integration.CreatedAt == nil {
@@ -57764,7 +57785,7 @@ type Asset implements Node {
   """
   integration that discovered this asset, when sourced via integration ingest
   """
-  integrationID: String
+  integrationID: ID
   """
   time when this asset was last observed by the source integration
   """
@@ -58060,6 +58081,10 @@ type Asset implements Node {
     where: ControlWhereInput
   ): ControlConnection!
   sourcePlatform: Platform
+  """
+  integration that owns this asset
+  """
+  integration: Integration
   connectedAssets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -58918,21 +58943,21 @@ input AssetWhereInput {
   """
   integration_id field predicates
   """
-  integrationID: String
-  integrationIDNEQ: String
-  integrationIDIn: [String!]
-  integrationIDNotIn: [String!]
-  integrationIDGT: String
-  integrationIDGTE: String
-  integrationIDLT: String
-  integrationIDLTE: String
-  integrationIDContains: String
-  integrationIDHasPrefix: String
-  integrationIDHasSuffix: String
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
   integrationIDIsNil: Boolean
   integrationIDNotNil: Boolean
-  integrationIDEqualFold: String
-  integrationIDContainsFold: String
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
   """
   observed_at field predicates
   """
@@ -59051,6 +59076,11 @@ input AssetWhereInput {
   """
   hasSourcePlatform: Boolean
   hasSourcePlatformWith: [PlatformWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
   """
   connected_assets edge predicates
   """
@@ -60931,6 +60961,7 @@ enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/common/enums
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 ContactWhereInput is used for filtering Contact objects.
@@ -65009,10 +65040,6 @@ input CreateAssetInput {
   """
   categories: [String!]
   """
-  integration that discovered this asset, when sourced via integration ingest
-  """
-  integrationID: String
-  """
   time when this asset was last observed by the source integration
   """
   observedAt: DateTime
@@ -65037,6 +65064,7 @@ input CreateAssetInput {
   identityHolderIDs: [ID!]
   controlIDs: [ID!]
   sourcePlatformID: ID
+  integrationID: ID
   connectedAssetIDs: [ID!]
   connectedFromIDs: [ID!]
 }
@@ -77173,7 +77201,7 @@ type Entity implements Node {
   """
   vendorMetadata: Map
   """
-  URL of the logo
+  The logo file id for the entity
   """
   logoFileID: ID
   """
@@ -87779,6 +87807,10 @@ IdentityHolderIdentityHolderType is enum for the field identity_holder_type
 enum IdentityHolderIdentityHolderType @goModel(model: "github.com/theopenlane/core/common/enums.IdentityHolderType") {
   EMPLOYEE
   CONTRACTOR
+  UNSPECIFIED
+  INTERN
+  SERVICE
+  PARTNER
 }
 """
 Ordering options for IdentityHolder connections
@@ -87825,6 +87857,7 @@ enum IdentityHolderUserStatus @goModel(model: "github.com/theopenlane/core/commo
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 IdentityHolderWhereInput is used for filtering IdentityHolder objects.
@@ -88837,6 +88870,37 @@ type Integration implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
   directoryAccounts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -89552,6 +89616,11 @@ input IntegrationWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
   """
   directory_accounts edge predicates
   """
@@ -125271,11 +125340,6 @@ input UpdateAssetInput {
   appendCategories: [String!]
   clearCategories: Boolean
   """
-  integration that discovered this asset, when sourced via integration ingest
-  """
-  integrationID: String
-  clearIntegrationID: Boolean
-  """
   time when this asset was last observed by the source integration
   """
   observedAt: DateTime
@@ -133645,6 +133709,7 @@ enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/common/e
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 UserSettingWhereInput is used for filtering UserSetting objects.

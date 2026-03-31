@@ -409,7 +409,6 @@ var (
 		{Name: "purchase_date", Type: field.TypeTime, Nullable: true},
 		{Name: "cpe", Type: field.TypeString, Nullable: true},
 		{Name: "categories", Type: field.TypeJSON, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
@@ -422,6 +421,7 @@ var (
 		{Name: "security_tier_id", Type: field.TypeString, Nullable: true},
 		{Name: "criticality_id", Type: field.TypeString, Nullable: true},
 		{Name: "finding_assets", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "source_platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_assets", Type: field.TypeString, Nullable: true},
@@ -437,68 +437,74 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assets_users_internal_owner_user",
-				Columns:    []*schema.Column{AssetsColumns[38]},
+				Columns:    []*schema.Column{AssetsColumns[37]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_groups_internal_owner_group",
-				Columns:    []*schema.Column{AssetsColumns[39]},
+				Columns:    []*schema.Column{AssetsColumns[38]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_asset_subtype",
-				Columns:    []*schema.Column{AssetsColumns[40]},
+				Columns:    []*schema.Column{AssetsColumns[39]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_asset_data_classification",
-				Columns:    []*schema.Column{AssetsColumns[41]},
+				Columns:    []*schema.Column{AssetsColumns[40]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_environment",
-				Columns:    []*schema.Column{AssetsColumns[42]},
+				Columns:    []*schema.Column{AssetsColumns[41]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_scope",
-				Columns:    []*schema.Column{AssetsColumns[43]},
+				Columns:    []*schema.Column{AssetsColumns[42]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_access_model",
-				Columns:    []*schema.Column{AssetsColumns[44]},
+				Columns:    []*schema.Column{AssetsColumns[43]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_encryption_status",
-				Columns:    []*schema.Column{AssetsColumns[45]},
+				Columns:    []*schema.Column{AssetsColumns[44]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_security_tier",
-				Columns:    []*schema.Column{AssetsColumns[46]},
+				Columns:    []*schema.Column{AssetsColumns[45]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_custom_type_enums_criticality",
-				Columns:    []*schema.Column{AssetsColumns[47]},
+				Columns:    []*schema.Column{AssetsColumns[46]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_findings_assets",
-				Columns:    []*schema.Column{AssetsColumns[48]},
+				Columns:    []*schema.Column{AssetsColumns[47]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_integrations_assets",
+				Columns:    []*schema.Column{AssetsColumns[48]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -798,7 +804,7 @@ var (
 		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "address", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING", "UNKNOWN"}, Default: "ACTIVE"},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
@@ -3585,8 +3591,8 @@ var (
 		{Name: "alternate_email", Type: field.TypeString, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "is_openlane_user", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "identity_holder_type", Type: field.TypeEnum, Enums: []string{"EMPLOYEE", "CONTRACTOR"}, Default: "EMPLOYEE"},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
+		{Name: "identity_holder_type", Type: field.TypeEnum, Enums: []string{"EMPLOYEE", "CONTRACTOR", "UNSPECIFIED", "INTERN", "SERVICE", "PARTNER"}, Default: "UNSPECIFIED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING", "UNKNOWN"}, Default: "ACTIVE"},
 		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "department", Type: field.TypeString, Nullable: true},
@@ -7804,7 +7810,7 @@ var (
 		{Name: "locked", Type: field.TypeBool, Default: false},
 		{Name: "silenced_at", Type: field.TypeTime, Nullable: true},
 		{Name: "suspended_at", Type: field.TypeTime, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING", "UNKNOWN"}, Default: "ACTIVE"},
 		{Name: "email_confirmed", Type: field.TypeBool, Default: false},
 		{Name: "is_webauthn_allowed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "is_tfa_enabled", Type: field.TypeBool, Nullable: true, Default: false},
@@ -13513,12 +13519,13 @@ func init() {
 	AssetsTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
 	AssetsTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
 	AssetsTable.ForeignKeys[10].RefTable = FindingsTable
-	AssetsTable.ForeignKeys[11].RefTable = OrganizationsTable
-	AssetsTable.ForeignKeys[12].RefTable = PlatformsTable
-	AssetsTable.ForeignKeys[13].RefTable = RemediationsTable
-	AssetsTable.ForeignKeys[14].RefTable = ReviewsTable
-	AssetsTable.ForeignKeys[15].RefTable = RisksTable
-	AssetsTable.ForeignKeys[16].RefTable = VulnerabilitiesTable
+	AssetsTable.ForeignKeys[11].RefTable = IntegrationsTable
+	AssetsTable.ForeignKeys[12].RefTable = OrganizationsTable
+	AssetsTable.ForeignKeys[13].RefTable = PlatformsTable
+	AssetsTable.ForeignKeys[14].RefTable = RemediationsTable
+	AssetsTable.ForeignKeys[15].RefTable = ReviewsTable
+	AssetsTable.ForeignKeys[16].RefTable = RisksTable
+	AssetsTable.ForeignKeys[17].RefTable = VulnerabilitiesTable
 	CampaignsTable.ForeignKeys[0].RefTable = AssessmentsTable
 	CampaignsTable.ForeignKeys[1].RefTable = UsersTable
 	CampaignsTable.ForeignKeys[2].RefTable = GroupsTable

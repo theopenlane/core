@@ -119,6 +119,8 @@ type IntegrationEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
 	// DirectoryAccounts holds the value of the directory_accounts edge.
 	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
 	// DirectoryGroups holds the value of the directory_groups edge.
@@ -141,9 +143,9 @@ type IntegrationEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [22]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
 	namedSecrets               map[string][]*Hush
 	namedFiles                 map[string][]*File
@@ -154,6 +156,7 @@ type IntegrationEdges struct {
 	namedRemediations          map[string][]*Remediation
 	namedTasks                 map[string][]*Task
 	namedActionPlans           map[string][]*ActionPlan
+	namedAssets                map[string][]*Asset
 	namedDirectoryAccounts     map[string][]*DirectoryAccount
 	namedDirectoryGroups       map[string][]*DirectoryGroup
 	namedDirectoryMemberships  map[string][]*DirectoryMembership
@@ -279,10 +282,19 @@ func (e IntegrationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[12] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -291,7 +303,7 @@ func (e IntegrationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) 
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -300,7 +312,7 @@ func (e IntegrationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -309,7 +321,7 @@ func (e IntegrationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, e
 // DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.DirectorySyncRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
@@ -320,7 +332,7 @@ func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) 
 func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
 	if e.Platform != nil {
 		return e.Platform, nil
-	} else if e.loadedTypes[16] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform"}
@@ -329,7 +341,7 @@ func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -338,7 +350,7 @@ func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate,
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -347,7 +359,7 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.IntegrationWebhooks, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_webhooks"}
@@ -356,7 +368,7 @@ func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, err
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.IntegrationRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_runs"}
@@ -365,7 +377,7 @@ func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -696,6 +708,11 @@ func (_m *Integration) QueryTasks() *TaskQuery {
 // QueryActionPlans queries the "action_plans" edge of the Integration entity.
 func (_m *Integration) QueryActionPlans() *ActionPlanQuery {
 	return NewIntegrationClient(_m.config).QueryActionPlans(_m)
+}
+
+// QueryAssets queries the "assets" edge of the Integration entity.
+func (_m *Integration) QueryAssets() *AssetQuery {
+	return NewIntegrationClient(_m.config).QueryAssets(_m)
 }
 
 // QueryDirectoryAccounts queries the "directory_accounts" edge of the Integration entity.
@@ -1084,6 +1101,30 @@ func (_m *Integration) appendNamedActionPlans(name string, edges ...*ActionPlan)
 		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
 		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
 	}
 }
 

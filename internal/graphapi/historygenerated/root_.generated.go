@@ -25508,6 +25508,7 @@ enum ContactHistoryUserStatus @goModel(model: "github.com/theopenlane/core/commo
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 ContactHistoryWhereInput is used for filtering ContactHistory objects.
@@ -32556,7 +32557,7 @@ type EntityHistory implements Node {
   """
   vendorMetadata: Map
   """
-  URL of the logo
+  The logo file id for the entity
   """
   logoFileID: String
   """
@@ -37912,6 +37913,10 @@ IdentityHolderHistoryIdentityHolderType is enum for the field identity_holder_ty
 enum IdentityHolderHistoryIdentityHolderType @goModel(model: "github.com/theopenlane/core/common/enums.IdentityHolderType") {
   EMPLOYEE
   CONTRACTOR
+  UNSPECIFIED
+  INTERN
+  SERVICE
+  PARTNER
 }
 """
 IdentityHolderHistoryOpType is enum for the field operation
@@ -37967,6 +37972,7 @@ enum IdentityHolderHistoryUserStatus @goModel(model: "github.com/theopenlane/cor
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 IdentityHolderHistoryWhereInput is used for filtering IdentityHolderHistory objects.
@@ -60055,6 +60061,7 @@ enum UserSettingHistoryUserStatus @goModel(model: "github.com/theopenlane/core/c
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 UserSettingHistoryWhereInput is used for filtering UserSettingHistory objects.

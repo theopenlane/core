@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
@@ -902,6 +903,11 @@ func (_c *AssetCreate) SetSourcePlatform(v *Platform) *AssetCreate {
 	return _c.SetSourcePlatformID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_c *AssetCreate) SetIntegration(v *Integration) *AssetCreate {
+	return _c.SetIntegrationID(v.ID)
+}
+
 // AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
 func (_c *AssetCreate) AddConnectedAssetIDs(ids ...string) *AssetCreate {
 	_c.mutation.AddConnectedAssetIDs(ids...)
@@ -1224,10 +1230,6 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 		_node.Categories = value
-	}
-	if value, ok := _c.mutation.IntegrationID(); ok {
-		_spec.SetField(asset.FieldIntegrationID, field.TypeString, value)
-		_node.IntegrationID = value
 	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(asset.FieldObservedAt, field.TypeTime, value)
@@ -1600,6 +1602,24 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.SourcePlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IntegrationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ConnectedAssetsIDs(); len(nodes) > 0 {

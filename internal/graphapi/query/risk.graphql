@@ -11,13 +11,16 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
 			impact
+			integrationID
 			likelihood
 			mitigation
 			mitigationJSON
 			name
+			observedAt
 			ownerID
 			riskCategoryID
 			riskCategoryName
@@ -55,13 +58,16 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
 			impact
+			integrationID
 			likelihood
 			mitigation
 			mitigationJSON
 			name
+			observedAt
 			ownerID
 			riskCategoryID
 			riskCategoryName
@@ -99,13 +105,16 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
 			impact
+			integrationID
 			likelihood
 			mitigation
 			mitigationJSON
 			name
+			observedAt
 			ownerID
 			riskCategoryID
 			riskCategoryName
@@ -188,13 +197,16 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				displayID
 				environmentID
 				environmentName
+				externalID
 				externalUUID
 				id
 				impact
+				integrationID
 				likelihood
 				mitigation
 				mitigationJSON
 				name
+				observedAt
 				ownerID
 				riskCategoryID
 				riskCategoryName
@@ -264,13 +276,16 @@ query GetRiskByID ($riskId: ID!) {
 		displayID
 		environmentID
 		environmentName
+		externalID
 		externalUUID
 		id
 		impact
+		integrationID
 		likelihood
 		mitigation
 		mitigationJSON
 		name
+		observedAt
 		ownerID
 		riskCategoryID
 		riskCategoryName
@@ -347,13 +362,16 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				displayID
 				environmentID
 				environmentName
+				externalID
 				externalUUID
 				id
 				impact
+				integrationID
 				likelihood
 				mitigation
 				mitigationJSON
 				name
+				observedAt
 				ownerID
 				riskCategoryID
 				riskCategoryName
@@ -424,13 +442,16 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
 			impact
+			integrationID
 			likelihood
 			mitigation
 			mitigationJSON
 			name
+			observedAt
 			ownerID
 			riskCategoryID
 			riskCategoryName
@@ -469,13 +490,16 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
 			impact
+			integrationID
 			likelihood
 			mitigation
 			mitigationJSON
 			name
+			observedAt
 			ownerID
 			riskCategoryID
 			riskCategoryName

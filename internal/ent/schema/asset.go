@@ -164,6 +164,7 @@ func (Asset) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that discovered this asset, when sourced via integration ingest").
 			Optional().
+			Immutable().
 			Annotations(
 				entx.IntegrationMappingField().FromIntegration(),
 			),
@@ -230,7 +231,7 @@ func (a Asset) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			immutable:  true,
-			comment:    "integration that owns this directory account",
+			comment:    "integration that owns this asset",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: a,

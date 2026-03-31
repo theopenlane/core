@@ -879,26 +879,6 @@ func (_u *AssetUpdate) ClearCategories() *AssetUpdate {
 	return _u
 }
 
-// SetIntegrationID sets the "integration_id" field.
-func (_u *AssetUpdate) SetIntegrationID(v string) *AssetUpdate {
-	_u.mutation.SetIntegrationID(v)
-	return _u
-}
-
-// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
-func (_u *AssetUpdate) SetNillableIntegrationID(v *string) *AssetUpdate {
-	if v != nil {
-		_u.SetIntegrationID(*v)
-	}
-	return _u
-}
-
-// ClearIntegrationID clears the value of the "integration_id" field.
-func (_u *AssetUpdate) ClearIntegrationID() *AssetUpdate {
-	_u.mutation.ClearIntegrationID()
-	return _u
-}
-
 // SetObservedAt sets the "observed_at" field.
 func (_u *AssetUpdate) SetObservedAt(v models.DateTime) *AssetUpdate {
 	_u.mutation.SetObservedAt(v)
@@ -1730,12 +1710,6 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(asset.FieldCategories, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.IntegrationID(); ok {
-		_spec.SetField(asset.FieldIntegrationID, field.TypeString, value)
-	}
-	if _u.mutation.IntegrationIDCleared() {
-		_spec.ClearField(asset.FieldIntegrationID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ObservedAt(); ok {
 		_spec.SetField(asset.FieldObservedAt, field.TypeTime, value)
@@ -3473,26 +3447,6 @@ func (_u *AssetUpdateOne) ClearCategories() *AssetUpdateOne {
 	return _u
 }
 
-// SetIntegrationID sets the "integration_id" field.
-func (_u *AssetUpdateOne) SetIntegrationID(v string) *AssetUpdateOne {
-	_u.mutation.SetIntegrationID(v)
-	return _u
-}
-
-// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
-func (_u *AssetUpdateOne) SetNillableIntegrationID(v *string) *AssetUpdateOne {
-	if v != nil {
-		_u.SetIntegrationID(*v)
-	}
-	return _u
-}
-
-// ClearIntegrationID clears the value of the "integration_id" field.
-func (_u *AssetUpdateOne) ClearIntegrationID() *AssetUpdateOne {
-	_u.mutation.ClearIntegrationID()
-	return _u
-}
-
 // SetObservedAt sets the "observed_at" field.
 func (_u *AssetUpdateOne) SetObservedAt(v models.DateTime) *AssetUpdateOne {
 	_u.mutation.SetObservedAt(v)
@@ -4354,12 +4308,6 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(asset.FieldCategories, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.IntegrationID(); ok {
-		_spec.SetField(asset.FieldIntegrationID, field.TypeString, value)
-	}
-	if _u.mutation.IntegrationIDCleared() {
-		_spec.ClearField(asset.FieldIntegrationID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ObservedAt(); ok {
 		_spec.SetField(asset.FieldObservedAt, field.TypeTime, value)

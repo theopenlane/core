@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -178,15 +179,17 @@ type AssetEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// SourcePlatform holds the value of the source_platform edge.
 	SourcePlatform *Platform `json:"source_platform,omitempty"`
+	// integration that owns this asset
+	Integration *Integration `json:"integration,omitempty"`
 	// assets that this asset connects to
 	ConnectedAssets []*Asset `json:"connected_assets,omitempty"`
 	// assets that connect to this asset
 	ConnectedFrom []*Asset `json:"connected_from,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [24]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -414,10 +417,21 @@ func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 	return nil, &NotLoadedError{edge: "source_platform"}
 }
 
+// IntegrationOrErr returns the Integration value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
+	if e.Integration != nil {
+		return e.Integration, nil
+	} else if e.loadedTypes[21] {
+		return nil, &NotFoundError{label: integration.Label}
+	}
+	return nil, &NotLoadedError{edge: "integration"}
+}
+
 // ConnectedAssetsOrErr returns the ConnectedAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.ConnectedAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_assets"}
@@ -426,7 +440,7 @@ func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
 // ConnectedFromOrErr returns the ConnectedFrom value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedFromOrErr() ([]*Asset, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.ConnectedFrom, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_from"}
@@ -933,6 +947,11 @@ func (_m *Asset) QueryControls() *ControlQuery {
 // QuerySourcePlatform queries the "source_platform" edge of the Asset entity.
 func (_m *Asset) QuerySourcePlatform() *PlatformQuery {
 	return NewAssetClient(_m.config).QuerySourcePlatform(_m)
+}
+
+// QueryIntegration queries the "integration" edge of the Asset entity.
+func (_m *Asset) QueryIntegration() *IntegrationQuery {
+	return NewAssetClient(_m.config).QueryIntegration(_m)
 }
 
 // QueryConnectedAssets queries the "connected_assets" edge of the Asset entity.

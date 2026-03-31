@@ -43,7 +43,7 @@ func TestAWSSecurityHubMappingsEvalMap(t *testing.T) {
 	assert.Equal(t, "arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890", mapped["externalOwnerID"])
 	assert.Equal(t, "aws_security_hub", mapped["source"])
 	assert.Equal(t, "Software and Configuration Checks/Vulnerabilities/CVE", mapped["category"])
-	assert.Equal(t, "NEW", mapped["status"])
+	assert.Equal(t, "NEW", mapped["vulnerabilityStatusName"])
 	assert.Equal(t, "CRITICAL", mapped["severity"])
 	assert.Equal(t, "Critical package vulnerability", mapped["summary"])
 	assert.Equal(t, "Security Hub detected a vulnerable package", mapped["description"])

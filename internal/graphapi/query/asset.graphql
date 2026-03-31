@@ -25,11 +25,13 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			estimatedMonthlyCost
 			id
 			identifier
+			integrationID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerUserID
 			name
+			observedAt
 			ownerID
 			physicalLocation
 			purchaseDate
@@ -77,11 +79,13 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			estimatedMonthlyCost
 			id
 			identifier
+			integrationID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerUserID
 			name
+			observedAt
 			ownerID
 			physicalLocation
 			purchaseDate
@@ -129,11 +133,13 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			estimatedMonthlyCost
 			id
 			identifier
+			integrationID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerUserID
 			name
+			observedAt
 			ownerID
 			physicalLocation
 			purchaseDate
@@ -199,11 +205,13 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				estimatedMonthlyCost
 				id
 				identifier
+				integrationID
 				internalNotes
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerUserID
 				name
+				observedAt
 				ownerID
 				physicalLocation
 				purchaseDate
@@ -251,11 +259,13 @@ query GetAssetByID ($assetId: ID!) {
 		estimatedMonthlyCost
 		id
 		identifier
+		integrationID
 		internalNotes
 		internalOwner
 		internalOwnerGroupID
 		internalOwnerUserID
 		name
+		observedAt
 		ownerID
 		physicalLocation
 		purchaseDate
@@ -310,11 +320,13 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				estimatedMonthlyCost
 				id
 				identifier
+				integrationID
 				internalNotes
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerUserID
 				name
+				observedAt
 				ownerID
 				physicalLocation
 				purchaseDate
@@ -363,11 +375,13 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			estimatedMonthlyCost
 			id
 			identifier
+			integrationID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerUserID
 			name
+			observedAt
 			ownerID
 			physicalLocation
 			purchaseDate
@@ -415,11 +429,13 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			estimatedMonthlyCost
 			id
 			identifier
+			integrationID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerUserID
 			name
+			observedAt
 			ownerID
 			physicalLocation
 			purchaseDate
@@ -468,11 +484,13 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			estimatedMonthlyCost
 			id
 			identifier
+			integrationID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerUserID
 			name
+			observedAt
 			ownerID
 			physicalLocation
 			purchaseDate

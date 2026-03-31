@@ -9,6 +9,7 @@ mutation CreateBulkCSVNotificationTemplate ($input: Upload!) {
 			createdBy
 			defaults
 			description
+			destinations
 			emailTemplateID
 			format
 			id
@@ -46,6 +47,7 @@ mutation CreateBulkNotificationTemplate ($input: [CreateNotificationTemplateInpu
 			createdBy
 			defaults
 			description
+			destinations
 			emailTemplateID
 			format
 			id
@@ -83,6 +85,7 @@ mutation CreateNotificationTemplate ($input: CreateNotificationTemplateInput!) {
 			createdBy
 			defaults
 			description
+			destinations
 			emailTemplateID
 			format
 			id
@@ -138,6 +141,7 @@ query GetAllNotificationTemplates ($first: Int, $last: Int, $after: Cursor, $bef
 				createdBy
 				defaults
 				description
+				destinations
 				emailTemplateID
 				format
 				id
@@ -175,6 +179,7 @@ query GetNotificationTemplateByID ($notificationTemplateId: ID!) {
 		createdBy
 		defaults
 		description
+		destinations
 		emailTemplateID
 		format
 		id
@@ -219,6 +224,7 @@ query GetNotificationTemplates ($first: Int, $last: Int, $after: Cursor, $before
 				createdBy
 				defaults
 				description
+				destinations
 				emailTemplateID
 				format
 				id
@@ -257,6 +263,7 @@ mutation UpdateBulkCSVNotificationTemplate ($input: Upload!) {
 			createdBy
 			defaults
 			description
+			destinations
 			emailTemplateID
 			format
 			id
@@ -295,6 +302,7 @@ mutation UpdateBulkNotificationTemplate ($ids: [ID!]!, $input: UpdateNotificatio
 			createdBy
 			defaults
 			description
+			destinations
 			emailTemplateID
 			format
 			id
@@ -333,6 +341,7 @@ mutation UpdateNotificationTemplate ($updateNotificationTemplateId: ID!, $input:
 			createdBy
 			defaults
 			description
+			destinations
 			emailTemplateID
 			format
 			id

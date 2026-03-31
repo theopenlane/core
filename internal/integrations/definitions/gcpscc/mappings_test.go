@@ -54,7 +54,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 		assert.Equal(t, "organizations/123/sources/456/findings/finding-1", mapped["externalID"])
 		assert.Equal(t, "projects/example-project/instances/vm-1", mapped["externalOwnerID"])
 		assert.Equal(t, "OPEN_FIREWALL", mapped["category"])
-		assert.Equal(t, "ACTIVE", mapped["status"])
+		assert.Equal(t, "ACTIVE", mapped["vulnerabilityStatusName"])
 		assert.Equal(t, "HIGH", mapped["severity"])
 		assert.Equal(t, "OPEN_FIREWALL", mapped["summary"])
 		assert.Equal(t, "Firewall rule allows ingress from 0.0.0.0/0.", mapped["description"])

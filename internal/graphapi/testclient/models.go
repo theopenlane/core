@@ -1719,8 +1719,10 @@ type Asset struct {
 	IdentityHolders         *IdentityHolderConnection `json:"identityHolders"`
 	Controls                *ControlConnection        `json:"controls"`
 	SourcePlatform          *Platform                 `json:"sourcePlatform,omitempty"`
-	ConnectedAssets         *AssetConnection          `json:"connectedAssets"`
-	ConnectedFrom           *AssetConnection          `json:"connectedFrom"`
+	// integration that owns this asset
+	Integration     *Integration     `json:"integration,omitempty"`
+	ConnectedAssets *AssetConnection `json:"connectedAssets"`
+	ConnectedFrom   *AssetConnection `json:"connectedFrom"`
 }
 
 func (Asset) IsNode() {}
@@ -2502,6 +2504,9 @@ type AssetWhereInput struct {
 	// source_platform edge predicates
 	HasSourcePlatform     *bool                 `json:"hasSourcePlatform,omitempty"`
 	HasSourcePlatformWith []*PlatformWhereInput `json:"hasSourcePlatformWith,omitempty"`
+	// integration edge predicates
+	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
+	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
 	// connected_assets edge predicates
 	HasConnectedAssets     *bool              `json:"hasConnectedAssets,omitempty"`
 	HasConnectedAssetsWith []*AssetWhereInput `json:"hasConnectedAssetsWith,omitempty"`
@@ -5823,8 +5828,6 @@ type CreateAssetInput struct {
 	Cpe *string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
 	Categories []string `json:"categories,omitempty"`
-	// integration that discovered this asset, when sourced via integration ingest
-	IntegrationID *string `json:"integrationID,omitempty"`
 	// time when this asset was last observed by the source integration
 	ObservedAt                *models.DateTime `json:"observedAt,omitempty"`
 	OwnerID                   *string          `json:"ownerID,omitempty"`
@@ -5848,6 +5851,7 @@ type CreateAssetInput struct {
 	IdentityHolderIDs         []string         `json:"identityHolderIDs,omitempty"`
 	ControlIDs                []string         `json:"controlIDs,omitempty"`
 	SourcePlatformID          *string          `json:"sourcePlatformID,omitempty"`
+	IntegrationID             *string          `json:"integrationID,omitempty"`
 	ConnectedAssetIDs         []string         `json:"connectedAssetIDs,omitempty"`
 	ConnectedFromIDs          []string         `json:"connectedFromIDs,omitempty"`
 }
@@ -13763,7 +13767,7 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
-	// URL of the logo
+	// The logo file id for the entity
 	LogoFileID *string `json:"logoFileID,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
@@ -19676,6 +19680,7 @@ type Integration struct {
 	Remediations             *RemediationConnection         `json:"remediations"`
 	Tasks                    *TaskConnection                `json:"tasks"`
 	ActionPlans              *ActionPlanConnection          `json:"actionPlans"`
+	Assets                   *AssetConnection               `json:"assets"`
 	DirectoryAccounts        *DirectoryAccountConnection    `json:"directoryAccounts"`
 	DirectoryGroups          *DirectoryGroupConnection      `json:"directoryGroups"`
 	DirectoryMemberships     *DirectoryMembershipConnection `json:"directoryMemberships"`
@@ -20077,6 +20082,9 @@ type IntegrationWhereInput struct {
 	// action_plans edge predicates
 	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
 	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
 	// directory_accounts edge predicates
 	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
 	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
@@ -38514,9 +38522,6 @@ type UpdateAssetInput struct {
 	Categories       []string `json:"categories,omitempty"`
 	AppendCategories []string `json:"appendCategories,omitempty"`
 	ClearCategories  *bool    `json:"clearCategories,omitempty"`
-	// integration that discovered this asset, when sourced via integration ingest
-	IntegrationID      *string `json:"integrationID,omitempty"`
-	ClearIntegrationID *bool   `json:"clearIntegrationID,omitempty"`
 	// time when this asset was last observed by the source integration
 	ObservedAt                   *models.DateTime `json:"observedAt,omitempty"`
 	ClearObservedAt              *bool            `json:"clearObservedAt,omitempty"`

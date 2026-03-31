@@ -195,12 +195,12 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultIdentityHolderType enums.IdentityHolderType = "EMPLOYEE"
+const DefaultIdentityHolderType enums.IdentityHolderType = "UNSPECIFIED"
 
 // IdentityHolderTypeValidator is a validator for the "identity_holder_type" field enum values. It is called by the builders before save.
 func IdentityHolderTypeValidator(iht enums.IdentityHolderType) error {
 	switch iht.String() {
-	case "EMPLOYEE", "CONTRACTOR":
+	case "EMPLOYEE", "CONTRACTOR", "UNSPECIFIED", "INTERN", "SERVICE", "PARTNER":
 		return nil
 	default:
 		return fmt.Errorf("identityholderhistory: invalid enum value for identity_holder_type field: %q", iht)
@@ -212,7 +212,7 @@ const DefaultStatus enums.UserStatus = "ACTIVE"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.UserStatus) error {
 	switch s.String() {
-	case "ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING":
+	case "ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING", "UNKNOWN":
 		return nil
 	default:
 		return fmt.Errorf("identityholderhistory: invalid enum value for status field: %q", s)
