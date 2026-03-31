@@ -17,6 +17,57 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// HookControlTrustcenter runs on control mutations when adding making a trustcenter control
+func HookControlTrustcenter() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
+			_, ok := m.IsTrustCenterControl()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			publicRepresentation, publicExists := m.PublicRepresentation()
+			standardID, standardExists := m.StandardID()
+
+			switch m.Op() {
+			case ent.OpCreate:
+				if !publicExists || publicRepresentation == "" {
+					return nil, ErrTrustCenterControlNoPublicRepresentation
+				}
+
+				if !standardExists || standardID == "" {
+					return nil, ErrTrustCenterControlNoStandardRequired
+				}
+
+			case ent.OpUpdateOne:
+				if !publicExists {
+					oldRepresentation, err := m.OldPublicRepresentation(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldRepresentation == "" {
+						return nil, ErrTrustCenterControlNoPublicRepresentation
+					}
+				}
+
+				if !standardExists {
+					oldStandardID, err := m.OldStandardID(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldStandardID == "" {
+						return nil, ErrTrustCenterControlNoStandardRequired
+					}
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
+}
+
 // HookControlReferenceFramework runs on control mutations to set the reference framework
 // based on the standard's short name
 func HookControlReferenceFramework() ent.Hook {
