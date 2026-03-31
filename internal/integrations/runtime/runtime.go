@@ -179,7 +179,7 @@ func New(config Config) (*Runtime, error) {
 	})
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(rt.Definition, func(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, def types.Definition, result types.AuthCompleteResult) error {
-			installation, err := rt.ResolveIntegration(ctx, "", integrationID, def.ID)
+			installation, err := rt.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: integrationID, DefinitionID: def.ID})
 			if err != nil {
 				return err
 			}

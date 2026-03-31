@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/operations"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -50,7 +51,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapiCtx)
 	}
 
-	integrationRef, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, caller.OrganizationID, req.IntegrationID, "")
+	integrationRef, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, integrationsruntime.IntegrationLookup{
+		IntegrationID: req.IntegrationID,
+		OwnerID:       caller.OrganizationID,
+	})
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
 

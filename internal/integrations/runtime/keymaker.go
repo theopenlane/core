@@ -9,7 +9,7 @@ import (
 )
 
 // installationResolverFunc matches the signature of Runtime.ResolveIntegration for testability
-type installationResolverFunc func(ctx context.Context, ownerID, integrationID, definitionID string) (*ent.Integration, error)
+type installationResolverFunc func(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error)
 
 // lookupKeymakerInstallation adapts runtime installation resolution to keymaker's lookup contract
 func (r *Runtime) lookupKeymakerInstallation(ctx context.Context, integrationID string) (keymaker.InstallationRecord, error) {
@@ -22,7 +22,7 @@ func resolveKeymakerInstallation(ctx context.Context, integrationID string, reso
 		return keymaker.InstallationRecord{}, keymaker.ErrInstallationIDRequired
 	}
 
-	record, err := resolve(ctx, "", integrationID, "")
+	record, err := resolve(ctx, IntegrationLookup{IntegrationID: integrationID})
 	if err != nil {
 		switch {
 		case errors.Is(err, ErrInstallationNotFound):

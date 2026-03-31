@@ -12,7 +12,7 @@ import (
 func TestResolveKeymakerInstallationRequiresInstallationID(t *testing.T) {
 	t.Parallel()
 
-	_, err := resolveKeymakerInstallation(context.Background(), "", func(context.Context, string, string, string) (*ent.Integration, error) {
+	_, err := resolveKeymakerInstallation(context.Background(), "", func(context.Context, IntegrationLookup) (*ent.Integration, error) {
 		t.Fatal("unexpected resolver call")
 
 		return nil, nil
@@ -25,7 +25,7 @@ func TestResolveKeymakerInstallationRequiresInstallationID(t *testing.T) {
 func TestResolveKeymakerInstallationMapsNotFound(t *testing.T) {
 	t.Parallel()
 
-	_, err := resolveKeymakerInstallation(context.Background(), "install-1", func(context.Context, string, string, string) (*ent.Integration, error) {
+	_, err := resolveKeymakerInstallation(context.Background(), "install-1", func(context.Context, IntegrationLookup) (*ent.Integration, error) {
 		return nil, ErrInstallationNotFound
 	})
 	if !errors.Is(err, keymaker.ErrInstallationNotFound) {
@@ -38,7 +38,7 @@ func TestResolveKeymakerInstallationPassesThroughUnexpectedErrors(t *testing.T) 
 
 	expectedErr := errors.New("db unavailable")
 
-	_, err := resolveKeymakerInstallation(context.Background(), "install-1", func(context.Context, string, string, string) (*ent.Integration, error) {
+	_, err := resolveKeymakerInstallation(context.Background(), "install-1", func(context.Context, IntegrationLookup) (*ent.Integration, error) {
 		return nil, expectedErr
 	})
 	if !errors.Is(err, expectedErr) {
@@ -49,19 +49,19 @@ func TestResolveKeymakerInstallationPassesThroughUnexpectedErrors(t *testing.T) 
 func TestResolveKeymakerInstallationReturnsRecord(t *testing.T) {
 	t.Parallel()
 
-	record, err := resolveKeymakerInstallation(context.Background(), "install-1", func(_ context.Context, ownerID, integrationID, definitionID string) (*ent.Integration, error) {
-		if ownerID != "" {
-			t.Fatalf("expected empty ownerID, got %q", ownerID)
+	record, err := resolveKeymakerInstallation(context.Background(), "install-1", func(_ context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
+		if lookup.OwnerID != "" {
+			t.Fatalf("expected empty OwnerID, got %q", lookup.OwnerID)
 		}
-		if integrationID != "install-1" {
-			t.Fatalf("expected integrationID install-1, got %q", integrationID)
+		if lookup.IntegrationID != "install-1" {
+			t.Fatalf("expected IntegrationID install-1, got %q", lookup.IntegrationID)
 		}
-		if definitionID != "" {
-			t.Fatalf("expected empty definitionID, got %q", definitionID)
+		if lookup.DefinitionID != "" {
+			t.Fatalf("expected empty DefinitionID, got %q", lookup.DefinitionID)
 		}
 
 		return &ent.Integration{
-			ID:           integrationID,
+			ID:           lookup.IntegrationID,
 			OwnerID:      "org-1",
 			DefinitionID: "github-oauth",
 		}, nil

@@ -12,10 +12,6 @@ import (
 
 // HealthCheck holds the result of an AWS Security Hub health check
 type HealthCheck struct {
-	// Region is the AWS region used for the session
-	Region string `json:"region"`
-	// RoleARN is the assumed role ARN when present
-	RoleARN string `json:"roleArn,omitempty"`
 	// HubARN is the Security Hub ARN
 	HubARN string `json:"hubArn,omitempty"`
 	// SubscribedAt is the Security Hub subscription timestamp
@@ -25,26 +21,18 @@ type HealthCheck struct {
 // Handle adapts the health check to the generic operation registration boundary
 func (h HealthCheck) Handle() types.OperationHandler {
 	return providerkit.WithClientRequest(securityHubClient, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) (json.RawMessage, error) {
-		return h.Run(ctx, request.Credentials, client)
+		return h.Run(ctx, client)
 	})
 }
 
 // Run validates Security Hub access by calling DescribeHub
-func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *securityhub.Client) (json.RawMessage, error) {
-	awsCredential, err := resolveAssumeRoleCredential(credentials)
-	if err != nil {
-		return nil, err
-	}
-
+func (HealthCheck) Run(ctx context.Context, c *securityhub.Client) (json.RawMessage, error) {
 	resp, err := c.DescribeHub(ctx, &securityhub.DescribeHubInput{})
 	if err != nil {
 		return nil, ErrDescribeHubFailed
 	}
 
-	details := HealthCheck{
-		Region:  awsCredential.HomeRegion,
-		RoleARN: awsCredential.RoleARN,
-	}
+	details := HealthCheck{}
 
 	if resp.HubArn != nil {
 		details.HubARN = *resp.HubArn

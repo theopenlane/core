@@ -152,7 +152,11 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 
 	allowCtx := workflows.AllowContextForOrg(ctx, orgID)
 
-	installationRecord, err := e.integrationRuntime.ResolveIntegration(allowCtx, orgID, req.InstallationID, req.DefinitionID)
+	installationRecord, err := e.integrationRuntime.ResolveIntegration(allowCtx, integrationsruntime.IntegrationLookup{
+		IntegrationID: req.InstallationID,
+		OwnerID:       orgID,
+		DefinitionID:  req.DefinitionID,
+	})
 	if err != nil {
 		return IntegrationQueueResult{}, err
 	}

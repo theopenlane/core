@@ -130,21 +130,16 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 
 	for _, payloadSet := range payloadSets {
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
-			err = ErrIngestSchemaNotDeclared
-
-			return err
+			return ErrIngestSchemaNotDeclared
 		}
 
 		if _, ok := integrationgenerated.IntegrationMappingSchemas[payloadSet.Schema]; !ok {
-			err = ErrIngestSchemaNotFound
-			return err
+			return ErrIngestSchemaNotFound
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
-			record, include, recordErr := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
-			if recordErr != nil {
-				err = recordErr
-
+			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
+			if err != nil {
 				return err
 			}
 

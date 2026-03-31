@@ -168,7 +168,7 @@ var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // skipUserParentTupleFunc returns a skip function that always skips creating user parent tuples.
 // This is used for service-only objects where the parent relation only allows organization/service types.
-func skipUserParentTupleFunc(_ context.Context, m ent.Mutation) bool {
+func skipUserParentTupleFunc(_ context.Context, _ ent.Mutation) bool {
 	// Always skip creating caller-derived parent tuples for service-only objects.
 	// These schemas inherit access from their org/parent relationships only, and
 	// update paths can run under internal callers that do not map to valid FGA subjects.

@@ -171,6 +171,7 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Remediation{}),
 		defaultEdgeToWithPagination(i, Task{}),
 		defaultEdgeToWithPagination(i, ActionPlan{}),
+		defaultEdgeToWithPagination(i, Asset{}),
 		defaultEdgeToWithPagination(i, DirectoryAccount{}),
 		defaultEdgeToWithPagination(i, DirectoryGroup{}),
 		defaultEdgeToWithPagination(i, DirectoryMembership{}),
@@ -217,9 +218,6 @@ func (i Integration) Mixin() []ent.Mixin {
 // Policy of the Integration
 func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

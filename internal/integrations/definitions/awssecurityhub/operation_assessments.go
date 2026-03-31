@@ -45,10 +45,6 @@ type AssessmentPayload struct {
 	CreationTime time.Time `json:"creationTime"`
 	// LastUpdated is when the assessment was last updated
 	LastUpdated time.Time `json:"lastUpdated"`
-	// AccountID is the AWS account identifier
-	AccountID string `json:"accountId,omitempty"`
-	// Region is the AWS region
-	Region string `json:"region,omitempty"`
 }
 
 // AssessmentsCollect collects AWS Audit Manager assessments for Finding ingest
@@ -56,18 +52,13 @@ type AssessmentsCollect struct{}
 
 // IngestHandle adapts assessment collection to the ingest operation registration boundary
 func (a AssessmentsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(auditManagerClient, assessmentsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
-		return a.Run(ctx, request.Credentials, client, cfg)
+	return providerkit.WithClientRequestConfig(auditManagerClient, assessmentsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
+		return a.Run(ctx, client, cfg)
 	})
 }
 
 // Run paginates through Audit Manager assessments and emits Finding ingest payloads
-func (AssessmentsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
-	awsCredential, err := resolveAssumeRoleCredential(credentials)
-	if err != nil {
-		return nil, err
-	}
-
+func (AssessmentsCollect) Run(ctx context.Context, c *auditmanager.Client, cfg AssessmentsConfig) ([]types.IngestPayloadSet, error) {
 	input := &auditmanager.ListAssessmentsInput{
 		MaxResults: awssdk.Int32(assessmentsPageSize),
 	}
@@ -97,9 +88,9 @@ collectLoop:
 				break collectLoop
 			}
 
-			payload := mapAssessmentPayload(resp.AssessmentMetadata[i], awsCredential)
+			payload := mapAssessmentPayload(resp.AssessmentMetadata[i])
 
-			envelope, err := providerkit.MarshalEnvelopeVariant(assessmentVariant, payload.AccountID, payload, ErrAssessmentEncode)
+			envelope, err := providerkit.MarshalEnvelopeVariant(assessmentVariant, payload.ID, payload, ErrAssessmentEncode)
 			if err != nil {
 				return nil, err
 			}
@@ -123,15 +114,13 @@ collectLoop:
 }
 
 // mapAssessmentPayload converts an Audit Manager assessment metadata item to the ingest payload shape
-func mapAssessmentPayload(item auditmanagertypes.AssessmentMetadataItem, credential AssumeRoleCredentialSchema) AssessmentPayload {
+func mapAssessmentPayload(item auditmanagertypes.AssessmentMetadataItem) AssessmentPayload {
 	payload := AssessmentPayload{
 		ID:              awssdk.ToString(item.Id),
 		Name:            awssdk.ToString(item.Name),
 		ComplianceType:  awssdk.ToString(item.ComplianceType),
 		Status:          string(item.Status),
 		DelegationCount: int32(min(len(item.Delegations), math.MaxInt32)), //nolint:gosec // G115: bounded by min
-		AccountID:       credential.AccountID,
-		Region:          credential.HomeRegion,
 	}
 
 	if item.CreationTime != nil {

@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -37,7 +38,10 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapi)
 	}
 
-	record, err := h.IntegrationsRuntime.ResolveIntegration(userCtx, caller.OrganizationID, in.IntegrationID, "")
+	record, err := h.IntegrationsRuntime.ResolveIntegration(userCtx, integrationsruntime.IntegrationLookup{
+		IntegrationID: in.IntegrationID,
+		OwnerID:       caller.OrganizationID,
+	})
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration record")
 

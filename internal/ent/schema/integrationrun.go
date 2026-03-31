@@ -207,9 +207,6 @@ func (r IntegrationRun) Annotations() []schema.Annotation {
 // Policy of the IntegrationRun.
 func (IntegrationRun) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),

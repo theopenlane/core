@@ -31,7 +31,7 @@ type DirectoryUserHandler struct {
 // Create stores a new DirectoryAccount record derived from SCIM user attributes,
 // upserting by (integration_id, external_id) when a match exists
 func (h *DirectoryUserHandler) Create(r *http.Request, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -46,7 +46,7 @@ func (h *DirectoryUserHandler) Create(r *http.Request, attributes scim.ResourceA
 
 // Get returns the DirectoryAccount corresponding to the given identifier, scoped by integration
 func (h *DirectoryUserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -64,7 +64,7 @@ func (h *DirectoryUserHandler) Get(r *http.Request, id string) (scim.Resource, e
 
 // GetAll returns a paginated list of DirectoryAccount resources scoped by integration
 func (h *DirectoryUserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (scim.Page, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Page{}, err
 	}
@@ -101,7 +101,7 @@ func (h *DirectoryUserHandler) GetAll(r *http.Request, params scim.ListRequestPa
 
 // Replace replaces all attributes on the DirectoryAccount identified by id
 func (h *DirectoryUserHandler) Replace(r *http.Request, id string, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -127,7 +127,7 @@ func (h *DirectoryUserHandler) Replace(r *http.Request, id string, attributes sc
 
 // Patch applies a set of patch operations to the DirectoryAccount identified by id
 func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -153,7 +153,7 @@ func (h *DirectoryUserHandler) Patch(r *http.Request, id string, operations []sc
 
 // Delete sets the DirectoryAccount status to DELETED
 func (h *DirectoryUserHandler) Delete(r *http.Request, id string) error {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return err
 	}

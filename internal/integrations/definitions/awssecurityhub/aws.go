@@ -34,8 +34,8 @@ func resolveAssumeRoleCredential(bindings types.CredentialBindings) (AssumeRoleC
 	return decoded, nil
 }
 
-// resolveSourceCredential extracts the service account credential from the bindings
-func resolveSourceCredential(bindings types.CredentialBindings) (*ServiceAccountCredentialSchema, error) {
+// resolveServiceAccountCredential extracts the service account credential from the bindings
+func resolveServiceAccountCredential(bindings types.CredentialBindings) (*ServiceAccountCredentialSchema, error) {
 	decoded, ok, err := awsServiceAccountCredential.Resolve(bindings)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func buildAWSServiceClient[T any](ctx context.Context, req types.ClientBuildRequ
 		return nil, ErrRegionMissing
 	}
 
-	sourceCredential, err := resolveSourceCredential(req.Credentials)
+	sourceCredential, err := resolveServiceAccountCredential(req.Credentials)
 	if err != nil {
 		return nil, err
 	}

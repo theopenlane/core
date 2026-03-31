@@ -30,24 +30,17 @@ type VulnerabilitiesCollect struct{}
 
 // IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
 func (v VulnerabilitiesCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(securityHubClient, vulnerabilitiesCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-		return v.Run(ctx, request.Credentials, client, cfg)
+	return providerkit.WithClientRequestConfig(securityHubClient, vulnerabilitiesCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+		return v.Run(ctx, client, cfg)
 	})
 }
 
-// Run collects Security Hub findings using credential-defined collection scope
-func (VulnerabilitiesCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
-	awsCredential, err := resolveAssumeRoleCredential(credentials)
-	if err != nil {
-		return nil, err
-	}
-
+// Run collects Security Hub findings
+func (VulnerabilitiesCollect) Run(ctx context.Context, c *securityhub.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
 	pageSize := defaultPageSize
 	if cfg.MaxFindings > 0 && int32(cfg.MaxFindings) < maxPageSize { //nolint:gosec // bounded by maxPageSize
 		pageSize = int32(cfg.MaxFindings) //nolint:gosec
 	}
-
-	filters := buildSecurityHubFilters(awsCredential)
 
 	var (
 		envelopes []types.MappingEnvelope
@@ -63,7 +56,6 @@ collectLoop:
 	for {
 		input := &securityhub.GetFindingsInput{
 			MaxResults: awssdk.Int32(pageSize),
-			Filters:    filters,
 		}
 		if nextToken != nil {
 			input.NextToken = nextToken
@@ -101,46 +93,6 @@ collectLoop:
 			Envelopes: envelopes,
 		},
 	}, nil
-}
-
-// buildSecurityHubFilters constructs a server-side filter from credential metadata
-// so account and region scope stay tied to integration setup.
-func buildSecurityHubFilters(credential AssumeRoleCredentialSchema) *securityhubtypes.AwsSecurityFindingFilters {
-	var filters securityhubtypes.AwsSecurityFindingFilters
-
-	if credential.AccountScope == AccountScopeSpecific {
-		filters.AwsAccountId = toStringFilters(credential.AccountIDs)
-	}
-
-	filters.Region = toStringFilters(credential.LinkedRegions)
-
-	if len(filters.AwsAccountId) == 0 && len(filters.Region) == 0 {
-		return nil
-	}
-
-	return &filters
-}
-
-// toStringFilters converts string values into equality filters
-func toStringFilters(values []string) []securityhubtypes.StringFilter {
-	out := make([]securityhubtypes.StringFilter, 0, len(values))
-
-	for _, v := range values {
-		if v == "" {
-			continue
-		}
-
-		out = append(out, securityhubtypes.StringFilter{
-			Comparison: securityhubtypes.StringFilterComparisonEquals,
-			Value:      awssdk.String(v),
-		})
-	}
-
-	if len(out) == 0 {
-		return nil
-	}
-
-	return out
 }
 
 // buildFindingEnvelope serializes one Security Hub finding into an ingest envelope

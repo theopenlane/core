@@ -81,8 +81,6 @@ type InstallationMetadata struct {
 	AccountIDs []string `json:"accountIds,omitempty" jsonschema:"title=Account IDs"`
 	// LinkedRegions limits collection to the listed AWS source regions when configured
 	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
-	// UsesSourceCredential reports whether a static source credential is persisted alongside the assume-role configuration
-	UsesSourceCredential bool `json:"usesSourceCredential,omitempty" jsonschema:"title=Uses Source Credential"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable

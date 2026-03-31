@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers/scim"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
 // SCIMHandler resolves the SCIM endpoint, authenticates the bearer token,
@@ -45,7 +46,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid bearer token")
 		}
 
-		installation, err := rt.ResolveIntegration(ctx, "", webhook.IntegrationID, "")
+		installation, err := rt.ResolveIntegration(ctx, integrationsruntime.IntegrationLookup{IntegrationID: webhook.IntegrationID})
 		if err != nil {
 			return echo.NewHTTPError(http.StatusNotFound, "integration not found")
 		}

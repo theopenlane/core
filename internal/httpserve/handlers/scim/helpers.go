@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // lookupByID queries a single entity by ID, mapping ent not-found to a SCIM resource-not-found error
@@ -23,7 +24,9 @@ func lookupByID[T any](ctx context.Context, id string, query func(context.Contex
 			return zero, scimerrors.ScimErrorResourceNotFound(id)
 		}
 
-		return zero, fmt.Errorf("failed to get resource: %w", err)
+		logx.FromContext(ctx).Error().Err(err).Str("id", id).Msg("database error looking up resource")
+
+		return zero, scimerrors.ScimErrorInternal
 	}
 
 	return record, nil

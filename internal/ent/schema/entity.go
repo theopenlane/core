@@ -264,7 +264,7 @@ func (Entity) Fields() []ent.Field {
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
 			Optional(),
 		field.String("logo_file_id").
-			Comment("URL of the logo").
+			Comment("The logo file id for the entity").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),

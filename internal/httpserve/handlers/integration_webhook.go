@@ -16,6 +16,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -67,7 +68,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	integration, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, "", persistedWebhook.IntegrationID, "")
+	integration, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, integrationsruntime.IntegrationLookup{IntegrationID: persistedWebhook.IntegrationID})
 	if err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve integration")
 

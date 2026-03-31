@@ -12,8 +12,8 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
 
@@ -154,7 +154,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared token manager to avoid RSA key generation
 	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	// shared redis client to avoid miniredis server startup
 	suite.sharedRedisClient = coreutils.NewRedisClient()
@@ -164,7 +164,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared FGA client to avoid repeated container connections
 	suite.sharedFGAClient, err = suite.ofgaTF.NewFgaClient(context.Background())
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	// shared OTP manager
 	otpOpts := []totp.ConfigOption{
@@ -194,16 +194,16 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		FetchCooldown:     time.Millisecond,
 		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
 	})
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
-	assert.NoError(suite.T(), galaInstance.StartWorkers(context.Background()))
+	require.NoError(suite.T(), galaInstance.StartWorkers(context.Background()))
 
 	suite.galaRuntime = galaInstance
 
 	// suite-scoped ent client for gala listeners — stays open for the entire suite
 	// so durable job handlers never reference a closed connection
 	hc, err := entdb.NewTestHistoryClient(context.Background(), suite.tf)
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	galaSessionConfig := sessions.NewSessionConfig(
 		suite.sharedSessionManager,
@@ -217,7 +217,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	galaMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
 	galaEntitlements, err := entitlements.NewStripeClient(
-		entitlements.WithAPIKey("sk_test_gala"),
+		entitlements.WithAPIKey("not_a_stripe_key"),
 		entitlements.WithConfig(entitlements.Config{Enabled: true}),
 		entitlements.WithBackends(&stripe.Backends{
 			API:     galaMockBackend,
@@ -225,7 +225,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			Uploads: galaMockBackend,
 		}),
 	)
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	galaOpts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
@@ -242,13 +242,13 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	galaJobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	galaDB, err := entdb.NewTestClient(context.Background(), suite.tf, galaJobOpts, nil, galaOpts)
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	suite.galaDB = galaDB
 
 	// single integration runtime for the entire suite — listeners registered once
 	credStore, err := keystore.NewStore(suite.galaDB)
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	rt, err := runtime.New(runtime.Config{
 		DB:       suite.galaDB,
@@ -268,7 +268,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			userInputOnlyTestDefinitionBuilder("def_01K0TESTUIONLY000000000001"),
 		},
 	})
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	suite.sharedIntegrationsRT = rt
 
@@ -293,11 +293,11 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup history client
 	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
@@ -322,25 +322,25 @@ func (suite *HandlerTestSuite) SetupTest() {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
-	assert.NoError(t, err, "failed opening connection to database")
+	require.NoError(t, err, "failed opening connection to database")
 
 	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// truncate river tables
 	err = db.Job.TruncateRiverTables(ctx)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// add db to test client
 	suite.db = db
 
 	// add the client
 	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// setup router with schema registry
 	suite.router, err = setupRouter()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
@@ -397,7 +397,7 @@ func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path str
 func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
 	// get keys from the token manager
 	keys, err := suite.db.TokenManager.Keys()
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
@@ -435,13 +435,13 @@ func (suite *HandlerTestSuite) registerRouteOnce(method, path string, operation 
 func (suite *HandlerTestSuite) TearDownTest() {
 	if suite.db != nil {
 		err := suite.db.CloseAll()
-		assert.NoError(suite.T(), err)
+		require.NoError(suite.T(), err)
 	}
 }
 
 func (suite *HandlerTestSuite) ClearTestData() {
 	err := suite.db.Job.TruncateRiverTables(context.Background())
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
@@ -458,7 +458,7 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 
 	// terminate all fga containers
 	err := suite.ofgaTF.TeardownFixture()
-	assert.NoError(suite.T(), err)
+	require.NoError(suite.T(), err)
 }
 
 // WaitForEvents blocks until all durable Gala dispatch jobs have completed
@@ -593,7 +593,7 @@ func (suite *HandlerTestSuite) mockStripeClient() (*entitlements.StripeClient, e
 
 	suite.orgSubscriptionMocks()
 
-	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
+	return entitlements.NewStripeClient(entitlements.WithAPIKey("not_a_stripe_key"),
 		entitlements.WithConfig(entitlements.Config{
 			Enabled:             true,
 			StripeWebhookSecret: webhookSecret,

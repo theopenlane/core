@@ -32,16 +32,16 @@ func WithRequest(ctx context.Context, req *Request) context.Context {
 }
 
 // RequestFromContext retrieves the SCIM request context
-func RequestFromContext(ctx context.Context) (*Request, bool) {
+func requestFromContext(ctx context.Context) (*Request, bool) {
 	return requestKey.Get(ctx)
 }
 
-// ResolveRequest extracts the transaction client and SCIM request from the HTTP request context
-func ResolveRequest(r *http.Request) (context.Context, *generated.Client, *Request, error) {
+// resolveRequest extracts the transaction client and SCIM request from the HTTP request context
+func resolveRequest(r *http.Request) (context.Context, *generated.Client, *Request, error) {
 	ctx := r.Context()
 	client := transaction.FromContext(ctx).Client()
 
-	sr, ok := RequestFromContext(ctx)
+	sr, ok := requestFromContext(ctx)
 	if !ok {
 		return ctx, nil, nil, ErrSCIMRequestRequired
 	}

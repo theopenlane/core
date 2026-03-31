@@ -225,6 +225,13 @@ func (a Asset) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Platform{}.Name()),
 			},
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: a,
+			edgeSchema: Integration{},
+			field:      "integration_id",
+			immutable:  true,
+			comment:    "integration that owns this directory account",
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: a,
 			t:          Asset.Type,

@@ -349,8 +349,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateEvidenceInput{
-				Name:    "Test Evidence - TSK-123",
-				OwnerID: &testUser1.OrganizationID,
+				Name: "Test Evidence - TSK-123",
 			},
 			files: []*graphql.Upload{
 				txtFile,

@@ -60,12 +60,10 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
-
 	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
 		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
 			SetStatus(enums.IntegrationStatusConnected).
-			Exec(systemCtx); err != nil {
+			Exec(requestCtx); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
 
 			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
@@ -85,6 +83,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	var primaryWebhookURL string
 	var primaryWebhookSecret string
+
+	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
 
 	for i, registration := range def.Webhooks {
 		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(systemCtx, installationRec, registration.Name, "")

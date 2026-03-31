@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/elimity-com/scim"
+	scimerrors "github.com/elimity-com/scim/errors"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // DirectoryGroupHandler implements scim.ResourceHandler writing to DirectoryGroup instead of Group.
@@ -27,7 +29,7 @@ type DirectoryGroupHandler struct {
 // Create stores a new DirectoryGroup record derived from SCIM group attributes,
 // upserting by (integration_id, external_id) when a match exists
 func (h *DirectoryGroupHandler) Create(r *http.Request, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -42,7 +44,7 @@ func (h *DirectoryGroupHandler) Create(r *http.Request, attributes scim.Resource
 
 // Get returns the DirectoryGroup corresponding to the given identifier, scoped by integration
 func (h *DirectoryGroupHandler) Get(r *http.Request, id string) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -65,7 +67,7 @@ func (h *DirectoryGroupHandler) Get(r *http.Request, id string) (scim.Resource, 
 
 // GetAll returns a paginated list of DirectoryGroup resources scoped by integration
 func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestParams) (scim.Page, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Page{}, err
 	}
@@ -74,7 +76,8 @@ func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestP
 
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
-		return scim.Page{}, fmt.Errorf("failed to count directory groups: %w", err)
+		logx.FromContext(ctx).Error().Err(err).Msg("database error counting directory groups")
+		return scim.Page{}, scimerrors.ScimErrorInternal
 	}
 
 	offset := max(params.StartIndex-1, 0)
@@ -86,7 +89,8 @@ func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestP
 
 	groups, err := query.Offset(offset).Limit(count).All(ctx)
 	if err != nil {
-		return scim.Page{}, fmt.Errorf("failed to list directory groups: %w", err)
+		logx.FromContext(ctx).Error().Err(err).Msg("database error listing directory groups")
+		return scim.Page{}, scimerrors.ScimErrorInternal
 	}
 
 	resources := make([]scim.Resource, 0, len(groups))
@@ -107,7 +111,7 @@ func (h *DirectoryGroupHandler) GetAll(r *http.Request, params scim.ListRequestP
 
 // Replace replaces all attributes on the DirectoryGroup identified by id
 func (h *DirectoryGroupHandler) Replace(r *http.Request, id string, attributes scim.ResourceAttributes) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -137,7 +141,7 @@ func (h *DirectoryGroupHandler) Replace(r *http.Request, id string, attributes s
 
 // Patch applies a set of patch operations to the DirectoryGroup identified by id
 func (h *DirectoryGroupHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return scim.Resource{}, err
 	}
@@ -174,7 +178,7 @@ func (h *DirectoryGroupHandler) Patch(r *http.Request, id string, operations []s
 
 // Delete sets the DirectoryGroup status to DELETED
 func (h *DirectoryGroupHandler) Delete(r *http.Request, id string) error {
-	ctx, client, sr, err := ResolveRequest(r)
+	ctx, client, sr, err := resolveRequest(r)
 	if err != nil {
 		return err
 	}
@@ -221,12 +225,14 @@ func (h *DirectoryGroupHandler) syncDirectoryGroup(ctx context.Context, client *
 			return nil, nil, definitionscim.ErrDirectoryGroupNotFound
 		}
 
-		return nil, nil, fmt.Errorf("failed to reload directory group: %w", err)
+		logx.FromContext(ctx).Error().Err(err).Str("external_id", externalID).Msg("database error reloading directory group")
+
+		return nil, nil, scimerrors.ScimErrorInternal
 	}
 
 	members, err := h.loadGroupMembers(ctx, client, dg.ID)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to reload directory memberships: %w", err)
+		return nil, nil, err
 	}
 
 	return dg, members, nil
@@ -237,15 +243,25 @@ func (h *DirectoryGroupHandler) clearGroupMembers(ctx context.Context, client *g
 	_, err := client.DirectoryMembership.Delete().
 		Where(directorymembership.DirectoryGroupID(groupID)).
 		Exec(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("group_id", groupID).Msg("database error clearing group members")
+		return scimerrors.ScimErrorInternal
+	}
 
-	return err
+	return nil
 }
 
 // loadGroupMembers returns the DirectoryAccount IDs and display names for all members of a group
 func (h *DirectoryGroupHandler) loadGroupMembers(ctx context.Context, client *generated.Client, groupID string) ([]*generated.DirectoryMembership, error) {
-	return client.DirectoryMembership.Query().
+	members, err := client.DirectoryMembership.Query().
 		Where(directorymembership.DirectoryGroupID(groupID)).
 		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("group_id", groupID).Msg("database error loading group members")
+		return nil, scimerrors.ScimErrorInternal
+	}
+
+	return members, nil
 }
 
 // applyGroupPatchOperations applies SCIM PATCH operations to group attributes before ingest.
