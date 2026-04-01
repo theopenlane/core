@@ -6640,9 +6640,9 @@ type CreateEvidenceInput struct {
 	// description of how the evidence was collected
 	CollectionProcedure *string `json:"collectionProcedure,omitempty"`
 	// the date the evidence was retrieved
-	CreationDate *time.Time `json:"creationDate,omitempty"`
+	CreationDate *models.DateTime `json:"creationDate,omitempty"`
 	// the date the evidence should be renewed, defaults to a year from entry date
-	RenewalDate *time.Time `json:"renewalDate,omitempty"`
+	RenewalDate *models.DateTime `json:"renewalDate,omitempty"`
 	// the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
 	Source *string `json:"source,omitempty"`
 	// whether the evidence was automatically generated
@@ -14832,9 +14832,9 @@ type Evidence struct {
 	// description of how the evidence was collected
 	CollectionProcedure *string `json:"collectionProcedure,omitempty"`
 	// the date the evidence was retrieved
-	CreationDate time.Time `json:"creationDate"`
+	CreationDate models.DateTime `json:"creationDate"`
 	// the date the evidence should be renewed, defaults to a year from entry date
-	RenewalDate *time.Time `json:"renewalDate,omitempty"`
+	RenewalDate *models.DateTime `json:"renewalDate,omitempty"`
 	// the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
 	Source *string `json:"source,omitempty"`
 	// whether the evidence was automatically generated
@@ -15166,25 +15166,25 @@ type EvidenceWhereInput struct {
 	CollectionProcedureEqualFold    *string  `json:"collectionProcedureEqualFold,omitempty"`
 	CollectionProcedureContainsFold *string  `json:"collectionProcedureContainsFold,omitempty"`
 	// creation_date field predicates
-	CreationDate      *time.Time   `json:"creationDate,omitempty"`
-	CreationDateNeq   *time.Time   `json:"creationDateNEQ,omitempty"`
-	CreationDateIn    []*time.Time `json:"creationDateIn,omitempty"`
-	CreationDateNotIn []*time.Time `json:"creationDateNotIn,omitempty"`
-	CreationDateGt    *time.Time   `json:"creationDateGT,omitempty"`
-	CreationDateGte   *time.Time   `json:"creationDateGTE,omitempty"`
-	CreationDateLt    *time.Time   `json:"creationDateLT,omitempty"`
-	CreationDateLte   *time.Time   `json:"creationDateLTE,omitempty"`
+	CreationDate      *models.DateTime   `json:"creationDate,omitempty"`
+	CreationDateNeq   *models.DateTime   `json:"creationDateNEQ,omitempty"`
+	CreationDateIn    []*models.DateTime `json:"creationDateIn,omitempty"`
+	CreationDateNotIn []*models.DateTime `json:"creationDateNotIn,omitempty"`
+	CreationDateGt    *models.DateTime   `json:"creationDateGT,omitempty"`
+	CreationDateGte   *models.DateTime   `json:"creationDateGTE,omitempty"`
+	CreationDateLt    *models.DateTime   `json:"creationDateLT,omitempty"`
+	CreationDateLte   *models.DateTime   `json:"creationDateLTE,omitempty"`
 	// renewal_date field predicates
-	RenewalDate       *time.Time   `json:"renewalDate,omitempty"`
-	RenewalDateNeq    *time.Time   `json:"renewalDateNEQ,omitempty"`
-	RenewalDateIn     []*time.Time `json:"renewalDateIn,omitempty"`
-	RenewalDateNotIn  []*time.Time `json:"renewalDateNotIn,omitempty"`
-	RenewalDateGt     *time.Time   `json:"renewalDateGT,omitempty"`
-	RenewalDateGte    *time.Time   `json:"renewalDateGTE,omitempty"`
-	RenewalDateLt     *time.Time   `json:"renewalDateLT,omitempty"`
-	RenewalDateLte    *time.Time   `json:"renewalDateLTE,omitempty"`
-	RenewalDateIsNil  *bool        `json:"renewalDateIsNil,omitempty"`
-	RenewalDateNotNil *bool        `json:"renewalDateNotNil,omitempty"`
+	RenewalDate       *models.DateTime   `json:"renewalDate,omitempty"`
+	RenewalDateNeq    *models.DateTime   `json:"renewalDateNEQ,omitempty"`
+	RenewalDateIn     []*models.DateTime `json:"renewalDateIn,omitempty"`
+	RenewalDateNotIn  []*models.DateTime `json:"renewalDateNotIn,omitempty"`
+	RenewalDateGt     *models.DateTime   `json:"renewalDateGT,omitempty"`
+	RenewalDateGte    *models.DateTime   `json:"renewalDateGTE,omitempty"`
+	RenewalDateLt     *models.DateTime   `json:"renewalDateLT,omitempty"`
+	RenewalDateLte    *models.DateTime   `json:"renewalDateLTE,omitempty"`
+	RenewalDateIsNil  *bool              `json:"renewalDateIsNil,omitempty"`
+	RenewalDateNotNil *bool              `json:"renewalDateNotNil,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -39542,10 +39542,10 @@ type UpdateEvidenceInput struct {
 	CollectionProcedure      *string `json:"collectionProcedure,omitempty"`
 	ClearCollectionProcedure *bool   `json:"clearCollectionProcedure,omitempty"`
 	// the date the evidence was retrieved
-	CreationDate *time.Time `json:"creationDate,omitempty"`
+	CreationDate *models.DateTime `json:"creationDate,omitempty"`
 	// the date the evidence should be renewed, defaults to a year from entry date
-	RenewalDate      *time.Time `json:"renewalDate,omitempty"`
-	ClearRenewalDate *bool      `json:"clearRenewalDate,omitempty"`
+	RenewalDate      *models.DateTime `json:"renewalDate,omitempty"`
+	ClearRenewalDate *bool            `json:"clearRenewalDate,omitempty"`
 	// the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`

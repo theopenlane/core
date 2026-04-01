@@ -24,9 +24,9 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.5
 	github.com/aws/aws-sdk-go-v2/config v1.32.13
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.13
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.11
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.13
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.98.0
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.10
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.12
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.3
 	github.com/brianvoe/gofakeit/v7 v7.14.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.8.0
@@ -39,7 +39,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.134.0
-	github.com/go-jose/go-jose/v4 v4.1.4
+	github.com/go-jose/go-jose/v4 v4.1.3
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-webauthn/webauthn v0.16.1
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
@@ -68,7 +68,7 @@ require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/microcosm-cc/bluemonday v1.0.27
-	github.com/nyaruka/phonenumbers v1.7.0
+	github.com/nyaruka/phonenumbers v1.6.12
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/openfga/go-sdk v0.7.5
 	github.com/pkg/errors v0.9.1
@@ -104,7 +104,7 @@ require (
 	github.com/urfave/cli/v3 v3.8.0
 	github.com/vektah/gqlparser/v2 v2.5.32
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zitadel/oidc/v3 v3.45.6
+	github.com/zitadel/oidc/v3 v3.45.5
 	gocloud.dev v0.45.0
 	golang.org/x/crypto v0.49.0
 	golang.org/x/mod v0.34.0
@@ -112,7 +112,7 @@ require (
 	golang.org/x/sync v0.20.0
 	golang.org/x/text v0.35.0
 	golang.org/x/tools v0.43.0
-	google.golang.org/api v0.273.1
+	google.golang.org/api v0.273.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )

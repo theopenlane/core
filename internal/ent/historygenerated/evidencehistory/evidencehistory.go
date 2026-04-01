@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -142,9 +143,9 @@ var (
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
 	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
-	DefaultCreationDate func() time.Time
+	DefaultCreationDate models.DateTime
 	// DefaultRenewalDate holds the default value on creation for the "renewal_date" field.
-	DefaultRenewalDate time.Time
+	DefaultRenewalDate models.DateTime
 	// DefaultIsAutomated holds the default value on creation for the "is_automated" field.
 	DefaultIsAutomated bool
 	// DefaultID holds the default value on creation for the "id" field.

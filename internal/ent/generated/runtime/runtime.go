@@ -6,6 +6,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
@@ -2750,11 +2751,11 @@ func init() {
 	// evidenceDescCreationDate is the schema descriptor for creation_date field.
 	evidenceDescCreationDate := evidenceFields[4].Descriptor()
 	// evidence.DefaultCreationDate holds the default value on creation for the creation_date field.
-	evidence.DefaultCreationDate = evidenceDescCreationDate.Default.(func() time.Time)
+	evidence.DefaultCreationDate = evidenceDescCreationDate.Default.(models.DateTime)
 	// evidenceDescRenewalDate is the schema descriptor for renewal_date field.
 	evidenceDescRenewalDate := evidenceFields[5].Descriptor()
 	// evidence.DefaultRenewalDate holds the default value on creation for the renewal_date field.
-	evidence.DefaultRenewalDate = evidenceDescRenewalDate.Default.(time.Time)
+	evidence.DefaultRenewalDate = evidenceDescRenewalDate.Default.(models.DateTime)
 	// evidenceDescIsAutomated is the schema descriptor for is_automated field.
 	evidenceDescIsAutomated := evidenceFields[7].Descriptor()
 	// evidence.DefaultIsAutomated holds the default value on creation for the is_automated field.

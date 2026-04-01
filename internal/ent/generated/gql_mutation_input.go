@@ -8381,8 +8381,8 @@ type CreateEvidenceInput struct {
 	Name                     string
 	Description              *string
 	CollectionProcedure      *string
-	CreationDate             *time.Time
-	RenewalDate              *time.Time
+	CreationDate             *models.DateTime
+	RenewalDate              *models.DateTime
 	Source                   *string
 	IsAutomated              *bool
 	URL                      *string
@@ -8513,9 +8513,9 @@ type UpdateEvidenceInput struct {
 	Description                    *string
 	ClearCollectionProcedure       bool
 	CollectionProcedure            *string
-	CreationDate                   *time.Time
+	CreationDate                   *models.DateTime
 	ClearRenewalDate               bool
-	RenewalDate                    *time.Time
+	RenewalDate                    *models.DateTime
 	ClearSource                    bool
 	Source                         *string
 	ClearIsAutomated               bool
