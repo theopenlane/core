@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -57,6 +58,7 @@ type AssetQuery struct {
 	withIdentityHolders          *IdentityHolderQuery
 	withControls                 *ControlQuery
 	withSourcePlatform           *PlatformQuery
+	withIntegration              *IntegrationQuery
 	withConnectedAssets          *AssetQuery
 	withConnectedFrom            *AssetQuery
 	withFKs                      bool
@@ -634,6 +636,31 @@ func (_q *AssetQuery) QuerySourcePlatform() *PlatformQuery {
 	return query
 }
 
+// QueryIntegration chains the current query on the "integration" edge.
+func (_q *AssetQuery) QueryIntegration() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, asset.IntegrationTable, asset.IntegrationColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryConnectedAssets chains the current query on the "connected_assets" edge.
 func (_q *AssetQuery) QueryConnectedAssets() *AssetQuery {
 	query := (&AssetClient{config: _q.config}).Query()
@@ -897,6 +924,7 @@ func (_q *AssetQuery) Clone() *AssetQuery {
 		withIdentityHolders:         _q.withIdentityHolders.Clone(),
 		withControls:                _q.withControls.Clone(),
 		withSourcePlatform:          _q.withSourcePlatform.Clone(),
+		withIntegration:             _q.withIntegration.Clone(),
 		withConnectedAssets:         _q.withConnectedAssets.Clone(),
 		withConnectedFrom:           _q.withConnectedFrom.Clone(),
 		// clone intermediate query.
@@ -1137,6 +1165,17 @@ func (_q *AssetQuery) WithSourcePlatform(opts ...func(*PlatformQuery)) *AssetQue
 	return _q
 }
 
+// WithIntegration tells the query-builder to eager-load the nodes that are connected to
+// the "integration" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithIntegration(opts ...func(*IntegrationQuery)) *AssetQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegration = query
+	return _q
+}
+
 // WithConnectedAssets tells the query-builder to eager-load the nodes that are connected to
 // the "connected_assets" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithConnectedAssets(opts ...func(*AssetQuery)) *AssetQuery {
@@ -1244,7 +1283,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		nodes       = []*Asset{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1266,6 +1305,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			_q.withIdentityHolders != nil,
 			_q.withControls != nil,
 			_q.withSourcePlatform != nil,
+			_q.withIntegration != nil,
 			_q.withConnectedAssets != nil,
 			_q.withConnectedFrom != nil,
 		}
@@ -1428,6 +1468,12 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 	if query := _q.withSourcePlatform; query != nil {
 		if err := _q.loadSourcePlatform(ctx, query, nodes, nil,
 			func(n *Asset, e *Platform) { n.Edges.SourcePlatform = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegration; query != nil {
+		if err := _q.loadIntegration(ctx, query, nodes, nil,
+			func(n *Asset, e *Integration) { n.Edges.Integration = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2343,6 +2389,35 @@ func (_q *AssetQuery) loadSourcePlatform(ctx context.Context, query *PlatformQue
 	}
 	return nil
 }
+func (_q *AssetQuery) loadIntegration(ctx context.Context, query *IntegrationQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Integration)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].IntegrationID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(integration.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "integration_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadConnectedAssets(ctx context.Context, query *AssetQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Asset)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Asset)
@@ -2533,6 +2608,9 @@ func (_q *AssetQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withSourcePlatform != nil {
 			_spec.Node.AddColumnOnce(asset.FieldSourcePlatformID)
+		}
+		if _q.withIntegration != nil {
+			_spec.Node.AddColumnOnce(asset.FieldIntegrationID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

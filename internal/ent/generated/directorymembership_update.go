@@ -168,6 +168,26 @@ func (_u *DirectoryMembershipUpdate) ClearScopeID() *DirectoryMembershipUpdate {
 	return _u
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_u *DirectoryMembershipUpdate) SetDirectoryInstanceID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetDirectoryInstanceID(v)
+	return _u
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableDirectoryInstanceID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetDirectoryInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
+func (_u *DirectoryMembershipUpdate) ClearDirectoryInstanceID() *DirectoryMembershipUpdate {
+	_u.mutation.ClearDirectoryInstanceID()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *DirectoryMembershipUpdate) SetRole(v enums.DirectoryMembershipRole) *DirectoryMembershipUpdate {
 	_u.mutation.SetRole(v)
@@ -245,6 +265,46 @@ func (_u *DirectoryMembershipUpdate) SetNillableLastSeenAt(v *time.Time) *Direct
 // ClearLastSeenAt clears the value of the "last_seen_at" field.
 func (_u *DirectoryMembershipUpdate) ClearLastSeenAt() *DirectoryMembershipUpdate {
 	_u.mutation.ClearLastSeenAt()
+	return _u
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_u *DirectoryMembershipUpdate) SetAddedAt(v time.Time) *DirectoryMembershipUpdate {
+	_u.mutation.SetAddedAt(v)
+	return _u
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableAddedAt(v *time.Time) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetAddedAt(*v)
+	}
+	return _u
+}
+
+// ClearAddedAt clears the value of the "added_at" field.
+func (_u *DirectoryMembershipUpdate) ClearAddedAt() *DirectoryMembershipUpdate {
+	_u.mutation.ClearAddedAt()
+	return _u
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_u *DirectoryMembershipUpdate) SetRemovedAt(v time.Time) *DirectoryMembershipUpdate {
+	_u.mutation.SetRemovedAt(v)
+	return _u
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableRemovedAt(v *time.Time) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetRemovedAt(*v)
+	}
+	return _u
+}
+
+// ClearRemovedAt clears the value of the "removed_at" field.
+func (_u *DirectoryMembershipUpdate) ClearRemovedAt() *DirectoryMembershipUpdate {
+	_u.mutation.ClearRemovedAt()
 	return _u
 }
 
@@ -507,6 +567,12 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directorymembership.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorymembership.FieldDirectoryInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryInstanceIDCleared() {
+		_spec.ClearField(directorymembership.FieldDirectoryInstanceID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
 	}
@@ -530,6 +596,18 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.LastSeenAtCleared() {
 		_spec.ClearField(directorymembership.FieldLastSeenAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AddedAt(); ok {
+		_spec.SetField(directorymembership.FieldAddedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AddedAtCleared() {
+		_spec.ClearField(directorymembership.FieldAddedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.RemovedAt(); ok {
+		_spec.SetField(directorymembership.FieldRemovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.RemovedAtCleared() {
+		_spec.ClearField(directorymembership.FieldRemovedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.LastConfirmedRunID(); ok {
 		_spec.SetField(directorymembership.FieldLastConfirmedRunID, field.TypeString, value)
@@ -888,6 +966,26 @@ func (_u *DirectoryMembershipUpdateOne) ClearScopeID() *DirectoryMembershipUpdat
 	return _u
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetDirectoryInstanceID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetDirectoryInstanceID(v)
+	return _u
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableDirectoryInstanceID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetDirectoryInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
+func (_u *DirectoryMembershipUpdateOne) ClearDirectoryInstanceID() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearDirectoryInstanceID()
+	return _u
+}
+
 // SetRole sets the "role" field.
 func (_u *DirectoryMembershipUpdateOne) SetRole(v enums.DirectoryMembershipRole) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetRole(v)
@@ -965,6 +1063,46 @@ func (_u *DirectoryMembershipUpdateOne) SetNillableLastSeenAt(v *time.Time) *Dir
 // ClearLastSeenAt clears the value of the "last_seen_at" field.
 func (_u *DirectoryMembershipUpdateOne) ClearLastSeenAt() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearLastSeenAt()
+	return _u
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_u *DirectoryMembershipUpdateOne) SetAddedAt(v time.Time) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetAddedAt(v)
+	return _u
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableAddedAt(v *time.Time) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetAddedAt(*v)
+	}
+	return _u
+}
+
+// ClearAddedAt clears the value of the "added_at" field.
+func (_u *DirectoryMembershipUpdateOne) ClearAddedAt() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearAddedAt()
+	return _u
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_u *DirectoryMembershipUpdateOne) SetRemovedAt(v time.Time) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetRemovedAt(v)
+	return _u
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableRemovedAt(v *time.Time) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetRemovedAt(*v)
+	}
+	return _u
+}
+
+// ClearRemovedAt clears the value of the "removed_at" field.
+func (_u *DirectoryMembershipUpdateOne) ClearRemovedAt() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearRemovedAt()
 	return _u
 }
 
@@ -1257,6 +1395,12 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directorymembership.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorymembership.FieldDirectoryInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryInstanceIDCleared() {
+		_spec.ClearField(directorymembership.FieldDirectoryInstanceID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
 	}
@@ -1280,6 +1424,18 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	}
 	if _u.mutation.LastSeenAtCleared() {
 		_spec.ClearField(directorymembership.FieldLastSeenAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AddedAt(); ok {
+		_spec.SetField(directorymembership.FieldAddedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AddedAtCleared() {
+		_spec.ClearField(directorymembership.FieldAddedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.RemovedAt(); ok {
+		_spec.SetField(directorymembership.FieldRemovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.RemovedAtCleared() {
+		_spec.ClearField(directorymembership.FieldRemovedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.LastConfirmedRunID(); ok {
 		_spec.SetField(directorymembership.FieldLastConfirmedRunID, field.TypeString, value)

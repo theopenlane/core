@@ -1,9 +1,13 @@
 package mapx
 
 import (
+	"cmp"
 	"maps"
 	"reflect"
+	"slices"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 // DeepCloneMapAny creates a deep copy of a map[string]any
@@ -139,4 +143,26 @@ func MapIntersectionUnique[T comparable](left, right []T) []T {
 	}
 
 	return intersection
+}
+
+// SortedValues returns map values sorted by a key derived from each value
+func SortedValues[K comparable, V any, S cmp.Ordered](m map[K]V, sortKey func(V) S) []V {
+	out := lo.MapToSlice(m, func(_ K, v V) V { return v })
+
+	slices.SortFunc(out, func(a, b V) int {
+		return cmp.Compare(sortKey(a), sortKey(b))
+	})
+
+	return out
+}
+
+// SortedProjection projects map values into a target type and returns them sorted by sortKey
+func SortedProjection[K comparable, V any, T any, S cmp.Ordered](m map[K]V, project func(V) T, sortKey func(T) S) []T {
+	out := lo.MapToSlice(m, func(_ K, v V) T { return project(v) })
+
+	slices.SortFunc(out, func(a, b T) int {
+		return cmp.Compare(sortKey(a), sortKey(b))
+	})
+
+	return out
 }

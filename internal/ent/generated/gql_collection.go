@@ -4119,6 +4119,21 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				fieldSeen[asset.FieldSourcePlatformID] = struct{}{}
 			}
 
+		case "integration":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			_q.withIntegration = query
+			if _, ok := fieldSeen[asset.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, asset.FieldIntegrationID)
+				fieldSeen[asset.FieldIntegrationID] = struct{}{}
+			}
+
 		case "connectedAssets":
 			var (
 				alias = field.Alias
@@ -4166,10 +4181,10 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -4177,10 +4192,10 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ConnectedAssets)
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -4259,10 +4274,10 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[22] == nil {
-								nodes[i].Edges.totalCount[22] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[22][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -4270,10 +4285,10 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Asset) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ConnectedFrom)
-							if nodes[i].Edges.totalCount[22] == nil {
-								nodes[i].Edges.totalCount[22] = make(map[string]int)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[22][alias] = n
+							nodes[i].Edges.totalCount[23][alias] = n
 						}
 						return nil
 					})
@@ -4528,6 +4543,16 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 			if _, ok := fieldSeen[asset.FieldCategories]; !ok {
 				selectedFields = append(selectedFields, asset.FieldCategories)
 				fieldSeen[asset.FieldCategories] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[asset.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, asset.FieldIntegrationID)
+				fieldSeen[asset.FieldIntegrationID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[asset.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, asset.FieldObservedAt)
+				fieldSeen[asset.FieldObservedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -6806,6 +6831,21 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[contact.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, contact.FieldStatus)
 				fieldSeen[contact.FieldStatus] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[contact.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldExternalID)
+				fieldSeen[contact.FieldExternalID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[contact.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldIntegrationID)
+				fieldSeen[contact.FieldIntegrationID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[contact.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, contact.FieldObservedAt)
+				fieldSeen[contact.FieldObservedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -13988,6 +14028,11 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, directoryaccount.FieldPlatformID)
 				fieldSeen[directoryaccount.FieldPlatformID] = struct{}{}
 			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directoryaccount.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDirectoryInstanceID)
+				fieldSeen[directoryaccount.FieldDirectoryInstanceID] = struct{}{}
+			}
 		case "identityHolderID":
 			if _, ok := fieldSeen[directoryaccount.FieldIdentityHolderID]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldIdentityHolderID)
@@ -14083,6 +14128,26 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, directoryaccount.FieldLastLoginAt)
 				fieldSeen[directoryaccount.FieldLastLoginAt] = struct{}{}
 			}
+		case "firstSeenAt":
+			if _, ok := fieldSeen[directoryaccount.FieldFirstSeenAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldFirstSeenAt)
+				fieldSeen[directoryaccount.FieldFirstSeenAt] = struct{}{}
+			}
+		case "lastSeenAt":
+			if _, ok := fieldSeen[directoryaccount.FieldLastSeenAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldLastSeenAt)
+				fieldSeen[directoryaccount.FieldLastSeenAt] = struct{}{}
+			}
+		case "addedAt":
+			if _, ok := fieldSeen[directoryaccount.FieldAddedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldAddedAt)
+				fieldSeen[directoryaccount.FieldAddedAt] = struct{}{}
+			}
+		case "removedAt":
+			if _, ok := fieldSeen[directoryaccount.FieldRemovedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldRemovedAt)
+				fieldSeen[directoryaccount.FieldRemovedAt] = struct{}{}
+			}
 		case "observedAt":
 			if _, ok := fieldSeen[directoryaccount.FieldObservedAt]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldObservedAt)
@@ -14097,6 +14162,11 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[directoryaccount.FieldProfile]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldProfile)
 				fieldSeen[directoryaccount.FieldProfile] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[directoryaccount.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldMetadata)
+				fieldSeen[directoryaccount.FieldMetadata] = struct{}{}
 			}
 		case "rawProfileFileID":
 			if _, ok := fieldSeen[directoryaccount.FieldRawProfileFileID]; !ok {
@@ -14624,6 +14694,11 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, directorygroup.FieldPlatformID)
 				fieldSeen[directorygroup.FieldPlatformID] = struct{}{}
 			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directorygroup.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDirectoryInstanceID)
+				fieldSeen[directorygroup.FieldDirectoryInstanceID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorygroup.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldDirectorySyncRunID)
@@ -14669,6 +14744,26 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, directorygroup.FieldMemberCount)
 				fieldSeen[directorygroup.FieldMemberCount] = struct{}{}
 			}
+		case "firstSeenAt":
+			if _, ok := fieldSeen[directorygroup.FieldFirstSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldFirstSeenAt)
+				fieldSeen[directorygroup.FieldFirstSeenAt] = struct{}{}
+			}
+		case "lastSeenAt":
+			if _, ok := fieldSeen[directorygroup.FieldLastSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldLastSeenAt)
+				fieldSeen[directorygroup.FieldLastSeenAt] = struct{}{}
+			}
+		case "addedAt":
+			if _, ok := fieldSeen[directorygroup.FieldAddedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldAddedAt)
+				fieldSeen[directorygroup.FieldAddedAt] = struct{}{}
+			}
+		case "removedAt":
+			if _, ok := fieldSeen[directorygroup.FieldRemovedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldRemovedAt)
+				fieldSeen[directorygroup.FieldRemovedAt] = struct{}{}
+			}
 		case "observedAt":
 			if _, ok := fieldSeen[directorygroup.FieldObservedAt]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldObservedAt)
@@ -14683,6 +14778,11 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[directorygroup.FieldProfile]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldProfile)
 				fieldSeen[directorygroup.FieldProfile] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[directorygroup.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldMetadata)
+				fieldSeen[directorygroup.FieldMetadata] = struct{}{}
 			}
 		case "rawProfileFileID":
 			if _, ok := fieldSeen[directorygroup.FieldRawProfileFileID]; !ok {
@@ -15142,6 +15242,11 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, directorymembership.FieldPlatformID)
 				fieldSeen[directorymembership.FieldPlatformID] = struct{}{}
 			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directorymembership.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectoryInstanceID)
+				fieldSeen[directorymembership.FieldDirectoryInstanceID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorymembership.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorymembership.FieldDirectorySyncRunID)
@@ -15176,6 +15281,16 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[directorymembership.FieldLastSeenAt]; !ok {
 				selectedFields = append(selectedFields, directorymembership.FieldLastSeenAt)
 				fieldSeen[directorymembership.FieldLastSeenAt] = struct{}{}
+			}
+		case "addedAt":
+			if _, ok := fieldSeen[directorymembership.FieldAddedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldAddedAt)
+				fieldSeen[directorymembership.FieldAddedAt] = struct{}{}
+			}
+		case "removedAt":
+			if _, ok := fieldSeen[directorymembership.FieldRemovedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldRemovedAt)
+				fieldSeen[directorymembership.FieldRemovedAt] = struct{}{}
 			}
 		case "observedAt":
 			if _, ok := fieldSeen[directorymembership.FieldObservedAt]; !ok {
@@ -15683,6 +15798,11 @@ func (_q *DirectorySyncRunQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[directorysyncrun.FieldPlatformID]; !ok {
 				selectedFields = append(selectedFields, directorysyncrun.FieldPlatformID)
 				fieldSeen[directorysyncrun.FieldPlatformID] = struct{}{}
+			}
+		case "directoryInstanceID":
+			if _, ok := fieldSeen[directorysyncrun.FieldDirectoryInstanceID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldDirectoryInstanceID)
+				fieldSeen[directorysyncrun.FieldDirectoryInstanceID] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[directorysyncrun.FieldStatus]; !ok {
@@ -20285,6 +20405,16 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[entity.FieldLogoFileID]; !ok {
 				selectedFields = append(selectedFields, entity.FieldLogoFileID)
 				fieldSeen[entity.FieldLogoFileID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[entity.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldExternalID)
+				fieldSeen[entity.FieldExternalID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[entity.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, entity.FieldObservedAt)
+				fieldSeen[entity.FieldObservedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -35137,6 +35267,95 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "assets":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&AssetClient{config: _q.config}).Query()
+			)
+			args := newAssetPaginateArgs(fieldArgs(ctx, new(AssetWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newAssetPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"integration_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(integration.AssetsColumn), ids...))
+						})
+						if err := query.GroupBy(integration.AssetsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[12] == nil {
+								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[12][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Assets)
+							if nodes[i].Edges.totalCount[12] == nil {
+								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[12][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, assetImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(integration.AssetsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedAssets(alias, func(wq *AssetQuery) {
+				*wq = *query
+			})
+
 		case "directoryAccounts":
 			var (
 				alias = field.Alias
@@ -35180,10 +35399,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[12][alias] = n
+							nodes[i].Edges.totalCount[13][alias] = n
 						}
 						return nil
 					})
@@ -35191,10 +35410,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.DirectoryAccounts)
-							if nodes[i].Edges.totalCount[12] == nil {
-								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[12][alias] = n
+							nodes[i].Edges.totalCount[13][alias] = n
 						}
 						return nil
 					})
@@ -35269,10 +35488,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[13] == nil {
-								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[13][alias] = n
+							nodes[i].Edges.totalCount[14][alias] = n
 						}
 						return nil
 					})
@@ -35280,10 +35499,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.DirectoryGroups)
-							if nodes[i].Edges.totalCount[13] == nil {
-								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[13][alias] = n
+							nodes[i].Edges.totalCount[14][alias] = n
 						}
 						return nil
 					})
@@ -35358,10 +35577,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[15][alias] = n
 						}
 						return nil
 					})
@@ -35369,10 +35588,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.DirectoryMemberships)
-							if nodes[i].Edges.totalCount[14] == nil {
-								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							if nodes[i].Edges.totalCount[15] == nil {
+								nodes[i].Edges.totalCount[15] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[14][alias] = n
+							nodes[i].Edges.totalCount[15][alias] = n
 						}
 						return nil
 					})
@@ -35447,10 +35666,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[15] == nil {
-								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							if nodes[i].Edges.totalCount[16] == nil {
+								nodes[i].Edges.totalCount[16] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[15][alias] = n
+							nodes[i].Edges.totalCount[16][alias] = n
 						}
 						return nil
 					})
@@ -35458,10 +35677,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.DirectorySyncRuns)
-							if nodes[i].Edges.totalCount[15] == nil {
-								nodes[i].Edges.totalCount[15] = make(map[string]int)
+							if nodes[i].Edges.totalCount[16] == nil {
+								nodes[i].Edges.totalCount[16] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[15][alias] = n
+							nodes[i].Edges.totalCount[16][alias] = n
 						}
 						return nil
 					})
@@ -35551,10 +35770,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[17] == nil {
-								nodes[i].Edges.totalCount[17] = make(map[string]int)
+							if nodes[i].Edges.totalCount[18] == nil {
+								nodes[i].Edges.totalCount[18] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[17][alias] = n
+							nodes[i].Edges.totalCount[18][alias] = n
 						}
 						return nil
 					})
@@ -35562,10 +35781,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.NotificationTemplates)
-							if nodes[i].Edges.totalCount[17] == nil {
-								nodes[i].Edges.totalCount[17] = make(map[string]int)
+							if nodes[i].Edges.totalCount[18] == nil {
+								nodes[i].Edges.totalCount[18] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[17][alias] = n
+							nodes[i].Edges.totalCount[18][alias] = n
 						}
 						return nil
 					})
@@ -35640,10 +35859,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[18] == nil {
-								nodes[i].Edges.totalCount[18] = make(map[string]int)
+							if nodes[i].Edges.totalCount[19] == nil {
+								nodes[i].Edges.totalCount[19] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[18][alias] = n
+							nodes[i].Edges.totalCount[19][alias] = n
 						}
 						return nil
 					})
@@ -35651,10 +35870,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.EmailTemplates)
-							if nodes[i].Edges.totalCount[18] == nil {
-								nodes[i].Edges.totalCount[18] = make(map[string]int)
+							if nodes[i].Edges.totalCount[19] == nil {
+								nodes[i].Edges.totalCount[19] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[18][alias] = n
+							nodes[i].Edges.totalCount[19][alias] = n
 						}
 						return nil
 					})
@@ -35733,10 +35952,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[19] == nil {
-								nodes[i].Edges.totalCount[19] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[19][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -35744,10 +35963,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
-							if nodes[i].Edges.totalCount[19] == nil {
-								nodes[i].Edges.totalCount[19] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[19][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -42097,6 +42316,11 @@ func (_q *NotificationTemplateQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[notificationtemplate.FieldIntegrationID]; !ok {
 				selectedFields = append(selectedFields, notificationtemplate.FieldIntegrationID)
 				fieldSeen[notificationtemplate.FieldIntegrationID] = struct{}{}
+			}
+		case "destinations":
+			if _, ok := fieldSeen[notificationtemplate.FieldDestinations]; !ok {
+				selectedFields = append(selectedFields, notificationtemplate.FieldDestinations)
+				fieldSeen[notificationtemplate.FieldDestinations] = struct{}{}
 			}
 		case "workflowDefinitionID":
 			if _, ok := fieldSeen[notificationtemplate.FieldWorkflowDefinitionID]; !ok {
@@ -64366,6 +64590,21 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[risk.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldScopeID)
 				fieldSeen[risk.FieldScopeID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[risk.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldExternalID)
+				fieldSeen[risk.FieldExternalID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[risk.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldIntegrationID)
+				fieldSeen[risk.FieldIntegrationID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[risk.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, risk.FieldObservedAt)
+				fieldSeen[risk.FieldObservedAt] = struct{}{}
 			}
 		case "externalUUID":
 			if _, ok := fieldSeen[risk.FieldExternalUUID]; !ok {

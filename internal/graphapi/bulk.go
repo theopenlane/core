@@ -5259,7 +5259,7 @@ func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, i
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendDestinations(input.AppendDestinations).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to update notificationtemplate in bulk operation")
 			continue
@@ -5300,7 +5300,7 @@ func (r *mutationResolver) bulkUpdateCSVNotificationTemplate(ctx context.Context
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendDestinations(input.Input.AppendDestinations).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", input.ID).Msg("failed to update notificationtemplate in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationtemplate"})

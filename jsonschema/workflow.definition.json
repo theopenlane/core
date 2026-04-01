@@ -15,13 +15,17 @@
                   "USER",
                   "GROUP",
                   "ROLE",
-                  "RESOLVER"
+                  "RESOLVER",
+                  "CHANNEL"
                 ]
               },
               "id": {
                 "type": "string"
               },
               "resolver_key": {
+                "type": "string"
+              },
+              "destination": {
                 "type": "string"
               }
             },
@@ -96,37 +100,32 @@
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://github.com/theopenlane/core/internal/workflows/integration-action-params",
       "properties": {
-        "integration": {
-          "type": "string",
-          "description": "Integration identifier"
+        "installation_id": {
+          "type": "string"
         },
-        "provider": {
-          "type": "string",
-          "description": "Provider override for the integration"
+        "definition_id": {
+          "type": "string"
         },
-        "operation": {
+        "operation_name": {
           "type": "string",
-          "description": "The integration operation to perform"
+          "description": "Exact operation name criteria for integration target resolution"
         },
         "config": {
-          "type": "object",
           "description": "Integration-specific configuration payload"
         },
-        "timeout_ms": {
-          "type": "integer",
-          "description": "Operation timeout in milliseconds"
+        "scope_expression": {
+          "type": "string",
+          "description": "Optional CEL condition that gates whether the integration action should execute"
         },
-        "retries": {
-          "type": "integer",
-          "description": "Number of retry attempts on failure"
+        "scope_payload": {
+          "description": "Optional scope payload exposed to scope_expression evaluation"
         },
-        "force_refresh": {
-          "type": "boolean",
-          "description": "Request a provider-side refresh"
+        "scope_resource": {
+          "type": "string",
+          "description": "Optional scope resource identity exposed to scope_expression evaluation"
         },
-        "client_force": {
-          "type": "boolean",
-          "description": "Request a client-side refresh"
+        "force_client_rebuild": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
@@ -147,7 +146,8 @@
                   "USER",
                   "GROUP",
                   "ROLE",
-                  "RESOLVER"
+                  "RESOLVER",
+                  "CHANNEL"
                 ]
               },
               "id": {
@@ -155,33 +155,26 @@
               },
               "resolver_key": {
                 "type": "string"
+              },
+              "destination": {
+                "type": "string"
               }
             },
             "additionalProperties": false,
             "type": "object"
           },
           "type": "array",
-          "description": "List of users, groups, roles, or resolvers to receive the notification"
-        },
-        "channels": {
-          "items": {
-            "type": "string",
-            "enum": [
-              "IN_APP",
-              "SLACK",
-              "TEAMS",
-              "EMAIL"
-            ],
-            "description": "Notification delivery channel"
-          },
-          "type": "array",
-          "description": "Notification delivery channels (IN_APP, SLACK, EMAIL)"
+          "description": "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications"
         },
         "template_id": {
           "type": "string"
         },
         "template_key": {
           "type": "string"
+        },
+        "operation_name": {
+          "type": "string",
+          "description": "Integration operation to invoke when the template has an integration_id"
         },
         "topic": {
           "type": "string",
@@ -218,13 +211,17 @@
                   "USER",
                   "GROUP",
                   "ROLE",
-                  "RESOLVER"
+                  "RESOLVER",
+                  "CHANNEL"
                 ]
               },
               "id": {
                 "type": "string"
               },
               "resolver_key": {
+                "type": "string"
+              },
+              "destination": {
                 "type": "string"
               }
             },
@@ -262,7 +259,8 @@
             "USER",
             "GROUP",
             "ROLE",
-            "RESOLVER"
+            "RESOLVER",
+            "CHANNEL"
           ],
           "description": "Target type: USER (specific user), GROUP (group members), ROLE (role holders), or RESOLVER (dynamic resolution)"
         },
@@ -273,6 +271,9 @@
         "resolver_key": {
           "type": "string",
           "description": "The resolver key for dynamic target resolution (required for RESOLVER type)"
+        },
+        "destination": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

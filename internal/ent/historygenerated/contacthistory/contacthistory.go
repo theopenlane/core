@@ -56,6 +56,12 @@ const (
 	FieldAddress = "address"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// Table holds the table name of the contacthistory in the database.
 	Table = "contact_history"
 )
@@ -81,6 +87,9 @@ var Columns = []string{
 	FieldPhoneNumber,
 	FieldAddress,
 	FieldStatus,
+	FieldExternalID,
+	FieldIntegrationID,
+	FieldObservedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -131,7 +140,7 @@ const DefaultStatus enums.UserStatus = "ACTIVE"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.UserStatus) error {
 	switch s.String() {
-	case "ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING":
+	case "ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING", "UNKNOWN":
 		return nil
 	default:
 		return fmt.Errorf("contacthistory: invalid enum value for status field: %q", s)
@@ -229,6 +238,21 @@ func ByAddress(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
 var (

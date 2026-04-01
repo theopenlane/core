@@ -169,6 +169,20 @@ func (_c *IntegrationWebhookCreate) SetNillableStatus(v *enums.IntegrationWebhoo
 	return _c
 }
 
+// SetEndpointID sets the "endpoint_id" field.
+func (_c *IntegrationWebhookCreate) SetEndpointID(v string) *IntegrationWebhookCreate {
+	_c.mutation.SetEndpointID(v)
+	return _c
+}
+
+// SetNillableEndpointID sets the "endpoint_id" field if the given value is not nil.
+func (_c *IntegrationWebhookCreate) SetNillableEndpointID(v *string) *IntegrationWebhookCreate {
+	if v != nil {
+		_c.SetEndpointID(*v)
+	}
+	return _c
+}
+
 // SetEndpointURL sets the "endpoint_url" field.
 func (_c *IntegrationWebhookCreate) SetEndpointURL(v string) *IntegrationWebhookCreate {
 	_c.mutation.SetEndpointURL(v)
@@ -398,11 +412,6 @@ func (_c *IntegrationWebhookCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
 		}
 	}
-	if v, ok := _c.mutation.EndpointURL(); ok {
-		if err := integrationwebhook.EndpointURLValidator(v); err != nil {
-			return &ValidationError{Name: "endpoint_url", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.endpoint_url": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -474,6 +483,10 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(integrationwebhook.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.EndpointID(); ok {
+		_spec.SetField(integrationwebhook.FieldEndpointID, field.TypeString, value)
+		_node.EndpointID = &value
 	}
 	if value, ok := _c.mutation.EndpointURL(); ok {
 		_spec.SetField(integrationwebhook.FieldEndpointURL, field.TypeString, value)

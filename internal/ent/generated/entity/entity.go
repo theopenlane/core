@@ -138,6 +138,10 @@ const (
 	FieldVendorMetadata = "vendor_metadata"
 	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
 	FieldLogoFileID = "logo_file_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -465,6 +469,8 @@ var Columns = []string{
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
 	FieldLogoFileID,
+	FieldExternalID,
+	FieldObservedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "entities"
@@ -894,6 +900,16 @@ func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 // ByLogoFileID orders the results by the logo_file_id field.
 func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

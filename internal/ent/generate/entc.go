@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/entx/integrationmapping"
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/entx/workflowgen"
 	"github.com/theopenlane/iam/entfga"
@@ -343,6 +344,19 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			genhooks.WithCSVPackageName("csvgenerated"),
 			genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
 			genhooks.WithCSVGenerateAllWrappers(true)),
+		integrationmapping.New(
+			integrationmapping.WithOutputDir(integrationGeneratedPath),
+			integrationmapping.WithPackageName("integrationgenerated"),
+			integrationmapping.WithEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
+			integrationmapping.WithGalaPackage("github.com/theopenlane/core/pkg/gala"),
+			integrationmapping.WithIngestOutputDir("internal/integrations/operations"),
+			integrationmapping.WithIngestPackageName("operations"),
+			integrationmapping.WithIntegrationGeneratedPackage("github.com/theopenlane/core/internal/ent/integrationgenerated"),
+			integrationmapping.WithContextxPackage("github.com/theopenlane/utils/contextx"),
+			integrationmapping.WithDoPackage("github.com/samber/do/v2"),
+			integrationmapping.WithLoPackage("github.com/samber/lo"),
+			integrationmapping.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),
+		).Hook(),
 		accessMapExt.Hook(),
 		exportenums.New().Hook(),
 		workflowGenExt.Hook(),

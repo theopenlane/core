@@ -56,6 +56,8 @@ const (
 	FieldTopicPattern = "topic_pattern"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
+	// FieldDestinations holds the string denoting the destinations field in the database.
+	FieldDestinations = "destinations"
 	// FieldWorkflowDefinitionID holds the string denoting the workflow_definition_id field in the database.
 	FieldWorkflowDefinitionID = "workflow_definition_id"
 	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
@@ -153,6 +155,7 @@ var Columns = []string{
 	FieldLocale,
 	FieldTopicPattern,
 	FieldIntegrationID,
+	FieldDestinations,
 	FieldWorkflowDefinitionID,
 	FieldEmailTemplateID,
 	FieldTitleTemplate,

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -295,6 +296,66 @@ func (_u *RiskUpdate) SetNillableScopeID(v *string) *RiskUpdate {
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RiskUpdate) ClearScopeID() *RiskUpdate {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *RiskUpdate) SetExternalID(v string) *RiskUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableExternalID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RiskUpdate) ClearExternalID() *RiskUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *RiskUpdate) SetIntegrationID(v string) *RiskUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableIntegrationID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *RiskUpdate) ClearIntegrationID() *RiskUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *RiskUpdate) SetObservedAt(v models.DateTime) *RiskUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableObservedAt(v *models.DateTime) *RiskUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *RiskUpdate) ClearObservedAt() *RiskUpdate {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -1369,6 +1430,24 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(risk.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(risk.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(risk.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(risk.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(risk.FieldObservedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ExternalUUID(); ok {
 		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)
@@ -2685,6 +2764,66 @@ func (_u *RiskUpdateOne) ClearScopeID() *RiskUpdateOne {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *RiskUpdateOne) SetExternalID(v string) *RiskUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableExternalID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RiskUpdateOne) ClearExternalID() *RiskUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *RiskUpdateOne) SetIntegrationID(v string) *RiskUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableIntegrationID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *RiskUpdateOne) ClearIntegrationID() *RiskUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *RiskUpdateOne) SetObservedAt(v models.DateTime) *RiskUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableObservedAt(v *models.DateTime) *RiskUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *RiskUpdateOne) ClearObservedAt() *RiskUpdateOne {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_u *RiskUpdateOne) SetExternalUUID(v string) *RiskUpdateOne {
 	_u.mutation.SetExternalUUID(v)
@@ -3786,6 +3925,24 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(risk.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(risk.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(risk.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(risk.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(risk.FieldObservedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ExternalUUID(); ok {
 		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)

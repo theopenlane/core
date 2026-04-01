@@ -20,14 +20,12 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
-	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -38,14 +36,6 @@ import (
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/utils/rout"
 )
-
-// ProviderRegistry exposes provider runtimes and metadata to handlers.
-type ProviderRegistry interface {
-	Provider(provider types.ProviderType) (types.Provider, bool)
-	Config(provider types.ProviderType) (config.ProviderSpec, bool)
-	ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig
-	OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor
-}
 
 // SchemaRegistry interface for dynamic schema registration
 type SchemaRegistry interface {
@@ -91,10 +81,6 @@ type Handler struct {
 	SessionConfig *sessions.SessionConfig
 	// OauthProvider contains the configuration settings for all supported Oauth2 providers (for social login)
 	OauthProvider OauthProviderConfig
-	// IntegrationOauthProvider contains the configuration settings for integration Oauth2 providers
-	IntegrationOauthProvider IntegrationOauthProviderConfig
-	// IntegrationGitHubApp contains the configuration settings for GitHub App integrations
-	IntegrationGitHubApp IntegrationGitHubAppConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints
@@ -114,20 +100,12 @@ type Handler struct {
 	DefaultTrustCenterDomain string
 	// ObjectStore handles file storage operations
 	ObjectStore *objects.Service
-	// IntegrationRegistry contains the declarative provider runtimes for third-party integrations
-	IntegrationRegistry ProviderRegistry
-	// IntegrationStore handles persistence for integration metadata and secrets
-	IntegrationStore *keystore.Store
-	// IntegrationBroker exchanges credentials for provider access tokens
-	IntegrationBroker *keystore.Broker
-	// IntegrationClients reuses provider SDK clients via pooled builders
-	IntegrationClients *keystore.ClientPoolManager
-	// IntegrationOperations standardizes executing provider operations
-	IntegrationOperations *keystore.OperationManager
+	// IntegrationsRuntime holds the integration runtime components.
+	IntegrationsRuntime *integrationsruntime.Runtime
+	// IntegrationsConfig contains environment-backed operator configuration for built-in integrations.
+	IntegrationsConfig catalog.Config
 	// Gala is the shared event runtime for asynchronous dispatch.
 	Gala *gala.Gala
-	// IntegrationActivation orchestrates integration activation flows
-	IntegrationActivation *activation.Service
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
 	// CampaignWebhook contains the configuration for campaign-related email webhooks

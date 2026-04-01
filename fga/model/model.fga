@@ -169,6 +169,8 @@ type organization
     define can_create_workflow_assignment_target: [service]
     define can_create_workflow_event: [service]
     define can_create_workflow_proposal: [service]
+    define can_create_integration_run: [service]
+    define can_create_integration_webhook: [service]
 
     define entity_creator: [group#member]
     define can_create_entity: can_edit or entity_creator or can_manage_trust_center
@@ -538,14 +540,13 @@ type integration
 # webhooks configured for integrations
 type integration_webhook
   relations
-    define can_view: [user, service] or can_edit or (viewer but not blocked)
-    define can_edit: [user, service] or (editor but not blocked)
-    define can_delete: [user, service] or (editor but not blocked)
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define editor: [group#member, organization#owner] or can_edit from parent
-    define viewer: [group#member] or editor or can_view from parent
-    define blocked: [user, group#member]
     define parent: [user, service, organization, integration]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
 
 # integration run history is service-driven but visible to org members via parent
 type integration_run

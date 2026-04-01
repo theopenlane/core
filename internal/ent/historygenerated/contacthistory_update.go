@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -279,6 +280,66 @@ func (_u *ContactHistoryUpdate) SetNillableStatus(v *enums.UserStatus) *ContactH
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ContactHistoryUpdate) SetExternalID(v string) *ContactHistoryUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ContactHistoryUpdate) SetNillableExternalID(v *string) *ContactHistoryUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ContactHistoryUpdate) ClearExternalID() *ContactHistoryUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *ContactHistoryUpdate) SetIntegrationID(v string) *ContactHistoryUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *ContactHistoryUpdate) SetNillableIntegrationID(v *string) *ContactHistoryUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *ContactHistoryUpdate) ClearIntegrationID() *ContactHistoryUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *ContactHistoryUpdate) SetObservedAt(v models.DateTime) *ContactHistoryUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *ContactHistoryUpdate) SetNillableObservedAt(v *models.DateTime) *ContactHistoryUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *ContactHistoryUpdate) ClearObservedAt() *ContactHistoryUpdate {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the ContactHistoryMutation object of the builder.
 func (_u *ContactHistoryUpdate) Mutation() *ContactHistoryMutation {
 	return _u.mutation
@@ -442,6 +503,24 @@ func (_u *ContactHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(contacthistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(contacthistory.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(contacthistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(contacthistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(contacthistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ContactHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -711,6 +790,66 @@ func (_u *ContactHistoryUpdateOne) SetNillableStatus(v *enums.UserStatus) *Conta
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ContactHistoryUpdateOne) SetExternalID(v string) *ContactHistoryUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ContactHistoryUpdateOne) SetNillableExternalID(v *string) *ContactHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ContactHistoryUpdateOne) ClearExternalID() *ContactHistoryUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *ContactHistoryUpdateOne) SetIntegrationID(v string) *ContactHistoryUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *ContactHistoryUpdateOne) SetNillableIntegrationID(v *string) *ContactHistoryUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *ContactHistoryUpdateOne) ClearIntegrationID() *ContactHistoryUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *ContactHistoryUpdateOne) SetObservedAt(v models.DateTime) *ContactHistoryUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *ContactHistoryUpdateOne) SetNillableObservedAt(v *models.DateTime) *ContactHistoryUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *ContactHistoryUpdateOne) ClearObservedAt() *ContactHistoryUpdateOne {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the ContactHistoryMutation object of the builder.
 func (_u *ContactHistoryUpdateOne) Mutation() *ContactHistoryMutation {
 	return _u.mutation
@@ -904,6 +1043,24 @@ func (_u *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ContactH
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(contacthistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(contacthistory.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(contacthistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(contacthistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(contacthistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ContactHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

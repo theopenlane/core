@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -260,6 +261,48 @@ func (_c *ContactHistoryCreate) SetNillableStatus(v *enums.UserStatus) *ContactH
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *ContactHistoryCreate) SetExternalID(v string) *ContactHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableExternalID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_c *ContactHistoryCreate) SetIntegrationID(v string) *ContactHistoryCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableIntegrationID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *ContactHistoryCreate) SetObservedAt(v models.DateTime) *ContactHistoryCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableObservedAt(v *models.DateTime) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ContactHistoryCreate) SetID(v string) *ContactHistoryCreate {
 	_c.mutation.SetID(v)
@@ -478,6 +521,18 @@ func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.IntegrationID(); ok {
+		_spec.SetField(contacthistory.FieldIntegrationID, field.TypeString, value)
+		_node.IntegrationID = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(contacthistory.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	return _node, _spec
 }

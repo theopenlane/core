@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -60,6 +61,7 @@ type IntegrationQuery struct {
 	withRemediations               *RemediationQuery
 	withTasks                      *TaskQuery
 	withActionPlans                *ActionPlanQuery
+	withAssets                     *AssetQuery
 	withDirectoryAccounts          *DirectoryAccountQuery
 	withDirectoryGroups            *DirectoryGroupQuery
 	withDirectoryMemberships       *DirectoryMembershipQuery
@@ -82,6 +84,7 @@ type IntegrationQuery struct {
 	withNamedRemediations          map[string]*RemediationQuery
 	withNamedTasks                 map[string]*TaskQuery
 	withNamedActionPlans           map[string]*ActionPlanQuery
+	withNamedAssets                map[string]*AssetQuery
 	withNamedDirectoryAccounts     map[string]*DirectoryAccountQuery
 	withNamedDirectoryGroups       map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships  map[string]*DirectoryMembershipQuery
@@ -421,6 +424,31 @@ func (_q *IntegrationQuery) QueryActionPlans() *ActionPlanQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.IntegrationActionPlans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssets chains the current query on the "assets" edge.
+func (_q *IntegrationQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.AssetsTable, integration.AssetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -881,6 +909,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withRemediations:          _q.withRemediations.Clone(),
 		withTasks:                 _q.withTasks.Clone(),
 		withActionPlans:           _q.withActionPlans.Clone(),
+		withAssets:                _q.withAssets.Clone(),
 		withDirectoryAccounts:     _q.withDirectoryAccounts.Clone(),
 		withDirectoryGroups:       _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:  _q.withDirectoryMemberships.Clone(),
@@ -1027,6 +1056,17 @@ func (_q *IntegrationQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *Int
 		opt(query)
 	}
 	_q.withActionPlans = query
+	return _q
+}
+
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithAssets(opts ...func(*AssetQuery)) *IntegrationQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssets = query
 	return _q
 }
 
@@ -1225,7 +1265,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [22]bool{
+		loadedTypes = [23]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1238,6 +1278,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withRemediations != nil,
 			_q.withTasks != nil,
 			_q.withActionPlans != nil,
+			_q.withAssets != nil,
 			_q.withDirectoryAccounts != nil,
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
@@ -1354,6 +1395,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadActionPlans(ctx, query, nodes,
 			func(n *Integration) { n.Edges.ActionPlans = []*ActionPlan{} },
 			func(n *Integration, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *Integration) { n.Edges.Assets = []*Asset{} },
+			func(n *Integration, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1496,6 +1544,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadActionPlans(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedActionPlans(name) },
 			func(n *Integration, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedAssets(name) },
+			func(n *Integration, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2153,6 +2208,37 @@ func (_q *IntegrationQuery) loadActionPlans(ctx context.Context, query *ActionPl
 	}
 	return nil
 }
+func (_q *IntegrationQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Asset)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(asset.FieldIntegrationID)
+	}
+	query.Where(predicate.Asset(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.AssetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *IntegrationQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *DirectoryAccount)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Integration)
@@ -2718,6 +2804,20 @@ func (_q *IntegrationQuery) WithNamedActionPlans(name string, opts ...func(*Acti
 		_q.withNamedActionPlans = make(map[string]*ActionPlanQuery)
 	}
 	_q.withNamedActionPlans[name] = query
+	return _q
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *IntegrationQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedAssets[name] = query
 	return _q
 }
 

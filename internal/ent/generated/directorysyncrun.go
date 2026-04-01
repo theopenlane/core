@@ -47,6 +47,8 @@ type DirectorySyncRun struct {
 	IntegrationID string `json:"integration_id,omitempty"`
 	// optional platform associated with this sync run
 	PlatformID string `json:"platform_id,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
 	// current state of the sync run
 	Status enums.DirectorySyncRunStatus `json:"status,omitempty"`
 	// time the sync started
@@ -191,7 +193,7 @@ func (*DirectorySyncRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorysyncrun.FieldFullCount, directorysyncrun.FieldDeltaCount:
 			values[i] = new(sql.NullInt64)
-		case directorysyncrun.FieldID, directorysyncrun.FieldCreatedBy, directorysyncrun.FieldUpdatedBy, directorysyncrun.FieldDisplayID, directorysyncrun.FieldOwnerID, directorysyncrun.FieldEnvironmentName, directorysyncrun.FieldEnvironmentID, directorysyncrun.FieldScopeName, directorysyncrun.FieldScopeID, directorysyncrun.FieldIntegrationID, directorysyncrun.FieldPlatformID, directorysyncrun.FieldStatus, directorysyncrun.FieldSourceCursor, directorysyncrun.FieldError, directorysyncrun.FieldRawManifestFileID:
+		case directorysyncrun.FieldID, directorysyncrun.FieldCreatedBy, directorysyncrun.FieldUpdatedBy, directorysyncrun.FieldDisplayID, directorysyncrun.FieldOwnerID, directorysyncrun.FieldEnvironmentName, directorysyncrun.FieldEnvironmentID, directorysyncrun.FieldScopeName, directorysyncrun.FieldScopeID, directorysyncrun.FieldIntegrationID, directorysyncrun.FieldPlatformID, directorysyncrun.FieldDirectoryInstanceID, directorysyncrun.FieldStatus, directorysyncrun.FieldSourceCursor, directorysyncrun.FieldError, directorysyncrun.FieldRawManifestFileID:
 			values[i] = new(sql.NullString)
 		case directorysyncrun.FieldCreatedAt, directorysyncrun.FieldUpdatedAt, directorysyncrun.FieldStartedAt, directorysyncrun.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -287,6 +289,13 @@ func (_m *DirectorySyncRun) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
 			} else if value.Valid {
 				_m.PlatformID = value.String
+			}
+		case directorysyncrun.FieldDirectoryInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_instance_id", values[i])
+			} else if value.Valid {
+				_m.DirectoryInstanceID = new(string)
+				*_m.DirectoryInstanceID = value.String
 			}
 		case directorysyncrun.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -459,6 +468,11 @@ func (_m *DirectorySyncRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
+	builder.WriteString(", ")
+	if v := _m.DirectoryInstanceID; v != nil {
+		builder.WriteString("directory_instance_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

@@ -2,6 +2,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 	createBulkCSVDirectoryAccount(input: $input) {
 		directoryAccounts {
 			accountType
+			addedAt
 			avatarLocalFileID
 			avatarRemoteURL
 			avatarUpdatedAt
@@ -9,6 +10,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			createdAt
 			createdBy
 			department
+			directoryInstanceID
 			directoryName
 			directorySyncRunID
 			displayID
@@ -17,13 +19,16 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			environmentName
 			externalID
 			familyName
+			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			jobTitle
 			lastLoginAt
+			lastSeenAt
 			lastSeenIP
+			metadata
 			mfaState
 			observedAt
 			organizationUnit
@@ -32,6 +37,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			profile
 			profileHash
 			rawProfileFileID
+			removedAt
 			scopeID
 			scopeName
 			secondaryKey
@@ -47,6 +53,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 	createBulkDirectoryAccount(input: $input) {
 		directoryAccounts {
 			accountType
+			addedAt
 			avatarLocalFileID
 			avatarRemoteURL
 			avatarUpdatedAt
@@ -54,6 +61,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			createdAt
 			createdBy
 			department
+			directoryInstanceID
 			directoryName
 			directorySyncRunID
 			displayID
@@ -62,13 +70,16 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			environmentName
 			externalID
 			familyName
+			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			jobTitle
 			lastLoginAt
+			lastSeenAt
 			lastSeenIP
+			metadata
 			mfaState
 			observedAt
 			organizationUnit
@@ -77,6 +88,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			profile
 			profileHash
 			rawProfileFileID
+			removedAt
 			scopeID
 			scopeName
 			secondaryKey
@@ -92,6 +104,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 	createDirectoryAccount(input: $input) {
 		directoryAccount {
 			accountType
+			addedAt
 			avatarLocalFileID
 			avatarRemoteURL
 			avatarUpdatedAt
@@ -99,6 +112,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			createdAt
 			createdBy
 			department
+			directoryInstanceID
 			directoryName
 			directorySyncRunID
 			displayID
@@ -107,13 +121,16 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			environmentName
 			externalID
 			familyName
+			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			jobTitle
 			lastLoginAt
+			lastSeenAt
 			lastSeenIP
+			metadata
 			mfaState
 			observedAt
 			organizationUnit
@@ -122,6 +139,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			profile
 			profileHash
 			rawProfileFileID
+			removedAt
 			scopeID
 			scopeName
 			secondaryKey
@@ -185,6 +203,7 @@ query GetAllDirectoryAccounts {
 query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 	directoryAccount(id: $directoryAccountId) {
 		accountType
+		addedAt
 		avatarLocalFileID
 		avatarRemoteURL
 		avatarUpdatedAt
@@ -192,6 +211,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		createdAt
 		createdBy
 		department
+		directoryInstanceID
 		directoryName
 		directorySyncRunID
 		displayID
@@ -200,13 +220,16 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		environmentName
 		externalID
 		familyName
+		firstSeenAt
 		givenName
 		id
 		identityHolderID
 		integrationID
 		jobTitle
 		lastLoginAt
+		lastSeenAt
 		lastSeenIP
+		metadata
 		mfaState
 		observedAt
 		organizationUnit
@@ -215,6 +238,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		profile
 		profileHash
 		rawProfileFileID
+		removedAt
 		scopeID
 		scopeName
 		secondaryKey
@@ -273,6 +297,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 	updateDirectoryAccount(id: $updateDirectoryAccountId, input: $input) {
 		directoryAccount {
 			accountType
+			addedAt
 			avatarLocalFileID
 			avatarRemoteURL
 			avatarUpdatedAt
@@ -280,6 +305,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			createdAt
 			createdBy
 			department
+			directoryInstanceID
 			directoryName
 			directorySyncRunID
 			displayID
@@ -288,13 +314,16 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			environmentName
 			externalID
 			familyName
+			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			jobTitle
 			lastLoginAt
+			lastSeenAt
 			lastSeenIP
+			metadata
 			mfaState
 			observedAt
 			organizationUnit
@@ -303,6 +332,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			profile
 			profileHash
 			rawProfileFileID
+			removedAt
 			scopeID
 			scopeName
 			secondaryKey

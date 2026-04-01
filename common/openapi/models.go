@@ -11,15 +11,10 @@ import (
 	"time"
 
 	"github.com/go-webauthn/webauthn/protocol"
-	"github.com/invopop/jsonschema"
-	"github.com/samber/lo"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/state"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 
@@ -1696,7 +1691,6 @@ type SSOCallbackRequest struct {
 // Validate ensures the required fields are set on the SSOCallbackRequest
 func (r *SSOCallbackRequest) Validate() error {
 	r.Code = strings.TrimSpace(r.Code)
-	r.State = strings.TrimSpace(r.State)
 	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
 
 	switch {
@@ -1729,7 +1723,6 @@ type SSOTokenCallbackRequest struct {
 // Validate ensures required fields are set on the SSOTokenCallbackRequest
 func (r *SSOTokenCallbackRequest) Validate() error {
 	r.Code = strings.TrimSpace(r.Code)
-	r.State = strings.TrimSpace(r.State)
 
 	switch {
 	case r.Code == "":
@@ -2147,65 +2140,6 @@ func (r *EndImpersonationRequest) Validate() error {
 // OAUTH INTEGRATIONS
 // =========
 
-// IntegrationToken represents stored OAuth tokens for an integration
-type IntegrationToken struct {
-	// Provider is the provider value.
-	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)"`
-	// AccessToken is the accessToken value.
-	AccessToken string `json:"accessToken" description:"OAuth access token"`
-	// RefreshToken is the refreshToken value.
-	RefreshToken string `json:"refreshToken,omitempty" description:"OAuth refresh token"`
-	// ExpiresAt is the expiresAt value.
-	ExpiresAt *time.Time `json:"expiresAt,omitempty" description:"Token expiration time"`
-	// ProviderUserID is the providerUserId value.
-	ProviderUserID string `json:"providerUserId,omitempty" description:"User ID from the OAuth provider"`
-	// ProviderUsername is the providerUsername value.
-	ProviderUsername string `json:"providerUsername,omitempty" description:"Username from the OAuth provider"`
-	// ProviderEmail is the providerEmail value.
-	ProviderEmail string `json:"providerEmail,omitempty" description:"Email from the OAuth provider"`
-}
-
-// IsExpired returns true if the token has expired
-func (t *IntegrationToken) IsExpired() bool {
-	if t.ExpiresAt == nil {
-		return false // No expiry means never expires
-	}
-
-	return time.Now().After(*t.ExpiresAt)
-}
-
-// HasValidToken returns true if the token is valid and not expired
-func (t *IntegrationToken) HasValidToken() bool {
-	return t.Provider != "" && t.AccessToken != "" && !t.IsExpired()
-}
-
-// IntegrationTokenResponse is the response for getting integration tokens
-type IntegrationTokenResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Provider is the provider value.
-	Provider string `json:"provider"`
-	// Token is the token value.
-	Token *IntegrationToken `json:"token"`
-	// ExpiresAt is the expiresAt value.
-	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
-}
-
-// ExampleResponse returns an example IntegrationTokenResponse for OpenAPI documentation
-func (r *IntegrationTokenResponse) ExampleResponse() any {
-	expiresAt := exampleTime(30 * 24 * time.Hour) //nolint:mnd
-
-	return IntegrationTokenResponse{
-		Reply:    rout.Reply{Success: true},
-		Provider: "github",
-		Token: &IntegrationToken{
-			AccessToken:  "ghr_example_token",
-			RefreshToken: "ghr_example_refresh_token",
-		},
-		ExpiresAt: &expiresAt,
-	}
-}
-
 // ListIntegrationsResponse is the response for listing integrations
 type ListIntegrationsResponse struct {
 	// Reply is the reply value.
@@ -2216,46 +2150,16 @@ type ListIntegrationsResponse struct {
 
 // DeleteIntegrationResponse is the response for deleting an integration
 type DeleteIntegrationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is a user-facing summary of the disconnect action
 	Message string `json:"message"`
-	// DeletedID is the deletedId value.
+	// DeletedID is the installation record ID that was removed
 	DeletedID string `json:"deletedId,omitempty"`
-}
-
-// IntegrationStatusResponse is the response for checking integration status
-type IntegrationStatusResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Provider is the provider value.
-	Provider string `json:"provider"`
-	// Connected is the connected value.
-	Connected bool `json:"connected"`
-	// Status is the status value.
-	Status string `json:"status,omitempty"` // "connected", "expired", "invalid"
-	// TokenValid is the tokenValid value.
-	TokenValid bool `json:"tokenValid,omitempty"`
-	// TokenExpired is the tokenExpired value.
-	TokenExpired bool `json:"tokenExpired,omitempty"`
-	// Message is the message value.
-	Message string `json:"message"`
-	// Integration is the integration value.
-	Integration any `json:"integration,omitempty"` // Will be *ent.Integration
-}
-
-// ExampleResponse returns an example IntegrationStatusResponse for OpenAPI documentation
-func (r *IntegrationStatusResponse) ExampleResponse() any {
-	return IntegrationStatusResponse{
-		Reply:        rout.Reply{Success: true},
-		Provider:     "github",
-		Connected:    true,
-		Status:       "connected",
-		TokenValid:   true,
-		TokenExpired: false,
-		Message:      "Integration status retrieved successfully",
-		Integration:  map[string]any{"id": exampleULID("integration"), "name": "GitHub Integration"},
-	}
+	// RedirectURL is a provider URL the user should visit to complete external teardown
+	RedirectURL string `json:"redirectUrl,omitempty"`
+	// Details is an opaque provider-specific payload describing teardown actions taken or required
+	Details json.RawMessage `json:"details,omitempty"`
 }
 
 // GetIntegrationTokenRequest is the request for getting integration tokens
@@ -2268,17 +2172,6 @@ type GetIntegrationTokenRequest struct {
 type DeleteIntegrationRequest struct {
 	// ID is the id value.
 	ID string `param:"id" description:"Integration ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-}
-
-// RefreshIntegrationTokenRequest is the request for refreshing integration tokens
-type RefreshIntegrationTokenRequest struct {
-	// Provider is the provider value.
-	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
-}
-
-// ExampleRefreshIntegrationTokenRequest is an example refresh integration token request for OpenAPI documentation
-var ExampleRefreshIntegrationTokenRequest = RefreshIntegrationTokenRequest{
-	Provider: "github",
 }
 
 // GetIntegrationStatusRequest is the request for checking integration status
@@ -2307,16 +2200,6 @@ func (r *DeleteIntegrationRequest) Validate() error {
 	return nil
 }
 
-// Validate validates the RefreshIntegrationTokenRequest
-func (r *RefreshIntegrationTokenRequest) Validate() error {
-	r.Provider = strings.TrimSpace(r.Provider)
-	if r.Provider == "" {
-		return errProviderRequired
-	}
-
-	return nil
-}
-
 // Validate validates the GetIntegrationStatusRequest
 func (r *GetIntegrationStatusRequest) Validate() error {
 	r.Provider = strings.TrimSpace(r.Provider)
@@ -2335,6 +2218,8 @@ func (r *GetIntegrationStatusRequest) Validate() error {
 type OAuthFlowRequest struct {
 	// Provider is the provider value.
 	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+	// IntegrationID scopes the OAuth callback credential save to a specific integration record.
+	IntegrationID string `json:"integrationId,omitempty" description:"Optional integration ID to attach OAuth credentials to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// RedirectURI is the redirectUri value.
 	RedirectURI string `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
 	// Scopes is the scopes value.
@@ -2387,32 +2272,6 @@ func (r *OAuthFlowResponse) ExampleResponse() any {
 	}
 }
 
-// OAuthCallbackRequest represents the OAuth callback data
-type OAuthCallbackRequest struct {
-	// Provider is the provider value.
-	Provider string `json:"provider,omitempty" query:"provider" description:"OAuth provider (extracted from state)"`
-	// Code is the code value.
-	Code string `json:"code" query:"code" description:"OAuth authorization code"`
-	// State is the state value.
-	State string `json:"state" query:"state" description:"OAuth state parameter"`
-}
-
-// Validate ensures the required fields are set on the OAuthCallbackRequest
-func (r *OAuthCallbackRequest) Validate() error {
-	r.Provider = strings.TrimSpace(strings.ToLower(r.Provider))
-	r.Code = strings.TrimSpace(r.Code)
-	r.State = strings.TrimSpace(r.State)
-
-	switch {
-	case r.Code == "":
-		return rout.NewMissingRequiredFieldError("code")
-	case r.State == "":
-		return rout.NewMissingRequiredFieldError("state")
-	}
-
-	return nil
-}
-
 // ExampleStartImpersonationRequest is an example request for OpenAPI documentation
 var ExampleStartImpersonationRequest = StartImpersonationRequest{
 	TargetUserID: exampleULID("user_alt"),
@@ -2442,42 +2301,6 @@ var ExampleEndImpersonationReply = EndImpersonationReply{
 	Message: "Impersonation session ended successfully",
 }
 
-// OAuthCallbackResponse contains the result of OAuth callback processing
-type OAuthCallbackResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Success is the success value.
-	Success bool `json:"success" description:"Whether the OAuth callback was processed successfully"`
-	// Integration is the integration value.
-	Integration any `json:"integration,omitempty" description:"The created/updated integration object"`
-	// Message is the message value.
-	Message string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
-}
-
-// ExampleResponse returns an example OAuthCallbackResponse for OpenAPI documentation
-func (r *OAuthCallbackResponse) ExampleResponse() any {
-	return OAuthCallbackResponse{
-		Reply:       rout.Reply{Success: true},
-		Success:     true,
-		Integration: map[string]any{"id": exampleULID("integration"), "provider": "github", "status": "connected"},
-		Message:     "Successfully connected GitHub integration",
-	}
-}
-
-// ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation
-var ExampleOAuthFlowRequest = OAuthFlowRequest{
-	Provider:    "github",
-	RedirectURI: "https://app.example.com/integrations",
-	Scopes:      []string{"repo", "gist"},
-}
-
-// ExampleOAuthCallbackRequest is an example OAuth callback request for OpenAPI documentation
-var ExampleOAuthCallbackRequest = OAuthCallbackRequest{
-	Provider: "github",
-	Code:     "4/0AQlEz8xY...",
-	State:    "eyJvcmdJRCI6IjAxSE...",
-}
-
 // ExampleOAuthFlowResponse is an example OAuth flow response for OpenAPI documentation
 var ExampleOAuthFlowResponse = OAuthFlowResponse{
 	Reply:         rout.Reply{Success: true},
@@ -2485,89 +2308,6 @@ var ExampleOAuthFlowResponse = OAuthFlowResponse{
 	State:         "eyJvcmdJRCI6IjAxSE...",
 	Message:       "",
 	RequiresLogin: false,
-}
-
-// ExampleOAuthCallbackResponse is an example OAuth callback response for OpenAPI documentation
-var ExampleOAuthCallbackResponse = OAuthCallbackResponse{
-	Reply:   rout.Reply{Success: true},
-	Success: true,
-	Message: "Successfully connected GitHub integration",
-}
-
-// =========
-// GITHUB APP INTEGRATION REQUESTS/RESPONSES
-// =========
-
-// GitHubAppInstallRequest represents the GitHub App installation start request.
-type GitHubAppInstallRequest struct{}
-
-// Validate ensures the GitHubAppInstallRequest is valid.
-func (r *GitHubAppInstallRequest) Validate() error {
-	return nil
-}
-
-// GitHubAppInstallResponse contains the GitHub App installation URL and state.
-type GitHubAppInstallResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// InstallURL is the installUrl value.
-	InstallURL string `json:"installUrl" description:"URL to initiate the GitHub App installation" example:"https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE..."`
-	// State is the state value.
-	State string `json:"state,omitempty" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
-	// Message is the message value.
-	Message string `json:"message,omitempty" description:"Optional message"`
-}
-
-// ExampleResponse returns an example GitHubAppInstallResponse.
-func (r *GitHubAppInstallResponse) ExampleResponse() any {
-	return GitHubAppInstallResponse{
-		Reply:      rout.Reply{Success: true},
-		InstallURL: "https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...",
-		State:      "eyJvcmdJRCI6IjAxSE...",
-		Message:    "",
-	}
-}
-
-// GitHubAppInstallCallbackRequest represents query params for the GitHub App callback.
-type GitHubAppInstallCallbackRequest struct {
-	// InstallationID is the installation_id value.
-	InstallationID string `json:"installation_id" query:"installation_id" description:"GitHub App installation ID" example:"12345678"`
-	// SetupAction is the setup_action value.
-	SetupAction string `json:"setup_action,omitempty" query:"setup_action" description:"GitHub setup action" example:"install"`
-	// State is the state value.
-	State string `json:"state" query:"state" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
-}
-
-// Validate ensures required callback fields are set.
-func (r *GitHubAppInstallCallbackRequest) Validate() error {
-	r.InstallationID = strings.TrimSpace(r.InstallationID)
-	r.SetupAction = strings.TrimSpace(r.SetupAction)
-	r.State = strings.TrimSpace(r.State)
-
-	switch {
-	case r.InstallationID == "":
-		return rout.NewMissingRequiredFieldError("installation_id")
-	case r.State == "":
-		return rout.NewMissingRequiredFieldError("state")
-	}
-
-	return nil
-}
-
-// GitHubAppInstallCallbackResponse contains the callback result.
-type GitHubAppInstallCallbackResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Message is the message value.
-	Message string `json:"message,omitempty" description:"Success or error message"`
-}
-
-// ExampleResponse returns an example GitHubAppInstallCallbackResponse.
-func (r *GitHubAppInstallCallbackResponse) ExampleResponse() any {
-	return GitHubAppInstallCallbackResponse{
-		Reply:   rout.Reply{Success: true},
-		Message: "GitHub App integration connected",
-	}
 }
 
 // GitHubAppWebhookResponse acknowledges GitHub App webhooks.
@@ -2589,29 +2329,6 @@ func (r *GitHubAppWebhookResponse) ExampleResponse() any {
 			"total":   1,
 		},
 	}
-}
-
-// ExampleGitHubAppInstallRequest is an example GitHub App install request.
-var ExampleGitHubAppInstallRequest = GitHubAppInstallRequest{}
-
-// ExampleGitHubAppInstallResponse is an example GitHub App install response.
-var ExampleGitHubAppInstallResponse = GitHubAppInstallResponse{
-	Reply:      rout.Reply{Success: true},
-	InstallURL: "https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE...",
-	State:      "eyJvcmdJRCI6IjAxSE...",
-}
-
-// ExampleGitHubAppInstallCallbackRequest is an example GitHub App callback request.
-var ExampleGitHubAppInstallCallbackRequest = GitHubAppInstallCallbackRequest{
-	InstallationID: "12345678",
-	SetupAction:    "install",
-	State:          "eyJvcmdJRCI6IjAxSE...",
-}
-
-// ExampleGitHubAppInstallCallbackResponse is an example GitHub App callback response.
-var ExampleGitHubAppInstallCallbackResponse = GitHubAppInstallCallbackResponse{
-	Reply:   rout.Reply{Success: true},
-	Message: "GitHub App integration connected",
 }
 
 // =========
@@ -2701,367 +2418,15 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 		}},
 }
 
-// IntegrationConfigRequest represents arbitrary credential configuration submitted for a provider.
-type IntegrationConfigRequest struct {
-	// ServiceAccountEmail is the serviceAccountEmail value.
-	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty"`
-	// Audience is the audience value.
-	Audience string `json:"audience,omitempty"`
-	// ProjectID is the projectId value.
-	ProjectID string `json:"projectId,omitempty"`
-	// OrganizationID is the organizationId value.
-	OrganizationID string `json:"organizationId,omitempty"`
-	// WorkloadIdentityProvider is the workloadIdentityProvider value.
-	WorkloadIdentityProvider string `json:"workloadIdentityProvider,omitempty"`
-	// FindingFilter is the findingFilter value.
-	FindingFilter string `json:"findingFilter,omitempty"`
-	// Additional is the additional value.
-	Additional map[string]any `json:"-"`
-}
-
-// ExampleIntegrationConfigRequest is an example configuration payload for OpenAPI documentation.
-var ExampleIntegrationConfigRequest = IntegrationConfigRequest{
-	ServiceAccountEmail:      "scc-runner@example.iam.gserviceaccount.com",
-	Audience:                 "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	ProjectID:                "sample-project",
-	OrganizationID:           "1234567890",
-	WorkloadIdentityProvider: "projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-}
-
-// UnmarshalJSON captures known fields and preserves additional properties.
-func (r *IntegrationConfigRequest) UnmarshalJSON(data []byte) error {
-	type Alias IntegrationConfigRequest
-	var alias Alias
-	if err := json.Unmarshal(data, &alias); err != nil {
-		return err
-	}
-	*r = IntegrationConfigRequest(alias)
-
-	var raw map[string]any
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	known := map[string]struct{}{
-		"serviceAccountEmail":      {},
-		"audience":                 {},
-		"projectId":                {},
-		"organizationId":           {},
-		"workloadIdentityProvider": {},
-		"findingFilter":            {},
-	}
-	r.Additional = make(map[string]any)
-	for key, value := range raw {
-		if _, ok := known[key]; ok {
-			continue
-		}
-		r.Additional[key] = value
-	}
-
-	return nil
-}
-
-// ToMap flattens the request into a map for schema validation and keystore.
-func (r IntegrationConfigRequest) ToMap() map[string]any {
-	base := map[string]any{
-		"serviceAccountEmail":      r.ServiceAccountEmail,
-		"audience":                 r.Audience,
-		"projectId":                r.ProjectID,
-		"organizationId":           r.OrganizationID,
-		"workloadIdentityProvider": r.WorkloadIdentityProvider,
-		"findingFilter":            r.FindingFilter,
-	}
-
-	nonEmpty := lo.PickBy(base, func(_ string, value any) bool {
-		if str, ok := value.(string); ok {
-			return strings.TrimSpace(str) != ""
-		}
-		return value != nil
-	})
-
-	additional := lo.PickBy(r.Additional, func(_ string, value any) bool {
-		if str, ok := value.(string); ok {
-			return strings.TrimSpace(str) != ""
-		}
-		return value != nil
-	})
-
-	if len(additional) == 0 {
-		return nonEmpty
-	}
-
-	return lo.Assign(nonEmpty, additional)
-}
-
-// IntegrationConfigParams captures path parameters for the integration config endpoint.
-type IntegrationConfigParams struct {
-	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration provider identifier" example:"gcpscc"`
-}
-
-// ExampleIntegrationConfigParams is an example of the path parameters for integration configuration.
-var ExampleIntegrationConfigParams = IntegrationConfigParams{
-	Provider: "gcpscc",
-}
-
-// IntegrationConfigPayload wraps path parameters with the request payload.
-type IntegrationConfigPayload struct {
-	// IntegrationConfigParams is the integrationconfigparams value.
-	IntegrationConfigParams
-	// Body is the payload value.
-	Body IntegrationConfigRequest `json:"payload"`
-}
-
-// IntegrationOperationParams captures path parameters for operation requests.
-type IntegrationOperationParams struct {
-	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration provider identifier" example:"gcpscc"`
-}
-
-// IntegrationOperationRequest describes a provider operation to run.
-type IntegrationOperationRequest struct {
-	// Operation is the operation value.
-	Operation string `json:"operation" validate:"required"`
-	// Config is the config value.
-	Config map[string]any `json:"config,omitempty"`
-	// Force is the force value.
-	Force bool `json:"force,omitempty"`
-}
-
-// IntegrationOperationPayload wraps the params with the operation body.
-type IntegrationOperationPayload struct {
-	// IntegrationOperationParams is the integrationoperationparams value.
-	IntegrationOperationParams
-	// Body is the payload value.
-	Body IntegrationOperationRequest `json:"payload"`
-}
-
-// ExampleIntegrationOperationPayload demonstrates a sample operation request.
-var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
-	IntegrationOperationParams: IntegrationOperationParams{Provider: "gcpscc"},
-	Body: IntegrationOperationRequest{
-		Operation: "findings.collect",
-		Config: map[string]any{
-			"sourceId": "organizations/123/sources/456",
-			"filter":   `severity="HIGH"`,
-		},
-		Force: true,
-	},
-}
-
-// IntegrationOperationMetadata describes an operation published by a provider.
-type IntegrationOperationMetadata struct {
-	// Name is the name value.
-	Name string `json:"name"`
-	// Kind is the kind value.
-	Kind string `json:"kind"`
-	// Description is the description value.
-	Description string `json:"description,omitempty"`
-	// Client is the client value.
-	Client string `json:"client,omitempty"`
-	// ConfigSchema is the configSchema value.
-	ConfigSchema map[string]any `json:"configSchema,omitempty"`
-}
-
-// IntegrationProviderMetadata describes the data required for rendering integration forms.
-type IntegrationProviderMetadata struct {
-	// Name is the name value.
-	Name string `json:"name"`
-	// DisplayName is the displayName value.
-	DisplayName string `json:"displayName"`
-	// Category is the category value.
-	Category string `json:"category"`
-	// Description is the description value.
-	Description string `json:"description,omitempty"`
-	// AuthType is the authType value.
-	AuthType types.AuthKind `json:"authType"`
-	// AuthStartPath is the integration API path to initiate provider authentication.
-	AuthStartPath string `json:"authStartPath,omitempty"`
-	// AuthCallbackPath is the integration API callback path used to complete provider authentication.
-	AuthCallbackPath string `json:"authCallbackPath,omitempty"`
-	// Active is the active value.
-	Active bool `json:"active"`
-	// Visible is the visible value.
-	Visible bool `json:"visible"`
-	// Tags is the tags value.
-	Tags []string `json:"tags,omitempty"`
-	// LogoURL is the logoUrl value.
-	LogoURL string `json:"logoUrl,omitempty"`
-	// DocsURL is the docsUrl value.
-	DocsURL string `json:"docsUrl,omitempty"`
-	// OAuth is the oauth value.
-	OAuth *IntegrationOAuthMetadata `json:"oauth,omitempty"`
-	// GoogleWorkloadIdentity is the workloadIdentity value.
-	GoogleWorkloadIdentity *config.GoogleWorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
-	// GitHubApp is the githubApp value.
-	GitHubApp *config.GitHubAppSpec `json:"githubApp,omitempty"`
-	// Persistence is the persistence value.
-	Persistence *config.PersistenceSpec `json:"persistence,omitempty"`
-	// CredentialsSchema is the credentialsSchema value.
-	CredentialsSchema map[string]any `json:"credentialsSchema,omitempty"`
-	// Labels is the labels value.
-	Labels map[string]string `json:"labels,omitempty"`
-	// Operations is the operations value.
-	Operations []IntegrationOperationMetadata `json:"operations,omitempty"`
-}
-
-// IntegrationOperationTemplate captures persisted configuration for an operation.
-type IntegrationOperationTemplate struct {
-	// Config holds the IntegrationOperationTemplate configuration
-	Config map[string]any `json:"config,omitempty"`
-	// AllowOverrides lists which config fields can be overridden at runtime
-	AllowOverrides []string `json:"allowOverrides,omitempty"`
-}
-
-// IntegrationMappingOverride customizes how provider payloads map into system types.
-type IntegrationMappingOverride struct {
-	// Version is the version of the IntegrationMappingOverride
-	Version string `json:"version,omitempty"`
-	// FilterExpr is the filter expression for the IntegrationMappingOverride
-	FilterExpr string `json:"filterExpr,omitempty"`
-	// MapExpr is the mapping expression for the IntegrationMappingOverride
-	MapExpr string `json:"mapExpr,omitempty"`
-}
-
-// IntegrationRetentionPolicy defines storage settings for integration payloads.
-type IntegrationRetentionPolicy struct {
-	// StoreRawPayload indicates whether to store the raw payload
-	StoreRawPayload bool `json:"storeRawPayload,omitempty"`
-	// PayloadTTL defines the payload TTL
-	PayloadTTL time.Duration `json:"payloadTtl,omitempty"`
-}
-
-// IntegrationConfig stores runtime configuration for an integration instance.
-type IntegrationConfig struct {
-	// OperationsTemplates holds saved operation templates for the IntegrationConfig
-	OperationTemplates map[string]IntegrationOperationTemplate `json:"operationTemplates,omitempty"`
-	// EnabledOperations lists which operations are enabled
-	EnabledOperations []string `json:"enabledOperations,omitempty"`
-	// ClientConfig holds provider-specific client configuration
-	ClientConfig map[string]any `json:"clientConfig,omitempty"`
-	// CollectionStrategy defines how data is collected from the provider
-	CollectionStrategy string `json:"collectionStrategy,omitempty"`
-	// Schedule defines the integration schedule
-	Schedule string `json:"schedule,omitempty"`
-	// PollInterval defines how often to poll the provider for new data
-	PollInterval time.Duration `json:"pollInterval,omitempty"`
-	// MappingOverrides holds the mapping overrides
-	MappingOverrides map[string]IntegrationMappingOverride `json:"mappingOverrides,omitempty"`
-	// RetentionPolicy definesw the data retention policy
-	RetentionPolicy *IntegrationRetentionPolicy `json:"retentionPolicy,omitempty"`
-}
-
-// IntegrationProviderState stores provider-specific integration state captured during auth/config.
-// This is separate from provider metadata (catalog) and per-run configuration.
-type IntegrationProviderState = state.IntegrationProviderState
-
-// IntegrationGitHubState captures GitHub App installation details for an integration.
-type IntegrationGitHubState = state.GitHubState
-
-// IntegrationSlackState captures Slack workspace details for an integration.
-type IntegrationSlackState = state.SlackState
-
-// ExampleIntegrationConfigPayload demonstrates a full integration configuration request.
-var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	IntegrationConfigParams: IntegrationConfigParams{Provider: "gcpscc"},
-	Body: IntegrationConfigRequest{
-		ServiceAccountEmail:      "scc-runner@example.iam.gserviceaccount.com",
-		Audience:                 "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-		ProjectID:                "sample-project",
-		OrganizationID:           "1234567890",
-		WorkloadIdentityProvider: "projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-		Additional: map[string]any{
-			"serviceAccountKey": "{ \"type\": \"service_account\", ... }",
-		},
-	},
-}
-
-// IntegrationOAuthMetadata captures OAuth-specific metadata for integrations.
-type IntegrationOAuthMetadata struct {
-	// ClientID is the OAuth application client identifier.
-	ClientID string `json:"clientId,omitempty"`
-	// AuthURL is the authUrl value.
-	AuthURL string `json:"authUrl,omitempty"`
-	// TokenURL is the tokenUrl value.
-	TokenURL string `json:"tokenUrl,omitempty"`
-	// RedirectURI is the redirectUri value.
-	RedirectURI string `json:"redirectUri,omitempty"`
-	// Scopes is the scopes value.
-	Scopes []string `json:"scopes,omitempty"`
-	// UsePKCE is the usePkce value.
-	UsePKCE bool `json:"usePkce,omitempty"`
-	// AuthParams is the authParams value.
-	AuthParams map[string]string `json:"authParams,omitempty"`
-	// TokenParams is the tokenParams value.
-	TokenParams map[string]string `json:"tokenParams,omitempty"`
-}
-
-// IntegrationProvidersResponse is returned by the provider metadata endpoint.
-type IntegrationProvidersResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Schema is the schema value.
-	Schema *jsonschema.Schema `json:"schema"`
-	// Providers is the providers value.
-	Providers []IntegrationProviderMetadata `json:"providers"`
-}
-
-// IntegrationConfigResponse is returned after persisting provider configuration.
-type IntegrationConfigResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Provider is the provider value.
-	Provider string `json:"provider"`
-}
-
-// IntegrationOperationResponse reports the result of a provider operation.
-type IntegrationOperationResponse struct {
-	// Reply is the reply value.
-	rout.Reply
-	// Provider is the provider value.
-	Provider string `json:"provider"`
-	// Operation is the operation value.
-	Operation string `json:"operation"`
-	// Status is the status value.
-	Status string `json:"status"`
-	// Summary is the summary value.
-	Summary string `json:"summary"`
-	// Details is the details value.
-	Details map[string]any `json:"details,omitempty"`
-}
-
-// ExampleResponse returns an example IntegrationConfigResponse for OpenAPI documentation.
-func (r *IntegrationConfigResponse) ExampleResponse() any {
-	return IntegrationConfigResponse{
-		Reply:    rout.Reply{Success: true},
-		Provider: "gcpscc",
-	}
-}
-
-// ExampleResponse returns a sample IntegrationOperationResponse.
-func (r *IntegrationOperationResponse) ExampleResponse() any {
-	return IntegrationOperationResponse{
-		Reply:     rout.Reply{Success: true},
-		Provider:  "gcpscc",
-		Operation: "findings.collect",
-		Status:    "ok",
-		Summary:   "Collected 5 findings from organizations/123/sources/456",
-		Details: map[string]any{
-			"totalFindings": exampleFindingsCount,
-		},
-	}
-}
-
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
 type DisconnectIntegrationRequest struct {
-	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration provider key" example:"github"`
-	// IntegrationID is the integrationid value.
-	IntegrationID string `query:"integration_id,omitempty" description:"Specific integration ID to delete"`
+	// IntegrationID is the integration ID to disconnect
+	IntegrationID string `param:"integrationID" description:"Integration ID to disconnect" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
 var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
-	Provider: "github",
+	IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
 // =========

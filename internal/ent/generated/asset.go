@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -119,6 +120,10 @@ type Asset struct {
 	Cpe string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
 	Categories []string `json:"categories,omitempty"`
+	// integration that discovered this asset, when sourced via integration ingest
+	IntegrationID string `json:"integration_id,omitempty"`
+	// time when this asset was last observed by the source integration
+	ObservedAt *models.DateTime `json:"observed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AssetQuery when eager-loading is set.
 	Edges                AssetEdges `json:"edges"`
@@ -174,15 +179,17 @@ type AssetEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// SourcePlatform holds the value of the source_platform edge.
 	SourcePlatform *Platform `json:"source_platform,omitempty"`
+	// integration that owns this asset
+	Integration *Integration `json:"integration,omitempty"`
 	// assets that this asset connects to
 	ConnectedAssets []*Asset `json:"connected_assets,omitempty"`
 	// assets that connect to this asset
 	ConnectedFrom []*Asset `json:"connected_from,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [24]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -410,10 +417,21 @@ func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 	return nil, &NotLoadedError{edge: "source_platform"}
 }
 
+// IntegrationOrErr returns the Integration value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
+	if e.Integration != nil {
+		return e.Integration, nil
+	} else if e.loadedTypes[21] {
+		return nil, &NotFoundError{label: integration.Label}
+	}
+	return nil, &NotLoadedError{edge: "integration"}
+}
+
 // ConnectedAssetsOrErr returns the ConnectedAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.ConnectedAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_assets"}
@@ -422,7 +440,7 @@ func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
 // ConnectedFromOrErr returns the ConnectedFrom value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedFromOrErr() ([]*Asset, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.ConnectedFrom, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_from"}
@@ -433,7 +451,7 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case asset.FieldPurchaseDate:
+		case asset.FieldPurchaseDate, asset.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case asset.FieldTags, asset.FieldCategories:
 			values[i] = new([]byte)
@@ -441,7 +459,7 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case asset.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldInternalOwner, asset.FieldInternalOwnerUserID, asset.FieldInternalOwnerGroupID, asset.FieldAssetSubtypeName, asset.FieldAssetSubtypeID, asset.FieldAssetDataClassificationName, asset.FieldAssetDataClassificationID, asset.FieldEnvironmentName, asset.FieldEnvironmentID, asset.FieldScopeName, asset.FieldScopeID, asset.FieldAccessModelName, asset.FieldAccessModelID, asset.FieldEncryptionStatusName, asset.FieldEncryptionStatusID, asset.FieldSecurityTierName, asset.FieldSecurityTierID, asset.FieldCriticalityName, asset.FieldCriticalityID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDisplayName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldPhysicalLocation, asset.FieldRegion, asset.FieldSourceType, asset.FieldSourcePlatformID, asset.FieldSourceIdentifier, asset.FieldCostCenter, asset.FieldCpe:
+		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldInternalOwner, asset.FieldInternalOwnerUserID, asset.FieldInternalOwnerGroupID, asset.FieldAssetSubtypeName, asset.FieldAssetSubtypeID, asset.FieldAssetDataClassificationName, asset.FieldAssetDataClassificationID, asset.FieldEnvironmentName, asset.FieldEnvironmentID, asset.FieldScopeName, asset.FieldScopeID, asset.FieldAccessModelName, asset.FieldAccessModelID, asset.FieldEncryptionStatusName, asset.FieldEncryptionStatusID, asset.FieldSecurityTierName, asset.FieldSecurityTierID, asset.FieldCriticalityName, asset.FieldCriticalityID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDisplayName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldPhysicalLocation, asset.FieldRegion, asset.FieldSourceType, asset.FieldSourcePlatformID, asset.FieldSourceIdentifier, asset.FieldCostCenter, asset.FieldCpe, asset.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case asset.FieldCreatedAt, asset.FieldUpdatedAt, asset.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -765,6 +783,19 @@ func (_m *Asset) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field categories: %w", err)
 				}
 			}
+		case asset.FieldIntegrationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationID = value.String
+			}
+		case asset.FieldObservedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
+			} else if value.Valid {
+				_m.ObservedAt = new(models.DateTime)
+				*_m.ObservedAt = *value.S.(*models.DateTime)
+			}
 		case asset.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_assets", values[i])
@@ -916,6 +947,11 @@ func (_m *Asset) QueryControls() *ControlQuery {
 // QuerySourcePlatform queries the "source_platform" edge of the Asset entity.
 func (_m *Asset) QuerySourcePlatform() *PlatformQuery {
 	return NewAssetClient(_m.config).QuerySourcePlatform(_m)
+}
+
+// QueryIntegration queries the "integration" edge of the Asset entity.
+func (_m *Asset) QueryIntegration() *IntegrationQuery {
+	return NewAssetClient(_m.config).QueryIntegration(_m)
 }
 
 // QueryConnectedAssets queries the "connected_assets" edge of the Asset entity.
@@ -1097,6 +1133,14 @@ func (_m *Asset) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("categories=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Categories))
+	builder.WriteString(", ")
+	builder.WriteString("integration_id=")
+	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	if v := _m.ObservedAt; v != nil {
+		builder.WriteString("observed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

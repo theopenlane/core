@@ -278,7 +278,7 @@ func TestMutationCreateIdentityHolder(t *testing.T) {
 
 			// defaults
 			if tc.request.IdentityHolderType == nil {
-				assert.Check(t, is.Equal(enums.IdentityHolderTypeEmployee, ih.IdentityHolderType))
+				assert.Check(t, is.Equal(enums.IdentityHolderTypeUnspecified, ih.IdentityHolderType))
 			} else {
 				assert.Check(t, is.Equal(*tc.request.IdentityHolderType, ih.IdentityHolderType))
 			}

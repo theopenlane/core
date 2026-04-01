@@ -3021,6 +3021,25 @@ func (c *AssetClient) QuerySourcePlatform(_m *Asset) *PlatformQuery {
 	return query
 }
 
+// QueryIntegration queries the integration edge of a Asset.
+func (c *AssetClient) QueryIntegration(_m *Asset) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, asset.IntegrationTable, asset.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryConnectedAssets queries the connected_assets edge of a Asset.
 func (c *AssetClient) QueryConnectedAssets(_m *Asset) *AssetQuery {
 	query := (&AssetClient{config: c.config}).Query()
@@ -14937,6 +14956,25 @@ func (c *IntegrationClient) QueryActionPlans(_m *Integration) *ActionPlanQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.IntegrationActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Integration.
+func (c *IntegrationClient) QueryAssets(_m *Integration) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.AssetsTable, integration.AssetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

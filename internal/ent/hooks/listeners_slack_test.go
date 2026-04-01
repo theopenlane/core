@@ -18,6 +18,7 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/slacknotify"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -39,7 +40,7 @@ func TestHandleUserMutationGalaSendsSlack(t *testing.T) {
 	recorder := newSlackWebhookRecorder(t)
 	defer recorder.Close()
 
-	setSlackConfigForTest(t, SlackConfig{WebhookURL: recorder.URL()})
+	setSlackConfigForTest(t, slacknotify.SlackConfig{WebhookURL: recorder.URL()})
 
 	handlerContext := gala.HandlerContext{
 		Context: context.Background(),
@@ -65,7 +66,7 @@ func TestHandleSubscriberMutationGalaHeaderFallback(t *testing.T) {
 	recorder := newSlackWebhookRecorder(t)
 	defer recorder.Close()
 
-	setSlackConfigForTest(t, SlackConfig{WebhookURL: recorder.URL()})
+	setSlackConfigForTest(t, slacknotify.SlackConfig{WebhookURL: recorder.URL()})
 
 	handlerContext := gala.HandlerContext{
 		Context: context.Background(),
@@ -93,7 +94,7 @@ func TestHandleUserMutationGalaUsesTemplateOverride(t *testing.T) {
 	defer recorder.Close()
 
 	customTemplatePath := writeSlackTemplateFile(t, "Custom user: {{.Email}}")
-	setSlackConfigForTest(t, SlackConfig{
+	setSlackConfigForTest(t, slacknotify.SlackConfig{
 		WebhookURL:         recorder.URL(),
 		NewUserMessageFile: customTemplatePath,
 	})
@@ -117,11 +118,11 @@ func TestHandleUserMutationGalaUsesTemplateOverride(t *testing.T) {
 
 // TestSlackNotificationsEnabled verifies webhook configuration detection.
 func TestSlackNotificationsEnabled(t *testing.T) {
-	setSlackConfigForTest(t, SlackConfig{})
-	assert.False(t, SlackNotificationsEnabled())
+	setSlackConfigForTest(t, slacknotify.SlackConfig{})
+	assert.False(t, slacknotify.NotificationsEnabled())
 
-	setSlackConfigForTest(t, SlackConfig{WebhookURL: "https://example.com/hook"})
-	assert.True(t, SlackNotificationsEnabled())
+	setSlackConfigForTest(t, slacknotify.SlackConfig{WebhookURL: "https://example.com/hook"})
+	assert.True(t, slacknotify.NotificationsEnabled())
 }
 
 // TestSendSlackNotification verifies plain-text Slack notifications are posted.
@@ -129,21 +130,21 @@ func TestSendSlackNotification(t *testing.T) {
 	recorder := newSlackWebhookRecorder(t)
 	defer recorder.Close()
 
-	setSlackConfigForTest(t, SlackConfig{WebhookURL: recorder.URL()})
+	setSlackConfigForTest(t, slacknotify.SlackConfig{WebhookURL: recorder.URL()})
 
-	require.NoError(t, SendSlackNotification(context.Background(), "github app installed"))
+	require.NoError(t, slacknotify.SendNotification(context.Background(), "github app installed"))
 	require.Len(t, recorder.Bodies(), 1)
 	assert.Contains(t, recorder.Bodies()[0], "github app installed")
 }
 
 // setSlackConfigForTest sets Slack config for a test and restores the previous value.
-func setSlackConfigForTest(t *testing.T, cfg SlackConfig) {
+func setSlackConfigForTest(t *testing.T, cfg slacknotify.SlackConfig) {
 	t.Helper()
 
-	previous := slackCfg
-	SetSlackConfig(cfg)
+	previous := slacknotify.GetConfig()
+	slacknotify.SetConfig(cfg)
 	t.Cleanup(func() {
-		SetSlackConfig(previous)
+		slacknotify.SetConfig(previous)
 	})
 }
 

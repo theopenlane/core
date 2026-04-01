@@ -57,10 +57,7 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 		return true, nil
 	}
 
-	userID := ""
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-		userID = caller.SubjectID
-	}
+	userID, _ := auth.GetSubjectIDFromContext(ctx)
 
 	vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
 
@@ -186,9 +183,7 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 		query = query.Where(stringArrayContains(workflowdefinition.FieldTriggerOperations, eventType))
 	}
 
-	allChanges := make([]string, 0, len(changedFields)+len(changedEdges))
-	allChanges = append(allChanges, changedFields...)
-	allChanges = append(allChanges, changedEdges...)
+	allChanges := lo.Flatten([][]string{changedFields, changedEdges})
 	if len(allChanges) > 0 {
 		fieldPredicates := lo.Map(allChanges, func(field string, _ int) predicate.WorkflowDefinition {
 			return stringArrayContains(workflowdefinition.FieldTriggerFields, field)
@@ -222,6 +217,19 @@ func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observabili
 		return false
 	}
 
+	// Merge once; same for every trigger evaluated in this call.
+	allChangedFields := lo.Flatten([][]string{changedFields, changedEdges})
+
+	// Build CEL variables lazily; same for every trigger expression in this call.
+	var celVars map[string]any
+	getCELVars := func() map[string]any {
+		if celVars == nil {
+			userID, _ := auth.GetSubjectIDFromContext(ctx)
+			celVars = workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
+		}
+		return celVars
+	}
+
 	return lo.SomeBy(triggers, func(trigger models.WorkflowTrigger) bool {
 		if trigger.Operation != eventType {
 			return false
@@ -233,13 +241,7 @@ func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observabili
 
 		// Evaluate trigger expression if present
 		if trigger.Expression != "" {
-			userID := ""
-			if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-				userID = caller.SubjectID
-			}
-			vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
-
-			result, err := e.celEvaluator.Evaluate(ctx, trigger.Expression, vars)
+			result, err := e.celEvaluator.Evaluate(ctx, trigger.Expression, getCELVars())
 			if err != nil {
 				scope.Warn(err, observability.Fields{
 					workflowinstance.FieldWorkflowDefinitionID: def.ID,
@@ -258,14 +260,7 @@ func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observabili
 			return true
 		}
 
-		// Check if any trigger field or edge is in the changed fields or edges
-		allTriggerFields := make([]string, 0, len(trigger.Fields)+len(trigger.Edges))
-		allTriggerFields = append(allTriggerFields, trigger.Fields...)
-		allTriggerFields = append(allTriggerFields, trigger.Edges...)
-		allChangedFields := make([]string, 0, len(changedFields)+len(changedEdges))
-		allChangedFields = append(allChangedFields, changedFields...)
-		allChangedFields = append(allChangedFields, changedEdges...)
-		return len(lo.Intersect(allTriggerFields, allChangedFields)) > 0
+		return len(lo.Intersect(lo.Flatten([][]string{trigger.Fields, trigger.Edges}), allChangedFields)) > 0
 	})
 }
 
@@ -323,7 +318,7 @@ func (l *WorkflowListeners) reEvaluateNotifyActions(scope *observability.Scope, 
 
 	// Persist newly executed notification keys to instance context
 	if len(newlyExecuted) > 0 {
-		l.trackExecutedNotifications(scope, instance.ID, newlyExecuted)
+		l.trackExecutedNotifications(scope, instance, newlyExecuted)
 	}
 }
 

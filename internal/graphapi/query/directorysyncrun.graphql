@@ -5,6 +5,7 @@ mutation CreateBulkCSVDirectorySyncRun ($input: Upload!) {
 			createdAt
 			createdBy
 			deltaCount
+			directoryInstanceID
 			displayID
 			environmentID
 			environmentName
@@ -33,6 +34,7 @@ mutation CreateBulkDirectorySyncRun ($input: [CreateDirectorySyncRunInput!]) {
 			createdAt
 			createdBy
 			deltaCount
+			directoryInstanceID
 			displayID
 			environmentID
 			environmentName
@@ -61,6 +63,7 @@ mutation CreateDirectorySyncRun ($input: CreateDirectorySyncRunInput!) {
 			createdAt
 			createdBy
 			deltaCount
+			directoryInstanceID
 			displayID
 			environmentID
 			environmentName
@@ -125,6 +128,7 @@ query GetDirectorySyncRunByID ($directorySyncRunId: ID!) {
 		createdAt
 		createdBy
 		deltaCount
+		directoryInstanceID
 		displayID
 		environmentID
 		environmentName
@@ -184,6 +188,7 @@ mutation UpdateDirectorySyncRun ($updateDirectorySyncRunId: ID!, $input: UpdateD
 			createdAt
 			createdBy
 			deltaCount
+			directoryInstanceID
 			displayID
 			environmentID
 			environmentName

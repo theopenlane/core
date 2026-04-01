@@ -1498,6 +1498,16 @@ func ConfigNotNil() predicate.Integration {
 	return predicate.Integration(sql.FieldNotNull(FieldConfig))
 }
 
+// InstallationMetadataIsNil applies the IsNil predicate on the "installation_metadata" field.
+func InstallationMetadataIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldInstallationMetadata))
+}
+
+// InstallationMetadataNotNil applies the NotNil predicate on the "installation_metadata" field.
+func InstallationMetadataNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldInstallationMetadata))
+}
+
 // ProviderStateIsNil applies the IsNil predicate on the "provider_state" field.
 func ProviderStateIsNil() predicate.Integration {
 	return predicate.Integration(sql.FieldIsNull(FieldProviderState))
@@ -2198,6 +2208,35 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Integration {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.IntegrationActionPlans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newAssetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

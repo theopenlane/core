@@ -94,6 +94,12 @@ func (NotificationTemplate) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration associated with this template").
 			Optional(),
+		field.Strings("destinations").
+			Comment("optional explicit provider destination identifiers for this template, such as Slack channel IDs").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.String("workflow_definition_id").
 			Comment("workflow definition associated with this template").
 			Optional(),

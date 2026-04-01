@@ -831,6 +831,34 @@ func (_c *EntityCreate) SetNillableLogoFileID(v *string) *EntityCreate {
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *EntityCreate) SetExternalID(v string) *EntityCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableExternalID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *EntityCreate) SetObservedAt(v models.DateTime) *EntityCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableObservedAt(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EntityCreate) SetID(v string) *EntityCreate {
 	_c.mutation.SetID(v)
@@ -1591,6 +1619,14 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.VendorMetadata(); ok {
 		_spec.SetField(entity.FieldVendorMetadata, field.TypeJSON, value)
 		_node.VendorMetadata = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(entity.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

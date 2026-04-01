@@ -66,6 +66,8 @@ type NotificationTemplateHistory struct {
 	TopicPattern string `json:"topic_pattern,omitempty"`
 	// integration associated with this template
 	IntegrationID string `json:"integration_id,omitempty"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations []string `json:"destinations,omitempty"`
 	// workflow definition associated with this template
 	WorkflowDefinitionID string `json:"workflow_definition_id,omitempty"`
 	// optional email template used for branded email delivery
@@ -100,7 +102,7 @@ func (*NotificationTemplateHistory) scanValues(columns []string) ([]any, error) 
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case notificationtemplatehistory.FieldBlocks, notificationtemplatehistory.FieldJsonconfig, notificationtemplatehistory.FieldUischema, notificationtemplatehistory.FieldMetadata, notificationtemplatehistory.FieldDefaults:
+		case notificationtemplatehistory.FieldDestinations, notificationtemplatehistory.FieldBlocks, notificationtemplatehistory.FieldJsonconfig, notificationtemplatehistory.FieldUischema, notificationtemplatehistory.FieldMetadata, notificationtemplatehistory.FieldDefaults:
 			values[i] = new([]byte)
 		case notificationtemplatehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -266,6 +268,14 @@ func (_m *NotificationTemplateHistory) assignValues(columns []string, values []a
 				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationID = value.String
+			}
+		case notificationtemplatehistory.FieldDestinations:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field destinations", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Destinations); err != nil {
+					return fmt.Errorf("unmarshal field destinations: %w", err)
+				}
 			}
 		case notificationtemplatehistory.FieldWorkflowDefinitionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -460,6 +470,9 @@ func (_m *NotificationTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	builder.WriteString("destinations=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Destinations))
 	builder.WriteString(", ")
 	builder.WriteString("workflow_definition_id=")
 	builder.WriteString(_m.WorkflowDefinitionID)

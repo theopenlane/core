@@ -185,6 +185,7 @@ query GetEntityByID ($entityId: ID!) {
 		entityTypeID
 		environmentID
 		environmentName
+		externalID
 		hasSoc2
 		id
 		internalNotes
@@ -199,6 +200,7 @@ query GetEntityByID ($entityId: ID!) {
 		mfaSupported
 		name
 		nextReviewAt
+		observedAt
 		ownerID
 		providedServices
 		renewalRisk
@@ -275,6 +277,7 @@ mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
 			entityTypeID
 			environmentID
 			environmentName
+			externalID
 			hasSoc2
 			id
 			internalNotes
@@ -289,6 +292,7 @@ mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
 			mfaSupported
 			name
 			nextReviewAt
+			observedAt
 			ownerID
 			providedServices
 			renewalRisk

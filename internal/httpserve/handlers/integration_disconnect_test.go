@@ -3,56 +3,59 @@ package handlers_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/common/integrations/types"
-	credentialmodels "github.com/theopenlane/core/common/models"
-	models "github.com/theopenlane/core/common/openapi"
+	openmodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
+
+const disconnectTestDefinitionID = "def_01K0TESTDISC0000000000001"
 
 func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 	t := suite.T()
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegration"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", op, suite.h.DisconnectIntegration)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
+	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
 
-	integrationID := suite.createTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, types.ProviderType("github"))
+	integrationID := suite.createTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, disconnectTestDefinitionID)
 
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/v1/integrations/github?integration_id=%s", integrationID), nil)
+	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/"+integrationID, nil)
 	req = req.WithContext(testUser.UserCtx)
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.DeleteIntegrationResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	var resp openmodels.DeleteIntegrationResponse
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, integrationID, resp.DeletedID)
-	assert.Contains(t, resp.Message, "github")
+	assert.Contains(t, resp.Message, "GitHub")
 
 	count, err := suite.db.Integration.Query().
 		Where(
-			integration.OwnerID(testUser.OrganizationID),
-			integration.Kind("github"),
+			integration.OwnerIDEQ(testUser.OrganizationID),
+			integration.DefinitionIDEQ(disconnectTestDefinitionID),
 		).
 		Count(testUser.UserCtx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Zero(t, count)
 }
 
@@ -61,62 +64,39 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationNotFound"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", op, suite.h.DisconnectIntegration)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
 
-	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/github", nil)
+	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/01HXYZ1234567890ABCDEFGHJ", nil)
 	req = req.WithContext(testUser.UserCtx)
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusNotFound, rec.Code)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
-func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.Context, orgID string, provider types.ProviderType) string {
+// createTestIntegration creates an integration record in the DB and saves a test credential
+func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	payload, err := types.NewCredentialBuilder(provider).
-		With(
-			types.WithCredentialKind(types.CredentialKindMetadata),
-			types.WithCredentialSet(credentialmodels.CredentialSet{
-				ProviderData: map[string]any{"token": "secret"},
-			}),
-		).Build()
-	require.NoError(t, err)
+	rec, err := suite.db.Integration.Create().
+		SetOwnerID(orgID).
+		SetName(definitionID).
+		SetDefinitionID(definitionID).
+		Save(ctx)
+	assert.NoError(t, err)
 
-	_, err = suite.h.IntegrationStore.SaveCredential(ctx, orgID, payload)
-	require.NoError(t, err)
+	credential := types.CredentialSet{
+		Data: json.RawMessage(`{"token":"secret"}`),
+	}
 
-	record := suite.db.Integration.Query().
-		Where(
-			integration.OwnerID(orgID),
-			integration.Kind(string(provider)),
-		).
-		OnlyX(ctx)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, githubTestCredentialRef, &credential, nil)
+	assert.NoError(t, err)
 
-	return record.ID
-}
-
-func (suite *HandlerTestSuite) TestDisconnectIntegrationInvalidProvider() {
-	t := suite.T()
-
-	op := openapi3.NewOperation()
-	op.OperationID = "DisconnectIntegrationInvalidProvider"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
-
-	ctx := echocontext.NewTestEchoContext().Request().Context()
-	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
-
-	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/invalid_provider", nil)
-	req = req.WithContext(testUser.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	require.True(t, rec.Code == http.StatusBadRequest || rec.Code == http.StatusNotFound)
+	return rec.ID
 }
 
 func (suite *HandlerTestSuite) TestDisconnectIntegrationUnauthorized() {
@@ -124,59 +104,12 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationUnauthorized() {
 
 	op := openapi3.NewOperation()
 	op.OperationID = "DisconnectIntegrationUnauthorized"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", op, suite.h.DisconnectIntegration)
 
-	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/github", nil)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
-}
-
-func (suite *HandlerTestSuite) TestDisconnectIntegrationWithExplicitID() {
-	t := suite.T()
-
-	op := openapi3.NewOperation()
-	op.OperationID = "DisconnectIntegrationWithID"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
-
-	ctx := echocontext.NewTestEchoContext().Request().Context()
-	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
-
-	integrationID := suite.createTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, types.ProviderType("github"))
-
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/v1/integrations/github?integration_id=%s", integrationID), nil)
-	req = req.WithContext(testUser.UserCtx)
+	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/"+disconnectTestDefinitionID, nil)
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	var resp models.DeleteIntegrationResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.True(t, resp.Success)
-	assert.Equal(t, integrationID, resp.DeletedID)
-}
-
-func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFoundWithID() {
-	t := suite.T()
-
-	op := openapi3.NewOperation()
-	op.OperationID = "DisconnectIntegrationNotFoundWithID"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
-
-	ctx := echocontext.NewTestEchoContext().Request().Context()
-	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
-
-	nonExistentID := "01HXYZ1234567890ABCDEFGHJ"
-
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/v1/integrations/github?integration_id=%s", nonExistentID), nil)
-	req = req.WithContext(testUser.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	require.Equal(t, http.StatusNotFound, rec.Code)
+	assert.Equal(t, http.StatusUnauthorized, rec.Code)
 }

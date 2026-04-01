@@ -1,0 +1,201 @@
+package handlers
+
+import (
+	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"io"
+	"net/http"
+	"strings"
+
+	"github.com/samber/lo"
+	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
+)
+
+const (
+	// integrationWebhookSignatureHeader is the HTTP header carrying the HMAC-SHA256 webhook signature
+	integrationWebhookSignatureHeader = "X-Webhook-Signature-256"
+	// maxIntegrationWebhookBodyBytes defines the maximum size of webhook payloads to prevent hex0rz
+	maxIntegrationWebhookBodyBytes = int64(1024 * 1024)
+)
+
+// IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event.
+// The endpoint is addressed by the stable endpoint_id generated at webhook creation time,
+// which survives integration record replacement so external callers are not disrupted
+func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
+	endpointID := ctx.PathParam("endpointID")
+	req := ctx.Request()
+
+	payload, err := readIntegrationWebhookPayload(ctx)
+	if err != nil {
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
+	// Webhook deliveries are unauthenticated — set privacy bypass and a synthetic caller
+	// so that ent queries succeed against privacy-policy-protected tables
+	webhookCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
+
+	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(webhookCtx, endpointID)
+	if err != nil {
+		if !ent.IsNotFound(err) {
+			// not finding a record vs. failing to query are different so branching that
+			logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to query integration webhook")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+	}
+
+	// Verify the webhook signature using the persisted secret token before any further processing
+	if err := verifyWebhookHMACSHA256(req, payload, persistedWebhook.SecretToken); err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("webhook signature verification failed")
+
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
+	integration, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, integrationsruntime.IntegrationLookup{IntegrationID: persistedWebhook.IntegrationID})
+	if err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve integration")
+
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+	}
+
+	// Re-set the caller now that the owning organization is known
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
+
+	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(integration.DefinitionID, persistedWebhook.Name)
+	if err != nil {
+		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
+	}
+
+	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, integration, webhookReg, persistedWebhook, payload, false)
+}
+
+// readIntegrationWebhookPayload reads the request body up to a defined maximum size and returns an error if the body is empty or exceeds the limit
+func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
+	payload, err := io.ReadAll(http.MaxBytesReader(ctx.Response().Writer, ctx.Request().Body, maxIntegrationWebhookBodyBytes))
+	if err != nil {
+		return nil, err
+	}
+
+	if len(payload) == 0 {
+		return nil, errPayloadEmpty
+	}
+
+	return payload, nil
+}
+
+// verifyWebhookHMACSHA256 validates an inbound webhook request header X-Webhook-Signature-256 header using HMAC-SHA256 (format is "sha256=<hex-encoded HMAC>")
+func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) error {
+	if secret == "" {
+		return errIntegrationWebhookSecretMissing
+	}
+
+	signature := req.Header.Get(integrationWebhookSignatureHeader)
+	if signature == "" {
+		return errIntegrationWebhookSignatureMissing
+	}
+
+	sigHex, found := strings.CutPrefix(signature, "sha256=")
+	if !found {
+		return errIntegrationWebhookSignatureMismatch
+	}
+
+	sigBytes, err := hex.DecodeString(sigHex)
+	if err != nil {
+		return errIntegrationWebhookSignatureMismatch
+	}
+
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write(payload)
+
+	if !hmac.Equal(sigBytes, mac.Sum(nil)) {
+		return errIntegrationWebhookSignatureMismatch
+	}
+
+	return nil
+}
+
+// handleResolvedIntegrationWebhook processes a webhook with a known integration and webhook registration
+func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, integration *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
+	requestCtx = logx.WithFields(requestCtx, logx.LogFields{
+		"integration_id": integration.ID,
+		"webhook":        webhook.Name,
+	})
+
+	// this actually isn't skipping verification it's delegating to the app-level handler so it's preventing dual verification of the same payload
+	if !skipVerify && webhook.Verify != nil {
+		if err := webhook.Verify(types.WebhookInboundRequest{
+			Integration: integration,
+			Webhook:     persistedWebhook,
+			Request:     ctx.Request(),
+			Payload:     payload,
+		}); err != nil {
+			return h.BadRequest(ctx, err, openapiCtx)
+		}
+	}
+
+	if webhook.Event == nil {
+		logx.FromContext(requestCtx).Error().Msg("webhook registration missing event resolver")
+
+		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
+	}
+
+	event, err := webhook.Event(types.WebhookInboundRequest{
+		Integration: integration,
+		Webhook:     persistedWebhook,
+		Request:     ctx.Request(),
+		Payload:     payload,
+	})
+	if err != nil {
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
+	if event.Name == "" || len(persistedWebhook.AllowedEvents) > 0 && !lo.Contains(persistedWebhook.AllowedEvents, event.Name) {
+		logx.FromContext(requestCtx).Debug().Str("event", event.Name).Msg("webhook event not in allowed list, skipped")
+		// event name is our contract for what events we accept; not having one means we return early with 200 to not trigger retries (even types unsupported)
+		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+	}
+
+	duplicate, err := h.IntegrationsRuntime.PrepareWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID)
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("delivery_id", event.DeliveryID).Msg("failed to register webhook delivery")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if duplicate {
+		logx.FromContext(requestCtx).Debug().Str("delivery_id", event.DeliveryID).Msg("duplicate webhook delivery skipped")
+
+		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.DispatchWebhookEvent(requestCtx, integration, webhook.Name, event); err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to dispatch webhook event")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "accepted", nil); err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to finalize webhook delivery")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+}

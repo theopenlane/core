@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
@@ -665,6 +666,34 @@ func (_c *AssetCreate) SetCategories(v []string) *AssetCreate {
 	return _c
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_c *AssetCreate) SetIntegrationID(v string) *AssetCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableIntegrationID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *AssetCreate) SetObservedAt(v models.DateTime) *AssetCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableObservedAt(v *models.DateTime) *AssetCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *AssetCreate) SetID(v string) *AssetCreate {
 	_c.mutation.SetID(v)
@@ -872,6 +901,11 @@ func (_c *AssetCreate) AddControls(v ...*Control) *AssetCreate {
 // SetSourcePlatform sets the "source_platform" edge to the Platform entity.
 func (_c *AssetCreate) SetSourcePlatform(v *Platform) *AssetCreate {
 	return _c.SetSourcePlatformID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_c *AssetCreate) SetIntegration(v *Integration) *AssetCreate {
+	return _c.SetIntegrationID(v.ID)
 }
 
 // AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
@@ -1196,6 +1230,10 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 		_node.Categories = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(asset.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1564,6 +1602,24 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.SourcePlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IntegrationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ConnectedAssetsIDs(); len(nodes) > 0 {

@@ -132,6 +132,7 @@ func (Asset) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("source_identifier"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			),
 		field.String("cost_center").
 			Comment("cost center associated with the asset").
@@ -160,6 +161,21 @@ func (Asset) Fields() []ent.Field {
 		field.Strings("categories").
 			Comment("the categories of the asset, e.g. web server, database, etc").
 			Optional(),
+		field.String("integration_id").
+			Comment("integration that discovered this asset, when sourced via integration ingest").
+			Optional().
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
+		field.Time("observed_at").
+			Comment("time when this asset was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 	}
 }
 
@@ -209,6 +225,13 @@ func (a Asset) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Platform{}.Name()),
 			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: a,
+			edgeSchema: Integration{},
+			field:      "integration_id",
+			immutable:  true,
+			comment:    "integration that owns this asset",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: a,
@@ -265,6 +288,9 @@ func (a Asset) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("inventory-item"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			Exclude("source_platform_id"),
 	}
 }
 

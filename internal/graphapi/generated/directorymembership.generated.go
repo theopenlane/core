@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -92,6 +94,10 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
 			case "lastSeenAt":
 				return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
 			case "lastConfirmedRunID":
@@ -175,6 +181,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -189,6 +197,10 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
 			case "lastSeenAt":
 				return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
 			case "lastConfirmedRunID":
@@ -301,6 +313,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -315,6 +329,10 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
 			case "lastSeenAt":
 				return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
 			case "lastConfirmedRunID":

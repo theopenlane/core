@@ -50,6 +50,27 @@ func (Risk) PluralName() string {
 // Fields returns risk fields.
 func (Risk) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_id").
+			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
+			Optional().
+			Annotations(
+				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
+		field.String("integration_id").
+			Comment("integration that surfaced this risk, when sourced via integration ingest").
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
+		field.Time("observed_at").
+			Comment("time when this risk was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 		field.String("external_uuid").
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
@@ -71,6 +92,7 @@ func (Risk) Fields() []ent.Field {
 					oscalgen.OSCALFieldRoleTitle,
 					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 				),
+				entx.IntegrationMappingField().UpsertKey(),
 			).
 			Comment("the name of the risk"),
 		field.Enum("status").
@@ -282,6 +304,9 @@ func (r Risk) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("risk"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			Exclude("stakeholder_id", "delegate_id"),
 	}
 }
 

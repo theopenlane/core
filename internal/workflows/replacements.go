@@ -18,12 +18,12 @@ func BuildObjectReplacements(obj *Object) map[string]string {
 		"object_type": obj.Type.String(),
 	}
 
-	node := obj.Node
-	if node == nil {
-		node = obj.CELValue()
+	nodeValue := any(obj.Node)
+	if nodeValue == nil {
+		nodeValue = obj.CELValue()
 	}
 
-	payload, err := jsonx.ToMap(node)
+	payload, err := jsonx.ToMap(nodeValue)
 	if err != nil {
 		return replacements
 	}

@@ -62,6 +62,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				entx.IntegrationMappingField().UpsertKey(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -269,6 +270,21 @@ func (Entity) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
+		field.String("external_id").
+			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
+			Optional().
+			Annotations(
+				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
+		field.Time("observed_at").
+			Comment("time when this entity was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 	}
 }
 
@@ -394,6 +410,9 @@ func (e Entity) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			Exclude("entity_type_id", "linked_asset_ids"),
 	}
 }
 

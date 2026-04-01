@@ -2,45 +2,35 @@ package route
 
 import (
 	"net/http"
-	"strings"
-
-	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers/scim"
 )
 
-// registerSCIMRoutes sets up SCIM routes
+const (
+	// scimRoutePrefix is the URL prefix stripped before dispatching to the SCIM library
+	scimRoutePrefix = "/v1/integrations/scim"
+)
+
+// registerSCIMRoutes sets up SCIM routes on the public endpoint using per-installation
+// Bearer token authentication resolved through the integration webhook infrastructure
 func registerSCIMRoutes(router *Router) error {
-	server, err := scim.NewSCIMServer()
+	server, err := scim.NewSCIMServer(router.Handler.IntegrationsRuntime)
 	if err != nil {
 		return err
 	}
 
-	scimHandler := scim.WrapSCIMServerHTTPHandler(server)
+	handler := router.Handler.SCIMHandler(server, scimRoutePrefix)
 
-	handler := func(c echo.Context) error {
-		// Get the request with updated context (after middleware)
-		req := c.Request()
-
-		// Strip /scim prefix so the library sees the path it expects
-		originalPath := req.URL.Path
-		newURL := *req.URL
-		newURL.Path = strings.TrimPrefix(originalPath, "/scim")
-
-		// Create new request with updated URL path and preserved context
-		reqWithPath := req.Clone(req.Context())
-		reqWithPath.URL = &newURL
-
-		scimHandler(c.Response(), reqWithPath)
-
-		return nil
+	methods := []string{
+		http.MethodGet,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodPatch,
+		http.MethodDelete,
 	}
 
-	grp := router.Base()
-
-	methods := []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete}
-
-	grp.Match(methods, "/scim/*", handler, *authenticatedEndpoint...)
+	grp := router.VersionOne()
+	grp.Match(methods, "/integrations/scim/:endpointID/*", handler, *unauthenticatedEndpoint...)
 
 	return nil
 }

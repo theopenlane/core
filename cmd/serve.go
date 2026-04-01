@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/internal/slacknotify"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -77,7 +78,7 @@ func serve(ctx context.Context) error {
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
 
-	hooks.SetSlackConfig(hooks.SlackConfig{
+	slacknotify.SetConfig(slacknotify.SlackConfig{
 		WebhookURL:               so.Config.Settings.Slack.WebhookURL,
 		NewSubscriberMessageFile: so.Config.Settings.Slack.NewSubscriberMessageFile,
 		NewUserMessageFile:       so.Config.Settings.Slack.NewUserMessageFile,
@@ -285,11 +286,7 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationStore(dbClient),
-		serveropts.WithIntegrationBroker(),
-		serveropts.WithIntegrationClients(),
-		serveropts.WithIntegrationOperations(),
-		serveropts.WithIntegrationActivation(),
+		serveropts.WithIntegrationsRuntime(dbClient),
 	)
 
 	// add session manager

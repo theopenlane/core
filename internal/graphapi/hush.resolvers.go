@@ -20,10 +20,16 @@ import (
 
 // CreateHush is the resolver for the createHush field.
 func (r *mutationResolver) CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error) {
+	if err := validateCreateHushInput(input); err != nil {
+		return nil, err
+	}
+
 	res, err := withTransactionalMutation(ctx).Hush.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "hush"})
 	}
+
+	redactHushCredentialSet(res)
 
 	return &model.HushCreatePayload{
 		Hush: res,
@@ -34,6 +40,14 @@ func (r *mutationResolver) CreateHush(ctx context.Context, input generated.Creat
 func (r *mutationResolver) CreateBulkHush(ctx context.Context, input []*generated.CreateHushInput) (*model.HushBulkCreatePayload, error) {
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+	for _, entry := range input {
+		if entry == nil {
+			return nil, rout.NewMissingRequiredFieldError("input")
+		}
+		if err := validateCreateHushInput(*entry); err != nil {
+			return nil, err
+		}
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -80,6 +94,9 @@ func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.
 
 	inputs := make([]*generated.CreateHushInput, 0, len(data))
 	for i := range data {
+		if err := validateCreateHushInput(data[i].Input); err != nil {
+			return nil, err
+		}
 		inputs = append(inputs, &data[i].Input)
 	}
 
@@ -91,12 +108,19 @@ func (r *mutationResolver) UpdateBulkHush(ctx context.Context, ids []string, inp
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
+	if err := validateUpdateHushInput(input); err != nil {
+		return nil, err
+	}
 
 	return r.bulkUpdateHush(ctx, ids, input)
 }
 
 // UpdateHush is the resolver for the updateHush field.
 func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error) {
+	if err := validateUpdateHushInput(input); err != nil {
+		return nil, err
+	}
+
 	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
@@ -109,6 +133,8 @@ func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input gene
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
 	}
+
+	redactHushCredentialSet(res)
 
 	return &model.HushUpdatePayload{
 		Hush: res,
@@ -155,6 +181,14 @@ func (r *mutationResolver) UpdateBulkCSVHush(ctx context.Context, input graphql.
 	if err := resolveCSVReferencesForSchema(ctx, "Hush", data); err != nil {
 		return nil, err
 	}
+	for _, row := range data {
+		if row == nil {
+			continue
+		}
+		if err := validateUpdateHushInput(row.Input); err != nil {
+			return nil, err
+		}
+	}
 
 	return r.bulkUpdateCSVHush(ctx, data)
 }
@@ -170,6 +204,8 @@ func (r *queryResolver) Hush(ctx context.Context, id string) (*generated.Hush, e
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
+
+	redactHushCredentialSet(res)
 
 	return res, nil
 }

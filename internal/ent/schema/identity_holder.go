@@ -114,7 +114,7 @@ func (IdentityHolder) Fields() []ent.Field {
 		field.Enum("identity_holder_type").
 			Comment("the classification of identity holders, such as employee or contractor").
 			GoType(enums.IdentityHolderType("")).
-			Default(enums.IdentityHolderTypeEmployee.String()).
+			Default(enums.IdentityHolderTypeUnspecified.String()).
 			Annotations(
 				entgql.OrderField("IDENTITY_HOLDER_TYPE"),
 			),

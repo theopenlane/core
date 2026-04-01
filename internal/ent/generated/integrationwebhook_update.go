@@ -374,11 +374,6 @@ func (_u *IntegrationWebhookUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.EndpointURL(); ok {
-		if err := integrationwebhook.EndpointURLValidator(v); err != nil {
-			return &ValidationError{Name: "endpoint_url", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.endpoint_url": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -441,6 +436,9 @@ func (_u *IntegrationWebhookUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integrationwebhook.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.EndpointIDCleared() {
+		_spec.ClearField(integrationwebhook.FieldEndpointID, field.TypeString)
 	}
 	if value, ok := _u.mutation.EndpointURL(); ok {
 		_spec.SetField(integrationwebhook.FieldEndpointURL, field.TypeString, value)
@@ -903,11 +901,6 @@ func (_u *IntegrationWebhookUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.status": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.EndpointURL(); ok {
-		if err := integrationwebhook.EndpointURLValidator(v); err != nil {
-			return &ValidationError{Name: "endpoint_url", err: fmt.Errorf(`generated: validator failed for field "IntegrationWebhook.endpoint_url": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -987,6 +980,9 @@ func (_u *IntegrationWebhookUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integrationwebhook.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.EndpointIDCleared() {
+		_spec.ClearField(integrationwebhook.FieldEndpointID, field.TypeString)
 	}
 	if value, ok := _u.mutation.EndpointURL(); ok {
 		_spec.SetField(integrationwebhook.FieldEndpointURL, field.TypeString, value)

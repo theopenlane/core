@@ -146,6 +146,10 @@ const (
 	FieldVendorMetadata = "vendor_metadata"
 	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
 	FieldLogoFileID = "logo_file_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// Table holds the table name of the entityhistory in the database.
 	Table = "entity_history"
 )
@@ -216,6 +220,8 @@ var Columns = []string{
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
 	FieldLogoFileID,
+	FieldExternalID,
+	FieldObservedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -598,6 +604,16 @@ func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 // ByLogoFileID orders the results by the logo_file_id field.
 func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
 var (

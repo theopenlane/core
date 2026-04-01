@@ -260,6 +260,12 @@ func (_c *NotificationTemplateCreate) SetNillableIntegrationID(v *string) *Notif
 	return _c
 }
 
+// SetDestinations sets the "destinations" field.
+func (_c *NotificationTemplateCreate) SetDestinations(v []string) *NotificationTemplateCreate {
+	_c.mutation.SetDestinations(v)
+	return _c
+}
+
 // SetWorkflowDefinitionID sets the "workflow_definition_id" field.
 func (_c *NotificationTemplateCreate) SetWorkflowDefinitionID(v string) *NotificationTemplateCreate {
 	_c.mutation.SetWorkflowDefinitionID(v)
@@ -705,6 +711,10 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 	if value, ok := _c.mutation.TopicPattern(); ok {
 		_spec.SetField(notificationtemplate.FieldTopicPattern, field.TypeString, value)
 		_node.TopicPattern = value
+	}
+	if value, ok := _c.mutation.Destinations(); ok {
+		_spec.SetField(notificationtemplate.FieldDestinations, field.TypeJSON, value)
+		_node.Destinations = value
 	}
 	if value, ok := _c.mutation.TitleTemplate(); ok {
 		_spec.SetField(notificationtemplate.FieldTitleTemplate, field.TypeString, value)

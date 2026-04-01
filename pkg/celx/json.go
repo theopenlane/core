@@ -6,6 +6,25 @@ import (
 	structpb "google.golang.org/protobuf/types/known/structpb"
 )
 
+// BoolResult extracts a boolean value from a CEL ref.Val.
+// Returns ErrNilOutput if val is nil and ErrTypeMismatch if val is not a boolean type.
+func BoolResult(val ref.Val) (bool, error) {
+	if val == nil {
+		return false, ErrNilOutput
+	}
+
+	if val.Type() != types.BoolType {
+		return false, ErrTypeMismatch
+	}
+
+	result, ok := val.Value().(bool)
+	if !ok {
+		result = val.Equal(types.True) == types.True
+	}
+
+	return result, nil
+}
+
 // ToJSON converts a CEL value to a native JSON-compatible value
 func ToJSON(val ref.Val) (any, error) {
 	if val == nil {

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -279,6 +280,66 @@ func (_u *ContactUpdate) SetNillableStatus(v *enums.UserStatus) *ContactUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *ContactUpdate) SetExternalID(v string) *ContactUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ContactUpdate) SetNillableExternalID(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ContactUpdate) ClearExternalID() *ContactUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *ContactUpdate) SetIntegrationID(v string) *ContactUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *ContactUpdate) SetNillableIntegrationID(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *ContactUpdate) ClearIntegrationID() *ContactUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *ContactUpdate) SetObservedAt(v models.DateTime) *ContactUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *ContactUpdate) SetNillableObservedAt(v *models.DateTime) *ContactUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *ContactUpdate) ClearObservedAt() *ContactUpdate {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -611,6 +672,24 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(contact.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(contact.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(contact.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(contact.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(contact.FieldObservedAt, field.TypeTime)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1103,6 +1182,66 @@ func (_u *ContactUpdateOne) SetNillableStatus(v *enums.UserStatus) *ContactUpdat
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ContactUpdateOne) SetExternalID(v string) *ContactUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ContactUpdateOne) SetNillableExternalID(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ContactUpdateOne) ClearExternalID() *ContactUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *ContactUpdateOne) SetIntegrationID(v string) *ContactUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *ContactUpdateOne) SetNillableIntegrationID(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *ContactUpdateOne) ClearIntegrationID() *ContactUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *ContactUpdateOne) SetObservedAt(v models.DateTime) *ContactUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *ContactUpdateOne) SetNillableObservedAt(v *models.DateTime) *ContactUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *ContactUpdateOne) ClearObservedAt() *ContactUpdateOne {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ContactUpdateOne) SetOwner(v *Organization) *ContactUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1462,6 +1601,24 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(contact.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(contact.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(contact.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(contact.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(contact.FieldObservedAt, field.TypeTime)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

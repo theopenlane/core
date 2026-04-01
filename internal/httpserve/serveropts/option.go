@@ -36,7 +36,6 @@ import (
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -190,18 +189,6 @@ func WithAuth() ServerOption {
 		// add oauth providers for social login
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 
-		// add oauth providers for integrations (separate config)
-		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
-		s.Config.Handler.IntegrationGitHubApp = s.Config.Settings.IntegrationGitHubApp
-		if (s.Config.Settings.IntegrationOauthProvider.Enabled || s.Config.Settings.IntegrationGitHubApp.Enabled) && s.Config.Handler.IntegrationRegistry == nil {
-			integrationRegistry, err := registry.NewRegistry(context.Background(), s.Config.Settings.IntegrationProviders)
-			if err != nil {
-				log.Panic().Err(err).Msg("failed to build integration provider registry")
-			}
-
-			s.Config.Handler.IntegrationRegistry = integrationRegistry
-		}
-
 		// add auth middleware
 		opts := getAuthOptions(s)
 
@@ -287,6 +274,10 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
 			WithAuthOptions(getAuthOptions(s)...).
 			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)
+
+		if rt := s.Config.Handler.IntegrationsRuntime; rt != nil {
+			r = r.WithIntegrationsRuntime(rt)
+		}
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

@@ -52,17 +52,33 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("optional integration that owns this directory account when sourced by an integration").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+			),
 		field.String("directory_sync_run_id").
 			Comment("optional sync run that produced this snapshot").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
+			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory account").
 			Optional().
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
+		field.String("directory_instance_id").
+			Comment("stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("directory_instance_id"),
+			),
 		field.String("identity_holder_id").
 			Comment("deduplicated identity holder linked to this directory account").
 			Optional().
@@ -82,6 +98,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 				entgql.OrderField("external_id"),
 			),
 		field.String("secondary_key").
@@ -93,6 +110,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
 				entgql.OrderField("canonical_email"),
 			),
 		field.String("display_name").
@@ -161,6 +179,34 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("timestamp of the most recent login reported by the provider").
 			Optional().
 			Nillable(),
+		field.Time("first_seen_at").
+			Comment("time this account was first observed by Openlane from directory ingest").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("last_seen_at").
+			Comment("time this account was most recently confirmed by directory ingest").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("added_at").
+			Comment("provider-reported time the account was added or provisioned in the source directory").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("removed_at").
+			Comment("provider-reported or locally-recorded time the account was removed from the source directory").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Time("observed_at").
 			Comment("time when this snapshot was recorded").
 			Default(time.Now).
@@ -171,6 +217,12 @@ func (DirectoryAccount) Fields() []ent.Field {
 		field.JSON("profile", map[string]any{}).
 			Comment("flattened attribute bag used for filtering/diffing").
 			Optional(),
+		field.JSON("metadata", map[string]any{}).
+			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("raw_profile_file_id").
 			Comment("object storage file identifier that holds the raw upstream payload").
 			Optional().
@@ -261,6 +313,8 @@ func (DirectoryAccount) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "external_id", "directory_sync_run_id").
 			Unique(),
+		index.Fields("directory_instance_id", "external_id"),
+		index.Fields("directory_instance_id", "canonical_email"),
 		index.Fields("platform_id", "external_id"),
 		index.Fields("directory_sync_run_id", "canonical_email"),
 		index.Fields("integration_id", "canonical_email"),
@@ -299,5 +353,6 @@ func (d DirectoryAccount) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

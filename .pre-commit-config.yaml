@@ -10,6 +10,7 @@ repos:
       - id: trailing-whitespace
         exclude: jsonschema/api-docs.md|jsonschema/workflow-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql
       - id: detect-private-key
+        exclude: internal/httpserve/serveropts/options_test.go
   - repo: https://github.com/google/yamlfmt
     rev: v0.21.0
     hooks:

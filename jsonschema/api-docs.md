@@ -24,9 +24,7 @@ Config contains the configuration for the core server
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
-|[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
-|[**integrationproviders**](#integrationproviders)|`object`|||
-|[**integrationgithubapp**](#integrationgithubapp)|`object`|IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.<br/>||
+|[**integrations**](#integrations)|`object`|||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
@@ -129,9 +127,13 @@ Config contains the configuration for the core server
     },
     "keywatcher": {},
     "slack": {},
-    "integrationoauthprovider": {},
-    "integrationproviders": {},
-    "integrationgithubapp": {},
+    "integrations": {
+        "githubapp": {},
+        "slack": {},
+        "googleworkspace": {},
+        "azureentraid": {},
+        "microsoftteams": {}
+    },
     "workflows": {
         "cel": {},
         "gala": {}
@@ -1577,91 +1579,47 @@ Slack contains settings for Slack notifications
 |**newusermessagefile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
 
 **Additional Properties:** not allowed  
-<a name="integrationoauthprovider"></a>
-## integrationoauthprovider: object
-
-IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
-
+<a name="integrations"></a>
+## integrations: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles initialization of the integration provider registry.<br/>||
-|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
-
-**Additional Properties:** not allowed  
-<a name="integrationproviders"></a>
-## integrationproviders: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|[**Additional Properties**](#integrationprovidersadditionalproperties)|`object`|||
-
-<a name="integrationprovidersadditionalproperties"></a>
-### integrationproviders\.additionalProperties: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**Name**|`string`|||
-|**DisplayName**|`string`|||
-|**Category**|`string`|||
-|**Description**|`string`|||
-|**AuthType**|`string`|||
-|**AuthStartPath**|`string`|||
-|**AuthCallbackPath**|`string`|||
-|**Active**|`boolean`|||
-|**Visible**|`boolean`|||
-|[**Tags**](#integrationprovidersadditionalpropertiestags)|`string[]`|||
-|**LogoURL**|`string`|||
-|**DocsURL**|`string`|||
-|**SchemaVersion**|`string`|||
-|[**oauth**](#integrationprovidersadditionalpropertiesoauth)|`object`|||
-|[**APIKey**](#integrationprovidersadditionalpropertiesapikey)|`object`|||
-|[**UserInfo**](#integrationprovidersadditionalpropertiesuserinfo)|`object`|||
-|[**GoogleWorkloadIdentity**](#integrationprovidersadditionalpropertiesgoogleworkloadidentity)|`object`|||
-|[**GitHubApp**](#integrationprovidersadditionalpropertiesgithubapp)|`object`|||
-|[**AWSSTS**](#integrationprovidersadditionalpropertiesawssts)|`object`|||
-|[**CredentialsSchema**](#integrationprovidersadditionalpropertiescredentialsschema)|`object`|||
-|[**Persistence**](#integrationprovidersadditionalpropertiespersistence)|`object`|||
-|[**Labels**](#integrationprovidersadditionalpropertieslabels)|`object`|||
-|[**Metadata**](#integrationprovidersadditionalpropertiesmetadata)|`object`|||
-|[**Defaults**](#integrationprovidersadditionalpropertiesdefaults)|`object`|||
+|[**githubapp**](#integrationsgithubapp)|`object`|||
+|[**slack**](#integrationsslack)|`object`|||
+|[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
+|[**azureentraid**](#integrationsazureentraid)|`object`|||
+|[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "oauth": {
-        "AuthParams": {},
-        "TokenParams": {}
-    },
-    "APIKey": {},
-    "UserInfo": {},
-    "GoogleWorkloadIdentity": {},
-    "GitHubApp": {},
-    "AWSSTS": {},
-    "CredentialsSchema": {},
-    "Persistence": {},
-    "Labels": {},
-    "Metadata": {},
-    "Defaults": {}
+    "githubapp": {},
+    "slack": {},
+    "googleworkspace": {},
+    "azureentraid": {},
+    "microsoftteams": {}
 }
 ```
 
-<a name="integrationprovidersadditionalpropertiestags"></a>
-#### integrationproviders\.additionalProperties\.Tags: array
+<a name="integrationsgithubapp"></a>
+### integrations\.githubapp: object
 
-**Items**
+**Properties**
 
-**Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesoauth"></a>
-#### integrationproviders\.additionalProperties\.oauth: object
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**appid**|`string`|||
+|**privatekey**|`string`|||
+|**webhooksecret**|`string`|||
+|**appslug**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationsslack"></a>
+### integrations\.slack: object
 
 **Properties**
 
@@ -1669,181 +1627,43 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
-|**AuthURL**|`string`|||
-|**TokenURL**|`string`|||
-|[**Scopes**](#integrationprovidersadditionalpropertiesoauthscopes)|`string[]`|||
-|**OIDCDiscovery**|`string`|||
-|**RedirectURI**|`string`|||
-|**UsePKCE**|`boolean`|||
-|[**AuthParams**](#integrationprovidersadditionalpropertiesoauthauthparams)|`object`|||
-|[**TokenParams**](#integrationprovidersadditionalpropertiesoauthtokenparams)|`object`|||
-|[**AdditionalHosts**](#integrationprovidersadditionalpropertiesoauthadditionalhosts)|`string[]`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "AuthParams": {},
-    "TokenParams": {}
-}
-```
-
-<a name="integrationprovidersadditionalpropertiesoauthscopes"></a>
-##### integrationproviders\.additionalProperties\.oauth\.Scopes: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesoauthauthparams"></a>
-##### integrationproviders\.additionalProperties\.oauth\.AuthParams: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**Additional Properties**|`string`|||
-
-<a name="integrationprovidersadditionalpropertiesoauthtokenparams"></a>
-##### integrationproviders\.additionalProperties\.oauth\.TokenParams: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**Additional Properties**|`string`|||
-
-<a name="integrationprovidersadditionalpropertiesoauthadditionalhosts"></a>
-##### integrationproviders\.additionalProperties\.oauth\.AdditionalHosts: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesapikey"></a>
-#### integrationproviders\.additionalProperties\.APIKey: object
+<a name="integrationsgoogleworkspace"></a>
+### integrations\.googleworkspace: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**KeyLabel**|`string`|||
-|**HeaderName**|`string`|||
-|**QueryParam**|`string`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesuserinfo"></a>
-#### integrationproviders\.additionalProperties\.UserInfo: object
+<a name="integrationsazureentraid"></a>
+### integrations\.azureentraid: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**URL**|`string`|||
-|**Method**|`string`|||
-|**AuthStyle**|`string`|||
-|**AuthHeader**|`string`|||
-|**IDPath**|`string`|||
-|**EmailPath**|`string`|||
-|**LoginPath**|`string`|||
-|**SecondaryEmailURL**|`string`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesgoogleworkloadidentity"></a>
-#### integrationproviders\.additionalProperties\.GoogleWorkloadIdentity: object
+<a name="integrationsmicrosoftteams"></a>
+### integrations\.microsoftteams: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**Audience**|`string`|||
-|**TargetServiceAccount**|`string`|||
-|[**Scopes**](#integrationprovidersadditionalpropertiesgoogleworkloadidentityscopes)|`string[]`|||
-|**TokenLifetime**|`integer`|||
-|**SubjectTokenType**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesgoogleworkloadidentityscopes"></a>
-##### integrationproviders\.additionalProperties\.GoogleWorkloadIdentity\.Scopes: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesgithubapp"></a>
-#### integrationproviders\.additionalProperties\.GitHubApp: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**BaseURL**|`string`|||
-|**TokenTTL**|`integer`|||
-|**AppSlug**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesawssts"></a>
-#### integrationproviders\.additionalProperties\.AWSSTS: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**RoleARN**|`string`|||
-|**SessionName**|`string`|||
-|**Duration**|`integer`|||
-|**Region**|`string`|||
-|**ExternalID**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiescredentialsschema"></a>
-#### integrationproviders\.additionalProperties\.CredentialsSchema: object
-
-**No properties.**
-
-<a name="integrationprovidersadditionalpropertiespersistence"></a>
-#### integrationproviders\.additionalProperties\.Persistence: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**StoreRefreshToken**|`boolean`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertieslabels"></a>
-#### integrationproviders\.additionalProperties\.Labels: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**Additional Properties**|`string`|||
-
-<a name="integrationprovidersadditionalpropertiesmetadata"></a>
-#### integrationproviders\.additionalProperties\.Metadata: object
-
-**No properties.**
-
-<a name="integrationprovidersadditionalpropertiesdefaults"></a>
-#### integrationproviders\.additionalProperties\.Defaults: object
-
-**No properties.**
-
-<a name="integrationgithubapp"></a>
-## integrationgithubapp: object
-
-IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles the GitHub App integration handlers.<br/>||
-|**appid**|`string`|AppID is the GitHub App ID used for JWT signing.<br/>||
-|**appslug**|`string`|AppSlug is the GitHub App slug used for the install URL.<br/>||
-|**privatekey**|`string`|PrivateKey is the PEM-encoded GitHub App private key.<br/>||
-|**webhooksecret**|`string`|WebhookSecret is the shared secret used to validate GitHub webhooks.<br/>||
-|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful installation.<br/>||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>

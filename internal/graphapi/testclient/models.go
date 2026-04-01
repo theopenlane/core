@@ -1693,7 +1693,11 @@ type Asset struct {
 	// the CPE (Common Platform Enumeration) of the asset, if applicable
 	Cpe *string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
-	Categories              []string                  `json:"categories,omitempty"`
+	Categories []string `json:"categories,omitempty"`
+	// integration that discovered this asset, when sourced via integration ingest
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// time when this asset was last observed by the source integration
+	ObservedAt              *models.DateTime          `json:"observedAt,omitempty"`
 	Owner                   *Organization             `json:"owner,omitempty"`
 	BlockedGroups           *GroupConnection          `json:"blockedGroups"`
 	Editors                 *GroupConnection          `json:"editors"`
@@ -1715,8 +1719,10 @@ type Asset struct {
 	IdentityHolders         *IdentityHolderConnection `json:"identityHolders"`
 	Controls                *ControlConnection        `json:"controls"`
 	SourcePlatform          *Platform                 `json:"sourcePlatform,omitempty"`
-	ConnectedAssets         *AssetConnection          `json:"connectedAssets"`
-	ConnectedFrom           *AssetConnection          `json:"connectedFrom"`
+	// integration that owns this asset
+	Integration     *Integration     `json:"integration,omitempty"`
+	ConnectedAssets *AssetConnection `json:"connectedAssets"`
+	ConnectedFrom   *AssetConnection `json:"connectedFrom"`
 }
 
 func (Asset) IsNode() {}
@@ -2408,6 +2414,33 @@ type AssetWhereInput struct {
 	PurchaseDateLte    *models.DateTime   `json:"purchaseDateLTE,omitempty"`
 	PurchaseDateIsNil  *bool              `json:"purchaseDateIsNil,omitempty"`
 	PurchaseDateNotNil *bool              `json:"purchaseDateNotNil,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// observed_at field predicates
+	ObservedAt       *models.DateTime   `json:"observedAt,omitempty"`
+	ObservedAtNeq    *models.DateTime   `json:"observedAtNEQ,omitempty"`
+	ObservedAtIn     []*models.DateTime `json:"observedAtIn,omitempty"`
+	ObservedAtNotIn  []*models.DateTime `json:"observedAtNotIn,omitempty"`
+	ObservedAtGt     *models.DateTime   `json:"observedAtGT,omitempty"`
+	ObservedAtGte    *models.DateTime   `json:"observedAtGTE,omitempty"`
+	ObservedAtLt     *models.DateTime   `json:"observedAtLT,omitempty"`
+	ObservedAtLte    *models.DateTime   `json:"observedAtLTE,omitempty"`
+	ObservedAtIsNil  *bool              `json:"observedAtIsNil,omitempty"`
+	ObservedAtNotNil *bool              `json:"observedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -2471,6 +2504,9 @@ type AssetWhereInput struct {
 	// source_platform edge predicates
 	HasSourcePlatform     *bool                 `json:"hasSourcePlatform,omitempty"`
 	HasSourcePlatformWith []*PlatformWhereInput `json:"hasSourcePlatformWith,omitempty"`
+	// integration edge predicates
+	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
+	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
 	// connected_assets edge predicates
 	HasConnectedAssets     *bool              `json:"hasConnectedAssets,omitempty"`
 	HasConnectedAssetsWith []*AssetWhereInput `json:"hasConnectedAssetsWith,omitempty"`
@@ -3558,7 +3594,13 @@ type Contact struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status          enums.UserStatus          `json:"status"`
+	Status enums.UserStatus `json:"status"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID *string `json:"externalID,omitempty"`
+	// integration that sourced this contact, when populated via integration ingest
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// time when this contact was last observed by the source integration
+	ObservedAt      *models.DateTime          `json:"observedAt,omitempty"`
 	Owner           *Organization             `json:"owner,omitempty"`
 	Entities        *EntityConnection         `json:"entities"`
 	Campaigns       *CampaignConnection       `json:"campaigns"`
@@ -3820,6 +3862,49 @@ type ContactWhereInput struct {
 	StatusNeq   *enums.UserStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.UserStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// observed_at field predicates
+	ObservedAt       *models.DateTime   `json:"observedAt,omitempty"`
+	ObservedAtNeq    *models.DateTime   `json:"observedAtNEQ,omitempty"`
+	ObservedAtIn     []*models.DateTime `json:"observedAtIn,omitempty"`
+	ObservedAtNotIn  []*models.DateTime `json:"observedAtNotIn,omitempty"`
+	ObservedAtGt     *models.DateTime   `json:"observedAtGT,omitempty"`
+	ObservedAtGte    *models.DateTime   `json:"observedAtGTE,omitempty"`
+	ObservedAtLt     *models.DateTime   `json:"observedAtLT,omitempty"`
+	ObservedAtLte    *models.DateTime   `json:"observedAtLTE,omitempty"`
+	ObservedAtIsNil  *bool              `json:"observedAtIsNil,omitempty"`
+	ObservedAtNotNil *bool              `json:"observedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -5742,30 +5827,33 @@ type CreateAssetInput struct {
 	// the CPE (Common Platform Enumeration) of the asset, if applicable
 	Cpe *string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
-	Categories                []string `json:"categories,omitempty"`
-	OwnerID                   *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs           []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                 []string `json:"editorIDs,omitempty"`
-	ViewerIDs                 []string `json:"viewerIDs,omitempty"`
-	InternalOwnerUserID       *string  `json:"internalOwnerUserID,omitempty"`
-	InternalOwnerGroupID      *string  `json:"internalOwnerGroupID,omitempty"`
-	AssetSubtypeID            *string  `json:"assetSubtypeID,omitempty"`
-	AssetDataClassificationID *string  `json:"assetDataClassificationID,omitempty"`
-	EnvironmentID             *string  `json:"environmentID,omitempty"`
-	ScopeID                   *string  `json:"scopeID,omitempty"`
-	AccessModelID             *string  `json:"accessModelID,omitempty"`
-	EncryptionStatusID        *string  `json:"encryptionStatusID,omitempty"`
-	SecurityTierID            *string  `json:"securityTierID,omitempty"`
-	CriticalityID             *string  `json:"criticalityID,omitempty"`
-	ScanIDs                   []string `json:"scanIDs,omitempty"`
-	EntityIDs                 []string `json:"entityIDs,omitempty"`
-	PlatformIDs               []string `json:"platformIDs,omitempty"`
-	OutOfScopePlatformIDs     []string `json:"outOfScopePlatformIDs,omitempty"`
-	IdentityHolderIDs         []string `json:"identityHolderIDs,omitempty"`
-	ControlIDs                []string `json:"controlIDs,omitempty"`
-	SourcePlatformID          *string  `json:"sourcePlatformID,omitempty"`
-	ConnectedAssetIDs         []string `json:"connectedAssetIDs,omitempty"`
-	ConnectedFromIDs          []string `json:"connectedFromIDs,omitempty"`
+	Categories []string `json:"categories,omitempty"`
+	// time when this asset was last observed by the source integration
+	ObservedAt                *models.DateTime `json:"observedAt,omitempty"`
+	OwnerID                   *string          `json:"ownerID,omitempty"`
+	BlockedGroupIDs           []string         `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                 []string         `json:"editorIDs,omitempty"`
+	ViewerIDs                 []string         `json:"viewerIDs,omitempty"`
+	InternalOwnerUserID       *string          `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID      *string          `json:"internalOwnerGroupID,omitempty"`
+	AssetSubtypeID            *string          `json:"assetSubtypeID,omitempty"`
+	AssetDataClassificationID *string          `json:"assetDataClassificationID,omitempty"`
+	EnvironmentID             *string          `json:"environmentID,omitempty"`
+	ScopeID                   *string          `json:"scopeID,omitempty"`
+	AccessModelID             *string          `json:"accessModelID,omitempty"`
+	EncryptionStatusID        *string          `json:"encryptionStatusID,omitempty"`
+	SecurityTierID            *string          `json:"securityTierID,omitempty"`
+	CriticalityID             *string          `json:"criticalityID,omitempty"`
+	ScanIDs                   []string         `json:"scanIDs,omitempty"`
+	EntityIDs                 []string         `json:"entityIDs,omitempty"`
+	PlatformIDs               []string         `json:"platformIDs,omitempty"`
+	OutOfScopePlatformIDs     []string         `json:"outOfScopePlatformIDs,omitempty"`
+	IdentityHolderIDs         []string         `json:"identityHolderIDs,omitempty"`
+	ControlIDs                []string         `json:"controlIDs,omitempty"`
+	SourcePlatformID          *string          `json:"sourcePlatformID,omitempty"`
+	IntegrationID             *string          `json:"integrationID,omitempty"`
+	ConnectedAssetIDs         []string         `json:"connectedAssetIDs,omitempty"`
+	ConnectedFromIDs          []string         `json:"connectedFromIDs,omitempty"`
 }
 
 // CreateCampaignInput is used for create Campaign object.
@@ -5891,12 +5979,18 @@ type CreateContactInput struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status            *enums.UserStatus `json:"status,omitempty"`
-	OwnerID           *string           `json:"ownerID,omitempty"`
-	EntityIDs         []string          `json:"entityIDs,omitempty"`
-	CampaignIDs       []string          `json:"campaignIDs,omitempty"`
-	CampaignTargetIDs []string          `json:"campaignTargetIDs,omitempty"`
-	FileIDs           []string          `json:"fileIDs,omitempty"`
+	Status *enums.UserStatus `json:"status,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID *string `json:"externalID,omitempty"`
+	// integration that sourced this contact, when populated via integration ingest
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// time when this contact was last observed by the source integration
+	ObservedAt        *models.DateTime `json:"observedAt,omitempty"`
+	OwnerID           *string          `json:"ownerID,omitempty"`
+	EntityIDs         []string         `json:"entityIDs,omitempty"`
+	CampaignIDs       []string         `json:"campaignIDs,omitempty"`
+	CampaignTargetIDs []string         `json:"campaignTargetIDs,omitempty"`
+	FileIDs           []string         `json:"fileIDs,omitempty"`
 }
 
 // CreateControlImplementationInput is used for create ControlImplementation object.
@@ -6173,6 +6267,8 @@ type CreateDirectoryAccountInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_account
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directoryName,omitempty"`
 	// stable identifier from the directory system
@@ -6207,12 +6303,22 @@ type CreateDirectoryAccountInput struct {
 	LastSeenIP *string `json:"lastSeenIP,omitempty"`
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt *time.Time `json:"lastLoginAt,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt *time.Time `json:"observedAt,omitempty"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion        *string  `json:"sourceVersion,omitempty"`
 	OwnerID              *string  `json:"ownerID,omitempty"`
@@ -6237,6 +6343,8 @@ type CreateDirectoryGroupInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_group
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"externalID"`
 	// primary group email address, when applicable
@@ -6253,12 +6361,22 @@ type CreateDirectoryGroupInput struct {
 	ExternalSharingAllowed *bool `json:"externalSharingAllowed,omitempty"`
 	// member count reported by the directory
 	MemberCount *int64 `json:"memberCount,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt *time.Time `json:"observedAt,omitempty"`
 	// hash of the normalized payload for diffing
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion        *string  `json:"sourceVersion,omitempty"`
 	OwnerID              *string  `json:"ownerID,omitempty"`
@@ -6277,14 +6395,20 @@ type CreateDirectoryMembershipInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_membership
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// membership role reported by the provider
 	Role *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	// mechanism used to populate the membership (api, scim, csv, etc)
 	Source *string `json:"source,omitempty"`
 	// first time the membership was detected
 	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this record was created
 	ObservedAt *time.Time `json:"observedAt,omitempty"`
 	// sync run identifier that most recently confirmed this membership
@@ -6310,6 +6434,8 @@ type CreateDirectorySyncRunInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_sync_run
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// current state of the sync run
 	Status *enums.DirectorySyncRunStatus `json:"status,omitempty"`
 	// time the sync started
@@ -6548,7 +6674,11 @@ type CreateEntityInput struct {
 	// when the entity contract is up for renewal
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
-	VendorMetadata                      map[string]any   `json:"vendorMetadata,omitempty"`
+	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID *string `json:"externalID,omitempty"`
+	// time when this entity was last observed by the source integration
+	ObservedAt                          *models.DateTime `json:"observedAt,omitempty"`
 	OwnerID                             *string          `json:"ownerID,omitempty"`
 	BlockedGroupIDs                     []string         `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                           []string         `json:"editorIDs,omitempty"`
@@ -7482,6 +7612,8 @@ type CreateNotificationTemplateInput struct {
 	Locale *string `json:"locale,omitempty"`
 	// topic name or wildcard pattern this template targets
 	TopicPattern string `json:"topicPattern"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations []string `json:"destinations,omitempty"`
 	// title template for external channel messages
 	TitleTemplate *string `json:"titleTemplate,omitempty"`
 	// subject template for email notifications
@@ -8144,6 +8276,12 @@ type CreateRiskInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the risk
 	ScopeName *string `json:"scopeName,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID *string `json:"externalID,omitempty"`
+	// integration that surfaced this risk, when sourced via integration ingest
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// time when this risk was last observed by the source integration
+	ObservedAt *models.DateTime `json:"observedAt,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"externalUUID,omitempty"`
 	// the name of the risk
@@ -10082,6 +10220,8 @@ type DirectoryAccount struct {
 	DirectorySyncRunID *string `json:"directorySyncRunID,omitempty"`
 	// optional platform associated with this directory account
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// deduplicated identity holder linked to this directory account
 	IdentityHolderID *string `json:"identityHolderID,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
@@ -10120,12 +10260,22 @@ type DirectoryAccount struct {
 	LastSeenIP *string `json:"lastSeenIP,omitempty"`
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt *time.Time `json:"lastLoginAt,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt time.Time `json:"observedAt"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash string `json:"profileHash"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// object storage file identifier that holds the raw upstream payload
 	RawProfileFileID *string `json:"rawProfileFileID,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
@@ -10414,6 +10564,22 @@ type DirectoryAccountWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// identity_holder_id field predicates
 	IdentityHolderID             *string  `json:"identityHolderID,omitempty"`
 	IdentityHolderIdneq          *string  `json:"identityHolderIDNEQ,omitempty"`
@@ -10675,6 +10841,50 @@ type DirectoryAccountWhereInput struct {
 	LastLoginAtLte    *time.Time   `json:"lastLoginAtLTE,omitempty"`
 	LastLoginAtIsNil  *bool        `json:"lastLoginAtIsNil,omitempty"`
 	LastLoginAtNotNil *bool        `json:"lastLoginAtNotNil,omitempty"`
+	// first_seen_at field predicates
+	FirstSeenAt       *time.Time   `json:"firstSeenAt,omitempty"`
+	FirstSeenAtNeq    *time.Time   `json:"firstSeenAtNEQ,omitempty"`
+	FirstSeenAtIn     []*time.Time `json:"firstSeenAtIn,omitempty"`
+	FirstSeenAtNotIn  []*time.Time `json:"firstSeenAtNotIn,omitempty"`
+	FirstSeenAtGt     *time.Time   `json:"firstSeenAtGT,omitempty"`
+	FirstSeenAtGte    *time.Time   `json:"firstSeenAtGTE,omitempty"`
+	FirstSeenAtLt     *time.Time   `json:"firstSeenAtLT,omitempty"`
+	FirstSeenAtLte    *time.Time   `json:"firstSeenAtLTE,omitempty"`
+	FirstSeenAtIsNil  *bool        `json:"firstSeenAtIsNil,omitempty"`
+	FirstSeenAtNotNil *bool        `json:"firstSeenAtNotNil,omitempty"`
+	// last_seen_at field predicates
+	LastSeenAt       *time.Time   `json:"lastSeenAt,omitempty"`
+	LastSeenAtNeq    *time.Time   `json:"lastSeenAtNEQ,omitempty"`
+	LastSeenAtIn     []*time.Time `json:"lastSeenAtIn,omitempty"`
+	LastSeenAtNotIn  []*time.Time `json:"lastSeenAtNotIn,omitempty"`
+	LastSeenAtGt     *time.Time   `json:"lastSeenAtGT,omitempty"`
+	LastSeenAtGte    *time.Time   `json:"lastSeenAtGTE,omitempty"`
+	LastSeenAtLt     *time.Time   `json:"lastSeenAtLT,omitempty"`
+	LastSeenAtLte    *time.Time   `json:"lastSeenAtLTE,omitempty"`
+	LastSeenAtIsNil  *bool        `json:"lastSeenAtIsNil,omitempty"`
+	LastSeenAtNotNil *bool        `json:"lastSeenAtNotNil,omitempty"`
+	// added_at field predicates
+	AddedAt       *time.Time   `json:"addedAt,omitempty"`
+	AddedAtNeq    *time.Time   `json:"addedAtNEQ,omitempty"`
+	AddedAtIn     []*time.Time `json:"addedAtIn,omitempty"`
+	AddedAtNotIn  []*time.Time `json:"addedAtNotIn,omitempty"`
+	AddedAtGt     *time.Time   `json:"addedAtGT,omitempty"`
+	AddedAtGte    *time.Time   `json:"addedAtGTE,omitempty"`
+	AddedAtLt     *time.Time   `json:"addedAtLT,omitempty"`
+	AddedAtLte    *time.Time   `json:"addedAtLTE,omitempty"`
+	AddedAtIsNil  *bool        `json:"addedAtIsNil,omitempty"`
+	AddedAtNotNil *bool        `json:"addedAtNotNil,omitempty"`
+	// removed_at field predicates
+	RemovedAt       *time.Time   `json:"removedAt,omitempty"`
+	RemovedAtNeq    *time.Time   `json:"removedAtNEQ,omitempty"`
+	RemovedAtIn     []*time.Time `json:"removedAtIn,omitempty"`
+	RemovedAtNotIn  []*time.Time `json:"removedAtNotIn,omitempty"`
+	RemovedAtGt     *time.Time   `json:"removedAtGT,omitempty"`
+	RemovedAtGte    *time.Time   `json:"removedAtGTE,omitempty"`
+	RemovedAtLt     *time.Time   `json:"removedAtLT,omitempty"`
+	RemovedAtLte    *time.Time   `json:"removedAtLTE,omitempty"`
+	RemovedAtIsNil  *bool        `json:"removedAtIsNil,omitempty"`
+	RemovedAtNotNil *bool        `json:"removedAtNotNil,omitempty"`
 	// observed_at field predicates
 	ObservedAt      *time.Time   `json:"observedAt,omitempty"`
 	ObservedAtNeq   *time.Time   `json:"observedAtNEQ,omitempty"`
@@ -10778,6 +10988,8 @@ type DirectoryGroup struct {
 	IntegrationID string `json:"integrationID"`
 	// optional platform associated with this directory group
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// stable identifier from the directory system
@@ -10796,12 +11008,22 @@ type DirectoryGroup struct {
 	ExternalSharingAllowed *bool `json:"externalSharingAllowed,omitempty"`
 	// member count reported by the directory
 	MemberCount *int64 `json:"memberCount,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this snapshot was recorded
 	ObservedAt time.Time `json:"observedAt"`
 	// hash of the normalized payload for diffing
 	ProfileHash string `json:"profileHash"`
 	// flattened attribute bag used for filtering/diffing
 	Profile map[string]any `json:"profile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// object storage file identifier containing the raw upstream payload
 	RawProfileFileID *string `json:"rawProfileFileID,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
@@ -11067,6 +11289,22 @@ type DirectoryGroupWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// directory_sync_run_id field predicates
 	DirectorySyncRunID             *string  `json:"directorySyncRunID,omitempty"`
 	DirectorySyncRunIdneq          *string  `json:"directorySyncRunIDNEQ,omitempty"`
@@ -11153,6 +11391,50 @@ type DirectoryGroupWhereInput struct {
 	MemberCountLte    *int64  `json:"memberCountLTE,omitempty"`
 	MemberCountIsNil  *bool   `json:"memberCountIsNil,omitempty"`
 	MemberCountNotNil *bool   `json:"memberCountNotNil,omitempty"`
+	// first_seen_at field predicates
+	FirstSeenAt       *time.Time   `json:"firstSeenAt,omitempty"`
+	FirstSeenAtNeq    *time.Time   `json:"firstSeenAtNEQ,omitempty"`
+	FirstSeenAtIn     []*time.Time `json:"firstSeenAtIn,omitempty"`
+	FirstSeenAtNotIn  []*time.Time `json:"firstSeenAtNotIn,omitempty"`
+	FirstSeenAtGt     *time.Time   `json:"firstSeenAtGT,omitempty"`
+	FirstSeenAtGte    *time.Time   `json:"firstSeenAtGTE,omitempty"`
+	FirstSeenAtLt     *time.Time   `json:"firstSeenAtLT,omitempty"`
+	FirstSeenAtLte    *time.Time   `json:"firstSeenAtLTE,omitempty"`
+	FirstSeenAtIsNil  *bool        `json:"firstSeenAtIsNil,omitempty"`
+	FirstSeenAtNotNil *bool        `json:"firstSeenAtNotNil,omitempty"`
+	// last_seen_at field predicates
+	LastSeenAt       *time.Time   `json:"lastSeenAt,omitempty"`
+	LastSeenAtNeq    *time.Time   `json:"lastSeenAtNEQ,omitempty"`
+	LastSeenAtIn     []*time.Time `json:"lastSeenAtIn,omitempty"`
+	LastSeenAtNotIn  []*time.Time `json:"lastSeenAtNotIn,omitempty"`
+	LastSeenAtGt     *time.Time   `json:"lastSeenAtGT,omitempty"`
+	LastSeenAtGte    *time.Time   `json:"lastSeenAtGTE,omitempty"`
+	LastSeenAtLt     *time.Time   `json:"lastSeenAtLT,omitempty"`
+	LastSeenAtLte    *time.Time   `json:"lastSeenAtLTE,omitempty"`
+	LastSeenAtIsNil  *bool        `json:"lastSeenAtIsNil,omitempty"`
+	LastSeenAtNotNil *bool        `json:"lastSeenAtNotNil,omitempty"`
+	// added_at field predicates
+	AddedAt       *time.Time   `json:"addedAt,omitempty"`
+	AddedAtNeq    *time.Time   `json:"addedAtNEQ,omitempty"`
+	AddedAtIn     []*time.Time `json:"addedAtIn,omitempty"`
+	AddedAtNotIn  []*time.Time `json:"addedAtNotIn,omitempty"`
+	AddedAtGt     *time.Time   `json:"addedAtGT,omitempty"`
+	AddedAtGte    *time.Time   `json:"addedAtGTE,omitempty"`
+	AddedAtLt     *time.Time   `json:"addedAtLT,omitempty"`
+	AddedAtLte    *time.Time   `json:"addedAtLTE,omitempty"`
+	AddedAtIsNil  *bool        `json:"addedAtIsNil,omitempty"`
+	AddedAtNotNil *bool        `json:"addedAtNotNil,omitempty"`
+	// removed_at field predicates
+	RemovedAt       *time.Time   `json:"removedAt,omitempty"`
+	RemovedAtNeq    *time.Time   `json:"removedAtNEQ,omitempty"`
+	RemovedAtIn     []*time.Time `json:"removedAtIn,omitempty"`
+	RemovedAtNotIn  []*time.Time `json:"removedAtNotIn,omitempty"`
+	RemovedAtGt     *time.Time   `json:"removedAtGT,omitempty"`
+	RemovedAtGte    *time.Time   `json:"removedAtGTE,omitempty"`
+	RemovedAtLt     *time.Time   `json:"removedAtLT,omitempty"`
+	RemovedAtLte    *time.Time   `json:"removedAtLTE,omitempty"`
+	RemovedAtIsNil  *bool        `json:"removedAtIsNil,omitempty"`
+	RemovedAtNotNil *bool        `json:"removedAtNotNil,omitempty"`
 	// observed_at field predicates
 	ObservedAt      *time.Time   `json:"observedAt,omitempty"`
 	ObservedAtNeq   *time.Time   `json:"observedAtNEQ,omitempty"`
@@ -11245,6 +11527,8 @@ type DirectoryMembership struct {
 	IntegrationID string `json:"integrationID"`
 	// optional platform associated with this directory membership
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// directory account participating in this membership
@@ -11257,8 +11541,12 @@ type DirectoryMembership struct {
 	Source *string `json:"source,omitempty"`
 	// first time the membership was detected
 	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt *time.Time `json:"removedAt,omitempty"`
 	// time when this record was created
 	ObservedAt time.Time `json:"observedAt"`
 	// sync run identifier that most recently confirmed this membership
@@ -11449,6 +11737,22 @@ type DirectoryMembershipWhereInput struct {
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
 	ScopeNameEqualFold    *string  `json:"scopeNameEqualFold,omitempty"`
 	ScopeNameContainsFold *string  `json:"scopeNameContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// role field predicates
 	Role       *enums.DirectoryMembershipRole  `json:"role,omitempty"`
 	RoleNeq    *enums.DirectoryMembershipRole  `json:"roleNEQ,omitempty"`
@@ -11494,6 +11798,28 @@ type DirectoryMembershipWhereInput struct {
 	LastSeenAtLte    *time.Time   `json:"lastSeenAtLTE,omitempty"`
 	LastSeenAtIsNil  *bool        `json:"lastSeenAtIsNil,omitempty"`
 	LastSeenAtNotNil *bool        `json:"lastSeenAtNotNil,omitempty"`
+	// added_at field predicates
+	AddedAt       *time.Time   `json:"addedAt,omitempty"`
+	AddedAtNeq    *time.Time   `json:"addedAtNEQ,omitempty"`
+	AddedAtIn     []*time.Time `json:"addedAtIn,omitempty"`
+	AddedAtNotIn  []*time.Time `json:"addedAtNotIn,omitempty"`
+	AddedAtGt     *time.Time   `json:"addedAtGT,omitempty"`
+	AddedAtGte    *time.Time   `json:"addedAtGTE,omitempty"`
+	AddedAtLt     *time.Time   `json:"addedAtLT,omitempty"`
+	AddedAtLte    *time.Time   `json:"addedAtLTE,omitempty"`
+	AddedAtIsNil  *bool        `json:"addedAtIsNil,omitempty"`
+	AddedAtNotNil *bool        `json:"addedAtNotNil,omitempty"`
+	// removed_at field predicates
+	RemovedAt       *time.Time   `json:"removedAt,omitempty"`
+	RemovedAtNeq    *time.Time   `json:"removedAtNEQ,omitempty"`
+	RemovedAtIn     []*time.Time `json:"removedAtIn,omitempty"`
+	RemovedAtNotIn  []*time.Time `json:"removedAtNotIn,omitempty"`
+	RemovedAtGt     *time.Time   `json:"removedAtGT,omitempty"`
+	RemovedAtGte    *time.Time   `json:"removedAtGTE,omitempty"`
+	RemovedAtLt     *time.Time   `json:"removedAtLT,omitempty"`
+	RemovedAtLte    *time.Time   `json:"removedAtLTE,omitempty"`
+	RemovedAtIsNil  *bool        `json:"removedAtIsNil,omitempty"`
+	RemovedAtNotNil *bool        `json:"removedAtNotNil,omitempty"`
 	// observed_at field predicates
 	ObservedAt      *time.Time   `json:"observedAt,omitempty"`
 	ObservedAtNeq   *time.Time   `json:"observedAtNEQ,omitempty"`
@@ -11543,6 +11869,8 @@ type DirectorySyncRun struct {
 	IntegrationID string `json:"integrationID"`
 	// optional platform associated with this sync run
 	PlatformID *string `json:"platformID,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
 	// current state of the sync run
 	Status enums.DirectorySyncRunStatus `json:"status"`
 	// time the sync started
@@ -11820,6 +12148,22 @@ type DirectorySyncRunWhereInput struct {
 	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// directory_instance_id field predicates
+	DirectoryInstanceID             *string  `json:"directoryInstanceID,omitempty"`
+	DirectoryInstanceIdneq          *string  `json:"directoryInstanceIDNEQ,omitempty"`
+	DirectoryInstanceIDIn           []string `json:"directoryInstanceIDIn,omitempty"`
+	DirectoryInstanceIDNotIn        []string `json:"directoryInstanceIDNotIn,omitempty"`
+	DirectoryInstanceIdgt           *string  `json:"directoryInstanceIDGT,omitempty"`
+	DirectoryInstanceIdgte          *string  `json:"directoryInstanceIDGTE,omitempty"`
+	DirectoryInstanceIdlt           *string  `json:"directoryInstanceIDLT,omitempty"`
+	DirectoryInstanceIdlte          *string  `json:"directoryInstanceIDLTE,omitempty"`
+	DirectoryInstanceIDContains     *string  `json:"directoryInstanceIDContains,omitempty"`
+	DirectoryInstanceIDHasPrefix    *string  `json:"directoryInstanceIDHasPrefix,omitempty"`
+	DirectoryInstanceIDHasSuffix    *string  `json:"directoryInstanceIDHasSuffix,omitempty"`
+	DirectoryInstanceIDIsNil        *bool    `json:"directoryInstanceIDIsNil,omitempty"`
+	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
+	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
+	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
 	// status field predicates
 	Status      *enums.DirectorySyncRunStatus  `json:"status,omitempty"`
 	StatusNeq   *enums.DirectorySyncRunStatus  `json:"statusNEQ,omitempty"`
@@ -13424,7 +13768,11 @@ type Entity struct {
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
 	// The logo file id for the entity
-	LogoFileID                        *string                       `json:"logoFileID,omitempty"`
+	LogoFileID *string `json:"logoFileID,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID *string `json:"externalID,omitempty"`
+	// time when this entity was last observed by the source integration
+	ObservedAt                        *models.DateTime              `json:"observedAt,omitempty"`
 	Owner                             *Organization                 `json:"owner,omitempty"`
 	BlockedGroups                     *GroupConnection              `json:"blockedGroups"`
 	Editors                           *GroupConnection              `json:"editors"`
@@ -14444,6 +14792,33 @@ type EntityWhereInput struct {
 	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
 	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
 	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// observed_at field predicates
+	ObservedAt       *models.DateTime   `json:"observedAt,omitempty"`
+	ObservedAtNeq    *models.DateTime   `json:"observedAtNEQ,omitempty"`
+	ObservedAtIn     []*models.DateTime `json:"observedAtIn,omitempty"`
+	ObservedAtNotIn  []*models.DateTime `json:"observedAtNotIn,omitempty"`
+	ObservedAtGt     *models.DateTime   `json:"observedAtGT,omitempty"`
+	ObservedAtGte    *models.DateTime   `json:"observedAtGTE,omitempty"`
+	ObservedAtLt     *models.DateTime   `json:"observedAtLT,omitempty"`
+	ObservedAtLte    *models.DateTime   `json:"observedAtLTE,omitempty"`
+	ObservedAtIsNil  *bool              `json:"observedAtIsNil,omitempty"`
+	ObservedAtNotNil *bool              `json:"observedAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -19305,6 +19680,7 @@ type Integration struct {
 	Remediations             *RemediationConnection         `json:"remediations"`
 	Tasks                    *TaskConnection                `json:"tasks"`
 	ActionPlans              *ActionPlanConnection          `json:"actionPlans"`
+	Assets                   *AssetConnection               `json:"assets"`
 	DirectoryAccounts        *DirectoryAccountConnection    `json:"directoryAccounts"`
 	DirectoryGroups          *DirectoryGroupConnection      `json:"directoryGroups"`
 	DirectoryMemberships     *DirectoryMembershipConnection `json:"directoryMemberships"`
@@ -19314,6 +19690,7 @@ type Integration struct {
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
 	Entities              *EntityConnection               `json:"entities"`
+	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
 }
 
 func (Integration) IsNode() {}
@@ -19705,6 +20082,9 @@ type IntegrationWhereInput struct {
 	// action_plans edge predicates
 	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
 	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
 	// directory_accounts edge predicates
 	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
 	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
@@ -23495,6 +23875,8 @@ type NotificationTemplate struct {
 	TopicPattern string `json:"topicPattern"`
 	// integration associated with this template
 	IntegrationID *string `json:"integrationID,omitempty"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations []string `json:"destinations,omitempty"`
 	// workflow definition associated with this template
 	WorkflowDefinitionID *string `json:"workflowDefinitionID,omitempty"`
 	// optional email template used for branded email delivery
@@ -29578,6 +29960,12 @@ type Risk struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the risk
 	ScopeID *string `json:"scopeID,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID *string `json:"externalID,omitempty"`
+	// integration that surfaced this risk, when sourced via integration ingest
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// time when this risk was last observed by the source integration
+	ObservedAt *models.DateTime `json:"observedAt,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"externalUUID,omitempty"`
 	// the name of the risk
@@ -29928,6 +30316,49 @@ type RiskWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// external_id field predicates
+	ExternalID             *string  `json:"externalID,omitempty"`
+	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
+	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
+	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
+	ExternalIdgt           *string  `json:"externalIDGT,omitempty"`
+	ExternalIdgte          *string  `json:"externalIDGTE,omitempty"`
+	ExternalIdlt           *string  `json:"externalIDLT,omitempty"`
+	ExternalIdlte          *string  `json:"externalIDLTE,omitempty"`
+	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
+	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
+	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
+	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
+	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// observed_at field predicates
+	ObservedAt       *models.DateTime   `json:"observedAt,omitempty"`
+	ObservedAtNeq    *models.DateTime   `json:"observedAtNEQ,omitempty"`
+	ObservedAtIn     []*models.DateTime `json:"observedAtIn,omitempty"`
+	ObservedAtNotIn  []*models.DateTime `json:"observedAtNotIn,omitempty"`
+	ObservedAtGt     *models.DateTime   `json:"observedAtGT,omitempty"`
+	ObservedAtGte    *models.DateTime   `json:"observedAtGTE,omitempty"`
+	ObservedAtLt     *models.DateTime   `json:"observedAtLT,omitempty"`
+	ObservedAtLte    *models.DateTime   `json:"observedAtLTE,omitempty"`
+	ObservedAtIsNil  *bool              `json:"observedAtIsNil,omitempty"`
+	ObservedAtNotNil *bool              `json:"observedAtNotNil,omitempty"`
 	// external_uuid field predicates
 	ExternalUUID             *string  `json:"externalUUID,omitempty"`
 	ExternalUUIDNeq          *string  `json:"externalUUIDNEQ,omitempty"`
@@ -38088,64 +38519,67 @@ type UpdateAssetInput struct {
 	Cpe      *string `json:"cpe,omitempty"`
 	ClearCpe *bool   `json:"clearCpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
-	Categories                   []string `json:"categories,omitempty"`
-	AppendCategories             []string `json:"appendCategories,omitempty"`
-	ClearCategories              *bool    `json:"clearCategories,omitempty"`
-	AddBlockedGroupIDs           []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs        []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups           *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                 []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs              []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors                 *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs                 []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs              []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers                 *bool    `json:"clearViewers,omitempty"`
-	InternalOwnerUserID          *string  `json:"internalOwnerUserID,omitempty"`
-	ClearInternalOwnerUser       *bool    `json:"clearInternalOwnerUser,omitempty"`
-	InternalOwnerGroupID         *string  `json:"internalOwnerGroupID,omitempty"`
-	ClearInternalOwnerGroup      *bool    `json:"clearInternalOwnerGroup,omitempty"`
-	AssetSubtypeID               *string  `json:"assetSubtypeID,omitempty"`
-	ClearAssetSubtype            *bool    `json:"clearAssetSubtype,omitempty"`
-	AssetDataClassificationID    *string  `json:"assetDataClassificationID,omitempty"`
-	ClearAssetDataClassification *bool    `json:"clearAssetDataClassification,omitempty"`
-	EnvironmentID                *string  `json:"environmentID,omitempty"`
-	ClearEnvironment             *bool    `json:"clearEnvironment,omitempty"`
-	ScopeID                      *string  `json:"scopeID,omitempty"`
-	ClearScope                   *bool    `json:"clearScope,omitempty"`
-	AccessModelID                *string  `json:"accessModelID,omitempty"`
-	ClearAccessModel             *bool    `json:"clearAccessModel,omitempty"`
-	EncryptionStatusID           *string  `json:"encryptionStatusID,omitempty"`
-	ClearEncryptionStatus        *bool    `json:"clearEncryptionStatus,omitempty"`
-	SecurityTierID               *string  `json:"securityTierID,omitempty"`
-	ClearSecurityTier            *bool    `json:"clearSecurityTier,omitempty"`
-	CriticalityID                *string  `json:"criticalityID,omitempty"`
-	ClearCriticality             *bool    `json:"clearCriticality,omitempty"`
-	AddScanIDs                   []string `json:"addScanIDs,omitempty"`
-	RemoveScanIDs                []string `json:"removeScanIDs,omitempty"`
-	ClearScans                   *bool    `json:"clearScans,omitempty"`
-	AddEntityIDs                 []string `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs              []string `json:"removeEntityIDs,omitempty"`
-	ClearEntities                *bool    `json:"clearEntities,omitempty"`
-	AddPlatformIDs               []string `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs            []string `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms               *bool    `json:"clearPlatforms,omitempty"`
-	AddOutOfScopePlatformIDs     []string `json:"addOutOfScopePlatformIDs,omitempty"`
-	RemoveOutOfScopePlatformIDs  []string `json:"removeOutOfScopePlatformIDs,omitempty"`
-	ClearOutOfScopePlatforms     *bool    `json:"clearOutOfScopePlatforms,omitempty"`
-	AddIdentityHolderIDs         []string `json:"addIdentityHolderIDs,omitempty"`
-	RemoveIdentityHolderIDs      []string `json:"removeIdentityHolderIDs,omitempty"`
-	ClearIdentityHolders         *bool    `json:"clearIdentityHolders,omitempty"`
-	AddControlIDs                []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs             []string `json:"removeControlIDs,omitempty"`
-	ClearControls                *bool    `json:"clearControls,omitempty"`
-	SourcePlatformID             *string  `json:"sourcePlatformID,omitempty"`
-	ClearSourcePlatform          *bool    `json:"clearSourcePlatform,omitempty"`
-	AddConnectedAssetIDs         []string `json:"addConnectedAssetIDs,omitempty"`
-	RemoveConnectedAssetIDs      []string `json:"removeConnectedAssetIDs,omitempty"`
-	ClearConnectedAssets         *bool    `json:"clearConnectedAssets,omitempty"`
-	AddConnectedFromIDs          []string `json:"addConnectedFromIDs,omitempty"`
-	RemoveConnectedFromIDs       []string `json:"removeConnectedFromIDs,omitempty"`
-	ClearConnectedFrom           *bool    `json:"clearConnectedFrom,omitempty"`
+	Categories       []string `json:"categories,omitempty"`
+	AppendCategories []string `json:"appendCategories,omitempty"`
+	ClearCategories  *bool    `json:"clearCategories,omitempty"`
+	// time when this asset was last observed by the source integration
+	ObservedAt                   *models.DateTime `json:"observedAt,omitempty"`
+	ClearObservedAt              *bool            `json:"clearObservedAt,omitempty"`
+	AddBlockedGroupIDs           []string         `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs        []string         `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups           *bool            `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                 []string         `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs              []string         `json:"removeEditorIDs,omitempty"`
+	ClearEditors                 *bool            `json:"clearEditors,omitempty"`
+	AddViewerIDs                 []string         `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs              []string         `json:"removeViewerIDs,omitempty"`
+	ClearViewers                 *bool            `json:"clearViewers,omitempty"`
+	InternalOwnerUserID          *string          `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser       *bool            `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID         *string          `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup      *bool            `json:"clearInternalOwnerGroup,omitempty"`
+	AssetSubtypeID               *string          `json:"assetSubtypeID,omitempty"`
+	ClearAssetSubtype            *bool            `json:"clearAssetSubtype,omitempty"`
+	AssetDataClassificationID    *string          `json:"assetDataClassificationID,omitempty"`
+	ClearAssetDataClassification *bool            `json:"clearAssetDataClassification,omitempty"`
+	EnvironmentID                *string          `json:"environmentID,omitempty"`
+	ClearEnvironment             *bool            `json:"clearEnvironment,omitempty"`
+	ScopeID                      *string          `json:"scopeID,omitempty"`
+	ClearScope                   *bool            `json:"clearScope,omitempty"`
+	AccessModelID                *string          `json:"accessModelID,omitempty"`
+	ClearAccessModel             *bool            `json:"clearAccessModel,omitempty"`
+	EncryptionStatusID           *string          `json:"encryptionStatusID,omitempty"`
+	ClearEncryptionStatus        *bool            `json:"clearEncryptionStatus,omitempty"`
+	SecurityTierID               *string          `json:"securityTierID,omitempty"`
+	ClearSecurityTier            *bool            `json:"clearSecurityTier,omitempty"`
+	CriticalityID                *string          `json:"criticalityID,omitempty"`
+	ClearCriticality             *bool            `json:"clearCriticality,omitempty"`
+	AddScanIDs                   []string         `json:"addScanIDs,omitempty"`
+	RemoveScanIDs                []string         `json:"removeScanIDs,omitempty"`
+	ClearScans                   *bool            `json:"clearScans,omitempty"`
+	AddEntityIDs                 []string         `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs              []string         `json:"removeEntityIDs,omitempty"`
+	ClearEntities                *bool            `json:"clearEntities,omitempty"`
+	AddPlatformIDs               []string         `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs            []string         `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms               *bool            `json:"clearPlatforms,omitempty"`
+	AddOutOfScopePlatformIDs     []string         `json:"addOutOfScopePlatformIDs,omitempty"`
+	RemoveOutOfScopePlatformIDs  []string         `json:"removeOutOfScopePlatformIDs,omitempty"`
+	ClearOutOfScopePlatforms     *bool            `json:"clearOutOfScopePlatforms,omitempty"`
+	AddIdentityHolderIDs         []string         `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs      []string         `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders         *bool            `json:"clearIdentityHolders,omitempty"`
+	AddControlIDs                []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs             []string         `json:"removeControlIDs,omitempty"`
+	ClearControls                *bool            `json:"clearControls,omitempty"`
+	SourcePlatformID             *string          `json:"sourcePlatformID,omitempty"`
+	ClearSourcePlatform          *bool            `json:"clearSourcePlatform,omitempty"`
+	AddConnectedAssetIDs         []string         `json:"addConnectedAssetIDs,omitempty"`
+	RemoveConnectedAssetIDs      []string         `json:"removeConnectedAssetIDs,omitempty"`
+	ClearConnectedAssets         *bool            `json:"clearConnectedAssets,omitempty"`
+	AddConnectedFromIDs          []string         `json:"addConnectedFromIDs,omitempty"`
+	RemoveConnectedFromIDs       []string         `json:"removeConnectedFromIDs,omitempty"`
+	ClearConnectedFrom           *bool            `json:"clearConnectedFrom,omitempty"`
 }
 
 // UpdateCampaignInput is used for update Campaign object.
@@ -38328,21 +38762,30 @@ type UpdateContactInput struct {
 	Address      *string `json:"address,omitempty"`
 	ClearAddress *bool   `json:"clearAddress,omitempty"`
 	// status of the contact
-	Status                  *enums.UserStatus `json:"status,omitempty"`
-	OwnerID                 *string           `json:"ownerID,omitempty"`
-	ClearOwner              *bool             `json:"clearOwner,omitempty"`
-	AddEntityIDs            []string          `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs         []string          `json:"removeEntityIDs,omitempty"`
-	ClearEntities           *bool             `json:"clearEntities,omitempty"`
-	AddCampaignIDs          []string          `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs       []string          `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns          *bool             `json:"clearCampaigns,omitempty"`
-	AddCampaignTargetIDs    []string          `json:"addCampaignTargetIDs,omitempty"`
-	RemoveCampaignTargetIDs []string          `json:"removeCampaignTargetIDs,omitempty"`
-	ClearCampaignTargets    *bool             `json:"clearCampaignTargets,omitempty"`
-	AddFileIDs              []string          `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string          `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool             `json:"clearFiles,omitempty"`
+	Status *enums.UserStatus `json:"status,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID      *string `json:"externalID,omitempty"`
+	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// integration that sourced this contact, when populated via integration ingest
+	IntegrationID      *string `json:"integrationID,omitempty"`
+	ClearIntegrationID *bool   `json:"clearIntegrationID,omitempty"`
+	// time when this contact was last observed by the source integration
+	ObservedAt              *models.DateTime `json:"observedAt,omitempty"`
+	ClearObservedAt         *bool            `json:"clearObservedAt,omitempty"`
+	OwnerID                 *string          `json:"ownerID,omitempty"`
+	ClearOwner              *bool            `json:"clearOwner,omitempty"`
+	AddEntityIDs            []string         `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs         []string         `json:"removeEntityIDs,omitempty"`
+	ClearEntities           *bool            `json:"clearEntities,omitempty"`
+	AddCampaignIDs          []string         `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs       []string         `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns          *bool            `json:"clearCampaigns,omitempty"`
+	AddCampaignTargetIDs    []string         `json:"addCampaignTargetIDs,omitempty"`
+	RemoveCampaignTargetIDs []string         `json:"removeCampaignTargetIDs,omitempty"`
+	ClearCampaignTargets    *bool            `json:"clearCampaignTargets,omitempty"`
+	AddFileIDs              []string         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs           []string         `json:"removeFileIDs,omitempty"`
+	ClearFiles              *bool            `json:"clearFiles,omitempty"`
 }
 
 // UpdateControlImplementationInput is used for update ControlImplementation object.
@@ -38815,6 +39258,9 @@ type UpdateDirectoryAccountInput struct {
 	// the scope of the directory_account
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName      *string `json:"directoryName,omitempty"`
 	ClearDirectoryName *bool   `json:"clearDirectoryName,omitempty"`
@@ -38861,11 +39307,26 @@ type UpdateDirectoryAccountInput struct {
 	// timestamp of the most recent login reported by the provider
 	LastLoginAt      *time.Time `json:"lastLoginAt,omitempty"`
 	ClearLastLoginAt *bool      `json:"clearLastLoginAt,omitempty"`
+	// time this account was first observed by Openlane from directory ingest
+	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
+	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
+	// time this account was most recently confirmed by directory ingest
+	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
+	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
+	// provider-reported time the account was added or provisioned in the source directory
+	AddedAt      *time.Time `json:"addedAt,omitempty"`
+	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
+	// provider-reported or locally-recorded time the account was removed from the source directory
+	RemovedAt      *time.Time `json:"removedAt,omitempty"`
+	ClearRemovedAt *bool      `json:"clearRemovedAt,omitempty"`
 	// hash of the normalized profile payload for change detection
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile      map[string]any `json:"profile,omitempty"`
 	ClearProfile *bool          `json:"clearProfile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion              *string  `json:"sourceVersion,omitempty"`
 	ClearSourceVersion         *bool    `json:"clearSourceVersion,omitempty"`
@@ -38903,6 +39364,9 @@ type UpdateDirectoryGroupInput struct {
 	// the scope of the directory_group
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// primary group email address, when applicable
 	Email      *string `json:"email,omitempty"`
 	ClearEmail *bool   `json:"clearEmail,omitempty"`
@@ -38922,11 +39386,26 @@ type UpdateDirectoryGroupInput struct {
 	// member count reported by the directory
 	MemberCount      *int64 `json:"memberCount,omitempty"`
 	ClearMemberCount *bool  `json:"clearMemberCount,omitempty"`
+	// time this group was first observed by Openlane from directory ingest
+	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
+	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
+	// time this group was most recently confirmed by directory ingest
+	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
+	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
+	// provider-reported time the group was added or provisioned in the source directory
+	AddedAt      *time.Time `json:"addedAt,omitempty"`
+	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
+	// provider-reported or locally-recorded time the group was removed from the source directory
+	RemovedAt      *time.Time `json:"removedAt,omitempty"`
+	ClearRemovedAt *bool      `json:"clearRemovedAt,omitempty"`
 	// hash of the normalized payload for diffing
 	ProfileHash *string `json:"profileHash,omitempty"`
 	// flattened attribute bag used for filtering/diffing
 	Profile      map[string]any `json:"profile,omitempty"`
 	ClearProfile *bool          `json:"clearProfile,omitempty"`
+	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion              *string  `json:"sourceVersion,omitempty"`
 	ClearSourceVersion         *bool    `json:"clearSourceVersion,omitempty"`
@@ -38950,6 +39429,9 @@ type UpdateDirectoryMembershipInput struct {
 	// the scope of the directory_membership
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// membership role reported by the provider
 	Role      *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	ClearRole *bool                          `json:"clearRole,omitempty"`
@@ -38959,9 +39441,15 @@ type UpdateDirectoryMembershipInput struct {
 	// first time the membership was detected
 	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
 	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
-	// most recent time the membership was detected
+	// most recent time the membership was confirmed by directory ingest
 	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
 	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
+	// provider-reported time the membership was added in the source directory
+	AddedAt      *time.Time `json:"addedAt,omitempty"`
+	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
+	// provider-reported or locally-recorded time the membership was removed from the source directory
+	RemovedAt      *time.Time `json:"removedAt,omitempty"`
+	ClearRemovedAt *bool      `json:"clearRemovedAt,omitempty"`
 	// sync run identifier that most recently confirmed this membership
 	LastConfirmedRunID      *string `json:"lastConfirmedRunID,omitempty"`
 	ClearLastConfirmedRunID *bool   `json:"clearLastConfirmedRunID,omitempty"`
@@ -38991,6 +39479,9 @@ type UpdateDirectorySyncRunInput struct {
 	// the scope of the directory_sync_run
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	DirectoryInstanceID      *string `json:"directoryInstanceID,omitempty"`
+	ClearDirectoryInstanceID *bool   `json:"clearDirectoryInstanceID,omitempty"`
 	// current state of the sync run
 	Status *enums.DirectorySyncRunStatus `json:"status,omitempty"`
 	// time the sync started
@@ -39359,8 +39850,14 @@ type UpdateEntityInput struct {
 	ContractRenewalAt      *models.DateTime `json:"contractRenewalAt,omitempty"`
 	ClearContractRenewalAt *bool            `json:"clearContractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
-	VendorMetadata                         map[string]any   `json:"vendorMetadata,omitempty"`
-	ClearVendorMetadata                    *bool            `json:"clearVendorMetadata,omitempty"`
+	VendorMetadata      map[string]any `json:"vendorMetadata,omitempty"`
+	ClearVendorMetadata *bool          `json:"clearVendorMetadata,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID      *string `json:"externalID,omitempty"`
+	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// time when this entity was last observed by the source integration
+	ObservedAt                             *models.DateTime `json:"observedAt,omitempty"`
+	ClearObservedAt                        *bool            `json:"clearObservedAt,omitempty"`
 	AddBlockedGroupIDs                     []string         `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs                  []string         `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups                     *bool            `json:"clearBlockedGroups,omitempty"`
@@ -40895,6 +41392,10 @@ type UpdateNotificationTemplateInput struct {
 	Locale *string `json:"locale,omitempty"`
 	// topic name or wildcard pattern this template targets
 	TopicPattern *string `json:"topicPattern,omitempty"`
+	// optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	Destinations       []string `json:"destinations,omitempty"`
+	AppendDestinations []string `json:"appendDestinations,omitempty"`
+	ClearDestinations  *bool    `json:"clearDestinations,omitempty"`
 	// title template for external channel messages
 	TitleTemplate      *string `json:"titleTemplate,omitempty"`
 	ClearTitleTemplate *bool   `json:"clearTitleTemplate,omitempty"`
@@ -42105,6 +42606,15 @@ type UpdateRiskInput struct {
 	// the scope of the risk
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID      *string `json:"externalID,omitempty"`
+	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// integration that surfaced this risk, when sourced via integration ingest
+	IntegrationID      *string `json:"integrationID,omitempty"`
+	ClearIntegrationID *bool   `json:"clearIntegrationID,omitempty"`
+	// time when this risk was last observed by the source integration
+	ObservedAt      *models.DateTime `json:"observedAt,omitempty"`
+	ClearObservedAt *bool            `json:"clearObservedAt,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID      *string `json:"externalUUID,omitempty"`
 	ClearExternalUUID *bool   `json:"clearExternalUUID,omitempty"`
@@ -47008,6 +47518,8 @@ type WorkflowInstanceWhereInput struct {
 type WorkflowMetadata struct {
 	// Available workflow object types
 	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
+	// Extensible workflow metadata payload for action configuration surfaces
+	Extensions map[string]any `json:"extensions"`
 }
 
 type WorkflowObjectRef struct {
@@ -47915,6 +48427,7 @@ const (
 	AssetOrderFieldCostCenter           AssetOrderField = "cost_center"
 	AssetOrderFieldEstimatedMonthlyCost AssetOrderField = "estimated_monthly_cost"
 	AssetOrderFieldPurchaseDate         AssetOrderField = "purchase_date"
+	AssetOrderFieldObservedAt           AssetOrderField = "observed_at"
 )
 
 var AllAssetOrderField = []AssetOrderField{
@@ -47932,11 +48445,12 @@ var AllAssetOrderField = []AssetOrderField{
 	AssetOrderFieldCostCenter,
 	AssetOrderFieldEstimatedMonthlyCost,
 	AssetOrderFieldPurchaseDate,
+	AssetOrderFieldObservedAt,
 }
 
 func (e AssetOrderField) IsValid() bool {
 	switch e {
-	case AssetOrderFieldCreatedAt, AssetOrderFieldUpdatedAt, AssetOrderFieldInternalOwner, AssetOrderFieldAssetType, AssetOrderFieldName, AssetOrderFieldDisplayName, AssetOrderFieldPhysicalLocation, AssetOrderFieldRegion, AssetOrderFieldContainsPii, AssetOrderFieldSourceType, AssetOrderFieldSourceIdentifier, AssetOrderFieldCostCenter, AssetOrderFieldEstimatedMonthlyCost, AssetOrderFieldPurchaseDate:
+	case AssetOrderFieldCreatedAt, AssetOrderFieldUpdatedAt, AssetOrderFieldInternalOwner, AssetOrderFieldAssetType, AssetOrderFieldName, AssetOrderFieldDisplayName, AssetOrderFieldPhysicalLocation, AssetOrderFieldRegion, AssetOrderFieldContainsPii, AssetOrderFieldSourceType, AssetOrderFieldSourceIdentifier, AssetOrderFieldCostCenter, AssetOrderFieldEstimatedMonthlyCost, AssetOrderFieldPurchaseDate, AssetOrderFieldObservedAt:
 		return true
 	}
 	return false
@@ -48141,13 +48655,15 @@ func (e CampaignTargetOrderField) MarshalJSON() ([]byte, error) {
 type ContactOrderField string
 
 const (
-	ContactOrderFieldCreatedAt ContactOrderField = "created_at"
-	ContactOrderFieldUpdatedAt ContactOrderField = "updated_at"
-	ContactOrderFieldFullName  ContactOrderField = "full_name"
-	ContactOrderFieldTitle     ContactOrderField = "title"
-	ContactOrderFieldCompany   ContactOrderField = "company"
-	ContactOrderFieldEmail     ContactOrderField = "email"
-	ContactOrderFieldStatus    ContactOrderField = "STATUS"
+	ContactOrderFieldCreatedAt  ContactOrderField = "created_at"
+	ContactOrderFieldUpdatedAt  ContactOrderField = "updated_at"
+	ContactOrderFieldFullName   ContactOrderField = "full_name"
+	ContactOrderFieldTitle      ContactOrderField = "title"
+	ContactOrderFieldCompany    ContactOrderField = "company"
+	ContactOrderFieldEmail      ContactOrderField = "email"
+	ContactOrderFieldStatus     ContactOrderField = "STATUS"
+	ContactOrderFieldExternalID ContactOrderField = "external_id"
+	ContactOrderFieldObservedAt ContactOrderField = "observed_at"
 )
 
 var AllContactOrderField = []ContactOrderField{
@@ -48158,11 +48674,13 @@ var AllContactOrderField = []ContactOrderField{
 	ContactOrderFieldCompany,
 	ContactOrderFieldEmail,
 	ContactOrderFieldStatus,
+	ContactOrderFieldExternalID,
+	ContactOrderFieldObservedAt,
 }
 
 func (e ContactOrderField) IsValid() bool {
 	switch e {
-	case ContactOrderFieldCreatedAt, ContactOrderFieldUpdatedAt, ContactOrderFieldFullName, ContactOrderFieldTitle, ContactOrderFieldCompany, ContactOrderFieldEmail, ContactOrderFieldStatus:
+	case ContactOrderFieldCreatedAt, ContactOrderFieldUpdatedAt, ContactOrderFieldFullName, ContactOrderFieldTitle, ContactOrderFieldCompany, ContactOrderFieldEmail, ContactOrderFieldStatus, ContactOrderFieldExternalID, ContactOrderFieldObservedAt:
 		return true
 	}
 	return false
@@ -48649,17 +49167,19 @@ func (e DNSVerificationOrderField) MarshalJSON() ([]byte, error) {
 type DirectoryAccountOrderField string
 
 const (
-	DirectoryAccountOrderFieldCreatedAt      DirectoryAccountOrderField = "created_at"
-	DirectoryAccountOrderFieldUpdatedAt      DirectoryAccountOrderField = "updated_at"
-	DirectoryAccountOrderFieldDirectoryName  DirectoryAccountOrderField = "directory_name"
-	DirectoryAccountOrderFieldExternalID     DirectoryAccountOrderField = "external_id"
-	DirectoryAccountOrderFieldCanonicalEmail DirectoryAccountOrderField = "canonical_email"
-	DirectoryAccountOrderFieldDisplayName    DirectoryAccountOrderField = "display_name"
+	DirectoryAccountOrderFieldCreatedAt           DirectoryAccountOrderField = "created_at"
+	DirectoryAccountOrderFieldUpdatedAt           DirectoryAccountOrderField = "updated_at"
+	DirectoryAccountOrderFieldDirectoryInstanceID DirectoryAccountOrderField = "directory_instance_id"
+	DirectoryAccountOrderFieldDirectoryName       DirectoryAccountOrderField = "directory_name"
+	DirectoryAccountOrderFieldExternalID          DirectoryAccountOrderField = "external_id"
+	DirectoryAccountOrderFieldCanonicalEmail      DirectoryAccountOrderField = "canonical_email"
+	DirectoryAccountOrderFieldDisplayName         DirectoryAccountOrderField = "display_name"
 )
 
 var AllDirectoryAccountOrderField = []DirectoryAccountOrderField{
 	DirectoryAccountOrderFieldCreatedAt,
 	DirectoryAccountOrderFieldUpdatedAt,
+	DirectoryAccountOrderFieldDirectoryInstanceID,
 	DirectoryAccountOrderFieldDirectoryName,
 	DirectoryAccountOrderFieldExternalID,
 	DirectoryAccountOrderFieldCanonicalEmail,
@@ -48668,7 +49188,7 @@ var AllDirectoryAccountOrderField = []DirectoryAccountOrderField{
 
 func (e DirectoryAccountOrderField) IsValid() bool {
 	switch e {
-	case DirectoryAccountOrderFieldCreatedAt, DirectoryAccountOrderFieldUpdatedAt, DirectoryAccountOrderFieldDirectoryName, DirectoryAccountOrderFieldExternalID, DirectoryAccountOrderFieldCanonicalEmail, DirectoryAccountOrderFieldDisplayName:
+	case DirectoryAccountOrderFieldCreatedAt, DirectoryAccountOrderFieldUpdatedAt, DirectoryAccountOrderFieldDirectoryInstanceID, DirectoryAccountOrderFieldDirectoryName, DirectoryAccountOrderFieldExternalID, DirectoryAccountOrderFieldCanonicalEmail, DirectoryAccountOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -48713,16 +49233,18 @@ func (e DirectoryAccountOrderField) MarshalJSON() ([]byte, error) {
 type DirectoryGroupOrderField string
 
 const (
-	DirectoryGroupOrderFieldCreatedAt   DirectoryGroupOrderField = "created_at"
-	DirectoryGroupOrderFieldUpdatedAt   DirectoryGroupOrderField = "updated_at"
-	DirectoryGroupOrderFieldExternalID  DirectoryGroupOrderField = "external_id"
-	DirectoryGroupOrderFieldEmail       DirectoryGroupOrderField = "email"
-	DirectoryGroupOrderFieldDisplayName DirectoryGroupOrderField = "display_name"
+	DirectoryGroupOrderFieldCreatedAt           DirectoryGroupOrderField = "created_at"
+	DirectoryGroupOrderFieldUpdatedAt           DirectoryGroupOrderField = "updated_at"
+	DirectoryGroupOrderFieldDirectoryInstanceID DirectoryGroupOrderField = "directory_instance_id"
+	DirectoryGroupOrderFieldExternalID          DirectoryGroupOrderField = "external_id"
+	DirectoryGroupOrderFieldEmail               DirectoryGroupOrderField = "email"
+	DirectoryGroupOrderFieldDisplayName         DirectoryGroupOrderField = "display_name"
 )
 
 var AllDirectoryGroupOrderField = []DirectoryGroupOrderField{
 	DirectoryGroupOrderFieldCreatedAt,
 	DirectoryGroupOrderFieldUpdatedAt,
+	DirectoryGroupOrderFieldDirectoryInstanceID,
 	DirectoryGroupOrderFieldExternalID,
 	DirectoryGroupOrderFieldEmail,
 	DirectoryGroupOrderFieldDisplayName,
@@ -48730,7 +49252,7 @@ var AllDirectoryGroupOrderField = []DirectoryGroupOrderField{
 
 func (e DirectoryGroupOrderField) IsValid() bool {
 	switch e {
-	case DirectoryGroupOrderFieldCreatedAt, DirectoryGroupOrderFieldUpdatedAt, DirectoryGroupOrderFieldExternalID, DirectoryGroupOrderFieldEmail, DirectoryGroupOrderFieldDisplayName:
+	case DirectoryGroupOrderFieldCreatedAt, DirectoryGroupOrderFieldUpdatedAt, DirectoryGroupOrderFieldDirectoryInstanceID, DirectoryGroupOrderFieldExternalID, DirectoryGroupOrderFieldEmail, DirectoryGroupOrderFieldDisplayName:
 		return true
 	}
 	return false
@@ -49160,6 +49682,8 @@ const (
 	EntityOrderFieldReviewFrequency       EntityOrderField = "REVIEW_FREQUENCY"
 	EntityOrderFieldNextReviewAt          EntityOrderField = "next_review_at"
 	EntityOrderFieldContractRenewalAt     EntityOrderField = "contract_renewal_at"
+	EntityOrderFieldExternalID            EntityOrderField = "external_id"
+	EntityOrderFieldObservedAt            EntityOrderField = "observed_at"
 )
 
 var AllEntityOrderField = []EntityOrderField{
@@ -49192,11 +49716,13 @@ var AllEntityOrderField = []EntityOrderField{
 	EntityOrderFieldReviewFrequency,
 	EntityOrderFieldNextReviewAt,
 	EntityOrderFieldContractRenewalAt,
+	EntityOrderFieldExternalID,
+	EntityOrderFieldObservedAt,
 }
 
 func (e EntityOrderField) IsValid() bool {
 	switch e {
-	case EntityOrderFieldCreatedAt, EntityOrderFieldUpdatedAt, EntityOrderFieldInternalOwner, EntityOrderFieldReviewedBy, EntityOrderFieldLastReviewedAt, EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus, EntityOrderFieldApprovedForUse, EntityOrderFieldHasSoc2, EntityOrderFieldSoc2PeriodEnd, EntityOrderFieldContractStartDate, EntityOrderFieldContractEndDate, EntityOrderFieldAutoRenews, EntityOrderFieldTerminationNoticeDays, EntityOrderFieldAnnualSpend, EntityOrderFieldSpendCurrency, EntityOrderFieldBillingModel, EntityOrderFieldRenewalRisk, EntityOrderFieldSsoEnforced, EntityOrderFieldMfaSupported, EntityOrderFieldMfaEnforced, EntityOrderFieldStatusPageURL, EntityOrderFieldRiskRating, EntityOrderFieldRiskScore, EntityOrderFieldTier, EntityOrderFieldReviewFrequency, EntityOrderFieldNextReviewAt, EntityOrderFieldContractRenewalAt:
+	case EntityOrderFieldCreatedAt, EntityOrderFieldUpdatedAt, EntityOrderFieldInternalOwner, EntityOrderFieldReviewedBy, EntityOrderFieldLastReviewedAt, EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus, EntityOrderFieldApprovedForUse, EntityOrderFieldHasSoc2, EntityOrderFieldSoc2PeriodEnd, EntityOrderFieldContractStartDate, EntityOrderFieldContractEndDate, EntityOrderFieldAutoRenews, EntityOrderFieldTerminationNoticeDays, EntityOrderFieldAnnualSpend, EntityOrderFieldSpendCurrency, EntityOrderFieldBillingModel, EntityOrderFieldRenewalRisk, EntityOrderFieldSsoEnforced, EntityOrderFieldMfaSupported, EntityOrderFieldMfaEnforced, EntityOrderFieldStatusPageURL, EntityOrderFieldRiskRating, EntityOrderFieldRiskScore, EntityOrderFieldTier, EntityOrderFieldReviewFrequency, EntityOrderFieldNextReviewAt, EntityOrderFieldContractRenewalAt, EntityOrderFieldExternalID, EntityOrderFieldObservedAt:
 		return true
 	}
 	return false
@@ -51743,6 +52269,8 @@ type RiskOrderField string
 const (
 	RiskOrderFieldCreatedAt     RiskOrderField = "created_at"
 	RiskOrderFieldUpdatedAt     RiskOrderField = "updated_at"
+	RiskOrderFieldExternalID    RiskOrderField = "external_id"
+	RiskOrderFieldObservedAt    RiskOrderField = "observed_at"
 	RiskOrderFieldName          RiskOrderField = "name"
 	RiskOrderFieldStatus        RiskOrderField = "STATUS"
 	RiskOrderFieldImpact        RiskOrderField = "IMPACT"
@@ -51754,6 +52282,8 @@ const (
 var AllRiskOrderField = []RiskOrderField{
 	RiskOrderFieldCreatedAt,
 	RiskOrderFieldUpdatedAt,
+	RiskOrderFieldExternalID,
+	RiskOrderFieldObservedAt,
 	RiskOrderFieldName,
 	RiskOrderFieldStatus,
 	RiskOrderFieldImpact,
@@ -51764,7 +52294,7 @@ var AllRiskOrderField = []RiskOrderField{
 
 func (e RiskOrderField) IsValid() bool {
 	switch e {
-	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
+	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
 		return true
 	}
 	return false
