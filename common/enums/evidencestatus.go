@@ -6,6 +6,8 @@ import "io"
 type EvidenceStatus string
 
 var (
+	// EvidenceStatusRequested indicates the the evidence is requested, usually by an auditor or internal reviewer.
+	EvidenceStatusRequested EvidenceStatus = "REQUESTED"
 	// EvidenceStatusDraft indicates the in draft.
 	EvidenceStatusDraft EvidenceStatus = "DRAFT"
 	// EvidenceStatusSubmitted indicates the submitted.
@@ -27,6 +29,7 @@ var (
 )
 
 var evidenceStatusValues = []EvidenceStatus{
+	EvidenceStatusRequested,
 	EvidenceStatusDraft,
 	EvidenceStatusSubmitted,
 	EvidenceStatusReadyForAuditor,

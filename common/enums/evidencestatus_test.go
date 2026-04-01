@@ -11,6 +11,7 @@ func TestToEvidenceStatus(t *testing.T) {
 		input    string
 		expected *EvidenceStatus
 	}{
+		{"REQUESTED", &EvidenceStatusRequested},
 		{"SUBMITTED", &EvidenceStatusSubmitted},
 		{"READY_FOR_AUDITOR", &EvidenceStatusReadyForAuditor},
 		{"AUDITOR_APPROVED", &EvidenceStatusAuditorApproved},
