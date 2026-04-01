@@ -25379,6 +25379,7 @@ type EvidenceEdge {
 EvidenceEvidenceStatus is enum for the field status
 """
 enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
+  REQUESTED
   DRAFT
   SUBMITTED
   READY_FOR_AUDITOR
