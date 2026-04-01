@@ -95,7 +95,7 @@ require (
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/zalando/go-keyring v0.2.6 // indirect
-	github.com/zitadel/oidc/v3 v3.45.5 // indirect
+	github.com/zitadel/oidc/v3 v3.45.6 // indirect
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
