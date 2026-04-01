@@ -1419,7 +1419,7 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 	}
 
 	mutation := e.client.db.Evidence.Create().
-		SetCreationDate(time.Now().Add(-time.Minute)).
+		SetCreationDate(models.DateTime(time.Now().Add(-time.Minute))).
 		SetName(e.Name)
 
 	if e.ProgramID != "" {

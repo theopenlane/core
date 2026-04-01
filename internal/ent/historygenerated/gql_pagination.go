@@ -10032,11 +10032,24 @@ var (
 	// EvidenceHistoryOrderFieldCreationDate orders EvidenceHistory by creation_date.
 	EvidenceHistoryOrderFieldCreationDate = &EvidenceHistoryOrderField{
 		Value: func(_m *EvidenceHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CreationDate == nil {
+				return nil, nil
+			}
 			return _m.CreationDate, nil
 		},
 		column: evidencehistory.FieldCreationDate,
-		toTerm: evidencehistory.ByCreationDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidencehistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidencehistory.ByCreationDate(opts...)
+		},
 		toCursor: func(_m *EvidenceHistory) Cursor {
+			if _m.CreationDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.CreationDate,
@@ -10046,11 +10059,24 @@ var (
 	// EvidenceHistoryOrderFieldRenewalDate orders EvidenceHistory by renewal_date.
 	EvidenceHistoryOrderFieldRenewalDate = &EvidenceHistoryOrderField{
 		Value: func(_m *EvidenceHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.RenewalDate == nil {
+				return nil, nil
+			}
 			return _m.RenewalDate, nil
 		},
 		column: evidencehistory.FieldRenewalDate,
-		toTerm: evidencehistory.ByRenewalDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidencehistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidencehistory.ByRenewalDate(opts...)
+		},
 		toCursor: func(_m *EvidenceHistory) Cursor {
+			if _m.RenewalDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.RenewalDate,

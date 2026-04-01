@@ -66117,11 +66117,11 @@ input CreateEvidenceInput {
   """
   the date the evidence was retrieved
   """
-  creationDate: Time
+  creationDate: DateTime
   """
   the date the evidence should be renewed, defaults to a year from entry date
   """
-  renewalDate: Time
+  renewalDate: DateTime
   """
   the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
   """
@@ -79151,11 +79151,11 @@ type Evidence implements Node {
   """
   the date the evidence was retrieved
   """
-  creationDate: Time!
+  creationDate: DateTime!
   """
   the date the evidence should be renewed, defaults to a year from entry date
   """
-  renewalDate: Time
+  renewalDate: DateTime
   """
   the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
   """
@@ -79853,25 +79853,25 @@ input EvidenceWhereInput {
   """
   creation_date field predicates
   """
-  creationDate: Time
-  creationDateNEQ: Time
-  creationDateIn: [Time!]
-  creationDateNotIn: [Time!]
-  creationDateGT: Time
-  creationDateGTE: Time
-  creationDateLT: Time
-  creationDateLTE: Time
+  creationDate: DateTime
+  creationDateNEQ: DateTime
+  creationDateIn: [DateTime!]
+  creationDateNotIn: [DateTime!]
+  creationDateGT: DateTime
+  creationDateGTE: DateTime
+  creationDateLT: DateTime
+  creationDateLTE: DateTime
   """
   renewal_date field predicates
   """
-  renewalDate: Time
-  renewalDateNEQ: Time
-  renewalDateIn: [Time!]
-  renewalDateNotIn: [Time!]
-  renewalDateGT: Time
-  renewalDateGTE: Time
-  renewalDateLT: Time
-  renewalDateLTE: Time
+  renewalDate: DateTime
+  renewalDateNEQ: DateTime
+  renewalDateIn: [DateTime!]
+  renewalDateNotIn: [DateTime!]
+  renewalDateGT: DateTime
+  renewalDateGTE: DateTime
+  renewalDateLT: DateTime
+  renewalDateLTE: DateTime
   renewalDateIsNil: Boolean
   renewalDateNotNil: Boolean
   """
@@ -126426,11 +126426,11 @@ input UpdateEvidenceInput {
   """
   the date the evidence was retrieved
   """
-  creationDate: Time
+  creationDate: DateTime
   """
   the date the evidence should be renewed, defaults to a year from entry date
   """
-  renewalDate: Time
+  renewalDate: DateTime
   clearRenewalDate: Boolean
   """
   the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)

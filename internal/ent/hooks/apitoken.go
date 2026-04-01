@@ -10,17 +10,20 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func validateTimeNotInPast(t time.Time, ok bool) error {
+func validateTimeNotInPast[T time.Time | models.DateTime](t T, ok bool) error {
 	if !ok {
 		return nil
 	}
 
-	if t.Before(time.Now()) {
+	timeValue := time.Time(t)
+
+	if timeValue.Before(time.Now()) {
 		return ErrPastTimeNotAllowed
 	}
 

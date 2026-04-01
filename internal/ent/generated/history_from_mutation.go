@@ -8201,11 +8201,11 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if creationDate, exists := m.CreationDate(); exists {
-		create = create.SetCreationDate(creationDate)
+		create = create.SetNillableCreationDate(&creationDate)
 	}
 
 	if renewalDate, exists := m.RenewalDate(); exists {
-		create = create.SetRenewalDate(renewalDate)
+		create = create.SetNillableRenewalDate(&renewalDate)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -8364,15 +8364,15 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if creationDate, exists := m.CreationDate(); exists {
-			create = create.SetCreationDate(creationDate)
+			create = create.SetNillableCreationDate(&creationDate)
 		} else {
-			create = create.SetCreationDate(evidence.CreationDate)
+			create = create.SetNillableCreationDate(evidence.CreationDate)
 		}
 
 		if renewalDate, exists := m.RenewalDate(); exists {
-			create = create.SetRenewalDate(renewalDate)
+			create = create.SetNillableRenewalDate(&renewalDate)
 		} else {
-			create = create.SetRenewalDate(evidence.RenewalDate)
+			create = create.SetNillableRenewalDate(evidence.RenewalDate)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -8452,8 +8452,8 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(evidence.Name).
 			SetDescription(evidence.Description).
 			SetCollectionProcedure(evidence.CollectionProcedure).
-			SetCreationDate(evidence.CreationDate).
-			SetRenewalDate(evidence.RenewalDate).
+			SetNillableCreationDate(evidence.CreationDate).
+			SetNillableRenewalDate(evidence.RenewalDate).
 			SetSource(evidence.Source).
 			SetIsAutomated(evidence.IsAutomated).
 			SetURL(evidence.URL).
