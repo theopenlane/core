@@ -1,6 +1,7 @@
 package graphapi_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -12,6 +13,7 @@ import (
 
 	auth "github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -368,6 +370,28 @@ func TestMutationDeleteUser(t *testing.T) {
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 		})
 	}
+}
+
+func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
+	orgUser := suite.userBuilder(context.Background(), t)
+
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+
+	newMember := (&UserBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+
+	orgCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
+
+	_, err := suite.client.api.AddUserToOrgWithRole(orgCtx, testclient.CreateOrgMembershipInput{
+		UserID: newMember.ID,
+		Role:   &enums.RoleOwner,
+	})
+	assert.NilError(t, err)
+
+	deleteCtx := auth.NewTestContextWithOrgID(newMember.ID, org.ID)
+
+	_, err = suite.client.api.DeleteUser(deleteCtx, newMember.ID)
+
+	assert.ErrorContains(t, err, "organization owner cannot be deleted")
 }
 
 func TestMutationUserCascadeDelete(t *testing.T) {
