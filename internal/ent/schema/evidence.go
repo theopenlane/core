@@ -116,8 +116,6 @@ func (Evidence) Fields() []ent.Field {
 			}).
 			GoType(models.DateTime{}).
 			Nillable().
-			GoType(models.DateTime{}).
-			Nillable().
 			Annotations(
 				entgql.OrderField("renewal_date"),
 			).
