@@ -125,6 +125,10 @@ func (i InternalPolicy) Edges() []ent.Edge {
 				entx.FieldWorkflowEligible(),
 			},
 		}),
+		defaultEdgeToWithPagination(i, Asset{}),
+		defaultEdgeToWithPagination(i, Entity{}),
+		defaultEdgeToWithPagination(i, IdentityHolder{}),
+		defaultEdgeFromWithPagination(i, Review{}),
 	}
 }
 

@@ -263,6 +263,7 @@ func (p IdentityHolder) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
+		defaultEdgeFromWithPagination(p, InternalPolicy{}),
 	}
 }
 
