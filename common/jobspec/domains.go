@@ -134,9 +134,26 @@ type CreateDomainScanArgs struct {
 }
 
 // Kind satisfies the river.Job interface
-func (CreateDomainScanArgs) Kind() string { return "create_domain_scan_args" }
+func (CreateDomainScanArgs) Kind() string { return "create_domain_scan" }
 
 // InsertOpts provides the default configuration when processing this job.
 func (CreateDomainScanArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueCompliance}
+}
+
+// RetrieveDomainScanArgs for the worker to poll the domain result from cloudflare before creating the notification
+type RetrieveDomainScanArgs struct {
+	// OrganizationID is the organization that owns the onboarding
+	OrganizationID string `json:"organization_id"`
+
+	// ScanResultID is the id from cloudflare radar
+	ScanResultID string `json:"scan_result_id"`
+}
+
+// Kind satisfies the river.Job interface
+func (RetrieveDomainScanArgs) Kind() string { return "retrieve_domain_scan" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (RetrieveDomainScanArgs) InsertOpts() river.InsertOpts {
 	return river.InsertOpts{Queue: QueueCompliance}
 }
