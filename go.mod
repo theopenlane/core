@@ -111,7 +111,7 @@ require (
 	github.com/urfave/cli/v3 v3.8.0
 	github.com/vektah/gqlparser/v2 v2.5.32
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zitadel/oidc/v3 v3.45.6
+	github.com/zitadel/oidc/v3 v3.46.0
 	gocloud.dev v0.45.0
 	golang.org/x/crypto v0.49.0
 	golang.org/x/mod v0.34.0
