@@ -224,6 +224,7 @@ func (r Review) Edges() []ent.Edge {
 			edgeSchema: File{},
 			comment:    "supporting files or evidence for the review",
 		}),
+		defaultEdgeToWithPagination(r, InternalPolicy{}),
 	}
 }
 

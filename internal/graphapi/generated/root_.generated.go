@@ -399,6 +399,7 @@ type ComplexityRoot struct {
 		InternalOwnerGroupID        func(childComplexity int) int
 		InternalOwnerUser           func(childComplexity int) int
 		InternalOwnerUserID         func(childComplexity int) int
+		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name                        func(childComplexity int) int
 		ObservedAt                  func(childComplexity int) int
 		OutOfScopePlatforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
@@ -1763,6 +1764,7 @@ type ComplexityRoot struct {
 		InternalOwnerGroupID                  func(childComplexity int) int
 		InternalOwnerUser                     func(childComplexity int) int
 		InternalOwnerUserID                   func(childComplexity int) int
+		InternalPolicies                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		LastReviewedAt                        func(childComplexity int) int
 		LinkedAssetIds                        func(childComplexity int) int
 		Links                                 func(childComplexity int) int
@@ -2655,6 +2657,7 @@ type ComplexityRoot struct {
 		InternalOwnerGroupID    func(childComplexity int) int
 		InternalOwnerUser       func(childComplexity int) int
 		InternalOwnerUserID     func(childComplexity int) int
+		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsActive                func(childComplexity int) int
 		IsOpenlaneUser          func(childComplexity int) int
 		Location                func(childComplexity int) int
@@ -2790,6 +2793,7 @@ type ComplexityRoot struct {
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
+		Assets                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Comments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -2808,6 +2812,7 @@ type ComplexityRoot struct {
 		DismissedTagSuggestions         func(childComplexity int) int
 		DisplayID                       func(childComplexity int) int
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment                     func(childComplexity int) int
 		EnvironmentID                   func(childComplexity int) int
 		EnvironmentName                 func(childComplexity int) int
@@ -2817,6 +2822,7 @@ type ComplexityRoot struct {
 		HasPendingWorkflow              func(childComplexity int) int
 		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
+		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
 		InternalPolicyKind              func(childComplexity int) int
@@ -2830,6 +2836,7 @@ type ComplexityRoot struct {
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
+		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Revision                        func(childComplexity int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scope                           func(childComplexity int) int
@@ -5273,6 +5280,7 @@ type ComplexityRoot struct {
 		ID               func(childComplexity int) int
 		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes    func(childComplexity int) int
+		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Metadata         func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
@@ -9222,6 +9230,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Asset.InternalOwnerUserID(childComplexity), true
+
+	case "Asset.internalPolicies":
+		if e.ComplexityRoot.Asset.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Asset.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Asset.name":
 		if e.ComplexityRoot.Asset.Name == nil {
@@ -16001,6 +16021,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Entity.InternalOwnerUserID(childComplexity), true
 
+	case "Entity.internalPolicies":
+		if e.ComplexityRoot.Entity.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+
 	case "Entity.lastReviewedAt":
 		if e.ComplexityRoot.Entity.LastReviewedAt == nil {
 			break
@@ -20702,6 +20734,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IdentityHolder.InternalOwnerUserID(childComplexity), true
 
+	case "IdentityHolder.internalPolicies":
+		if e.ComplexityRoot.IdentityHolder.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IdentityHolder.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+
 	case "IdentityHolder.isActive":
 		if e.ComplexityRoot.IdentityHolder.IsActive == nil {
 			break
@@ -21489,6 +21533,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InternalPolicy.ApproverID(childComplexity), true
 
+	case "InternalPolicy.assets":
+		if e.ComplexityRoot.InternalPolicy.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "InternalPolicy.blockedGroups":
 		if e.ComplexityRoot.InternalPolicy.BlockedGroups == nil {
 			break
@@ -21650,6 +21706,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InternalPolicy.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "InternalPolicy.entities":
+		if e.ComplexityRoot.InternalPolicy.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
 	case "InternalPolicy.environment":
 		if e.ComplexityRoot.InternalPolicy.Environment == nil {
 			break
@@ -21712,6 +21780,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.ID(childComplexity), true
+
+	case "InternalPolicy.identityHolders":
+		if e.ComplexityRoot.InternalPolicy.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
 
 	case "InternalPolicy.improvementSuggestions":
 		if e.ComplexityRoot.InternalPolicy.ImprovementSuggestions == nil {
@@ -21818,6 +21898,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.ReviewFrequency(childComplexity), true
+
+	case "InternalPolicy.reviews":
+		if e.ComplexityRoot.InternalPolicy.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 
 	case "InternalPolicy.revision":
 		if e.ComplexityRoot.InternalPolicy.Revision == nil {
@@ -40181,6 +40273,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Review.InternalNotes(childComplexity), true
 
+	case "Review.internalPolicies":
+		if e.ComplexityRoot.Review.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Review_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Review.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+
 	case "Review.metadata":
 		if e.ComplexityRoot.Review.Metadata == nil {
 			break
@@ -58080,6 +58184,37 @@ type Asset implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   sourcePlatform: Platform
   """
   integration that owns this asset
@@ -59071,6 +59206,11 @@ input AssetWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
   source_platform edge predicates
   """
@@ -65063,6 +65203,7 @@ input CreateAssetInput {
   outOfScopePlatformIDs: [ID!]
   identityHolderIDs: [ID!]
   controlIDs: [ID!]
+  internalPolicyIDs: [ID!]
   sourcePlatformID: ID
   integrationID: ID
   connectedAssetIDs: [ID!]
@@ -66484,6 +66625,7 @@ input CreateEntityInput {
   sourcePlatformIDs: [ID!]
   entityTypeID: ID
   logoFileID: ID
+  internalPolicyIDs: [ID!]
 }
 """
 CreateEntityTypeInput is used for create EntityType object.
@@ -67284,6 +67426,7 @@ input CreateIdentityHolderInput {
   workflowObjectRefIDs: [ID!]
   accessPlatformIDs: [ID!]
   userID: ID
+  internalPolicyIDs: [ID!]
 }
 """
 CreateInternalPolicyInput is used for create InternalPolicy object.
@@ -67403,6 +67546,10 @@ input CreateInternalPolicyInput {
   commentIDs: [ID!]
   discussionIDs: [ID!]
   workflowObjectRefIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  identityHolderIDs: [ID!]
+  reviewIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -68878,6 +69025,7 @@ input CreateReviewInput {
   reviewerID: ID
   commentIDs: [ID!]
   fileIDs: [ID!]
+  internalPolicyIDs: [ID!]
 }
 """
 CreateRiskInput is used for create Risk object.
@@ -77844,6 +77992,37 @@ type Entity implements Node {
   ): PlatformConnection!
   entityType: EntityType
   logoFile: File
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
 }
 """
 A connection to a list of items.
@@ -79217,6 +79396,11 @@ input EntityWhereInput {
   """
   hasLogoFile: Boolean
   hasLogoFileWith: [FileWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -87771,6 +87955,37 @@ type IdentityHolder implements Node {
     where: PlatformWhereInput
   ): PlatformConnection!
   user: User
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
 }
 """
 A connection to a list of items.
@@ -88494,6 +88709,11 @@ input IdentityHolderWhereInput {
   """
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -90249,6 +90469,130 @@ type InternalPolicy implements Node {
     """
     where: WorkflowObjectRefWhereInput
   ): WorkflowObjectRefConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
 }
 """
 A connection to a list of items.
@@ -90885,6 +91229,26 @@ input InternalPolicyWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -111005,6 +111369,37 @@ type Review implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
 }
 """
 A connection to a list of items.
@@ -111641,6 +112036,11 @@ input ReviewWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -125392,6 +125792,9 @@ input UpdateAssetInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
   sourcePlatformID: ID
   clearSourcePlatform: Boolean
   addConnectedAssetIDs: [ID!]
@@ -127297,6 +127700,9 @@ input UpdateEntityInput {
   clearEntityType: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
 }
 """
 UpdateEntityTypeInput is used for update EntityType object.
@@ -128482,6 +128888,9 @@ input UpdateIdentityHolderInput {
   clearAccessPlatforms: Boolean
   userID: ID
   clearUser: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
 }
 """
 UpdateInternalPolicyInput is used for update InternalPolicy object.
@@ -128666,6 +129075,18 @@ input UpdateInternalPolicyInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -130748,6 +131169,9 @@ input UpdateReviewInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
 }
 """
 UpdateRiskInput is used for update Risk object.

@@ -370,6 +370,7 @@ func (e Entity) Edges() []ent.Edge {
 			t:          File.Type,
 			field:      "logo_file_id",
 		}),
+		defaultEdgeFromWithPagination(e, InternalPolicy{}),
 	}
 }
 

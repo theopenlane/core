@@ -138,29 +138,32 @@ type ReviewEdges struct {
 	Comments []*Note `json:"comments,omitempty"`
 	// supporting files or evidence for the review
 	Files []*File `json:"files,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [22]map[string]int
 
-	namedBlockedGroups   map[string][]*Group
-	namedEditors         map[string][]*Group
-	namedViewers         map[string][]*Group
-	namedIntegrations    map[string][]*Integration
-	namedFindings        map[string][]*Finding
-	namedVulnerabilities map[string][]*Vulnerability
-	namedActionPlans     map[string][]*ActionPlan
-	namedRemediations    map[string][]*Remediation
-	namedControls        map[string][]*Control
-	namedSubcontrols     map[string][]*Subcontrol
-	namedRisks           map[string][]*Risk
-	namedPrograms        map[string][]*Program
-	namedAssets          map[string][]*Asset
-	namedEntities        map[string][]*Entity
-	namedTasks           map[string][]*Task
-	namedComments        map[string][]*Note
-	namedFiles           map[string][]*File
+	namedBlockedGroups    map[string][]*Group
+	namedEditors          map[string][]*Group
+	namedViewers          map[string][]*Group
+	namedIntegrations     map[string][]*Integration
+	namedFindings         map[string][]*Finding
+	namedVulnerabilities  map[string][]*Vulnerability
+	namedActionPlans      map[string][]*ActionPlan
+	namedRemediations     map[string][]*Remediation
+	namedControls         map[string][]*Control
+	namedSubcontrols      map[string][]*Subcontrol
+	namedRisks            map[string][]*Risk
+	namedPrograms         map[string][]*Program
+	namedAssets           map[string][]*Asset
+	namedEntities         map[string][]*Entity
+	namedTasks            map[string][]*Task
+	namedComments         map[string][]*Note
+	namedFiles            map[string][]*File
+	namedInternalPolicies map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -358,6 +361,15 @@ func (e ReviewEdges) FilesOrErr() ([]*File, error) {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e ReviewEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[21] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -721,6 +733,11 @@ func (_m *Review) QueryComments() *NoteQuery {
 // QueryFiles queries the "files" edge of the Review entity.
 func (_m *Review) QueryFiles() *FileQuery {
 	return NewReviewClient(_m.config).QueryFiles(_m)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the Review entity.
+func (_m *Review) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewReviewClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // Update returns a builder for updating this Review.
@@ -1263,6 +1280,30 @@ func (_m *Review) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Review) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Review) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

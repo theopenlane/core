@@ -135,6 +135,9 @@ type SchemaConfig struct {
 	InternalPolicyNarratives           string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks                string // InternalPolicy-risks->Risk table.
+	InternalPolicyAssets               string // InternalPolicy-assets->Asset table.
+	InternalPolicyEntities             string // InternalPolicy-entities->Entity table.
+	InternalPolicyIdentityHolders      string // InternalPolicy-identity_holders->IdentityHolder table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
 	InviteGroups                       string // Invite-groups->Group table.
@@ -231,6 +234,7 @@ type SchemaConfig struct {
 	ReviewRemediations                 string // Review-remediations->Remediation table.
 	ReviewControls                     string // Review-controls->Control table.
 	ReviewSubcontrols                  string // Review-subcontrols->Subcontrol table.
+	ReviewInternalPolicies             string // Review-internal_policies->InternalPolicy table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.

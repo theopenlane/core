@@ -177,6 +177,8 @@ type AssetEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// SourcePlatform holds the value of the source_platform edge.
 	SourcePlatform *Platform `json:"source_platform,omitempty"`
 	// integration that owns this asset
@@ -187,9 +189,9 @@ type AssetEdges struct {
 	ConnectedFrom []*Asset `json:"connected_from,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [25]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -200,6 +202,7 @@ type AssetEdges struct {
 	namedOutOfScopePlatforms map[string][]*Platform
 	namedIdentityHolders     map[string][]*IdentityHolder
 	namedControls            map[string][]*Control
+	namedInternalPolicies    map[string][]*InternalPolicy
 	namedConnectedAssets     map[string][]*Asset
 	namedConnectedFrom       map[string][]*Asset
 }
@@ -406,12 +409,21 @@ func (e AssetEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[20] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
 // SourcePlatformOrErr returns the SourcePlatform value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 	if e.SourcePlatform != nil {
 		return e.SourcePlatform, nil
-	} else if e.loadedTypes[20] {
+	} else if e.loadedTypes[21] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "source_platform"}
@@ -422,7 +434,7 @@ func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[21] {
+	} else if e.loadedTypes[22] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -431,7 +443,7 @@ func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
 // ConnectedAssetsOrErr returns the ConnectedAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.ConnectedAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_assets"}
@@ -440,7 +452,7 @@ func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
 // ConnectedFromOrErr returns the ConnectedFrom value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedFromOrErr() ([]*Asset, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.ConnectedFrom, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_from"}
@@ -944,6 +956,11 @@ func (_m *Asset) QueryControls() *ControlQuery {
 	return NewAssetClient(_m.config).QueryControls(_m)
 }
 
+// QueryInternalPolicies queries the "internal_policies" edge of the Asset entity.
+func (_m *Asset) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewAssetClient(_m.config).QueryInternalPolicies(_m)
+}
+
 // QuerySourcePlatform queries the "source_platform" edge of the Asset entity.
 func (_m *Asset) QuerySourcePlatform() *PlatformQuery {
 	return NewAssetClient(_m.config).QuerySourcePlatform(_m)
@@ -1358,6 +1375,30 @@ func (_m *Asset) appendNamedControls(name string, edges ...*Control) {
 		_m.Edges.namedControls[name] = []*Control{}
 	} else {
 		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

@@ -1224,6 +1224,7 @@ type CreateAssetInput struct {
 	OutOfScopePlatformIDs       []string
 	IdentityHolderIDs           []string
 	ControlIDs                  []string
+	InternalPolicyIDs           []string
 	SourcePlatformID            *string
 	IntegrationID               *string
 	ConnectedAssetIDs           []string
@@ -1377,6 +1378,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 	if v := i.SourcePlatformID; v != nil {
 		m.SetSourcePlatformID(*v)
 	}
@@ -1503,6 +1507,9 @@ type UpdateAssetInput struct {
 	ClearControls                    bool
 	AddControlIDs                    []string
 	RemoveControlIDs                 []string
+	ClearInternalPolicies            bool
+	AddInternalPolicyIDs             []string
+	RemoveInternalPolicyIDs          []string
 	ClearSourcePlatform              bool
 	SourcePlatformID                 *string
 	ClearConnectedAssets             bool
@@ -1826,6 +1833,15 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearSourcePlatform {
 		m.ClearSourcePlatform()
@@ -7330,6 +7346,7 @@ type CreateEntityInput struct {
 	SourcePlatformIDs                     []string
 	EntityTypeID                          *string
 	LogoFileID                            *string
+	InternalPolicyIDs                     []string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -7559,6 +7576,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateEntityInput on the EntityCreate builder.
@@ -7742,6 +7762,9 @@ type UpdateEntityInput struct {
 	EntityTypeID                               *string
 	ClearLogoFile                              bool
 	LogoFileID                                 *string
+	ClearInternalPolicies                      bool
+	AddInternalPolicyIDs                       []string
+	RemoveInternalPolicyIDs                    []string
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -8264,6 +8287,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 }
 
@@ -12119,6 +12151,7 @@ type CreateIdentityHolderInput struct {
 	WorkflowObjectRefIDs   []string
 	AccessPlatformIDs      []string
 	UserID                 *string
+	InternalPolicyIDs      []string
 }
 
 // Mutate applies the CreateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -12257,6 +12290,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.UserID; v != nil {
 		m.SetUserID(*v)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateIdentityHolderInput on the IdentityHolderCreate builder.
@@ -12370,6 +12406,9 @@ type UpdateIdentityHolderInput struct {
 	RemoveAccessPlatformIDs     []string
 	ClearUser                   bool
 	UserID                      *string
+	ClearInternalPolicies       bool
+	AddInternalPolicyIDs        []string
+	RemoveInternalPolicyIDs     []string
 }
 
 // Mutate applies the UpdateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -12683,6 +12722,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.UserID; v != nil {
 		m.SetUserID(*v)
 	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateIdentityHolderInput on the IdentityHolderUpdate builder.
@@ -12743,6 +12791,10 @@ type CreateInternalPolicyInput struct {
 	CommentIDs                      []string
 	DiscussionIDs                   []string
 	WorkflowObjectRefIDs            []string
+	AssetIDs                        []string
+	EntityIDs                       []string
+	IdentityHolderIDs               []string
+	ReviewIDs                       []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -12877,6 +12929,18 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
@@ -12996,6 +13060,18 @@ type UpdateInternalPolicyInput struct {
 	ClearWorkflowObjectRefs               bool
 	AddWorkflowObjectRefIDs               []string
 	RemoveWorkflowObjectRefIDs            []string
+	ClearAssets                           bool
+	AddAssetIDs                           []string
+	RemoveAssetIDs                        []string
+	ClearEntities                         bool
+	AddEntityIDs                          []string
+	RemoveEntityIDs                       []string
+	ClearIdentityHolders                  bool
+	AddIdentityHolderIDs                  []string
+	RemoveIdentityHolderIDs               []string
+	ClearReviews                          bool
+	AddReviewIDs                          []string
+	RemoveReviewIDs                       []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -13326,6 +13402,42 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
 	}
 }
 
@@ -20575,49 +20687,50 @@ func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUp
 
 // CreateReviewInput represents a mutation input for creating reviews.
 type CreateReviewInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	EnvironmentName  *string
-	ScopeName        *string
-	ExternalID       *string
-	ExternalOwnerID  *string
-	Title            string
-	State            *string
-	Category         *string
-	Classification   *string
-	Summary          *string
-	Details          *string
-	Reporter         *string
-	Approved         *bool
-	ReviewedAt       *models.DateTime
-	ReportedAt       *models.DateTime
-	ApprovedAt       *models.DateTime
-	Source           *string
-	ExternalURI      *string
-	Metadata         map[string]interface{}
-	RawPayload       map[string]interface{}
-	OwnerID          *string
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	ViewerIDs        []string
-	EnvironmentID    *string
-	ScopeID          *string
-	IntegrationIDs   []string
-	FindingIDs       []string
-	VulnerabilityIDs []string
-	ActionPlanIDs    []string
-	RemediationIDs   []string
-	ControlIDs       []string
-	SubcontrolIDs    []string
-	RiskIDs          []string
-	ProgramIDs       []string
-	AssetIDs         []string
-	EntityIDs        []string
-	TaskIDs          []string
-	ReviewerID       *string
-	CommentIDs       []string
-	FileIDs          []string
+	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
+	EnvironmentName   *string
+	ScopeName         *string
+	ExternalID        *string
+	ExternalOwnerID   *string
+	Title             string
+	State             *string
+	Category          *string
+	Classification    *string
+	Summary           *string
+	Details           *string
+	Reporter          *string
+	Approved          *bool
+	ReviewedAt        *models.DateTime
+	ReportedAt        *models.DateTime
+	ApprovedAt        *models.DateTime
+	Source            *string
+	ExternalURI       *string
+	Metadata          map[string]interface{}
+	RawPayload        map[string]interface{}
+	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
+	ViewerIDs         []string
+	EnvironmentID     *string
+	ScopeID           *string
+	IntegrationIDs    []string
+	FindingIDs        []string
+	VulnerabilityIDs  []string
+	ActionPlanIDs     []string
+	RemediationIDs    []string
+	ControlIDs        []string
+	SubcontrolIDs     []string
+	RiskIDs           []string
+	ProgramIDs        []string
+	AssetIDs          []string
+	EntityIDs         []string
+	TaskIDs           []string
+	ReviewerID        *string
+	CommentIDs        []string
+	FileIDs           []string
+	InternalPolicyIDs []string
 }
 
 // Mutate applies the CreateReviewInput on the ReviewMutation builder.
@@ -20749,6 +20862,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateReviewInput on the ReviewCreate builder.
@@ -20759,107 +20875,110 @@ func (c *ReviewCreate) SetInput(i CreateReviewInput) *ReviewCreate {
 
 // UpdateReviewInput represents a mutation input for updating reviews.
 type UpdateReviewInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	ClearInternalNotes     bool
-	InternalNotes          *string
-	ClearSystemInternalID  bool
-	SystemInternalID       *string
-	ClearEnvironmentName   bool
-	EnvironmentName        *string
-	ClearScopeName         bool
-	ScopeName              *string
-	ClearExternalID        bool
-	ExternalID             *string
-	ClearExternalOwnerID   bool
-	ExternalOwnerID        *string
-	Title                  *string
-	ClearState             bool
-	State                  *string
-	ClearCategory          bool
-	Category               *string
-	ClearClassification    bool
-	Classification         *string
-	ClearSummary           bool
-	Summary                *string
-	ClearDetails           bool
-	Details                *string
-	ClearReporter          bool
-	Reporter               *string
-	ClearApproved          bool
-	Approved               *bool
-	ClearReviewedAt        bool
-	ReviewedAt             *models.DateTime
-	ClearReportedAt        bool
-	ReportedAt             *models.DateTime
-	ClearApprovedAt        bool
-	ApprovedAt             *models.DateTime
-	ClearSource            bool
-	Source                 *string
-	ClearExternalURI       bool
-	ExternalURI            *string
-	ClearMetadata          bool
-	Metadata               map[string]interface{}
-	ClearRawPayload        bool
-	RawPayload             map[string]interface{}
-	ClearBlockedGroups     bool
-	AddBlockedGroupIDs     []string
-	RemoveBlockedGroupIDs  []string
-	ClearEditors           bool
-	AddEditorIDs           []string
-	RemoveEditorIDs        []string
-	ClearViewers           bool
-	AddViewerIDs           []string
-	RemoveViewerIDs        []string
-	ClearEnvironment       bool
-	EnvironmentID          *string
-	ClearScope             bool
-	ScopeID                *string
-	ClearIntegrations      bool
-	AddIntegrationIDs      []string
-	RemoveIntegrationIDs   []string
-	ClearFindings          bool
-	AddFindingIDs          []string
-	RemoveFindingIDs       []string
-	ClearVulnerabilities   bool
-	AddVulnerabilityIDs    []string
-	RemoveVulnerabilityIDs []string
-	ClearActionPlans       bool
-	AddActionPlanIDs       []string
-	RemoveActionPlanIDs    []string
-	ClearRemediations      bool
-	AddRemediationIDs      []string
-	RemoveRemediationIDs   []string
-	ClearControls          bool
-	AddControlIDs          []string
-	RemoveControlIDs       []string
-	ClearSubcontrols       bool
-	AddSubcontrolIDs       []string
-	RemoveSubcontrolIDs    []string
-	ClearRisks             bool
-	AddRiskIDs             []string
-	RemoveRiskIDs          []string
-	ClearPrograms          bool
-	AddProgramIDs          []string
-	RemoveProgramIDs       []string
-	ClearAssets            bool
-	AddAssetIDs            []string
-	RemoveAssetIDs         []string
-	ClearEntities          bool
-	AddEntityIDs           []string
-	RemoveEntityIDs        []string
-	ClearTasks             bool
-	AddTaskIDs             []string
-	RemoveTaskIDs          []string
-	ClearReviewer          bool
-	ReviewerID             *string
-	ClearComments          bool
-	AddCommentIDs          []string
-	RemoveCommentIDs       []string
-	ClearFiles             bool
-	AddFileIDs             []string
-	RemoveFileIDs          []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
+	ClearEnvironmentName    bool
+	EnvironmentName         *string
+	ClearScopeName          bool
+	ScopeName               *string
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearExternalOwnerID    bool
+	ExternalOwnerID         *string
+	Title                   *string
+	ClearState              bool
+	State                   *string
+	ClearCategory           bool
+	Category                *string
+	ClearClassification     bool
+	Classification          *string
+	ClearSummary            bool
+	Summary                 *string
+	ClearDetails            bool
+	Details                 *string
+	ClearReporter           bool
+	Reporter                *string
+	ClearApproved           bool
+	Approved                *bool
+	ClearReviewedAt         bool
+	ReviewedAt              *models.DateTime
+	ClearReportedAt         bool
+	ReportedAt              *models.DateTime
+	ClearApprovedAt         bool
+	ApprovedAt              *models.DateTime
+	ClearSource             bool
+	Source                  *string
+	ClearExternalURI        bool
+	ExternalURI             *string
+	ClearMetadata           bool
+	Metadata                map[string]interface{}
+	ClearRawPayload         bool
+	RawPayload              map[string]interface{}
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
+	ClearEnvironment        bool
+	EnvironmentID           *string
+	ClearScope              bool
+	ScopeID                 *string
+	ClearIntegrations       bool
+	AddIntegrationIDs       []string
+	RemoveIntegrationIDs    []string
+	ClearFindings           bool
+	AddFindingIDs           []string
+	RemoveFindingIDs        []string
+	ClearVulnerabilities    bool
+	AddVulnerabilityIDs     []string
+	RemoveVulnerabilityIDs  []string
+	ClearActionPlans        bool
+	AddActionPlanIDs        []string
+	RemoveActionPlanIDs     []string
+	ClearRemediations       bool
+	AddRemediationIDs       []string
+	RemoveRemediationIDs    []string
+	ClearControls           bool
+	AddControlIDs           []string
+	RemoveControlIDs        []string
+	ClearSubcontrols        bool
+	AddSubcontrolIDs        []string
+	RemoveSubcontrolIDs     []string
+	ClearRisks              bool
+	AddRiskIDs              []string
+	RemoveRiskIDs           []string
+	ClearPrograms           bool
+	AddProgramIDs           []string
+	RemoveProgramIDs        []string
+	ClearAssets             bool
+	AddAssetIDs             []string
+	RemoveAssetIDs          []string
+	ClearEntities           bool
+	AddEntityIDs            []string
+	RemoveEntityIDs         []string
+	ClearTasks              bool
+	AddTaskIDs              []string
+	RemoveTaskIDs           []string
+	ClearReviewer           bool
+	ReviewerID              *string
+	ClearComments           bool
+	AddCommentIDs           []string
+	RemoveCommentIDs        []string
+	ClearFiles              bool
+	AddFileIDs              []string
+	RemoveFileIDs           []string
+	ClearInternalPolicies   bool
+	AddInternalPolicyIDs    []string
+	RemoveInternalPolicyIDs []string
 }
 
 // Mutate applies the UpdateReviewInput on the ReviewMutation builder.
@@ -21166,6 +21285,15 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 }
 

@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -57,6 +58,7 @@ type AssetQuery struct {
 	withOutOfScopePlatforms      *PlatformQuery
 	withIdentityHolders          *IdentityHolderQuery
 	withControls                 *ControlQuery
+	withInternalPolicies         *InternalPolicyQuery
 	withSourcePlatform           *PlatformQuery
 	withIntegration              *IntegrationQuery
 	withConnectedAssets          *AssetQuery
@@ -73,6 +75,7 @@ type AssetQuery struct {
 	withNamedOutOfScopePlatforms map[string]*PlatformQuery
 	withNamedIdentityHolders     map[string]*IdentityHolderQuery
 	withNamedControls            map[string]*ControlQuery
+	withNamedInternalPolicies    map[string]*InternalPolicyQuery
 	withNamedConnectedAssets     map[string]*AssetQuery
 	withNamedConnectedFrom       map[string]*AssetQuery
 	// intermediate query (i.e. traversal path).
@@ -611,6 +614,31 @@ func (_q *AssetQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *AssetQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.InternalPoliciesTable, asset.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySourcePlatform chains the current query on the "source_platform" edge.
 func (_q *AssetQuery) QuerySourcePlatform() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -923,6 +951,7 @@ func (_q *AssetQuery) Clone() *AssetQuery {
 		withOutOfScopePlatforms:     _q.withOutOfScopePlatforms.Clone(),
 		withIdentityHolders:         _q.withIdentityHolders.Clone(),
 		withControls:                _q.withControls.Clone(),
+		withInternalPolicies:        _q.withInternalPolicies.Clone(),
 		withSourcePlatform:          _q.withSourcePlatform.Clone(),
 		withIntegration:             _q.withIntegration.Clone(),
 		withConnectedAssets:         _q.withConnectedAssets.Clone(),
@@ -1154,6 +1183,17 @@ func (_q *AssetQuery) WithControls(opts ...func(*ControlQuery)) *AssetQuery {
 	return _q
 }
 
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *AssetQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
 // WithSourcePlatform tells the query-builder to eager-load the nodes that are connected to
 // the "source_platform" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithSourcePlatform(opts ...func(*PlatformQuery)) *AssetQuery {
@@ -1283,7 +1323,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		nodes       = []*Asset{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [25]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1304,6 +1344,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			_q.withOutOfScopePlatforms != nil,
 			_q.withIdentityHolders != nil,
 			_q.withControls != nil,
+			_q.withInternalPolicies != nil,
 			_q.withSourcePlatform != nil,
 			_q.withIntegration != nil,
 			_q.withConnectedAssets != nil,
@@ -1465,6 +1506,13 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Asset) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Asset, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withSourcePlatform; query != nil {
 		if err := _q.loadSourcePlatform(ctx, query, nodes, nil,
 			func(n *Asset, e *Platform) { n.Edges.SourcePlatform = e }); err != nil {
@@ -1551,6 +1599,13 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Asset) { n.appendNamedControls(name) },
 			func(n *Asset, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedInternalPolicies(name) },
+			func(n *Asset, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2360,6 +2415,68 @@ func (_q *AssetQuery) loadControls(ctx context.Context, query *ControlQuery, nod
 	}
 	return nil
 }
+func (_q *AssetQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.InternalPoliciesTable)
+		joinT.Schema(_q.schemaConfig.InternalPolicyAssets)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(asset.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadSourcePlatform(ctx context.Context, query *PlatformQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Platform)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Asset)
@@ -2803,6 +2920,20 @@ func (_q *AssetQuery) WithNamedControls(name string, opts ...func(*ControlQuery)
 		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
 	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *AssetQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
 	return _q
 }
 

@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -77,6 +78,7 @@ type EntityQuery struct {
 	withSourcePlatforms                   *PlatformQuery
 	withEntityType                        *EntityTypeQuery
 	withLogoFile                          *FileQuery
+	withInternalPolicies                  *InternalPolicyQuery
 	withFKs                               bool
 	loadTotal                             []func(context.Context, []*Entity) error
 	modifiers                             []func(*sql.Selector)
@@ -100,6 +102,7 @@ type EntityQuery struct {
 	withNamedPlatforms                    map[string]*PlatformQuery
 	withNamedOutOfScopePlatforms          map[string]*PlatformQuery
 	withNamedSourcePlatforms              map[string]*PlatformQuery
+	withNamedInternalPolicies             map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -936,6 +939,31 @@ func (_q *EntityQuery) QueryLogoFile() *FileQuery {
 	return query
 }
 
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *EntityQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.InternalPoliciesTable, entity.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyEntities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Entity entity from the query.
 // Returns a *NotFoundError when no Entity was found.
 func (_q *EntityQuery) First(ctx context.Context) (*Entity, error) {
@@ -1160,6 +1188,7 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withSourcePlatforms:                   _q.withSourcePlatforms.Clone(),
 		withEntityType:                        _q.withEntityType.Clone(),
 		withLogoFile:                          _q.withLogoFile.Clone(),
+		withInternalPolicies:                  _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1519,6 +1548,17 @@ func (_q *EntityQuery) WithLogoFile(opts ...func(*FileQuery)) *EntityQuery {
 	return _q
 }
 
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *EntityQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1604,7 +1644,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [32]bool{
+		loadedTypes = [33]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1637,6 +1677,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withSourcePlatforms != nil,
 			_q.withEntityType != nil,
 			_q.withLogoFile != nil,
+			_q.withInternalPolicies != nil,
 		}
 	)
 	if withFKs {
@@ -1881,6 +1922,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Entity) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Entity, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedBlockedGroups(name) },
@@ -2018,6 +2066,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadSourcePlatforms(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedSourcePlatforms(name) },
 			func(n *Entity, e *Platform) { n.appendNamedSourcePlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedInternalPolicies(name) },
+			func(n *Entity, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3431,6 +3486,68 @@ func (_q *EntityQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes
 	}
 	return nil
 }
+func (_q *EntityQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.InternalPoliciesTable)
+		joinT.Schema(_q.schemaConfig.InternalPolicyEntities)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(entity.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *EntityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3843,6 +3960,20 @@ func (_q *EntityQuery) WithNamedSourcePlatforms(name string, opts ...func(*Platf
 		_q.withNamedSourcePlatforms = make(map[string]*PlatformQuery)
 	}
 	_q.withNamedSourcePlatforms[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *EntityQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
 	return _q
 }
 

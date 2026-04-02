@@ -1718,6 +1718,7 @@ type Asset struct {
 	OutOfScopePlatforms     *PlatformConnection       `json:"outOfScopePlatforms"`
 	IdentityHolders         *IdentityHolderConnection `json:"identityHolders"`
 	Controls                *ControlConnection        `json:"controls"`
+	InternalPolicies        *InternalPolicyConnection `json:"internalPolicies"`
 	SourcePlatform          *Platform                 `json:"sourcePlatform,omitempty"`
 	// integration that owns this asset
 	Integration     *Integration     `json:"integration,omitempty"`
@@ -2501,6 +2502,9 @@ type AssetWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// source_platform edge predicates
 	HasSourcePlatform     *bool                 `json:"hasSourcePlatform,omitempty"`
 	HasSourcePlatformWith []*PlatformWhereInput `json:"hasSourcePlatformWith,omitempty"`
@@ -5850,6 +5854,7 @@ type CreateAssetInput struct {
 	OutOfScopePlatformIDs     []string         `json:"outOfScopePlatformIDs,omitempty"`
 	IdentityHolderIDs         []string         `json:"identityHolderIDs,omitempty"`
 	ControlIDs                []string         `json:"controlIDs,omitempty"`
+	InternalPolicyIDs         []string         `json:"internalPolicyIDs,omitempty"`
 	SourcePlatformID          *string          `json:"sourcePlatformID,omitempty"`
 	IntegrationID             *string          `json:"integrationID,omitempty"`
 	ConnectedAssetIDs         []string         `json:"connectedAssetIDs,omitempty"`
@@ -6711,6 +6716,7 @@ type CreateEntityInput struct {
 	SourcePlatformIDs                   []string         `json:"sourcePlatformIDs,omitempty"`
 	EntityTypeID                        *string          `json:"entityTypeID,omitempty"`
 	LogoFileID                          *string          `json:"logoFileID,omitempty"`
+	InternalPolicyIDs                   []string         `json:"internalPolicyIDs,omitempty"`
 	Note                                *CreateNoteInput `json:"note,omitempty"`
 }
 
@@ -7229,6 +7235,7 @@ type CreateIdentityHolderInput struct {
 	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
 	AccessPlatformIDs     []string       `json:"accessPlatformIDs,omitempty"`
 	UserID                *string        `json:"userID,omitempty"`
+	InternalPolicyIDs     []string       `json:"internalPolicyIDs,omitempty"`
 }
 
 // CreateInternalPolicyInput is used for create InternalPolicy object.
@@ -7301,6 +7308,10 @@ type CreateInternalPolicyInput struct {
 	CommentIDs               []string `json:"commentIDs,omitempty"`
 	DiscussionIDs            []string `json:"discussionIDs,omitempty"`
 	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
+	AssetIDs                 []string `json:"assetIDs,omitempty"`
+	EntityIDs                []string `json:"entityIDs,omitempty"`
+	IdentityHolderIDs        []string `json:"identityHolderIDs,omitempty"`
+	ReviewIDs                []string `json:"reviewIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -8239,28 +8250,29 @@ type CreateReviewInput struct {
 	// raw metadata payload for the review from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload       map[string]any `json:"rawPayload,omitempty"`
-	OwnerID          *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs  []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs        []string       `json:"editorIDs,omitempty"`
-	ViewerIDs        []string       `json:"viewerIDs,omitempty"`
-	EnvironmentID    *string        `json:"environmentID,omitempty"`
-	ScopeID          *string        `json:"scopeID,omitempty"`
-	IntegrationIDs   []string       `json:"integrationIDs,omitempty"`
-	FindingIDs       []string       `json:"findingIDs,omitempty"`
-	VulnerabilityIDs []string       `json:"vulnerabilityIDs,omitempty"`
-	ActionPlanIDs    []string       `json:"actionPlanIDs,omitempty"`
-	RemediationIDs   []string       `json:"remediationIDs,omitempty"`
-	ControlIDs       []string       `json:"controlIDs,omitempty"`
-	SubcontrolIDs    []string       `json:"subcontrolIDs,omitempty"`
-	RiskIDs          []string       `json:"riskIDs,omitempty"`
-	ProgramIDs       []string       `json:"programIDs,omitempty"`
-	AssetIDs         []string       `json:"assetIDs,omitempty"`
-	EntityIDs        []string       `json:"entityIDs,omitempty"`
-	TaskIDs          []string       `json:"taskIDs,omitempty"`
-	ReviewerID       *string        `json:"reviewerID,omitempty"`
-	CommentIDs       []string       `json:"commentIDs,omitempty"`
-	FileIDs          []string       `json:"fileIDs,omitempty"`
+	RawPayload        map[string]any `json:"rawPayload,omitempty"`
+	OwnerID           *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string       `json:"editorIDs,omitempty"`
+	ViewerIDs         []string       `json:"viewerIDs,omitempty"`
+	EnvironmentID     *string        `json:"environmentID,omitempty"`
+	ScopeID           *string        `json:"scopeID,omitempty"`
+	IntegrationIDs    []string       `json:"integrationIDs,omitempty"`
+	FindingIDs        []string       `json:"findingIDs,omitempty"`
+	VulnerabilityIDs  []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs     []string       `json:"actionPlanIDs,omitempty"`
+	RemediationIDs    []string       `json:"remediationIDs,omitempty"`
+	ControlIDs        []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs     []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs           []string       `json:"riskIDs,omitempty"`
+	ProgramIDs        []string       `json:"programIDs,omitempty"`
+	AssetIDs          []string       `json:"assetIDs,omitempty"`
+	EntityIDs         []string       `json:"entityIDs,omitempty"`
+	TaskIDs           []string       `json:"taskIDs,omitempty"`
+	ReviewerID        *string        `json:"reviewerID,omitempty"`
+	CommentIDs        []string       `json:"commentIDs,omitempty"`
+	FileIDs           []string       `json:"fileIDs,omitempty"`
+	InternalPolicyIDs []string       `json:"internalPolicyIDs,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.
@@ -13805,6 +13817,7 @@ type Entity struct {
 	SourcePlatforms                   *PlatformConnection           `json:"sourcePlatforms"`
 	EntityType                        *EntityType                   `json:"entityType,omitempty"`
 	LogoFile                          *File                         `json:"logoFile,omitempty"`
+	InternalPolicies                  *InternalPolicyConnection     `json:"internalPolicies"`
 }
 
 func (Entity) IsNode() {}
@@ -14915,6 +14928,9 @@ type EntityWhereInput struct {
 	// logo_file edge predicates
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for domainsHas to contain a specific value
@@ -19022,6 +19038,7 @@ type IdentityHolder struct {
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	AccessPlatforms     *PlatformConnection           `json:"accessPlatforms"`
 	User                *User                         `json:"user,omitempty"`
+	InternalPolicies    *InternalPolicyConnection     `json:"internalPolicies"`
 	// Indicates if this identityHolder has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this identityHolder has any workflow history (completed or failed instances)
@@ -19616,6 +19633,9 @@ type IdentityHolderWhereInput struct {
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -20207,6 +20227,10 @@ type InternalPolicy struct {
 	Comments               *NoteConnection                  `json:"comments"`
 	Discussions            *DiscussionConnection            `json:"discussions"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	Assets                 *AssetConnection                 `json:"assets"`
+	Entities               *EntityConnection                `json:"entities"`
+	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
+	Reviews                *ReviewConnection                `json:"reviews"`
 	// Indicates if this internalPolicy has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this internalPolicy has any workflow history (completed or failed instances)
@@ -20741,6 +20765,18 @@ type InternalPolicyWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// identity_holders edge predicates
+	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
+	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for tagSuggestionsHas to contain a specific value
@@ -29378,9 +29414,10 @@ type Review struct {
 	Entities        *EntityConnection        `json:"entities"`
 	Tasks           *TaskConnection          `json:"tasks"`
 	// primary reviewer responsible for the record
-	Reviewer *User           `json:"reviewer,omitempty"`
-	Comments *NoteConnection `json:"comments"`
-	Files    *FileConnection `json:"files"`
+	Reviewer         *User                     `json:"reviewer,omitempty"`
+	Comments         *NoteConnection           `json:"comments"`
+	Files            *FileConnection           `json:"files"`
+	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
 }
 
 func (Review) IsNode() {}
@@ -29928,6 +29965,9 @@ type ReviewWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -38572,6 +38612,9 @@ type UpdateAssetInput struct {
 	AddControlIDs                []string         `json:"addControlIDs,omitempty"`
 	RemoveControlIDs             []string         `json:"removeControlIDs,omitempty"`
 	ClearControls                *bool            `json:"clearControls,omitempty"`
+	AddInternalPolicyIDs         []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs      []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies        *bool            `json:"clearInternalPolicies,omitempty"`
 	SourcePlatformID             *string          `json:"sourcePlatformID,omitempty"`
 	ClearSourcePlatform          *bool            `json:"clearSourcePlatform,omitempty"`
 	AddConnectedAssetIDs         []string         `json:"addConnectedAssetIDs,omitempty"`
@@ -39940,6 +39983,9 @@ type UpdateEntityInput struct {
 	ClearEntityType                        *bool            `json:"clearEntityType,omitempty"`
 	LogoFileID                             *string          `json:"logoFileID,omitempty"`
 	ClearLogoFile                          *bool            `json:"clearLogoFile,omitempty"`
+	AddInternalPolicyIDs                   []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs                []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies                  *bool            `json:"clearInternalPolicies,omitempty"`
 	Note                                   *CreateNoteInput `json:"note,omitempty"`
 }
 
@@ -40850,6 +40896,9 @@ type UpdateIdentityHolderInput struct {
 	ClearAccessPlatforms        *bool          `json:"clearAccessPlatforms,omitempty"`
 	UserID                      *string        `json:"userID,omitempty"`
 	ClearUser                   *bool          `json:"clearUser,omitempty"`
+	AddInternalPolicyIDs        []string       `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs     []string       `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies       *bool          `json:"clearInternalPolicies,omitempty"`
 }
 
 // UpdateInternalPolicyInput is used for update InternalPolicy object.
@@ -40987,6 +41036,18 @@ type UpdateInternalPolicyInput struct {
 	AddWorkflowObjectRefIDs        []string                `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs     []string                `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs        *bool                   `json:"clearWorkflowObjectRefs,omitempty"`
+	AddAssetIDs                    []string                `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs                 []string                `json:"removeAssetIDs,omitempty"`
+	ClearAssets                    *bool                   `json:"clearAssets,omitempty"`
+	AddEntityIDs                   []string                `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs                []string                `json:"removeEntityIDs,omitempty"`
+	ClearEntities                  *bool                   `json:"clearEntities,omitempty"`
+	AddIdentityHolderIDs           []string                `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs        []string                `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders           *bool                   `json:"clearIdentityHolders,omitempty"`
+	AddReviewIDs                   []string                `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                []string                `json:"removeReviewIDs,omitempty"`
+	ClearReviews                   *bool                   `json:"clearReviews,omitempty"`
 	AddDiscussion                  *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
 	UpdateDiscussion               *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
 	DeleteDiscussion               *string                 `json:"deleteDiscussion,omitempty"`
@@ -42526,65 +42587,68 @@ type UpdateReviewInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload             map[string]any `json:"rawPayload,omitempty"`
-	ClearRawPayload        *bool          `json:"clearRawPayload,omitempty"`
-	AddBlockedGroupIDs     []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs  []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups     *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs           []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs        []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors           *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs           []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs        []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers           *bool          `json:"clearViewers,omitempty"`
-	EnvironmentID          *string        `json:"environmentID,omitempty"`
-	ClearEnvironment       *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                *string        `json:"scopeID,omitempty"`
-	ClearScope             *bool          `json:"clearScope,omitempty"`
-	AddIntegrationIDs      []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs   []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations      *bool          `json:"clearIntegrations,omitempty"`
-	AddFindingIDs          []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs       []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings          *bool          `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs    []string       `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs []string       `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities   *bool          `json:"clearVulnerabilities,omitempty"`
-	AddActionPlanIDs       []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs    []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans       *bool          `json:"clearActionPlans,omitempty"`
-	AddRemediationIDs      []string       `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs   []string       `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations      *bool          `json:"clearRemediations,omitempty"`
-	AddControlIDs          []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs       []string       `json:"removeControlIDs,omitempty"`
-	ClearControls          *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs       []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs    []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols       *bool          `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs             []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs          []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks             *bool          `json:"clearRisks,omitempty"`
-	AddProgramIDs          []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs       []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms          *bool          `json:"clearPrograms,omitempty"`
-	AddAssetIDs            []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs         []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets            *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs           []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs        []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities          *bool          `json:"clearEntities,omitempty"`
-	AddTaskIDs             []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs          []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks             *bool          `json:"clearTasks,omitempty"`
-	ReviewerID             *string        `json:"reviewerID,omitempty"`
-	ClearReviewer          *bool          `json:"clearReviewer,omitempty"`
-	AddCommentIDs          []string       `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs       []string       `json:"removeCommentIDs,omitempty"`
-	ClearComments          *bool          `json:"clearComments,omitempty"`
-	AddFileIDs             []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs          []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles             *bool          `json:"clearFiles,omitempty"`
+	RawPayload              map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload         *bool          `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs      []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs            []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs         []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers            *bool          `json:"clearViewers,omitempty"`
+	EnvironmentID           *string        `json:"environmentID,omitempty"`
+	ClearEnvironment        *bool          `json:"clearEnvironment,omitempty"`
+	ScopeID                 *string        `json:"scopeID,omitempty"`
+	ClearScope              *bool          `json:"clearScope,omitempty"`
+	AddIntegrationIDs       []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs    []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations       *bool          `json:"clearIntegrations,omitempty"`
+	AddFindingIDs           []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs        []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings           *bool          `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs     []string       `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs  []string       `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities    *bool          `json:"clearVulnerabilities,omitempty"`
+	AddActionPlanIDs        []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs     []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans        *bool          `json:"clearActionPlans,omitempty"`
+	AddRemediationIDs       []string       `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs    []string       `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations       *bool          `json:"clearRemediations,omitempty"`
+	AddControlIDs           []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs        []string       `json:"removeControlIDs,omitempty"`
+	ClearControls           *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs        []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs     []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols        *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs              []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs           []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks              *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs           []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs        []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms           *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs             []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs          []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets             *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs            []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs         []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities           *bool          `json:"clearEntities,omitempty"`
+	AddTaskIDs              []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool          `json:"clearTasks,omitempty"`
+	ReviewerID              *string        `json:"reviewerID,omitempty"`
+	ClearReviewer           *bool          `json:"clearReviewer,omitempty"`
+	AddCommentIDs           []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs        []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments           *bool          `json:"clearComments,omitempty"`
+	AddFileIDs              []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs           []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles              *bool          `json:"clearFiles,omitempty"`
+	AddInternalPolicyIDs    []string       `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs []string       `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies   *bool          `json:"clearInternalPolicies,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.

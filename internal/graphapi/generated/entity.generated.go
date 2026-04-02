@@ -238,6 +238,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -484,6 +486,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -730,6 +734,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -976,6 +982,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
