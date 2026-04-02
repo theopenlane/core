@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
 
@@ -57,7 +59,6 @@ func (Task) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique().
 			Annotations(
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleUUID,
@@ -146,6 +147,14 @@ func (Task) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Comment("the parent task this task belongs to"),
+	}
+}
+
+// Indexes of the Task
+func (Task) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_uuid", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

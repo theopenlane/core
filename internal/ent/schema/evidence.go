@@ -5,8 +5,10 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -54,7 +56,6 @@ func (Evidence) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique().
 			Annotations(
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleUUID,
@@ -138,6 +139,14 @@ func (Evidence) Fields() []ent.Field {
 			).
 			Comment("the status of the evidence, ready, approved, needs renewal, missing artifact, rejected").
 			Optional(),
+	}
+}
+
+// Indexes of the Evidence
+func (Evidence) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_uuid", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

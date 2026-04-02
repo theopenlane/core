@@ -2,8 +2,10 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -53,7 +55,6 @@ func (InternalPolicy) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique().
 			Annotations(
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleUUID,
@@ -129,6 +130,14 @@ func (i InternalPolicy) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Entity{}),
 		defaultEdgeToWithPagination(i, IdentityHolder{}),
 		defaultEdgeFromWithPagination(i, Review{}),
+	}
+}
+
+// Indexes of the InternalPolicy
+func (InternalPolicy) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_uuid", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
