@@ -152,11 +152,19 @@ type InternalPolicyEdges struct {
 	Discussions []*Discussion `json:"discussions,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [25]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -172,6 +180,10 @@ type InternalPolicyEdges struct {
 	namedComments               map[string][]*Note
 	namedDiscussions            map[string][]*Discussion
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
+	namedAssets                 map[string][]*Asset
+	namedEntities               map[string][]*Entity
+	namedIdentityHolders        map[string][]*IdentityHolder
+	namedReviews                map[string][]*Review
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -375,6 +387,42 @@ func (e InternalPolicyEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[21] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[22] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[23] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[24] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -791,6 +839,26 @@ func (_m *InternalPolicy) QueryDiscussions() *DiscussionQuery {
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewInternalPolicyClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
+// QueryAssets queries the "assets" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryAssets() *AssetQuery {
+	return NewInternalPolicyClient(_m.config).QueryAssets(_m)
+}
+
+// QueryEntities queries the "entities" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryEntities() *EntityQuery {
+	return NewInternalPolicyClient(_m.config).QueryEntities(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewInternalPolicyClient(_m.config).QueryIdentityHolders(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryReviews() *ReviewQuery {
+	return NewInternalPolicyClient(_m.config).QueryReviews(_m)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -1279,6 +1347,102 @@ func (_m *InternalPolicy) appendNamedWorkflowObjectRefs(name string, edges ...*W
 		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
 	} else {
 		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
 	}
 }
 

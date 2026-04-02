@@ -153,11 +153,13 @@ type IdentityHolderEdges struct {
 	AccessPlatforms []*Platform `json:"access_platforms,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [25]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -176,6 +178,7 @@ type IdentityHolderEdges struct {
 	namedFindings            map[string][]*Finding
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 	namedAccessPlatforms     map[string][]*Platform
+	namedInternalPolicies    map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -406,6 +409,15 @@ func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[24] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -797,6 +809,11 @@ func (_m *IdentityHolder) QueryAccessPlatforms() *PlatformQuery {
 // QueryUser queries the "user" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryUser() *UserQuery {
 	return NewIdentityHolderClient(_m.config).QueryUser(_m)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewIdentityHolderClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // Update returns a builder for updating this IdentityHolder.
@@ -1342,6 +1359,30 @@ func (_m *IdentityHolder) appendNamedAccessPlatforms(name string, edges ...*Plat
 		_m.Edges.namedAccessPlatforms[name] = []*Platform{}
 	} else {
 		_m.Edges.namedAccessPlatforms[name] = append(_m.Edges.namedAccessPlatforms[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

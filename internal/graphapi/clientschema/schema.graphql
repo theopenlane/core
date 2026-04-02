@@ -3373,6 +3373,37 @@ type Asset implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	sourcePlatform: Platform
 	"""
 	integration that owns this asset
@@ -4422,6 +4453,11 @@ input AssetWhereInput {
 	"""
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	source_platform edge predicates
 	"""
@@ -11061,6 +11097,7 @@ input CreateAssetInput {
 	outOfScopePlatformIDs: [ID!]
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	sourcePlatformID: ID
 	integrationID: ID
 	connectedAssetIDs: [ID!]
@@ -12500,6 +12537,7 @@ input CreateEntityInput {
 	sourcePlatformIDs: [ID!]
 	entityTypeID: ID
 	logoFileID: ID
+	internalPolicyIDs: [ID!]
 	note: CreateNoteInput
 }
 """
@@ -13311,6 +13349,7 @@ input CreateIdentityHolderInput {
 	workflowObjectRefIDs: [ID!]
 	accessPlatformIDs: [ID!]
 	userID: ID
+	internalPolicyIDs: [ID!]
 }
 """
 CreateInternalPolicyInput is used for create InternalPolicy object.
@@ -13430,6 +13469,10 @@ input CreateInternalPolicyInput {
 	commentIDs: [ID!]
 	discussionIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	assetIDs: [ID!]
+	entityIDs: [ID!]
+	identityHolderIDs: [ID!]
+	reviewIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -14952,6 +14995,7 @@ input CreateReviewInput {
 	reviewerID: ID
 	commentIDs: [ID!]
 	fileIDs: [ID!]
+	internalPolicyIDs: [ID!]
 }
 """
 CreateRiskInput is used for create Risk object.
@@ -24523,6 +24567,37 @@ type Entity implements Node {
 	): PlatformConnection!
 	entityType: EntityType
 	logoFile: File
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 }
 """
 Return response for createBulkEntity mutation
@@ -26012,6 +26087,11 @@ input EntityWhereInput {
 	"""
 	hasLogoFile: Boolean
 	hasLogoFileWith: [FileWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -35264,6 +35344,37 @@ type IdentityHolder implements Node {
 		where: PlatformWhereInput
 	): PlatformConnection!
 	user: User
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	"""
 	Indicates if this identityHolder has pending changes awaiting workflow approval
 	"""
@@ -36061,6 +36172,11 @@ input IdentityHolderWhereInput {
 	"""
 	hasUser: Boolean
 	hasUserWith: [UserWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -37830,6 +37946,130 @@ type InternalPolicy implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	identityHolders(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IdentityHolders returned from the connection.
+		"""
+		orderBy: [IdentityHolderOrder!]
+
+		"""
+		Filtering options for IdentityHolders returned from the connection.
+		"""
+		where: IdentityHolderWhereInput
+	): IdentityHolderConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
 	"""
 	Indicates if this internalPolicy has pending changes awaiting workflow approval
 	"""
@@ -38540,6 +38780,26 @@ input InternalPolicyWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	identity_holders edge predicates
+	"""
+	hasIdentityHolders: Boolean
+	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -68365,6 +68625,37 @@ type Review implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 }
 """
 Return response for createBulkReview mutation
@@ -69059,6 +69350,11 @@ input ReviewWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -84074,6 +84370,9 @@ input UpdateAssetInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	sourcePlatformID: ID
 	clearSourcePlatform: Boolean
 	addConnectedAssetIDs: [ID!]
@@ -85997,6 +86296,9 @@ input UpdateEntityInput {
 	clearEntityType: Boolean
 	logoFileID: ID
 	clearLogoFile: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	note: CreateNoteInput
 }
 """
@@ -87193,6 +87495,9 @@ input UpdateIdentityHolderInput {
 	clearAccessPlatforms: Boolean
 	userID: ID
 	clearUser: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 }
 """
 UpdateInternalPolicyInput is used for update InternalPolicy object.
@@ -87377,6 +87682,18 @@ input UpdateInternalPolicyInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addIdentityHolderIDs: [ID!]
+	removeIdentityHolderIDs: [ID!]
+	clearIdentityHolders: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -89476,6 +89793,9 @@ input UpdateReviewInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 }
 """
 UpdateRiskInput is used for update Risk object.

@@ -10800,6 +10800,81 @@ var (
 			},
 		},
 	}
+	// InternalPolicyAssetsColumns holds the columns for the "internal_policy_assets" table.
+	InternalPolicyAssetsColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "asset_id", Type: field.TypeString},
+	}
+	// InternalPolicyAssetsTable holds the schema information for the "internal_policy_assets" table.
+	InternalPolicyAssetsTable = &schema.Table{
+		Name:       "internal_policy_assets",
+		Columns:    InternalPolicyAssetsColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyAssetsColumns[0], InternalPolicyAssetsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_assets_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyAssetsColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_assets_asset_id",
+				Columns:    []*schema.Column{InternalPolicyAssetsColumns[1]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicyEntitiesColumns holds the columns for the "internal_policy_entities" table.
+	InternalPolicyEntitiesColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "entity_id", Type: field.TypeString},
+	}
+	// InternalPolicyEntitiesTable holds the schema information for the "internal_policy_entities" table.
+	InternalPolicyEntitiesTable = &schema.Table{
+		Name:       "internal_policy_entities",
+		Columns:    InternalPolicyEntitiesColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyEntitiesColumns[0], InternalPolicyEntitiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_entities_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyEntitiesColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_entities_entity_id",
+				Columns:    []*schema.Column{InternalPolicyEntitiesColumns[1]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicyIdentityHoldersColumns holds the columns for the "internal_policy_identity_holders" table.
+	InternalPolicyIdentityHoldersColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "identity_holder_id", Type: field.TypeString},
+	}
+	// InternalPolicyIdentityHoldersTable holds the schema information for the "internal_policy_identity_holders" table.
+	InternalPolicyIdentityHoldersTable = &schema.Table{
+		Name:       "internal_policy_identity_holders",
+		Columns:    InternalPolicyIdentityHoldersColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyIdentityHoldersColumns[0], InternalPolicyIdentityHoldersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_identity_holders_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyIdentityHoldersColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_identity_holders_identity_holder_id",
+				Columns:    []*schema.Column{InternalPolicyIdentityHoldersColumns[1]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InviteEventsColumns holds the columns for the "invite_events" table.
 	InviteEventsColumns = []*schema.Column{
 		{Name: "invite_id", Type: field.TypeString},
@@ -12475,6 +12550,31 @@ var (
 			},
 		},
 	}
+	// ReviewInternalPoliciesColumns holds the columns for the "review_internal_policies" table.
+	ReviewInternalPoliciesColumns = []*schema.Column{
+		{Name: "review_id", Type: field.TypeString},
+		{Name: "internal_policy_id", Type: field.TypeString},
+	}
+	// ReviewInternalPoliciesTable holds the schema information for the "review_internal_policies" table.
+	ReviewInternalPoliciesTable = &schema.Table{
+		Name:       "review_internal_policies",
+		Columns:    ReviewInternalPoliciesColumns,
+		PrimaryKey: []*schema.Column{ReviewInternalPoliciesColumns[0], ReviewInternalPoliciesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "review_internal_policies_review_id",
+				Columns:    []*schema.Column{ReviewInternalPoliciesColumns[0]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "review_internal_policies_internal_policy_id",
+				Columns:    []*schema.Column{ReviewInternalPoliciesColumns[1]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RiskBlockedGroupsColumns holds the columns for the "risk_blocked_groups" table.
 	RiskBlockedGroupsColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
@@ -13391,6 +13491,9 @@ var (
 		InternalPolicyNarrativesTable,
 		InternalPolicyTasksTable,
 		InternalPolicyRisksTable,
+		InternalPolicyAssetsTable,
+		InternalPolicyEntitiesTable,
+		InternalPolicyIdentityHoldersTable,
 		InviteEventsTable,
 		InviteGroupsTable,
 		JobRunnerJobRunnerTokensTable,
@@ -13458,6 +13561,7 @@ var (
 		ReviewRemediationsTable,
 		ReviewControlsTable,
 		ReviewSubcontrolsTable,
+		ReviewInternalPoliciesTable,
 		RiskBlockedGroupsTable,
 		RiskEditorsTable,
 		RiskViewersTable,
@@ -14201,6 +14305,12 @@ func init() {
 	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
 	InternalPolicyRisksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyRisksTable.ForeignKeys[1].RefTable = RisksTable
+	InternalPolicyAssetsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyAssetsTable.ForeignKeys[1].RefTable = AssetsTable
+	InternalPolicyEntitiesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyEntitiesTable.ForeignKeys[1].RefTable = EntitiesTable
+	InternalPolicyIdentityHoldersTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyIdentityHoldersTable.ForeignKeys[1].RefTable = IdentityHoldersTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	InviteGroupsTable.ForeignKeys[0].RefTable = InvitesTable
@@ -14335,6 +14445,8 @@ func init() {
 	ReviewControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	ReviewSubcontrolsTable.ForeignKeys[0].RefTable = ReviewsTable
 	ReviewSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	ReviewInternalPoliciesTable.ForeignKeys[0].RefTable = ReviewsTable
+	ReviewInternalPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	RiskBlockedGroupsTable.ForeignKeys[0].RefTable = RisksTable
 	RiskBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskEditorsTable.ForeignKeys[0].RefTable = RisksTable

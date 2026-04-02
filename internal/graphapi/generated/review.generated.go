@@ -158,6 +158,8 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 				return ec.fieldContext_Review_comments(ctx, field)
 			case "files":
 				return ec.fieldContext_Review_files(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Review_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
 		},
@@ -324,6 +326,8 @@ func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_reviews(_ conte
 				return ec.fieldContext_Review_comments(ctx, field)
 			case "files":
 				return ec.fieldContext_Review_files(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Review_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
 		},
@@ -490,6 +494,8 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 				return ec.fieldContext_Review_comments(ctx, field)
 			case "files":
 				return ec.fieldContext_Review_files(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Review_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
 		},
@@ -656,6 +662,8 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 				return ec.fieldContext_Review_comments(ctx, field)
 			case "files":
 				return ec.fieldContext_Review_files(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Review_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
 		},
