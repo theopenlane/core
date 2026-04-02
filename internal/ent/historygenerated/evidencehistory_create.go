@@ -452,11 +452,17 @@ func (_c *EvidenceHistoryCreate) defaults() error {
 		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.CreationDate(); !ok {
-		v := evidencehistory.DefaultCreationDate
+		if evidencehistory.DefaultCreationDate == nil {
+			return fmt.Errorf("historygenerated: uninitialized evidencehistory.DefaultCreationDate (forgotten import historygenerated/runtime?)")
+		}
+		v := evidencehistory.DefaultCreationDate()
 		_c.mutation.SetCreationDate(v)
 	}
 	if _, ok := _c.mutation.RenewalDate(); !ok {
-		v := evidencehistory.DefaultRenewalDate
+		if evidencehistory.DefaultRenewalDate == nil {
+			return fmt.Errorf("historygenerated: uninitialized evidencehistory.DefaultRenewalDate (forgotten import historygenerated/runtime?)")
+		}
+		v := evidencehistory.DefaultRenewalDate()
 		_c.mutation.SetRenewalDate(v)
 	}
 	if _, ok := _c.mutation.IsAutomated(); !ok {

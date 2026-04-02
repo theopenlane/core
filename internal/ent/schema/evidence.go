@@ -104,10 +104,16 @@ func (Evidence) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("creation_date"),
 			).
-			Default(models.DateTime(time.Now())),
+			Default(func() models.DateTime {
+				now := time.Now()
+				return models.DateTime(now)
+			}),
 		field.Time("renewal_date").
 			Comment("the date the evidence should be renewed, defaults to a year from entry date").
-			Default(models.DateTime(time.Now().AddDate(1, 0, 0))).
+			Default(func() models.DateTime {
+				defaultRenewal := time.Now().AddDate(1, 0, 0)
+				return models.DateTime(defaultRenewal)
+			}).
 			GoType(models.DateTime{}).
 			Nillable().
 			Annotations(

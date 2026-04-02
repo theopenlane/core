@@ -143,9 +143,9 @@ var (
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
 	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
-	DefaultCreationDate models.DateTime
+	DefaultCreationDate func() models.DateTime
 	// DefaultRenewalDate holds the default value on creation for the "renewal_date" field.
-	DefaultRenewalDate models.DateTime
+	DefaultRenewalDate func() models.DateTime
 	// DefaultIsAutomated holds the default value on creation for the "is_automated" field.
 	DefaultIsAutomated bool
 	// DefaultID holds the default value on creation for the "id" field.

@@ -273,9 +273,9 @@ var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
-	DefaultCreationDate models.DateTime
+	DefaultCreationDate func() models.DateTime
 	// DefaultRenewalDate holds the default value on creation for the "renewal_date" field.
-	DefaultRenewalDate models.DateTime
+	DefaultRenewalDate func() models.DateTime
 	// DefaultIsAutomated holds the default value on creation for the "is_automated" field.
 	DefaultIsAutomated bool
 	// URLValidator is a validator for the "url" field. It is called by the builders before save.
