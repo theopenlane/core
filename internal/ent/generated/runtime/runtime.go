@@ -2751,11 +2751,11 @@ func init() {
 	// evidenceDescCreationDate is the schema descriptor for creation_date field.
 	evidenceDescCreationDate := evidenceFields[4].Descriptor()
 	// evidence.DefaultCreationDate holds the default value on creation for the creation_date field.
-	evidence.DefaultCreationDate = evidenceDescCreationDate.Default.(models.DateTime)
+	evidence.DefaultCreationDate = evidenceDescCreationDate.Default.(func() models.DateTime)
 	// evidenceDescRenewalDate is the schema descriptor for renewal_date field.
 	evidenceDescRenewalDate := evidenceFields[5].Descriptor()
 	// evidence.DefaultRenewalDate holds the default value on creation for the renewal_date field.
-	evidence.DefaultRenewalDate = evidenceDescRenewalDate.Default.(models.DateTime)
+	evidence.DefaultRenewalDate = evidenceDescRenewalDate.Default.(func() models.DateTime)
 	// evidenceDescIsAutomated is the schema descriptor for is_automated field.
 	evidenceDescIsAutomated := evidenceFields[7].Descriptor()
 	// evidence.DefaultIsAutomated holds the default value on creation for the is_automated field.

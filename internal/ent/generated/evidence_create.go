@@ -601,11 +601,17 @@ func (_c *EvidenceCreate) defaults() error {
 		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.CreationDate(); !ok {
-		v := evidence.DefaultCreationDate
+		if evidence.DefaultCreationDate == nil {
+			return fmt.Errorf("generated: uninitialized evidence.DefaultCreationDate (forgotten import generated/runtime?)")
+		}
+		v := evidence.DefaultCreationDate()
 		_c.mutation.SetCreationDate(v)
 	}
 	if _, ok := _c.mutation.RenewalDate(); !ok {
-		v := evidence.DefaultRenewalDate
+		if evidence.DefaultRenewalDate == nil {
+			return fmt.Errorf("generated: uninitialized evidence.DefaultRenewalDate (forgotten import generated/runtime?)")
+		}
+		v := evidence.DefaultRenewalDate()
 		_c.mutation.SetRenewalDate(v)
 	}
 	if _, ok := _c.mutation.IsAutomated(); !ok {
