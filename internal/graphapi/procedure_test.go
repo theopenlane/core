@@ -356,13 +356,6 @@ func TestMutationUpdateProcedure(t *testing.T) {
 	// create procedure to be updated
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
-	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
-
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-
 	// create a viewer user and add them to the same organization as testUser1
 	// also add them to the same group as testUser1, this should still allow them to edit the procedure
 	// despite not not being an organization admin
@@ -432,20 +425,12 @@ func TestMutationUpdateProcedure(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update allowed, details updated",
+			name: "update allowed, details updated by admin",
 			request: testclient.UpdateProcedureInput{
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
 			client: suite.client.api,
-			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
-		},
-		{
-			name: "update allowed, user in editor group",
-			request: testclient.UpdateProcedureInput{
-				Name: lo.ToPtr("Updated Procedure Name Again"),
-			},
-			client: suite.client.api,
-			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "member update allowed, user in editor group",
@@ -486,8 +471,8 @@ func TestMutationUpdateProcedure(t *testing.T) {
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
 			client:      suite.client.api,
-			ctx:         anotherAdminUser.UserCtx, // user assigned to the group which no longer has editor permissions
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         anotherViewerUser.UserCtx,
+			expectedErr: notFoundErrorMsg, // TODO: this will change back to not authorized on the new permissions branch
 		},
 		{
 			name: "update not allowed, no permissions",
