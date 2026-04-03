@@ -1,4 +1,4 @@
-h1:zGpCqIxepAaxsL5dreDIkSH45Vz4zFnzSzDxuvlL3+E=
+h1:5MqIdCsBEnx6ie4PqyCtVL+Qf70xpzjXSrL0bGa6xk0=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -93,3 +93,4 @@ h1:zGpCqIxepAaxsL5dreDIkSH45Vz4zFnzSzDxuvlL3+E=
 20260331183524_integrationswebhook.sql h1:lBVTJ+54MJadVgGxxhx15kU2L7fZwFAKTb+N4nAJYJo=
 20260331183527_integrationswebhook_history.sql h1:62WQYiEX9qy1FEHk9OitUuKwJtHPFvjeKSc8KZzwXI4=
 20260402213036_registry_edges.sql h1:oO1oE3i2IjoAV3UtN5VHn2kD2i3App0nKOpaBvtq9AU=
+20260403001855_external_uuid_unique.sql h1:VXirwGuqxD8A9l7Hb9kWzt87MH61wEa5NVB4tOSy/Wo=

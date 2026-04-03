@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/oscalgen"
@@ -75,7 +77,6 @@ func (Risk) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique().
 			Annotations(
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleUUID,
@@ -241,6 +242,14 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+	}
+}
+
+// Indexes of the Risk
+func (Risk) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_uuid", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

@@ -52,7 +52,6 @@ func (Platform) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique().
 			Annotations(
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleUUID,
@@ -297,6 +296,8 @@ func (Platform) Indexes() []ent.Index {
 	return []ent.Index{
 		// names should be unique, but ignore deleted names
 		index.Fields("name", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("external_uuid", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

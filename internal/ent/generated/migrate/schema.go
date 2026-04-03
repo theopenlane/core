@@ -845,7 +845,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description_json", Type: field.TypeJSON, Nullable: true},
@@ -965,6 +965,14 @@ var (
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[53]},
+			},
+			{
+				Name:    "control_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ControlsColumns[9], ControlsColumns[53]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "control_owner_id",
@@ -2446,7 +2454,7 @@ var (
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2495,6 +2503,14 @@ var (
 				Name:    "evidence_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{EvidencesColumns[24]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "evidence_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{EvidencesColumns[12], EvidencesColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4019,7 +4035,7 @@ var (
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_internal_policies", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
@@ -4094,6 +4110,14 @@ var (
 				Name:    "internalpolicy_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{InternalPoliciesColumns[40]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "internalpolicy_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{InternalPoliciesColumns[32], InternalPoliciesColumns[40]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5396,7 +5420,7 @@ var (
 		{Name: "security_tier_name", Type: field.TypeString, Nullable: true},
 		{Name: "criticality_name", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "business_purpose", Type: field.TypeString, Nullable: true},
@@ -5584,6 +5608,14 @@ var (
 					Where: "deleted_at is NULL",
 				},
 			},
+			{
+				Name:    "platform_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{PlatformsColumns[22], PlatformsColumns[42]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// ProceduresColumns holds the columns for the "procedures" table.
@@ -5719,7 +5751,7 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "program_kind_name", Type: field.TypeString, Nullable: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "ACTION_REQUIRED", "READY_FOR_AUDITOR", "COMPLETED", "ARCHIVED"}, Default: "NOT_STARTED"},
@@ -5806,6 +5838,14 @@ var (
 				Name:    "program_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{ProgramsColumns[25]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "program_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProgramsColumns[10], ProgramsColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6050,7 +6090,7 @@ var (
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
 		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
@@ -6178,6 +6218,14 @@ var (
 				Name:    "risk_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{RisksColumns[32]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "risk_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{RisksColumns[16], RisksColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6550,7 +6598,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "description_json", Type: field.TypeJSON, Nullable: true},
@@ -6673,6 +6721,14 @@ var (
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[45]},
+			},
+			{
+				Name:    "subcontrol_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{SubcontrolsColumns[9], SubcontrolsColumns[45]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "subcontrol_owner_id",
@@ -7022,7 +7078,7 @@ var (
 		{Name: "task_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "external_uuid", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
@@ -7127,6 +7183,14 @@ var (
 				Name:    "task_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{TasksColumns[24]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "task_external_uuid_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{TasksColumns[12], TasksColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
