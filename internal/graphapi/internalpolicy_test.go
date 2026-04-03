@@ -487,13 +487,6 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	internalPolicyAdminUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
-	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
-
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-
 	// create a viewer user and add them to the same organization as testUser1
 	// also add them to the same group as testUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
@@ -602,13 +595,13 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:     "update allowed, user in editor group",
+			name:     "update allowed, org admins have edit access to all policies in the org",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
 			client: suite.client.api,
-			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name:     "member update allowed, user in editor group",
@@ -663,8 +656,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
 			client:      suite.client.api,
-			ctx:         anotherAdminUser.UserCtx, // user assigned to the group which no longer has editor permissions
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which no longer has editor permissions
+			expectedErr: notFoundErrorMsg,          // TODO: this will change back to not authorized on the new permissions branch
 		},
 		{
 			name:     "update not allowed, no permissions",
