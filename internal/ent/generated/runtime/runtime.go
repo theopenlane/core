@@ -4694,8 +4694,6 @@ func init() {
 	notification.Hooks[4] = notificationHooks[0]
 
 	notification.Hooks[5] = notificationHooks[1]
-
-	notification.Hooks[6] = notificationHooks[2]
 	notificationMixinInters3 := notificationMixin[3].Interceptors()
 	notificationInters := schema.Notification{}.Interceptors()
 	notification.Interceptors[0] = notificationMixinInters3[0]

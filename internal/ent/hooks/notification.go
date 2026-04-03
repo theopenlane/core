@@ -5,55 +5,13 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"entgo.io/ent/privacy"
-
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-// HookCreateNotification runs on notification mutations to ensure the owner_id is always set to
-// that of the org from the request body
-func HookCreateNotification() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.NotificationFunc(func(ctx context.Context, m *generated.NotificationMutation) (generated.Value, error) {
-
-			if !auth.IsSystemAdminFromContext(ctx) {
-				return next.Mutate(ctx, m)
-			}
-
-			systemAdminID, err := auth.GetOrganizationIDFromContext(ctx)
-			if err != nil {
-				return nil, err
-			}
-
-			ownerID, ok := m.OwnerID()
-
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-			exist, err := m.Client().Organization.Query().Where(organization.ID(ownerID)).
-				Exist(allowCtx)
-			if err != nil {
-				return nil, err
-			}
-
-			if !exist {
-				return nil, ErrNoOrganizationID
-			}
-
-			if ok && systemAdminID != ownerID {
-				m.SetOwnerID(ownerID)
-			}
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate)
-}
 
 // HookNotification runs on notification mutations to validate channels
 func HookNotification() ent.Hook {

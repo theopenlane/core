@@ -194,8 +194,20 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
 
+	// if this is set to true, we want to also verify the request is coming from
+	// a system admin. In that case, use the ownerID from the request instead
 	if o.SkipAutoOwnerID && auth.IsSystemAdminFromContext(ctx) {
-		return nil
+		val, ok := m.Field(ownerFieldName)
+		if !ok {
+			return fmt.Errorf("failed to get owner id from request: %w", err)
+		}
+
+		orgFromRequest, ok := val.(string)
+		if !ok {
+			return fmt.Errorf("invalid owner id from request: %w", err)
+		}
+
+		orgID = orgFromRequest
 	}
 
 	// set owner on mutation

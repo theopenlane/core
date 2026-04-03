@@ -103,7 +103,6 @@ func (Notification) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNotification(),
 		hooks.HookNotificationPublish(),
-		hooks.HookCreateNotification(),
 	}
 }
 
