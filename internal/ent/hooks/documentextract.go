@@ -21,6 +21,11 @@ type addSubcontrolsMutation interface {
 	AddSubcontrolIDs(ids ...string)
 }
 
+// versionMutation allows for setting the revision field in a mutation
+type versionMutation interface {
+	SetRevision(revision string)
+}
+
 // HookParseAssociations is an ent hook that parses associations from a document
 // such as referenced controls and adds the necessary edges
 func HookParseAssociations() ent.Hook {
@@ -53,6 +58,13 @@ func HookParseAssociations() ent.Hook {
 				}
 			}
 
+			if edgeLinks.version != "" {
+				verMut, ok := mut.(versionMutation)
+				if ok {
+					verMut.SetRevision(edgeLinks.version)
+				}
+			}
+
 			return next.Mutate(ctx, m)
 		})
 		// only do on create for now to avoid updating associations that a user may have manually removed
@@ -61,6 +73,7 @@ func HookParseAssociations() ent.Hook {
 
 // edgeLinks is a struct that holds the IDs of associated entities that should be linked to the document being created or updated, such as controlIDs
 type edgeLinks struct {
+	version       string
 	controlIDs    []string
 	subcontrolIDs []string
 }
@@ -78,7 +91,42 @@ func getDocumentAssociations(ctx context.Context, m detailsMutation) *edgeLinks 
 		return nil
 	}
 
-	return findControlMatches(details, orgControls)
+	edgeLinks := findControlMatches(details, orgControls)
+
+	edgeLinks.version = findVersion(details)
+
+	return edgeLinks
+}
+
+// findVersion attempts to find the version of the document in the details by
+// looking for a line that starts with "Version:" and extracting the version number from it. It returns the version in semver format if found, or an empty string if not found.
+func findVersion(details string) string {
+	lines := strings.Split(details, "\n")
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if strings.HasPrefix(strings.ToLower(trimmed), "version:") {
+			parts := strings.SplitN(trimmed, ":", 2)
+			if len(parts) == 2 {
+				// convert to semver format if possible, e.g. "Version: 1.0" -> "1.0.0"
+				version := strings.TrimSpace(parts[1])
+				if version == "" {
+					return ""
+				}
+				parts := strings.Split(version, ".")
+				for len(parts) < 3 {
+					parts = append(parts, "0")
+				}
+				version = strings.Join(parts, ".")
+
+				if !strings.HasPrefix(version, "v") {
+					version = "v" + version
+				}
+				return version
+			}
+		}
+	}
+
+	return ""
 }
 
 // findControlMatches searches the text for matches to a control, this is a simple implementation that will be

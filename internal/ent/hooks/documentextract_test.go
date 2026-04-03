@@ -8,7 +8,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 )
 
-func Test_findControlMatches(t *testing.T) {
+func TestFindControlMatches(t *testing.T) {
 	tests := []struct {
 		name     string
 		details  string
@@ -104,6 +104,41 @@ func Test_findControlMatches(t *testing.T) {
 
 			assert.Check(t, is.DeepEqual(tt.want.controlIDs, got.controlIDs))
 			assert.Check(t, is.DeepEqual(tt.want.subcontrolIDs, got.subcontrolIDs))
+		})
+	}
+}
+
+func TestFindVersion(t *testing.T) {
+	tests := []struct {
+		name    string
+		details string
+		want    string
+	}{
+		{
+			name:    "finds version with 'Version:' prefix",
+			details: "Version: 1.0",
+			want:    "v1.0.0",
+		},
+		{
+			name:    "finds version with 'version:' prefix in different case",
+			details: "version: 2.5",
+			want:    "v2.5.0",
+		},
+		{
+			name:    "returns empty string when no version is present",
+			details: "This document is about control AC-2.",
+			want:    "",
+		},
+		{
+			name:    "version in middle of details",
+			details: "This document is about control AC-2. Version: 1.0",
+			want:    "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := findVersion(tt.details)
+			assert.Check(t, is.Equal(tt.want, got))
 		})
 	}
 }
