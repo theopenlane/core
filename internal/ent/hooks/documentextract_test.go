@@ -20,8 +20,8 @@ func Test_findControlMatches(t *testing.T) {
 			details: "This is a reference to control AC-2 in the document details.",
 			controls: controlMapping{
 				"AC-2": {
-					ID:      "control-id-1",
-					RefCode: "AC-2",
+					id:      "control-id-1",
+					fefCode: "AC-2",
 				},
 			},
 			want: &edgeLinks{
@@ -33,8 +33,8 @@ func Test_findControlMatches(t *testing.T) {
 			details: "The document details mention control AC-2, which is important.",
 			controls: controlMapping{
 				"AC-2": {
-					ID:      "control-id-1",
-					RefCode: "AC-2",
+					id:      "control-id-1",
+					fefCode: "AC-2",
 				},
 			},
 			want: &edgeLinks{
@@ -46,8 +46,8 @@ func Test_findControlMatches(t *testing.T) {
 			details: "The document details mention control AC-200, which is important.",
 			controls: controlMapping{
 				"AC-2": {
-					ID:      "control-id-1",
-					RefCode: "AC-2",
+					id:      "control-id-1",
+					fefCode: "AC-2",
 				},
 			},
 			want: &edgeLinks{},
@@ -57,12 +57,12 @@ func Test_findControlMatches(t *testing.T) {
 			details: "The document details mention controls AC-2 and AC-3, which are important.",
 			controls: controlMapping{
 				"AC-2": {
-					ID:      "control-id-1",
-					RefCode: "AC-2",
+					id:      "control-id-1",
+					fefCode: "AC-2",
 				},
 				"AC-3": {
-					ID:      "control-id-2",
-					RefCode: "AC-3",
+					id:      "control-id-2",
+					fefCode: "AC-3",
 				},
 			},
 			want: &edgeLinks{
@@ -74,8 +74,8 @@ func Test_findControlMatches(t *testing.T) {
 			details: "The document details mention control ac-2, which is important.",
 			controls: controlMapping{
 				"AC-2": {
-					ID:      "control-id-1",
-					RefCode: "AC-2",
+					id:      "control-id-1",
+					fefCode: "AC-2",
 				},
 			},
 			want: &edgeLinks{
@@ -87,8 +87,8 @@ func Test_findControlMatches(t *testing.T) {
 			details: "## 4.1 this is not a control reference",
 			controls: controlMapping{
 				"4.1": {
-					ID:      "control-id-1",
-					RefCode: "4.1",
+					id:      "control-id-1",
+					fefCode: "4.1",
 				},
 			},
 			want: &edgeLinks{},

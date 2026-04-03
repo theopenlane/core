@@ -99,10 +99,10 @@ func findControlMatches(details string, controls controlMapping) *edgeLinks {
 			pattern := `(?i)(^|[\s,;:\(\)\[\]\{\}])` + regexp.QuoteMeta(refCode) + `([\s,;:\(\)\[\]\{\}\.]|$)`
 			re := regexp.MustCompile(pattern)
 			if re.MatchString(lineLower) {
-				if info.IsSubControl {
-					edges.subcontrolIDs = append(edges.subcontrolIDs, info.ID)
+				if info.isSubControl {
+					edges.subcontrolIDs = append(edges.subcontrolIDs, info.id)
 				} else {
-					edges.controlIDs = append(edges.controlIDs, info.ID)
+					edges.controlIDs = append(edges.controlIDs, info.id)
 				}
 			}
 		}
@@ -112,10 +112,10 @@ func findControlMatches(details string, controls controlMapping) *edgeLinks {
 
 // controlInfo is a struct that holds relevant information about a control that may be referenced in the document details, such as its ID, reference code, and framework
 type controlInfo struct {
-	ID           string
-	RefCode      string
-	Framework    string
-	IsSubControl bool
+	id           string
+	fefCode      string
+	framework    string
+	isSubControl bool
 }
 
 // controlMapping contains the refCode with additional info
@@ -141,10 +141,10 @@ func getOrganizationControls(ctx context.Context, m detailsMutation) controlMapp
 		}
 
 		result[c.RefCode] = controlInfo{
-			ID:           c.ID,
-			RefCode:      c.RefCode,
-			Framework:    refFramework,
-			IsSubControl: false,
+			id:           c.ID,
+			fefCode:      c.RefCode,
+			framework:    refFramework,
+			isSubControl: false,
 		}
 
 		for _, sc := range c.Edges.Subcontrols {
@@ -154,10 +154,10 @@ func getOrganizationControls(ctx context.Context, m detailsMutation) controlMapp
 			}
 
 			result[sc.RefCode] = controlInfo{
-				ID:           sc.ID,
-				RefCode:      sc.RefCode,
-				Framework:    subRefFramework,
-				IsSubControl: true,
+				id:           sc.ID,
+				fefCode:      sc.RefCode,
+				framework:    subRefFramework,
+				isSubControl: true,
 			}
 		}
 
