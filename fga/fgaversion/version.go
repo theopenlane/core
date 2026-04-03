@@ -27,7 +27,7 @@ func GetVersion() (string, error) {
 		line := scanner.Text()
 		if strings.Contains(line, packageName) {
 			fields := strings.Fields(line)
-			if len(fields) >= 2 {
+			if len(fields) >= 2 { //nolint:mnd
 				return fields[1], nil
 			}
 		}
