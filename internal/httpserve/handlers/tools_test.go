@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -139,6 +140,9 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	// setup db container
 	suite.tf = entdb.NewTestFixture()
 
+	version, err := fgaversion.GetVersion()
+	require.NoError(suite.T(), err)
+
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModelFile(fgaModelFile),
@@ -147,10 +151,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
 			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
 		}),
+		fgatest.WithVersion(version),
 	)
-
-	// create shared instances once to avoid expensive recreation in each test
-	var err error
 
 	// shared token manager to avoid RSA key generation
 	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd

@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -150,6 +151,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// setup db container
 	suite.tf = entdb.NewTestFixture()
 
+	version, err := fgaversion.GetVersion()
+	requireNoError(t, err)
+
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModelFile(fgaModelFile),
@@ -158,7 +162,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
 			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
 		},
-		))
+		),
+		fgatest.WithVersion(version),
+	)
 
 	ctx := context.Background()
 

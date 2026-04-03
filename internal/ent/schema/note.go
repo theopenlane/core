@@ -104,6 +104,7 @@ func (n Note) Edges() []ent.Edge {
 			ref:        "comments",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Control{}.Name()),
+				entx.CSVRef().FromColumn("Control").MatchOn("ref_code"),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -112,6 +113,7 @@ func (n Note) Edges() []ent.Edge {
 			ref:        "comments",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+				entx.CSVRef().FromColumn("Subcontrol").MatchOn("ref_code"),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -120,6 +122,7 @@ func (n Note) Edges() []ent.Edge {
 			ref:        "comments",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Procedure{}.Name()),
+				entx.CSVRef().FromColumn("ProcedureName").MatchOn("name"),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -128,6 +131,7 @@ func (n Note) Edges() []ent.Edge {
 			ref:        "comments",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Risk{}.Name()),
+				entx.CSVRef().FromColumn("RiskName").MatchOn("name"),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -136,6 +140,7 @@ func (n Note) Edges() []ent.Edge {
 			ref:        "comments",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+				entx.CSVRef().FromColumn("PolicyName").MatchOn("name"),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
