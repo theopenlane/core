@@ -420,6 +420,7 @@ type ComplexityRoot struct {
 		SourcePlatform              func(childComplexity int) int
 		SourcePlatformID            func(childComplexity int) int
 		SourceType                  func(childComplexity int) int
+		Subcontrols                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID            func(childComplexity int) int
 		SystemOwned                 func(childComplexity int) int
 		Tags                        func(childComplexity int) int
@@ -1800,6 +1801,7 @@ type ComplexityRoot struct {
 		SpendCurrency                         func(childComplexity int) int
 		Status                                func(childComplexity int) int
 		StatusPageURL                         func(childComplexity int) int
+		Subcontrols                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Subprocessors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		SystemInternalID                      func(childComplexity int) int
 		SystemOwned                           func(childComplexity int) int
@@ -2671,6 +2673,7 @@ type ComplexityRoot struct {
 		ScopeName               func(childComplexity int) int
 		StartDate               func(childComplexity int) int
 		Status                  func(childComplexity int) int
+		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags                    func(childComplexity int) int
 		Tasks                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		Team                    func(childComplexity int) int
@@ -5810,6 +5813,7 @@ type ComplexityRoot struct {
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
+		Assets                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AuditorReferenceID         func(childComplexity int) int
 		Category                   func(childComplexity int) int
 		CategoryID                 func(childComplexity int) int
@@ -5829,6 +5833,7 @@ type ComplexityRoot struct {
 		DescriptionJSON            func(childComplexity int) int
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
+		Entities                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
@@ -5836,6 +5841,7 @@ type ComplexityRoot struct {
 		HasPendingWorkflow         func(childComplexity int) int
 		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		IdentityHolders            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		ImplementationStatus       func(childComplexity int) int
@@ -9397,6 +9403,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Asset.SourceType(childComplexity), true
+
+	case "Asset.subcontrols":
+		if e.ComplexityRoot.Asset.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Asset.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "Asset.systemInternalID":
 		if e.ComplexityRoot.Asset.SystemInternalID == nil {
@@ -16303,6 +16321,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Entity.StatusPageURL(childComplexity), true
 
+	case "Entity.subcontrols":
+		if e.ComplexityRoot.Entity.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
 	case "Entity.subprocessors":
 		if e.ComplexityRoot.Entity.Subprocessors == nil {
 			break
@@ -20841,6 +20871,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Status(childComplexity), true
+
+	case "IdentityHolder.subcontrols":
+		if e.ComplexityRoot.IdentityHolder.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IdentityHolder.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "IdentityHolder.tags":
 		if e.ComplexityRoot.IdentityHolder.Tags == nil {
@@ -42942,6 +42984,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.AssessmentObjectives(childComplexity), true
 
+	case "Subcontrol.assets":
+		if e.ComplexityRoot.Subcontrol.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subcontrol.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "Subcontrol.auditorReferenceID":
 		if e.ComplexityRoot.Subcontrol.AuditorReferenceID == nil {
 			break
@@ -43095,6 +43149,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.DisplayID(childComplexity), true
 
+	case "Subcontrol.entities":
+		if e.ComplexityRoot.Subcontrol.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subcontrol.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
 	case "Subcontrol.evidence":
 		if e.ComplexityRoot.Subcontrol.Evidence == nil {
 			break
@@ -43148,6 +43214,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.ID(childComplexity), true
+
+	case "Subcontrol.identityHolders":
+		if e.ComplexityRoot.Subcontrol.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subcontrol.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
 
 	case "Subcontrol.implementationDescription":
 		if e.ComplexityRoot.Subcontrol.ImplementationDescription == nil {
@@ -58184,6 +58262,37 @@ type Asset implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -59206,6 +59315,11 @@ input AssetWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -65203,6 +65317,7 @@ input CreateAssetInput {
   outOfScopePlatformIDs: [ID!]
   identityHolderIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   internalPolicyIDs: [ID!]
   sourcePlatformID: ID
   integrationID: ID
@@ -66620,6 +66735,7 @@ input CreateEntityInput {
   employerIdentityHolderIDs: [ID!]
   identityHolderIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   platformIDs: [ID!]
   outOfScopePlatformIDs: [ID!]
   sourcePlatformIDs: [ID!]
@@ -67418,6 +67534,7 @@ input CreateIdentityHolderInput {
   entityIDs: [ID!]
   directoryAccountIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   platformIDs: [ID!]
   campaignIDs: [ID!]
   taskIDs: [ID!]
@@ -69525,6 +69642,9 @@ input CreateSubcontrolInput {
   controlImplementationIDs: [ID!]
   scheduledJobIDs: [ID!]
   workflowObjectRefIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  identityHolderIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -77897,6 +78017,37 @@ type Entity implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -79371,6 +79522,11 @@ input EntityWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   platforms edge predicates
   """
@@ -87739,6 +87895,37 @@ type IdentityHolder implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -88671,6 +88858,11 @@ input IdentityHolderWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   platforms edge predicates
   """
@@ -116828,6 +117020,99 @@ type Subcontrol implements Node {
     """
     where: WorkflowObjectRefWhereInput
   ): WorkflowObjectRefConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
 }
 """
 A connection to a list of items.
@@ -117580,6 +117865,21 @@ input SubcontrolWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -125794,6 +126094,9 @@ input UpdateAssetInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
@@ -127689,6 +127992,9 @@ input UpdateEntityInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean
@@ -128867,6 +129173,9 @@ input UpdateIdentityHolderInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean
@@ -131892,6 +132201,15 @@ input UpdateSubcontrolInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
 }
 """
 UpdateSubprocessorInput is used for update Subprocessor object.

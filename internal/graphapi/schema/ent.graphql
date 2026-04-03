@@ -3127,6 +3127,37 @@ type Asset implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -4149,6 +4180,11 @@ input AssetWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -10146,6 +10182,7 @@ input CreateAssetInput {
   outOfScopePlatformIDs: [ID!]
   identityHolderIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   internalPolicyIDs: [ID!]
   sourcePlatformID: ID
   integrationID: ID
@@ -11563,6 +11600,7 @@ input CreateEntityInput {
   employerIdentityHolderIDs: [ID!]
   identityHolderIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   platformIDs: [ID!]
   outOfScopePlatformIDs: [ID!]
   sourcePlatformIDs: [ID!]
@@ -12361,6 +12399,7 @@ input CreateIdentityHolderInput {
   entityIDs: [ID!]
   directoryAccountIDs: [ID!]
   controlIDs: [ID!]
+  subcontrolIDs: [ID!]
   platformIDs: [ID!]
   campaignIDs: [ID!]
   taskIDs: [ID!]
@@ -14468,6 +14507,9 @@ input CreateSubcontrolInput {
   controlImplementationIDs: [ID!]
   scheduledJobIDs: [ID!]
   workflowObjectRefIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  identityHolderIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -22840,6 +22882,37 @@ type Entity implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -24314,6 +24387,11 @@ input EntityWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   platforms edge predicates
   """
@@ -32682,6 +32760,37 @@ type IdentityHolder implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -33614,6 +33723,11 @@ input IdentityHolderWhereInput {
   """
   hasControls: Boolean
   hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
   """
   platforms edge predicates
   """
@@ -61771,6 +61885,99 @@ type Subcontrol implements Node {
     """
     where: WorkflowObjectRefWhereInput
   ): WorkflowObjectRefConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
 }
 """
 A connection to a list of items.
@@ -62523,6 +62730,21 @@ input SubcontrolWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -70737,6 +70959,9 @@ input UpdateAssetInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
@@ -72632,6 +72857,9 @@ input UpdateEntityInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean
@@ -73810,6 +74038,9 @@ input UpdateIdentityHolderInput {
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean
@@ -76835,6 +77066,15 @@ input UpdateSubcontrolInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
 }
 """
 UpdateSubprocessorInput is used for update Subprocessor object.

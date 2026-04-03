@@ -4059,6 +4059,35 @@ func HasControlsWith(preds ...predicate.Control) predicate.Asset {
 	})
 }
 
+// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
+func HasSubcontrols() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
+func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
 func HasInternalPolicies() predicate.Asset {
 	return predicate.Asset(func(s *sql.Selector) {

@@ -216,6 +216,7 @@ func (a Asset) Edges() []ent.Edge {
 		}),
 		defaultEdgeFromWithPagination(a, IdentityHolder{}),
 		defaultEdgeFromWithPagination(a, Control{}),
+		defaultEdgeFromWithPagination(a, Subcontrol{}),
 		defaultEdgeFromWithPagination(a, InternalPolicy{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: a,

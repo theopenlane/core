@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -22,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -73,6 +75,9 @@ type SubcontrolQuery struct {
 	withMappedToSubcontrols         *MappedControlQuery
 	withMappedFromSubcontrols       *MappedControlQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
+	withAssets                      *AssetQuery
+	withEntities                    *EntityQuery
+	withIdentityHolders             *IdentityHolderQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Subcontrol) error
 	modifiers                       []func(*sql.Selector)
@@ -94,6 +99,9 @@ type SubcontrolQuery struct {
 	withNamedMappedToSubcontrols    map[string]*MappedControlQuery
 	withNamedMappedFromSubcontrols  map[string]*MappedControlQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
+	withNamedAssets                 map[string]*AssetQuery
+	withNamedEntities               map[string]*EntityQuery
+	withNamedIdentityHolders        map[string]*IdentityHolderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -730,6 +738,81 @@ func (_q *SubcontrolQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return query
 }
 
+// QueryAssets chains the current query on the "assets" edge.
+func (_q *SubcontrolQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.AssetsTable, subcontrol.AssetsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *SubcontrolQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.EntitiesTable, subcontrol.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders chains the current query on the "identity_holders" edge.
+func (_q *SubcontrolQuery) QueryIdentityHolders() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.IdentityHoldersTable, subcontrol.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Subcontrol entity from the query.
 // Returns a *NotFoundError when no Subcontrol was found.
 func (_q *SubcontrolQuery) First(ctx context.Context) (*Subcontrol, error) {
@@ -946,6 +1029,9 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withMappedToSubcontrols:    _q.withMappedToSubcontrols.Clone(),
 		withMappedFromSubcontrols:  _q.withMappedFromSubcontrols.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
+		withAssets:                 _q.withAssets.Clone(),
+		withEntities:               _q.withEntities.Clone(),
+		withIdentityHolders:        _q.withIdentityHolders.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1217,6 +1303,39 @@ func (_q *SubcontrolQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRe
 	return _q
 }
 
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithAssets(opts ...func(*AssetQuery)) *SubcontrolQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssets = query
+	return _q
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithEntities(opts ...func(*EntityQuery)) *SubcontrolQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
+	return _q
+}
+
+// WithIdentityHolders tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holders" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *SubcontrolQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolders = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1302,7 +1421,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [27]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1327,6 +1446,9 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withMappedToSubcontrols != nil,
 			_q.withMappedFromSubcontrols != nil,
 			_q.withWorkflowObjectRefs != nil,
+			_q.withAssets != nil,
+			_q.withEntities != nil,
+			_q.withIdentityHolders != nil,
 		}
 	)
 	if withFKs {
@@ -1527,6 +1649,27 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Assets = []*Asset{} },
+			func(n *Subcontrol, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Entities = []*Entity{} },
+			func(n *Subcontrol, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolders; query != nil {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.IdentityHolders = []*IdentityHolder{} },
+			func(n *Subcontrol, e *IdentityHolder) { n.Edges.IdentityHolders = append(n.Edges.IdentityHolders, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedEvidence {
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedEvidence(name) },
@@ -1650,6 +1793,27 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedWorkflowObjectRefs(name) },
 			func(n *Subcontrol, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedAssets(name) },
+			func(n *Subcontrol, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedEntities(name) },
+			func(n *Subcontrol, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolders {
+		if err := _q.loadIdentityHolders(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedIdentityHolders(name) },
+			func(n *Subcontrol, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2799,6 +2963,192 @@ func (_q *SubcontrolQuery) loadWorkflowObjectRefs(ctx context.Context, query *Wo
 	}
 	return nil
 }
+func (_q *SubcontrolQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Asset)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.AssetsTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolAssets)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(subcontrol.AssetsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.AssetsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.AssetsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "assets" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SubcontrolQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.EntitiesTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolEntities)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(subcontrol.EntitiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.EntitiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.EntitiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *SubcontrolQuery) loadIdentityHolders(ctx context.Context, query *IdentityHolderQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *IdentityHolder)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.IdentityHoldersTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolIdentityHolders)
+		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(subcontrol.IdentityHoldersPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.IdentityHoldersPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.IdentityHoldersPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IdentityHolder](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "identity_holders" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *SubcontrolQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3165,6 +3515,48 @@ func (_q *SubcontrolQuery) WithNamedWorkflowObjectRefs(name string, opts ...func
 		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
 	}
 	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *SubcontrolQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedAssets[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *SubcontrolQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolders tells the query-builder to eager-load the nodes that are connected to the "identity_holders"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedIdentityHolders(name string, opts ...func(*IdentityHolderQuery)) *SubcontrolQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolders == nil {
+		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
+	}
+	_q.withNamedIdentityHolders[name] = query
 	return _q
 }
 

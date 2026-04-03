@@ -1224,6 +1224,7 @@ type CreateAssetInput struct {
 	OutOfScopePlatformIDs       []string
 	IdentityHolderIDs           []string
 	ControlIDs                  []string
+	SubcontrolIDs               []string
 	InternalPolicyIDs           []string
 	SourcePlatformID            *string
 	IntegrationID               *string
@@ -1378,6 +1379,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
@@ -1507,6 +1511,9 @@ type UpdateAssetInput struct {
 	ClearControls                    bool
 	AddControlIDs                    []string
 	RemoveControlIDs                 []string
+	ClearSubcontrols                 bool
+	AddSubcontrolIDs                 []string
+	RemoveSubcontrolIDs              []string
 	ClearInternalPolicies            bool
 	AddInternalPolicyIDs             []string
 	RemoveInternalPolicyIDs          []string
@@ -1833,6 +1840,15 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 	if i.ClearInternalPolicies {
 		m.ClearInternalPolicies()
@@ -7341,6 +7357,7 @@ type CreateEntityInput struct {
 	EmployerIdentityHolderIDs             []string
 	IdentityHolderIDs                     []string
 	ControlIDs                            []string
+	SubcontrolIDs                         []string
 	PlatformIDs                           []string
 	OutOfScopePlatformIDs                 []string
 	SourcePlatformIDs                     []string
@@ -7561,6 +7578,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -7749,6 +7769,9 @@ type UpdateEntityInput struct {
 	ClearControls                              bool
 	AddControlIDs                              []string
 	RemoveControlIDs                           []string
+	ClearSubcontrols                           bool
+	AddSubcontrolIDs                           []string
+	RemoveSubcontrolIDs                        []string
 	ClearPlatforms                             bool
 	AddPlatformIDs                             []string
 	RemovePlatformIDs                          []string
@@ -8248,6 +8271,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
@@ -12143,6 +12175,7 @@ type CreateIdentityHolderInput struct {
 	EntityIDs              []string
 	DirectoryAccountIDs    []string
 	ControlIDs             []string
+	SubcontrolIDs          []string
 	PlatformIDs            []string
 	CampaignIDs            []string
 	TaskIDs                []string
@@ -12266,6 +12299,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -12383,6 +12419,9 @@ type UpdateIdentityHolderInput struct {
 	ClearControls               bool
 	AddControlIDs               []string
 	RemoveControlIDs            []string
+	ClearSubcontrols            bool
+	AddSubcontrolIDs            []string
+	RemoveSubcontrolIDs         []string
 	ClearPlatforms              bool
 	AddPlatformIDs              []string
 	RemovePlatformIDs           []string
@@ -12652,6 +12691,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
@@ -23152,6 +23200,9 @@ type CreateSubcontrolInput struct {
 	ControlImplementationIDs   []string
 	ScheduledJobIDs            []string
 	WorkflowObjectRefIDs       []string
+	AssetIDs                   []string
+	EntityIDs                  []string
+	IdentityHolderIDs          []string
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -23317,6 +23368,15 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubcontrolInput on the SubcontrolCreate builder.
@@ -23459,6 +23519,15 @@ type UpdateSubcontrolInput struct {
 	ClearWorkflowObjectRefs         bool
 	AddWorkflowObjectRefIDs         []string
 	RemoveWorkflowObjectRefIDs      []string
+	ClearAssets                     bool
+	AddAssetIDs                     []string
+	RemoveAssetIDs                  []string
+	ClearEntities                   bool
+	AddEntityIDs                    []string
+	RemoveEntityIDs                 []string
+	ClearIdentityHolders            bool
+	AddIdentityHolderIDs            []string
+	RemoveIdentityHolderIDs         []string
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -23858,6 +23927,33 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
 	}
 }
 

@@ -236,6 +236,7 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Entity{}),
 		defaultEdgeToWithPagination(p, DirectoryAccount{}),
 		defaultEdgeFromWithPagination(p, Control{}),
+		defaultEdgeFromWithPagination(p, Subcontrol{}),
 		defaultEdgeFromWithPagination(p, Platform{}),
 		defaultEdgeFromWithPagination(p, Campaign{}),
 		defaultEdgeToWithPagination(p, Task{}),

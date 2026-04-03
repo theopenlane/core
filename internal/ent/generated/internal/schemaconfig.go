@@ -264,6 +264,9 @@ type SchemaConfig struct {
 	SubcontrolProcedures               string // Subcontrol-procedures->Procedure table.
 	SubcontrolScans                    string // Subcontrol-scans->Scan table.
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
+	SubcontrolAssets                   string // Subcontrol-assets->Asset table.
+	SubcontrolEntities                 string // Subcontrol-entities->Entity table.
+	SubcontrolIdentityHolders          string // Subcontrol-identity_holders->IdentityHolder table.
 	Subprocessor                       string // Subprocessor table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
