@@ -125,6 +125,11 @@ func TestFindVersion(t *testing.T) {
 			want:    "v2.5.0",
 		},
 		{
+			name:    "finds version with 'version:' prefix in different case, only single digit",
+			details: "version: 2",
+			want:    "v2.0.0",
+		},
+		{
 			name:    "returns empty string when no version is present",
 			details: "This document is about control AC-2.",
 			want:    "",
@@ -132,6 +137,11 @@ func TestFindVersion(t *testing.T) {
 		{
 			name:    "version in middle of details",
 			details: "This document is about control AC-2. Version: 1.0",
+			want:    "",
+		},
+		{
+			name:    "finds version with 'version:' but with a string that cannot be converted to semver",
+			details: "version: a",
 			want:    "",
 		},
 	}

@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"entgo.io/ent"
@@ -105,17 +106,25 @@ func findVersion(details string) string {
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
 		if strings.HasPrefix(strings.ToLower(trimmed), "version:") {
-			parts := strings.SplitN(trimmed, ":", 2)
-			if len(parts) == 2 {
+			parts := strings.SplitN(trimmed, ":", 2) //nolint:gomnd
+			if len(parts) == 2 {                     //nolint:gomnd
 				// convert to semver format if possible, e.g. "Version: 1.0" -> "1.0.0"
 				version := strings.TrimSpace(parts[1])
 				if version == "" {
 					return ""
 				}
+
 				parts := strings.Split(version, ".")
 				for len(parts) < 3 {
 					parts = append(parts, "0")
 				}
+				// Validate all parts are numbers
+				for _, p := range parts[:3] {
+					if _, err := strconv.Atoi(p); err != nil {
+						return ""
+					}
+				}
+
 				version = strings.Join(parts, ".")
 
 				if !strings.HasPrefix(version, "v") {
