@@ -340,6 +340,9 @@ func (Campaign) Modules() []models.OrgModule {
 func (Campaign) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

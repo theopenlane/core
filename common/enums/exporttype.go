@@ -6,8 +6,12 @@ import "io"
 type ExportType string
 
 var (
+	// ExportTypeAssessment indicates the assessment.
+	ExportTypeAssessment ExportType = "ASSESSMENT"
 	// ExportTypeAsset indicates the asset.
 	ExportTypeAsset ExportType = "ASSET"
+	// ExportTypeCampaign indicates the campaign.
+	ExportTypeCampaign ExportType = "CAMPAIGN"
 	// ExportTypeContact indicates the contact.
 	ExportTypeContact ExportType = "CONTACT"
 	// ExportTypeControl indicates the control.
@@ -51,7 +55,9 @@ var (
 )
 
 var exportTypeValues = []ExportType{
+	ExportTypeAssessment,
 	ExportTypeAsset,
+	ExportTypeCampaign,
 	ExportTypeContact,
 	ExportTypeControl,
 	ExportTypeDirectoryMembership,
