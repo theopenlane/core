@@ -240,21 +240,23 @@ func init() {
 
 	actionplan.Hooks[10] = actionplanMixinHooks6[5]
 
-	actionplan.Hooks[11] = actionplanMixinHooks7[0]
+	actionplan.Hooks[11] = actionplanMixinHooks6[6]
 
-	actionplan.Hooks[12] = actionplanMixinHooks7[1]
+	actionplan.Hooks[12] = actionplanMixinHooks7[0]
 
-	actionplan.Hooks[13] = actionplanMixinHooks8[0]
+	actionplan.Hooks[13] = actionplanMixinHooks7[1]
 
-	actionplan.Hooks[14] = actionplanMixinHooks8[1]
+	actionplan.Hooks[14] = actionplanMixinHooks8[0]
 
-	actionplan.Hooks[15] = actionplanMixinHooks8[2]
+	actionplan.Hooks[15] = actionplanMixinHooks8[1]
 
-	actionplan.Hooks[16] = actionplanMixinHooks9[0]
+	actionplan.Hooks[16] = actionplanMixinHooks8[2]
 
-	actionplan.Hooks[17] = actionplanMixinHooks10[0]
+	actionplan.Hooks[17] = actionplanMixinHooks9[0]
 
-	actionplan.Hooks[18] = actionplanMixinHooks11[0]
+	actionplan.Hooks[18] = actionplanMixinHooks10[0]
+
+	actionplan.Hooks[19] = actionplanMixinHooks11[0]
 	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
 	actionplanMixinInters7 := actionplanMixin[7].Interceptors()
 	actionplan.Interceptors[0] = actionplanMixinInters1[0]
@@ -3770,15 +3772,17 @@ func init() {
 
 	internalpolicy.Hooks[15] = internalpolicyMixinHooks9[5]
 
-	internalpolicy.Hooks[16] = internalpolicyMixinHooks10[0]
+	internalpolicy.Hooks[16] = internalpolicyMixinHooks9[6]
 
-	internalpolicy.Hooks[17] = internalpolicyMixinHooks11[0]
+	internalpolicy.Hooks[17] = internalpolicyMixinHooks10[0]
 
-	internalpolicy.Hooks[18] = internalpolicyMixinHooks12[0]
+	internalpolicy.Hooks[18] = internalpolicyMixinHooks11[0]
 
-	internalpolicy.Hooks[19] = internalpolicyMixinHooks13[0]
+	internalpolicy.Hooks[19] = internalpolicyMixinHooks12[0]
 
-	internalpolicy.Hooks[20] = internalpolicyHooks[0]
+	internalpolicy.Hooks[20] = internalpolicyMixinHooks13[0]
+
+	internalpolicy.Hooks[21] = internalpolicyHooks[0]
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
 	internalpolicyMixinInters6 := internalpolicyMixin[6].Interceptors()
 	internalpolicyMixinInters8 := internalpolicyMixin[8].Interceptors()
@@ -5758,17 +5762,19 @@ func init() {
 
 	procedure.Hooks[14] = procedureMixinHooks8[5]
 
-	procedure.Hooks[15] = procedureMixinHooks9[0]
+	procedure.Hooks[15] = procedureMixinHooks8[6]
 
-	procedure.Hooks[16] = procedureMixinHooks10[0]
+	procedure.Hooks[16] = procedureMixinHooks9[0]
 
-	procedure.Hooks[17] = procedureMixinHooks11[0]
+	procedure.Hooks[17] = procedureMixinHooks10[0]
 
-	procedure.Hooks[18] = procedureMixinHooks12[0]
+	procedure.Hooks[18] = procedureMixinHooks11[0]
 
-	procedure.Hooks[19] = procedureMixinHooks13[0]
+	procedure.Hooks[19] = procedureMixinHooks12[0]
 
-	procedure.Hooks[20] = procedureHooks[0]
+	procedure.Hooks[20] = procedureMixinHooks13[0]
+
+	procedure.Hooks[21] = procedureHooks[0]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters6 := procedureMixin[6].Interceptors()
 	procedureMixinInters7 := procedureMixin[7].Interceptors()
