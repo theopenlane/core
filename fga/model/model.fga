@@ -175,6 +175,12 @@ type organization
     define entity_creator: [group#member]
     define can_create_entity: can_edit or entity_creator or can_manage_trust_center
 
+    define vendor_scoring_config_creator: [group#member]
+    define can_create_vendor_scoring_config: can_edit or vendor_scoring_config_creator
+
+    define vendor_risk_score_creator: [group#member]
+    define can_create_vendor_risk_score: can_edit or vendor_risk_score_creator
+
     define asset_creator: [group#member]
     define can_create_asset: can_edit or asset_creator
 
