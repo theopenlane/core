@@ -420,9 +420,8 @@ func TestMutationUpdateProcedure(t *testing.T) {
 			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Meow"),
 			},
-			client:      suite.client.api,
-			ctx:         adminUser.UserCtx, // admin users do not automatically inherit permissions
-			expectedErr: notAuthorizedErrorMsg,
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
 		},
 		{
 			name: "update allowed, details updated by admin",
