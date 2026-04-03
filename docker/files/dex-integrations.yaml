@@ -1,0 +1,19 @@
+issuer: http://localhost:5557/dex
+storage:
+  type: memory
+web:
+  http: 0.0.0.0:5557
+staticClients:
+  - id: local-core-oidc
+    redirectURIs:
+      - http://localhost:17608/v1/integrations/auth/callback
+    name: Core Integration Local OIDC Test
+    secret: local-core-oidc-secret
+enablePasswordDB: true
+staticPasswords:
+  - email: integration-test@theopenlane.io
+    hash: $2y$10$nBnug6Mfuxw6Kbrz23y4SOjXm02eVTZ.lVa5JI1tJVhCAdDxVxv4i
+    username: integration-test
+    userID: 7a2ebf04-9c7d-4cef-bc58-1234567890ab
+logger:
+  level: debug

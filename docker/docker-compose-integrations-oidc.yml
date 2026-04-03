@@ -1,0 +1,19 @@
+services:
+  dex-integrations:
+    image: ghcr.io/dexidp/dex:v2.45.1
+    volumes:
+      - ./files/dex-integrations.yaml:/etc/dex/config.yaml:ro
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+    ports:
+      - "5557:5557"
+    networks:
+      - default
+
+  integrations-ui:
+    image: nginx:alpine
+    volumes:
+      - ../internal/testutils/integrations:/usr/share/nginx/html:ro
+    ports:
+      - "3001:80"
+    networks:
+      - default

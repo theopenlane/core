@@ -546,6 +546,11 @@ coreConfiguration:
     microsoftteams:
       clientid: ""  # @schema type:string
       redirecturl: ""  # @schema type:string
+    oidclocal:
+      enabled: false  # @schema type:boolean; default:false
+      clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
+      discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
+      redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -941,6 +946,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_MICROSOFTTEAMS_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-microsoftteams-clientsecret"  # @schema type:string
+    # -- core-integrations-oidclocal-clientsecret secret configuration
+    core-integrations-oidclocal-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.oidclocal.clientsecret
+      secretKey: "CORE_INTEGRATIONS_OIDCLOCAL_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-oidclocal-clientsecret"  # @schema type:string
     # -- core-campaignwebhook-resendapikey secret configuration
     core-campaignwebhook-resendapikey:
       # -- Enable this external secret

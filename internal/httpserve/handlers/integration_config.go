@@ -20,7 +20,7 @@ import (
 // When installation_id is provided the credentials on that installation are updated.
 // When omitted a new installation is created and its ID is returned in the response
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationConfigPayload, IntegrationConfigResponse{}, openapiCtx.Registry)
+	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleConfigureIntegrationRequest, ConfigureIntegrationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -54,7 +54,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
 	}
 
-	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, payload.CredentialRef, credential, nil); err != nil {
+	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("reconcile failed")
 
 		return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
@@ -72,7 +72,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		installationRec.Status = enums.IntegrationStatusConnected
 	}
 
-	resp := IntegrationConfigResponse{
+	resp := ConfigureIntegrationResponse{
 		Reply:                rout.Reply{Success: true},
 		Provider:             def.ID,
 		IntegrationID:        installationRec.ID,

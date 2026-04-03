@@ -1,6 +1,11 @@
 version: "3"
 
 tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
   build:
     dir: ..
     desc: builds the core docker image
@@ -141,6 +146,18 @@ tasks:
     desc: launches the Dex IdP and test UI for SSO development
     cmds:
       - "docker compose -f ./docker/docker-compose-oidc.yml up -d dex sso-ui tokens-ui"
+
+  dex:integrations:
+    dir: ..
+    desc: launches Dex for local integration OAuth/OIDC callback testing
+    cmds:
+      - "docker compose -f ./docker/docker-compose-integrations-oidc.yml up -d dex-integrations integrations-ui"
+
+  dex:integrations:down:
+    dir: ..
+    desc: stops Dex for local integration OAuth/OIDC callback testing
+    cmds:
+      - "docker compose -f ./docker/docker-compose-integrations-oidc.yml down"
 
   windmill:
     dir: ..
