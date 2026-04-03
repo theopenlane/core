@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -58,6 +59,7 @@ type AssetQuery struct {
 	withOutOfScopePlatforms      *PlatformQuery
 	withIdentityHolders          *IdentityHolderQuery
 	withControls                 *ControlQuery
+	withSubcontrols              *SubcontrolQuery
 	withInternalPolicies         *InternalPolicyQuery
 	withSourcePlatform           *PlatformQuery
 	withIntegration              *IntegrationQuery
@@ -75,6 +77,7 @@ type AssetQuery struct {
 	withNamedOutOfScopePlatforms map[string]*PlatformQuery
 	withNamedIdentityHolders     map[string]*IdentityHolderQuery
 	withNamedControls            map[string]*ControlQuery
+	withNamedSubcontrols         map[string]*SubcontrolQuery
 	withNamedInternalPolicies    map[string]*InternalPolicyQuery
 	withNamedConnectedAssets     map[string]*AssetQuery
 	withNamedConnectedFrom       map[string]*AssetQuery
@@ -614,6 +617,31 @@ func (_q *AssetQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (_q *AssetQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.SubcontrolsTable, asset.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryInternalPolicies chains the current query on the "internal_policies" edge.
 func (_q *AssetQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: _q.config}).Query()
@@ -951,6 +979,7 @@ func (_q *AssetQuery) Clone() *AssetQuery {
 		withOutOfScopePlatforms:     _q.withOutOfScopePlatforms.Clone(),
 		withIdentityHolders:         _q.withIdentityHolders.Clone(),
 		withControls:                _q.withControls.Clone(),
+		withSubcontrols:             _q.withSubcontrols.Clone(),
 		withInternalPolicies:        _q.withInternalPolicies.Clone(),
 		withSourcePlatform:          _q.withSourcePlatform.Clone(),
 		withIntegration:             _q.withIntegration.Clone(),
@@ -1183,6 +1212,17 @@ func (_q *AssetQuery) WithControls(opts ...func(*ControlQuery)) *AssetQuery {
 	return _q
 }
 
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *AssetQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrols = query
+	return _q
+}
+
 // WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
 // the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssetQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *AssetQuery {
@@ -1323,7 +1363,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		nodes       = []*Asset{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [25]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1344,6 +1384,7 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			_q.withOutOfScopePlatforms != nil,
 			_q.withIdentityHolders != nil,
 			_q.withControls != nil,
+			_q.withSubcontrols != nil,
 			_q.withInternalPolicies != nil,
 			_q.withSourcePlatform != nil,
 			_q.withIntegration != nil,
@@ -1506,6 +1547,13 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *Asset) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *Asset, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withInternalPolicies; query != nil {
 		if err := _q.loadInternalPolicies(ctx, query, nodes,
 			func(n *Asset) { n.Edges.InternalPolicies = []*InternalPolicy{} },
@@ -1599,6 +1647,13 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Asset) { n.appendNamedControls(name) },
 			func(n *Asset, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedSubcontrols(name) },
+			func(n *Asset, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2415,6 +2470,68 @@ func (_q *AssetQuery) loadControls(ctx context.Context, query *ControlQuery, nod
 	}
 	return nil
 }
+func (_q *AssetQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.SubcontrolsTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolAssets)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(asset.SubcontrolsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(asset.SubcontrolsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.SubcontrolsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Asset)
@@ -2920,6 +3037,20 @@ func (_q *AssetQuery) WithNamedControls(name string, opts ...func(*ControlQuery)
 		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
 	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *AssetQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	_q.withNamedSubcontrols[name] = query
 	return _q
 }
 

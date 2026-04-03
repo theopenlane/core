@@ -3002,6 +3002,25 @@ func (c *AssetClient) QueryControls(_m *Asset) *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols queries the subcontrols edge of a Asset.
+func (c *AssetClient) QuerySubcontrols(_m *Asset) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.SubcontrolsTable, asset.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryInternalPolicies queries the internal_policies edge of a Asset.
 func (c *AssetClient) QueryInternalPolicies(_m *Asset) *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: c.config}).Query()
@@ -9462,6 +9481,25 @@ func (c *EntityClient) QueryControls(_m *Entity) *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols queries the subcontrols edge of a Entity.
+func (c *EntityClient) QuerySubcontrols(_m *Entity) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.SubcontrolsTable, entity.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPlatforms queries the platforms edge of a Entity.
 func (c *EntityClient) QueryPlatforms(_m *Entity) *PlatformQuery {
 	query := (&PlatformClient{config: c.config}).Query()
@@ -14287,6 +14325,25 @@ func (c *IdentityHolderClient) QueryControls(_m *IdentityHolder) *ControlQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlIdentityHolders
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a IdentityHolder.
+func (c *IdentityHolderClient) QuerySubcontrols(_m *IdentityHolder) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.SubcontrolsTable, identityholder.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -28866,6 +28923,63 @@ func (c *SubcontrolClient) QueryWorkflowObjectRefs(_m *Subcontrol) *WorkflowObje
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.WorkflowObjectRef
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Subcontrol.
+func (c *SubcontrolClient) QueryAssets(_m *Subcontrol) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.AssetsTable, subcontrol.AssetsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Subcontrol.
+func (c *SubcontrolClient) QueryEntities(_m *Subcontrol) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.EntitiesTable, subcontrol.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolders queries the identity_holders edge of a Subcontrol.
+func (c *SubcontrolClient) QueryIdentityHolders(_m *Subcontrol) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.IdentityHoldersTable, subcontrol.IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

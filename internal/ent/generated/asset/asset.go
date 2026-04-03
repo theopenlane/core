@@ -156,6 +156,8 @@ const (
 	EdgeIdentityHolders = "identity_holders"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
+	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
+	EdgeSubcontrols = "subcontrols"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
 	// EdgeSourcePlatform holds the string denoting the source_platform edge name in mutations.
@@ -296,6 +298,11 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "subcontrol_assets"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
 	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
 	InternalPoliciesTable = "internal_policy_assets"
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
@@ -404,6 +411,9 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "asset_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"subcontrol_id", "asset_id"}
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "asset_id"}
@@ -931,6 +941,20 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySubcontrolsCount orders the results by subcontrols count.
+func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+	}
+}
+
+// BySubcontrols orders the results by subcontrols terms.
+func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByInternalPoliciesCount orders the results by internal_policies count.
 func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1124,6 +1148,13 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+	)
+}
+func newSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newInternalPoliciesStep() *sqlgraph.Step {

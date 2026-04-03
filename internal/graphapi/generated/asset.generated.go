@@ -188,6 +188,8 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
@@ -394,6 +396,8 @@ func (ec *executionContext) fieldContext_AssetBulkUpdatePayload_assets(_ context
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
@@ -600,6 +604,8 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
@@ -806,6 +812,8 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":

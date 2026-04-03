@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -23,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -1146,6 +1148,51 @@ func (_u *SubcontrolUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Subc
 	return _u.AddWorkflowObjectRefIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *SubcontrolUpdate) AddAssetIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *SubcontrolUpdate) AddAssets(v ...*Asset) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *SubcontrolUpdate) AddEntityIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *SubcontrolUpdate) AddEntities(v ...*Entity) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *SubcontrolUpdate) AddIdentityHolderIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *SubcontrolUpdate) AddIdentityHolders(v ...*IdentityHolder) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (_u *SubcontrolUpdate) Mutation() *SubcontrolMutation {
 	return _u.mutation
@@ -1557,6 +1604,69 @@ func (_u *SubcontrolUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *S
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *SubcontrolUpdate) ClearAssets() *SubcontrolUpdate {
+	_u.mutation.ClearAssets()
+	return _u
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *SubcontrolUpdate) RemoveAssetIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *SubcontrolUpdate) RemoveAssets(v ...*Asset) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *SubcontrolUpdate) ClearEntities() *SubcontrolUpdate {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *SubcontrolUpdate) RemoveEntityIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *SubcontrolUpdate) RemoveEntities(v ...*Entity) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *SubcontrolUpdate) ClearIdentityHolders() *SubcontrolUpdate {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *SubcontrolUpdate) RemoveIdentityHolderIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *SubcontrolUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2964,6 +3074,150 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Subcontrol
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -4079,6 +4333,51 @@ func (_u *SubcontrolUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *S
 	return _u.AddWorkflowObjectRefIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *SubcontrolUpdateOne) AddAssetIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *SubcontrolUpdateOne) AddAssets(v ...*Asset) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *SubcontrolUpdateOne) AddEntityIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *SubcontrolUpdateOne) AddEntities(v ...*Entity) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *SubcontrolUpdateOne) AddIdentityHolderIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *SubcontrolUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (_u *SubcontrolUpdateOne) Mutation() *SubcontrolMutation {
 	return _u.mutation
@@ -4490,6 +4789,69 @@ func (_u *SubcontrolUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef)
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *SubcontrolUpdateOne) ClearAssets() *SubcontrolUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *SubcontrolUpdateOne) RemoveAssetIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *SubcontrolUpdateOne) RemoveAssets(v ...*Asset) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *SubcontrolUpdateOne) ClearEntities() *SubcontrolUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *SubcontrolUpdateOne) RemoveEntityIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *SubcontrolUpdateOne) RemoveEntities(v ...*Entity) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *SubcontrolUpdateOne) ClearIdentityHolders() *SubcontrolUpdateOne {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *SubcontrolUpdateOne) RemoveIdentityHolderIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *SubcontrolUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
 // Where appends a list predicates to the SubcontrolUpdate builder.
@@ -5922,6 +6284,150 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolEntities
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

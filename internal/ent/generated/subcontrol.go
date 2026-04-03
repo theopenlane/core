@@ -180,11 +180,17 @@ type SubcontrolEdges struct {
 	MappedFromSubcontrols []*MappedControl `json:"mapped_from_subcontrols,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [25]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -204,6 +210,9 @@ type SubcontrolEdges struct {
 	namedMappedToSubcontrols    map[string][]*MappedControl
 	namedMappedFromSubcontrols  map[string][]*MappedControl
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
+	namedAssets                 map[string][]*Asset
+	namedEntities               map[string][]*Entity
+	namedIdentityHolders        map[string][]*IdentityHolder
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -432,6 +441,33 @@ func (e SubcontrolEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error)
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[24] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[25] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[26] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -957,6 +993,21 @@ func (_m *Subcontrol) QueryMappedFromSubcontrols() *MappedControlQuery {
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Subcontrol entity.
 func (_m *Subcontrol) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewSubcontrolClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
+// QueryAssets queries the "assets" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryAssets() *AssetQuery {
+	return NewSubcontrolClient(_m.config).QueryAssets(_m)
+}
+
+// QueryEntities queries the "entities" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryEntities() *EntityQuery {
+	return NewSubcontrolClient(_m.config).QueryEntities(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewSubcontrolClient(_m.config).QueryIdentityHolders(_m)
 }
 
 // Update returns a builder for updating this Subcontrol.
@@ -1569,6 +1620,78 @@ func (_m *Subcontrol) appendNamedWorkflowObjectRefs(name string, edges ...*Workf
 		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
 	} else {
 		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subcontrol) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subcontrol) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subcontrol) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subcontrol) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subcontrol) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subcontrol) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
 	}
 }
 

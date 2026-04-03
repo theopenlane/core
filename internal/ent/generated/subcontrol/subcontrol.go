@@ -160,6 +160,12 @@ const (
 	EdgeMappedFromSubcontrols = "mapped_from_subcontrols"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
+	// EdgeAssets holds the string denoting the assets edge name in mutations.
+	EdgeAssets = "assets"
+	// EdgeEntities holds the string denoting the entities edge name in mutations.
+	EdgeEntities = "entities"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -304,6 +310,21 @@ const (
 	WorkflowObjectRefsInverseTable = "workflow_object_refs"
 	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
 	WorkflowObjectRefsColumn = "subcontrol_id"
+	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
+	AssetsTable = "subcontrol_assets"
+	// AssetsInverseTable is the table name for the Asset entity.
+	// It exists in this package in order to avoid circular dependency with the "asset" package.
+	AssetsInverseTable = "assets"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "subcontrol_entities"
+	// EntitiesInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntitiesInverseTable = "entities"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge. The primary key declared below.
+	IdentityHoldersTable = "subcontrol_identity_holders"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
 )
 
 // Columns holds all SQL columns for subcontrol fields.
@@ -408,6 +429,15 @@ var (
 	// MappedFromSubcontrolsPrimaryKey and MappedFromSubcontrolsColumn2 are the table columns denoting the
 	// primary key for the mapped_from_subcontrols relation (M2M).
 	MappedFromSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
+	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
+	// primary key for the assets relation (M2M).
+	AssetsPrimaryKey = []string{"subcontrol_id", "asset_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"subcontrol_id", "entity_id"}
+	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
+	// primary key for the identity_holders relation (M2M).
+	IdentityHoldersPrimaryKey = []string{"subcontrol_id", "identity_holder_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -972,6 +1002,48 @@ func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByAssetsCount orders the results by assets count.
+func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssetsStep(), opts...)
+	}
+}
+
+// ByAssets orders the results by assets terms.
+func ByAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntitiesCount orders the results by entities count.
+func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntitiesStep(), opts...)
+	}
+}
+
+// ByEntities orders the results by entities terms.
+func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1138,6 +1210,27 @@ func newWorkflowObjectRefsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+	)
+}
+func newAssetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
+	)
+}
+func newEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
 	)
 }
 

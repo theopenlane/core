@@ -228,6 +228,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -476,6 +478,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -724,6 +728,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -972,6 +978,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
