@@ -2,48 +2,21 @@
 
 set -euo pipefail
 
-# normalizes a ssh url (git@github.com:theopenlane/core.git) to theopenlane/core.
-# NOTE: not exactly sure if the pull request one will always come in this format or it
-# would use https but we can always fix if that is the case as this function indexes on
-# it being always ssh
-owner_slug_format() {
-  local url="${1:-}"
-  [[ -z "$url" ]] && return 0
-  url="${url%.git}"
-  url=$(echo "$url" | tr '[:upper:]' '[:lower:]')
-  if [[ "$url" =~ github\.com:([^/]+/[^/]+) ]]; then
-    echo "${BASH_REMATCH[1]}"
-  fi
-}
-
 OPENLANE_BUILDKITE_JOB_PRIORITY=0
-# highest priority: releases tag.
 if [[ -n "${BUILDKITE_TAG:-}" ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=100
-# PRs: branches from same repo should be high priority while renovate/forks should get low priority.
 elif [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]; then
   renovate=false
   [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]] && renovate=true
-
-  # find out if the PR is from a fork by comparing the source repo slug to pipeline repo slug.
   fork=false
-  if [[ -n "${BUILDKITE_PULL_REQUEST_REPO:-}" && -n "${BUILDKITE_REPO:-}" ]]; then
-    pr_repo_slug=$(owner_slug_format "${BUILDKITE_PULL_REQUEST_REPO}")
-    pipeline_repo_slug=$(owner_slug_format "${BUILDKITE_REPO}")
-    if [[ -n "$pr_repo_slug" && -n "$pipeline_repo_slug" && "$pr_repo_slug" != "$pipeline_repo_slug" ]]; then
-      fork=true
-    fi
-  fi
-
+  [[ "${BUILDKITE_BRANCH:-}" =~ : ]] && fork=true
   if [[ "$renovate" == true || "$fork" == true ]]; then
     OPENLANE_BUILDKITE_JOB_PRIORITY=-10
   else
     OPENLANE_BUILDKITE_JOB_PRIORITY=80
   fi
-
 elif [[ "${BUILDKITE_BRANCH:-}" == "main" ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=50
-# renovate commits on main branch are not prioritized too
 elif [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=-10
 fi
