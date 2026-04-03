@@ -81136,7 +81136,9 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enum
 ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
+  ASSESSMENT
   ASSET
+  CAMPAIGN
   CONTACT
   CONTROL
   DIRECTORY_MEMBERSHIP
