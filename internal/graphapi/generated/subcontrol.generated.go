@@ -188,6 +188,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Subcontrol_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Subcontrol_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Subcontrol_identityHolders(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -392,6 +398,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Subcontrol_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Subcontrol_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Subcontrol_identityHolders(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -596,6 +608,12 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Subcontrol_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Subcontrol_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Subcontrol_identityHolders(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -800,6 +818,12 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_Subcontrol_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Subcontrol_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Subcontrol_identityHolders(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":

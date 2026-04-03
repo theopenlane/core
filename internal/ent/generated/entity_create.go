@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -1179,6 +1180,21 @@ func (_c *EntityCreate) AddControls(v ...*Control) *EntityCreate {
 	return _c.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_c *EntityCreate) AddSubcontrolIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_c *EntityCreate) AddSubcontrols(v ...*Subcontrol) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubcontrolIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_c *EntityCreate) AddPlatformIDs(ids ...string) *EntityCreate {
 	_c.mutation.AddPlatformIDs(ids...)
@@ -2108,6 +2124,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ControlEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SubcontrolsTable,
+			Columns: entity.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SubcontrolEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

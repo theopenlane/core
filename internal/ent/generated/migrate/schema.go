@@ -13189,6 +13189,81 @@ var (
 			},
 		},
 	}
+	// SubcontrolAssetsColumns holds the columns for the "subcontrol_assets" table.
+	SubcontrolAssetsColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "asset_id", Type: field.TypeString},
+	}
+	// SubcontrolAssetsTable holds the schema information for the "subcontrol_assets" table.
+	SubcontrolAssetsTable = &schema.Table{
+		Name:       "subcontrol_assets",
+		Columns:    SubcontrolAssetsColumns,
+		PrimaryKey: []*schema.Column{SubcontrolAssetsColumns[0], SubcontrolAssetsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_assets_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolAssetsColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_assets_asset_id",
+				Columns:    []*schema.Column{SubcontrolAssetsColumns[1]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SubcontrolEntitiesColumns holds the columns for the "subcontrol_entities" table.
+	SubcontrolEntitiesColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "entity_id", Type: field.TypeString},
+	}
+	// SubcontrolEntitiesTable holds the schema information for the "subcontrol_entities" table.
+	SubcontrolEntitiesTable = &schema.Table{
+		Name:       "subcontrol_entities",
+		Columns:    SubcontrolEntitiesColumns,
+		PrimaryKey: []*schema.Column{SubcontrolEntitiesColumns[0], SubcontrolEntitiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_entities_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolEntitiesColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_entities_entity_id",
+				Columns:    []*schema.Column{SubcontrolEntitiesColumns[1]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SubcontrolIdentityHoldersColumns holds the columns for the "subcontrol_identity_holders" table.
+	SubcontrolIdentityHoldersColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "identity_holder_id", Type: field.TypeString},
+	}
+	// SubcontrolIdentityHoldersTable holds the schema information for the "subcontrol_identity_holders" table.
+	SubcontrolIdentityHoldersTable = &schema.Table{
+		Name:       "subcontrol_identity_holders",
+		Columns:    SubcontrolIdentityHoldersColumns,
+		PrimaryKey: []*schema.Column{SubcontrolIdentityHoldersColumns[0], SubcontrolIdentityHoldersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_identity_holders_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolIdentityHoldersColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_identity_holders_identity_holder_id",
+				Columns:    []*schema.Column{SubcontrolIdentityHoldersColumns[1]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubscriberEventsColumns holds the columns for the "subscriber_events" table.
 	SubscriberEventsColumns = []*schema.Column{
 		{Name: "subscriber_id", Type: field.TypeString},
@@ -13648,6 +13723,9 @@ var (
 		SubcontrolProceduresTable,
 		SubcontrolScansTable,
 		SubcontrolControlImplementationsTable,
+		SubcontrolAssetsTable,
+		SubcontrolEntitiesTable,
+		SubcontrolIdentityHoldersTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
@@ -14555,6 +14633,12 @@ func init() {
 	SubcontrolScansTable.ForeignKeys[1].RefTable = ScansTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	SubcontrolAssetsTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolAssetsTable.ForeignKeys[1].RefTable = AssetsTable
+	SubcontrolEntitiesTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolEntitiesTable.ForeignKeys[1].RefTable = EntitiesTable
+	SubcontrolIdentityHoldersTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolIdentityHoldersTable.ForeignKeys[1].RefTable = IdentityHoldersTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable

@@ -1718,6 +1718,7 @@ type Asset struct {
 	OutOfScopePlatforms     *PlatformConnection       `json:"outOfScopePlatforms"`
 	IdentityHolders         *IdentityHolderConnection `json:"identityHolders"`
 	Controls                *ControlConnection        `json:"controls"`
+	Subcontrols             *SubcontrolConnection     `json:"subcontrols"`
 	InternalPolicies        *InternalPolicyConnection `json:"internalPolicies"`
 	SourcePlatform          *Platform                 `json:"sourcePlatform,omitempty"`
 	// integration that owns this asset
@@ -2502,6 +2503,9 @@ type AssetWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
@@ -5854,6 +5858,7 @@ type CreateAssetInput struct {
 	OutOfScopePlatformIDs     []string         `json:"outOfScopePlatformIDs,omitempty"`
 	IdentityHolderIDs         []string         `json:"identityHolderIDs,omitempty"`
 	ControlIDs                []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs             []string         `json:"subcontrolIDs,omitempty"`
 	InternalPolicyIDs         []string         `json:"internalPolicyIDs,omitempty"`
 	SourcePlatformID          *string          `json:"sourcePlatformID,omitempty"`
 	IntegrationID             *string          `json:"integrationID,omitempty"`
@@ -6711,6 +6716,7 @@ type CreateEntityInput struct {
 	EmployerIdentityHolderIDs           []string         `json:"employerIdentityHolderIDs,omitempty"`
 	IdentityHolderIDs                   []string         `json:"identityHolderIDs,omitempty"`
 	ControlIDs                          []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs                       []string         `json:"subcontrolIDs,omitempty"`
 	PlatformIDs                         []string         `json:"platformIDs,omitempty"`
 	OutOfScopePlatformIDs               []string         `json:"outOfScopePlatformIDs,omitempty"`
 	SourcePlatformIDs                   []string         `json:"sourcePlatformIDs,omitempty"`
@@ -7227,6 +7233,7 @@ type CreateIdentityHolderInput struct {
 	EntityIDs             []string       `json:"entityIDs,omitempty"`
 	DirectoryAccountIDs   []string       `json:"directoryAccountIDs,omitempty"`
 	ControlIDs            []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs         []string       `json:"subcontrolIDs,omitempty"`
 	PlatformIDs           []string       `json:"platformIDs,omitempty"`
 	CampaignIDs           []string       `json:"campaignIDs,omitempty"`
 	TaskIDs               []string       `json:"taskIDs,omitempty"`
@@ -8581,6 +8588,9 @@ type CreateSubcontrolInput struct {
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
 	ScheduledJobIDs          []string `json:"scheduledJobIDs,omitempty"`
 	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
+	AssetIDs                 []string `json:"assetIDs,omitempty"`
+	EntityIDs                []string `json:"entityIDs,omitempty"`
+	IdentityHolderIDs        []string `json:"identityHolderIDs,omitempty"`
 }
 
 // CreateSubprocessorInput is used for create Subprocessor object.
@@ -13812,6 +13822,7 @@ type Entity struct {
 	EmployerIdentityHolders           *IdentityHolderConnection     `json:"employerIdentityHolders"`
 	IdentityHolders                   *IdentityHolderConnection     `json:"identityHolders"`
 	Controls                          *ControlConnection            `json:"controls"`
+	Subcontrols                       *SubcontrolConnection         `json:"subcontrols"`
 	Platforms                         *PlatformConnection           `json:"platforms"`
 	OutOfScopePlatforms               *PlatformConnection           `json:"outOfScopePlatforms"`
 	SourcePlatforms                   *PlatformConnection           `json:"sourcePlatforms"`
@@ -14913,6 +14924,9 @@ type EntityWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
@@ -19030,6 +19044,7 @@ type IdentityHolder struct {
 	Entities            *EntityConnection             `json:"entities"`
 	DirectoryAccounts   *DirectoryAccountConnection   `json:"directoryAccounts"`
 	Controls            *ControlConnection            `json:"controls"`
+	Subcontrols         *SubcontrolConnection         `json:"subcontrols"`
 	Platforms           *PlatformConnection           `json:"platforms"`
 	Campaigns           *CampaignConnection           `json:"campaigns"`
 	Tasks               *TaskConnection               `json:"tasks"`
@@ -19609,6 +19624,9 @@ type IdentityHolderWhereInput struct {
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
@@ -32519,6 +32537,9 @@ type Subcontrol struct {
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	Assets                 *AssetConnection                 `json:"assets"`
+	Entities               *EntityConnection                `json:"entities"`
+	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
 	// Indicates if this subcontrol has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this subcontrol has any workflow history (completed or failed instances)
@@ -33141,6 +33162,15 @@ type SubcontrolWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// assets edge predicates
+	HasAssets     *bool              `json:"hasAssets,omitempty"`
+	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// identity_holders edge predicates
+	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
+	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for aliasesHas to contain a specific value
@@ -38612,6 +38642,9 @@ type UpdateAssetInput struct {
 	AddControlIDs                []string         `json:"addControlIDs,omitempty"`
 	RemoveControlIDs             []string         `json:"removeControlIDs,omitempty"`
 	ClearControls                *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs             []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs          []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols             *bool            `json:"clearSubcontrols,omitempty"`
 	AddInternalPolicyIDs         []string         `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs      []string         `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies        *bool            `json:"clearInternalPolicies,omitempty"`
@@ -39970,6 +40003,9 @@ type UpdateEntityInput struct {
 	AddControlIDs                          []string         `json:"addControlIDs,omitempty"`
 	RemoveControlIDs                       []string         `json:"removeControlIDs,omitempty"`
 	ClearControls                          *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs                       []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs                    []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols                       *bool            `json:"clearSubcontrols,omitempty"`
 	AddPlatformIDs                         []string         `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs                      []string         `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms                         *bool            `json:"clearPlatforms,omitempty"`
@@ -40873,6 +40909,9 @@ type UpdateIdentityHolderInput struct {
 	AddControlIDs               []string       `json:"addControlIDs,omitempty"`
 	RemoveControlIDs            []string       `json:"removeControlIDs,omitempty"`
 	ClearControls               *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs            []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs         []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols            *bool          `json:"clearSubcontrols,omitempty"`
 	AddPlatformIDs              []string       `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs           []string       `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms              *bool          `json:"clearPlatforms,omitempty"`
@@ -43188,6 +43227,15 @@ type UpdateSubcontrolInput struct {
 	AddWorkflowObjectRefIDs        []string                `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs     []string                `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs        *bool                   `json:"clearWorkflowObjectRefs,omitempty"`
+	AddAssetIDs                    []string                `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs                 []string                `json:"removeAssetIDs,omitempty"`
+	ClearAssets                    *bool                   `json:"clearAssets,omitempty"`
+	AddEntityIDs                   []string                `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs                []string                `json:"removeEntityIDs,omitempty"`
+	ClearEntities                  *bool                   `json:"clearEntities,omitempty"`
+	AddIdentityHolderIDs           []string                `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs        []string                `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders           *bool                   `json:"clearIdentityHolders,omitempty"`
 	AddDiscussion                  *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
 	UpdateDiscussion               *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
 	DeleteDiscussion               *string                 `json:"deleteDiscussion,omitempty"`

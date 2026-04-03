@@ -133,6 +133,9 @@ func (s Subcontrol) Edges() []ent.Edge {
 				entx.FieldWorkflowEligible(),
 			},
 		}),
+		defaultEdgeToWithPagination(s, Asset{}),
+		defaultEdgeToWithPagination(s, Entity{}),
+		defaultEdgeToWithPagination(s, IdentityHolder{}),
 	}
 }
 

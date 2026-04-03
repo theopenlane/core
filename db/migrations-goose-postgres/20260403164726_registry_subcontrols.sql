@@ -1,0 +1,15 @@
+-- +goose Up
+-- create "subcontrol_assets" table
+CREATE TABLE "subcontrol_assets" ("subcontrol_id" character varying NOT NULL, "asset_id" character varying NOT NULL, PRIMARY KEY ("subcontrol_id", "asset_id"), CONSTRAINT "subcontrol_assets_asset_id" FOREIGN KEY ("asset_id") REFERENCES "assets" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "subcontrol_assets_subcontrol_id" FOREIGN KEY ("subcontrol_id") REFERENCES "subcontrols" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "subcontrol_entities" table
+CREATE TABLE "subcontrol_entities" ("subcontrol_id" character varying NOT NULL, "entity_id" character varying NOT NULL, PRIMARY KEY ("subcontrol_id", "entity_id"), CONSTRAINT "subcontrol_entities_entity_id" FOREIGN KEY ("entity_id") REFERENCES "entities" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "subcontrol_entities_subcontrol_id" FOREIGN KEY ("subcontrol_id") REFERENCES "subcontrols" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "subcontrol_identity_holders" table
+CREATE TABLE "subcontrol_identity_holders" ("subcontrol_id" character varying NOT NULL, "identity_holder_id" character varying NOT NULL, PRIMARY KEY ("subcontrol_id", "identity_holder_id"), CONSTRAINT "subcontrol_identity_holders_identity_holder_id" FOREIGN KEY ("identity_holder_id") REFERENCES "identity_holders" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "subcontrol_identity_holders_subcontrol_id" FOREIGN KEY ("subcontrol_id") REFERENCES "subcontrols" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+
+-- +goose Down
+-- reverse: create "subcontrol_identity_holders" table
+DROP TABLE "subcontrol_identity_holders";
+-- reverse: create "subcontrol_entities" table
+DROP TABLE "subcontrol_entities";
+-- reverse: create "subcontrol_assets" table
+DROP TABLE "subcontrol_assets";

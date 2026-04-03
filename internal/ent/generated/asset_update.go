@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -1085,6 +1086,21 @@ func (_u *AssetUpdate) AddControls(v ...*Control) *AssetUpdate {
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *AssetUpdate) AddSubcontrolIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *AssetUpdate) AddSubcontrols(v ...*Subcontrol) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_u *AssetUpdate) AddInternalPolicyIDs(ids ...string) *AssetUpdate {
 	_u.mutation.AddInternalPolicyIDs(ids...)
@@ -1387,6 +1403,27 @@ func (_u *AssetUpdate) RemoveControls(v ...*Control) *AssetUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *AssetUpdate) ClearSubcontrols() *AssetUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *AssetUpdate) RemoveSubcontrolIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *AssetUpdate) RemoveSubcontrols(v ...*Subcontrol) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
@@ -2491,6 +2528,54 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3737,6 +3822,21 @@ func (_u *AssetUpdateOne) AddControls(v ...*Control) *AssetUpdateOne {
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *AssetUpdateOne) AddSubcontrolIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *AssetUpdateOne) AddSubcontrols(v ...*Subcontrol) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_u *AssetUpdateOne) AddInternalPolicyIDs(ids ...string) *AssetUpdateOne {
 	_u.mutation.AddInternalPolicyIDs(ids...)
@@ -4039,6 +4139,27 @@ func (_u *AssetUpdateOne) RemoveControls(v ...*Control) *AssetUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *AssetUpdateOne) ClearSubcontrols() *AssetUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *AssetUpdateOne) RemoveSubcontrolIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *AssetUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
 }
 
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
@@ -5173,6 +5294,54 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

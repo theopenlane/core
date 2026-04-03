@@ -4453,6 +4453,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"Asset",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"internal_policies",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -6913,6 +6925,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Control",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SubcontrolsTable,
+			Columns: entity.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"platforms",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8855,6 +8879,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"IdentityHolder",
 		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"IdentityHolder",
+		"Subcontrol",
 	)
 	graph.MustAddE(
 		"platforms",
@@ -14569,6 +14605,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.AssetsTable,
+			Columns: subcontrol.AssetsPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Asset",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EntitiesTable,
+			Columns: subcontrol.EntitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Entity",
+	)
+	graph.MustAddE(
+		"identity_holders",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.IdentityHoldersTable,
+			Columns: subcontrol.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -18891,6 +18963,20 @@ func (f *AssetFilter) WhereHasControls() {
 // WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
 func (f *AssetFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *AssetFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -24952,6 +25038,20 @@ func (f *EntityFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	})))
 }
 
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *EntityFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasPlatforms applies a predicate to check if query has an edge platforms.
 func (f *EntityFilter) WhereHasPlatforms() {
 	f.Where(entql.HasEdge("platforms"))
@@ -29084,6 +29184,20 @@ func (f *IdentityHolderFilter) WhereHasControls() {
 // WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
 func (f *IdentityHolderFilter) WhereHasControlsWith(preds ...predicate.Control) {
 	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *IdentityHolderFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *IdentityHolderFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -41773,6 +41887,48 @@ func (f *SubcontrolFilter) WhereHasWorkflowObjectRefs() {
 // WhereHasWorkflowObjectRefsWith applies a predicate to check if query has an edge workflow_object_refs with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) {
 	f.Where(entql.HasEdgeWith("workflow_object_refs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *SubcontrolFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *SubcontrolFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIdentityHolders applies a predicate to check if query has an edge identity_holders.
+func (f *SubcontrolFilter) WhereHasIdentityHolders() {
+	f.Where(entql.HasEdge("identity_holders"))
+}
+
+// WhereHasIdentityHoldersWith applies a predicate to check if query has an edge identity_holders with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasIdentityHoldersWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("identity_holders", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -219,6 +219,8 @@ type EntityEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// OutOfScopePlatforms holds the value of the out_of_scope_platforms edge.
@@ -233,9 +235,9 @@ type EntityEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [33]bool
+	loadedTypes [34]bool
 	// totalCount holds the count of the edges above.
-	totalCount [33]map[string]int
+	totalCount [34]map[string]int
 
 	namedBlockedGroups           map[string][]*Group
 	namedEditors                 map[string][]*Group
@@ -254,6 +256,7 @@ type EntityEdges struct {
 	namedEmployerIdentityHolders map[string][]*IdentityHolder
 	namedIdentityHolders         map[string][]*IdentityHolder
 	namedControls                map[string][]*Control
+	namedSubcontrols             map[string][]*Subcontrol
 	namedPlatforms               map[string][]*Platform
 	namedOutOfScopePlatforms     map[string][]*Platform
 	namedSourcePlatforms         map[string][]*Platform
@@ -523,10 +526,19 @@ func (e EntityEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[27] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -535,7 +547,7 @@ func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
 // OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.OutOfScopePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
@@ -544,7 +556,7 @@ func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
 // SourcePlatformsOrErr returns the SourcePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[30] {
 		return e.SourcePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "source_platforms"}
@@ -555,7 +567,7 @@ func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[30] {
+	} else if e.loadedTypes[31] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
@@ -566,7 +578,7 @@ func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 func (e EntityEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[31] {
+	} else if e.loadedTypes[32] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -575,7 +587,7 @@ func (e EntityEdges) LogoFileOrErr() (*File, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[33] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -1224,6 +1236,11 @@ func (_m *Entity) QueryIdentityHolders() *IdentityHolderQuery {
 // QueryControls queries the "controls" edge of the Entity entity.
 func (_m *Entity) QueryControls() *ControlQuery {
 	return NewEntityClient(_m.config).QueryControls(_m)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the Entity entity.
+func (_m *Entity) QuerySubcontrols() *SubcontrolQuery {
+	return NewEntityClient(_m.config).QuerySubcontrols(_m)
 }
 
 // QueryPlatforms queries the "platforms" edge of the Entity entity.
@@ -1893,6 +1910,30 @@ func (_m *Entity) appendNamedControls(name string, edges ...*Control) {
 		_m.Edges.namedControls[name] = []*Control{}
 	} else {
 		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
 	}
 }
 
