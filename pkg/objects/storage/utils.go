@@ -190,6 +190,8 @@ func parseDocx(content []byte) (string, error) {
 					}
 				}
 			}
+
+			paragraphs = append(paragraphs, "")
 		}
 	}
 
