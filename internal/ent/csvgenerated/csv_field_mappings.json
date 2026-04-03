@@ -88,9 +88,19 @@
   ],
   "Control": [
     {
+      "csvColumn": "ActionPlanNames",
+      "targetField": "ActionPlanIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ControlDelegateGroupName",
       "targetField": "DelegateID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "ControlObjectiveNames",
+      "targetField": "ControlObjectiveIDs",
+      "isSlice": true
     },
     {
       "csvColumn": "ControlOwnerGroupName",
@@ -98,9 +108,24 @@
       "isSlice": false
     },
     {
+      "csvColumn": "PolicyNames",
+      "targetField": "InternalPolicyIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "ProcedureNames",
+      "targetField": "ProcedureIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ResponsiblePartyEntityName",
       "targetField": "ResponsiblePartyID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "RiskNames",
+      "targetField": "RiskIDs",
+      "isSlice": true
     }
   ],
   "DirectoryAccount": [
@@ -331,9 +356,19 @@
   ],
   "Subcontrol": [
     {
+      "csvColumn": "ActionPlanNames",
+      "targetField": "ActionPlanIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ControlDelegateGroupName",
       "targetField": "DelegateID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "ControlObjectiveNames",
+      "targetField": "ControlObjectiveIDs",
+      "isSlice": true
     },
     {
       "csvColumn": "ControlOwnerGroupName",
@@ -341,9 +376,24 @@
       "isSlice": false
     },
     {
+      "csvColumn": "PolicyNames",
+      "targetField": "InternalPolicyIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "ProcedureNames",
+      "targetField": "ProcedureIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ResponsiblePartyEntityName",
       "targetField": "ResponsiblePartyID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "RiskNames",
+      "targetField": "RiskIDs",
+      "isSlice": true
     }
   ],
   "Task": [

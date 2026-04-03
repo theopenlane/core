@@ -13,6 +13,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
@@ -75,7 +76,10 @@ func (suite *HookTestSuite) TearDownSuite() {
 func (suite *HookTestSuite) setupClient() *generated.Client {
 	t := suite.T()
 
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
+	version, err := fgaversion.GetVersion()
+	require.NoError(suite.T(), err)
+
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile), fgatest.WithVersion(version))
 	ctx := context.Background()
 
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)

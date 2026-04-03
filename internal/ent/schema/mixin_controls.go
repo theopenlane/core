@@ -64,6 +64,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: ControlObjective{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("ControlObjectiveNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -85,6 +86,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: Risk{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("RiskNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -92,6 +94,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: ActionPlan{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("ActionPlanNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -99,6 +102,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: Procedure{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("ProcedureNames").MatchOn("name"),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
@@ -106,6 +110,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: InternalPolicy{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("PolicyNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
