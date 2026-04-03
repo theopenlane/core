@@ -106,8 +106,8 @@ func findVersion(details string) string {
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
 		if strings.HasPrefix(strings.ToLower(trimmed), "version:") {
-			parts := strings.SplitN(trimmed, ":", 2) //nolint:gomnd
-			if len(parts) == 2 {                     //nolint:gomnd
+			parts := strings.SplitN(trimmed, ":", 2) //nolint:mnd
+			if len(parts) == 2 {                     //nolint:mnd
 				// convert to semver format if possible, e.g. "Version: 1.0" -> "1.0.0"
 				version := strings.TrimSpace(parts[1])
 				if version == "" {
