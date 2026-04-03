@@ -11,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.35.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.14.2
+	github.com/theopenlane/core v1.15.2
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.24.0
 	github.com/theopenlane/utils v0.7.0
@@ -57,6 +57,7 @@ require (
 	github.com/riverqueue/river/riverdriver v0.32.0 // indirect
 	github.com/riverqueue/river/rivershared v0.32.0 // indirect
 	github.com/riverqueue/river/rivertype v0.32.0 // indirect
+	github.com/samber/lo v1.53.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
