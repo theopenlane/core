@@ -194,12 +194,12 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
 
-	// set owner on mutation
-	if err := m.SetField(ownerFieldName, orgID); err != nil {
-		return err
+	if o.SkipAutoOwnerID && auth.IsSystemAdminFromContext(ctx) {
+		return nil
 	}
 
-	return nil
+	// set owner on mutation
+	return m.SetField(ownerFieldName, orgID)
 }
 
 // addOrganizationOwnerEditorRelation adds the organization owner as an editor to the object
