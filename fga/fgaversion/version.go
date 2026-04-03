@@ -9,6 +9,7 @@ import (
 
 const packageName = "github.com/openfga/openfga"
 
+// GetVersion reads the go.mod file to find the version of the openFGA package being used in the project. It returns the version as a string or an error if it fails to find or read the go.mod file.
 func GetVersion() (string, error) {
 	goModPath, err := findGoModPath()
 	if err != nil {
@@ -31,6 +32,7 @@ func GetVersion() (string, error) {
 			}
 		}
 	}
+
 	return "", scanner.Err()
 }
 
@@ -44,11 +46,14 @@ func findGoModPath() (string, error) {
 		if _, err := os.Stat(modPath); err == nil {
 			return modPath, nil
 		}
+
 		parent := filepath.Dir(dir)
 		if parent == dir {
 			break // reached root
 		}
+
 		dir = parent
 	}
+
 	return "", os.ErrNotExist
 }
