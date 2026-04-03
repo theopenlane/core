@@ -119,7 +119,7 @@ func (n Notification) Mixin() []ent.Mixin {
 		excludeAnnotations: true,
 		excludeSoftDelete:  true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(n, withSkipOwnerID()),
+			newOrgOwnedMixin(n, withOwnerIDFromRequest()),
 		},
 	}.getMixins(n)
 }

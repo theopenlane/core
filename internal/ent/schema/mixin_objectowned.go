@@ -73,9 +73,9 @@ type ObjectOwnedMixin struct {
 	SkipDeletedAt bool
 	// WorkflowEdgeEligible marks owner edges as workflow-eligible for trigger detection.
 	WorkflowEdgeEligible bool
-	// SkipAutoOwnerID allows system admin tokens to create objects for other organizations
+	// WithOwnerIDFromRequest allows system admin tokens to create objects for other organizations
 	// Else, it would always inherit the system admin org
-	SkipAutoOwnerID bool
+	WithOwnerIDFromRequest bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -169,11 +169,11 @@ func withOwnerRelation(relation string) objectOwnedOption {
 	}
 }
 
-// withSkipOwnerID allows to not force "owner_id" field to use the system admin org
+// withOwnerIDFromRequest allows to not force "owner_id" field to use the system admin org
 // this is useful for system admins creating objects in other orgs e.g notifications
-func withSkipOwnerID() objectOwnedOption {
+func withOwnerIDFromRequest() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.SkipAutoOwnerID = true
+		o.WithOwnerIDFromRequest = true
 	}
 }
 
