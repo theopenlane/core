@@ -115,3 +115,7 @@ scalar ExportMetadata
 Any is a generic fallback type
 """
 scalar Any
+"""
+VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring
+"""
+scalar VendorScoringQuestionsConfig

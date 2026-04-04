@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -68,6 +69,7 @@ type EntityQuery struct {
 	withScans                             *ScanQuery
 	withCampaigns                         *CampaignQuery
 	withAssessmentResponses               *AssessmentResponseQuery
+	withVendorRiskScores                  *VendorRiskScoreQuery
 	withIntegrations                      *IntegrationQuery
 	withSubprocessors                     *SubprocessorQuery
 	withAuthMethods                       *CustomTypeEnumQuery
@@ -95,6 +97,7 @@ type EntityQuery struct {
 	withNamedScans                        map[string]*ScanQuery
 	withNamedCampaigns                    map[string]*CampaignQuery
 	withNamedAssessmentResponses          map[string]*AssessmentResponseQuery
+	withNamedVendorRiskScores             map[string]*VendorRiskScoreQuery
 	withNamedIntegrations                 map[string]*IntegrationQuery
 	withNamedSubprocessors                map[string]*SubprocessorQuery
 	withNamedAuthMethods                  map[string]*CustomTypeEnumQuery
@@ -667,6 +670,31 @@ func (_q *EntityQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return query
 }
 
+// QueryVendorRiskScores chains the current query on the "vendor_risk_scores" edge.
+func (_q *EntityQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.VendorRiskScoresTable, entity.VendorRiskScoresColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryIntegrations chains the current query on the "integrations" edge.
 func (_q *EntityQuery) QueryIntegrations() *IntegrationQuery {
 	query := (&IntegrationClient{config: _q.config}).Query()
@@ -1205,6 +1233,7 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withScans:                             _q.withScans.Clone(),
 		withCampaigns:                         _q.withCampaigns.Clone(),
 		withAssessmentResponses:               _q.withAssessmentResponses.Clone(),
+		withVendorRiskScores:                  _q.withVendorRiskScores.Clone(),
 		withIntegrations:                      _q.withIntegrations.Clone(),
 		withSubprocessors:                     _q.withSubprocessors.Clone(),
 		withAuthMethods:                       _q.withAuthMethods.Clone(),
@@ -1456,6 +1485,17 @@ func (_q *EntityQuery) WithAssessmentResponses(opts ...func(*AssessmentResponseQ
 	return _q
 }
 
+// WithVendorRiskScores tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_risk_scores" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithVendorRiskScores(opts ...func(*VendorRiskScoreQuery)) *EntityQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVendorRiskScores = query
+	return _q
+}
+
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
 // the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *EntityQuery {
@@ -1684,7 +1724,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [34]bool{
+		loadedTypes = [35]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1706,6 +1746,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withScans != nil,
 			_q.withCampaigns != nil,
 			_q.withAssessmentResponses != nil,
+			_q.withVendorRiskScores != nil,
 			_q.withIntegrations != nil,
 			_q.withSubprocessors != nil,
 			_q.withAuthMethods != nil,
@@ -1886,6 +1927,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withVendorRiskScores; query != nil {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *Entity) { n.Edges.VendorRiskScores = []*VendorRiskScore{} },
+			func(n *Entity, e *VendorRiskScore) { n.Edges.VendorRiskScores = append(n.Edges.VendorRiskScores, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withIntegrations; query != nil {
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Integrations = []*Integration{} },
@@ -2051,6 +2099,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedAssessmentResponses(name) },
 			func(n *Entity, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVendorRiskScores {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedVendorRiskScores(name) },
+			func(n *Entity, e *VendorRiskScore) { n.appendNamedVendorRiskScores(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2980,6 +3035,37 @@ func (_q *EntityQuery) loadAssessmentResponses(ctx context.Context, query *Asses
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "entity_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EntityQuery) loadVendorRiskScores(ctx context.Context, query *VendorRiskScoreQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *VendorRiskScore)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.VendorRiskScore(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.VendorRiskScoresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.entity_vendor_risk_scores
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "entity_vendor_risk_scores" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "entity_vendor_risk_scores" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -3951,6 +4037,20 @@ func (_q *EntityQuery) WithNamedAssessmentResponses(name string, opts ...func(*A
 		_q.withNamedAssessmentResponses = make(map[string]*AssessmentResponseQuery)
 	}
 	_q.withNamedAssessmentResponses[name] = query
+	return _q
+}
+
+// WithNamedVendorRiskScores tells the query-builder to eager-load the nodes that are connected to the "vendor_risk_scores"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedVendorRiskScores(name string, opts ...func(*VendorRiskScoreQuery)) *EntityQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVendorRiskScores == nil {
+		_q.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery)
+	}
+	_q.withNamedVendorRiskScores[name] = query
 	return _q
 }
 

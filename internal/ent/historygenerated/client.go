@@ -90,6 +90,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
@@ -249,6 +251,10 @@ type Client struct {
 	UserHistory *UserHistoryClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
 	UserSettingHistory *UserSettingHistoryClient
+	// VendorRiskScoreHistory is the client for interacting with the VendorRiskScoreHistory builders.
+	VendorRiskScoreHistory *VendorRiskScoreHistoryClient
+	// VendorScoringConfigHistory is the client for interacting with the VendorScoringConfigHistory builders.
+	VendorScoringConfigHistory *VendorScoringConfigHistoryClient
 	// VulnerabilityHistory is the client for interacting with the VulnerabilityHistory builders.
 	VulnerabilityHistory *VulnerabilityHistoryClient
 	// WorkflowAssignmentHistory is the client for interacting with the WorkflowAssignmentHistory builders.
@@ -350,6 +356,8 @@ func (c *Client) init() {
 	c.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(c.config)
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSettingHistory = NewUserSettingHistoryClient(c.config)
+	c.VendorRiskScoreHistory = NewVendorRiskScoreHistoryClient(c.config)
+	c.VendorScoringConfigHistory = NewVendorScoringConfigHistoryClient(c.config)
 	c.VulnerabilityHistory = NewVulnerabilityHistoryClient(c.config)
 	c.WorkflowAssignmentHistory = NewWorkflowAssignmentHistoryClient(c.config)
 	c.WorkflowAssignmentTargetHistory = NewWorkflowAssignmentTargetHistoryClient(c.config)
@@ -543,6 +551,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TrustCenterWatermarkConfigHistory: NewTrustCenterWatermarkConfigHistoryClient(cfg),
 		UserHistory:                       NewUserHistoryClient(cfg),
 		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		VendorRiskScoreHistory:            NewVendorRiskScoreHistoryClient(cfg),
+		VendorScoringConfigHistory:        NewVendorScoringConfigHistoryClient(cfg),
 		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
 		WorkflowAssignmentHistory:         NewWorkflowAssignmentHistoryClient(cfg),
 		WorkflowAssignmentTargetHistory:   NewWorkflowAssignmentTargetHistoryClient(cfg),
@@ -639,6 +649,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TrustCenterWatermarkConfigHistory: NewTrustCenterWatermarkConfigHistoryClient(cfg),
 		UserHistory:                       NewUserHistoryClient(cfg),
 		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		VendorRiskScoreHistory:            NewVendorRiskScoreHistoryClient(cfg),
+		VendorScoringConfigHistory:        NewVendorScoringConfigHistoryClient(cfg),
 		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
 		WorkflowAssignmentHistory:         NewWorkflowAssignmentHistoryClient(cfg),
 		WorkflowAssignmentTargetHistory:   NewWorkflowAssignmentTargetHistoryClient(cfg),
@@ -698,7 +710,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
+		c.UserHistory, c.UserSettingHistory, c.VendorRiskScoreHistory,
+		c.VendorScoringConfigHistory, c.VulnerabilityHistory,
 		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
 		c.WorkflowDefinitionHistory, c.WorkflowEventHistory, c.WorkflowInstanceHistory,
 		c.WorkflowObjectRefHistory,
@@ -734,7 +747,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
+		c.UserHistory, c.UserSettingHistory, c.VendorRiskScoreHistory,
+		c.VendorScoringConfigHistory, c.VulnerabilityHistory,
 		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
 		c.WorkflowDefinitionHistory, c.WorkflowEventHistory, c.WorkflowInstanceHistory,
 		c.WorkflowObjectRefHistory,
@@ -938,6 +952,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.UserHistory.mutate(ctx, m)
 	case *UserSettingHistoryMutation:
 		return c.UserSettingHistory.mutate(ctx, m)
+	case *VendorRiskScoreHistoryMutation:
+		return c.VendorRiskScoreHistory.mutate(ctx, m)
+	case *VendorScoringConfigHistoryMutation:
+		return c.VendorScoringConfigHistory.mutate(ctx, m)
 	case *VulnerabilityHistoryMutation:
 		return c.VulnerabilityHistory.mutate(ctx, m)
 	case *WorkflowAssignmentHistoryMutation:
@@ -10405,6 +10423,272 @@ func (c *UserSettingHistoryClient) mutate(ctx context.Context, m *UserSettingHis
 	}
 }
 
+// VendorRiskScoreHistoryClient is a client for the VendorRiskScoreHistory schema.
+type VendorRiskScoreHistoryClient struct {
+	config
+}
+
+// NewVendorRiskScoreHistoryClient returns a client for the VendorRiskScoreHistory from the given config.
+func NewVendorRiskScoreHistoryClient(c config) *VendorRiskScoreHistoryClient {
+	return &VendorRiskScoreHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorriskscorehistory.Hooks(f(g(h())))`.
+func (c *VendorRiskScoreHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorRiskScoreHistory = append(c.hooks.VendorRiskScoreHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorriskscorehistory.Intercept(f(g(h())))`.
+func (c *VendorRiskScoreHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorRiskScoreHistory = append(c.inters.VendorRiskScoreHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorRiskScoreHistory entity.
+func (c *VendorRiskScoreHistoryClient) Create() *VendorRiskScoreHistoryCreate {
+	mutation := newVendorRiskScoreHistoryMutation(c.config, OpCreate)
+	return &VendorRiskScoreHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorRiskScoreHistory entities.
+func (c *VendorRiskScoreHistoryClient) CreateBulk(builders ...*VendorRiskScoreHistoryCreate) *VendorRiskScoreHistoryCreateBulk {
+	return &VendorRiskScoreHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorRiskScoreHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorRiskScoreHistoryCreate, int)) *VendorRiskScoreHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorRiskScoreHistoryCreateBulk{err: fmt.Errorf("calling to VendorRiskScoreHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorRiskScoreHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorRiskScoreHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorRiskScoreHistory.
+func (c *VendorRiskScoreHistoryClient) Update() *VendorRiskScoreHistoryUpdate {
+	mutation := newVendorRiskScoreHistoryMutation(c.config, OpUpdate)
+	return &VendorRiskScoreHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorRiskScoreHistoryClient) UpdateOne(_m *VendorRiskScoreHistory) *VendorRiskScoreHistoryUpdateOne {
+	mutation := newVendorRiskScoreHistoryMutation(c.config, OpUpdateOne, withVendorRiskScoreHistory(_m))
+	return &VendorRiskScoreHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorRiskScoreHistoryClient) UpdateOneID(id string) *VendorRiskScoreHistoryUpdateOne {
+	mutation := newVendorRiskScoreHistoryMutation(c.config, OpUpdateOne, withVendorRiskScoreHistoryID(id))
+	return &VendorRiskScoreHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorRiskScoreHistory.
+func (c *VendorRiskScoreHistoryClient) Delete() *VendorRiskScoreHistoryDelete {
+	mutation := newVendorRiskScoreHistoryMutation(c.config, OpDelete)
+	return &VendorRiskScoreHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorRiskScoreHistoryClient) DeleteOne(_m *VendorRiskScoreHistory) *VendorRiskScoreHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorRiskScoreHistoryClient) DeleteOneID(id string) *VendorRiskScoreHistoryDeleteOne {
+	builder := c.Delete().Where(vendorriskscorehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorRiskScoreHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorRiskScoreHistory.
+func (c *VendorRiskScoreHistoryClient) Query() *VendorRiskScoreHistoryQuery {
+	return &VendorRiskScoreHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorRiskScoreHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorRiskScoreHistory entity by its id.
+func (c *VendorRiskScoreHistoryClient) Get(ctx context.Context, id string) (*VendorRiskScoreHistory, error) {
+	return c.Query().Where(vendorriskscorehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorRiskScoreHistoryClient) GetX(ctx context.Context, id string) *VendorRiskScoreHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorRiskScoreHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorRiskScoreHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorRiskScoreHistoryClient) Interceptors() []Interceptor {
+	return c.inters.VendorRiskScoreHistory
+}
+
+func (c *VendorRiskScoreHistoryClient) mutate(ctx context.Context, m *VendorRiskScoreHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorRiskScoreHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorRiskScoreHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorRiskScoreHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorRiskScoreHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown VendorRiskScoreHistory mutation op: %q", m.Op())
+	}
+}
+
+// VendorScoringConfigHistoryClient is a client for the VendorScoringConfigHistory schema.
+type VendorScoringConfigHistoryClient struct {
+	config
+}
+
+// NewVendorScoringConfigHistoryClient returns a client for the VendorScoringConfigHistory from the given config.
+func NewVendorScoringConfigHistoryClient(c config) *VendorScoringConfigHistoryClient {
+	return &VendorScoringConfigHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorscoringconfighistory.Hooks(f(g(h())))`.
+func (c *VendorScoringConfigHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorScoringConfigHistory = append(c.hooks.VendorScoringConfigHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorscoringconfighistory.Intercept(f(g(h())))`.
+func (c *VendorScoringConfigHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorScoringConfigHistory = append(c.inters.VendorScoringConfigHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorScoringConfigHistory entity.
+func (c *VendorScoringConfigHistoryClient) Create() *VendorScoringConfigHistoryCreate {
+	mutation := newVendorScoringConfigHistoryMutation(c.config, OpCreate)
+	return &VendorScoringConfigHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorScoringConfigHistory entities.
+func (c *VendorScoringConfigHistoryClient) CreateBulk(builders ...*VendorScoringConfigHistoryCreate) *VendorScoringConfigHistoryCreateBulk {
+	return &VendorScoringConfigHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorScoringConfigHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorScoringConfigHistoryCreate, int)) *VendorScoringConfigHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorScoringConfigHistoryCreateBulk{err: fmt.Errorf("calling to VendorScoringConfigHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorScoringConfigHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorScoringConfigHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorScoringConfigHistory.
+func (c *VendorScoringConfigHistoryClient) Update() *VendorScoringConfigHistoryUpdate {
+	mutation := newVendorScoringConfigHistoryMutation(c.config, OpUpdate)
+	return &VendorScoringConfigHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorScoringConfigHistoryClient) UpdateOne(_m *VendorScoringConfigHistory) *VendorScoringConfigHistoryUpdateOne {
+	mutation := newVendorScoringConfigHistoryMutation(c.config, OpUpdateOne, withVendorScoringConfigHistory(_m))
+	return &VendorScoringConfigHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorScoringConfigHistoryClient) UpdateOneID(id string) *VendorScoringConfigHistoryUpdateOne {
+	mutation := newVendorScoringConfigHistoryMutation(c.config, OpUpdateOne, withVendorScoringConfigHistoryID(id))
+	return &VendorScoringConfigHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorScoringConfigHistory.
+func (c *VendorScoringConfigHistoryClient) Delete() *VendorScoringConfigHistoryDelete {
+	mutation := newVendorScoringConfigHistoryMutation(c.config, OpDelete)
+	return &VendorScoringConfigHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorScoringConfigHistoryClient) DeleteOne(_m *VendorScoringConfigHistory) *VendorScoringConfigHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorScoringConfigHistoryClient) DeleteOneID(id string) *VendorScoringConfigHistoryDeleteOne {
+	builder := c.Delete().Where(vendorscoringconfighistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorScoringConfigHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorScoringConfigHistory.
+func (c *VendorScoringConfigHistoryClient) Query() *VendorScoringConfigHistoryQuery {
+	return &VendorScoringConfigHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorScoringConfigHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorScoringConfigHistory entity by its id.
+func (c *VendorScoringConfigHistoryClient) Get(ctx context.Context, id string) (*VendorScoringConfigHistory, error) {
+	return c.Query().Where(vendorscoringconfighistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorScoringConfigHistoryClient) GetX(ctx context.Context, id string) *VendorScoringConfigHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorScoringConfigHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorScoringConfigHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorScoringConfigHistoryClient) Interceptors() []Interceptor {
+	return c.inters.VendorScoringConfigHistory
+}
+
+func (c *VendorScoringConfigHistoryClient) mutate(ctx context.Context, m *VendorScoringConfigHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorScoringConfigHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorScoringConfigHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorScoringConfigHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorScoringConfigHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown VendorScoringConfigHistory mutation op: %q", m.Op())
+	}
+}
+
 // VulnerabilityHistoryClient is a client for the VulnerabilityHistory schema.
 type VulnerabilityHistoryClient struct {
 	config
@@ -11374,9 +11658,9 @@ type (
 		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
 		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
 		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
-		VulnerabilityHistory, WorkflowAssignmentHistory,
-		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
-		WorkflowEventHistory, WorkflowInstanceHistory,
+		VendorRiskScoreHistory, VendorScoringConfigHistory, VulnerabilityHistory,
+		WorkflowAssignmentHistory, WorkflowAssignmentTargetHistory,
+		WorkflowDefinitionHistory, WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Hook
 	}
 	inters struct {
@@ -11401,9 +11685,9 @@ type (
 		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
 		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
 		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
-		VulnerabilityHistory, WorkflowAssignmentHistory,
-		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
-		WorkflowEventHistory, WorkflowInstanceHistory,
+		VendorRiskScoreHistory, VendorScoringConfigHistory, VulnerabilityHistory,
+		WorkflowAssignmentHistory, WorkflowAssignmentTargetHistory,
+		WorkflowDefinitionHistory, WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Interceptor
 	}
 )

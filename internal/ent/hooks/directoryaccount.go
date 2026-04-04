@@ -271,7 +271,9 @@ func linkDirectoryAccountToIdentityHolder(ctx context.Context, client *generated
 	return nil
 }
 
-// enrichIdentityHolderFromDirectoryAccount fills empty holder fields from directory evidence
+// enrichIdentityHolderFromDirectoryAccount fills holder fields from directory evidence
+// Primary-source accounts overwrite existing values unconditionally; non-primary accounts
+// only fill fields that have not yet been set
 func enrichIdentityHolderFromDirectoryAccount(ctx context.Context, client *generated.Client, holderID string, account *generated.DirectoryAccount) error {
 	holder, err := client.IdentityHolder.Get(ctx, holderID)
 	switch {
@@ -285,19 +287,25 @@ func enrichIdentityHolderFromDirectoryAccount(ctx context.Context, client *gener
 	update := client.IdentityHolder.UpdateOneID(holderID)
 	changed := false
 
-	if name := identityHolderDescriptiveNameFromDirectoryAccount(account); name != "" && holder.FullName == holder.Email {
-		update.SetFullName(name)
-		changed = true
+	if name := identityHolderDescriptiveNameFromDirectoryAccount(account); name != "" {
+		if account.PrimarySource || holder.FullName == "" || holder.FullName == holder.Email {
+			update.SetFullName(name)
+			changed = true
+		}
 	}
 
-	if title := lo.FromPtr(account.JobTitle); title != "" && holder.Title == "" {
-		update.SetTitle(title)
-		changed = true
+	if title := lo.FromPtr(account.JobTitle); title != "" {
+		if account.PrimarySource || holder.Title == "" {
+			update.SetTitle(title)
+			changed = true
+		}
 	}
 
-	if department := lo.FromPtr(account.Department); department != "" && holder.Department == "" {
-		update.SetDepartment(department)
-		changed = true
+	if department := lo.FromPtr(account.Department); department != "" {
+		if account.PrimarySource || holder.Department == "" {
+			update.SetDepartment(department)
+			changed = true
+		}
 	}
 
 	if !changed {
@@ -334,6 +342,7 @@ func syncIdentityHolderLifecycleFromDirectoryAccounts(ctx context.Context, clien
 }
 
 // aggregateIdentityHolderLifecycle collapses linked directory account states into a holder status
+// When primary-source accounts are present they are used exclusively; otherwise all human accounts contribute
 func aggregateIdentityHolderLifecycle(ctx context.Context, client *generated.Client, ownerID, holderID string) (enums.UserStatus, bool, error) {
 	accounts, err := client.DirectoryAccount.Query().
 		Where(
@@ -345,12 +354,19 @@ func aggregateIdentityHolderLifecycle(ctx context.Context, client *generated.Cli
 		return "", false, err
 	}
 
-	effectiveStatuses := mapx.MapSetFromSlice(lo.FilterMap(accounts, func(account *generated.DirectoryAccount, _ int) (enums.DirectoryAccountStatus, bool) {
-		if !isHumanDirectoryAccount(account.AccountType) {
-			return "", false
-		}
+	humanAccounts := lo.Filter(accounts, func(account *generated.DirectoryAccount, _ int) bool {
+		return isHumanDirectoryAccount(account.AccountType)
+	})
 
-		return effectiveDirectoryAccountStatus(account), true
+	source := humanAccounts
+	if primaryAccounts := lo.Filter(humanAccounts, func(account *generated.DirectoryAccount, _ int) bool {
+		return account.PrimarySource
+	}); len(primaryAccounts) > 0 {
+		source = primaryAccounts
+	}
+
+	effectiveStatuses := mapx.MapSetFromSlice(lo.Map(source, func(account *generated.DirectoryAccount, _ int) enums.DirectoryAccountStatus {
+		return effectiveDirectoryAccountStatus(account)
 	}))
 
 	if len(effectiveStatuses) != 1 {

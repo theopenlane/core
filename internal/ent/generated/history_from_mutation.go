@@ -4988,6 +4988,10 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetNillableSourceVersion(&sourceVersion)
 	}
 
+	if primarySource, exists := m.PrimarySource(); exists {
+		create = create.SetPrimarySource(primarySource)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5283,6 +5287,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableSourceVersion(directoryaccount.SourceVersion)
 		}
 
+		if primarySource, exists := m.PrimarySource(); exists {
+			create = create.SetPrimarySource(primarySource)
+		} else {
+			create = create.SetPrimarySource(directoryaccount.PrimarySource)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5362,6 +5372,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetMetadata(directoryaccount.Metadata).
 			SetNillableRawProfileFileID(directoryaccount.RawProfileFileID).
 			SetNillableSourceVersion(directoryaccount.SourceVersion).
+			SetPrimarySource(directoryaccount.PrimarySource).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7590,6 +7601,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRiskScore(riskScore)
 	}
 
+	if riskScoreCoverage, exists := m.RiskScoreCoverage(); exists {
+		create = create.SetRiskScoreCoverage(riskScoreCoverage)
+	}
+
 	if tier, exists := m.Tier(); exists {
 		create = create.SetTier(tier)
 	}
@@ -7977,6 +7992,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRiskScore(entity.RiskScore)
 		}
 
+		if riskScoreCoverage, exists := m.RiskScoreCoverage(); exists {
+			create = create.SetRiskScoreCoverage(riskScoreCoverage)
+		} else {
+			create = create.SetRiskScoreCoverage(entity.RiskScoreCoverage)
+		}
+
 		if tier, exists := m.Tier(); exists {
 			create = create.SetTier(tier)
 		} else {
@@ -8114,6 +8135,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetLinks(entity.Links).
 			SetRiskRating(entity.RiskRating).
 			SetRiskScore(entity.RiskScore).
+			SetRiskScoreCoverage(entity.RiskScoreCoverage).
 			SetTier(entity.Tier).
 			SetReviewFrequency(entity.ReviewFrequency).
 			SetNillableNextReviewAt(entity.NextReviewAt).
@@ -11733,6 +11755,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
 	}
 
+	if primaryDirectory, exists := m.PrimaryDirectory(); exists {
+		create = create.SetPrimaryDirectory(primaryDirectory)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11950,6 +11976,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot)
 		}
 
+		if primaryDirectory, exists := m.PrimaryDirectory(); exists {
+			create = create.SetPrimaryDirectory(primaryDirectory)
+		} else {
+			create = create.SetPrimaryDirectory(integration.PrimaryDirectory)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -12016,6 +12048,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetFamily(integration.Family).
 			SetStatus(integration.Status).
 			SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot).
+			SetPrimaryDirectory(integration.PrimaryDirectory).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -25135,6 +25168,518 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetIsWebauthnAllowed(usersetting.IsWebauthnAllowed).
 			SetIsTfaEnabled(usersetting.IsTfaEnabled).
 			SetNillablePhoneNumber(usersetting.PhoneNumber).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.VendorRiskScoreHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if questionKey, exists := m.QuestionKey(); exists {
+		create = create.SetQuestionKey(questionKey)
+	}
+
+	if questionName, exists := m.QuestionName(); exists {
+		create = create.SetQuestionName(questionName)
+	}
+
+	if questionDescription, exists := m.QuestionDescription(); exists {
+		create = create.SetNillableQuestionDescription(&questionDescription)
+	}
+
+	if questionCategory, exists := m.QuestionCategory(); exists {
+		create = create.SetQuestionCategory(questionCategory)
+	}
+
+	if answerType, exists := m.AnswerType(); exists {
+		create = create.SetAnswerType(answerType)
+	}
+
+	if impact, exists := m.Impact(); exists {
+		create = create.SetImpact(impact)
+	}
+
+	if likelihood, exists := m.Likelihood(); exists {
+		create = create.SetLikelihood(likelihood)
+	}
+
+	if score, exists := m.Score(); exists {
+		create = create.SetScore(score)
+	}
+
+	if answer, exists := m.Answer(); exists {
+		create = create.SetNillableAnswer(&answer)
+	}
+
+	if notes, exists := m.Notes(); exists {
+		create = create.SetNillableNotes(&notes)
+	}
+
+	if vendorScoringConfigID, exists := m.VendorScoringConfigID(); exists {
+		create = create.SetVendorScoringConfigID(vendorScoringConfigID)
+	}
+
+	if entityID, exists := m.EntityID(); exists {
+		create = create.SetEntityID(entityID)
+	}
+
+	if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+		create = create.SetAssessmentResponseID(assessmentResponseID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorriskscore, err := client.VendorRiskScore.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorRiskScoreHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorriskscore.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorriskscore.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorriskscore.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorriskscore.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorriskscore.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorriskscore.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendorriskscore.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendorriskscore.OwnerID)
+		}
+
+		if questionKey, exists := m.QuestionKey(); exists {
+			create = create.SetQuestionKey(questionKey)
+		} else {
+			create = create.SetQuestionKey(vendorriskscore.QuestionKey)
+		}
+
+		if questionName, exists := m.QuestionName(); exists {
+			create = create.SetQuestionName(questionName)
+		} else {
+			create = create.SetQuestionName(vendorriskscore.QuestionName)
+		}
+
+		if questionDescription, exists := m.QuestionDescription(); exists {
+			create = create.SetNillableQuestionDescription(&questionDescription)
+		} else {
+			create = create.SetNillableQuestionDescription(vendorriskscore.QuestionDescription)
+		}
+
+		if questionCategory, exists := m.QuestionCategory(); exists {
+			create = create.SetQuestionCategory(questionCategory)
+		} else {
+			create = create.SetQuestionCategory(vendorriskscore.QuestionCategory)
+		}
+
+		if answerType, exists := m.AnswerType(); exists {
+			create = create.SetAnswerType(answerType)
+		} else {
+			create = create.SetAnswerType(vendorriskscore.AnswerType)
+		}
+
+		if impact, exists := m.Impact(); exists {
+			create = create.SetImpact(impact)
+		} else {
+			create = create.SetImpact(vendorriskscore.Impact)
+		}
+
+		if likelihood, exists := m.Likelihood(); exists {
+			create = create.SetLikelihood(likelihood)
+		} else {
+			create = create.SetLikelihood(vendorriskscore.Likelihood)
+		}
+
+		if score, exists := m.Score(); exists {
+			create = create.SetScore(score)
+		} else {
+			create = create.SetScore(vendorriskscore.Score)
+		}
+
+		if answer, exists := m.Answer(); exists {
+			create = create.SetNillableAnswer(&answer)
+		} else {
+			create = create.SetNillableAnswer(vendorriskscore.Answer)
+		}
+
+		if notes, exists := m.Notes(); exists {
+			create = create.SetNillableNotes(&notes)
+		} else {
+			create = create.SetNillableNotes(vendorriskscore.Notes)
+		}
+
+		if vendorScoringConfigID, exists := m.VendorScoringConfigID(); exists {
+			create = create.SetVendorScoringConfigID(vendorScoringConfigID)
+		} else {
+			create = create.SetVendorScoringConfigID(vendorriskscore.VendorScoringConfigID)
+		}
+
+		if entityID, exists := m.EntityID(); exists {
+			create = create.SetEntityID(entityID)
+		} else {
+			create = create.SetEntityID(vendorriskscore.EntityID)
+		}
+
+		if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+			create = create.SetAssessmentResponseID(assessmentResponseID)
+		} else {
+			create = create.SetAssessmentResponseID(vendorriskscore.AssessmentResponseID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorriskscore, err := client.VendorRiskScore.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorRiskScoreHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorriskscore.CreatedAt).
+			SetUpdatedAt(vendorriskscore.UpdatedAt).
+			SetCreatedBy(vendorriskscore.CreatedBy).
+			SetUpdatedBy(vendorriskscore.UpdatedBy).
+			SetDeletedAt(vendorriskscore.DeletedAt).
+			SetDeletedBy(vendorriskscore.DeletedBy).
+			SetTags(vendorriskscore.Tags).
+			SetOwnerID(vendorriskscore.OwnerID).
+			SetQuestionKey(vendorriskscore.QuestionKey).
+			SetQuestionName(vendorriskscore.QuestionName).
+			SetNillableQuestionDescription(vendorriskscore.QuestionDescription).
+			SetQuestionCategory(vendorriskscore.QuestionCategory).
+			SetAnswerType(vendorriskscore.AnswerType).
+			SetImpact(vendorriskscore.Impact).
+			SetLikelihood(vendorriskscore.Likelihood).
+			SetScore(vendorriskscore.Score).
+			SetNillableAnswer(vendorriskscore.Answer).
+			SetNillableNotes(vendorriskscore.Notes).
+			SetVendorScoringConfigID(vendorriskscore.VendorScoringConfigID).
+			SetEntityID(vendorriskscore.EntityID).
+			SetAssessmentResponseID(vendorriskscore.AssessmentResponseID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.VendorScoringConfigHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if questions, exists := m.Questions(); exists {
+		create = create.SetQuestions(questions)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorscoringconfig, err := client.VendorScoringConfig.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorScoringConfigHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorscoringconfig.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorscoringconfig.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorscoringconfig.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorscoringconfig.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorscoringconfig.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorscoringconfig.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendorscoringconfig.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendorscoringconfig.OwnerID)
+		}
+
+		if questions, exists := m.Questions(); exists {
+			create = create.SetQuestions(questions)
+		} else {
+			create = create.SetQuestions(vendorscoringconfig.Questions)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorscoringconfig, err := client.VendorScoringConfig.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorScoringConfigHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorscoringconfig.CreatedAt).
+			SetUpdatedAt(vendorscoringconfig.UpdatedAt).
+			SetCreatedBy(vendorscoringconfig.CreatedBy).
+			SetUpdatedBy(vendorscoringconfig.UpdatedBy).
+			SetDeletedAt(vendorscoringconfig.DeletedAt).
+			SetDeletedBy(vendorscoringconfig.DeletedBy).
+			SetTags(vendorscoringconfig.Tags).
+			SetOwnerID(vendorscoringconfig.OwnerID).
+			SetQuestions(vendorscoringconfig.Questions).
 			Save(ctx)
 		if err != nil {
 			return err

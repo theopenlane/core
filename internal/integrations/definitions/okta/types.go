@@ -30,6 +30,8 @@ type UserInput struct {
 	Search string `json:"search,omitempty" jsonschema:"title=User Search Expression,description=Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."`
 	// EnableGroupSync controls whether group and membership records are collected
 	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
+	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // CredentialSchema holds the Okta tenant credentials for one installation

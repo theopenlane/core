@@ -170,3 +170,6 @@ models:
   Map:
     model:
       - github.com/99designs/gqlgen/graphql.Map
+  VendorScoringQuestionsConfig:
+    model:
+      - github.com/theopenlane/core/common/models.VendorScoringQuestionsConfig

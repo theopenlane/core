@@ -446,6 +446,20 @@ func (_c *IntegrationCreate) SetProviderMetadataSnapshot(v map[string]interface{
 	return _c
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_c *IntegrationCreate) SetPrimaryDirectory(v bool) *IntegrationCreate {
+	_c.mutation.SetPrimaryDirectory(v)
+	return _c
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillablePrimaryDirectory(v *bool) *IntegrationCreate {
+	if v != nil {
+		_c.SetPrimaryDirectory(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationCreate) SetID(v string) *IntegrationCreate {
 	_c.mutation.SetID(v)
@@ -828,6 +842,10 @@ func (_c *IntegrationCreate) defaults() error {
 		v := integration.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
+		v := integration.DefaultPrimaryDirectory
+		_c.mutation.SetPrimaryDirectory(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integration.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultID (forgotten import generated/runtime?)")
@@ -860,6 +878,9 @@ func (_c *IntegrationCreate) check() error {
 		if err := integration.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Integration.status": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
+		return &ValidationError{Name: "primary_directory", err: errors.New(`generated: missing required field "Integration.primary_directory"`)}
 	}
 	return nil
 }
@@ -1004,6 +1025,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
 		_node.ProviderMetadataSnapshot = value
+	}
+	if value, ok := _c.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
+		_node.PrimaryDirectory = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

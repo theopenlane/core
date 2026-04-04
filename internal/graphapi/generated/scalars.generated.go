@@ -228,6 +228,16 @@ func (ec *executionContext) marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return res
 }
 
+func (ec *executionContext) unmarshalNVendorScoringQuestionsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, v any) (models.VendorScoringQuestionsConfig, error) {
+	var res models.VendorScoringQuestionsConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNVendorScoringQuestionsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, sel ast.SelectionSet, v models.VendorScoringQuestionsConfig) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
 	var res models.Address
 	err := res.UnmarshalGQL(v)
@@ -784,6 +794,22 @@ func (ec *executionContext) marshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	_ = ctx
 	res := graphql.MarshalUpload(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOVendorScoringQuestionsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, v any) (*models.VendorScoringQuestionsConfig, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.VendorScoringQuestionsConfig)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOVendorScoringQuestionsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, sel ast.SelectionSet, v *models.VendorScoringQuestionsConfig) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVersionBump(ctx context.Context, v any) (*models.VersionBump, error) {

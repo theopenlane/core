@@ -9,10 +9,8 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // VendorScoringConfig holds the schema definition for the VendorScoringConfig entity
@@ -83,18 +81,18 @@ func (VendorScoringConfig) Hooks() []ent.Hook {
 }
 
 // Policy of the VendorScoringConfig
-func (VendorScoringConfig) Policy() ent.Policy {
-	return policy.NewPolicy(
-		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
-		),
-	)
-}
+//func (VendorScoringConfig) Policy() ent.Policy {
+//	return policy.NewPolicy(
+//		policy.WithMutationRules(
+//			policy.CheckOrgWriteAccess(),
+//		),
+//	)
+//}
 
 // Annotations of the VendorScoringConfig
 func (VendorScoringConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SelfAccessChecks(),
+		//		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),

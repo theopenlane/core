@@ -3211,6 +3211,82 @@ type UserUpdatePayload struct {
 	User *generated.User `json:"user"`
 }
 
+// Return response for createBulkVendorRiskScore mutation
+type VendorRiskScoreBulkCreatePayload struct {
+	// Created vendorRiskScores
+	VendorRiskScores []*generated.VendorRiskScore `json:"vendorRiskScores,omitempty"`
+}
+
+// Return response for deleteBulkVendorRiskScore mutation
+type VendorRiskScoreBulkDeletePayload struct {
+	// Deleted vendorRiskScore IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVendorRiskScore mutation
+type VendorRiskScoreBulkUpdatePayload struct {
+	// Updated vendorRiskScores
+	VendorRiskScores []*generated.VendorRiskScore `json:"vendorRiskScores,omitempty"`
+	// IDs of the updated vendorRiskScores
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createVendorRiskScore mutation
+type VendorRiskScoreCreatePayload struct {
+	// Created vendorRiskScore
+	VendorRiskScore *generated.VendorRiskScore `json:"vendorRiskScore"`
+}
+
+// Return response for deleteVendorRiskScore mutation
+type VendorRiskScoreDeletePayload struct {
+	// Deleted vendorRiskScore ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateVendorRiskScore mutation
+type VendorRiskScoreUpdatePayload struct {
+	// Updated vendorRiskScore
+	VendorRiskScore *generated.VendorRiskScore `json:"vendorRiskScore"`
+}
+
+// Return response for createBulkVendorScoringConfig mutation
+type VendorScoringConfigBulkCreatePayload struct {
+	// Created vendorScoringConfigs
+	VendorScoringConfigs []*generated.VendorScoringConfig `json:"vendorScoringConfigs,omitempty"`
+}
+
+// Return response for deleteBulkVendorScoringConfig mutation
+type VendorScoringConfigBulkDeletePayload struct {
+	// Deleted vendorScoringConfig IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVendorScoringConfig mutation
+type VendorScoringConfigBulkUpdatePayload struct {
+	// Updated vendorScoringConfigs
+	VendorScoringConfigs []*generated.VendorScoringConfig `json:"vendorScoringConfigs,omitempty"`
+	// IDs of the updated vendorScoringConfigs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createVendorScoringConfig mutation
+type VendorScoringConfigCreatePayload struct {
+	// Created vendorScoringConfig
+	VendorScoringConfig *generated.VendorScoringConfig `json:"vendorScoringConfig"`
+}
+
+// Return response for deleteVendorScoringConfig mutation
+type VendorScoringConfigDeletePayload struct {
+	// Deleted vendorScoringConfig ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateVendorScoringConfig mutation
+type VendorScoringConfigUpdatePayload struct {
+	// Updated vendorScoringConfig
+	VendorScoringConfig *generated.VendorScoringConfig `json:"vendorScoringConfig"`
+}
+
 // Return response for createBulkVulnerability mutation
 type VulnerabilityBulkCreatePayload struct {
 	// Created vulnerabilitys

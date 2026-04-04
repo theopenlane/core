@@ -115,6 +115,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -342,6 +344,10 @@ type Client struct {
 	User *UserClient
 	// UserSetting is the client for interacting with the UserSetting builders.
 	UserSetting *UserSettingClient
+	// VendorRiskScore is the client for interacting with the VendorRiskScore builders.
+	VendorRiskScore *VendorRiskScoreClient
+	// VendorScoringConfig is the client for interacting with the VendorScoringConfig builders.
+	VendorScoringConfig *VendorScoringConfigClient
 	// Vulnerability is the client for interacting with the Vulnerability builders.
 	Vulnerability *VulnerabilityClient
 	// Webauthn is the client for interacting with the Webauthn builders.
@@ -476,6 +482,8 @@ func (c *Client) init() {
 	c.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
+	c.VendorRiskScore = NewVendorRiskScoreClient(c.config)
+	c.VendorScoringConfig = NewVendorScoringConfigClient(c.config)
 	c.Vulnerability = NewVulnerabilityClient(c.config)
 	c.Webauthn = NewWebauthnClient(c.config)
 	c.WorkflowAssignment = NewWorkflowAssignmentClient(c.config)
@@ -793,6 +801,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TrustCenterWatermarkConfig: NewTrustCenterWatermarkConfigClient(cfg),
 		User:                       NewUserClient(cfg),
 		UserSetting:                NewUserSettingClient(cfg),
+		VendorRiskScore:            NewVendorRiskScoreClient(cfg),
+		VendorScoringConfig:        NewVendorScoringConfigClient(cfg),
 		Vulnerability:              NewVulnerabilityClient(cfg),
 		Webauthn:                   NewWebauthnClient(cfg),
 		WorkflowAssignment:         NewWorkflowAssignmentClient(cfg),
@@ -917,6 +927,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TrustCenterWatermarkConfig: NewTrustCenterWatermarkConfigClient(cfg),
 		User:                       NewUserClient(cfg),
 		UserSetting:                NewUserSettingClient(cfg),
+		VendorRiskScore:            NewVendorRiskScoreClient(cfg),
+		VendorScoringConfig:        NewVendorScoringConfigClient(cfg),
 		Vulnerability:              NewVulnerabilityClient(cfg),
 		Webauthn:                   NewWebauthnClient(cfg),
 		WorkflowAssignment:         NewWorkflowAssignmentClient(cfg),
@@ -977,9 +989,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
 		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
 		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
-		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
-		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
-		c.WorkflowProposal,
+		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
+		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
+		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -1011,9 +1023,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
 		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
 		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
-		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
-		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
-		c.WorkflowProposal,
+		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
+		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
+		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1286,6 +1298,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.User.mutate(ctx, m)
 	case *UserSettingMutation:
 		return c.UserSetting.mutate(ctx, m)
+	case *VendorRiskScoreMutation:
+		return c.VendorRiskScore.mutate(ctx, m)
+	case *VendorScoringConfigMutation:
+		return c.VendorScoringConfig.mutate(ctx, m)
 	case *VulnerabilityMutation:
 		return c.Vulnerability.mutate(ctx, m)
 	case *WebauthnMutation:
@@ -2481,6 +2497,25 @@ func (c *AssessmentResponseClient) QueryDocument(_m *AssessmentResponse) *Docume
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorRiskScores queries the vendor_risk_scores edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryVendorRiskScores(_m *AssessmentResponse) *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessmentresponse.VendorRiskScoresTable, assessmentresponse.VendorRiskScoresColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9361,6 +9396,25 @@ func (c *EntityClient) QueryAssessmentResponses(_m *Entity) *AssessmentResponseQ
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorRiskScores queries the vendor_risk_scores edge of a Entity.
+func (c *EntityClient) QueryVendorRiskScores(_m *Entity) *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.VendorRiskScoresTable, entity.VendorRiskScoresColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -22475,6 +22529,44 @@ func (c *OrganizationClient) QueryDiscussions(_m *Organization) *DiscussionQuery
 	return query
 }
 
+// QueryVendorScoringConfigs queries the vendor_scoring_configs edge of a Organization.
+func (c *OrganizationClient) QueryVendorScoringConfigs(_m *Organization) *VendorScoringConfigQuery {
+	query := (&VendorScoringConfigClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(vendorscoringconfig.Table, vendorscoringconfig.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorScoringConfigsTable, organization.VendorScoringConfigsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.VendorScoringConfig
+		step.Edge.Schema = schemaConfig.VendorScoringConfig
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorRiskScores queries the vendor_risk_scores edge of a Organization.
+func (c *OrganizationClient) QueryVendorRiskScores(_m *Organization) *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorRiskScoresTable, organization.VendorRiskScoresColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -33970,6 +34062,390 @@ func (c *UserSettingClient) mutate(ctx context.Context, m *UserSettingMutation) 
 	}
 }
 
+// VendorRiskScoreClient is a client for the VendorRiskScore schema.
+type VendorRiskScoreClient struct {
+	config
+}
+
+// NewVendorRiskScoreClient returns a client for the VendorRiskScore from the given config.
+func NewVendorRiskScoreClient(c config) *VendorRiskScoreClient {
+	return &VendorRiskScoreClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorriskscore.Hooks(f(g(h())))`.
+func (c *VendorRiskScoreClient) Use(hooks ...Hook) {
+	c.hooks.VendorRiskScore = append(c.hooks.VendorRiskScore, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorriskscore.Intercept(f(g(h())))`.
+func (c *VendorRiskScoreClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorRiskScore = append(c.inters.VendorRiskScore, interceptors...)
+}
+
+// Create returns a builder for creating a VendorRiskScore entity.
+func (c *VendorRiskScoreClient) Create() *VendorRiskScoreCreate {
+	mutation := newVendorRiskScoreMutation(c.config, OpCreate)
+	return &VendorRiskScoreCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorRiskScore entities.
+func (c *VendorRiskScoreClient) CreateBulk(builders ...*VendorRiskScoreCreate) *VendorRiskScoreCreateBulk {
+	return &VendorRiskScoreCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorRiskScoreClient) MapCreateBulk(slice any, setFunc func(*VendorRiskScoreCreate, int)) *VendorRiskScoreCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorRiskScoreCreateBulk{err: fmt.Errorf("calling to VendorRiskScoreClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorRiskScoreCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorRiskScoreCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorRiskScore.
+func (c *VendorRiskScoreClient) Update() *VendorRiskScoreUpdate {
+	mutation := newVendorRiskScoreMutation(c.config, OpUpdate)
+	return &VendorRiskScoreUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorRiskScoreClient) UpdateOne(_m *VendorRiskScore) *VendorRiskScoreUpdateOne {
+	mutation := newVendorRiskScoreMutation(c.config, OpUpdateOne, withVendorRiskScore(_m))
+	return &VendorRiskScoreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorRiskScoreClient) UpdateOneID(id string) *VendorRiskScoreUpdateOne {
+	mutation := newVendorRiskScoreMutation(c.config, OpUpdateOne, withVendorRiskScoreID(id))
+	return &VendorRiskScoreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorRiskScore.
+func (c *VendorRiskScoreClient) Delete() *VendorRiskScoreDelete {
+	mutation := newVendorRiskScoreMutation(c.config, OpDelete)
+	return &VendorRiskScoreDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorRiskScoreClient) DeleteOne(_m *VendorRiskScore) *VendorRiskScoreDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorRiskScoreClient) DeleteOneID(id string) *VendorRiskScoreDeleteOne {
+	builder := c.Delete().Where(vendorriskscore.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorRiskScoreDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorRiskScore.
+func (c *VendorRiskScoreClient) Query() *VendorRiskScoreQuery {
+	return &VendorRiskScoreQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorRiskScore},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorRiskScore entity by its id.
+func (c *VendorRiskScoreClient) Get(ctx context.Context, id string) (*VendorRiskScore, error) {
+	return c.Query().Where(vendorriskscore.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorRiskScoreClient) GetX(ctx context.Context, id string) *VendorRiskScore {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a VendorRiskScore.
+func (c *VendorRiskScoreClient) QueryOwner(_m *VendorRiskScore) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, vendorriskscore.OwnerTable, vendorriskscore.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorScoringConfig queries the vendor_scoring_config edge of a VendorRiskScore.
+func (c *VendorRiskScoreClient) QueryVendorScoringConfig(_m *VendorRiskScore) *VendorScoringConfigQuery {
+	query := (&VendorScoringConfigClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, id),
+			sqlgraph.To(vendorscoringconfig.Table, vendorscoringconfig.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorriskscore.VendorScoringConfigTable, vendorriskscore.VendorScoringConfigColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.VendorScoringConfig
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntity queries the entity edge of a VendorRiskScore.
+func (c *VendorRiskScoreClient) QueryEntity(_m *VendorRiskScore) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorriskscore.EntityTable, vendorriskscore.EntityColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponse queries the assessment_response edge of a VendorRiskScore.
+func (c *VendorRiskScoreClient) QueryAssessmentResponse(_m *VendorRiskScore) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorriskscore.Table, vendorriskscore.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorriskscore.AssessmentResponseTable, vendorriskscore.AssessmentResponseColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorRiskScoreClient) Hooks() []Hook {
+	hooks := c.hooks.VendorRiskScore
+	return append(hooks[:len(hooks):len(hooks)], vendorriskscore.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorRiskScoreClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorRiskScore
+	return append(inters[:len(inters):len(inters)], vendorriskscore.Interceptors[:]...)
+}
+
+func (c *VendorRiskScoreClient) mutate(ctx context.Context, m *VendorRiskScoreMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorRiskScoreCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorRiskScoreUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorRiskScoreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorRiskScoreDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorRiskScore mutation op: %q", m.Op())
+	}
+}
+
+// VendorScoringConfigClient is a client for the VendorScoringConfig schema.
+type VendorScoringConfigClient struct {
+	config
+}
+
+// NewVendorScoringConfigClient returns a client for the VendorScoringConfig from the given config.
+func NewVendorScoringConfigClient(c config) *VendorScoringConfigClient {
+	return &VendorScoringConfigClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorscoringconfig.Hooks(f(g(h())))`.
+func (c *VendorScoringConfigClient) Use(hooks ...Hook) {
+	c.hooks.VendorScoringConfig = append(c.hooks.VendorScoringConfig, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorscoringconfig.Intercept(f(g(h())))`.
+func (c *VendorScoringConfigClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorScoringConfig = append(c.inters.VendorScoringConfig, interceptors...)
+}
+
+// Create returns a builder for creating a VendorScoringConfig entity.
+func (c *VendorScoringConfigClient) Create() *VendorScoringConfigCreate {
+	mutation := newVendorScoringConfigMutation(c.config, OpCreate)
+	return &VendorScoringConfigCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorScoringConfig entities.
+func (c *VendorScoringConfigClient) CreateBulk(builders ...*VendorScoringConfigCreate) *VendorScoringConfigCreateBulk {
+	return &VendorScoringConfigCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorScoringConfigClient) MapCreateBulk(slice any, setFunc func(*VendorScoringConfigCreate, int)) *VendorScoringConfigCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorScoringConfigCreateBulk{err: fmt.Errorf("calling to VendorScoringConfigClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorScoringConfigCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorScoringConfigCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorScoringConfig.
+func (c *VendorScoringConfigClient) Update() *VendorScoringConfigUpdate {
+	mutation := newVendorScoringConfigMutation(c.config, OpUpdate)
+	return &VendorScoringConfigUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorScoringConfigClient) UpdateOne(_m *VendorScoringConfig) *VendorScoringConfigUpdateOne {
+	mutation := newVendorScoringConfigMutation(c.config, OpUpdateOne, withVendorScoringConfig(_m))
+	return &VendorScoringConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorScoringConfigClient) UpdateOneID(id string) *VendorScoringConfigUpdateOne {
+	mutation := newVendorScoringConfigMutation(c.config, OpUpdateOne, withVendorScoringConfigID(id))
+	return &VendorScoringConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorScoringConfig.
+func (c *VendorScoringConfigClient) Delete() *VendorScoringConfigDelete {
+	mutation := newVendorScoringConfigMutation(c.config, OpDelete)
+	return &VendorScoringConfigDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorScoringConfigClient) DeleteOne(_m *VendorScoringConfig) *VendorScoringConfigDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorScoringConfigClient) DeleteOneID(id string) *VendorScoringConfigDeleteOne {
+	builder := c.Delete().Where(vendorscoringconfig.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorScoringConfigDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorScoringConfig.
+func (c *VendorScoringConfigClient) Query() *VendorScoringConfigQuery {
+	return &VendorScoringConfigQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorScoringConfig},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorScoringConfig entity by its id.
+func (c *VendorScoringConfigClient) Get(ctx context.Context, id string) (*VendorScoringConfig, error) {
+	return c.Query().Where(vendorscoringconfig.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorScoringConfigClient) GetX(ctx context.Context, id string) *VendorScoringConfig {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a VendorScoringConfig.
+func (c *VendorScoringConfigClient) QueryOwner(_m *VendorScoringConfig) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorscoringconfig.Table, vendorscoringconfig.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, vendorscoringconfig.OwnerTable, vendorscoringconfig.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.VendorScoringConfig
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorRiskScores queries the vendor_risk_scores edge of a VendorScoringConfig.
+func (c *VendorScoringConfigClient) QueryVendorRiskScores(_m *VendorScoringConfig) *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorscoringconfig.Table, vendorscoringconfig.FieldID, id),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorscoringconfig.VendorRiskScoresTable, vendorscoringconfig.VendorRiskScoresColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorScoringConfigClient) Hooks() []Hook {
+	hooks := c.hooks.VendorScoringConfig
+	return append(hooks[:len(hooks):len(hooks)], vendorscoringconfig.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorScoringConfigClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorScoringConfig
+	return append(inters[:len(inters):len(inters)], vendorscoringconfig.Interceptors[:]...)
+}
+
+func (c *VendorScoringConfigClient) mutate(ctx context.Context, m *VendorScoringConfigMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorScoringConfigCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorScoringConfigUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorScoringConfigUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorScoringConfigDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorScoringConfig mutation op: %q", m.Op())
+	}
+}
+
 // VulnerabilityClient is a client for the Vulnerability schema.
 type VulnerabilityClient struct {
 	config
@@ -36765,9 +37241,9 @@ type (
 		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
 		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
 		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
-		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
-		WorkflowProposal []ent.Hook
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -36789,8 +37265,9 @@ type (
 		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
 		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
 		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
-		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
 		WorkflowProposal []ent.Interceptor
 	}
 )

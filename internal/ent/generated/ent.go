@@ -108,6 +108,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -273,6 +275,8 @@ func checkColumn(t, c string) error {
 			trustcenterwatermarkconfig.Table: trustcenterwatermarkconfig.ValidColumn,
 			user.Table:                       user.ValidColumn,
 			usersetting.Table:                usersetting.ValidColumn,
+			vendorriskscore.Table:            vendorriskscore.ValidColumn,
+			vendorscoringconfig.Table:        vendorscoringconfig.ValidColumn,
 			vulnerability.Table:              vulnerability.ValidColumn,
 			webauthn.Table:                   webauthn.ValidColumn,
 			workflowassignment.Table:         workflowassignment.ValidColumn,

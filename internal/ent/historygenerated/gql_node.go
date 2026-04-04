@@ -81,6 +81,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
@@ -444,6 +446,16 @@ var usersettinghistoryImplementors = []string{"UserSettingHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*UserSettingHistory) IsNode() {}
+
+var vendorriskscorehistoryImplementors = []string{"VendorRiskScoreHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorRiskScoreHistory) IsNode() {}
+
+var vendorscoringconfighistoryImplementors = []string{"VendorScoringConfigHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorScoringConfigHistory) IsNode() {}
 
 var vulnerabilityhistoryImplementors = []string{"VulnerabilityHistory", "Node"}
 
@@ -1164,6 +1176,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(usersettinghistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, usersettinghistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorriskscorehistory.Table:
+		query := c.VendorRiskScoreHistory.Query().
+			Where(vendorriskscorehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorriskscorehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorscoringconfighistory.Table:
+		query := c.VendorScoringConfigHistory.Query().
+			Where(vendorscoringconfighistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorscoringconfighistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2412,6 +2442,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.UserSettingHistory.Query().
 			Where(usersettinghistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, usersettinghistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorriskscorehistory.Table:
+		query := c.VendorRiskScoreHistory.Query().
+			Where(vendorriskscorehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorriskscorehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorscoringconfighistory.Table:
+		query := c.VendorScoringConfigHistory.Query().
+			Where(vendorscoringconfighistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorscoringconfighistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

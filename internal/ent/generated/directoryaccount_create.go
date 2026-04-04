@@ -608,6 +608,20 @@ func (_c *DirectoryAccountCreate) SetNillableSourceVersion(v *string) *Directory
 	return _c
 }
 
+// SetPrimarySource sets the "primary_source" field.
+func (_c *DirectoryAccountCreate) SetPrimarySource(v bool) *DirectoryAccountCreate {
+	_c.mutation.SetPrimarySource(v)
+	return _c
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillablePrimarySource(v *bool) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetPrimarySource(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *DirectoryAccountCreate) SetID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetID(v)
@@ -821,6 +835,10 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultProfileHash
 		_c.mutation.SetProfileHash(v)
 	}
+	if _, ok := _c.mutation.PrimarySource(); !ok {
+		v := directoryaccount.DefaultPrimarySource
+		_c.mutation.SetPrimarySource(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if directoryaccount.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultID (forgotten import generated/runtime?)")
@@ -900,6 +918,9 @@ func (_c *DirectoryAccountCreate) check() error {
 	}
 	if _, ok := _c.mutation.ProfileHash(); !ok {
 		return &ValidationError{Name: "profile_hash", err: errors.New(`generated: missing required field "DirectoryAccount.profile_hash"`)}
+	}
+	if _, ok := _c.mutation.PrimarySource(); !ok {
+		return &ValidationError{Name: "primary_source", err: errors.New(`generated: missing required field "DirectoryAccount.primary_source"`)}
 	}
 	return nil
 }
@@ -1080,6 +1101,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.SourceVersion(); ok {
 		_spec.SetField(directoryaccount.FieldSourceVersion, field.TypeString, value)
 		_node.SourceVersion = &value
+	}
+	if value, ok := _c.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
+		_node.PrimarySource = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -52,6 +52,8 @@ type UserInput struct {
 	IncludeSuspended bool `json:"includeSuspendedUsers,omitempty" jsonschema:"title=Include Suspended Users"`
 	// EnableGroupSync controls whether group membership is collected
 	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
+	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // InstallationMetadata holds the stable Google Workspace directory target selected for one installation

@@ -134,6 +134,8 @@ const (
 	FieldRiskRating = "risk_rating"
 	// FieldRiskScore holds the string denoting the risk_score field in the database.
 	FieldRiskScore = "risk_score"
+	// FieldRiskScoreCoverage holds the string denoting the risk_score_coverage field in the database.
+	FieldRiskScoreCoverage = "risk_score_coverage"
 	// FieldTier holds the string denoting the tier field in the database.
 	FieldTier = "tier"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
@@ -214,6 +216,7 @@ var Columns = []string{
 	FieldLinks,
 	FieldRiskRating,
 	FieldRiskScore,
+	FieldRiskScoreCoverage,
 	FieldTier,
 	FieldReviewFrequency,
 	FieldNextReviewAt,
@@ -298,6 +301,16 @@ func StatusValidator(s enums.EntityStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("entityhistory: invalid enum value for status field: %q", s)
+	}
+}
+
+// TierValidator is a validator for the "tier" field enum values. It is called by the builders before save.
+func TierValidator(t enums.VendorTier) error {
+	switch t.String() {
+	case "CRITICAL", "HIGH", "STANDARD", "LOW":
+		return nil
+	default:
+		return fmt.Errorf("entityhistory: invalid enum value for tier field: %q", t)
 	}
 }
 
@@ -581,6 +594,11 @@ func ByRiskScore(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskScore, opts...).ToFunc()
 }
 
+// ByRiskScoreCoverage orders the results by the risk_score_coverage field.
+func ByRiskScoreCoverage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskScoreCoverage, opts...).ToFunc()
+}
+
 // ByTier orders the results by the tier field.
 func ByTier(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTier, opts...).ToFunc()
@@ -628,6 +646,13 @@ var (
 	_ graphql.Marshaler = (*enums.EntityStatus)(nil)
 	// enums.EntityStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.EntityStatus)(nil)
+)
+
+var (
+	// enums.VendorTier must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.VendorTier)(nil)
+	// enums.VendorTier must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.VendorTier)(nil)
 )
 
 var (

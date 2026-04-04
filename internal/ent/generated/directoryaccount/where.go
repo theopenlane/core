@@ -258,6 +258,11 @@ func SourceVersion(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldSourceVersion, v))
 }
 
+// PrimarySource applies equality check predicate on the "primary_source" field. It's identical to PrimarySourceEQ.
+func PrimarySource(v bool) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldPrimarySource, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldCreatedAt, v))
@@ -2971,6 +2976,16 @@ func SourceVersionEqualFold(v string) predicate.DirectoryAccount {
 // SourceVersionContainsFold applies the ContainsFold predicate on the "source_version" field.
 func SourceVersionContainsFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldSourceVersion, v))
+}
+
+// PrimarySourceEQ applies the EQ predicate on the "primary_source" field.
+func PrimarySourceEQ(v bool) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldPrimarySource, v))
+}
+
+// PrimarySourceNEQ applies the NEQ predicate on the "primary_source" field.
+func PrimarySourceNEQ(v bool) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldPrimarySource, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

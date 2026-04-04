@@ -158,6 +158,16 @@ func (ec *executionContext) marshalNTestingProcedures2githubᚗcomᚋtheopenlane
 	return v
 }
 
+func (ec *executionContext) unmarshalNVendorScoringQuestionsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, v any) (models.VendorScoringQuestionsConfig, error) {
+	var res models.VendorScoringQuestionsConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNVendorScoringQuestionsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, sel ast.SelectionSet, v models.VendorScoringQuestionsConfig) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
 	var res models.Address
 	err := res.UnmarshalGQL(v)

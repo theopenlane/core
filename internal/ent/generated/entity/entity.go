@@ -126,6 +126,8 @@ const (
 	FieldRiskRating = "risk_rating"
 	// FieldRiskScore holds the string denoting the risk_score field in the database.
 	FieldRiskScore = "risk_score"
+	// FieldRiskScoreCoverage holds the string denoting the risk_score_coverage field in the database.
+	FieldRiskScoreCoverage = "risk_score_coverage"
 	// FieldTier holds the string denoting the tier field in the database.
 	FieldTier = "tier"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
@@ -184,6 +186,8 @@ const (
 	EdgeCampaigns = "campaigns"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
+	EdgeVendorRiskScores = "vendor_risk_scores"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeSubprocessors holds the string denoting the subprocessors edge name in mutations.
@@ -345,6 +349,13 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "entity_id"
+	// VendorRiskScoresTable is the table that holds the vendor_risk_scores relation/edge.
+	VendorRiskScoresTable = "vendor_risk_scores"
+	// VendorRiskScoresInverseTable is the table name for the VendorRiskScore entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorriskscore" package.
+	VendorRiskScoresInverseTable = "vendor_risk_scores"
+	// VendorRiskScoresColumn is the table column denoting the vendor_risk_scores relation/edge.
+	VendorRiskScoresColumn = "entity_vendor_risk_scores"
 	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
 	IntegrationsTable = "entity_integrations"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -477,6 +488,7 @@ var Columns = []string{
 	FieldLinks,
 	FieldRiskRating,
 	FieldRiskScore,
+	FieldRiskScoreCoverage,
 	FieldTier,
 	FieldReviewFrequency,
 	FieldNextReviewAt,
@@ -629,6 +641,16 @@ func StatusValidator(s enums.EntityStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("entity: invalid enum value for status field: %q", s)
+	}
+}
+
+// TierValidator is a validator for the "tier" field enum values. It is called by the builders before save.
+func TierValidator(t enums.VendorTier) error {
+	switch t.String() {
+	case "CRITICAL", "HIGH", "STANDARD", "LOW":
+		return nil
+	default:
+		return fmt.Errorf("entity: invalid enum value for tier field: %q", t)
 	}
 }
 
@@ -897,6 +919,11 @@ func ByRiskScore(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskScore, opts...).ToFunc()
 }
 
+// ByRiskScoreCoverage orders the results by the risk_score_coverage field.
+func ByRiskScoreCoverage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskScoreCoverage, opts...).ToFunc()
+}
+
 // ByTier orders the results by the tier field.
 func ByTier(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTier, opts...).ToFunc()
@@ -1153,6 +1180,20 @@ func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponsesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVendorRiskScoresCount orders the results by vendor_risk_scores count.
+func ByVendorRiskScoresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorRiskScoresStep(), opts...)
+	}
+}
+
+// ByVendorRiskScores orders the results by vendor_risk_scores terms.
+func ByVendorRiskScores(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorRiskScoresStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1470,6 +1511,13 @@ func newAssessmentResponsesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
 	)
 }
+func newVendorRiskScoresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorRiskScoresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+	)
+}
 func newIntegrationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1567,6 +1615,13 @@ var (
 	_ graphql.Marshaler = (*enums.EntityStatus)(nil)
 	// enums.EntityStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.EntityStatus)(nil)
+)
+
+var (
+	// enums.VendorTier must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.VendorTier)(nil)
+	// enums.VendorTier must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.VendorTier)(nil)
 )
 
 var (

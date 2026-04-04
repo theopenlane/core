@@ -1,0 +1,285 @@
+mutation CreateBulkCSVVendorRiskScore($input: Upload!) {
+  createBulkCSVVendorRiskScore(input: $input) {
+    vendorRiskScores {
+      answer
+      answerType
+      assessmentResponseID
+      createdAt
+      createdBy
+      entityID
+      id
+      impact
+      likelihood
+      notes
+      ownerID
+      questionCategory
+      questionDescription
+      questionKey
+      questionName
+      score
+      tags
+      updatedAt
+      updatedBy
+      vendorScoringConfigID
+    }
+  }
+}
+
+mutation CreateBulkVendorRiskScore($input: [CreateVendorRiskScoreInput!]) {
+  createBulkVendorRiskScore(input: $input) {
+    vendorRiskScores {
+      answer
+      answerType
+      assessmentResponseID
+      createdAt
+      createdBy
+      entityID
+      id
+      impact
+      likelihood
+      notes
+      ownerID
+      questionCategory
+      questionDescription
+      questionKey
+      questionName
+      score
+      tags
+      updatedAt
+      updatedBy
+      vendorScoringConfigID
+    }
+  }
+}
+
+mutation CreateVendorRiskScore($input: CreateVendorRiskScoreInput!) {
+  createVendorRiskScore(input: $input) {
+    vendorRiskScore {
+      answer
+      answerType
+      assessmentResponseID
+      createdAt
+      createdBy
+      entityID
+      id
+      impact
+      likelihood
+      notes
+      ownerID
+      questionCategory
+      questionDescription
+      questionKey
+      questionName
+      score
+      tags
+      updatedAt
+      updatedBy
+      vendorScoringConfigID
+    }
+  }
+}
+
+mutation DeleteBulkVendorRiskScore($ids: [ID!]!) {
+  deleteBulkVendorRiskScore(ids: $ids) {
+    deletedIDs
+  }
+}
+
+mutation DeleteVendorRiskScore($deleteVendorRiskScoreId: ID!) {
+  deleteVendorRiskScore(id: $deleteVendorRiskScoreId) {
+    deletedID
+  }
+}
+
+query GetAllVendorRiskScores($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorRiskScoreOrder!]) {
+  vendorRiskScores(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        answer
+        answerType
+        assessmentResponseID
+        createdAt
+        createdBy
+        entityID
+        id
+        impact
+        likelihood
+        notes
+        ownerID
+        questionCategory
+        questionDescription
+        questionKey
+        questionName
+        score
+        tags
+        updatedAt
+        updatedBy
+        vendorScoringConfigID
+      }
+    }
+  }
+}
+
+query GetVendorRiskScoreByID($vendorRiskScoreId: ID!) {
+  vendorRiskScore(id: $vendorRiskScoreId) {
+    answer
+    answerType
+    assessmentResponseID
+    createdAt
+    createdBy
+    entityID
+    id
+    impact
+    likelihood
+    notes
+    ownerID
+    questionCategory
+    questionDescription
+    questionKey
+    questionName
+    score
+    tags
+    updatedAt
+    updatedBy
+    vendorScoringConfigID
+  }
+}
+
+query GetVendorRiskScores($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorRiskScoreOrder!], $where: VendorRiskScoreWhereInput) {
+  vendorRiskScores(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        answer
+        answerType
+        assessmentResponseID
+        createdAt
+        createdBy
+        entityID
+        id
+        impact
+        likelihood
+        notes
+        ownerID
+        questionCategory
+        questionDescription
+        questionKey
+        questionName
+        score
+        tags
+        updatedAt
+        updatedBy
+        vendorScoringConfigID
+      }
+    }
+  }
+}
+
+mutation UpdateBulkCSVVendorRiskScore($input: Upload!) {
+  updateBulkCSVVendorRiskScore(input: $input) {
+    vendorRiskScores {
+      answer
+      answerType
+      assessmentResponseID
+      createdAt
+      createdBy
+      entityID
+      id
+      impact
+      likelihood
+      notes
+      ownerID
+      questionCategory
+      questionDescription
+      questionKey
+      questionName
+      score
+      tags
+      updatedAt
+      updatedBy
+      vendorScoringConfigID
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkVendorRiskScore($ids: [ID!]!, $input: UpdateVendorRiskScoreInput!) {
+  updateBulkVendorRiskScore(ids: $ids, input: $input) {
+    vendorRiskScores {
+      answer
+      answerType
+      assessmentResponseID
+      createdAt
+      createdBy
+      entityID
+      id
+      impact
+      likelihood
+      notes
+      ownerID
+      questionCategory
+      questionDescription
+      questionKey
+      questionName
+      score
+      tags
+      updatedAt
+      updatedBy
+      vendorScoringConfigID
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateVendorRiskScore($updateVendorRiskScoreId: ID!, $input: UpdateVendorRiskScoreInput!) {
+  updateVendorRiskScore(id: $updateVendorRiskScoreId, input: $input) {
+    vendorRiskScore {
+      answer
+      answerType
+      assessmentResponseID
+      createdAt
+      createdBy
+      entityID
+      id
+      impact
+      likelihood
+      notes
+      ownerID
+      questionCategory
+      questionDescription
+      questionKey
+      questionName
+      score
+      tags
+      updatedAt
+      updatedBy
+      vendorScoringConfigID
+    }
+  }
+}

@@ -1,0 +1,177 @@
+mutation CreateBulkCSVVendorScoringConfig($input: Upload!) {
+  createBulkCSVVendorScoringConfig(input: $input) {
+    vendorScoringConfigs {
+      createdAt
+      createdBy
+      id
+      ownerID
+      questions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkVendorScoringConfig($input: [CreateVendorScoringConfigInput!]) {
+  createBulkVendorScoringConfig(input: $input) {
+    vendorScoringConfigs {
+      createdAt
+      createdBy
+      id
+      ownerID
+      questions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateVendorScoringConfig($input: CreateVendorScoringConfigInput!) {
+  createVendorScoringConfig(input: $input) {
+    vendorScoringConfig {
+      createdAt
+      createdBy
+      id
+      ownerID
+      questions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteBulkVendorScoringConfig($ids: [ID!]!) {
+  deleteBulkVendorScoringConfig(ids: $ids) {
+    deletedIDs
+  }
+}
+
+mutation DeleteVendorScoringConfig($deleteVendorScoringConfigId: ID!) {
+  deleteVendorScoringConfig(id: $deleteVendorScoringConfigId) {
+    deletedID
+  }
+}
+
+query GetAllVendorScoringConfigs($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorScoringConfigOrder!]) {
+  vendorScoringConfigs(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        ownerID
+        questions
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetVendorScoringConfigByID($vendorScoringConfigId: ID!) {
+  vendorScoringConfig(id: $vendorScoringConfigId) {
+    createdAt
+    createdBy
+    id
+    ownerID
+    questions
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetVendorScoringConfigs($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorScoringConfigOrder!], $where: VendorScoringConfigWhereInput) {
+  vendorScoringConfigs(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        ownerID
+        questions
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateBulkCSVVendorScoringConfig($input: Upload!) {
+  updateBulkCSVVendorScoringConfig(input: $input) {
+    vendorScoringConfigs {
+      createdAt
+      createdBy
+      id
+      ownerID
+      questions
+      tags
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkVendorScoringConfig($ids: [ID!]!, $input: UpdateVendorScoringConfigInput!) {
+  updateBulkVendorScoringConfig(ids: $ids, input: $input) {
+    vendorScoringConfigs {
+      createdAt
+      createdBy
+      id
+      ownerID
+      questions
+      tags
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateVendorScoringConfig($updateVendorScoringConfigId: ID!, $input: UpdateVendorScoringConfigInput!) {
+  updateVendorScoringConfig(id: $updateVendorScoringConfigId, input: $input) {
+    vendorScoringConfig {
+      createdAt
+      createdBy
+      id
+      ownerID
+      questions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

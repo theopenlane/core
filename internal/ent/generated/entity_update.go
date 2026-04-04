@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1056,14 +1057,41 @@ func (_u *EntityUpdate) ClearRiskScore() *EntityUpdate {
 	return _u
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_u *EntityUpdate) SetRiskScoreCoverage(v int) *EntityUpdate {
+	_u.mutation.ResetRiskScoreCoverage()
+	_u.mutation.SetRiskScoreCoverage(v)
+	return _u
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableRiskScoreCoverage(v *int) *EntityUpdate {
+	if v != nil {
+		_u.SetRiskScoreCoverage(*v)
+	}
+	return _u
+}
+
+// AddRiskScoreCoverage adds value to the "risk_score_coverage" field.
+func (_u *EntityUpdate) AddRiskScoreCoverage(v int) *EntityUpdate {
+	_u.mutation.AddRiskScoreCoverage(v)
+	return _u
+}
+
+// ClearRiskScoreCoverage clears the value of the "risk_score_coverage" field.
+func (_u *EntityUpdate) ClearRiskScoreCoverage() *EntityUpdate {
+	_u.mutation.ClearRiskScoreCoverage()
+	return _u
+}
+
 // SetTier sets the "tier" field.
-func (_u *EntityUpdate) SetTier(v string) *EntityUpdate {
+func (_u *EntityUpdate) SetTier(v enums.VendorTier) *EntityUpdate {
 	_u.mutation.SetTier(v)
 	return _u
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_u *EntityUpdate) SetNillableTier(v *string) *EntityUpdate {
+func (_u *EntityUpdate) SetNillableTier(v *enums.VendorTier) *EntityUpdate {
 	if v != nil {
 		_u.SetTier(*v)
 	}
@@ -1416,6 +1444,21 @@ func (_u *EntityUpdate) AddAssessmentResponses(v ...*AssessmentResponse) *Entity
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_u *EntityUpdate) AddVendorRiskScoreIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *EntityUpdate) AddVendorRiskScores(v ...*VendorRiskScore) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorRiskScoreIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -1883,6 +1926,27 @@ func (_u *EntityUpdate) RemoveAssessmentResponses(v ...*AssessmentResponse) *Ent
 	return _u.RemoveAssessmentResponseIDs(ids...)
 }
 
+// ClearVendorRiskScores clears all "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *EntityUpdate) ClearVendorRiskScores() *EntityUpdate {
+	_u.mutation.ClearVendorRiskScores()
+	return _u
+}
+
+// RemoveVendorRiskScoreIDs removes the "vendor_risk_scores" edge to VendorRiskScore entities by IDs.
+func (_u *EntityUpdate) RemoveVendorRiskScoreIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// RemoveVendorRiskScores removes "vendor_risk_scores" edges to VendorRiskScore entities.
+func (_u *EntityUpdate) RemoveVendorRiskScores(v ...*VendorRiskScore) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorRiskScoreIDs(ids...)
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (_u *EntityUpdate) ClearIntegrations() *EntityUpdate {
 	_u.mutation.ClearIntegrations()
@@ -2200,6 +2264,11 @@ func (_u *EntityUpdate) check() error {
 			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Tier(); ok {
+		if err := entity.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`generated: validator failed for field "Entity.tier": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := entity.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
@@ -2509,11 +2578,20 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.RiskScoreCleared() {
 		_spec.ClearField(entity.FieldRiskScore, field.TypeInt)
 	}
+	if value, ok := _u.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entity.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScoreCoverage(); ok {
+		_spec.AddField(entity.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCoverageCleared() {
+		_spec.ClearField(entity.FieldRiskScoreCoverage, field.TypeInt)
+	}
 	if value, ok := _u.mutation.Tier(); ok {
-		_spec.SetField(entity.FieldTier, field.TypeString, value)
+		_spec.SetField(entity.FieldTier, field.TypeEnum, value)
 	}
 	if _u.mutation.TierCleared() {
-		_spec.ClearField(entity.FieldTier, field.TypeString)
+		_spec.ClearField(entity.FieldTier, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(entity.FieldReviewFrequency, field.TypeEnum, value)
@@ -3353,6 +3431,54 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4975,14 +5101,41 @@ func (_u *EntityUpdateOne) ClearRiskScore() *EntityUpdateOne {
 	return _u
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_u *EntityUpdateOne) SetRiskScoreCoverage(v int) *EntityUpdateOne {
+	_u.mutation.ResetRiskScoreCoverage()
+	_u.mutation.SetRiskScoreCoverage(v)
+	return _u
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableRiskScoreCoverage(v *int) *EntityUpdateOne {
+	if v != nil {
+		_u.SetRiskScoreCoverage(*v)
+	}
+	return _u
+}
+
+// AddRiskScoreCoverage adds value to the "risk_score_coverage" field.
+func (_u *EntityUpdateOne) AddRiskScoreCoverage(v int) *EntityUpdateOne {
+	_u.mutation.AddRiskScoreCoverage(v)
+	return _u
+}
+
+// ClearRiskScoreCoverage clears the value of the "risk_score_coverage" field.
+func (_u *EntityUpdateOne) ClearRiskScoreCoverage() *EntityUpdateOne {
+	_u.mutation.ClearRiskScoreCoverage()
+	return _u
+}
+
 // SetTier sets the "tier" field.
-func (_u *EntityUpdateOne) SetTier(v string) *EntityUpdateOne {
+func (_u *EntityUpdateOne) SetTier(v enums.VendorTier) *EntityUpdateOne {
 	_u.mutation.SetTier(v)
 	return _u
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_u *EntityUpdateOne) SetNillableTier(v *string) *EntityUpdateOne {
+func (_u *EntityUpdateOne) SetNillableTier(v *enums.VendorTier) *EntityUpdateOne {
 	if v != nil {
 		_u.SetTier(*v)
 	}
@@ -5335,6 +5488,21 @@ func (_u *EntityUpdateOne) AddAssessmentResponses(v ...*AssessmentResponse) *Ent
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssessmentResponseIDs(ids...)
+}
+
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_u *EntityUpdateOne) AddVendorRiskScoreIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *EntityUpdateOne) AddVendorRiskScores(v ...*VendorRiskScore) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorRiskScoreIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -5802,6 +5970,27 @@ func (_u *EntityUpdateOne) RemoveAssessmentResponses(v ...*AssessmentResponse) *
 	return _u.RemoveAssessmentResponseIDs(ids...)
 }
 
+// ClearVendorRiskScores clears all "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *EntityUpdateOne) ClearVendorRiskScores() *EntityUpdateOne {
+	_u.mutation.ClearVendorRiskScores()
+	return _u
+}
+
+// RemoveVendorRiskScoreIDs removes the "vendor_risk_scores" edge to VendorRiskScore entities by IDs.
+func (_u *EntityUpdateOne) RemoveVendorRiskScoreIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// RemoveVendorRiskScores removes "vendor_risk_scores" edges to VendorRiskScore entities.
+func (_u *EntityUpdateOne) RemoveVendorRiskScores(v ...*VendorRiskScore) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorRiskScoreIDs(ids...)
+}
+
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
 func (_u *EntityUpdateOne) ClearIntegrations() *EntityUpdateOne {
 	_u.mutation.ClearIntegrations()
@@ -6132,6 +6321,11 @@ func (_u *EntityUpdateOne) check() error {
 			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Tier(); ok {
+		if err := entity.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`generated: validator failed for field "Entity.tier": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := entity.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
@@ -6458,11 +6652,20 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.RiskScoreCleared() {
 		_spec.ClearField(entity.FieldRiskScore, field.TypeInt)
 	}
+	if value, ok := _u.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entity.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScoreCoverage(); ok {
+		_spec.AddField(entity.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCoverageCleared() {
+		_spec.ClearField(entity.FieldRiskScoreCoverage, field.TypeInt)
+	}
 	if value, ok := _u.mutation.Tier(); ok {
-		_spec.SetField(entity.FieldTier, field.TypeString, value)
+		_spec.SetField(entity.FieldTier, field.TypeEnum, value)
 	}
 	if _u.mutation.TierCleared() {
-		_spec.ClearField(entity.FieldTier, field.TypeString)
+		_spec.ClearField(entity.FieldTier, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(entity.FieldReviewFrequency, field.TypeEnum, value)
@@ -7302,6 +7505,54 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

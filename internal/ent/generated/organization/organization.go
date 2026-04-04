@@ -267,6 +267,10 @@ const (
 	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
 	EdgeDiscussions = "discussions"
+	// EdgeVendorScoringConfigs holds the string denoting the vendor_scoring_configs edge name in mutations.
+	EdgeVendorScoringConfigs = "vendor_scoring_configs"
+	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
+	EdgeVendorRiskScores = "vendor_risk_scores"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -1020,6 +1024,20 @@ const (
 	DiscussionsInverseTable = "discussions"
 	// DiscussionsColumn is the table column denoting the discussions relation/edge.
 	DiscussionsColumn = "owner_id"
+	// VendorScoringConfigsTable is the table that holds the vendor_scoring_configs relation/edge.
+	VendorScoringConfigsTable = "vendor_scoring_configs"
+	// VendorScoringConfigsInverseTable is the table name for the VendorScoringConfig entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorscoringconfig" package.
+	VendorScoringConfigsInverseTable = "vendor_scoring_configs"
+	// VendorScoringConfigsColumn is the table column denoting the vendor_scoring_configs relation/edge.
+	VendorScoringConfigsColumn = "owner_id"
+	// VendorRiskScoresTable is the table that holds the vendor_risk_scores relation/edge.
+	VendorRiskScoresTable = "vendor_risk_scores"
+	// VendorRiskScoresInverseTable is the table name for the VendorRiskScore entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorriskscore" package.
+	VendorRiskScoresInverseTable = "vendor_risk_scores"
+	// VendorRiskScoresColumn is the table column denoting the vendor_risk_scores relation/edge.
+	VendorRiskScoresColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -2706,6 +2724,34 @@ func ByDiscussions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByVendorScoringConfigsCount orders the results by vendor_scoring_configs count.
+func ByVendorScoringConfigsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorScoringConfigsStep(), opts...)
+	}
+}
+
+// ByVendorScoringConfigs orders the results by vendor_scoring_configs terms.
+func ByVendorScoringConfigs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorScoringConfigsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVendorRiskScoresCount orders the results by vendor_risk_scores count.
+func ByVendorRiskScoresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorRiskScoresStep(), opts...)
+	}
+}
+
+// ByVendorRiskScores orders the results by vendor_risk_scores terms.
+func ByVendorRiskScores(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorRiskScoresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3480,6 +3526,20 @@ func newDiscussionsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DiscussionsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
+	)
+}
+func newVendorScoringConfigsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorScoringConfigsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorScoringConfigsTable, VendorScoringConfigsColumn),
+	)
+}
+func newVendorRiskScoresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorRiskScoresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

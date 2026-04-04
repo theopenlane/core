@@ -1,6 +1,8 @@
 package models
 
 import (
+	"io"
+
 	"github.com/theopenlane/core/common/enums"
 )
 
@@ -35,6 +37,16 @@ type VendorScoringQuestionDef struct {
 type VendorScoringQuestionsConfig struct {
 	// Custom holds org-specific question additions and overrides of system defaults
 	Custom []VendorScoringQuestionDef `json:"custom"`
+}
+
+// MarshalGQL implements the Marshaler interface for gqlgen
+func (v VendorScoringQuestionsConfig) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, v)
+}
+
+// UnmarshalGQL implements the Unmarshaler interface for gqlgen
+func (v *VendorScoringQuestionsConfig) UnmarshalGQL(val any) error {
+	return unmarshalGQLJSON(val, v)
 }
 
 // All returns the merged set of system defaults and org-custom questions.

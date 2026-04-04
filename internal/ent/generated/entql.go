@@ -100,6 +100,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -118,7 +120,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 105)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 107)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -725,6 +727,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldMetadata:            {Type: field.TypeJSON, Column: directoryaccount.FieldMetadata},
 			directoryaccount.FieldRawProfileFileID:    {Type: field.TypeString, Column: directoryaccount.FieldRawProfileFileID},
 			directoryaccount.FieldSourceVersion:       {Type: field.TypeString, Column: directoryaccount.FieldSourceVersion},
+			directoryaccount.FieldPrimarySource:       {Type: field.TypeBool, Column: directoryaccount.FieldPrimarySource},
 		},
 	}
 	graph.Nodes[15] = &sqlgraph.Node{
@@ -1060,7 +1063,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldLinks:                                 {Type: field.TypeJSON, Column: entity.FieldLinks},
 			entity.FieldRiskRating:                            {Type: field.TypeString, Column: entity.FieldRiskRating},
 			entity.FieldRiskScore:                             {Type: field.TypeInt, Column: entity.FieldRiskScore},
-			entity.FieldTier:                                  {Type: field.TypeString, Column: entity.FieldTier},
+			entity.FieldRiskScoreCoverage:                     {Type: field.TypeInt, Column: entity.FieldRiskScoreCoverage},
+			entity.FieldTier:                                  {Type: field.TypeEnum, Column: entity.FieldTier},
 			entity.FieldReviewFrequency:                       {Type: field.TypeEnum, Column: entity.FieldReviewFrequency},
 			entity.FieldNextReviewAt:                          {Type: field.TypeTime, Column: entity.FieldNextReviewAt},
 			entity.FieldContractRenewalAt:                     {Type: field.TypeTime, Column: entity.FieldContractRenewalAt},
@@ -1580,6 +1584,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldFamily:                   {Type: field.TypeString, Column: integration.FieldFamily},
 			integration.FieldStatus:                   {Type: field.TypeEnum, Column: integration.FieldStatus},
 			integration.FieldProviderMetadataSnapshot: {Type: field.TypeJSON, Column: integration.FieldProviderMetadataSnapshot},
+			integration.FieldPrimaryDirectory:         {Type: field.TypeBool, Column: integration.FieldPrimaryDirectory},
 		},
 	}
 	graph.Nodes[39] = &sqlgraph.Node{
@@ -3472,6 +3477,62 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   vendorriskscore.Table,
+			Columns: vendorriskscore.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: vendorriskscore.FieldID,
+			},
+		},
+		Type: "VendorRiskScore",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			vendorriskscore.FieldCreatedAt:             {Type: field.TypeTime, Column: vendorriskscore.FieldCreatedAt},
+			vendorriskscore.FieldUpdatedAt:             {Type: field.TypeTime, Column: vendorriskscore.FieldUpdatedAt},
+			vendorriskscore.FieldCreatedBy:             {Type: field.TypeString, Column: vendorriskscore.FieldCreatedBy},
+			vendorriskscore.FieldUpdatedBy:             {Type: field.TypeString, Column: vendorriskscore.FieldUpdatedBy},
+			vendorriskscore.FieldDeletedAt:             {Type: field.TypeTime, Column: vendorriskscore.FieldDeletedAt},
+			vendorriskscore.FieldDeletedBy:             {Type: field.TypeString, Column: vendorriskscore.FieldDeletedBy},
+			vendorriskscore.FieldTags:                  {Type: field.TypeJSON, Column: vendorriskscore.FieldTags},
+			vendorriskscore.FieldOwnerID:               {Type: field.TypeString, Column: vendorriskscore.FieldOwnerID},
+			vendorriskscore.FieldQuestionKey:           {Type: field.TypeString, Column: vendorriskscore.FieldQuestionKey},
+			vendorriskscore.FieldQuestionName:          {Type: field.TypeString, Column: vendorriskscore.FieldQuestionName},
+			vendorriskscore.FieldQuestionDescription:   {Type: field.TypeString, Column: vendorriskscore.FieldQuestionDescription},
+			vendorriskscore.FieldQuestionCategory:      {Type: field.TypeEnum, Column: vendorriskscore.FieldQuestionCategory},
+			vendorriskscore.FieldAnswerType:            {Type: field.TypeEnum, Column: vendorriskscore.FieldAnswerType},
+			vendorriskscore.FieldImpact:                {Type: field.TypeEnum, Column: vendorriskscore.FieldImpact},
+			vendorriskscore.FieldLikelihood:            {Type: field.TypeEnum, Column: vendorriskscore.FieldLikelihood},
+			vendorriskscore.FieldScore:                 {Type: field.TypeFloat64, Column: vendorriskscore.FieldScore},
+			vendorriskscore.FieldAnswer:                {Type: field.TypeString, Column: vendorriskscore.FieldAnswer},
+			vendorriskscore.FieldNotes:                 {Type: field.TypeString, Column: vendorriskscore.FieldNotes},
+			vendorriskscore.FieldVendorScoringConfigID: {Type: field.TypeString, Column: vendorriskscore.FieldVendorScoringConfigID},
+			vendorriskscore.FieldEntityID:              {Type: field.TypeString, Column: vendorriskscore.FieldEntityID},
+			vendorriskscore.FieldAssessmentResponseID:  {Type: field.TypeString, Column: vendorriskscore.FieldAssessmentResponseID},
+		},
+	}
+	graph.Nodes[97] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   vendorscoringconfig.Table,
+			Columns: vendorscoringconfig.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: vendorscoringconfig.FieldID,
+			},
+		},
+		Type: "VendorScoringConfig",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			vendorscoringconfig.FieldCreatedAt: {Type: field.TypeTime, Column: vendorscoringconfig.FieldCreatedAt},
+			vendorscoringconfig.FieldUpdatedAt: {Type: field.TypeTime, Column: vendorscoringconfig.FieldUpdatedAt},
+			vendorscoringconfig.FieldCreatedBy: {Type: field.TypeString, Column: vendorscoringconfig.FieldCreatedBy},
+			vendorscoringconfig.FieldUpdatedBy: {Type: field.TypeString, Column: vendorscoringconfig.FieldUpdatedBy},
+			vendorscoringconfig.FieldDeletedAt: {Type: field.TypeTime, Column: vendorscoringconfig.FieldDeletedAt},
+			vendorscoringconfig.FieldDeletedBy: {Type: field.TypeString, Column: vendorscoringconfig.FieldDeletedBy},
+			vendorscoringconfig.FieldTags:      {Type: field.TypeJSON, Column: vendorscoringconfig.FieldTags},
+			vendorscoringconfig.FieldOwnerID:   {Type: field.TypeString, Column: vendorscoringconfig.FieldOwnerID},
+			vendorscoringconfig.FieldQuestions: {Type: field.TypeJSON, Column: vendorscoringconfig.FieldQuestions},
+		},
+	}
+	graph.Nodes[98] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vulnerability.Table,
 			Columns: vulnerability.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -3530,7 +3591,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldRawPayload:              {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -3559,7 +3620,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldUserVerified:    {Type: field.TypeBool, Column: webauthn.FieldUserVerified},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[100] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignment.Table,
 			Columns: workflowassignment.Columns,
@@ -3596,7 +3657,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignment.FieldDueAt:                {Type: field.TypeTime, Column: workflowassignment.FieldDueAt},
 		},
 	}
-	graph.Nodes[99] = &sqlgraph.Node{
+	graph.Nodes[101] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenttarget.Table,
 			Columns: workflowassignmenttarget.Columns,
@@ -3623,7 +3684,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenttarget.FieldResolverKey:          {Type: field.TypeString, Column: workflowassignmenttarget.FieldResolverKey},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowdefinition.Table,
 			Columns: workflowdefinition.Columns,
@@ -3665,7 +3726,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowdefinition.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinition.FieldTrackedFields},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowevent.Table,
 			Columns: workflowevent.Columns,
@@ -3690,7 +3751,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowevent.FieldPayload:            {Type: field.TypeJSON, Column: workflowevent.FieldPayload},
 		},
 	}
-	graph.Nodes[102] = &sqlgraph.Node{
+	graph.Nodes[104] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowinstance.Table,
 			Columns: workflowinstance.Columns,
@@ -3729,7 +3790,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstance.FieldPlatformID:           {Type: field.TypeString, Column: workflowinstance.FieldPlatformID},
 		},
 	}
-	graph.Nodes[103] = &sqlgraph.Node{
+	graph.Nodes[105] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowobjectref.Table,
 			Columns: workflowobjectref.Columns,
@@ -3764,7 +3825,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectref.FieldPlatformID:            {Type: field.TypeString, Column: workflowobjectref.FieldPlatformID},
 		},
 	}
-	graph.Nodes[104] = &sqlgraph.Node{
+	graph.Nodes[106] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowproposal.Table,
 			Columns: workflowproposal.Columns,
@@ -4211,6 +4272,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"AssessmentResponse",
 		"DocumentData",
+	)
+	graph.MustAddE(
+		"vendor_risk_scores",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+		},
+		"AssessmentResponse",
+		"VendorRiskScore",
 	)
 	graph.MustAddE(
 		"owner",
@@ -6851,6 +6924,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Entity",
 		"AssessmentResponse",
+	)
+	graph.MustAddE(
+		"vendor_risk_scores",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"VendorRiskScore",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -11893,6 +11978,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Discussion",
 	)
 	graph.MustAddE(
+		"vendor_scoring_configs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"VendorScoringConfig",
+	)
+	graph.MustAddE(
+		"vendor_risk_scores",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"VendorRiskScore",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -16241,6 +16350,78 @@ var schemaGraph = func() *sqlgraph.Schema {
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
+			Table:   vendorriskscore.OwnerTable,
+			Columns: []string{vendorriskscore.OwnerColumn},
+			Bidi:    false,
+		},
+		"VendorRiskScore",
+		"Organization",
+	)
+	graph.MustAddE(
+		"vendor_scoring_config",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vendorriskscore.VendorScoringConfigTable,
+			Columns: []string{vendorriskscore.VendorScoringConfigColumn},
+			Bidi:    false,
+		},
+		"VendorRiskScore",
+		"VendorScoringConfig",
+	)
+	graph.MustAddE(
+		"entity",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vendorriskscore.EntityTable,
+			Columns: []string{vendorriskscore.EntityColumn},
+			Bidi:    false,
+		},
+		"VendorRiskScore",
+		"Entity",
+	)
+	graph.MustAddE(
+		"assessment_response",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vendorriskscore.AssessmentResponseTable,
+			Columns: []string{vendorriskscore.AssessmentResponseColumn},
+			Bidi:    false,
+		},
+		"VendorRiskScore",
+		"AssessmentResponse",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   vendorscoringconfig.OwnerTable,
+			Columns: []string{vendorscoringconfig.OwnerColumn},
+			Bidi:    false,
+		},
+		"VendorScoringConfig",
+		"Organization",
+	)
+	graph.MustAddE(
+		"vendor_risk_scores",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorscoringconfig.VendorRiskScoresTable,
+			Columns: []string{vendorscoringconfig.VendorRiskScoresColumn},
+			Bidi:    false,
+		},
+		"VendorScoringConfig",
+		"VendorRiskScore",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
 			Table:   vulnerability.OwnerTable,
 			Columns: []string{vulnerability.OwnerColumn},
 			Bidi:    false,
@@ -18398,6 +18579,20 @@ func (f *AssessmentResponseFilter) WhereHasDocument() {
 // WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
 func (f *AssessmentResponseFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
 	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorRiskScores applies a predicate to check if query has an edge vendor_risk_scores.
+func (f *AssessmentResponseFilter) WhereHasVendorRiskScores() {
+	f.Where(entql.HasEdge("vendor_risk_scores"))
+}
+
+// WhereHasVendorRiskScoresWith applies a predicate to check if query has an edge vendor_risk_scores with a given conditions (other predicates).
+func (f *AssessmentResponseFilter) WhereHasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) {
+	f.Where(entql.HasEdgeWith("vendor_risk_scores", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -22190,6 +22385,11 @@ func (f *DirectoryAccountFilter) WhereSourceVersion(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldSourceVersion))
 }
 
+// WherePrimarySource applies the entql bool predicate on the primary_source field.
+func (f *DirectoryAccountFilter) WherePrimarySource(p entql.BoolP) {
+	f.Where(p.Field(directoryaccount.FieldPrimarySource))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *DirectoryAccountFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -24620,6 +24820,11 @@ func (f *EntityFilter) WhereRiskScore(p entql.IntP) {
 	f.Where(p.Field(entity.FieldRiskScore))
 }
 
+// WhereRiskScoreCoverage applies the entql int predicate on the risk_score_coverage field.
+func (f *EntityFilter) WhereRiskScoreCoverage(p entql.IntP) {
+	f.Where(p.Field(entity.FieldRiskScoreCoverage))
+}
+
 // WhereTier applies the entql string predicate on the tier field.
 func (f *EntityFilter) WhereTier(p entql.StringP) {
 	f.Where(p.Field(entity.FieldTier))
@@ -24948,6 +25153,20 @@ func (f *EntityFilter) WhereHasAssessmentResponses() {
 // WhereHasAssessmentResponsesWith applies a predicate to check if query has an edge assessment_responses with a given conditions (other predicates).
 func (f *EntityFilter) WhereHasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) {
 	f.Where(entql.HasEdgeWith("assessment_responses", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorRiskScores applies a predicate to check if query has an edge vendor_risk_scores.
+func (f *EntityFilter) WhereHasVendorRiskScores() {
+	f.Where(entql.HasEdge("vendor_risk_scores"))
+}
+
+// WhereHasVendorRiskScoresWith applies a predicate to check if query has an edge vendor_risk_scores with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) {
+	f.Where(entql.HasEdgeWith("vendor_risk_scores", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -29685,6 +29904,11 @@ func (f *IntegrationFilter) WhereStatus(p entql.StringP) {
 // WhereProviderMetadataSnapshot applies the entql json.RawMessage predicate on the provider_metadata_snapshot field.
 func (f *IntegrationFilter) WhereProviderMetadataSnapshot(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldProviderMetadataSnapshot))
+}
+
+// WherePrimaryDirectory applies the entql bool predicate on the primary_directory field.
+func (f *IntegrationFilter) WherePrimaryDirectory(p entql.BoolP) {
+	f.Where(p.Field(integration.FieldPrimaryDirectory))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -35933,6 +36157,34 @@ func (f *OrganizationFilter) WhereHasDiscussions() {
 // WhereHasDiscussionsWith applies a predicate to check if query has an edge discussions with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasDiscussionsWith(preds ...predicate.Discussion) {
 	f.Where(entql.HasEdgeWith("discussions", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorScoringConfigs applies a predicate to check if query has an edge vendor_scoring_configs.
+func (f *OrganizationFilter) WhereHasVendorScoringConfigs() {
+	f.Where(entql.HasEdge("vendor_scoring_configs"))
+}
+
+// WhereHasVendorScoringConfigsWith applies a predicate to check if query has an edge vendor_scoring_configs with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasVendorScoringConfigsWith(preds ...predicate.VendorScoringConfig) {
+	f.Where(entql.HasEdgeWith("vendor_scoring_configs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorRiskScores applies a predicate to check if query has an edge vendor_risk_scores.
+func (f *OrganizationFilter) WhereHasVendorRiskScores() {
+	f.Where(entql.HasEdge("vendor_risk_scores"))
+}
+
+// WhereHasVendorRiskScoresWith applies a predicate to check if query has an edge vendor_risk_scores with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) {
+	f.Where(entql.HasEdgeWith("vendor_risk_scores", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -46103,6 +46355,320 @@ func (f *UserSettingFilter) WhereHasDefaultOrgWith(preds ...predicate.Organizati
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *VendorRiskScoreQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the VendorRiskScoreQuery builder.
+func (_q *VendorRiskScoreQuery) Filter() *VendorRiskScoreFilter {
+	return &VendorRiskScoreFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *VendorRiskScoreMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the VendorRiskScoreMutation builder.
+func (m *VendorRiskScoreMutation) Filter() *VendorRiskScoreFilter {
+	return &VendorRiskScoreFilter{config: m.config, predicateAdder: m}
+}
+
+// VendorRiskScoreFilter provides a generic filtering capability at runtime for VendorRiskScoreQuery.
+type VendorRiskScoreFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *VendorRiskScoreFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *VendorRiskScoreFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *VendorRiskScoreFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorriskscore.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *VendorRiskScoreFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorriskscore.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *VendorRiskScoreFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *VendorRiskScoreFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *VendorRiskScoreFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorriskscore.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *VendorRiskScoreFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *VendorRiskScoreFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(vendorriskscore.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *VendorRiskScoreFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldOwnerID))
+}
+
+// WhereQuestionKey applies the entql string predicate on the question_key field.
+func (f *VendorRiskScoreFilter) WhereQuestionKey(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldQuestionKey))
+}
+
+// WhereQuestionName applies the entql string predicate on the question_name field.
+func (f *VendorRiskScoreFilter) WhereQuestionName(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldQuestionName))
+}
+
+// WhereQuestionDescription applies the entql string predicate on the question_description field.
+func (f *VendorRiskScoreFilter) WhereQuestionDescription(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldQuestionDescription))
+}
+
+// WhereQuestionCategory applies the entql string predicate on the question_category field.
+func (f *VendorRiskScoreFilter) WhereQuestionCategory(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldQuestionCategory))
+}
+
+// WhereAnswerType applies the entql string predicate on the answer_type field.
+func (f *VendorRiskScoreFilter) WhereAnswerType(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldAnswerType))
+}
+
+// WhereImpact applies the entql string predicate on the impact field.
+func (f *VendorRiskScoreFilter) WhereImpact(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldImpact))
+}
+
+// WhereLikelihood applies the entql string predicate on the likelihood field.
+func (f *VendorRiskScoreFilter) WhereLikelihood(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldLikelihood))
+}
+
+// WhereScore applies the entql float64 predicate on the score field.
+func (f *VendorRiskScoreFilter) WhereScore(p entql.Float64P) {
+	f.Where(p.Field(vendorriskscore.FieldScore))
+}
+
+// WhereAnswer applies the entql string predicate on the answer field.
+func (f *VendorRiskScoreFilter) WhereAnswer(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldAnswer))
+}
+
+// WhereNotes applies the entql string predicate on the notes field.
+func (f *VendorRiskScoreFilter) WhereNotes(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldNotes))
+}
+
+// WhereVendorScoringConfigID applies the entql string predicate on the vendor_scoring_config_id field.
+func (f *VendorRiskScoreFilter) WhereVendorScoringConfigID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldVendorScoringConfigID))
+}
+
+// WhereEntityID applies the entql string predicate on the entity_id field.
+func (f *VendorRiskScoreFilter) WhereEntityID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldEntityID))
+}
+
+// WhereAssessmentResponseID applies the entql string predicate on the assessment_response_id field.
+func (f *VendorRiskScoreFilter) WhereAssessmentResponseID(p entql.StringP) {
+	f.Where(p.Field(vendorriskscore.FieldAssessmentResponseID))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *VendorRiskScoreFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *VendorRiskScoreFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorScoringConfig applies a predicate to check if query has an edge vendor_scoring_config.
+func (f *VendorRiskScoreFilter) WhereHasVendorScoringConfig() {
+	f.Where(entql.HasEdge("vendor_scoring_config"))
+}
+
+// WhereHasVendorScoringConfigWith applies a predicate to check if query has an edge vendor_scoring_config with a given conditions (other predicates).
+func (f *VendorRiskScoreFilter) WhereHasVendorScoringConfigWith(preds ...predicate.VendorScoringConfig) {
+	f.Where(entql.HasEdgeWith("vendor_scoring_config", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntity applies a predicate to check if query has an edge entity.
+func (f *VendorRiskScoreFilter) WhereHasEntity() {
+	f.Where(entql.HasEdge("entity"))
+}
+
+// WhereHasEntityWith applies a predicate to check if query has an edge entity with a given conditions (other predicates).
+func (f *VendorRiskScoreFilter) WhereHasEntityWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssessmentResponse applies a predicate to check if query has an edge assessment_response.
+func (f *VendorRiskScoreFilter) WhereHasAssessmentResponse() {
+	f.Where(entql.HasEdge("assessment_response"))
+}
+
+// WhereHasAssessmentResponseWith applies a predicate to check if query has an edge assessment_response with a given conditions (other predicates).
+func (f *VendorRiskScoreFilter) WhereHasAssessmentResponseWith(preds ...predicate.AssessmentResponse) {
+	f.Where(entql.HasEdgeWith("assessment_response", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *VendorScoringConfigQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the VendorScoringConfigQuery builder.
+func (_q *VendorScoringConfigQuery) Filter() *VendorScoringConfigFilter {
+	return &VendorScoringConfigFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *VendorScoringConfigMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the VendorScoringConfigMutation builder.
+func (m *VendorScoringConfigMutation) Filter() *VendorScoringConfigFilter {
+	return &VendorScoringConfigFilter{config: m.config, predicateAdder: m}
+}
+
+// VendorScoringConfigFilter provides a generic filtering capability at runtime for VendorScoringConfigQuery.
+type VendorScoringConfigFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *VendorScoringConfigFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *VendorScoringConfigFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfig.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *VendorScoringConfigFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorscoringconfig.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *VendorScoringConfigFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorscoringconfig.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *VendorScoringConfigFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfig.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *VendorScoringConfigFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfig.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *VendorScoringConfigFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorscoringconfig.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *VendorScoringConfigFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfig.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *VendorScoringConfigFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(vendorscoringconfig.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *VendorScoringConfigFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfig.FieldOwnerID))
+}
+
+// WhereQuestions applies the entql json.RawMessage predicate on the questions field.
+func (f *VendorScoringConfigFilter) WhereQuestions(p entql.BytesP) {
+	f.Where(p.Field(vendorscoringconfig.FieldQuestions))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *VendorScoringConfigFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *VendorScoringConfigFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorRiskScores applies a predicate to check if query has an edge vendor_risk_scores.
+func (f *VendorScoringConfigFilter) WhereHasVendorRiskScores() {
+	f.Where(entql.HasEdge("vendor_risk_scores"))
+}
+
+// WhereHasVendorRiskScoresWith applies a predicate to check if query has an edge vendor_risk_scores with a given conditions (other predicates).
+func (f *VendorScoringConfigFilter) WhereHasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) {
+	f.Where(entql.HasEdgeWith("vendor_risk_scores", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *VulnerabilityQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -46131,7 +46697,7 @@ type VulnerabilityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VulnerabilityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -46714,7 +47280,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -46848,7 +47414,7 @@ type WorkflowAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -47078,7 +47644,7 @@ type WorkflowAssignmentTargetFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentTargetFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -47244,7 +47810,7 @@ type WorkflowDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -47555,7 +48121,7 @@ type WorkflowEventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowEventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -47683,7 +48249,7 @@ type WorkflowInstanceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowInstanceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -48091,7 +48657,7 @@ type WorkflowObjectRefFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowObjectRefFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -48493,7 +49059,7 @@ type WorkflowProposalFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowProposalFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

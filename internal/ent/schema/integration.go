@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -148,6 +149,9 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.Bool("primary_directory").
+			Comment("designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization").
+			Default(false),
 	}
 }
 
@@ -213,6 +217,13 @@ func (i Integration) Mixin() []ent.Mixin {
 			newCustomEnumMixin(i, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(i)
+}
+
+// Hooks of the Integration
+func (Integration) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookIntegrationPrimaryDirectory(),
+	}
 }
 
 // Policy of the Integration

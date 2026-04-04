@@ -101,11 +101,15 @@ type AssessmentResponseEdges struct {
 	Entity *Entity `json:"entity,omitempty"`
 	// Document holds the value of the document edge.
 	Document *DocumentData `json:"document,omitempty"`
+	// VendorRiskScores holds the value of the vendor_risk_scores edge.
+	VendorRiskScores []*VendorRiskScore `json:"vendor_risk_scores,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
+
+	namedVendorRiskScores map[string][]*VendorRiskScore
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -172,6 +176,15 @@ func (e AssessmentResponseEdges) DocumentOrErr() (*DocumentData, error) {
 		return nil, &NotFoundError{label: documentdata.Label}
 	}
 	return nil, &NotLoadedError{edge: "document"}
+}
+
+// VendorRiskScoresOrErr returns the VendorRiskScores value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentResponseEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
+	if e.loadedTypes[6] {
+		return e.VendorRiskScores, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_risk_scores"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -423,6 +436,11 @@ func (_m *AssessmentResponse) QueryDocument() *DocumentDataQuery {
 	return NewAssessmentResponseClient(_m.config).QueryDocument(_m)
 }
 
+// QueryVendorRiskScores queries the "vendor_risk_scores" edge of the AssessmentResponse entity.
+func (_m *AssessmentResponse) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	return NewAssessmentResponseClient(_m.config).QueryVendorRiskScores(_m)
+}
+
 // Update returns a builder for updating this AssessmentResponse.
 // Note that you need to call AssessmentResponse.Unwrap() before calling this method if this AssessmentResponse
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -531,6 +549,30 @@ func (_m *AssessmentResponse) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.IsDraft))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedVendorRiskScores returns the VendorRiskScores named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *AssessmentResponse) NamedVendorRiskScores(name string) ([]*VendorRiskScore, error) {
+	if _m.Edges.namedVendorRiskScores == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVendorRiskScores[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *AssessmentResponse) appendNamedVendorRiskScores(name string, edges ...*VendorRiskScore) {
+	if _m.Edges.namedVendorRiskScores == nil {
+		_m.Edges.namedVendorRiskScores = make(map[string][]*VendorRiskScore)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVendorRiskScores[name] = []*VendorRiskScore{}
+	} else {
+		_m.Edges.namedVendorRiskScores[name] = append(_m.Edges.namedVendorRiskScores[name], edges...)
+	}
 }
 
 // AssessmentResponses is a parsable slice of AssessmentResponse.

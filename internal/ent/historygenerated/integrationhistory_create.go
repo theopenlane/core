@@ -461,6 +461,20 @@ func (_c *IntegrationHistoryCreate) SetProviderMetadataSnapshot(v map[string]int
 	return _c
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_c *IntegrationHistoryCreate) SetPrimaryDirectory(v bool) *IntegrationHistoryCreate {
+	_c.mutation.SetPrimaryDirectory(v)
+	return _c
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillablePrimaryDirectory(v *bool) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetPrimaryDirectory(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationHistoryCreate) SetID(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -545,6 +559,10 @@ func (_c *IntegrationHistoryCreate) defaults() error {
 		v := integrationhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
+		v := integrationhistory.DefaultPrimaryDirectory
+		_c.mutation.SetPrimaryDirectory(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integrationhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized integrationhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -578,6 +596,9 @@ func (_c *IntegrationHistoryCreate) check() error {
 		if err := integrationhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "IntegrationHistory.status": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
+		return &ValidationError{Name: "primary_directory", err: errors.New(`historygenerated: missing required field "IntegrationHistory.primary_directory"`)}
 	}
 	return nil
 }
@@ -750,6 +771,10 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integrationhistory.FieldProviderMetadataSnapshot, field.TypeJSON, value)
 		_node.ProviderMetadataSnapshot = value
+	}
+	if value, ok := _c.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
+		_node.PrimaryDirectory = value
 	}
 	return _node, _spec
 }
