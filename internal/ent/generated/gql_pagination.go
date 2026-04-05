@@ -38229,6 +38229,20 @@ var (
 			}
 		},
 	}
+	// VendorScoringConfigOrderFieldScoringMode orders VendorScoringConfig by scoring_mode.
+	VendorScoringConfigOrderFieldScoringMode = &VendorScoringConfigOrderField{
+		Value: func(_m *VendorScoringConfig) (ent.Value, error) {
+			return _m.ScoringMode, nil
+		},
+		column: vendorscoringconfig.FieldScoringMode,
+		toTerm: vendorscoringconfig.ByScoringMode,
+		toCursor: func(_m *VendorScoringConfig) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ScoringMode,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -38239,6 +38253,8 @@ func (f VendorScoringConfigOrderField) String() string {
 		str = "created_at"
 	case VendorScoringConfigOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VendorScoringConfigOrderFieldScoringMode.column:
+		str = "scoring_mode"
 	}
 	return str
 }
@@ -38259,6 +38275,8 @@ func (f *VendorScoringConfigOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VendorScoringConfigOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VendorScoringConfigOrderFieldUpdatedAt
+	case "scoring_mode":
+		*f = *VendorScoringConfigOrderFieldScoringMode
 	default:
 		return fmt.Errorf("%s is not a valid VendorScoringConfigOrderField", str)
 	}

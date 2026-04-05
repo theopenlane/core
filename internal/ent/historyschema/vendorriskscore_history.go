@@ -11,9 +11,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // VendorRiskScoreHistory holds the schema definition for the VendorRiskScoreHistory entity.
@@ -34,6 +37,11 @@ func (VendorRiskScoreHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "vendor_risk_score",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -90,5 +98,22 @@ func (VendorRiskScoreHistory) Fields() []ent.Field {
 func (VendorRiskScoreHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
+	}
+}
+
+// Policy of the VendorRiskScoreHistory.
+// ensure history.AllowIfHistoryRequest() is already added to the base policy
+func (VendorRiskScoreHistory) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			history.AllowIfHistoryRequest(),
+		),
+	)
+}
+
+// Interceptors of the VendorRiskScoreHistory
+func (VendorRiskScoreHistory) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.FilterListQuery(),
 	}
 }

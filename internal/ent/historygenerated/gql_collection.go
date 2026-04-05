@@ -15140,6 +15140,16 @@ func (_q *VendorScoringConfigHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, vendorscoringconfighistory.FieldQuestions)
 				fieldSeen[vendorscoringconfighistory.FieldQuestions] = struct{}{}
 			}
+		case "scoringMode":
+			if _, ok := fieldSeen[vendorscoringconfighistory.FieldScoringMode]; !ok {
+				selectedFields = append(selectedFields, vendorscoringconfighistory.FieldScoringMode)
+				fieldSeen[vendorscoringconfighistory.FieldScoringMode] = struct{}{}
+			}
+		case "riskThresholds":
+			if _, ok := fieldSeen[vendorscoringconfighistory.FieldRiskThresholds]; !ok {
+				selectedFields = append(selectedFields, vendorscoringconfighistory.FieldRiskThresholds)
+				fieldSeen[vendorscoringconfighistory.FieldRiskThresholds] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

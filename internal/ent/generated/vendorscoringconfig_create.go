@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
@@ -141,6 +142,34 @@ func (_c *VendorScoringConfigCreate) SetNillableQuestions(v *models.VendorScorin
 	return _c
 }
 
+// SetScoringMode sets the "scoring_mode" field.
+func (_c *VendorScoringConfigCreate) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigCreate {
+	_c.mutation.SetScoringMode(v)
+	return _c
+}
+
+// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
+func (_c *VendorScoringConfigCreate) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigCreate {
+	if v != nil {
+		_c.SetScoringMode(*v)
+	}
+	return _c
+}
+
+// SetRiskThresholds sets the "risk_thresholds" field.
+func (_c *VendorScoringConfigCreate) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigCreate {
+	_c.mutation.SetRiskThresholds(v)
+	return _c
+}
+
+// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
+func (_c *VendorScoringConfigCreate) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigCreate {
+	if v != nil {
+		_c.SetRiskThresholds(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *VendorScoringConfigCreate) SetID(v string) *VendorScoringConfigCreate {
 	_c.mutation.SetID(v)
@@ -234,6 +263,14 @@ func (_c *VendorScoringConfigCreate) defaults() error {
 		v := vendorscoringconfig.DefaultQuestions
 		_c.mutation.SetQuestions(v)
 	}
+	if _, ok := _c.mutation.ScoringMode(); !ok {
+		v := vendorscoringconfig.DefaultScoringMode
+		_c.mutation.SetScoringMode(v)
+	}
+	if _, ok := _c.mutation.RiskThresholds(); !ok {
+		v := vendorscoringconfig.DefaultRiskThresholds
+		_c.mutation.SetRiskThresholds(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if vendorscoringconfig.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized vendorscoringconfig.DefaultID (forgotten import generated/runtime?)")
@@ -253,6 +290,17 @@ func (_c *VendorScoringConfigCreate) check() error {
 	}
 	if _, ok := _c.mutation.Questions(); !ok {
 		return &ValidationError{Name: "questions", err: errors.New(`generated: missing required field "VendorScoringConfig.questions"`)}
+	}
+	if _, ok := _c.mutation.ScoringMode(); !ok {
+		return &ValidationError{Name: "scoring_mode", err: errors.New(`generated: missing required field "VendorScoringConfig.scoring_mode"`)}
+	}
+	if v, ok := _c.mutation.ScoringMode(); ok {
+		if err := vendorscoringconfig.ScoringModeValidator(v); err != nil {
+			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`generated: validator failed for field "VendorScoringConfig.scoring_mode": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.RiskThresholds(); !ok {
+		return &ValidationError{Name: "risk_thresholds", err: errors.New(`generated: missing required field "VendorScoringConfig.risk_thresholds"`)}
 	}
 	return nil
 }
@@ -321,6 +369,14 @@ func (_c *VendorScoringConfigCreate) createSpec() (*VendorScoringConfig, *sqlgra
 	if value, ok := _c.mutation.Questions(); ok {
 		_spec.SetField(vendorscoringconfig.FieldQuestions, field.TypeJSON, value)
 		_node.Questions = value
+	}
+	if value, ok := _c.mutation.ScoringMode(); ok {
+		_spec.SetField(vendorscoringconfig.FieldScoringMode, field.TypeEnum, value)
+		_node.ScoringMode = value
+	}
+	if value, ok := _c.mutation.RiskThresholds(); ok {
+		_spec.SetField(vendorscoringconfig.FieldRiskThresholds, field.TypeJSON, value)
+		_node.RiskThresholds = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

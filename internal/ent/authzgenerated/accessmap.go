@@ -4276,7 +4276,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "vendor_scoring_config": {
-	ObjectType:      "vendor_scoring_config",
+	ObjectType:      "organization",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "entity": {
@@ -4294,8 +4294,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "vendor_risk_scores": {
 	ObjectType:      "vendor_risk_score",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "vulnerability": {"owner": {
 	ObjectType:      "owner",

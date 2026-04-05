@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
@@ -38,6 +39,10 @@ type VendorScoringConfig struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
 	Questions models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode enums.VendorScoringMode `json:"scoring_mode,omitempty"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds models.RiskThresholdsConfig `json:"risk_thresholds,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VendorScoringConfigQuery when eager-loading is set.
 	Edges        VendorScoringConfigEdges `json:"edges"`
@@ -84,9 +89,9 @@ func (*VendorScoringConfig) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case vendorscoringconfig.FieldTags, vendorscoringconfig.FieldQuestions:
+		case vendorscoringconfig.FieldTags, vendorscoringconfig.FieldQuestions, vendorscoringconfig.FieldRiskThresholds:
 			values[i] = new([]byte)
-		case vendorscoringconfig.FieldID, vendorscoringconfig.FieldCreatedBy, vendorscoringconfig.FieldUpdatedBy, vendorscoringconfig.FieldDeletedBy, vendorscoringconfig.FieldOwnerID:
+		case vendorscoringconfig.FieldID, vendorscoringconfig.FieldCreatedBy, vendorscoringconfig.FieldUpdatedBy, vendorscoringconfig.FieldDeletedBy, vendorscoringconfig.FieldOwnerID, vendorscoringconfig.FieldScoringMode:
 			values[i] = new(sql.NullString)
 		case vendorscoringconfig.FieldCreatedAt, vendorscoringconfig.FieldUpdatedAt, vendorscoringconfig.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -169,6 +174,20 @@ func (_m *VendorScoringConfig) assignValues(columns []string, values []any) erro
 					return fmt.Errorf("unmarshal field questions: %w", err)
 				}
 			}
+		case vendorscoringconfig.FieldScoringMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scoring_mode", values[i])
+			} else if value.Valid {
+				_m.ScoringMode = enums.VendorScoringMode(value.String)
+			}
+		case vendorscoringconfig.FieldRiskThresholds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_thresholds", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RiskThresholds); err != nil {
+					return fmt.Errorf("unmarshal field risk_thresholds: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -241,6 +260,12 @@ func (_m *VendorScoringConfig) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("questions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Questions))
+	builder.WriteString(", ")
+	builder.WriteString("scoring_mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ScoringMode))
+	builder.WriteString(", ")
+	builder.WriteString("risk_thresholds=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskThresholds))
 	builder.WriteByte(')')
 	return builder.String()
 }

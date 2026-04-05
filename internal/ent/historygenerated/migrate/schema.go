@@ -3174,6 +3174,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "questions", Type: field.TypeJSON},
+		{Name: "scoring_mode", Type: field.TypeEnum, Enums: []string{"ANSWERED_ONLY", "FULL_QUESTIONNAIRE", "MANUAL"}, Default: "ANSWERED_ONLY"},
+		{Name: "risk_thresholds", Type: field.TypeJSON},
 	}
 	// VendorScoringConfigHistoryTable holds the schema information for the "vendor_scoring_config_history" table.
 	VendorScoringConfigHistoryTable = &schema.Table{

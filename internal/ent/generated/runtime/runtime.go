@@ -8460,18 +8460,34 @@ func init() {
 	// usersetting.DefaultID holds the default value on creation for the id field.
 	usersetting.DefaultID = usersettingDescID.Default.(func() string)
 	vendorriskscoreMixin := schema.VendorRiskScore{}.Mixin()
+	vendorriskscore.Policy = privacy.NewPolicies(schema.VendorRiskScore{})
+	vendorriskscore.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorriskscore.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	vendorriskscoreMixinHooks0 := vendorriskscoreMixin[0].Hooks()
 	vendorriskscoreMixinHooks1 := vendorriskscoreMixin[1].Hooks()
 	vendorriskscoreMixinHooks3 := vendorriskscoreMixin[3].Hooks()
 	vendorriskscoreMixinHooks5 := vendorriskscoreMixin[5].Hooks()
 	vendorriskscoreHooks := schema.VendorRiskScore{}.Hooks()
-	vendorriskscore.Hooks[0] = vendorriskscoreMixinHooks0[0]
-	vendorriskscore.Hooks[1] = vendorriskscoreMixinHooks1[0]
-	vendorriskscore.Hooks[2] = vendorriskscoreMixinHooks3[0]
-	vendorriskscore.Hooks[3] = vendorriskscoreMixinHooks5[0]
-	vendorriskscore.Hooks[4] = vendorriskscoreMixinHooks5[1]
-	vendorriskscore.Hooks[5] = vendorriskscoreHooks[0]
-	vendorriskscore.Hooks[6] = vendorriskscoreHooks[1]
+
+	vendorriskscore.Hooks[1] = vendorriskscoreMixinHooks0[0]
+
+	vendorriskscore.Hooks[2] = vendorriskscoreMixinHooks1[0]
+
+	vendorriskscore.Hooks[3] = vendorriskscoreMixinHooks3[0]
+
+	vendorriskscore.Hooks[4] = vendorriskscoreMixinHooks5[0]
+
+	vendorriskscore.Hooks[5] = vendorriskscoreMixinHooks5[1]
+
+	vendorriskscore.Hooks[6] = vendorriskscoreHooks[0]
+
+	vendorriskscore.Hooks[7] = vendorriskscoreHooks[1]
 	vendorriskscoreMixinInters1 := vendorriskscoreMixin[1].Interceptors()
 	vendorriskscoreMixinInters5 := vendorriskscoreMixin[5].Interceptors()
 	vendorriskscore.Interceptors[0] = vendorriskscoreMixinInters1[0]
@@ -8526,14 +8542,30 @@ func init() {
 	// vendorriskscore.DefaultID holds the default value on creation for the id field.
 	vendorriskscore.DefaultID = vendorriskscoreDescID.Default.(func() string)
 	vendorscoringconfigMixin := schema.VendorScoringConfig{}.Mixin()
+	vendorscoringconfig.Policy = privacy.NewPolicies(schema.VendorScoringConfig{})
+	vendorscoringconfig.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorscoringconfig.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	vendorscoringconfigMixinHooks0 := vendorscoringconfigMixin[0].Hooks()
 	vendorscoringconfigMixinHooks1 := vendorscoringconfigMixin[1].Hooks()
 	vendorscoringconfigMixinHooks3 := vendorscoringconfigMixin[3].Hooks()
 	vendorscoringconfigMixinHooks5 := vendorscoringconfigMixin[5].Hooks()
-	vendorscoringconfig.Hooks[0] = vendorscoringconfigMixinHooks0[0]
-	vendorscoringconfig.Hooks[1] = vendorscoringconfigMixinHooks1[0]
-	vendorscoringconfig.Hooks[2] = vendorscoringconfigMixinHooks3[0]
-	vendorscoringconfig.Hooks[3] = vendorscoringconfigMixinHooks5[0]
+	vendorscoringconfigHooks := schema.VendorScoringConfig{}.Hooks()
+
+	vendorscoringconfig.Hooks[1] = vendorscoringconfigMixinHooks0[0]
+
+	vendorscoringconfig.Hooks[2] = vendorscoringconfigMixinHooks1[0]
+
+	vendorscoringconfig.Hooks[3] = vendorscoringconfigMixinHooks3[0]
+
+	vendorscoringconfig.Hooks[4] = vendorscoringconfigMixinHooks5[0]
+
+	vendorscoringconfig.Hooks[5] = vendorscoringconfigHooks[0]
 	vendorscoringconfigMixinInters1 := vendorscoringconfigMixin[1].Interceptors()
 	vendorscoringconfigMixinInters5 := vendorscoringconfigMixin[5].Interceptors()
 	vendorscoringconfig.Interceptors[0] = vendorscoringconfigMixinInters1[0]
@@ -8570,6 +8602,10 @@ func init() {
 	vendorscoringconfigDescQuestions := vendorscoringconfigFields[0].Descriptor()
 	// vendorscoringconfig.DefaultQuestions holds the default value on creation for the questions field.
 	vendorscoringconfig.DefaultQuestions = vendorscoringconfigDescQuestions.Default.(models.VendorScoringQuestionsConfig)
+	// vendorscoringconfigDescRiskThresholds is the schema descriptor for risk_thresholds field.
+	vendorscoringconfigDescRiskThresholds := vendorscoringconfigFields[2].Descriptor()
+	// vendorscoringconfig.DefaultRiskThresholds holds the default value on creation for the risk_thresholds field.
+	vendorscoringconfig.DefaultRiskThresholds = vendorscoringconfigDescRiskThresholds.Default.(models.RiskThresholdsConfig)
 	// vendorscoringconfigDescID is the schema descriptor for id field.
 	vendorscoringconfigDescID := vendorscoringconfigMixinFields2[0].Descriptor()
 	// vendorscoringconfig.DefaultID holds the default value on creation for the id field.

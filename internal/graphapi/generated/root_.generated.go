@@ -7076,6 +7076,8 @@ type ComplexityRoot struct {
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		Questions        func(childComplexity int) int
+		RiskThresholds   func(childComplexity int) int
+		ScoringMode      func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
@@ -49053,6 +49055,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorScoringConfig.Questions(childComplexity), true
 
+	case "VendorScoringConfig.riskThresholds":
+		if e.ComplexityRoot.VendorScoringConfig.RiskThresholds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfig.RiskThresholds(childComplexity), true
+
+	case "VendorScoringConfig.scoringMode":
+		if e.ComplexityRoot.VendorScoringConfig.ScoringMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfig.ScoringMode(childComplexity), true
+
 	case "VendorScoringConfig.tags":
 		if e.ComplexityRoot.VendorScoringConfig.Tags == nil {
 			break
@@ -52476,7 +52492,12 @@ scalar Any
 """
 VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring
 """
-scalar VendorScoringQuestionsConfig`, BuiltIn: false},
+scalar VendorScoringQuestionsConfig
+"""
+RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
+"""
+scalar RiskThresholdsConfig
+`, BuiltIn: false},
 	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
     """
     Indicates if this actionPlan has pending changes awaiting workflow approval
@@ -71384,6 +71405,14 @@ input CreateVendorScoringConfigInput {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig
   ownerID: ID
   vendorRiskScoreIDs: [ID!]
 }
@@ -134533,6 +134562,14 @@ input UpdateVendorScoringConfigInput {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig
   ownerID: ID
   clearOwner: Boolean
   addVendorRiskScoreIDs: [ID!]
@@ -136888,6 +136925,14 @@ type VendorScoringConfig implements Node {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig!
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode!
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig!
   owner: Organization
   vendorRiskScores(
     """
@@ -136970,6 +137015,15 @@ Properties by which VendorScoringConfig connections can be ordered.
 enum VendorScoringConfigOrderField {
   created_at
   updated_at
+  scoring_mode
+}
+"""
+VendorScoringConfigVendorScoringMode is enum for the field scoring_mode
+"""
+enum VendorScoringConfigVendorScoringMode @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringMode") {
+  ANSWERED_ONLY
+  FULL_QUESTIONNAIRE
+  MANUAL
 }
 """
 VendorScoringConfigWhereInput is used for filtering VendorScoringConfig objects.
@@ -137072,6 +137126,13 @@ input VendorScoringConfigWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  scoring_mode field predicates
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode
+  scoringModeNEQ: VendorScoringConfigVendorScoringMode
+  scoringModeIn: [VendorScoringConfigVendorScoringMode!]
+  scoringModeNotIn: [VendorScoringConfigVendorScoringMode!]
   """
   owner edge predicates
   """

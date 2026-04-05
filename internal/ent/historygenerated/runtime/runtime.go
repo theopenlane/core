@@ -3119,6 +3119,17 @@ func init() {
 	usersettinghistoryDescID := usersettinghistoryFields[9].Descriptor()
 	// usersettinghistory.DefaultID holds the default value on creation for the id field.
 	usersettinghistory.DefaultID = usersettinghistoryDescID.Default.(func() string)
+	vendorriskscorehistory.Policy = privacy.NewPolicies(historyschema.VendorRiskScoreHistory{})
+	vendorriskscorehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorriskscorehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorriskscorehistoryInters := historyschema.VendorRiskScoreHistory{}.Interceptors()
+	vendorriskscorehistory.Interceptors[0] = vendorriskscorehistoryInters[0]
 	vendorriskscorehistoryFields := historyschema.VendorRiskScoreHistory{}.Fields()
 	_ = vendorriskscorehistoryFields
 	// vendorriskscorehistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -3147,6 +3158,17 @@ func init() {
 	vendorriskscorehistoryDescID := vendorriskscorehistoryFields[9].Descriptor()
 	// vendorriskscorehistory.DefaultID holds the default value on creation for the id field.
 	vendorriskscorehistory.DefaultID = vendorriskscorehistoryDescID.Default.(func() string)
+	vendorscoringconfighistory.Policy = privacy.NewPolicies(historyschema.VendorScoringConfigHistory{})
+	vendorscoringconfighistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorscoringconfighistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorscoringconfighistoryInters := historyschema.VendorScoringConfigHistory{}.Interceptors()
+	vendorscoringconfighistory.Interceptors[0] = vendorscoringconfighistoryInters[0]
 	vendorscoringconfighistoryFields := historyschema.VendorScoringConfigHistory{}.Fields()
 	_ = vendorscoringconfighistoryFields
 	// vendorscoringconfighistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -3171,6 +3193,10 @@ func init() {
 	vendorscoringconfighistoryDescQuestions := vendorscoringconfighistoryFields[12].Descriptor()
 	// vendorscoringconfighistory.DefaultQuestions holds the default value on creation for the questions field.
 	vendorscoringconfighistory.DefaultQuestions = vendorscoringconfighistoryDescQuestions.Default.(models.VendorScoringQuestionsConfig)
+	// vendorscoringconfighistoryDescRiskThresholds is the schema descriptor for risk_thresholds field.
+	vendorscoringconfighistoryDescRiskThresholds := vendorscoringconfighistoryFields[14].Descriptor()
+	// vendorscoringconfighistory.DefaultRiskThresholds holds the default value on creation for the risk_thresholds field.
+	vendorscoringconfighistory.DefaultRiskThresholds = vendorscoringconfighistoryDescRiskThresholds.Default.(models.RiskThresholdsConfig)
 	// vendorscoringconfighistoryDescID is the schema descriptor for id field.
 	vendorscoringconfighistoryDescID := vendorscoringconfighistoryFields[9].Descriptor()
 	// vendorscoringconfighistory.DefaultID holds the default value on creation for the id field.

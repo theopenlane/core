@@ -309,7 +309,9 @@ func (_c *VendorRiskScoreHistoryCreate) Mutation() *VendorRiskScoreHistoryMutati
 
 // Save creates the VendorRiskScoreHistory in the database.
 func (_c *VendorRiskScoreHistoryCreate) Save(ctx context.Context) (*VendorRiskScoreHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -336,16 +338,25 @@ func (_c *VendorRiskScoreHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *VendorRiskScoreHistoryCreate) defaults() {
+func (_c *VendorRiskScoreHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if vendorriskscorehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorriskscorehistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorriskscorehistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if vendorriskscorehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorriskscorehistory.DefaultCreatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorriskscorehistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if vendorriskscorehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorriskscorehistory.DefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorriskscorehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -358,9 +369,13 @@ func (_c *VendorRiskScoreHistoryCreate) defaults() {
 		_c.mutation.SetScore(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if vendorriskscorehistory.DefaultID == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorriskscorehistory.DefaultID (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorriskscorehistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -30176,6 +30176,10 @@ input RiskHistoryWhereInput {
 	delegateIDEqualFold: String
 	delegateIDContainsFold: String
 }
+"""
+RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
+"""
+scalar RiskThresholdsConfig
 type SLADefinitionHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -39509,6 +39513,14 @@ type VendorScoringConfigHistory implements Node {
 	org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
 	"""
 	questions: VendorScoringQuestionsConfig!
+	"""
+	controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	"""
+	scoringMode: VendorScoringConfigHistoryVendorScoringMode!
+	"""
+	org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	"""
+	riskThresholds: RiskThresholdsConfig!
 }
 """
 A connection to a list of items.
@@ -39568,6 +39580,15 @@ enum VendorScoringConfigHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	scoring_mode
+}
+"""
+VendorScoringConfigHistoryVendorScoringMode is enum for the field scoring_mode
+"""
+enum VendorScoringConfigHistoryVendorScoringMode @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringMode") {
+	ANSWERED_ONLY
+	FULL_QUESTIONNAIRE
+	MANUAL
 }
 """
 VendorScoringConfigHistoryWhereInput is used for filtering VendorScoringConfigHistory objects.
@@ -39706,6 +39727,13 @@ input VendorScoringConfigHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	scoring_mode field predicates
+	"""
+	scoringMode: VendorScoringConfigHistoryVendorScoringMode
+	scoringModeNEQ: VendorScoringConfigHistoryVendorScoringMode
+	scoringModeIn: [VendorScoringConfigHistoryVendorScoringMode!]
+	scoringModeNotIn: [VendorScoringConfigHistoryVendorScoringMode!]
 }
 """
 VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring

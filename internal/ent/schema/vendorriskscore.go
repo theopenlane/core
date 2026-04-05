@@ -7,10 +7,14 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // VendorRiskScore holds the schema definition for a per-vendor per-question risk assessment
@@ -112,7 +116,7 @@ func (VendorRiskScore) Fields() []ent.Field {
 func (v VendorRiskScore) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[VendorRiskScore](v,
+			newObjectOwnedMixin[generated.VendorRiskScore](v,
 				withParents(VendorScoringConfig{}, Entity{}, AssessmentResponse{}),
 				withOrganizationOwner(true),
 			),
@@ -128,6 +132,9 @@ func (v VendorRiskScore) Edges() []ent.Edge {
 			name:       "vendor_scoring_config",
 			t:          VendorScoringConfig.Type,
 			field:      "vendor_scoring_config_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: v,
@@ -156,7 +163,7 @@ func (VendorRiskScore) Hooks() []ent.Hook {
 // Annotations of the VendorRiskScore
 func (VendorRiskScore) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		//		entfga.SelfAccessChecks(),
+		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
@@ -164,18 +171,20 @@ func (VendorRiskScore) Annotations() []schema.Annotation {
 }
 
 // Policy of the VendorRiskScore
-//func (VendorRiskScore) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CanCreateObjectsUnderParents([]string{
-//				VendorScoringConfig{}.PluralName(),
-//				Entity{}.PluralName(),
-//				AssessmentResponse{}.PluralName(),
-//			}),
-//			policy.CheckOrgWriteAccess(),
-//		),
-//	)
-//}
+func (VendorRiskScore) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				VendorScoringConfig{}.PluralName(),
+				Entity{}.PluralName(),
+				AssessmentResponse{}.PluralName(),
+			}),
+			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
+			entfga.CheckEditAccess[*generated.VendorRiskScoreMutation](),
+		),
+	)
+}
 
 // Modules of the VendorRiskScore
 func (VendorRiskScore) Modules() []models.OrgModule {

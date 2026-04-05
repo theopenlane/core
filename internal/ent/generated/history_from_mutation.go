@@ -25551,6 +25551,14 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetQuestions(questions)
 	}
 
+	if scoringMode, exists := m.ScoringMode(); exists {
+		create = create.SetScoringMode(scoringMode)
+	}
+
+	if riskThresholds, exists := m.RiskThresholds(); exists {
+		create = create.SetRiskThresholds(riskThresholds)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -25636,6 +25644,18 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetQuestions(vendorscoringconfig.Questions)
 		}
 
+		if scoringMode, exists := m.ScoringMode(); exists {
+			create = create.SetScoringMode(scoringMode)
+		} else {
+			create = create.SetScoringMode(vendorscoringconfig.ScoringMode)
+		}
+
+		if riskThresholds, exists := m.RiskThresholds(); exists {
+			create = create.SetRiskThresholds(riskThresholds)
+		} else {
+			create = create.SetRiskThresholds(vendorscoringconfig.RiskThresholds)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -25680,6 +25700,8 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetTags(vendorscoringconfig.Tags).
 			SetOwnerID(vendorscoringconfig.OwnerID).
 			SetQuestions(vendorscoringconfig.Questions).
+			SetScoringMode(vendorscoringconfig.ScoringMode).
+			SetRiskThresholds(vendorscoringconfig.RiskThresholds).
 			Save(ctx)
 		if err != nil {
 			return err

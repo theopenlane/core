@@ -8,8 +8,10 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx/history"
 )
@@ -43,6 +45,10 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldQuestions holds the string denoting the questions field in the database.
 	FieldQuestions = "questions"
+	// FieldScoringMode holds the string denoting the scoring_mode field in the database.
+	FieldScoringMode = "scoring_mode"
+	// FieldRiskThresholds holds the string denoting the risk_thresholds field in the database.
+	FieldRiskThresholds = "risk_thresholds"
 	// Table holds the table name of the vendorscoringconfighistory in the database.
 	Table = "vendor_scoring_config_history"
 )
@@ -62,6 +68,8 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldQuestions,
+	FieldScoringMode,
+	FieldRiskThresholds,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -74,7 +82,15 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 var (
+	Hooks        [1]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -87,6 +103,8 @@ var (
 	DefaultTags []string
 	// DefaultQuestions holds the default value on creation for the "questions" field.
 	DefaultQuestions models.VendorScoringQuestionsConfig
+	// DefaultRiskThresholds holds the default value on creation for the "risk_thresholds" field.
+	DefaultRiskThresholds models.RiskThresholdsConfig
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -98,6 +116,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("vendorscoringconfighistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultScoringMode enums.VendorScoringMode = "ANSWERED_ONLY"
+
+// ScoringModeValidator is a validator for the "scoring_mode" field enum values. It is called by the builders before save.
+func ScoringModeValidator(sm enums.VendorScoringMode) error {
+	switch sm.String() {
+	case "ANSWERED_ONLY", "FULL_QUESTIONNAIRE", "MANUAL":
+		return nil
+	default:
+		return fmt.Errorf("vendorscoringconfighistory: invalid enum value for scoring_mode field: %q", sm)
 	}
 }
 
@@ -159,9 +189,21 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByScoringMode orders the results by the scoring_mode field.
+func ByScoringMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScoringMode, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.VendorScoringMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.VendorScoringMode)(nil)
+	// enums.VendorScoringMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.VendorScoringMode)(nil)
 )

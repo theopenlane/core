@@ -15378,6 +15378,14 @@ input CreateVendorScoringConfigInput {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig
   ownerID: ID
   vendorRiskScoreIDs: [ID!]
 }
@@ -78527,6 +78535,14 @@ input UpdateVendorScoringConfigInput {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig
   ownerID: ID
   clearOwner: Boolean
   addVendorRiskScoreIDs: [ID!]
@@ -80882,6 +80898,14 @@ type VendorScoringConfig implements Node {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig!
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode!
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig!
   owner: Organization
   vendorRiskScores(
     """
@@ -80964,6 +80988,15 @@ Properties by which VendorScoringConfig connections can be ordered.
 enum VendorScoringConfigOrderField {
   created_at
   updated_at
+  scoring_mode
+}
+"""
+VendorScoringConfigVendorScoringMode is enum for the field scoring_mode
+"""
+enum VendorScoringConfigVendorScoringMode @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringMode") {
+  ANSWERED_ONLY
+  FULL_QUESTIONNAIRE
+  MANUAL
 }
 """
 VendorScoringConfigWhereInput is used for filtering VendorScoringConfig objects.
@@ -81066,6 +81099,13 @@ input VendorScoringConfigWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  scoring_mode field predicates
+  """
+  scoringMode: VendorScoringConfigVendorScoringMode
+  scoringModeNEQ: VendorScoringConfigVendorScoringMode
+  scoringModeIn: [VendorScoringConfigVendorScoringMode!]
+  scoringModeNotIn: [VendorScoringConfigVendorScoringMode!]
   """
   owner edge predicates
   """

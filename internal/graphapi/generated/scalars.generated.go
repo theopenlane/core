@@ -180,6 +180,16 @@ func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNRiskThresholdsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, v any) (models.RiskThresholdsConfig, error) {
+	var res models.RiskThresholdsConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRiskThresholdsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, sel ast.SelectionSet, v models.RiskThresholdsConfig) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTestingProcedures(ctx context.Context, v any) (models.TestingProcedures, error) {
 	var res models.TestingProcedures
 	err := res.UnmarshalGQL(v)
@@ -688,6 +698,22 @@ func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋco
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalORiskThresholdsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, v any) (*models.RiskThresholdsConfig, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.RiskThresholdsConfig)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalORiskThresholdsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, sel ast.SelectionSet, v *models.RiskThresholdsConfig) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, v any) (models.SSOAuthorizationMap, error) {

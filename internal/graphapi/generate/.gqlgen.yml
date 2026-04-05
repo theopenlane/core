@@ -173,3 +173,6 @@ models:
   VendorScoringQuestionsConfig:
     model:
       - github.com/theopenlane/core/common/models.VendorScoringQuestionsConfig
+  RiskThresholdsConfig:
+    model:
+      - github.com/theopenlane/core/common/models.RiskThresholdsConfig

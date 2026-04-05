@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
@@ -159,6 +160,34 @@ func (_u *VendorScoringConfigHistoryUpdate) SetNillableQuestions(v *models.Vendo
 	return _u
 }
 
+// SetScoringMode sets the "scoring_mode" field.
+func (_u *VendorScoringConfigHistoryUpdate) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigHistoryUpdate {
+	_u.mutation.SetScoringMode(v)
+	return _u
+}
+
+// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
+func (_u *VendorScoringConfigHistoryUpdate) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigHistoryUpdate {
+	if v != nil {
+		_u.SetScoringMode(*v)
+	}
+	return _u
+}
+
+// SetRiskThresholds sets the "risk_thresholds" field.
+func (_u *VendorScoringConfigHistoryUpdate) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdate {
+	_u.mutation.SetRiskThresholds(v)
+	return _u
+}
+
+// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
+func (_u *VendorScoringConfigHistoryUpdate) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdate {
+	if v != nil {
+		_u.SetRiskThresholds(*v)
+	}
+	return _u
+}
+
 // Mutation returns the VendorScoringConfigHistoryMutation object of the builder.
 func (_u *VendorScoringConfigHistoryUpdate) Mutation() *VendorScoringConfigHistoryMutation {
 	return _u.mutation
@@ -166,7 +195,9 @@ func (_u *VendorScoringConfigHistoryUpdate) Mutation() *VendorScoringConfigHisto
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *VendorScoringConfigHistoryUpdate) Save(ctx context.Context) (int, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -193,11 +224,25 @@ func (_u *VendorScoringConfigHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *VendorScoringConfigHistoryUpdate) defaults() {
+func (_u *VendorScoringConfigHistoryUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if vendorscoringconfighistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorscoringconfighistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (_u *VendorScoringConfigHistoryUpdate) check() error {
+	if v, ok := _u.mutation.ScoringMode(); ok {
+		if err := vendorscoringconfighistory.ScoringModeValidator(v); err != nil {
+			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`historygenerated: validator failed for field "VendorScoringConfigHistory.scoring_mode": %w`, err)}
+		}
+	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -207,6 +252,9 @@ func (_u *VendorScoringConfigHistoryUpdate) Modify(modifiers ...func(u *sql.Upda
 }
 
 func (_u *VendorScoringConfigHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(vendorscoringconfighistory.Table, vendorscoringconfighistory.Columns, sqlgraph.NewFieldSpec(vendorscoringconfighistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -267,6 +315,12 @@ func (_u *VendorScoringConfigHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := _u.mutation.Questions(); ok {
 		_spec.SetField(vendorscoringconfighistory.FieldQuestions, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.ScoringMode(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldScoringMode, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.RiskThresholds(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldRiskThresholds, field.TypeJSON, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.VendorScoringConfigHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -416,6 +470,34 @@ func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableQuestions(v *models.Ve
 	return _u
 }
 
+// SetScoringMode sets the "scoring_mode" field.
+func (_u *VendorScoringConfigHistoryUpdateOne) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigHistoryUpdateOne {
+	_u.mutation.SetScoringMode(v)
+	return _u
+}
+
+// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
+func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigHistoryUpdateOne {
+	if v != nil {
+		_u.SetScoringMode(*v)
+	}
+	return _u
+}
+
+// SetRiskThresholds sets the "risk_thresholds" field.
+func (_u *VendorScoringConfigHistoryUpdateOne) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdateOne {
+	_u.mutation.SetRiskThresholds(v)
+	return _u
+}
+
+// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
+func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskThresholds(*v)
+	}
+	return _u
+}
+
 // Mutation returns the VendorScoringConfigHistoryMutation object of the builder.
 func (_u *VendorScoringConfigHistoryUpdateOne) Mutation() *VendorScoringConfigHistoryMutation {
 	return _u.mutation
@@ -436,7 +518,9 @@ func (_u *VendorScoringConfigHistoryUpdateOne) Select(field string, fields ...st
 
 // Save executes the query and returns the updated VendorScoringConfigHistory entity.
 func (_u *VendorScoringConfigHistoryUpdateOne) Save(ctx context.Context) (*VendorScoringConfigHistory, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -463,11 +547,25 @@ func (_u *VendorScoringConfigHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *VendorScoringConfigHistoryUpdateOne) defaults() {
+func (_u *VendorScoringConfigHistoryUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if vendorscoringconfighistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorscoringconfighistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (_u *VendorScoringConfigHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.ScoringMode(); ok {
+		if err := vendorscoringconfighistory.ScoringModeValidator(v); err != nil {
+			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`historygenerated: validator failed for field "VendorScoringConfigHistory.scoring_mode": %w`, err)}
+		}
+	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -477,6 +575,9 @@ func (_u *VendorScoringConfigHistoryUpdateOne) Modify(modifiers ...func(u *sql.U
 }
 
 func (_u *VendorScoringConfigHistoryUpdateOne) sqlSave(ctx context.Context) (_node *VendorScoringConfigHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(vendorscoringconfighistory.Table, vendorscoringconfighistory.Columns, sqlgraph.NewFieldSpec(vendorscoringconfighistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -554,6 +655,12 @@ func (_u *VendorScoringConfigHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if value, ok := _u.mutation.Questions(); ok {
 		_spec.SetField(vendorscoringconfighistory.FieldQuestions, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.ScoringMode(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldScoringMode, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.RiskThresholds(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldRiskThresholds, field.TypeJSON, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.VendorScoringConfigHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

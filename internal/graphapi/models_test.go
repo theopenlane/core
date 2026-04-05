@@ -148,6 +148,7 @@ type EntityBuilder struct {
 	DisplayName string
 	TypeID      string
 	Description string
+	Tier        enums.VendorTier
 }
 
 type EntityTypeBuilder struct {
@@ -944,20 +945,26 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		e.Description = gofakeit.HipsterSentence()
 	}
 
+	if e.Tier == "" {
+		e.Tier = enums.VendorTierStandard
+	}
+
 	if e.TypeID == "" {
 		et := (&EntityTypeBuilder{client: e.client}).MustNew(ctx, t)
 		e.TypeID = et.ID
 	}
 
-	entity, err := e.client.db.Entity.Create().
+	entity := e.client.db.Entity.Create().
 		SetName(e.Name).
 		SetDisplayName(e.DisplayName).
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
-		Save(ctx)
+		SetTier(e.Tier)
+
+	savedEntity, err := entity.Save(ctx)
 	requireNoError(t, err)
 
-	return entity
+	return savedEntity
 }
 
 // MustNew identity holder builder is used to create, without authz checks, identity holders in the database

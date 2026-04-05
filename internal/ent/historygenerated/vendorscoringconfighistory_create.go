@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
 	"github.com/theopenlane/entx/history"
@@ -176,6 +177,34 @@ func (_c *VendorScoringConfigHistoryCreate) SetNillableQuestions(v *models.Vendo
 	return _c
 }
 
+// SetScoringMode sets the "scoring_mode" field.
+func (_c *VendorScoringConfigHistoryCreate) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigHistoryCreate {
+	_c.mutation.SetScoringMode(v)
+	return _c
+}
+
+// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
+func (_c *VendorScoringConfigHistoryCreate) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigHistoryCreate {
+	if v != nil {
+		_c.SetScoringMode(*v)
+	}
+	return _c
+}
+
+// SetRiskThresholds sets the "risk_thresholds" field.
+func (_c *VendorScoringConfigHistoryCreate) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigHistoryCreate {
+	_c.mutation.SetRiskThresholds(v)
+	return _c
+}
+
+// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
+func (_c *VendorScoringConfigHistoryCreate) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigHistoryCreate {
+	if v != nil {
+		_c.SetRiskThresholds(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *VendorScoringConfigHistoryCreate) SetID(v string) *VendorScoringConfigHistoryCreate {
 	_c.mutation.SetID(v)
@@ -197,7 +226,9 @@ func (_c *VendorScoringConfigHistoryCreate) Mutation() *VendorScoringConfigHisto
 
 // Save creates the VendorScoringConfigHistory in the database.
 func (_c *VendorScoringConfigHistoryCreate) Save(ctx context.Context) (*VendorScoringConfigHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -224,16 +255,25 @@ func (_c *VendorScoringConfigHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *VendorScoringConfigHistoryCreate) defaults() {
+func (_c *VendorScoringConfigHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if vendorscoringconfighistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorscoringconfighistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if vendorscoringconfighistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.DefaultCreatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorscoringconfighistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if vendorscoringconfighistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.DefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorscoringconfighistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -245,10 +285,22 @@ func (_c *VendorScoringConfigHistoryCreate) defaults() {
 		v := vendorscoringconfighistory.DefaultQuestions
 		_c.mutation.SetQuestions(v)
 	}
+	if _, ok := _c.mutation.ScoringMode(); !ok {
+		v := vendorscoringconfighistory.DefaultScoringMode
+		_c.mutation.SetScoringMode(v)
+	}
+	if _, ok := _c.mutation.RiskThresholds(); !ok {
+		v := vendorscoringconfighistory.DefaultRiskThresholds
+		_c.mutation.SetRiskThresholds(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if vendorscoringconfighistory.DefaultID == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.DefaultID (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorscoringconfighistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -266,6 +318,17 @@ func (_c *VendorScoringConfigHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Questions(); !ok {
 		return &ValidationError{Name: "questions", err: errors.New(`historygenerated: missing required field "VendorScoringConfigHistory.questions"`)}
+	}
+	if _, ok := _c.mutation.ScoringMode(); !ok {
+		return &ValidationError{Name: "scoring_mode", err: errors.New(`historygenerated: missing required field "VendorScoringConfigHistory.scoring_mode"`)}
+	}
+	if v, ok := _c.mutation.ScoringMode(); ok {
+		if err := vendorscoringconfighistory.ScoringModeValidator(v); err != nil {
+			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`historygenerated: validator failed for field "VendorScoringConfigHistory.scoring_mode": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.RiskThresholds(); !ok {
+		return &ValidationError{Name: "risk_thresholds", err: errors.New(`historygenerated: missing required field "VendorScoringConfigHistory.risk_thresholds"`)}
 	}
 	return nil
 }
@@ -350,6 +413,14 @@ func (_c *VendorScoringConfigHistoryCreate) createSpec() (*VendorScoringConfigHi
 	if value, ok := _c.mutation.Questions(); ok {
 		_spec.SetField(vendorscoringconfighistory.FieldQuestions, field.TypeJSON, value)
 		_node.Questions = value
+	}
+	if value, ok := _c.mutation.ScoringMode(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldScoringMode, field.TypeEnum, value)
+		_node.ScoringMode = value
+	}
+	if value, ok := _c.mutation.RiskThresholds(); ok {
+		_spec.SetField(vendorscoringconfighistory.FieldRiskThresholds, field.TypeJSON, value)
+		_node.RiskThresholds = value
 	}
 	return _node, _spec
 }

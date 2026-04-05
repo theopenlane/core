@@ -3,11 +3,14 @@
 package vendorscoringconfig
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 )
 
@@ -34,6 +37,10 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldQuestions holds the string denoting the questions field in the database.
 	FieldQuestions = "questions"
+	// FieldScoringMode holds the string denoting the scoring_mode field in the database.
+	FieldScoringMode = "scoring_mode"
+	// FieldRiskThresholds holds the string denoting the risk_thresholds field in the database.
+	FieldRiskThresholds = "risk_thresholds"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
@@ -68,6 +75,8 @@ var Columns = []string{
 	FieldTags,
 	FieldOwnerID,
 	FieldQuestions,
+	FieldScoringMode,
+	FieldRiskThresholds,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -86,8 +95,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
+	Hooks        [6]ent.Hook
 	Interceptors [2]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -100,9 +110,23 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultQuestions holds the default value on creation for the "questions" field.
 	DefaultQuestions models.VendorScoringQuestionsConfig
+	// DefaultRiskThresholds holds the default value on creation for the "risk_thresholds" field.
+	DefaultRiskThresholds models.RiskThresholdsConfig
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultScoringMode enums.VendorScoringMode = "ANSWERED_ONLY"
+
+// ScoringModeValidator is a validator for the "scoring_mode" field enum values. It is called by the builders before save.
+func ScoringModeValidator(sm enums.VendorScoringMode) error {
+	switch sm.String() {
+	case "ANSWERED_ONLY", "FULL_QUESTIONNAIRE", "MANUAL":
+		return nil
+	default:
+		return fmt.Errorf("vendorscoringconfig: invalid enum value for scoring_mode field: %q", sm)
+	}
+}
 
 // OrderOption defines the ordering options for the VendorScoringConfig queries.
 type OrderOption func(*sql.Selector)
@@ -147,6 +171,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByScoringMode orders the results by the scoring_mode field.
+func ByScoringMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScoringMode, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -181,3 +210,10 @@ func newVendorRiskScoresStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
 	)
 }
+
+var (
+	// enums.VendorScoringMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.VendorScoringMode)(nil)
+	// enums.VendorScoringMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.VendorScoringMode)(nil)
+)

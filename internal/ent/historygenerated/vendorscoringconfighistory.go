@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
 	"github.com/theopenlane/entx/history"
@@ -45,8 +46,12 @@ type VendorScoringConfigHistory struct {
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
-	Questions    models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
-	selectValues sql.SelectValues
+	Questions models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode enums.VendorScoringMode `json:"scoring_mode,omitempty"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds models.RiskThresholdsConfig `json:"risk_thresholds,omitempty"`
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -54,11 +59,11 @@ func (*VendorScoringConfigHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case vendorscoringconfighistory.FieldTags, vendorscoringconfighistory.FieldQuestions:
+		case vendorscoringconfighistory.FieldTags, vendorscoringconfighistory.FieldQuestions, vendorscoringconfighistory.FieldRiskThresholds:
 			values[i] = new([]byte)
 		case vendorscoringconfighistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case vendorscoringconfighistory.FieldID, vendorscoringconfighistory.FieldRef, vendorscoringconfighistory.FieldCreatedBy, vendorscoringconfighistory.FieldUpdatedBy, vendorscoringconfighistory.FieldDeletedBy, vendorscoringconfighistory.FieldOwnerID:
+		case vendorscoringconfighistory.FieldID, vendorscoringconfighistory.FieldRef, vendorscoringconfighistory.FieldCreatedBy, vendorscoringconfighistory.FieldUpdatedBy, vendorscoringconfighistory.FieldDeletedBy, vendorscoringconfighistory.FieldOwnerID, vendorscoringconfighistory.FieldScoringMode:
 			values[i] = new(sql.NullString)
 		case vendorscoringconfighistory.FieldHistoryTime, vendorscoringconfighistory.FieldCreatedAt, vendorscoringconfighistory.FieldUpdatedAt, vendorscoringconfighistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -159,6 +164,20 @@ func (_m *VendorScoringConfigHistory) assignValues(columns []string, values []an
 					return fmt.Errorf("unmarshal field questions: %w", err)
 				}
 			}
+		case vendorscoringconfighistory.FieldScoringMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scoring_mode", values[i])
+			} else if value.Valid {
+				_m.ScoringMode = enums.VendorScoringMode(value.String)
+			}
+		case vendorscoringconfighistory.FieldRiskThresholds:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_thresholds", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RiskThresholds); err != nil {
+					return fmt.Errorf("unmarshal field risk_thresholds: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -230,6 +249,12 @@ func (_m *VendorScoringConfigHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("questions=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Questions))
+	builder.WriteString(", ")
+	builder.WriteString("scoring_mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ScoringMode))
+	builder.WriteString(", ")
+	builder.WriteString("risk_thresholds=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskThresholds))
 	builder.WriteByte(')')
 	return builder.String()
 }

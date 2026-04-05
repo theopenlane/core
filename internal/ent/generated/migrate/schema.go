@@ -8004,6 +8004,8 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "questions", Type: field.TypeJSON},
+		{Name: "scoring_mode", Type: field.TypeEnum, Enums: []string{"ANSWERED_ONLY", "FULL_QUESTIONNAIRE", "MANUAL"}, Default: "ANSWERED_ONLY"},
+		{Name: "risk_thresholds", Type: field.TypeJSON},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// VendorScoringConfigsTable holds the schema information for the "vendor_scoring_configs" table.
@@ -8014,7 +8016,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "vendor_scoring_configs_organizations_vendor_scoring_configs",
-				Columns:    []*schema.Column{VendorScoringConfigsColumns[9]},
+				Columns:    []*schema.Column{VendorScoringConfigsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8023,15 +8025,10 @@ var (
 			{
 				Name:    "vendorscoringconfig_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{VendorScoringConfigsColumns[9]},
+				Columns: []*schema.Column{VendorScoringConfigsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
-			},
-			{
-				Name:    "vendorscoringconfig_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{VendorScoringConfigsColumns[9]},
 			},
 		},
 	}

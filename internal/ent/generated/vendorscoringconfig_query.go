@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -412,6 +413,12 @@ func (_q *VendorScoringConfigQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if vendorscoringconfig.Policy == nil {
+		return errors.New("generated: uninitialized vendorscoringconfig.Policy (forgotten import generated/runtime?)")
+	}
+	if err := vendorscoringconfig.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

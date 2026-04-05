@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -489,6 +490,12 @@ func (_q *VendorRiskScoreQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if vendorriskscore.Policy == nil {
+		return errors.New("generated: uninitialized vendorriskscore.Policy (forgotten import generated/runtime?)")
+	}
+	if err := vendorriskscore.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

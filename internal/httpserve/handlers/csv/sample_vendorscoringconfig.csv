@@ -1,2 +1,2 @@
-Tags,Questions,OwnerId,VendorRiskScoreIDs
-example_tags,example_questions,example_ownerid,example_vendorriskscoreids
+Tags,Questions,ScoringMode,RiskThresholds,OwnerId,VendorRiskScoreIDs
+example_tags,example_questions,example_scoringmode,example_riskthresholds,example_ownerid,example_vendorriskscoreids

@@ -6,6 +6,7 @@ package historygenerated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -334,6 +335,12 @@ func (_q *VendorRiskScoreHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if vendorriskscorehistory.Policy == nil {
+		return errors.New("historygenerated: uninitialized vendorriskscorehistory.Policy (forgotten import historygenerated/runtime?)")
+	}
+	if err := vendorriskscorehistory.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

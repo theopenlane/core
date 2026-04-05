@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -705,6 +706,36 @@ func OwnerIDEqualFold(v string) predicate.VendorScoringConfigHistory {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.VendorScoringConfigHistory {
 	return predicate.VendorScoringConfigHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// ScoringModeEQ applies the EQ predicate on the "scoring_mode" field.
+func ScoringModeEQ(v enums.VendorScoringMode) predicate.VendorScoringConfigHistory {
+	vc := v
+	return predicate.VendorScoringConfigHistory(sql.FieldEQ(FieldScoringMode, vc))
+}
+
+// ScoringModeNEQ applies the NEQ predicate on the "scoring_mode" field.
+func ScoringModeNEQ(v enums.VendorScoringMode) predicate.VendorScoringConfigHistory {
+	vc := v
+	return predicate.VendorScoringConfigHistory(sql.FieldNEQ(FieldScoringMode, vc))
+}
+
+// ScoringModeIn applies the In predicate on the "scoring_mode" field.
+func ScoringModeIn(vs ...enums.VendorScoringMode) predicate.VendorScoringConfigHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.VendorScoringConfigHistory(sql.FieldIn(FieldScoringMode, v...))
+}
+
+// ScoringModeNotIn applies the NotIn predicate on the "scoring_mode" field.
+func ScoringModeNotIn(vs ...enums.VendorScoringMode) predicate.VendorScoringConfigHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.VendorScoringConfigHistory(sql.FieldNotIn(FieldScoringMode, v...))
 }
 
 // And groups predicates with the AND operator between them.

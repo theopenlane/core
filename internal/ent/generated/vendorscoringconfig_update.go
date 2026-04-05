@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -159,6 +160,34 @@ func (_u *VendorScoringConfigUpdate) SetNillableQuestions(v *models.VendorScorin
 	return _u
 }
 
+// SetScoringMode sets the "scoring_mode" field.
+func (_u *VendorScoringConfigUpdate) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigUpdate {
+	_u.mutation.SetScoringMode(v)
+	return _u
+}
+
+// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
+func (_u *VendorScoringConfigUpdate) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigUpdate {
+	if v != nil {
+		_u.SetScoringMode(*v)
+	}
+	return _u
+}
+
+// SetRiskThresholds sets the "risk_thresholds" field.
+func (_u *VendorScoringConfigUpdate) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigUpdate {
+	_u.mutation.SetRiskThresholds(v)
+	return _u
+}
+
+// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
+func (_u *VendorScoringConfigUpdate) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigUpdate {
+	if v != nil {
+		_u.SetRiskThresholds(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *VendorScoringConfigUpdate) SetOwner(v *Organization) *VendorScoringConfigUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -260,6 +289,11 @@ func (_u *VendorScoringConfigUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "VendorScoringConfig.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ScoringMode(); ok {
+		if err := vendorscoringconfig.ScoringModeValidator(v); err != nil {
+			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`generated: validator failed for field "VendorScoringConfig.scoring_mode": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -324,6 +358,12 @@ func (_u *VendorScoringConfigUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.Questions(); ok {
 		_spec.SetField(vendorscoringconfig.FieldQuestions, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.ScoringMode(); ok {
+		_spec.SetField(vendorscoringconfig.FieldScoringMode, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.RiskThresholds(); ok {
+		_spec.SetField(vendorscoringconfig.FieldRiskThresholds, field.TypeJSON, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -552,6 +592,34 @@ func (_u *VendorScoringConfigUpdateOne) SetNillableQuestions(v *models.VendorSco
 	return _u
 }
 
+// SetScoringMode sets the "scoring_mode" field.
+func (_u *VendorScoringConfigUpdateOne) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigUpdateOne {
+	_u.mutation.SetScoringMode(v)
+	return _u
+}
+
+// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
+func (_u *VendorScoringConfigUpdateOne) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigUpdateOne {
+	if v != nil {
+		_u.SetScoringMode(*v)
+	}
+	return _u
+}
+
+// SetRiskThresholds sets the "risk_thresholds" field.
+func (_u *VendorScoringConfigUpdateOne) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigUpdateOne {
+	_u.mutation.SetRiskThresholds(v)
+	return _u
+}
+
+// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
+func (_u *VendorScoringConfigUpdateOne) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigUpdateOne {
+	if v != nil {
+		_u.SetRiskThresholds(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *VendorScoringConfigUpdateOne) SetOwner(v *Organization) *VendorScoringConfigUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -666,6 +734,11 @@ func (_u *VendorScoringConfigUpdateOne) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "VendorScoringConfig.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ScoringMode(); ok {
+		if err := vendorscoringconfig.ScoringModeValidator(v); err != nil {
+			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`generated: validator failed for field "VendorScoringConfig.scoring_mode": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -747,6 +820,12 @@ func (_u *VendorScoringConfigUpdateOne) sqlSave(ctx context.Context) (_node *Ven
 	}
 	if value, ok := _u.mutation.Questions(); ok {
 		_spec.SetField(vendorscoringconfig.FieldQuestions, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.ScoringMode(); ok {
+		_spec.SetField(vendorscoringconfig.FieldScoringMode, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.RiskThresholds(); ok {
+		_spec.SetField(vendorscoringconfig.FieldRiskThresholds, field.TypeJSON, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

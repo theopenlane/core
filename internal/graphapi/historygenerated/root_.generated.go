@@ -2994,17 +2994,19 @@ type ComplexityRoot struct {
 	}
 
 	VendorScoringConfigHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Questions   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		HistoryTime    func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Operation      func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		Questions      func(childComplexity int) int
+		Ref            func(childComplexity int) int
+		RiskThresholds func(childComplexity int) int
+		ScoringMode    func(childComplexity int) int
+		Tags           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
 	}
 
 	VendorScoringConfigHistoryConnection struct {
@@ -19975,6 +19977,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorScoringConfigHistory.Ref(childComplexity), true
 
+	case "VendorScoringConfigHistory.riskThresholds":
+		if e.ComplexityRoot.VendorScoringConfigHistory.RiskThresholds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.RiskThresholds(childComplexity), true
+
+	case "VendorScoringConfigHistory.scoringMode":
+		if e.ComplexityRoot.VendorScoringConfigHistory.ScoringMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.ScoringMode(childComplexity), true
+
 	case "VendorScoringConfigHistory.tags":
 		if e.ComplexityRoot.VendorScoringConfigHistory.Tags == nil {
 			break
@@ -21939,7 +21955,12 @@ scalar Any
 """
 VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring
 """
-scalar VendorScoringQuestionsConfig`, BuiltIn: false},
+scalar VendorScoringQuestionsConfig
+"""
+RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
+"""
+scalar RiskThresholdsConfig
+`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type ActionPlanHistory implements Node {
@@ -61335,6 +61356,14 @@ type VendorScoringConfigHistory implements Node {
   org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
   """
   questions: VendorScoringQuestionsConfig!
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigHistoryVendorScoringMode!
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig!
 }
 """
 A connection to a list of items.
@@ -61394,6 +61423,15 @@ enum VendorScoringConfigHistoryOrderField {
   history_time
   created_at
   updated_at
+  scoring_mode
+}
+"""
+VendorScoringConfigHistoryVendorScoringMode is enum for the field scoring_mode
+"""
+enum VendorScoringConfigHistoryVendorScoringMode @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringMode") {
+  ANSWERED_ONLY
+  FULL_QUESTIONNAIRE
+  MANUAL
 }
 """
 VendorScoringConfigHistoryWhereInput is used for filtering VendorScoringConfigHistory objects.
@@ -61532,6 +61570,13 @@ input VendorScoringConfigHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  scoring_mode field predicates
+  """
+  scoringMode: VendorScoringConfigHistoryVendorScoringMode
+  scoringModeNEQ: VendorScoringConfigHistoryVendorScoringMode
+  scoringModeIn: [VendorScoringConfigHistoryVendorScoringMode!]
+  scoringModeNotIn: [VendorScoringConfigHistoryVendorScoringMode!]
 }
 type VulnerabilityHistory implements Node {
   id: ID!

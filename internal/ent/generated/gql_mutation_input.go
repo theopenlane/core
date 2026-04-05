@@ -28025,6 +28025,8 @@ func (c *VendorRiskScoreUpdateOne) SetInput(i UpdateVendorRiskScoreInput) *Vendo
 type CreateVendorScoringConfigInput struct {
 	Tags               []string
 	Questions          *models.VendorScoringQuestionsConfig
+	ScoringMode        *enums.VendorScoringMode
+	RiskThresholds     *models.RiskThresholdsConfig
 	OwnerID            *string
 	VendorRiskScoreIDs []string
 }
@@ -28036,6 +28038,12 @@ func (i *CreateVendorScoringConfigInput) Mutate(m *VendorScoringConfigMutation) 
 	}
 	if v := i.Questions; v != nil {
 		m.SetQuestions(*v)
+	}
+	if v := i.ScoringMode; v != nil {
+		m.SetScoringMode(*v)
+	}
+	if v := i.RiskThresholds; v != nil {
+		m.SetRiskThresholds(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -28057,6 +28065,8 @@ type UpdateVendorScoringConfigInput struct {
 	Tags                     []string
 	AppendTags               []string
 	Questions                *models.VendorScoringQuestionsConfig
+	ScoringMode              *enums.VendorScoringMode
+	RiskThresholds           *models.RiskThresholdsConfig
 	ClearOwner               bool
 	OwnerID                  *string
 	ClearVendorRiskScores    bool
@@ -28077,6 +28087,12 @@ func (i *UpdateVendorScoringConfigInput) Mutate(m *VendorScoringConfigMutation) 
 	}
 	if v := i.Questions; v != nil {
 		m.SetQuestions(*v)
+	}
+	if v := i.ScoringMode; v != nil {
+		m.SetScoringMode(*v)
+	}
+	if v := i.RiskThresholds; v != nil {
+		m.SetRiskThresholds(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

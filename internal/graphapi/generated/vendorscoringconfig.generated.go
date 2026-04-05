@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_VendorScoringConfigBulkCreatePayload_ve
 				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
 			case "questions":
 				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
+			case "scoringMode":
+				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
+			case "riskThresholds":
+				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
 			case "owner":
 				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
 			case "vendorRiskScores":
@@ -148,6 +152,10 @@ func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_ve
 				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
 			case "questions":
 				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
+			case "scoringMode":
+				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
+			case "riskThresholds":
+				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
 			case "owner":
 				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
 			case "vendorRiskScores":
@@ -228,6 +236,10 @@ func (ec *executionContext) fieldContext_VendorScoringConfigCreatePayload_vendor
 				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
 			case "questions":
 				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
+			case "scoringMode":
+				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
+			case "riskThresholds":
+				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
 			case "owner":
 				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
 			case "vendorRiskScores":
@@ -308,6 +320,10 @@ func (ec *executionContext) fieldContext_VendorScoringConfigUpdatePayload_vendor
 				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
 			case "questions":
 				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
+			case "scoringMode":
+				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
+			case "riskThresholds":
+				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
 			case "owner":
 				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
 			case "vendorRiskScores":

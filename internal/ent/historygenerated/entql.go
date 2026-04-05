@@ -2969,18 +2969,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VendorScoringConfigHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vendorscoringconfighistory.FieldHistoryTime: {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldHistoryTime},
-			vendorscoringconfighistory.FieldRef:         {Type: field.TypeString, Column: vendorscoringconfighistory.FieldRef},
-			vendorscoringconfighistory.FieldOperation:   {Type: field.TypeEnum, Column: vendorscoringconfighistory.FieldOperation},
-			vendorscoringconfighistory.FieldCreatedAt:   {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldCreatedAt},
-			vendorscoringconfighistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldUpdatedAt},
-			vendorscoringconfighistory.FieldCreatedBy:   {Type: field.TypeString, Column: vendorscoringconfighistory.FieldCreatedBy},
-			vendorscoringconfighistory.FieldUpdatedBy:   {Type: field.TypeString, Column: vendorscoringconfighistory.FieldUpdatedBy},
-			vendorscoringconfighistory.FieldDeletedAt:   {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldDeletedAt},
-			vendorscoringconfighistory.FieldDeletedBy:   {Type: field.TypeString, Column: vendorscoringconfighistory.FieldDeletedBy},
-			vendorscoringconfighistory.FieldTags:        {Type: field.TypeJSON, Column: vendorscoringconfighistory.FieldTags},
-			vendorscoringconfighistory.FieldOwnerID:     {Type: field.TypeString, Column: vendorscoringconfighistory.FieldOwnerID},
-			vendorscoringconfighistory.FieldQuestions:   {Type: field.TypeJSON, Column: vendorscoringconfighistory.FieldQuestions},
+			vendorscoringconfighistory.FieldHistoryTime:    {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldHistoryTime},
+			vendorscoringconfighistory.FieldRef:            {Type: field.TypeString, Column: vendorscoringconfighistory.FieldRef},
+			vendorscoringconfighistory.FieldOperation:      {Type: field.TypeEnum, Column: vendorscoringconfighistory.FieldOperation},
+			vendorscoringconfighistory.FieldCreatedAt:      {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldCreatedAt},
+			vendorscoringconfighistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldUpdatedAt},
+			vendorscoringconfighistory.FieldCreatedBy:      {Type: field.TypeString, Column: vendorscoringconfighistory.FieldCreatedBy},
+			vendorscoringconfighistory.FieldUpdatedBy:      {Type: field.TypeString, Column: vendorscoringconfighistory.FieldUpdatedBy},
+			vendorscoringconfighistory.FieldDeletedAt:      {Type: field.TypeTime, Column: vendorscoringconfighistory.FieldDeletedAt},
+			vendorscoringconfighistory.FieldDeletedBy:      {Type: field.TypeString, Column: vendorscoringconfighistory.FieldDeletedBy},
+			vendorscoringconfighistory.FieldTags:           {Type: field.TypeJSON, Column: vendorscoringconfighistory.FieldTags},
+			vendorscoringconfighistory.FieldOwnerID:        {Type: field.TypeString, Column: vendorscoringconfighistory.FieldOwnerID},
+			vendorscoringconfighistory.FieldQuestions:      {Type: field.TypeJSON, Column: vendorscoringconfighistory.FieldQuestions},
+			vendorscoringconfighistory.FieldScoringMode:    {Type: field.TypeEnum, Column: vendorscoringconfighistory.FieldScoringMode},
+			vendorscoringconfighistory.FieldRiskThresholds: {Type: field.TypeJSON, Column: vendorscoringconfighistory.FieldRiskThresholds},
 		},
 	}
 	graph.Nodes[72] = &sqlgraph.Node{
@@ -15921,6 +15923,16 @@ func (f *VendorScoringConfigHistoryFilter) WhereOwnerID(p entql.StringP) {
 // WhereQuestions applies the entql json.RawMessage predicate on the questions field.
 func (f *VendorScoringConfigHistoryFilter) WhereQuestions(p entql.BytesP) {
 	f.Where(p.Field(vendorscoringconfighistory.FieldQuestions))
+}
+
+// WhereScoringMode applies the entql string predicate on the scoring_mode field.
+func (f *VendorScoringConfigHistoryFilter) WhereScoringMode(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfighistory.FieldScoringMode))
+}
+
+// WhereRiskThresholds applies the entql json.RawMessage predicate on the risk_thresholds field.
+func (f *VendorScoringConfigHistoryFilter) WhereRiskThresholds(p entql.BytesP) {
+	f.Where(p.Field(vendorscoringconfighistory.FieldRiskThresholds))
 }
 
 // addPredicate implements the predicateAdder interface.

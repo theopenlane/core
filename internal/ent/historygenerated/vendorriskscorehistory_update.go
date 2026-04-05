@@ -351,7 +351,9 @@ func (_u *VendorRiskScoreHistoryUpdate) Mutation() *VendorRiskScoreHistoryMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *VendorRiskScoreHistoryUpdate) Save(ctx context.Context) (int, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -378,11 +380,15 @@ func (_u *VendorRiskScoreHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *VendorRiskScoreHistoryUpdate) defaults() {
+func (_u *VendorRiskScoreHistoryUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if vendorriskscorehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorriskscorehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorriskscorehistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -885,7 +891,9 @@ func (_u *VendorRiskScoreHistoryUpdateOne) Select(field string, fields ...string
 
 // Save executes the query and returns the updated VendorRiskScoreHistory entity.
 func (_u *VendorRiskScoreHistoryUpdateOne) Save(ctx context.Context) (*VendorRiskScoreHistory, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -912,11 +920,15 @@ func (_u *VendorRiskScoreHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *VendorRiskScoreHistoryUpdateOne) defaults() {
+func (_u *VendorRiskScoreHistoryUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if vendorriskscorehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized vendorriskscorehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := vendorriskscorehistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

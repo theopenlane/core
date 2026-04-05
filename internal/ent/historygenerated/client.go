@@ -10533,12 +10533,14 @@ func (c *VendorRiskScoreHistoryClient) GetX(ctx context.Context, id string) *Ven
 
 // Hooks returns the client hooks.
 func (c *VendorRiskScoreHistoryClient) Hooks() []Hook {
-	return c.hooks.VendorRiskScoreHistory
+	hooks := c.hooks.VendorRiskScoreHistory
+	return append(hooks[:len(hooks):len(hooks)], vendorriskscorehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *VendorRiskScoreHistoryClient) Interceptors() []Interceptor {
-	return c.inters.VendorRiskScoreHistory
+	inters := c.inters.VendorRiskScoreHistory
+	return append(inters[:len(inters):len(inters)], vendorriskscorehistory.Interceptors[:]...)
 }
 
 func (c *VendorRiskScoreHistoryClient) mutate(ctx context.Context, m *VendorRiskScoreHistoryMutation) (Value, error) {
@@ -10666,12 +10668,14 @@ func (c *VendorScoringConfigHistoryClient) GetX(ctx context.Context, id string) 
 
 // Hooks returns the client hooks.
 func (c *VendorScoringConfigHistoryClient) Hooks() []Hook {
-	return c.hooks.VendorScoringConfigHistory
+	hooks := c.hooks.VendorScoringConfigHistory
+	return append(hooks[:len(hooks):len(hooks)], vendorscoringconfighistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *VendorScoringConfigHistoryClient) Interceptors() []Interceptor {
-	return c.inters.VendorScoringConfigHistory
+	inters := c.inters.VendorScoringConfigHistory
+	return append(inters[:len(inters):len(inters)], vendorscoringconfighistory.Interceptors[:]...)
 }
 
 func (c *VendorScoringConfigHistoryClient) mutate(ctx context.Context, m *VendorScoringConfigHistoryMutation) (Value, error) {

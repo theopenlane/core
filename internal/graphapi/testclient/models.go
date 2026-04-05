@@ -9165,9 +9165,13 @@ type CreateVendorScoringConfigInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
-	Questions          *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
-	OwnerID            *string                              `json:"ownerID,omitempty"`
-	VendorRiskScoreIDs []string                             `json:"vendorRiskScoreIDs,omitempty"`
+	Questions *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode *enums.VendorScoringMode `json:"scoringMode,omitempty"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds     *models.RiskThresholdsConfig `json:"riskThresholds,omitempty"`
+	OwnerID            *string                      `json:"ownerID,omitempty"`
+	VendorRiskScoreIDs []string                     `json:"vendorRiskScoreIDs,omitempty"`
 }
 
 // CreateVulnerabilityInput is used for create Vulnerability object.
@@ -44157,12 +44161,16 @@ type UpdateVendorScoringConfigInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
-	Questions                *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
-	OwnerID                  *string                              `json:"ownerID,omitempty"`
-	ClearOwner               *bool                                `json:"clearOwner,omitempty"`
-	AddVendorRiskScoreIDs    []string                             `json:"addVendorRiskScoreIDs,omitempty"`
-	RemoveVendorRiskScoreIDs []string                             `json:"removeVendorRiskScoreIDs,omitempty"`
-	ClearVendorRiskScores    *bool                                `json:"clearVendorRiskScores,omitempty"`
+	Questions *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode *enums.VendorScoringMode `json:"scoringMode,omitempty"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds           *models.RiskThresholdsConfig `json:"riskThresholds,omitempty"`
+	OwnerID                  *string                      `json:"ownerID,omitempty"`
+	ClearOwner               *bool                        `json:"clearOwner,omitempty"`
+	AddVendorRiskScoreIDs    []string                     `json:"addVendorRiskScoreIDs,omitempty"`
+	RemoveVendorRiskScoreIDs []string                     `json:"removeVendorRiskScoreIDs,omitempty"`
+	ClearVendorRiskScores    *bool                        `json:"clearVendorRiskScores,omitempty"`
 }
 
 // UpdateVulnerabilityInput is used for update Vulnerability object.
@@ -45533,9 +45541,13 @@ type VendorScoringConfig struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
-	Questions        models.VendorScoringQuestionsConfig `json:"questions"`
-	Owner            *Organization                       `json:"owner,omitempty"`
-	VendorRiskScores *VendorRiskScoreConnection          `json:"vendorRiskScores"`
+	Questions models.VendorScoringQuestionsConfig `json:"questions"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode enums.VendorScoringMode `json:"scoringMode"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds   models.RiskThresholdsConfig `json:"riskThresholds"`
+	Owner            *Organization               `json:"owner,omitempty"`
+	VendorRiskScores *VendorRiskScoreConnection  `json:"vendorRiskScores"`
 }
 
 func (VendorScoringConfig) IsNode() {}
@@ -45691,6 +45703,11 @@ type VendorScoringConfigWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// scoring_mode field predicates
+	ScoringMode      *enums.VendorScoringMode  `json:"scoringMode,omitempty"`
+	ScoringModeNeq   *enums.VendorScoringMode  `json:"scoringModeNEQ,omitempty"`
+	ScoringModeIn    []enums.VendorScoringMode `json:"scoringModeIn,omitempty"`
+	ScoringModeNotIn []enums.VendorScoringMode `json:"scoringModeNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -54624,18 +54641,20 @@ func (e VendorRiskScoreOrderField) MarshalJSON() ([]byte, error) {
 type VendorScoringConfigOrderField string
 
 const (
-	VendorScoringConfigOrderFieldCreatedAt VendorScoringConfigOrderField = "created_at"
-	VendorScoringConfigOrderFieldUpdatedAt VendorScoringConfigOrderField = "updated_at"
+	VendorScoringConfigOrderFieldCreatedAt   VendorScoringConfigOrderField = "created_at"
+	VendorScoringConfigOrderFieldUpdatedAt   VendorScoringConfigOrderField = "updated_at"
+	VendorScoringConfigOrderFieldScoringMode VendorScoringConfigOrderField = "scoring_mode"
 )
 
 var AllVendorScoringConfigOrderField = []VendorScoringConfigOrderField{
 	VendorScoringConfigOrderFieldCreatedAt,
 	VendorScoringConfigOrderFieldUpdatedAt,
+	VendorScoringConfigOrderFieldScoringMode,
 }
 
 func (e VendorScoringConfigOrderField) IsValid() bool {
 	switch e {
-	case VendorScoringConfigOrderFieldCreatedAt, VendorScoringConfigOrderFieldUpdatedAt:
+	case VendorScoringConfigOrderFieldCreatedAt, VendorScoringConfigOrderFieldUpdatedAt, VendorScoringConfigOrderFieldScoringMode:
 		return true
 	}
 	return false

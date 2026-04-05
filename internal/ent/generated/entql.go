@@ -3520,15 +3520,17 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VendorScoringConfig",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vendorscoringconfig.FieldCreatedAt: {Type: field.TypeTime, Column: vendorscoringconfig.FieldCreatedAt},
-			vendorscoringconfig.FieldUpdatedAt: {Type: field.TypeTime, Column: vendorscoringconfig.FieldUpdatedAt},
-			vendorscoringconfig.FieldCreatedBy: {Type: field.TypeString, Column: vendorscoringconfig.FieldCreatedBy},
-			vendorscoringconfig.FieldUpdatedBy: {Type: field.TypeString, Column: vendorscoringconfig.FieldUpdatedBy},
-			vendorscoringconfig.FieldDeletedAt: {Type: field.TypeTime, Column: vendorscoringconfig.FieldDeletedAt},
-			vendorscoringconfig.FieldDeletedBy: {Type: field.TypeString, Column: vendorscoringconfig.FieldDeletedBy},
-			vendorscoringconfig.FieldTags:      {Type: field.TypeJSON, Column: vendorscoringconfig.FieldTags},
-			vendorscoringconfig.FieldOwnerID:   {Type: field.TypeString, Column: vendorscoringconfig.FieldOwnerID},
-			vendorscoringconfig.FieldQuestions: {Type: field.TypeJSON, Column: vendorscoringconfig.FieldQuestions},
+			vendorscoringconfig.FieldCreatedAt:      {Type: field.TypeTime, Column: vendorscoringconfig.FieldCreatedAt},
+			vendorscoringconfig.FieldUpdatedAt:      {Type: field.TypeTime, Column: vendorscoringconfig.FieldUpdatedAt},
+			vendorscoringconfig.FieldCreatedBy:      {Type: field.TypeString, Column: vendorscoringconfig.FieldCreatedBy},
+			vendorscoringconfig.FieldUpdatedBy:      {Type: field.TypeString, Column: vendorscoringconfig.FieldUpdatedBy},
+			vendorscoringconfig.FieldDeletedAt:      {Type: field.TypeTime, Column: vendorscoringconfig.FieldDeletedAt},
+			vendorscoringconfig.FieldDeletedBy:      {Type: field.TypeString, Column: vendorscoringconfig.FieldDeletedBy},
+			vendorscoringconfig.FieldTags:           {Type: field.TypeJSON, Column: vendorscoringconfig.FieldTags},
+			vendorscoringconfig.FieldOwnerID:        {Type: field.TypeString, Column: vendorscoringconfig.FieldOwnerID},
+			vendorscoringconfig.FieldQuestions:      {Type: field.TypeJSON, Column: vendorscoringconfig.FieldQuestions},
+			vendorscoringconfig.FieldScoringMode:    {Type: field.TypeEnum, Column: vendorscoringconfig.FieldScoringMode},
+			vendorscoringconfig.FieldRiskThresholds: {Type: field.TypeJSON, Column: vendorscoringconfig.FieldRiskThresholds},
 		},
 	}
 	graph.Nodes[98] = &sqlgraph.Node{
@@ -46638,6 +46640,16 @@ func (f *VendorScoringConfigFilter) WhereOwnerID(p entql.StringP) {
 // WhereQuestions applies the entql json.RawMessage predicate on the questions field.
 func (f *VendorScoringConfigFilter) WhereQuestions(p entql.BytesP) {
 	f.Where(p.Field(vendorscoringconfig.FieldQuestions))
+}
+
+// WhereScoringMode applies the entql string predicate on the scoring_mode field.
+func (f *VendorScoringConfigFilter) WhereScoringMode(p entql.StringP) {
+	f.Where(p.Field(vendorscoringconfig.FieldScoringMode))
+}
+
+// WhereRiskThresholds applies the entql json.RawMessage predicate on the risk_thresholds field.
+func (f *VendorScoringConfigFilter) WhereRiskThresholds(p entql.BytesP) {
+	f.Where(p.Field(vendorscoringconfig.FieldRiskThresholds))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

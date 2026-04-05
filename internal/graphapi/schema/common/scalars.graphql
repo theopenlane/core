@@ -119,3 +119,7 @@ scalar Any
 VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring
 """
 scalar VendorScoringQuestionsConfig
+"""
+RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
+"""
+scalar RiskThresholdsConfig

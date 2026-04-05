@@ -82238,6 +82238,16 @@ func (_q *VendorScoringConfigQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, vendorscoringconfig.FieldQuestions)
 				fieldSeen[vendorscoringconfig.FieldQuestions] = struct{}{}
 			}
+		case "scoringMode":
+			if _, ok := fieldSeen[vendorscoringconfig.FieldScoringMode]; !ok {
+				selectedFields = append(selectedFields, vendorscoringconfig.FieldScoringMode)
+				fieldSeen[vendorscoringconfig.FieldScoringMode] = struct{}{}
+			}
+		case "riskThresholds":
+			if _, ok := fieldSeen[vendorscoringconfig.FieldRiskThresholds]; !ok {
+				selectedFields = append(selectedFields, vendorscoringconfig.FieldRiskThresholds)
+				fieldSeen[vendorscoringconfig.FieldRiskThresholds] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

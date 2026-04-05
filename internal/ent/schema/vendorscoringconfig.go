@@ -3,14 +3,16 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // VendorScoringConfig holds the schema definition for the VendorScoringConfig entity
@@ -47,6 +49,19 @@ func (VendorScoringConfig) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput, entgql.SkipOrderField),
 			),
+		field.Enum("scoring_mode").
+			Comment("controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation").
+			GoType(enums.VendorScoringMode("")).
+			Default(string(enums.VendorScoringModeAnsweredOnly)).
+			Annotations(
+				entgql.OrderField("scoring_mode"),
+			),
+		field.JSON("risk_thresholds", models.RiskThresholdsConfig{}).
+			Comment("org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()").
+			Default(models.RiskThresholdsConfig{}).
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput, entgql.SkipOrderField),
+			),
 	}
 }
 
@@ -62,37 +77,35 @@ func (v VendorScoringConfig) Mixin() []ent.Mixin {
 // Edges of the VendorScoringConfig
 func (v VendorScoringConfig) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(v, VendorRiskScore{}),
-	}
-}
-
-// Indexes of the VendorScoringConfig
-func (VendorScoringConfig) Indexes() []ent.Index {
-	return []ent.Index{
-		// enforce one scoring config per organization
-		index.Fields(ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: v,
+			edgeSchema: VendorRiskScore{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(VendorRiskScore{}.Name()),
+			},
+		}),
 	}
 }
 
 // Hooks of the VendorScoringConfig
 func (VendorScoringConfig) Hooks() []ent.Hook {
-	return nil
+	return []ent.Hook{
+		hooks.HookVendorScoringConfigKeyGen(),
+	}
 }
 
 // Policy of the VendorScoringConfig
-//func (VendorScoringConfig) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckOrgWriteAccess(),
-//		),
-//	)
-//}
+func (VendorScoringConfig) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
+		),
+	)
+}
 
 // Annotations of the VendorScoringConfig
 func (VendorScoringConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		//		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
