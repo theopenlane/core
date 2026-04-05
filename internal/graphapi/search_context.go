@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 	"strings"
+	"sync"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -14,6 +15,7 @@ const (
 )
 
 type searchCtxTracker struct {
+	mu       sync.Mutex
 	contexts map[string]*models.SearchContext
 	query    string
 }
@@ -26,6 +28,9 @@ func newContextTracker(query string) *searchCtxTracker {
 }
 
 func (t *searchCtxTracker) addMatch(entityID, entityType string, fieldMatches []string, entity any) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
 	if _, ok := t.contexts[entityID]; !ok {
 		t.contexts[entityID] = &models.SearchContext{
 			EntityID:      entityID,
@@ -150,6 +155,9 @@ func (t *searchCtxTracker) createSnippet(fieldName, text, queryLower string) *mo
 }
 
 func (t *searchCtxTracker) getContexts() []*models.SearchContext {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
 	contexts := make([]*models.SearchContext, 0, len(t.contexts))
 	for _, ctx := range t.contexts {
 		contexts = append(contexts, ctx)
