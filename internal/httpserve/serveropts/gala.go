@@ -81,34 +81,24 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 	provideGalaDependencies(galaApp.Injector(), galaApp, dbClient, true)
 	provideGalaDependencies(notificationGala.Injector(), notificationGala, dbClient, false)
 
-	register := func(runtime *gala.Gala, registerListeners func(*gala.Registry) ([]gala.ListenerID, error)) error {
-		if _, err := registerListeners(runtime.Registry()); err != nil {
+	registrations := []struct {
+		runtime  *gala.Gala
+		register func(*gala.Registry) ([]gala.ListenerID, error)
+	}{
+		{galaApp, hooks.RegisterGalaEntitlementListeners},
+		{galaApp, hooks.RegisterGalaTrustCenterCacheListeners},
+		{galaApp, hooks.RegisterGalaWorkflowListeners},
+		{galaApp, hooks.RegisterGalaSlackListeners},
+		{galaApp, hooks.RegisterGalaVendorScoringListeners},
+		{notificationGala, hooks.RegisterGalaNotificationListeners},
+	}
+
+	for _, r := range registrations {
+		if _, err := r.register(r.runtime.Registry()); err != nil {
 			closeRuntimes()
 
 			return err
 		}
-
-		return nil
-	}
-
-	if err := register(galaApp, hooks.RegisterGalaEntitlementListeners); err != nil {
-		return err
-	}
-
-	if err := register(galaApp, hooks.RegisterGalaTrustCenterCacheListeners); err != nil {
-		return err
-	}
-
-	if err := register(galaApp, hooks.RegisterGalaWorkflowListeners); err != nil {
-		return err
-	}
-
-	if err := register(galaApp, hooks.RegisterGalaSlackListeners); err != nil {
-		return err
-	}
-
-	if err := register(notificationGala, hooks.RegisterGalaNotificationListeners); err != nil {
-		return err
 	}
 
 	if err := galaApp.StartWorkers(ctx); err != nil {

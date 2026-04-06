@@ -9,35 +9,33 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-func TestIntegrationConfigPayloadValidate(t *testing.T) {
+func TestConfigureIntegrationRequestValidate(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
 		name    string
-		payload IntegrationConfigPayload
+		payload ConfigureIntegrationRequest
 		wantErr bool
 	}{
 		{
 			name:    "missing definition ID",
-			payload: IntegrationConfigPayload{},
+			payload: ConfigureIntegrationRequest{},
 			wantErr: true,
 		},
 		{
 			name: "valid with body and credential ref",
-			payload: IntegrationConfigPayload{
+			payload: ConfigureIntegrationRequest{
 				DefinitionID:  "def_test",
-				CredentialRef: types.NewCredentialSlotID("test"),
+				CredentialRef: "test",
 				Body:          json.RawMessage(`{"key":"value"}`),
 			},
 			wantErr: false,
 		},
 		{
 			name: "body present without credential ref",
-			payload: IntegrationConfigPayload{
+			payload: ConfigureIntegrationRequest{
 				DefinitionID: "def_test",
 				Body:         json.RawMessage(`{"key":"value"}`),
 			},
@@ -45,22 +43,22 @@ func TestIntegrationConfigPayloadValidate(t *testing.T) {
 		},
 		{
 			name: "definition only with no body",
-			payload: IntegrationConfigPayload{
+			payload: ConfigureIntegrationRequest{
 				DefinitionID: "def_test",
 			},
 			wantErr: false,
 		},
 		{
 			name: "empty body with credential ref is valid",
-			payload: IntegrationConfigPayload{
+			payload: ConfigureIntegrationRequest{
 				DefinitionID:  "def_test",
-				CredentialRef: types.NewCredentialSlotID("test"),
+				CredentialRef: "test",
 			},
 			wantErr: false,
 		},
 		{
 			name: "null body does not require credential ref",
-			payload: IntegrationConfigPayload{
+			payload: ConfigureIntegrationRequest{
 				DefinitionID: "def_test",
 				Body:         json.RawMessage("null"),
 			},
@@ -92,7 +90,7 @@ func TestIntegrationAuthStartRequestValidate(t *testing.T) {
 	}{
 		{
 			name:    "missing definition ID",
-			req:     IntegrationAuthStartRequest{CredentialRef: types.NewCredentialSlotID("test")},
+			req:     IntegrationAuthStartRequest{CredentialRef: "test"},
 			wantErr: true,
 		},
 		{
@@ -104,7 +102,7 @@ func TestIntegrationAuthStartRequestValidate(t *testing.T) {
 			name: "valid",
 			req: IntegrationAuthStartRequest{
 				DefinitionID:  "def_test",
-				CredentialRef: types.NewCredentialSlotID("test"),
+				CredentialRef: "test",
 			},
 			wantErr: false,
 		},

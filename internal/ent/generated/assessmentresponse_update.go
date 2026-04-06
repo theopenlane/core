@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -505,6 +506,21 @@ func (_u *AssessmentResponseUpdate) SetDocument(v *DocumentData) *AssessmentResp
 	return _u.SetDocumentID(v.ID)
 }
 
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_u *AssessmentResponseUpdate) AddVendorRiskScoreIDs(ids ...string) *AssessmentResponseUpdate {
+	_u.mutation.AddVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *AssessmentResponseUpdate) AddVendorRiskScores(v ...*VendorRiskScore) *AssessmentResponseUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorRiskScoreIDs(ids...)
+}
+
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdate) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
@@ -538,6 +554,27 @@ func (_u *AssessmentResponseUpdate) ClearEntity() *AssessmentResponseUpdate {
 func (_u *AssessmentResponseUpdate) ClearDocument() *AssessmentResponseUpdate {
 	_u.mutation.ClearDocument()
 	return _u
+}
+
+// ClearVendorRiskScores clears all "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *AssessmentResponseUpdate) ClearVendorRiskScores() *AssessmentResponseUpdate {
+	_u.mutation.ClearVendorRiskScores()
+	return _u
+}
+
+// RemoveVendorRiskScoreIDs removes the "vendor_risk_scores" edge to VendorRiskScore entities by IDs.
+func (_u *AssessmentResponseUpdate) RemoveVendorRiskScoreIDs(ids ...string) *AssessmentResponseUpdate {
+	_u.mutation.RemoveVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// RemoveVendorRiskScores removes "vendor_risk_scores" edges to VendorRiskScore entities.
+func (_u *AssessmentResponseUpdate) RemoveVendorRiskScores(v ...*VendorRiskScore) *AssessmentResponseUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorRiskScoreIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -876,6 +913,54 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1373,6 +1458,21 @@ func (_u *AssessmentResponseUpdateOne) SetDocument(v *DocumentData) *AssessmentR
 	return _u.SetDocumentID(v.ID)
 }
 
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_u *AssessmentResponseUpdateOne) AddVendorRiskScoreIDs(ids ...string) *AssessmentResponseUpdateOne {
+	_u.mutation.AddVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *AssessmentResponseUpdateOne) AddVendorRiskScores(v ...*VendorRiskScore) *AssessmentResponseUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorRiskScoreIDs(ids...)
+}
+
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdateOne) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
@@ -1406,6 +1506,27 @@ func (_u *AssessmentResponseUpdateOne) ClearEntity() *AssessmentResponseUpdateOn
 func (_u *AssessmentResponseUpdateOne) ClearDocument() *AssessmentResponseUpdateOne {
 	_u.mutation.ClearDocument()
 	return _u
+}
+
+// ClearVendorRiskScores clears all "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *AssessmentResponseUpdateOne) ClearVendorRiskScores() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearVendorRiskScores()
+	return _u
+}
+
+// RemoveVendorRiskScoreIDs removes the "vendor_risk_scores" edge to VendorRiskScore entities by IDs.
+func (_u *AssessmentResponseUpdateOne) RemoveVendorRiskScoreIDs(ids ...string) *AssessmentResponseUpdateOne {
+	_u.mutation.RemoveVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// RemoveVendorRiskScores removes "vendor_risk_scores" edges to VendorRiskScore entities.
+func (_u *AssessmentResponseUpdateOne) RemoveVendorRiskScores(v ...*VendorRiskScore) *AssessmentResponseUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorRiskScoreIDs(ids...)
 }
 
 // Where appends a list predicates to the AssessmentResponseUpdate builder.
@@ -1774,6 +1895,54 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -230,8 +230,16 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("risk_score"),
 			),
-		field.String("tier").
-			Comment("the tier classification for the entity").
+		field.Int("risk_score_coverage").
+			Comment("number of scoring questions answered for the current risk score; used to contextualize partial assessments").
+			Optional().
+			Annotations(
+				entgql.OrderField("risk_score_coverage"),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.Enum("tier").
+			Comment("the vendor risk tier classification, used to determine the depth of TPRM assessment required").
+			GoType(enums.VendorTier("")).
 			Optional().
 			Annotations(
 				entgql.OrderField("tier"),
@@ -325,6 +333,7 @@ func (e Entity) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, Scan{}),
 		defaultEdgeToWithPagination(e, Campaign{}),
 		defaultEdgeToWithPagination(e, AssessmentResponse{}),
+		defaultEdgeToWithPagination(e, VendorRiskScore{}),
 		defaultEdgeToWithPagination(e, Integration{}),
 		defaultEdgeToWithPagination(e, Subprocessor{}),
 		edgeToWithPagination(&edgeDefinition{

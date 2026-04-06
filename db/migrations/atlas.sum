@@ -1,4 +1,4 @@
-h1:59qjPlmrdmQqMwcb9DFW70uPCj3sX4Szb2hKO8pcbrs=
+h1:GxWJH5OBKSIv7BYhruMWVHCKmnXOrLg4OMLkY0VZcjU=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -95,3 +95,5 @@ h1:59qjPlmrdmQqMwcb9DFW70uPCj3sX4Szb2hKO8pcbrs=
 20260402213036_registry_edges.sql h1:oO1oE3i2IjoAV3UtN5VHn2kD2i3App0nKOpaBvtq9AU=
 20260403001855_external_uuid_unique.sql h1:VXirwGuqxD8A9l7Hb9kWzt87MH61wEa5NVB4tOSy/Wo=
 20260403164719_registry_subcontrols.sql h1:PdLyw3w3Tjm5DrJMjmeooDrzkkpN/eEkrDfFTft4kdU=
+20260405172938_vendorriskscore.sql h1:qPwwDtspPkSPWz4Dodp7KDyRoTZequXCUipRu1W7NUQ=
+20260405172940_vendorriskscore_history.sql h1:NFdOOtD+4GBDC8r0mz2iMnc3HJOiyQt3XyE6umbDOYc=

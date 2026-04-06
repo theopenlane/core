@@ -1102,6 +1102,21 @@ data:
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}
+      oidclocal:
+        {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.enabled }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.clientid }}
+        clientid: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.clientid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.discoveryurl }}
+        discoveryurl: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.discoveryurl | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

@@ -132,7 +132,8 @@ Config contains the configuration for the core server
         "slack": {},
         "googleworkspace": {},
         "azureentraid": {},
-        "microsoftteams": {}
+        "microsoftteams": {},
+        "oidclocal": {}
     },
     "workflows": {
         "cel": {},
@@ -1591,6 +1592,7 @@ Slack contains settings for Slack notifications
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
+|[**oidclocal**](#integrationsoidclocal)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1601,7 +1603,8 @@ Slack contains settings for Slack notifications
     "slack": {},
     "googleworkspace": {},
     "azureentraid": {},
-    "microsoftteams": {}
+    "microsoftteams": {},
+    "oidclocal": {}
 }
 ```
 
@@ -1663,6 +1666,20 @@ Slack contains settings for Slack notifications
 |----|----|-----------|--------|
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationsoidclocal"></a>
+### integrations\.oidclocal: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**discoveryurl**|`string`|||
 |**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  

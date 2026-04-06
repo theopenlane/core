@@ -319,9 +319,9 @@ func RiskScore(v int) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldRiskScore, v))
 }
 
-// Tier applies equality check predicate on the "tier" field. It's identical to TierEQ.
-func Tier(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldEQ(FieldTier, v))
+// RiskScoreCoverage applies equality check predicate on the "risk_score_coverage" field. It's identical to RiskScoreCoverageEQ.
+func RiskScoreCoverage(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRiskScoreCoverage, v))
 }
 
 // NextReviewAt applies equality check predicate on the "next_review_at" field. It's identical to NextReviewAtEQ.
@@ -3539,59 +3539,84 @@ func RiskScoreNotNil() predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldNotNull(FieldRiskScore))
 }
 
+// RiskScoreCoverageEQ applies the EQ predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageEQ(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageNEQ applies the NEQ predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageNEQ(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageIn applies the In predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageIn(vs ...int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldRiskScoreCoverage, vs...))
+}
+
+// RiskScoreCoverageNotIn applies the NotIn predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageNotIn(vs ...int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldRiskScoreCoverage, vs...))
+}
+
+// RiskScoreCoverageGT applies the GT predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageGT(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageGTE applies the GTE predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageGTE(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageLT applies the LT predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageLT(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageLTE applies the LTE predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageLTE(v int) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageIsNil applies the IsNil predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldRiskScoreCoverage))
+}
+
+// RiskScoreCoverageNotNil applies the NotNil predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldRiskScoreCoverage))
+}
+
 // TierEQ applies the EQ predicate on the "tier" field.
-func TierEQ(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldEQ(FieldTier, v))
+func TierEQ(v enums.VendorTier) predicate.EntityHistory {
+	vc := v
+	return predicate.EntityHistory(sql.FieldEQ(FieldTier, vc))
 }
 
 // TierNEQ applies the NEQ predicate on the "tier" field.
-func TierNEQ(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldNEQ(FieldTier, v))
+func TierNEQ(v enums.VendorTier) predicate.EntityHistory {
+	vc := v
+	return predicate.EntityHistory(sql.FieldNEQ(FieldTier, vc))
 }
 
 // TierIn applies the In predicate on the "tier" field.
-func TierIn(vs ...string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldIn(FieldTier, vs...))
+func TierIn(vs ...enums.VendorTier) predicate.EntityHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EntityHistory(sql.FieldIn(FieldTier, v...))
 }
 
 // TierNotIn applies the NotIn predicate on the "tier" field.
-func TierNotIn(vs ...string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldNotIn(FieldTier, vs...))
-}
-
-// TierGT applies the GT predicate on the "tier" field.
-func TierGT(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldGT(FieldTier, v))
-}
-
-// TierGTE applies the GTE predicate on the "tier" field.
-func TierGTE(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldGTE(FieldTier, v))
-}
-
-// TierLT applies the LT predicate on the "tier" field.
-func TierLT(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldLT(FieldTier, v))
-}
-
-// TierLTE applies the LTE predicate on the "tier" field.
-func TierLTE(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldLTE(FieldTier, v))
-}
-
-// TierContains applies the Contains predicate on the "tier" field.
-func TierContains(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldContains(FieldTier, v))
-}
-
-// TierHasPrefix applies the HasPrefix predicate on the "tier" field.
-func TierHasPrefix(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldHasPrefix(FieldTier, v))
-}
-
-// TierHasSuffix applies the HasSuffix predicate on the "tier" field.
-func TierHasSuffix(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldHasSuffix(FieldTier, v))
+func TierNotIn(vs ...enums.VendorTier) predicate.EntityHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EntityHistory(sql.FieldNotIn(FieldTier, v...))
 }
 
 // TierIsNil applies the IsNil predicate on the "tier" field.
@@ -3602,16 +3627,6 @@ func TierIsNil() predicate.EntityHistory {
 // TierNotNil applies the NotNil predicate on the "tier" field.
 func TierNotNil() predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldNotNull(FieldTier))
-}
-
-// TierEqualFold applies the EqualFold predicate on the "tier" field.
-func TierEqualFold(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldEqualFold(FieldTier, v))
-}
-
-// TierContainsFold applies the ContainsFold predicate on the "tier" field.
-func TierContainsFold(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldContainsFold(FieldTier, v))
 }
 
 // ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.

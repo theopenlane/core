@@ -48,6 +48,10 @@ var (
 	ExportTypeTrustCenterFaq ExportType = "TRUST_CENTER_FAQ"
 	// ExportTypeTrustCenterSubprocessor indicates the trustcentersubprocessor.
 	ExportTypeTrustCenterSubprocessor ExportType = "TRUST_CENTER_SUBPROCESSOR"
+	// ExportTypeVendorRiskScore indicates the vendorriskscore.
+	ExportTypeVendorRiskScore ExportType = "VENDOR_RISK_SCORE"
+	// ExportTypeVendorScoringConfig indicates the vendorscoringconfig.
+	ExportTypeVendorScoringConfig ExportType = "VENDOR_SCORING_CONFIG"
 	// ExportTypeVulnerability indicates the vulnerability.
 	ExportTypeVulnerability ExportType = "VULNERABILITY"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
@@ -76,6 +80,8 @@ var exportTypeValues = []ExportType{
 	ExportTypeTask,
 	ExportTypeTrustCenterFaq,
 	ExportTypeTrustCenterSubprocessor,
+	ExportTypeVendorRiskScore,
+	ExportTypeVendorScoringConfig,
 	ExportTypeVulnerability,
 }
 

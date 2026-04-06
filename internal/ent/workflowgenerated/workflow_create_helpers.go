@@ -146,8 +146,14 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	NormalizeSchemaType("TrustCenterWatermarkConfig"): makeCreateEntry[generated.CreateTrustCenterWatermarkConfigInput](func(client *generated.Client) *generated.TrustCenterWatermarkConfigCreate {
 		return client.TrustCenterWatermarkConfig.Create()
 	}),
-	NormalizeSchemaType("User"):          makeCreateEntry[generated.CreateUserInput](func(client *generated.Client) *generated.UserCreate { return client.User.Create() }),
-	NormalizeSchemaType("UserSetting"):   makeCreateEntry[generated.CreateUserSettingInput](func(client *generated.Client) *generated.UserSettingCreate { return client.UserSetting.Create() }),
+	NormalizeSchemaType("User"):        makeCreateEntry[generated.CreateUserInput](func(client *generated.Client) *generated.UserCreate { return client.User.Create() }),
+	NormalizeSchemaType("UserSetting"): makeCreateEntry[generated.CreateUserSettingInput](func(client *generated.Client) *generated.UserSettingCreate { return client.UserSetting.Create() }),
+	NormalizeSchemaType("VendorRiskScore"): makeCreateEntry[generated.CreateVendorRiskScoreInput](func(client *generated.Client) *generated.VendorRiskScoreCreate {
+		return client.VendorRiskScore.Create()
+	}),
+	NormalizeSchemaType("VendorScoringConfig"): makeCreateEntry[generated.CreateVendorScoringConfigInput](func(client *generated.Client) *generated.VendorScoringConfigCreate {
+		return client.VendorScoringConfig.Create()
+	}),
 	NormalizeSchemaType("Vulnerability"): makeCreateEntry[generated.CreateVulnerabilityInput](func(client *generated.Client) *generated.VulnerabilityCreate { return client.Vulnerability.Create() }),
 	NormalizeSchemaType("WorkflowDefinition"): makeCreateEntry[generated.CreateWorkflowDefinitionInput](func(client *generated.Client) *generated.WorkflowDefinitionCreate {
 		return client.WorkflowDefinition.Create()

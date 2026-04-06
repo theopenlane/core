@@ -88,6 +88,12 @@ models:
   WorkflowAssignmentRejection:
     model:
       - github.com/theopenlane/core/common/models.WorkflowAssignmentRejection
+  VendorScoringQuestionsConfig:
+    model:
+      - github.com/theopenlane/core/common/models.VendorScoringQuestionsConfig
+  RiskThresholdsConfig:
+    model:
+      - github.com/theopenlane/core/common/models.RiskThresholdsConfig
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

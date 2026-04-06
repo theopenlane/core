@@ -1105,21 +1105,22 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
-	Email            string
-	EmailDeliveredAt *time.Time
-	EmailOpenedAt    *time.Time
-	EmailClickedAt   *time.Time
-	EmailOpenCount   *int
-	EmailClickCount  *int
-	LastEmailEventAt *time.Time
-	EmailMetadata    map[string]interface{}
-	DueDate          *time.Time
-	OwnerID          *string
-	AssessmentID     string
-	CampaignID       *string
-	IdentityHolderID *string
-	EntityID         *string
-	DocumentID       *string
+	Email              string
+	EmailDeliveredAt   *time.Time
+	EmailOpenedAt      *time.Time
+	EmailClickedAt     *time.Time
+	EmailOpenCount     *int
+	EmailClickCount    *int
+	LastEmailEventAt   *time.Time
+	EmailMetadata      map[string]interface{}
+	DueDate            *time.Time
+	OwnerID            *string
+	AssessmentID       string
+	CampaignID         *string
+	IdentityHolderID   *string
+	EntityID           *string
+	DocumentID         *string
+	VendorRiskScoreIDs []string
 }
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
@@ -1164,6 +1165,9 @@ func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 	}
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
+	}
+	if v := i.VendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
 	}
 }
 
@@ -5083,6 +5087,7 @@ type CreateDirectoryAccountInput struct {
 	Profile              map[string]interface{}
 	Metadata             map[string]interface{}
 	SourceVersion        *string
+	PrimarySource        *bool
 	OwnerID              *string
 	EnvironmentID        *string
 	ScopeID              *string
@@ -5186,6 +5191,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.SourceVersion; v != nil {
 		m.SetSourceVersion(*v)
 	}
+	if v := i.PrimarySource; v != nil {
+		m.SetPrimarySource(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -5283,6 +5291,7 @@ type UpdateDirectoryAccountInput struct {
 	Metadata                   map[string]interface{}
 	ClearSourceVersion         bool
 	SourceVersion              *string
+	PrimarySource              *bool
 	ClearOwner                 bool
 	OwnerID                    *string
 	ClearEnvironment           bool
@@ -5467,6 +5476,9 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.SourceVersion; v != nil {
 		m.SetSourceVersion(*v)
+	}
+	if v := i.PrimarySource; v != nil {
+		m.SetPrimarySource(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -7323,7 +7335,7 @@ type CreateEntityInput struct {
 	Links                                 []string
 	RiskRating                            *string
 	RiskScore                             *int
-	Tier                                  *string
+	Tier                                  *enums.VendorTier
 	ReviewFrequency                       *enums.Frequency
 	NextReviewAt                          *models.DateTime
 	ContractRenewalAt                     *models.DateTime
@@ -7351,6 +7363,7 @@ type CreateEntityInput struct {
 	ScanIDs                               []string
 	CampaignIDs                           []string
 	AssessmentResponseIDs                 []string
+	VendorRiskScoreIDs                    []string
 	IntegrationIDs                        []string
 	SubprocessorIDs                       []string
 	AuthMethodIDs                         []string
@@ -7560,6 +7573,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.AssessmentResponseIDs; len(v) > 0 {
 		m.AddAssessmentResponseIDs(v...)
 	}
+	if v := i.VendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
+	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
@@ -7687,7 +7703,7 @@ type UpdateEntityInput struct {
 	ClearRiskScore                             bool
 	RiskScore                                  *int
 	ClearTier                                  bool
-	Tier                                       *string
+	Tier                                       *enums.VendorTier
 	ClearReviewFrequency                       bool
 	ReviewFrequency                            *enums.Frequency
 	ClearNextReviewAt                          bool
@@ -7751,6 +7767,9 @@ type UpdateEntityInput struct {
 	ClearAssessmentResponses                   bool
 	AddAssessmentResponseIDs                   []string
 	RemoveAssessmentResponseIDs                []string
+	ClearVendorRiskScores                      bool
+	AddVendorRiskScoreIDs                      []string
+	RemoveVendorRiskScoreIDs                   []string
 	ClearIntegrations                          bool
 	AddIntegrationIDs                          []string
 	RemoveIntegrationIDs                       []string
@@ -8217,6 +8236,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
 		m.RemoveAssessmentResponseIDs(v...)
+	}
+	if i.ClearVendorRiskScores {
+		m.ClearVendorRiskScores()
+	}
+	if v := i.AddVendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
+	}
+	if v := i.RemoveVendorRiskScoreIDs; len(v) > 0 {
+		m.RemoveVendorRiskScoreIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -15892,6 +15920,8 @@ type CreateOrganizationInput struct {
 	DirectoryGroupIDs                 []string
 	DirectorySyncRunIDs               []string
 	DiscussionIDs                     []string
+	VendorScoringConfigIDs            []string
+	VendorRiskScoreIDs                []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -16215,6 +16245,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.DiscussionIDs; len(v) > 0 {
 		m.AddDiscussionIDs(v...)
 	}
+	if v := i.VendorScoringConfigIDs; len(v) > 0 {
+		m.AddVendorScoringConfigIDs(v...)
+	}
+	if v := i.VendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -16528,6 +16564,12 @@ type UpdateOrganizationInput struct {
 	ClearDiscussions                        bool
 	AddDiscussionIDs                        []string
 	RemoveDiscussionIDs                     []string
+	ClearVendorScoringConfigs               bool
+	AddVendorScoringConfigIDs               []string
+	RemoveVendorScoringConfigIDs            []string
+	ClearVendorRiskScores                   bool
+	AddVendorRiskScoreIDs                   []string
+	RemoveVendorRiskScoreIDs                []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -17440,6 +17482,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveDiscussionIDs; len(v) > 0 {
 		m.RemoveDiscussionIDs(v...)
+	}
+	if i.ClearVendorScoringConfigs {
+		m.ClearVendorScoringConfigs()
+	}
+	if v := i.AddVendorScoringConfigIDs; len(v) > 0 {
+		m.AddVendorScoringConfigIDs(v...)
+	}
+	if v := i.RemoveVendorScoringConfigIDs; len(v) > 0 {
+		m.RemoveVendorScoringConfigIDs(v...)
+	}
+	if i.ClearVendorRiskScores {
+		m.ClearVendorRiskScores()
+	}
+	if v := i.AddVendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
+	}
+	if v := i.RemoveVendorRiskScoreIDs; len(v) > 0 {
+		m.RemoveVendorRiskScoreIDs(v...)
 	}
 }
 
@@ -27807,6 +27867,258 @@ func (c *UserSettingUpdate) SetInput(i UpdateUserSettingInput) *UserSettingUpdat
 
 // SetInput applies the change-set in the UpdateUserSettingInput on the UserSettingUpdateOne builder.
 func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorRiskScoreInput represents a mutation input for creating vendorriskscores.
+type CreateVendorRiskScoreInput struct {
+	Tags                  []string
+	QuestionKey           string
+	QuestionName          string
+	QuestionDescription   *string
+	QuestionCategory      enums.VendorScoringCategory
+	Impact                enums.VendorRiskImpact
+	Likelihood            enums.VendorRiskLikelihood
+	Answer                *string
+	Notes                 *string
+	OwnerID               *string
+	VendorScoringConfigID *string
+	EntityID              string
+	AssessmentResponseID  *string
+}
+
+// Mutate applies the CreateVendorRiskScoreInput on the VendorRiskScoreMutation builder.
+func (i *CreateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetQuestionKey(i.QuestionKey)
+	m.SetQuestionName(i.QuestionName)
+	if v := i.QuestionDescription; v != nil {
+		m.SetQuestionDescription(*v)
+	}
+	m.SetQuestionCategory(i.QuestionCategory)
+	m.SetImpact(i.Impact)
+	m.SetLikelihood(i.Likelihood)
+	if v := i.Answer; v != nil {
+		m.SetAnswer(*v)
+	}
+	if v := i.Notes; v != nil {
+		m.SetNotes(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.VendorScoringConfigID; v != nil {
+		m.SetVendorScoringConfigID(*v)
+	}
+	m.SetEntityID(i.EntityID)
+	if v := i.AssessmentResponseID; v != nil {
+		m.SetAssessmentResponseID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorRiskScoreInput on the VendorRiskScoreCreate builder.
+func (c *VendorRiskScoreCreate) SetInput(i CreateVendorRiskScoreInput) *VendorRiskScoreCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorRiskScoreInput represents a mutation input for updating vendorriskscores.
+type UpdateVendorRiskScoreInput struct {
+	ClearTags                bool
+	Tags                     []string
+	AppendTags               []string
+	QuestionKey              *string
+	QuestionName             *string
+	ClearQuestionDescription bool
+	QuestionDescription      *string
+	QuestionCategory         *enums.VendorScoringCategory
+	Impact                   *enums.VendorRiskImpact
+	Likelihood               *enums.VendorRiskLikelihood
+	ClearAnswer              bool
+	Answer                   *string
+	ClearNotes               bool
+	Notes                    *string
+	ClearVendorScoringConfig bool
+	VendorScoringConfigID    *string
+	EntityID                 *string
+	ClearAssessmentResponse  bool
+	AssessmentResponseID     *string
+}
+
+// Mutate applies the UpdateVendorRiskScoreInput on the VendorRiskScoreMutation builder.
+func (i *UpdateVendorRiskScoreInput) Mutate(m *VendorRiskScoreMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.QuestionKey; v != nil {
+		m.SetQuestionKey(*v)
+	}
+	if v := i.QuestionName; v != nil {
+		m.SetQuestionName(*v)
+	}
+	if i.ClearQuestionDescription {
+		m.ClearQuestionDescription()
+	}
+	if v := i.QuestionDescription; v != nil {
+		m.SetQuestionDescription(*v)
+	}
+	if v := i.QuestionCategory; v != nil {
+		m.SetQuestionCategory(*v)
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if v := i.Likelihood; v != nil {
+		m.SetLikelihood(*v)
+	}
+	if i.ClearAnswer {
+		m.ClearAnswer()
+	}
+	if v := i.Answer; v != nil {
+		m.SetAnswer(*v)
+	}
+	if i.ClearNotes {
+		m.ClearNotes()
+	}
+	if v := i.Notes; v != nil {
+		m.SetNotes(*v)
+	}
+	if i.ClearVendorScoringConfig {
+		m.ClearVendorScoringConfig()
+	}
+	if v := i.VendorScoringConfigID; v != nil {
+		m.SetVendorScoringConfigID(*v)
+	}
+	if v := i.EntityID; v != nil {
+		m.SetEntityID(*v)
+	}
+	if i.ClearAssessmentResponse {
+		m.ClearAssessmentResponse()
+	}
+	if v := i.AssessmentResponseID; v != nil {
+		m.SetAssessmentResponseID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorRiskScoreInput on the VendorRiskScoreUpdate builder.
+func (c *VendorRiskScoreUpdate) SetInput(i UpdateVendorRiskScoreInput) *VendorRiskScoreUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorRiskScoreInput on the VendorRiskScoreUpdateOne builder.
+func (c *VendorRiskScoreUpdateOne) SetInput(i UpdateVendorRiskScoreInput) *VendorRiskScoreUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorScoringConfigInput represents a mutation input for creating vendorscoringconfigs.
+type CreateVendorScoringConfigInput struct {
+	Tags               []string
+	Questions          *models.VendorScoringQuestionsConfig
+	ScoringMode        *enums.VendorScoringMode
+	RiskThresholds     *models.RiskThresholdsConfig
+	OwnerID            *string
+	VendorRiskScoreIDs []string
+}
+
+// Mutate applies the CreateVendorScoringConfigInput on the VendorScoringConfigMutation builder.
+func (i *CreateVendorScoringConfigInput) Mutate(m *VendorScoringConfigMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.Questions; v != nil {
+		m.SetQuestions(*v)
+	}
+	if v := i.ScoringMode; v != nil {
+		m.SetScoringMode(*v)
+	}
+	if v := i.RiskThresholds; v != nil {
+		m.SetRiskThresholds(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.VendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorScoringConfigInput on the VendorScoringConfigCreate builder.
+func (c *VendorScoringConfigCreate) SetInput(i CreateVendorScoringConfigInput) *VendorScoringConfigCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorScoringConfigInput represents a mutation input for updating vendorscoringconfigs.
+type UpdateVendorScoringConfigInput struct {
+	ClearTags                bool
+	Tags                     []string
+	AppendTags               []string
+	Questions                *models.VendorScoringQuestionsConfig
+	ScoringMode              *enums.VendorScoringMode
+	RiskThresholds           *models.RiskThresholdsConfig
+	ClearOwner               bool
+	OwnerID                  *string
+	ClearVendorRiskScores    bool
+	AddVendorRiskScoreIDs    []string
+	RemoveVendorRiskScoreIDs []string
+}
+
+// Mutate applies the UpdateVendorScoringConfigInput on the VendorScoringConfigMutation builder.
+func (i *UpdateVendorScoringConfigInput) Mutate(m *VendorScoringConfigMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Questions; v != nil {
+		m.SetQuestions(*v)
+	}
+	if v := i.ScoringMode; v != nil {
+		m.SetScoringMode(*v)
+	}
+	if v := i.RiskThresholds; v != nil {
+		m.SetRiskThresholds(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearVendorRiskScores {
+		m.ClearVendorRiskScores()
+	}
+	if v := i.AddVendorRiskScoreIDs; len(v) > 0 {
+		m.AddVendorRiskScoreIDs(v...)
+	}
+	if v := i.RemoveVendorRiskScoreIDs; len(v) > 0 {
+		m.RemoveVendorRiskScoreIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorScoringConfigInput on the VendorScoringConfigUpdate builder.
+func (c *VendorScoringConfigUpdate) SetInput(i UpdateVendorScoringConfigInput) *VendorScoringConfigUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorScoringConfigInput on the VendorScoringConfigUpdateOne builder.
+func (c *VendorScoringConfigUpdateOne) SetInput(i UpdateVendorScoringConfigInput) *VendorScoringConfigUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

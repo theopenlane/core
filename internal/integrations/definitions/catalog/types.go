@@ -5,6 +5,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 )
 
@@ -21,4 +22,6 @@ type Config struct {
 	AzureEntraID azureentraid.Config `json:"azureentraid" koanf:"azureentraid"`
 	// MicrosoftTeams holds OAuth credentials for the Microsoft Teams definition
 	MicrosoftTeams microsoftteams.Config `json:"microsoftteams" koanf:"microsoftteams"`
+	// OIDCLocal holds local Dex-backed OIDC settings for end-to-end integration auth testing
+	OIDCLocal oidclocal.Config `json:"oidclocal" koanf:"oidclocal"`
 }

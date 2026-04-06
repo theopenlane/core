@@ -34,6 +34,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			organizationUnit
 			ownerID
 			platformID
+			primarySource
 			profile
 			profileHash
 			rawProfileFileID
@@ -85,6 +86,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			organizationUnit
 			ownerID
 			platformID
+			primarySource
 			profile
 			profileHash
 			rawProfileFileID
@@ -136,6 +138,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			organizationUnit
 			ownerID
 			platformID
+			primarySource
 			profile
 			profileHash
 			rawProfileFileID
@@ -235,6 +238,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		organizationUnit
 		ownerID
 		platformID
+		primarySource
 		profile
 		profileHash
 		rawProfileFileID
@@ -329,6 +333,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			organizationUnit
 			ownerID
 			platformID
+			primarySource
 			profile
 			profileHash
 			rawProfileFileID

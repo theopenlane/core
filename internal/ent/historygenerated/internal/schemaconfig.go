@@ -79,6 +79,8 @@ type SchemaConfig struct {
 	TrustCenterWatermarkConfigHistory string // TrustCenterWatermarkConfigHistory table.
 	UserHistory                       string // UserHistory table.
 	UserSettingHistory                string // UserSettingHistory table.
+	VendorRiskScoreHistory            string // VendorRiskScoreHistory table.
+	VendorScoringConfigHistory        string // VendorScoringConfigHistory table.
 	VulnerabilityHistory              string // VulnerabilityHistory table.
 	WorkflowAssignmentHistory         string // WorkflowAssignmentHistory table.
 	WorkflowAssignmentTargetHistory   string // WorkflowAssignmentTargetHistory table.

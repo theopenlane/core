@@ -438,6 +438,13 @@
       "isSlice": true
     }
   ],
+  "VendorRiskScore": [
+    {
+      "csvColumn": "VendorRiskScoreEntityName",
+      "targetField": "EntityID",
+      "isSlice": false
+    }
+  ],
   "Vulnerability": [
     {
       "csvColumn": "ControlRefCodes",

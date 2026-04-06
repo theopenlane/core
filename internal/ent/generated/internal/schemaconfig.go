@@ -292,6 +292,8 @@ type SchemaConfig struct {
 	UserEvents                         string // User-events->Event table.
 	UserPrograms                       string // User-programs->Program table.
 	UserSetting                        string // UserSetting table.
+	VendorRiskScore                    string // VendorRiskScore table.
+	VendorScoringConfig                string // VendorScoringConfig table.
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
 	VulnerabilityScans                 string // Vulnerability-scans->Scan table.

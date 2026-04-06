@@ -775,14 +775,28 @@ func (_c *EntityHistoryCreate) SetNillableRiskScore(v *int) *EntityHistoryCreate
 	return _c
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_c *EntityHistoryCreate) SetRiskScoreCoverage(v int) *EntityHistoryCreate {
+	_c.mutation.SetRiskScoreCoverage(v)
+	return _c
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableRiskScoreCoverage(v *int) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetRiskScoreCoverage(*v)
+	}
+	return _c
+}
+
 // SetTier sets the "tier" field.
-func (_c *EntityHistoryCreate) SetTier(v string) *EntityHistoryCreate {
+func (_c *EntityHistoryCreate) SetTier(v enums.VendorTier) *EntityHistoryCreate {
 	_c.mutation.SetTier(v)
 	return _c
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_c *EntityHistoryCreate) SetNillableTier(v *string) *EntityHistoryCreate {
+func (_c *EntityHistoryCreate) SetNillableTier(v *enums.VendorTier) *EntityHistoryCreate {
 	if v != nil {
 		_c.SetTier(*v)
 	}
@@ -1033,6 +1047,11 @@ func (_c *EntityHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := entityhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Tier(); ok {
+		if err := entityhistory.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.tier": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -1304,8 +1323,12 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldRiskScore, field.TypeInt, value)
 		_node.RiskScore = value
 	}
+	if value, ok := _c.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+		_node.RiskScoreCoverage = value
+	}
 	if value, ok := _c.mutation.Tier(); ok {
-		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldTier, field.TypeEnum, value)
 		_node.Tier = value
 	}
 	if value, ok := _c.mutation.ReviewFrequency(); ok {

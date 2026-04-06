@@ -91,7 +91,9 @@ type IntegrationHistory struct {
 	Status enums.IntegrationStatus `json:"status,omitempty"`
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
-	selectValues             sql.SelectValues
+	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
+	PrimaryDirectory bool `json:"primary_directory,omitempty"`
+	selectValues     sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -103,7 +105,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case integrationhistory.FieldSystemOwned:
+		case integrationhistory.FieldSystemOwned, integrationhistory.FieldPrimaryDirectory:
 			values[i] = new(sql.NullBool)
 		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldEnvironmentName, integrationhistory.FieldEnvironmentID, integrationhistory.FieldScopeName, integrationhistory.FieldScopeID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType, integrationhistory.FieldPlatformID, integrationhistory.FieldDefinitionID, integrationhistory.FieldDefinitionVersion, integrationhistory.FieldDefinitionSlug, integrationhistory.FieldFamily, integrationhistory.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -350,6 +352,12 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 					return fmt.Errorf("unmarshal field provider_metadata_snapshot: %w", err)
 				}
 			}
+		case integrationhistory.FieldPrimaryDirectory:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_directory", values[i])
+			} else if value.Valid {
+				_m.PrimaryDirectory = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -491,6 +499,9 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadataSnapshot))
+	builder.WriteString(", ")
+	builder.WriteString("primary_directory=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PrimaryDirectory))
 	builder.WriteByte(')')
 	return builder.String()
 }

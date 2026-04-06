@@ -220,6 +220,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*UserSettingMutation]() {
 		c.UserSetting.Use(hook)
 	}
+	for _, hook := range history.Hooks[*VendorRiskScoreMutation]() {
+		c.VendorRiskScore.Use(hook)
+	}
+	for _, hook := range history.Hooks[*VendorScoringConfigMutation]() {
+		c.VendorScoringConfig.Use(hook)
+	}
 	for _, hook := range history.Hooks[*VulnerabilityMutation]() {
 		c.Vulnerability.Use(hook)
 	}

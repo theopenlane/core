@@ -154,6 +154,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "document",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "vendor_risk_scores": {
+	ObjectType:      "vendor_risk_score",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "asset": {"owner": {
 	ObjectType:      "owner",
@@ -1052,6 +1056,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "assessment_responses": {
 	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vendor_risk_scores": {
+	ObjectType:      "vendor_risk_score",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integrations": {
@@ -2772,6 +2780,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "discussion",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "vendor_scoring_configs": {
+	ObjectType:      "vendor_scoring_config",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vendor_risk_scores": {
+	ObjectType:      "vendor_risk_score",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -4254,6 +4270,32 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "default_org",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+},
+}, "vendor_risk_score": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "vendor_scoring_config": {
+	ObjectType:      "organization",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entity": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessment_response": {
+	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "vendor_scoring_config": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "vendor_risk_scores": {
+	ObjectType:      "vendor_risk_score",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "vulnerability": {"owner": {
 	ObjectType:      "owner",

@@ -268,6 +268,11 @@ func SourceVersion(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldSourceVersion, v))
 }
 
+// PrimarySource applies equality check predicate on the "primary_source" field. It's identical to PrimarySourceEQ.
+func PrimarySource(v bool) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldPrimarySource, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -3116,6 +3121,16 @@ func SourceVersionEqualFold(v string) predicate.DirectoryAccountHistory {
 // SourceVersionContainsFold applies the ContainsFold predicate on the "source_version" field.
 func SourceVersionContainsFold(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldSourceVersion, v))
+}
+
+// PrimarySourceEQ applies the EQ predicate on the "primary_source" field.
+func PrimarySourceEQ(v bool) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldPrimarySource, v))
+}
+
+// PrimarySourceNEQ applies the NEQ predicate on the "primary_source" field.
+func PrimarySourceNEQ(v bool) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldPrimarySource, v))
 }
 
 // And groups predicates with the AND operator between them.

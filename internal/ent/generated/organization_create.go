@@ -88,6 +88,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -1986,6 +1988,36 @@ func (_c *OrganizationCreate) AddDiscussions(v ...*Discussion) *OrganizationCrea
 		ids[i] = v[i].ID
 	}
 	return _c.AddDiscussionIDs(ids...)
+}
+
+// AddVendorScoringConfigIDs adds the "vendor_scoring_configs" edge to the VendorScoringConfig entity by IDs.
+func (_c *OrganizationCreate) AddVendorScoringConfigIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddVendorScoringConfigIDs(ids...)
+	return _c
+}
+
+// AddVendorScoringConfigs adds the "vendor_scoring_configs" edges to the VendorScoringConfig entity.
+func (_c *OrganizationCreate) AddVendorScoringConfigs(v ...*VendorScoringConfig) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVendorScoringConfigIDs(ids...)
+}
+
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_c *OrganizationCreate) AddVendorRiskScoreIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddVendorRiskScoreIDs(ids...)
+	return _c
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_c *OrganizationCreate) AddVendorRiskScores(v ...*VendorRiskScore) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVendorRiskScoreIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -4066,6 +4098,40 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VendorScoringConfigsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VendorScoringConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

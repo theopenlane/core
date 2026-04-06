@@ -280,13 +280,17 @@ type OrganizationEdges struct {
 	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
 	// Discussions holds the value of the discussions edge.
 	Discussions []*Discussion `json:"discussions,omitempty"`
+	// VendorScoringConfigs holds the value of the vendor_scoring_configs edge.
+	VendorScoringConfigs []*VendorScoringConfig `json:"vendor_scoring_configs,omitempty"`
+	// VendorRiskScores holds the value of the vendor_risk_scores edge.
+	VendorRiskScores []*VendorRiskScore `json:"vendor_risk_scores,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [110]bool
+	loadedTypes [112]bool
 	// totalCount holds the count of the edges above.
-	totalCount [102]map[string]int
+	totalCount [104]map[string]int
 
 	namedControlCreators                 map[string][]*Group
 	namedControlImplementationCreators   map[string][]*Group
@@ -394,6 +398,8 @@ type OrganizationEdges struct {
 	namedDirectoryMemberships            map[string][]*DirectoryMembership
 	namedDirectorySyncRuns               map[string][]*DirectorySyncRun
 	namedDiscussions                     map[string][]*Discussion
+	namedVendorScoringConfigs            map[string][]*VendorScoringConfig
+	namedVendorRiskScores                map[string][]*VendorRiskScore
 	namedMembers                         map[string][]*OrgMembership
 }
 
@@ -1384,10 +1390,28 @@ func (e OrganizationEdges) DiscussionsOrErr() ([]*Discussion, error) {
 	return nil, &NotLoadedError{edge: "discussions"}
 }
 
+// VendorScoringConfigsOrErr returns the VendorScoringConfigs value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) VendorScoringConfigsOrErr() ([]*VendorScoringConfig, error) {
+	if e.loadedTypes[109] {
+		return e.VendorScoringConfigs, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_scoring_configs"}
+}
+
+// VendorRiskScoresOrErr returns the VendorRiskScores value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
+	if e.loadedTypes[110] {
+		return e.VendorRiskScores, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_risk_scores"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[109] {
+	if e.loadedTypes[111] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -2091,6 +2115,16 @@ func (_m *Organization) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 // QueryDiscussions queries the "discussions" edge of the Organization entity.
 func (_m *Organization) QueryDiscussions() *DiscussionQuery {
 	return NewOrganizationClient(_m.config).QueryDiscussions(_m)
+}
+
+// QueryVendorScoringConfigs queries the "vendor_scoring_configs" edge of the Organization entity.
+func (_m *Organization) QueryVendorScoringConfigs() *VendorScoringConfigQuery {
+	return NewOrganizationClient(_m.config).QueryVendorScoringConfigs(_m)
+}
+
+// QueryVendorRiskScores queries the "vendor_risk_scores" edge of the Organization entity.
+func (_m *Organization) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	return NewOrganizationClient(_m.config).QueryVendorRiskScores(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -4724,6 +4758,54 @@ func (_m *Organization) appendNamedDiscussions(name string, edges ...*Discussion
 		_m.Edges.namedDiscussions[name] = []*Discussion{}
 	} else {
 		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
+	}
+}
+
+// NamedVendorScoringConfigs returns the VendorScoringConfigs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedVendorScoringConfigs(name string) ([]*VendorScoringConfig, error) {
+	if _m.Edges.namedVendorScoringConfigs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVendorScoringConfigs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedVendorScoringConfigs(name string, edges ...*VendorScoringConfig) {
+	if _m.Edges.namedVendorScoringConfigs == nil {
+		_m.Edges.namedVendorScoringConfigs = make(map[string][]*VendorScoringConfig)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVendorScoringConfigs[name] = []*VendorScoringConfig{}
+	} else {
+		_m.Edges.namedVendorScoringConfigs[name] = append(_m.Edges.namedVendorScoringConfigs[name], edges...)
+	}
+}
+
+// NamedVendorRiskScores returns the VendorRiskScores named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedVendorRiskScores(name string) ([]*VendorRiskScore, error) {
+	if _m.Edges.namedVendorRiskScores == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVendorRiskScores[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedVendorRiskScores(name string, edges ...*VendorRiskScore) {
+	if _m.Edges.namedVendorRiskScores == nil {
+		_m.Edges.namedVendorRiskScores = make(map[string][]*VendorRiskScore)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVendorRiskScores[name] = []*VendorRiskScore{}
+	} else {
+		_m.Edges.namedVendorRiskScores[name] = append(_m.Edges.namedVendorRiskScores[name], edges...)
 	}
 }
 

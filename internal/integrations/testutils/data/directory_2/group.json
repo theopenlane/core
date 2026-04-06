@@ -1,0 +1,11 @@
+{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:Group"],
+  "externalId": "directory-2-group",
+  "displayName": "Directory 2 Contractors",
+  "members": [
+    {
+      "value": "{{ .UserID }}"
+    }
+  ],
+  "active": true
+}

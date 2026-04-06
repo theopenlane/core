@@ -851,6 +851,30 @@ func (f UserSettingHistoryFunc) Mutate(ctx context.Context, m historygenerated.M
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.UserSettingHistoryMutation", m)
 }
 
+// The VendorRiskScoreHistoryFunc type is an adapter to allow the use of ordinary
+// function as VendorRiskScoreHistory mutator.
+type VendorRiskScoreHistoryFunc func(context.Context, *historygenerated.VendorRiskScoreHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorRiskScoreHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.VendorRiskScoreHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.VendorRiskScoreHistoryMutation", m)
+}
+
+// The VendorScoringConfigHistoryFunc type is an adapter to allow the use of ordinary
+// function as VendorScoringConfigHistory mutator.
+type VendorScoringConfigHistoryFunc func(context.Context, *historygenerated.VendorScoringConfigHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorScoringConfigHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.VendorScoringConfigHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.VendorScoringConfigHistoryMutation", m)
+}
+
 // The VulnerabilityHistoryFunc type is an adapter to allow the use of ordinary
 // function as VulnerabilityHistory mutator.
 type VulnerabilityHistoryFunc func(context.Context, *historygenerated.VulnerabilityHistoryMutation) (historygenerated.Value, error)

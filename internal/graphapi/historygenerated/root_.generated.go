@@ -596,6 +596,7 @@ type ComplexityRoot struct {
 		OrganizationUnit    func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
 		PlatformID          func(childComplexity int) int
+		PrimarySource       func(childComplexity int) int
 		Profile             func(childComplexity int) int
 		ProfileHash         func(childComplexity int) int
 		RawProfileFileID    func(childComplexity int) int
@@ -903,6 +904,7 @@ type ComplexityRoot struct {
 		ReviewedByUserID                      func(childComplexity int) int
 		RiskRating                            func(childComplexity int) int
 		RiskScore                             func(childComplexity int) int
+		RiskScoreCoverage                     func(childComplexity int) int
 		SSOEnforced                           func(childComplexity int) int
 		ScopeID                               func(childComplexity int) int
 		ScopeName                             func(childComplexity int) int
@@ -1345,6 +1347,7 @@ type ComplexityRoot struct {
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PlatformID               func(childComplexity int) int
+		PrimaryDirectory         func(childComplexity int) int
 		ProviderMetadataSnapshot func(childComplexity int) int
 		Ref                      func(childComplexity int) int
 		ScopeID                  func(childComplexity int) int
@@ -2076,6 +2079,8 @@ type ComplexityRoot struct {
 		TrustCenterWatermarkConfigHistories func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterWatermarkConfigHistoryOrder, where *historygenerated.TrustCenterWatermarkConfigHistoryWhereInput) int
 		UserHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserHistoryOrder, where *historygenerated.UserHistoryWhereInput) int
 		UserSettingHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserSettingHistoryOrder, where *historygenerated.UserSettingHistoryWhereInput) int
+		VendorRiskScoreHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorRiskScoreHistoryOrder, where *historygenerated.VendorRiskScoreHistoryWhereInput) int
+		VendorScoringConfigHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorScoringConfigHistoryOrder, where *historygenerated.VendorScoringConfigHistoryWhereInput) int
 		VulnerabilityHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VulnerabilityHistoryOrder, where *historygenerated.VulnerabilityHistoryWhereInput) int
 		WorkflowAssignmentHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowAssignmentHistoryOrder, where *historygenerated.WorkflowAssignmentHistoryWhereInput) int
 		WorkflowAssignmentTargetHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowAssignmentTargetHistoryOrder, where *historygenerated.WorkflowAssignmentTargetHistoryWhereInput) int
@@ -2947,6 +2952,70 @@ type ComplexityRoot struct {
 	}
 
 	UserSettingHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	VendorRiskScoreHistory struct {
+		Answer                func(childComplexity int) int
+		AnswerType            func(childComplexity int) int
+		AssessmentResponseID  func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		EntityID              func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Impact                func(childComplexity int) int
+		Likelihood            func(childComplexity int) int
+		Notes                 func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		QuestionCategory      func(childComplexity int) int
+		QuestionDescription   func(childComplexity int) int
+		QuestionKey           func(childComplexity int) int
+		QuestionName          func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Score                 func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		VendorScoringConfigID func(childComplexity int) int
+	}
+
+	VendorRiskScoreHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	VendorRiskScoreHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	VendorScoringConfigHistory struct {
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		HistoryTime    func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Operation      func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		Questions      func(childComplexity int) int
+		Ref            func(childComplexity int) int
+		RiskThresholds func(childComplexity int) int
+		ScoringMode    func(childComplexity int) int
+		Tags           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+	}
+
+	VendorScoringConfigHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	VendorScoringConfigHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -6420,6 +6489,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistory.PlatformID(childComplexity), true
 
+	case "DirectoryAccountHistory.primarySource":
+		if e.ComplexityRoot.DirectoryAccountHistory.PrimarySource == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.PrimarySource(childComplexity), true
+
 	case "DirectoryAccountHistory.profile":
 		if e.ComplexityRoot.DirectoryAccountHistory.Profile == nil {
 			break
@@ -8127,6 +8203,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.RiskScore(childComplexity), true
+
+	case "EntityHistory.riskScoreCoverage":
+		if e.ComplexityRoot.EntityHistory.RiskScoreCoverage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.RiskScoreCoverage(childComplexity), true
 
 	case "EntityHistory.ssoEnforced":
 		if e.ComplexityRoot.EntityHistory.SSOEnforced == nil {
@@ -10528,6 +10611,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.PlatformID(childComplexity), true
+
+	case "IntegrationHistory.primaryDirectory":
+		if e.ComplexityRoot.IntegrationHistory.PrimaryDirectory == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.PrimaryDirectory(childComplexity), true
 
 	case "IntegrationHistory.providerMetadataSnapshot":
 		if e.ComplexityRoot.IntegrationHistory.ProviderMetadataSnapshot == nil {
@@ -14913,6 +15003,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.UserSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.UserSettingHistoryOrder), args["where"].(*historygenerated.UserSettingHistoryWhereInput)), true
+
+	case "Query.vendorRiskScoreHistories":
+		if e.ComplexityRoot.Query.VendorRiskScoreHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vendorRiskScoreHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.VendorRiskScoreHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.VendorRiskScoreHistoryOrder), args["where"].(*historygenerated.VendorRiskScoreHistoryWhereInput)), true
+
+	case "Query.vendorScoringConfigHistories":
+		if e.ComplexityRoot.Query.VendorScoringConfigHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vendorScoringConfigHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.VendorScoringConfigHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.VendorScoringConfigHistoryOrder), args["where"].(*historygenerated.VendorScoringConfigHistoryWhereInput)), true
 
 	case "Query.vulnerabilityHistories":
 		if e.ComplexityRoot.Query.VulnerabilityHistories == nil {
@@ -19611,6 +19725,328 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.UserSettingHistoryEdge.Node(childComplexity), true
 
+	case "VendorRiskScoreHistory.answer":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Answer == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Answer(childComplexity), true
+
+	case "VendorRiskScoreHistory.answerType":
+		if e.ComplexityRoot.VendorRiskScoreHistory.AnswerType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.AnswerType(childComplexity), true
+
+	case "VendorRiskScoreHistory.assessmentResponseID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.AssessmentResponseID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.AssessmentResponseID(childComplexity), true
+
+	case "VendorRiskScoreHistory.createdAt":
+		if e.ComplexityRoot.VendorRiskScoreHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.CreatedAt(childComplexity), true
+
+	case "VendorRiskScoreHistory.createdBy":
+		if e.ComplexityRoot.VendorRiskScoreHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.CreatedBy(childComplexity), true
+
+	case "VendorRiskScoreHistory.entityID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.EntityID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.EntityID(childComplexity), true
+
+	case "VendorRiskScoreHistory.historyTime":
+		if e.ComplexityRoot.VendorRiskScoreHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.HistoryTime(childComplexity), true
+
+	case "VendorRiskScoreHistory.id":
+		if e.ComplexityRoot.VendorRiskScoreHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.ID(childComplexity), true
+
+	case "VendorRiskScoreHistory.impact":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Impact == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Impact(childComplexity), true
+
+	case "VendorRiskScoreHistory.likelihood":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Likelihood == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Likelihood(childComplexity), true
+
+	case "VendorRiskScoreHistory.notes":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Notes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Notes(childComplexity), true
+
+	case "VendorRiskScoreHistory.operation":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Operation(childComplexity), true
+
+	case "VendorRiskScoreHistory.ownerID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.OwnerID(childComplexity), true
+
+	case "VendorRiskScoreHistory.questionCategory":
+		if e.ComplexityRoot.VendorRiskScoreHistory.QuestionCategory == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.QuestionCategory(childComplexity), true
+
+	case "VendorRiskScoreHistory.questionDescription":
+		if e.ComplexityRoot.VendorRiskScoreHistory.QuestionDescription == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.QuestionDescription(childComplexity), true
+
+	case "VendorRiskScoreHistory.questionKey":
+		if e.ComplexityRoot.VendorRiskScoreHistory.QuestionKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.QuestionKey(childComplexity), true
+
+	case "VendorRiskScoreHistory.questionName":
+		if e.ComplexityRoot.VendorRiskScoreHistory.QuestionName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.QuestionName(childComplexity), true
+
+	case "VendorRiskScoreHistory.ref":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Ref(childComplexity), true
+
+	case "VendorRiskScoreHistory.score":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Score == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Score(childComplexity), true
+
+	case "VendorRiskScoreHistory.tags":
+		if e.ComplexityRoot.VendorRiskScoreHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.Tags(childComplexity), true
+
+	case "VendorRiskScoreHistory.updatedAt":
+		if e.ComplexityRoot.VendorRiskScoreHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.UpdatedAt(childComplexity), true
+
+	case "VendorRiskScoreHistory.updatedBy":
+		if e.ComplexityRoot.VendorRiskScoreHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.UpdatedBy(childComplexity), true
+
+	case "VendorRiskScoreHistory.vendorScoringConfigID":
+		if e.ComplexityRoot.VendorRiskScoreHistory.VendorScoringConfigID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistory.VendorScoringConfigID(childComplexity), true
+
+	case "VendorRiskScoreHistoryConnection.edges":
+		if e.ComplexityRoot.VendorRiskScoreHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistoryConnection.Edges(childComplexity), true
+
+	case "VendorRiskScoreHistoryConnection.pageInfo":
+		if e.ComplexityRoot.VendorRiskScoreHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistoryConnection.PageInfo(childComplexity), true
+
+	case "VendorRiskScoreHistoryConnection.totalCount":
+		if e.ComplexityRoot.VendorRiskScoreHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistoryConnection.TotalCount(childComplexity), true
+
+	case "VendorRiskScoreHistoryEdge.cursor":
+		if e.ComplexityRoot.VendorRiskScoreHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistoryEdge.Cursor(childComplexity), true
+
+	case "VendorRiskScoreHistoryEdge.node":
+		if e.ComplexityRoot.VendorRiskScoreHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreHistoryEdge.Node(childComplexity), true
+
+	case "VendorScoringConfigHistory.createdAt":
+		if e.ComplexityRoot.VendorScoringConfigHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.CreatedAt(childComplexity), true
+
+	case "VendorScoringConfigHistory.createdBy":
+		if e.ComplexityRoot.VendorScoringConfigHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.CreatedBy(childComplexity), true
+
+	case "VendorScoringConfigHistory.historyTime":
+		if e.ComplexityRoot.VendorScoringConfigHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.HistoryTime(childComplexity), true
+
+	case "VendorScoringConfigHistory.id":
+		if e.ComplexityRoot.VendorScoringConfigHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.ID(childComplexity), true
+
+	case "VendorScoringConfigHistory.operation":
+		if e.ComplexityRoot.VendorScoringConfigHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.Operation(childComplexity), true
+
+	case "VendorScoringConfigHistory.ownerID":
+		if e.ComplexityRoot.VendorScoringConfigHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.OwnerID(childComplexity), true
+
+	case "VendorScoringConfigHistory.questions":
+		if e.ComplexityRoot.VendorScoringConfigHistory.Questions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.Questions(childComplexity), true
+
+	case "VendorScoringConfigHistory.ref":
+		if e.ComplexityRoot.VendorScoringConfigHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.Ref(childComplexity), true
+
+	case "VendorScoringConfigHistory.riskThresholds":
+		if e.ComplexityRoot.VendorScoringConfigHistory.RiskThresholds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.RiskThresholds(childComplexity), true
+
+	case "VendorScoringConfigHistory.scoringMode":
+		if e.ComplexityRoot.VendorScoringConfigHistory.ScoringMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.ScoringMode(childComplexity), true
+
+	case "VendorScoringConfigHistory.tags":
+		if e.ComplexityRoot.VendorScoringConfigHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.Tags(childComplexity), true
+
+	case "VendorScoringConfigHistory.updatedAt":
+		if e.ComplexityRoot.VendorScoringConfigHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.UpdatedAt(childComplexity), true
+
+	case "VendorScoringConfigHistory.updatedBy":
+		if e.ComplexityRoot.VendorScoringConfigHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistory.UpdatedBy(childComplexity), true
+
+	case "VendorScoringConfigHistoryConnection.edges":
+		if e.ComplexityRoot.VendorScoringConfigHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistoryConnection.Edges(childComplexity), true
+
+	case "VendorScoringConfigHistoryConnection.pageInfo":
+		if e.ComplexityRoot.VendorScoringConfigHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistoryConnection.PageInfo(childComplexity), true
+
+	case "VendorScoringConfigHistoryConnection.totalCount":
+		if e.ComplexityRoot.VendorScoringConfigHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistoryConnection.TotalCount(childComplexity), true
+
+	case "VendorScoringConfigHistoryEdge.cursor":
+		if e.ComplexityRoot.VendorScoringConfigHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistoryEdge.Cursor(childComplexity), true
+
+	case "VendorScoringConfigHistoryEdge.node":
+		if e.ComplexityRoot.VendorScoringConfigHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigHistoryEdge.Node(childComplexity), true
+
 	case "VulnerabilityHistory.blocking":
 		if e.ComplexityRoot.VulnerabilityHistory.Blocking == nil {
 			break
@@ -21299,6 +21735,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUserHistoryWhereInput,
 		ec.unmarshalInputUserSettingHistoryOrder,
 		ec.unmarshalInputUserSettingHistoryWhereInput,
+		ec.unmarshalInputVendorRiskScoreHistoryOrder,
+		ec.unmarshalInputVendorRiskScoreHistoryWhereInput,
+		ec.unmarshalInputVendorScoringConfigHistoryOrder,
+		ec.unmarshalInputVendorScoringConfigHistoryWhereInput,
 		ec.unmarshalInputVulnerabilityHistoryOrder,
 		ec.unmarshalInputVulnerabilityHistoryWhereInput,
 		ec.unmarshalInputWorkflowAssignmentHistoryOrder,
@@ -21511,7 +21951,16 @@ scalar ExportMetadata
 """
 Any is a generic fallback type
 """
-scalar Any`, BuiltIn: false},
+scalar Any
+"""
+VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring
+"""
+scalar VendorScoringQuestionsConfig
+"""
+RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
+"""
+scalar RiskThresholdsConfig
+`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type ActionPlanHistory implements Node {
@@ -28613,6 +29062,10 @@ type DirectoryAccountHistory implements Node {
   cursor or ETag supplied by the source system for auditing
   """
   sourceVersion: String
+  """
+  indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+  """
+  primarySource: Boolean!
 }
 """
 A connection to a list of items.
@@ -29398,6 +29851,11 @@ input DirectoryAccountHistoryWhereInput {
   sourceVersionNotNil: Boolean
   sourceVersionEqualFold: String
   sourceVersionContainsFold: String
+  """
+  primary_source field predicates
+  """
+  primarySource: Boolean
+  primarySourceNEQ: Boolean
 }
 type DirectoryGroupHistory implements Node {
   id: ID!
@@ -32537,9 +32995,13 @@ type EntityHistory implements Node {
   """
   riskScore: Int
   """
-  the tier classification for the entity
+  number of scoring questions answered for the current risk score; used to contextualize partial assessments
   """
-  tier: String
+  riskScoreCoverage: Int
+  """
+  the vendor risk tier classification, used to determine the depth of TPRM assessment required
+  """
+  tier: EntityHistoryVendorTier
   """
   the cadence for reviewing the entity
   """
@@ -32674,12 +33136,22 @@ enum EntityHistoryOrderField {
   status_page_url
   risk_rating
   risk_score
+  risk_score_coverage
   tier
   REVIEW_FREQUENCY
   next_review_at
   contract_renewal_at
   external_id
   observed_at
+}
+"""
+EntityHistoryVendorTier is enum for the field tier
+"""
+enum EntityHistoryVendorTier @goModel(model: "github.com/theopenlane/core/common/enums.VendorTier") {
+  CRITICAL
+  HIGH
+  STANDARD
+  LOW
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -33436,23 +33908,27 @@ input EntityHistoryWhereInput {
   riskScoreIsNil: Boolean
   riskScoreNotNil: Boolean
   """
+  risk_score_coverage field predicates
+  """
+  riskScoreCoverage: Int
+  riskScoreCoverageNEQ: Int
+  riskScoreCoverageIn: [Int!]
+  riskScoreCoverageNotIn: [Int!]
+  riskScoreCoverageGT: Int
+  riskScoreCoverageGTE: Int
+  riskScoreCoverageLT: Int
+  riskScoreCoverageLTE: Int
+  riskScoreCoverageIsNil: Boolean
+  riskScoreCoverageNotNil: Boolean
+  """
   tier field predicates
   """
-  tier: String
-  tierNEQ: String
-  tierIn: [String!]
-  tierNotIn: [String!]
-  tierGT: String
-  tierGTE: String
-  tierLT: String
-  tierLTE: String
-  tierContains: String
-  tierHasPrefix: String
-  tierHasSuffix: String
+  tier: EntityHistoryVendorTier
+  tierNEQ: EntityHistoryVendorTier
+  tierIn: [EntityHistoryVendorTier!]
+  tierNotIn: [EntityHistoryVendorTier!]
   tierIsNil: Boolean
   tierNotNil: Boolean
-  tierEqualFold: String
-  tierContainsFold: String
   """
   review_frequency field predicates
   """
@@ -38619,6 +39095,10 @@ type IntegrationHistory implements Node {
   snapshot of definition metadata captured on the installation
   """
   providerMetadataSnapshot: Map
+  """
+  designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
+  """
+  primaryDirectory: Boolean!
 }
 """
 A connection to a list of items.
@@ -39098,6 +39578,11 @@ input IntegrationHistoryWhereInput {
   statusNEQ: IntegrationHistoryIntegrationStatus
   statusIn: [IntegrationHistoryIntegrationStatus!]
   statusNotIn: [IntegrationHistoryIntegrationStatus!]
+  """
+  primary_directory field predicates
+  """
+  primaryDirectory: Boolean
+  primaryDirectoryNEQ: Boolean
 }
 type InternalPolicyHistory implements Node {
   id: ID!
@@ -49080,6 +49565,68 @@ type Query {
     """
     where: UserSettingHistoryWhereInput
   ): UserSettingHistoryConnection!
+  vendorRiskScoreHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for VendorRiskScoreHistories returned from the connection.
+    """
+    orderBy: VendorRiskScoreHistoryOrder
+
+    """
+    Filtering options for VendorRiskScoreHistories returned from the connection.
+    """
+    where: VendorRiskScoreHistoryWhereInput
+  ): VendorRiskScoreHistoryConnection!
+  vendorScoringConfigHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for VendorScoringConfigHistories returned from the connection.
+    """
+    orderBy: VendorScoringConfigHistoryOrder
+
+    """
+    Filtering options for VendorScoringConfigHistories returned from the connection.
+    """
+    where: VendorScoringConfigHistoryWhereInput
+  ): VendorScoringConfigHistoryConnection!
   vulnerabilityHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -60295,6 +60842,741 @@ input UserSettingHistoryWhereInput {
   isTfaEnabledNEQ: Boolean
   isTfaEnabledIsNil: Boolean
   isTfaEnabledNotNil: Boolean
+}
+type VendorRiskScoreHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: VendorRiskScoreHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+  """
+  questionKey: String!
+  """
+  question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+  """
+  questionName: String!
+  """
+  question description captured at assessment time
+  """
+  questionDescription: String
+  """
+  question category captured at assessment time
+  """
+  questionCategory: VendorRiskScoreHistoryVendorScoringCategory!
+  """
+  expected answer format captured at assessment time
+  """
+  answerType: VendorRiskScoreHistoryVendorScoringAnswerType!
+  """
+  user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+  """
+  impact: VendorRiskScoreHistoryVendorRiskImpact!
+  """
+  user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+  """
+  likelihood: VendorRiskScoreHistoryVendorRiskLikelihood!
+  """
+  hook-computed risk score: impactNumeric x likelihoodNumeric
+  """
+  score: Float!
+  """
+  factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+  """
+  answer: String
+  """
+  optional justification or context for the assigned impact and likelihood
+  """
+  notes: String
+  """
+  the scoring config this assessment belongs to; auto-resolved from org context if not provided
+  """
+  vendorScoringConfigID: String
+  """
+  the vendor entity being assessed
+  """
+  entityID: String!
+  """
+  the assessment response this score belongs to; scopes scores to a specific assessment cycle
+  """
+  assessmentResponseID: String
+}
+"""
+A connection to a list of items.
+"""
+type VendorRiskScoreHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [VendorRiskScoreHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type VendorRiskScoreHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: VendorRiskScoreHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+VendorRiskScoreHistoryOpType is enum for the field operation
+"""
+enum VendorRiskScoreHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for VendorRiskScoreHistory connections
+"""
+input VendorRiskScoreHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order VendorRiskScoreHistories.
+  """
+  field: VendorRiskScoreHistoryOrderField!
+}
+"""
+Properties by which VendorRiskScoreHistory connections can be ordered.
+"""
+enum VendorRiskScoreHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  question_key
+  question_category
+  impact
+  likelihood
+  score
+}
+"""
+VendorRiskScoreHistoryVendorRiskImpact is enum for the field impact
+"""
+enum VendorRiskScoreHistoryVendorRiskImpact @goModel(model: "github.com/theopenlane/core/common/enums.VendorRiskImpact") {
+  VERY_LOW
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+VendorRiskScoreHistoryVendorRiskLikelihood is enum for the field likelihood
+"""
+enum VendorRiskScoreHistoryVendorRiskLikelihood @goModel(model: "github.com/theopenlane/core/common/enums.VendorRiskLikelihood") {
+  VERY_LOW
+  LOW
+  MEDIUM
+  HIGH
+  VERY_HIGH
+}
+"""
+VendorRiskScoreHistoryVendorScoringAnswerType is enum for the field answer_type
+"""
+enum VendorRiskScoreHistoryVendorScoringAnswerType @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringAnswerType") {
+  BOOLEAN
+  TEXT
+  SINGLE_SELECT
+  NUMERIC
+}
+"""
+VendorRiskScoreHistoryVendorScoringCategory is enum for the field question_category
+"""
+enum VendorRiskScoreHistoryVendorScoringCategory @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringCategory") {
+  DATA_ACCESS
+  SECURITY_PRACTICES
+  REGULATORY_COMPLIANCE
+  FINANCIAL_STABILITY
+  OPERATIONAL_DEPENDENCY
+  BUSINESS_CONTINUITY
+  SUPPLY_CHAIN_RISK
+  INCIDENT_RESPONSE
+  DATA_PRIVACY
+}
+"""
+VendorRiskScoreHistoryWhereInput is used for filtering VendorRiskScoreHistory objects.
+Input was generated by ent.
+"""
+input VendorRiskScoreHistoryWhereInput {
+  not: VendorRiskScoreHistoryWhereInput
+  and: [VendorRiskScoreHistoryWhereInput!]
+  or: [VendorRiskScoreHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: VendorRiskScoreHistoryOpType
+  operationNEQ: VendorRiskScoreHistoryOpType
+  operationIn: [VendorRiskScoreHistoryOpType!]
+  operationNotIn: [VendorRiskScoreHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  question_key field predicates
+  """
+  questionKey: String
+  questionKeyNEQ: String
+  questionKeyIn: [String!]
+  questionKeyNotIn: [String!]
+  questionKeyGT: String
+  questionKeyGTE: String
+  questionKeyLT: String
+  questionKeyLTE: String
+  questionKeyContains: String
+  questionKeyHasPrefix: String
+  questionKeyHasSuffix: String
+  questionKeyEqualFold: String
+  questionKeyContainsFold: String
+  """
+  question_name field predicates
+  """
+  questionName: String
+  questionNameNEQ: String
+  questionNameIn: [String!]
+  questionNameNotIn: [String!]
+  questionNameGT: String
+  questionNameGTE: String
+  questionNameLT: String
+  questionNameLTE: String
+  questionNameContains: String
+  questionNameHasPrefix: String
+  questionNameHasSuffix: String
+  questionNameEqualFold: String
+  questionNameContainsFold: String
+  """
+  question_description field predicates
+  """
+  questionDescription: String
+  questionDescriptionNEQ: String
+  questionDescriptionIn: [String!]
+  questionDescriptionNotIn: [String!]
+  questionDescriptionGT: String
+  questionDescriptionGTE: String
+  questionDescriptionLT: String
+  questionDescriptionLTE: String
+  questionDescriptionContains: String
+  questionDescriptionHasPrefix: String
+  questionDescriptionHasSuffix: String
+  questionDescriptionIsNil: Boolean
+  questionDescriptionNotNil: Boolean
+  questionDescriptionEqualFold: String
+  questionDescriptionContainsFold: String
+  """
+  question_category field predicates
+  """
+  questionCategory: VendorRiskScoreHistoryVendorScoringCategory
+  questionCategoryNEQ: VendorRiskScoreHistoryVendorScoringCategory
+  questionCategoryIn: [VendorRiskScoreHistoryVendorScoringCategory!]
+  questionCategoryNotIn: [VendorRiskScoreHistoryVendorScoringCategory!]
+  """
+  answer_type field predicates
+  """
+  answerType: VendorRiskScoreHistoryVendorScoringAnswerType
+  answerTypeNEQ: VendorRiskScoreHistoryVendorScoringAnswerType
+  answerTypeIn: [VendorRiskScoreHistoryVendorScoringAnswerType!]
+  answerTypeNotIn: [VendorRiskScoreHistoryVendorScoringAnswerType!]
+  """
+  impact field predicates
+  """
+  impact: VendorRiskScoreHistoryVendorRiskImpact
+  impactNEQ: VendorRiskScoreHistoryVendorRiskImpact
+  impactIn: [VendorRiskScoreHistoryVendorRiskImpact!]
+  impactNotIn: [VendorRiskScoreHistoryVendorRiskImpact!]
+  """
+  likelihood field predicates
+  """
+  likelihood: VendorRiskScoreHistoryVendorRiskLikelihood
+  likelihoodNEQ: VendorRiskScoreHistoryVendorRiskLikelihood
+  likelihoodIn: [VendorRiskScoreHistoryVendorRiskLikelihood!]
+  likelihoodNotIn: [VendorRiskScoreHistoryVendorRiskLikelihood!]
+  """
+  score field predicates
+  """
+  score: Float
+  scoreNEQ: Float
+  scoreIn: [Float!]
+  scoreNotIn: [Float!]
+  scoreGT: Float
+  scoreGTE: Float
+  scoreLT: Float
+  scoreLTE: Float
+  """
+  answer field predicates
+  """
+  answer: String
+  answerNEQ: String
+  answerIn: [String!]
+  answerNotIn: [String!]
+  answerGT: String
+  answerGTE: String
+  answerLT: String
+  answerLTE: String
+  answerContains: String
+  answerHasPrefix: String
+  answerHasSuffix: String
+  answerIsNil: Boolean
+  answerNotNil: Boolean
+  answerEqualFold: String
+  answerContainsFold: String
+  """
+  notes field predicates
+  """
+  notes: String
+  notesNEQ: String
+  notesIn: [String!]
+  notesNotIn: [String!]
+  notesGT: String
+  notesGTE: String
+  notesLT: String
+  notesLTE: String
+  notesContains: String
+  notesHasPrefix: String
+  notesHasSuffix: String
+  notesIsNil: Boolean
+  notesNotNil: Boolean
+  notesEqualFold: String
+  notesContainsFold: String
+  """
+  vendor_scoring_config_id field predicates
+  """
+  vendorScoringConfigID: String
+  vendorScoringConfigIDNEQ: String
+  vendorScoringConfigIDIn: [String!]
+  vendorScoringConfigIDNotIn: [String!]
+  vendorScoringConfigIDGT: String
+  vendorScoringConfigIDGTE: String
+  vendorScoringConfigIDLT: String
+  vendorScoringConfigIDLTE: String
+  vendorScoringConfigIDContains: String
+  vendorScoringConfigIDHasPrefix: String
+  vendorScoringConfigIDHasSuffix: String
+  vendorScoringConfigIDIsNil: Boolean
+  vendorScoringConfigIDNotNil: Boolean
+  vendorScoringConfigIDEqualFold: String
+  vendorScoringConfigIDContainsFold: String
+  """
+  entity_id field predicates
+  """
+  entityID: String
+  entityIDNEQ: String
+  entityIDIn: [String!]
+  entityIDNotIn: [String!]
+  entityIDGT: String
+  entityIDGTE: String
+  entityIDLT: String
+  entityIDLTE: String
+  entityIDContains: String
+  entityIDHasPrefix: String
+  entityIDHasSuffix: String
+  entityIDEqualFold: String
+  entityIDContainsFold: String
+  """
+  assessment_response_id field predicates
+  """
+  assessmentResponseID: String
+  assessmentResponseIDNEQ: String
+  assessmentResponseIDIn: [String!]
+  assessmentResponseIDNotIn: [String!]
+  assessmentResponseIDGT: String
+  assessmentResponseIDGTE: String
+  assessmentResponseIDLT: String
+  assessmentResponseIDLTE: String
+  assessmentResponseIDContains: String
+  assessmentResponseIDHasPrefix: String
+  assessmentResponseIDHasSuffix: String
+  assessmentResponseIDIsNil: Boolean
+  assessmentResponseIDNotNil: Boolean
+  assessmentResponseIDEqualFold: String
+  assessmentResponseIDContainsFold: String
+}
+type VendorScoringConfigHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: VendorScoringConfigHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+  """
+  questions: VendorScoringQuestionsConfig!
+  """
+  controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+  """
+  scoringMode: VendorScoringConfigHistoryVendorScoringMode!
+  """
+  org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+  """
+  riskThresholds: RiskThresholdsConfig!
+}
+"""
+A connection to a list of items.
+"""
+type VendorScoringConfigHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [VendorScoringConfigHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type VendorScoringConfigHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: VendorScoringConfigHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+VendorScoringConfigHistoryOpType is enum for the field operation
+"""
+enum VendorScoringConfigHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for VendorScoringConfigHistory connections
+"""
+input VendorScoringConfigHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order VendorScoringConfigHistories.
+  """
+  field: VendorScoringConfigHistoryOrderField!
+}
+"""
+Properties by which VendorScoringConfigHistory connections can be ordered.
+"""
+enum VendorScoringConfigHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  scoring_mode
+}
+"""
+VendorScoringConfigHistoryVendorScoringMode is enum for the field scoring_mode
+"""
+enum VendorScoringConfigHistoryVendorScoringMode @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringMode") {
+  ANSWERED_ONLY
+  FULL_QUESTIONNAIRE
+  MANUAL
+}
+"""
+VendorScoringConfigHistoryWhereInput is used for filtering VendorScoringConfigHistory objects.
+Input was generated by ent.
+"""
+input VendorScoringConfigHistoryWhereInput {
+  not: VendorScoringConfigHistoryWhereInput
+  and: [VendorScoringConfigHistoryWhereInput!]
+  or: [VendorScoringConfigHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: VendorScoringConfigHistoryOpType
+  operationNEQ: VendorScoringConfigHistoryOpType
+  operationIn: [VendorScoringConfigHistoryOpType!]
+  operationNotIn: [VendorScoringConfigHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  scoring_mode field predicates
+  """
+  scoringMode: VendorScoringConfigHistoryVendorScoringMode
+  scoringModeNEQ: VendorScoringConfigHistoryVendorScoringMode
+  scoringModeIn: [VendorScoringConfigHistoryVendorScoringMode!]
+  scoringModeNotIn: [VendorScoringConfigHistoryVendorScoringMode!]
 }
 type VulnerabilityHistory implements Node {
   id: ID!

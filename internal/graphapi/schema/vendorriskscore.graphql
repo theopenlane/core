@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up vendorRiskScore by ID
+    """
+     vendorRiskScore(
+        """
+        ID of the vendorRiskScore
+        """
+        id: ID!
+    ):  VendorRiskScore!
+}
+
+extend type Mutation{
+    """
+    Create a new vendorRiskScore
+    """
+    createVendorRiskScore(
+        """
+        values of the vendorRiskScore
+        """
+        input: CreateVendorRiskScoreInput!
+    ): VendorRiskScoreCreatePayload!
+    """
+    Create multiple new vendorRiskScores
+    """
+    createBulkVendorRiskScore(
+        """
+        values of the vendorRiskScore
+        """
+        input: [CreateVendorRiskScoreInput!]
+    ): VendorRiskScoreBulkCreatePayload!
+    """
+    Create multiple new vendorRiskScores via file upload
+    """
+    createBulkCSVVendorRiskScore(
+        """
+        csv file containing values of the vendorRiskScore
+        """
+        input: Upload!
+    ): VendorRiskScoreBulkCreatePayload!
+    """
+    Update multiple existing vendorRiskScores
+    """
+    updateBulkVendorRiskScore(
+        """
+        IDs of the vendorRiskScores to update
+        """
+        ids: [ID!]!
+        """
+        values to update the vendorRiskScores with
+        """
+        input: UpdateVendorRiskScoreInput!
+    ): VendorRiskScoreBulkUpdatePayload!
+    """
+    Update multiple existing vendorRiskScores via file upload
+    """
+    updateBulkCSVVendorRiskScore(
+        """
+        csv file containing values of the vendorRiskScore, must include ID column
+        """
+        input: Upload!
+    ): VendorRiskScoreBulkUpdatePayload!
+    """
+    Update an existing vendorRiskScore
+    """
+    updateVendorRiskScore(
+        """
+        ID of the vendorRiskScore
+        """
+        id: ID!
+        """
+        New values for the vendorRiskScore
+        """
+        input: UpdateVendorRiskScoreInput!
+    ): VendorRiskScoreUpdatePayload!
+    """
+    Delete an existing vendorRiskScore
+    """
+    deleteVendorRiskScore(
+        """
+        ID of the vendorRiskScore
+        """
+        id: ID!
+    ): VendorRiskScoreDeletePayload!
+    """
+    Delete multiple vendorRiskScores
+    """
+    deleteBulkVendorRiskScore(
+        """
+        IDs of the vendorRiskScores to delete
+        """
+        ids: [ID!]!
+    ): VendorRiskScoreBulkDeletePayload!
+}
+
+"""
+Return response for createVendorRiskScore mutation
+"""
+type VendorRiskScoreCreatePayload {
+    """
+    Created vendorRiskScore
+    """
+    vendorRiskScore: VendorRiskScore!
+}
+
+"""
+Return response for updateVendorRiskScore mutation
+"""
+type VendorRiskScoreUpdatePayload {
+    """
+    Updated vendorRiskScore
+    """
+    vendorRiskScore: VendorRiskScore!
+}
+
+"""
+Return response for deleteVendorRiskScore mutation
+"""
+type VendorRiskScoreDeletePayload {
+    """
+    Deleted vendorRiskScore ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendorRiskScore mutation
+"""
+type VendorRiskScoreBulkCreatePayload {
+    """
+    Created vendorRiskScores
+    """
+    vendorRiskScores: [VendorRiskScore!]
+}
+
+"""
+Return response for updateBulkVendorRiskScore mutation
+"""
+type VendorRiskScoreBulkUpdatePayload {
+    """
+    Updated vendorRiskScores
+    """
+    vendorRiskScores: [VendorRiskScore!]
+    """
+    IDs of the updated vendorRiskScores
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkVendorRiskScore mutation
+"""
+type VendorRiskScoreBulkDeletePayload {
+    """
+    Deleted vendorRiskScore IDs
+    """
+    deletedIDs: [ID!]!
+}

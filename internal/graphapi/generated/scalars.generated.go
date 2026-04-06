@@ -180,6 +180,16 @@ func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNRiskThresholdsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, v any) (models.RiskThresholdsConfig, error) {
+	var res models.RiskThresholdsConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRiskThresholdsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, sel ast.SelectionSet, v models.RiskThresholdsConfig) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTestingProcedures(ctx context.Context, v any) (models.TestingProcedures, error) {
 	var res models.TestingProcedures
 	err := res.UnmarshalGQL(v)
@@ -226,6 +236,16 @@ func (ec *executionContext) marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNVendorScoringQuestionsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, v any) (models.VendorScoringQuestionsConfig, error) {
+	var res models.VendorScoringQuestionsConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNVendorScoringQuestionsConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, sel ast.SelectionSet, v models.VendorScoringQuestionsConfig) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
@@ -680,6 +700,22 @@ func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋco
 	return ret
 }
 
+func (ec *executionContext) unmarshalORiskThresholdsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, v any) (*models.RiskThresholdsConfig, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.RiskThresholdsConfig)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalORiskThresholdsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐRiskThresholdsConfig(ctx context.Context, sel ast.SelectionSet, v *models.RiskThresholdsConfig) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, v any) (models.SSOAuthorizationMap, error) {
 	if v == nil {
 		return nil, nil
@@ -784,6 +820,22 @@ func (ec *executionContext) marshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	_ = ctx
 	res := graphql.MarshalUpload(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOVendorScoringQuestionsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, v any) (*models.VendorScoringQuestionsConfig, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.VendorScoringQuestionsConfig)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOVendorScoringQuestionsConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVendorScoringQuestionsConfig(ctx context.Context, sel ast.SelectionSet, v *models.VendorScoringQuestionsConfig) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐVersionBump(ctx context.Context, v any) (*models.VersionBump, error) {

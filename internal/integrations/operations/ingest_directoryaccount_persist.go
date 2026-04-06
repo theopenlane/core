@@ -14,6 +14,8 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 		return ErrIngestUpsertKeyMissing
 	}
 
+	createInput.PrimarySource = &integration.PrimaryDirectory
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,

@@ -184,6 +184,12 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: ""
+    oidclocal:
+        clientid: local-core-oidc
+        clientsecret: local-core-oidc-secret
+        discoveryurl: http://localhost:5557/dex
+        enabled: false
+        redirecturl: http://localhost:17608/v1/integrations/auth/callback
     slack:
         clientid: ""
         clientsecret: ""

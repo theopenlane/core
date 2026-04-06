@@ -142,6 +142,8 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
+			case "primarySource":
+				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 			case "environment":
@@ -287,6 +289,8 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
+			case "primarySource":
+				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 			case "environment":
@@ -461,6 +465,8 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
+			case "primarySource":
+				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 			case "environment":

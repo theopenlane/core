@@ -9080,6 +9080,344 @@ func (r *mutationResolver) bulkUpdateCSVUserSetting(ctx context.Context, inputs 
 	}, nil
 }
 
+// bulkCreateVendorRiskScore uses the CreateBulk function to create multiple VendorRiskScore entities
+func (r *mutationResolver) bulkCreateVendorRiskScore(ctx context.Context, input []*generated.CreateVendorRiskScoreInput) (*model.VendorRiskScoreBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorRiskScoreCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorRiskScore.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorRiskScore.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vendorriskscore"})
+	}
+
+	// return response
+	return &model.VendorRiskScoreBulkCreatePayload{
+		VendorRiskScores: res,
+	}, nil
+}
+
+// bulkUpdateVendorRiskScore updates multiple VendorRiskScore entities
+func (r *mutationResolver) bulkUpdateVendorRiskScore(ctx context.Context, ids []string, input generated.UpdateVendorRiskScoreInput) (*model.VendorRiskScoreBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_risk_score", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.VendorRiskScoreBulkUpdatePayload{
+			VendorRiskScores: []*generated.VendorRiskScore{},
+			UpdatedIDs:       []string{},
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorRiskScore, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each vendorriskscore individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for vendorriskscore")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorRiskScore.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to get vendorriskscore in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to update vendorriskscore in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.VendorRiskScoreBulkUpdatePayload{
+		VendorRiskScores: results,
+		UpdatedIDs:       updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVVendorRiskScore updates multiple VendorRiskScore entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVVendorRiskScore(ctx context.Context, inputs []*csvgenerated.VendorRiskScoreCSVUpdateInput) (*model.VendorRiskScoreBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorRiskScore, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each vendorriskscore individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for vendorriskscore")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorRiskScore.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", input.ID).Msg("failed to get vendorriskscore in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", input.ID).Msg("failed to update vendorriskscore in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorriskscore"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.VendorRiskScoreBulkUpdatePayload{
+		VendorRiskScores: results,
+		UpdatedIDs:       updatedIDs,
+	}, nil
+}
+
+// bulkDeleteVendorRiskScore deletes multiple VendorRiskScore entities by their IDs
+func (r *mutationResolver) bulkDeleteVendorRiskScore(ctx context.Context, ids []string) (*model.VendorRiskScoreBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_risk_score", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.VendorRiskScoreBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each vendorriskscore individually to ensure proper cleanup
+			if err := r.db.VendorRiskScore.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to delete vendorriskscore in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.VendorRiskScoreEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to cleanup vendorriskscore edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vendorriskscore deletions failed")
+	}
+
+	return &model.VendorRiskScoreBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkCreateVendorScoringConfig uses the CreateBulk function to create multiple VendorScoringConfig entities
+func (r *mutationResolver) bulkCreateVendorScoringConfig(ctx context.Context, input []*generated.CreateVendorScoringConfigInput) (*model.VendorScoringConfigBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorScoringConfigCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorScoringConfig.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorScoringConfig.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vendorscoringconfig"})
+	}
+
+	// return response
+	return &model.VendorScoringConfigBulkCreatePayload{
+		VendorScoringConfigs: res,
+	}, nil
+}
+
+// bulkUpdateVendorScoringConfig updates multiple VendorScoringConfig entities
+func (r *mutationResolver) bulkUpdateVendorScoringConfig(ctx context.Context, ids []string, input generated.UpdateVendorScoringConfigInput) (*model.VendorScoringConfigBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_scoring_config", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.VendorScoringConfigBulkUpdatePayload{
+			VendorScoringConfigs: []*generated.VendorScoringConfig{},
+			UpdatedIDs:           []string{},
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorScoringConfig, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each vendorscoringconfig individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for vendorscoringconfig")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorScoringConfig.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to get vendorscoringconfig in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to update vendorscoringconfig in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.VendorScoringConfigBulkUpdatePayload{
+		VendorScoringConfigs: results,
+		UpdatedIDs:           updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVVendorScoringConfig updates multiple VendorScoringConfig entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVVendorScoringConfig(ctx context.Context, inputs []*csvgenerated.VendorScoringConfigCSVUpdateInput) (*model.VendorScoringConfigBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorScoringConfig, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each vendorscoringconfig individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for vendorscoringconfig")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorScoringConfig.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", input.ID).Msg("failed to get vendorscoringconfig in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", input.ID).Msg("failed to update vendorscoringconfig in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorscoringconfig"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.VendorScoringConfigBulkUpdatePayload{
+		VendorScoringConfigs: results,
+		UpdatedIDs:           updatedIDs,
+	}, nil
+}
+
+// bulkDeleteVendorScoringConfig deletes multiple VendorScoringConfig entities by their IDs
+func (r *mutationResolver) bulkDeleteVendorScoringConfig(ctx context.Context, ids []string) (*model.VendorScoringConfigBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_scoring_config", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.VendorScoringConfigBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each vendorscoringconfig individually to ensure proper cleanup
+			if err := r.db.VendorScoringConfig.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to delete vendorscoringconfig in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.VendorScoringConfigEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to cleanup vendorscoringconfig edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vendorscoringconfig deletions failed")
+	}
+
+	return &model.VendorScoringConfigBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateVulnerability uses the CreateBulk function to create multiple Vulnerability entities
 func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []*generated.CreateVulnerabilityInput) (*model.VulnerabilityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

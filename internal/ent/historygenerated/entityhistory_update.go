@@ -1039,14 +1039,41 @@ func (_u *EntityHistoryUpdate) ClearRiskScore() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdate) SetRiskScoreCoverage(v int) *EntityHistoryUpdate {
+	_u.mutation.ResetRiskScoreCoverage()
+	_u.mutation.SetRiskScoreCoverage(v)
+	return _u
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableRiskScoreCoverage(v *int) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetRiskScoreCoverage(*v)
+	}
+	return _u
+}
+
+// AddRiskScoreCoverage adds value to the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdate) AddRiskScoreCoverage(v int) *EntityHistoryUpdate {
+	_u.mutation.AddRiskScoreCoverage(v)
+	return _u
+}
+
+// ClearRiskScoreCoverage clears the value of the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdate) ClearRiskScoreCoverage() *EntityHistoryUpdate {
+	_u.mutation.ClearRiskScoreCoverage()
+	return _u
+}
+
 // SetTier sets the "tier" field.
-func (_u *EntityHistoryUpdate) SetTier(v string) *EntityHistoryUpdate {
+func (_u *EntityHistoryUpdate) SetTier(v enums.VendorTier) *EntityHistoryUpdate {
 	_u.mutation.SetTier(v)
 	return _u
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_u *EntityHistoryUpdate) SetNillableTier(v *string) *EntityHistoryUpdate {
+func (_u *EntityHistoryUpdate) SetNillableTier(v *enums.VendorTier) *EntityHistoryUpdate {
 	if v != nil {
 		_u.SetTier(*v)
 	}
@@ -1243,6 +1270,11 @@ func (_u *EntityHistoryUpdate) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := entityhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Tier(); ok {
+		if err := entityhistory.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.tier": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
@@ -1620,11 +1652,20 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.RiskScoreCleared() {
 		_spec.ClearField(entityhistory.FieldRiskScore, field.TypeInt)
 	}
+	if value, ok := _u.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScoreCoverage(); ok {
+		_spec.AddField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCoverageCleared() {
+		_spec.ClearField(entityhistory.FieldRiskScoreCoverage, field.TypeInt)
+	}
 	if value, ok := _u.mutation.Tier(); ok {
-		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldTier, field.TypeEnum, value)
 	}
 	if _u.mutation.TierCleared() {
-		_spec.ClearField(entityhistory.FieldTier, field.TypeString)
+		_spec.ClearField(entityhistory.FieldTier, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)
@@ -2695,14 +2736,41 @@ func (_u *EntityHistoryUpdateOne) ClearRiskScore() *EntityHistoryUpdateOne {
 	return _u
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdateOne) SetRiskScoreCoverage(v int) *EntityHistoryUpdateOne {
+	_u.mutation.ResetRiskScoreCoverage()
+	_u.mutation.SetRiskScoreCoverage(v)
+	return _u
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableRiskScoreCoverage(v *int) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskScoreCoverage(*v)
+	}
+	return _u
+}
+
+// AddRiskScoreCoverage adds value to the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdateOne) AddRiskScoreCoverage(v int) *EntityHistoryUpdateOne {
+	_u.mutation.AddRiskScoreCoverage(v)
+	return _u
+}
+
+// ClearRiskScoreCoverage clears the value of the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdateOne) ClearRiskScoreCoverage() *EntityHistoryUpdateOne {
+	_u.mutation.ClearRiskScoreCoverage()
+	return _u
+}
+
 // SetTier sets the "tier" field.
-func (_u *EntityHistoryUpdateOne) SetTier(v string) *EntityHistoryUpdateOne {
+func (_u *EntityHistoryUpdateOne) SetTier(v enums.VendorTier) *EntityHistoryUpdateOne {
 	_u.mutation.SetTier(v)
 	return _u
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_u *EntityHistoryUpdateOne) SetNillableTier(v *string) *EntityHistoryUpdateOne {
+func (_u *EntityHistoryUpdateOne) SetNillableTier(v *enums.VendorTier) *EntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetTier(*v)
 	}
@@ -2912,6 +2980,11 @@ func (_u *EntityHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := entityhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Tier(); ok {
+		if err := entityhistory.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.tier": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
@@ -3306,11 +3379,20 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.RiskScoreCleared() {
 		_spec.ClearField(entityhistory.FieldRiskScore, field.TypeInt)
 	}
+	if value, ok := _u.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScoreCoverage(); ok {
+		_spec.AddField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCoverageCleared() {
+		_spec.ClearField(entityhistory.FieldRiskScoreCoverage, field.TypeInt)
+	}
 	if value, ok := _u.mutation.Tier(); ok {
-		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldTier, field.TypeEnum, value)
 	}
 	if _u.mutation.TierCleared() {
-		_spec.ClearField(entityhistory.FieldTier, field.TypeString)
+		_spec.ClearField(entityhistory.FieldTier, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)

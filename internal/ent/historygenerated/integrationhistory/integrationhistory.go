@@ -88,6 +88,8 @@ const (
 	FieldStatus = "status"
 	// FieldProviderMetadataSnapshot holds the string denoting the provider_metadata_snapshot field in the database.
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
+	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
+	FieldPrimaryDirectory = "primary_directory"
 	// Table holds the table name of the integrationhistory in the database.
 	Table = "integration_history"
 )
@@ -129,6 +131,7 @@ var Columns = []string{
 	FieldFamily,
 	FieldStatus,
 	FieldProviderMetadataSnapshot,
+	FieldPrimaryDirectory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -162,6 +165,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultPrimaryDirectory holds the default value on creation for the "primary_directory" field.
+	DefaultPrimaryDirectory bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -329,6 +334,11 @@ func ByFamily(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByPrimaryDirectory orders the results by the primary_directory field.
+func ByPrimaryDirectory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryDirectory, opts...).ToFunc()
 }
 
 var (

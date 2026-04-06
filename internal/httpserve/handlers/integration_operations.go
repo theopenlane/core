@@ -28,7 +28,7 @@ type integrationOperationQueueDetails struct {
 
 // RunIntegrationOperation queues operation execution; operations have individual policies dictating when or how they run
 func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationOperationPayload, IntegrationOperationResponse{}, openapiCtx.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleRunIntegrationOperationRequest, RunIntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -116,7 +116,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			// not failing the request at this point since the operation itself succeeded and this is just a best-effort update to the integration record
 		}
 
-		return h.Success(ctx, IntegrationOperationResponse{
+		return h.Success(ctx, RunIntegrationOperationResponse{
 			Reply:     rout.Reply{Success: true},
 			Provider:  def.ID,
 			Operation: operationName,
@@ -147,7 +147,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
-	return h.Success(ctx, IntegrationOperationResponse{
+	return h.Success(ctx, RunIntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
 		Provider:  def.ID,
 		Operation: operationName,
