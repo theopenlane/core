@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -69,6 +70,11 @@ func HookVendorRiskScoreCompute() ent.Hook {
 func HookVendorRiskScoreAggregate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.VendorRiskScoreFunc(func(ctx context.Context, m *generated.VendorRiskScoreMutation) (generated.Value, error) {
+			// Skip aggregate recomputation when the parent entity is being soft-deleted
+			if entx.CheckIsSoftDeleteType(ctx, generated.TypeEntity) {
+				return next.Mutate(ctx, m)
+			}
+
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 			// Capture entity_id before deletion since the record will be gone after mutate
@@ -234,8 +240,6 @@ func computeOnCreate(ctx context.Context, m *generated.VendorRiskScoreMutation) 
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	// Resolve vendor_scoring_config_id from org context when not explicitly provided
 	configID, hasConfigID := m.VendorScoringConfigID()
 	if !hasConfigID {
@@ -243,7 +247,7 @@ func computeOnCreate(ctx context.Context, m *generated.VendorRiskScoreMutation) 
 		if ok {
 			cfg, err := m.Client().VendorScoringConfig.Query().
 				Where(vendorscoringconfig.OwnerID(ownerID)).
-				Only(allowCtx)
+				Only(ctx)
 			if err != nil && !generated.IsNotFound(err) {
 				return err
 			}
@@ -255,7 +259,7 @@ func computeOnCreate(ctx context.Context, m *generated.VendorRiskScoreMutation) 
 		}
 	}
 
-	def, err := resolveQuestionDef(allowCtx, m, configID, questionKey)
+	def, err := resolveQuestionDef(ctx, m, configID, questionKey)
 	if err != nil {
 		return err
 	}

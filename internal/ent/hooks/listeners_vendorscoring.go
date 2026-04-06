@@ -6,7 +6,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/pkg/gala"
@@ -46,13 +45,11 @@ func handleVendorScoringConfigMutationGala(ctx gala.HandlerContext, payload even
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
-
 	// Find all distinct entity IDs that have risk scores under this config
 	scores, err := client.VendorRiskScore.Query().
 		Where(vendorriskscore.VendorScoringConfigID(configID)).
 		Select(vendorriskscore.FieldEntityID).
-		All(allowCtx)
+		All(ctx.Context)
 	if err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Str("config_id", configID).Msg("failed to query entities for scoring mode recomputation")
 		return err
@@ -63,7 +60,7 @@ func handleVendorScoringConfigMutationGala(ctx gala.HandlerContext, payload even
 	}))
 
 	errs := lo.FilterMap(entityIDs, func(entityID string, _ int) (error, bool) {
-		err := RecomputeEntityRiskAggregate(allowCtx, client, entityID)
+		err := RecomputeEntityRiskAggregate(ctx.Context, client, entityID)
 		if err != nil {
 			logx.FromContext(ctx.Context).Error().Err(err).Str("entity_id", entityID).Str("config_id", configID).Msg("failed to recompute entity risk aggregate")
 		}
