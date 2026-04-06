@@ -1203,6 +1203,7 @@ type CreateAssetInput struct {
 	PurchaseDate                *models.DateTime
 	Cpe                         *string
 	Categories                  []string
+	ObservedAt                  *models.DateTime
 	OwnerID                     *string
 	BlockedGroupIDs             []string
 	EditorIDs                   []string
@@ -1223,7 +1224,10 @@ type CreateAssetInput struct {
 	OutOfScopePlatformIDs       []string
 	IdentityHolderIDs           []string
 	ControlIDs                  []string
+	SubcontrolIDs               []string
+	InternalPolicyIDs           []string
 	SourcePlatformID            *string
+	IntegrationID               *string
 	ConnectedAssetIDs           []string
 	ConnectedFromIDs            []string
 }
@@ -1312,6 +1316,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.Categories; v != nil {
 		m.SetCategories(v)
 	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -1372,8 +1379,17 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 	if v := i.SourcePlatformID; v != nil {
 		m.SetSourcePlatformID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
 	}
 	if v := i.ConnectedAssetIDs; len(v) > 0 {
 		m.AddConnectedAssetIDs(v...)
@@ -1446,6 +1462,8 @@ type UpdateAssetInput struct {
 	ClearCategories                  bool
 	Categories                       []string
 	AppendCategories                 []string
+	ClearObservedAt                  bool
+	ObservedAt                       *models.DateTime
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string
 	RemoveBlockedGroupIDs            []string
@@ -1493,6 +1511,12 @@ type UpdateAssetInput struct {
 	ClearControls                    bool
 	AddControlIDs                    []string
 	RemoveControlIDs                 []string
+	ClearSubcontrols                 bool
+	AddSubcontrolIDs                 []string
+	RemoveSubcontrolIDs              []string
+	ClearInternalPolicies            bool
+	AddInternalPolicyIDs             []string
+	RemoveInternalPolicyIDs          []string
 	ClearSourcePlatform              bool
 	SourcePlatformID                 *string
 	ClearConnectedAssets             bool
@@ -1670,6 +1694,12 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	if i.AppendCategories != nil {
 		m.AppendCategories(i.Categories)
 	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -1810,6 +1840,24 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 	if i.ClearSourcePlatform {
 		m.ClearSourcePlatform()
@@ -2597,6 +2645,9 @@ type CreateContactInput struct {
 	PhoneNumber       *string
 	Address           *string
 	Status            *enums.UserStatus
+	ExternalID        *string
+	IntegrationID     *string
+	ObservedAt        *models.DateTime
 	OwnerID           *string
 	EntityIDs         []string
 	CampaignIDs       []string
@@ -2629,6 +2680,15 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2671,6 +2731,12 @@ type UpdateContactInput struct {
 	ClearAddress            bool
 	Address                 *string
 	Status                  *enums.UserStatus
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearIntegrationID      bool
+	IntegrationID           *string
+	ClearObservedAt         bool
+	ObservedAt              *models.DateTime
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearEntities           bool
@@ -2736,6 +2802,24 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearIntegrationID {
+		m.ClearIntegrationID()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -4430,6 +4514,7 @@ type CreateCustomDomainInput struct {
 	SystemInternalID  *string
 	CnameRecord       string
 	TrustCenterID     *string
+	DomainType        *enums.CustomDomainType
 	OwnerID           *string
 	MappableDomainID  string
 	DNSVerificationID *string
@@ -4449,6 +4534,9 @@ func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	m.SetCnameRecord(i.CnameRecord)
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.DomainType; v != nil {
+		m.SetDomainType(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4968,6 +5056,7 @@ type CreateDirectoryAccountInput struct {
 	Tags                 []string
 	EnvironmentName      *string
 	ScopeName            *string
+	DirectoryInstanceID  *string
 	DirectoryName        *string
 	ExternalID           string
 	SecondaryKey         *string
@@ -4985,9 +5074,14 @@ type CreateDirectoryAccountInput struct {
 	MfaState             *enums.DirectoryAccountMFAState
 	LastSeenIP           *string
 	LastLoginAt          *time.Time
+	FirstSeenAt          *time.Time
+	LastSeenAt           *time.Time
+	AddedAt              *time.Time
+	RemovedAt            *time.Time
 	ObservedAt           *time.Time
 	ProfileHash          *string
 	Profile              map[string]interface{}
+	Metadata             map[string]interface{}
 	SourceVersion        *string
 	OwnerID              *string
 	EnvironmentID        *string
@@ -5012,6 +5106,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
@@ -5062,6 +5159,18 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.LastLoginAt; v != nil {
 		m.SetLastLoginAt(*v)
 	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
@@ -5070,6 +5179,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if v := i.SourceVersion; v != nil {
 		m.SetSourceVersion(*v)
@@ -5124,6 +5236,8 @@ type UpdateDirectoryAccountInput struct {
 	EnvironmentName            *string
 	ClearScopeName             bool
 	ScopeName                  *string
+	ClearDirectoryInstanceID   bool
+	DirectoryInstanceID        *string
 	ClearDirectoryName         bool
 	DirectoryName              *string
 	ClearSecondaryKey          bool
@@ -5154,9 +5268,19 @@ type UpdateDirectoryAccountInput struct {
 	LastSeenIP                 *string
 	ClearLastLoginAt           bool
 	LastLoginAt                *time.Time
+	ClearFirstSeenAt           bool
+	FirstSeenAt                *time.Time
+	ClearLastSeenAt            bool
+	LastSeenAt                 *time.Time
+	ClearAddedAt               bool
+	AddedAt                    *time.Time
+	ClearRemovedAt             bool
+	RemovedAt                  *time.Time
 	ProfileHash                *string
 	ClearProfile               bool
 	Profile                    map[string]interface{}
+	ClearMetadata              bool
+	Metadata                   map[string]interface{}
 	ClearSourceVersion         bool
 	SourceVersion              *string
 	ClearOwner                 bool
@@ -5202,6 +5326,12 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearDirectoryName {
 		m.ClearDirectoryName()
@@ -5293,6 +5423,30 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.LastLoginAt; v != nil {
 		m.SetLastLoginAt(*v)
 	}
+	if i.ClearFirstSeenAt {
+		m.ClearFirstSeenAt()
+	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if i.ClearLastSeenAt {
+		m.ClearLastSeenAt()
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if i.ClearAddedAt {
+		m.ClearAddedAt()
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if i.ClearRemovedAt {
+		m.ClearRemovedAt()
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ProfileHash; v != nil {
 		m.SetProfileHash(*v)
 	}
@@ -5301,6 +5455,12 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearSourceVersion {
 		m.ClearSourceVersion()
@@ -5384,6 +5544,7 @@ type CreateDirectoryGroupInput struct {
 	Tags                   []string
 	EnvironmentName        *string
 	ScopeName              *string
+	DirectoryInstanceID    *string
 	ExternalID             string
 	Email                  *string
 	DisplayName            *string
@@ -5392,9 +5553,14 @@ type CreateDirectoryGroupInput struct {
 	Status                 *enums.DirectoryGroupStatus
 	ExternalSharingAllowed *bool
 	MemberCount            *int
+	FirstSeenAt            *time.Time
+	LastSeenAt             *time.Time
+	AddedAt                *time.Time
+	RemovedAt              *time.Time
 	ObservedAt             *time.Time
 	ProfileHash            *string
 	Profile                map[string]interface{}
+	Metadata               map[string]interface{}
 	SourceVersion          *string
 	OwnerID                *string
 	EnvironmentID          *string
@@ -5415,6 +5581,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.Email; v != nil {
@@ -5438,6 +5607,18 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.MemberCount; v != nil {
 		m.SetMemberCount(*v)
 	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
@@ -5446,6 +5627,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if v := i.SourceVersion; v != nil {
 		m.SetSourceVersion(*v)
@@ -5484,6 +5668,8 @@ type UpdateDirectoryGroupInput struct {
 	EnvironmentName             *string
 	ClearScopeName              bool
 	ScopeName                   *string
+	ClearDirectoryInstanceID    bool
+	DirectoryInstanceID         *string
 	ClearEmail                  bool
 	Email                       *string
 	ClearDisplayName            bool
@@ -5496,9 +5682,19 @@ type UpdateDirectoryGroupInput struct {
 	ExternalSharingAllowed      *bool
 	ClearMemberCount            bool
 	MemberCount                 *int
+	ClearFirstSeenAt            bool
+	FirstSeenAt                 *time.Time
+	ClearLastSeenAt             bool
+	LastSeenAt                  *time.Time
+	ClearAddedAt                bool
+	AddedAt                     *time.Time
+	ClearRemovedAt              bool
+	RemovedAt                   *time.Time
 	ProfileHash                 *string
 	ClearProfile                bool
 	Profile                     map[string]interface{}
+	ClearMetadata               bool
+	Metadata                    map[string]interface{}
 	ClearSourceVersion          bool
 	SourceVersion               *string
 	ClearOwner                  bool
@@ -5534,6 +5730,12 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearEmail {
 		m.ClearEmail()
@@ -5571,6 +5773,30 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.MemberCount; v != nil {
 		m.SetMemberCount(*v)
 	}
+	if i.ClearFirstSeenAt {
+		m.ClearFirstSeenAt()
+	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if i.ClearLastSeenAt {
+		m.ClearLastSeenAt()
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if i.ClearAddedAt {
+		m.ClearAddedAt()
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if i.ClearRemovedAt {
+		m.ClearRemovedAt()
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
+	}
 	if v := i.ProfileHash; v != nil {
 		m.SetProfileHash(*v)
 	}
@@ -5579,6 +5805,12 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearSourceVersion {
 		m.ClearSourceVersion()
@@ -5631,10 +5863,13 @@ func (c *DirectoryGroupUpdateOne) SetInput(i UpdateDirectoryGroupInput) *Directo
 type CreateDirectoryMembershipInput struct {
 	EnvironmentName      *string
 	ScopeName            *string
+	DirectoryInstanceID  *string
 	Role                 *enums.DirectoryMembershipRole
 	Source               *string
 	FirstSeenAt          *time.Time
 	LastSeenAt           *time.Time
+	AddedAt              *time.Time
+	RemovedAt            *time.Time
 	ObservedAt           *time.Time
 	LastConfirmedRunID   *string
 	Metadata             map[string]interface{}
@@ -5658,6 +5893,9 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
+	}
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
 	}
@@ -5669,6 +5907,12 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.LastSeenAt; v != nil {
 		m.SetLastSeenAt(*v)
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
@@ -5715,6 +5959,8 @@ type UpdateDirectoryMembershipInput struct {
 	EnvironmentName            *string
 	ClearScopeName             bool
 	ScopeName                  *string
+	ClearDirectoryInstanceID   bool
+	DirectoryInstanceID        *string
 	ClearRole                  bool
 	Role                       *enums.DirectoryMembershipRole
 	ClearSource                bool
@@ -5723,6 +5969,10 @@ type UpdateDirectoryMembershipInput struct {
 	FirstSeenAt                *time.Time
 	ClearLastSeenAt            bool
 	LastSeenAt                 *time.Time
+	ClearAddedAt               bool
+	AddedAt                    *time.Time
+	ClearRemovedAt             bool
+	RemovedAt                  *time.Time
 	ClearLastConfirmedRunID    bool
 	LastConfirmedRunID         *string
 	ClearMetadata              bool
@@ -5755,6 +6005,12 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
+	}
 	if i.ClearRole {
 		m.ClearRole()
 	}
@@ -5778,6 +6034,18 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.LastSeenAt; v != nil {
 		m.SetLastSeenAt(*v)
+	}
+	if i.ClearAddedAt {
+		m.ClearAddedAt()
+	}
+	if v := i.AddedAt; v != nil {
+		m.SetAddedAt(*v)
+	}
+	if i.ClearRemovedAt {
+		m.ClearRemovedAt()
+	}
+	if v := i.RemovedAt; v != nil {
+		m.SetRemovedAt(*v)
 	}
 	if i.ClearLastConfirmedRunID {
 		m.ClearLastConfirmedRunID()
@@ -5845,6 +6113,7 @@ func (c *DirectoryMembershipUpdateOne) SetInput(i UpdateDirectoryMembershipInput
 type CreateDirectorySyncRunInput struct {
 	EnvironmentName     *string
 	ScopeName           *string
+	DirectoryInstanceID *string
 	Status              *enums.DirectorySyncRunStatus
 	StartedAt           *time.Time
 	CompletedAt         *time.Time
@@ -5870,6 +6139,9 @@ func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -5931,6 +6203,8 @@ type UpdateDirectorySyncRunInput struct {
 	EnvironmentName           *string
 	ClearScopeName            bool
 	ScopeName                 *string
+	ClearDirectoryInstanceID  bool
+	DirectoryInstanceID       *string
 	Status                    *enums.DirectorySyncRunStatus
 	StartedAt                 *time.Time
 	ClearCompletedAt          bool
@@ -5972,6 +6246,12 @@ func (i *UpdateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearDirectoryInstanceID {
+		m.ClearDirectoryInstanceID()
+	}
+	if v := i.DirectoryInstanceID; v != nil {
+		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -6644,10 +6924,13 @@ type CreateEmailTemplateInput struct {
 	Metadata                map[string]interface{}
 	Active                  *bool
 	Version                 *int
-	TemplateContext         *enums.TemplateContext
+	TemplateContext         enums.TemplateContext
 	Defaults                map[string]interface{}
 	OwnerID                 *string
-	EmailBrandingID         *string
+	BlockedGroupIDs         []string
+	EditorIDs               []string
+	ViewerIDs               []string
+	EmailBrandingIDs        []string
 	IntegrationID           *string
 	WorkflowDefinitionID    *string
 	WorkflowInstanceID      *string
@@ -6705,17 +6988,24 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.TemplateContext; v != nil {
-		m.SetTemplateContext(*v)
-	}
+	m.SetTemplateContext(i.TemplateContext)
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.EmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
@@ -6773,12 +7063,21 @@ type UpdateEmailTemplateInput struct {
 	Metadata                      map[string]interface{}
 	Active                        *bool
 	Version                       *int
-	ClearTemplateContext          bool
 	TemplateContext               *enums.TemplateContext
 	ClearDefaults                 bool
 	Defaults                      map[string]interface{}
+	ClearBlockedGroups            bool
+	AddBlockedGroupIDs            []string
+	RemoveBlockedGroupIDs         []string
+	ClearEditors                  bool
+	AddEditorIDs                  []string
+	RemoveEditorIDs               []string
+	ClearViewers                  bool
+	AddViewerIDs                  []string
+	RemoveViewerIDs               []string
 	ClearEmailBranding            bool
-	EmailBrandingID               *string
+	AddEmailBrandingIDs           []string
+	RemoveEmailBrandingIDs        []string
 	ClearIntegration              bool
 	IntegrationID                 *string
 	ClearWorkflowDefinition       bool
@@ -6882,9 +7181,6 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearTemplateContext {
-		m.ClearTemplateContext()
-	}
 	if v := i.TemplateContext; v != nil {
 		m.SetTemplateContext(*v)
 	}
@@ -6894,11 +7190,41 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
 	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
 	if i.ClearEmailBranding {
 		m.ClearEmailBranding()
 	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
+	if v := i.AddEmailBrandingIDs; len(v) > 0 {
+		m.AddEmailBrandingIDs(v...)
+	}
+	if v := i.RemoveEmailBrandingIDs; len(v) > 0 {
+		m.RemoveEmailBrandingIDs(v...)
 	}
 	if i.ClearIntegration {
 		m.ClearIntegration()
@@ -7002,6 +7328,8 @@ type CreateEntityInput struct {
 	NextReviewAt                          *models.DateTime
 	ContractRenewalAt                     *models.DateTime
 	VendorMetadata                        map[string]interface{}
+	ExternalID                            *string
+	ObservedAt                            *models.DateTime
 	OwnerID                               *string
 	BlockedGroupIDs                       []string
 	EditorIDs                             []string
@@ -7029,11 +7357,13 @@ type CreateEntityInput struct {
 	EmployerIdentityHolderIDs             []string
 	IdentityHolderIDs                     []string
 	ControlIDs                            []string
+	SubcontrolIDs                         []string
 	PlatformIDs                           []string
 	OutOfScopePlatformIDs                 []string
 	SourcePlatformIDs                     []string
 	EntityTypeID                          *string
 	LogoFileID                            *string
+	InternalPolicyIDs                     []string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -7161,6 +7491,12 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.VendorMetadata; v != nil {
 		m.SetVendorMetadata(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -7242,6 +7578,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -7256,6 +7595,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 }
 
@@ -7354,6 +7696,10 @@ type UpdateEntityInput struct {
 	ContractRenewalAt                          *models.DateTime
 	ClearVendorMetadata                        bool
 	VendorMetadata                             map[string]interface{}
+	ClearExternalID                            bool
+	ExternalID                                 *string
+	ClearObservedAt                            bool
+	ObservedAt                                 *models.DateTime
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string
 	RemoveBlockedGroupIDs                      []string
@@ -7423,6 +7769,9 @@ type UpdateEntityInput struct {
 	ClearControls                              bool
 	AddControlIDs                              []string
 	RemoveControlIDs                           []string
+	ClearSubcontrols                           bool
+	AddSubcontrolIDs                           []string
+	RemoveSubcontrolIDs                        []string
 	ClearPlatforms                             bool
 	AddPlatformIDs                             []string
 	RemovePlatformIDs                          []string
@@ -7436,6 +7785,9 @@ type UpdateEntityInput struct {
 	EntityTypeID                               *string
 	ClearLogoFile                              bool
 	LogoFileID                                 *string
+	ClearInternalPolicies                      bool
+	AddInternalPolicyIDs                       []string
+	RemoveInternalPolicyIDs                    []string
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -7701,6 +8053,18 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.VendorMetadata; v != nil {
 		m.SetVendorMetadata(v)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -7908,6 +8272,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
 	}
@@ -7946,6 +8319,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
 	}
 }
 
@@ -8331,8 +8713,8 @@ type CreateEvidenceInput struct {
 	Name                     string
 	Description              *string
 	CollectionProcedure      *string
-	CreationDate             *time.Time
-	RenewalDate              *time.Time
+	CreationDate             *models.DateTime
+	RenewalDate              *models.DateTime
 	Source                   *string
 	IsAutomated              *bool
 	URL                      *string
@@ -8463,9 +8845,9 @@ type UpdateEvidenceInput struct {
 	Description                    *string
 	ClearCollectionProcedure       bool
 	CollectionProcedure            *string
-	CreationDate                   *time.Time
+	CreationDate                   *models.DateTime
 	ClearRenewalDate               bool
-	RenewalDate                    *time.Time
+	RenewalDate                    *models.DateTime
 	ClearSource                    bool
 	Source                         *string
 	ClearIsAutomated               bool
@@ -9470,7 +9852,6 @@ type CreateFindingInput struct {
 	ScopeName            *string
 	FindingStatusName    *string
 	ExternalID           *string
-	Status               *string
 	ExternalOwnerID      *string
 	Source               *string
 	ResourceName         *string
@@ -9555,9 +9936,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -9764,8 +10142,6 @@ type UpdateFindingInput struct {
 	FindingStatusName          *string
 	ClearExternalID            bool
 	ExternalID                 *string
-	ClearStatus                bool
-	Status                     *string
 	ClearExternalOwnerID       bool
 	ExternalOwnerID            *string
 	ClearSource                bool
@@ -9957,12 +10333,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
-	}
-	if i.ClearStatus {
-		m.ClearStatus()
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -11829,6 +12199,7 @@ type CreateIdentityHolderInput struct {
 	EntityIDs              []string
 	DirectoryAccountIDs    []string
 	ControlIDs             []string
+	SubcontrolIDs          []string
 	PlatformIDs            []string
 	CampaignIDs            []string
 	TaskIDs                []string
@@ -11837,6 +12208,7 @@ type CreateIdentityHolderInput struct {
 	WorkflowObjectRefIDs   []string
 	AccessPlatformIDs      []string
 	UserID                 *string
+	InternalPolicyIDs      []string
 }
 
 // Mutate applies the CreateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -11951,6 +12323,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -11974,6 +12349,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.UserID; v != nil {
 		m.SetUserID(*v)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
 	}
 }
 
@@ -12065,6 +12443,9 @@ type UpdateIdentityHolderInput struct {
 	ClearControls               bool
 	AddControlIDs               []string
 	RemoveControlIDs            []string
+	ClearSubcontrols            bool
+	AddSubcontrolIDs            []string
+	RemoveSubcontrolIDs         []string
 	ClearPlatforms              bool
 	AddPlatformIDs              []string
 	RemovePlatformIDs           []string
@@ -12088,6 +12469,9 @@ type UpdateIdentityHolderInput struct {
 	RemoveAccessPlatformIDs     []string
 	ClearUser                   bool
 	UserID                      *string
+	ClearInternalPolicies       bool
+	AddInternalPolicyIDs        []string
+	RemoveInternalPolicyIDs     []string
 }
 
 // Mutate applies the UpdateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -12332,6 +12716,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
 	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
 	}
@@ -12401,6 +12794,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.UserID; v != nil {
 		m.SetUserID(*v)
 	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateIdentityHolderInput on the IdentityHolderUpdate builder.
@@ -12461,6 +12863,10 @@ type CreateInternalPolicyInput struct {
 	CommentIDs                      []string
 	DiscussionIDs                   []string
 	WorkflowObjectRefIDs            []string
+	AssetIDs                        []string
+	EntityIDs                       []string
+	IdentityHolderIDs               []string
+	ReviewIDs                       []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -12595,6 +13001,18 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
@@ -12714,6 +13132,18 @@ type UpdateInternalPolicyInput struct {
 	ClearWorkflowObjectRefs               bool
 	AddWorkflowObjectRefIDs               []string
 	RemoveWorkflowObjectRefIDs            []string
+	ClearAssets                           bool
+	AddAssetIDs                           []string
+	RemoveAssetIDs                        []string
+	ClearEntities                         bool
+	AddEntityIDs                          []string
+	RemoveEntityIDs                       []string
+	ClearIdentityHolders                  bool
+	AddIdentityHolderIDs                  []string
+	RemoveIdentityHolderIDs               []string
+	ClearReviews                          bool
+	AddReviewIDs                          []string
+	RemoveReviewIDs                       []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -13044,6 +13474,42 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
 	}
 }
 
@@ -14933,6 +15399,7 @@ type CreateNotificationTemplateInput struct {
 	Format               *enums.NotificationTemplateFormat
 	Locale               *string
 	TopicPattern         string
+	Destinations         []string
 	TitleTemplate        *string
 	SubjectTemplate      *string
 	BodyTemplate         *string
@@ -14975,6 +15442,9 @@ func (i *CreateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 		m.SetLocale(*v)
 	}
 	m.SetTopicPattern(i.TopicPattern)
+	if v := i.Destinations; v != nil {
+		m.SetDestinations(v)
+	}
 	if v := i.TitleTemplate; v != nil {
 		m.SetTitleTemplate(*v)
 	}
@@ -15047,6 +15517,9 @@ type UpdateNotificationTemplateInput struct {
 	Format                  *enums.NotificationTemplateFormat
 	Locale                  *string
 	TopicPattern            *string
+	ClearDestinations       bool
+	Destinations            []string
+	AppendDestinations      []string
 	ClearTitleTemplate      bool
 	TitleTemplate           *string
 	ClearSubjectTemplate    bool
@@ -15121,6 +15594,15 @@ func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	}
 	if v := i.TopicPattern; v != nil {
 		m.SetTopicPattern(*v)
+	}
+	if i.ClearDestinations {
+		m.ClearDestinations()
+	}
+	if v := i.Destinations; v != nil {
+		m.SetDestinations(v)
+	}
+	if i.AppendDestinations != nil {
+		m.AppendDestinations(i.Destinations)
 	}
 	if i.ClearTitleTemplate {
 		m.ClearTitleTemplate()
@@ -20277,49 +20759,50 @@ func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUp
 
 // CreateReviewInput represents a mutation input for creating reviews.
 type CreateReviewInput struct {
-	Tags             []string
-	InternalNotes    *string
-	SystemInternalID *string
-	EnvironmentName  *string
-	ScopeName        *string
-	ExternalID       *string
-	ExternalOwnerID  *string
-	Title            string
-	State            *string
-	Category         *string
-	Classification   *string
-	Summary          *string
-	Details          *string
-	Reporter         *string
-	Approved         *bool
-	ReviewedAt       *models.DateTime
-	ReportedAt       *models.DateTime
-	ApprovedAt       *models.DateTime
-	Source           *string
-	ExternalURI      *string
-	Metadata         map[string]interface{}
-	RawPayload       map[string]interface{}
-	OwnerID          *string
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	ViewerIDs        []string
-	EnvironmentID    *string
-	ScopeID          *string
-	IntegrationIDs   []string
-	FindingIDs       []string
-	VulnerabilityIDs []string
-	ActionPlanIDs    []string
-	RemediationIDs   []string
-	ControlIDs       []string
-	SubcontrolIDs    []string
-	RiskIDs          []string
-	ProgramIDs       []string
-	AssetIDs         []string
-	EntityIDs        []string
-	TaskIDs          []string
-	ReviewerID       *string
-	CommentIDs       []string
-	FileIDs          []string
+	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
+	EnvironmentName   *string
+	ScopeName         *string
+	ExternalID        *string
+	ExternalOwnerID   *string
+	Title             string
+	State             *string
+	Category          *string
+	Classification    *string
+	Summary           *string
+	Details           *string
+	Reporter          *string
+	Approved          *bool
+	ReviewedAt        *models.DateTime
+	ReportedAt        *models.DateTime
+	ApprovedAt        *models.DateTime
+	Source            *string
+	ExternalURI       *string
+	Metadata          map[string]interface{}
+	RawPayload        map[string]interface{}
+	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
+	ViewerIDs         []string
+	EnvironmentID     *string
+	ScopeID           *string
+	IntegrationIDs    []string
+	FindingIDs        []string
+	VulnerabilityIDs  []string
+	ActionPlanIDs     []string
+	RemediationIDs    []string
+	ControlIDs        []string
+	SubcontrolIDs     []string
+	RiskIDs           []string
+	ProgramIDs        []string
+	AssetIDs          []string
+	EntityIDs         []string
+	TaskIDs           []string
+	ReviewerID        *string
+	CommentIDs        []string
+	FileIDs           []string
+	InternalPolicyIDs []string
 }
 
 // Mutate applies the CreateReviewInput on the ReviewMutation builder.
@@ -20451,6 +20934,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateReviewInput on the ReviewCreate builder.
@@ -20461,107 +20947,110 @@ func (c *ReviewCreate) SetInput(i CreateReviewInput) *ReviewCreate {
 
 // UpdateReviewInput represents a mutation input for updating reviews.
 type UpdateReviewInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	ClearInternalNotes     bool
-	InternalNotes          *string
-	ClearSystemInternalID  bool
-	SystemInternalID       *string
-	ClearEnvironmentName   bool
-	EnvironmentName        *string
-	ClearScopeName         bool
-	ScopeName              *string
-	ClearExternalID        bool
-	ExternalID             *string
-	ClearExternalOwnerID   bool
-	ExternalOwnerID        *string
-	Title                  *string
-	ClearState             bool
-	State                  *string
-	ClearCategory          bool
-	Category               *string
-	ClearClassification    bool
-	Classification         *string
-	ClearSummary           bool
-	Summary                *string
-	ClearDetails           bool
-	Details                *string
-	ClearReporter          bool
-	Reporter               *string
-	ClearApproved          bool
-	Approved               *bool
-	ClearReviewedAt        bool
-	ReviewedAt             *models.DateTime
-	ClearReportedAt        bool
-	ReportedAt             *models.DateTime
-	ClearApprovedAt        bool
-	ApprovedAt             *models.DateTime
-	ClearSource            bool
-	Source                 *string
-	ClearExternalURI       bool
-	ExternalURI            *string
-	ClearMetadata          bool
-	Metadata               map[string]interface{}
-	ClearRawPayload        bool
-	RawPayload             map[string]interface{}
-	ClearBlockedGroups     bool
-	AddBlockedGroupIDs     []string
-	RemoveBlockedGroupIDs  []string
-	ClearEditors           bool
-	AddEditorIDs           []string
-	RemoveEditorIDs        []string
-	ClearViewers           bool
-	AddViewerIDs           []string
-	RemoveViewerIDs        []string
-	ClearEnvironment       bool
-	EnvironmentID          *string
-	ClearScope             bool
-	ScopeID                *string
-	ClearIntegrations      bool
-	AddIntegrationIDs      []string
-	RemoveIntegrationIDs   []string
-	ClearFindings          bool
-	AddFindingIDs          []string
-	RemoveFindingIDs       []string
-	ClearVulnerabilities   bool
-	AddVulnerabilityIDs    []string
-	RemoveVulnerabilityIDs []string
-	ClearActionPlans       bool
-	AddActionPlanIDs       []string
-	RemoveActionPlanIDs    []string
-	ClearRemediations      bool
-	AddRemediationIDs      []string
-	RemoveRemediationIDs   []string
-	ClearControls          bool
-	AddControlIDs          []string
-	RemoveControlIDs       []string
-	ClearSubcontrols       bool
-	AddSubcontrolIDs       []string
-	RemoveSubcontrolIDs    []string
-	ClearRisks             bool
-	AddRiskIDs             []string
-	RemoveRiskIDs          []string
-	ClearPrograms          bool
-	AddProgramIDs          []string
-	RemoveProgramIDs       []string
-	ClearAssets            bool
-	AddAssetIDs            []string
-	RemoveAssetIDs         []string
-	ClearEntities          bool
-	AddEntityIDs           []string
-	RemoveEntityIDs        []string
-	ClearTasks             bool
-	AddTaskIDs             []string
-	RemoveTaskIDs          []string
-	ClearReviewer          bool
-	ReviewerID             *string
-	ClearComments          bool
-	AddCommentIDs          []string
-	RemoveCommentIDs       []string
-	ClearFiles             bool
-	AddFileIDs             []string
-	RemoveFileIDs          []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
+	ClearEnvironmentName    bool
+	EnvironmentName         *string
+	ClearScopeName          bool
+	ScopeName               *string
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearExternalOwnerID    bool
+	ExternalOwnerID         *string
+	Title                   *string
+	ClearState              bool
+	State                   *string
+	ClearCategory           bool
+	Category                *string
+	ClearClassification     bool
+	Classification          *string
+	ClearSummary            bool
+	Summary                 *string
+	ClearDetails            bool
+	Details                 *string
+	ClearReporter           bool
+	Reporter                *string
+	ClearApproved           bool
+	Approved                *bool
+	ClearReviewedAt         bool
+	ReviewedAt              *models.DateTime
+	ClearReportedAt         bool
+	ReportedAt              *models.DateTime
+	ClearApprovedAt         bool
+	ApprovedAt              *models.DateTime
+	ClearSource             bool
+	Source                  *string
+	ClearExternalURI        bool
+	ExternalURI             *string
+	ClearMetadata           bool
+	Metadata                map[string]interface{}
+	ClearRawPayload         bool
+	RawPayload              map[string]interface{}
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
+	ClearEnvironment        bool
+	EnvironmentID           *string
+	ClearScope              bool
+	ScopeID                 *string
+	ClearIntegrations       bool
+	AddIntegrationIDs       []string
+	RemoveIntegrationIDs    []string
+	ClearFindings           bool
+	AddFindingIDs           []string
+	RemoveFindingIDs        []string
+	ClearVulnerabilities    bool
+	AddVulnerabilityIDs     []string
+	RemoveVulnerabilityIDs  []string
+	ClearActionPlans        bool
+	AddActionPlanIDs        []string
+	RemoveActionPlanIDs     []string
+	ClearRemediations       bool
+	AddRemediationIDs       []string
+	RemoveRemediationIDs    []string
+	ClearControls           bool
+	AddControlIDs           []string
+	RemoveControlIDs        []string
+	ClearSubcontrols        bool
+	AddSubcontrolIDs        []string
+	RemoveSubcontrolIDs     []string
+	ClearRisks              bool
+	AddRiskIDs              []string
+	RemoveRiskIDs           []string
+	ClearPrograms           bool
+	AddProgramIDs           []string
+	RemoveProgramIDs        []string
+	ClearAssets             bool
+	AddAssetIDs             []string
+	RemoveAssetIDs          []string
+	ClearEntities           bool
+	AddEntityIDs            []string
+	RemoveEntityIDs         []string
+	ClearTasks              bool
+	AddTaskIDs              []string
+	RemoveTaskIDs           []string
+	ClearReviewer           bool
+	ReviewerID              *string
+	ClearComments           bool
+	AddCommentIDs           []string
+	RemoveCommentIDs        []string
+	ClearFiles              bool
+	AddFileIDs              []string
+	RemoveFileIDs           []string
+	ClearInternalPolicies   bool
+	AddInternalPolicyIDs    []string
+	RemoveInternalPolicyIDs []string
 }
 
 // Mutate applies the UpdateReviewInput on the ReviewMutation builder.
@@ -20869,6 +21358,15 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
 	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateReviewInput on the ReviewUpdate builder.
@@ -20890,6 +21388,9 @@ type CreateRiskInput struct {
 	RiskCategoryName  *string
 	EnvironmentName   *string
 	ScopeName         *string
+	ExternalID        *string
+	IntegrationID     *string
+	ObservedAt        *models.DateTime
 	ExternalUUID      *string
 	Name              string
 	Status            *enums.RiskStatus
@@ -20943,6 +21444,15 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
@@ -21068,6 +21578,12 @@ type UpdateRiskInput struct {
 	EnvironmentName         *string
 	ClearScopeName          bool
 	ScopeName               *string
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearIntegrationID      bool
+	IntegrationID           *string
+	ClearObservedAt         bool
+	ObservedAt              *models.DateTime
 	ClearExternalUUID       bool
 	ExternalUUID            *string
 	Name                    *string
@@ -21190,6 +21706,24 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearIntegrationID {
+		m.ClearIntegrationID()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if i.ClearExternalUUID {
 		m.ClearExternalUUID()
@@ -22690,6 +23224,9 @@ type CreateSubcontrolInput struct {
 	ControlImplementationIDs   []string
 	ScheduledJobIDs            []string
 	WorkflowObjectRefIDs       []string
+	AssetIDs                   []string
+	EntityIDs                  []string
+	IdentityHolderIDs          []string
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -22855,6 +23392,15 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubcontrolInput on the SubcontrolCreate builder.
@@ -22997,6 +23543,15 @@ type UpdateSubcontrolInput struct {
 	ClearWorkflowObjectRefs         bool
 	AddWorkflowObjectRefIDs         []string
 	RemoveWorkflowObjectRefIDs      []string
+	ClearAssets                     bool
+	AddAssetIDs                     []string
+	RemoveAssetIDs                  []string
+	ClearEntities                   bool
+	AddEntityIDs                    []string
+	RemoveEntityIDs                 []string
+	ClearIdentityHolders            bool
+	AddIdentityHolderIDs            []string
+	RemoveIdentityHolderIDs         []string
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -23396,6 +23951,33 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
 	}
 }
 
@@ -27262,7 +27844,6 @@ type CreateVulnerabilityInput struct {
 	ScopeName               *string
 	VulnerabilityStatusName *string
 	ExternalOwnerID         *string
-	Status                  *string
 	ExternalID              string
 	CveID                   *string
 	Source                  *string
@@ -27336,9 +27917,6 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.CveID; v != nil {
@@ -27510,8 +28088,6 @@ type UpdateVulnerabilityInput struct {
 	VulnerabilityStatusName      *string
 	ClearExternalOwnerID         bool
 	ExternalOwnerID              *string
-	ClearStatus                  bool
-	Status                       *string
 	ExternalID                   *string
 	ClearCveID                   bool
 	CveID                        *string
@@ -27675,12 +28251,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if i.ClearStatus {
-		m.ClearStatus()
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)

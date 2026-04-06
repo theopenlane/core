@@ -374,31 +374,9 @@ func (_c *EmailTemplateHistoryCreate) SetTemplateContext(v enums.TemplateContext
 	return _c
 }
 
-// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
-func (_c *EmailTemplateHistoryCreate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateHistoryCreate {
-	if v != nil {
-		_c.SetTemplateContext(*v)
-	}
-	return _c
-}
-
 // SetDefaults sets the "defaults" field.
 func (_c *EmailTemplateHistoryCreate) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryCreate {
 	_c.mutation.SetDefaults(v)
-	return _c
-}
-
-// SetEmailBrandingID sets the "email_branding_id" field.
-func (_c *EmailTemplateHistoryCreate) SetEmailBrandingID(v string) *EmailTemplateHistoryCreate {
-	_c.mutation.SetEmailBrandingID(v)
-	return _c
-}
-
-// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
-func (_c *EmailTemplateHistoryCreate) SetNillableEmailBrandingID(v *string) *EmailTemplateHistoryCreate {
-	if v != nil {
-		_c.SetEmailBrandingID(*v)
-	}
 	return _c
 }
 
@@ -586,6 +564,9 @@ func (_c *EmailTemplateHistoryCreate) check() error {
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`historygenerated: missing required field "EmailTemplateHistory.version"`)}
 	}
+	if _, ok := _c.mutation.TemplateContext(); !ok {
+		return &ValidationError{Name: "template_context", err: errors.New(`historygenerated: missing required field "EmailTemplateHistory.template_context"`)}
+	}
 	if v, ok := _c.mutation.TemplateContext(); ok {
 		if err := emailtemplatehistory.TemplateContextValidator(v); err != nil {
 			return &ValidationError{Name: "template_context", err: fmt.Errorf(`historygenerated: validator failed for field "EmailTemplateHistory.template_context": %w`, err)}
@@ -746,10 +727,6 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 	if value, ok := _c.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)
 		_node.Defaults = value
-	}
-	if value, ok := _c.mutation.EmailBrandingID(); ok {
-		_spec.SetField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString, value)
-		_node.EmailBrandingID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldIntegrationID, field.TypeString, value)

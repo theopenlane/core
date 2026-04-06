@@ -1,6 +1,4 @@
-
-
-query GetAllNotificationTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationTemplateHistoryOrder!]){
+query GetAllNotificationTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationTemplateHistoryOrder!]) {
   notificationTemplateHistories(
     first: $first
     last: $last
@@ -23,7 +21,9 @@ query GetAllNotificationTemplateHistories($first: Int, $last: Int, $after: Curso
         channel
         createdAt
         createdBy
+        defaults
         description
+        destinations
         emailTemplateID
         format
         historyTime
@@ -38,9 +38,11 @@ query GetAllNotificationTemplateHistories($first: Int, $last: Int, $after: Curso
         operation
         ownerID
         ref
+        revision
         subjectTemplate
         systemInternalID
         systemOwned
+        templateContext
         titleTemplate
         topicPattern
         uischema
@@ -55,13 +57,13 @@ query GetAllNotificationTemplateHistories($first: Int, $last: Int, $after: Curso
 
 query GetNotificationTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [NotificationTemplateHistoryOrder!], $where: NotificationTemplateHistoryWhereInput) {
   notificationTemplateHistories(
-      first: $first
-      last: $last
-      after: $after
-      before: $before
-      orderBy: $orderBy
-      where: $where
-    ) {
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -77,7 +79,9 @@ query GetNotificationTemplateHistories($first: Int, $last: Int, $after: Cursor, 
         channel
         createdAt
         createdBy
+        defaults
         description
+        destinations
         emailTemplateID
         format
         historyTime
@@ -92,9 +96,11 @@ query GetNotificationTemplateHistories($first: Int, $last: Int, $after: Cursor, 
         operation
         ownerID
         ref
+        revision
         subjectTemplate
         systemInternalID
         systemOwned
+        templateContext
         titleTemplate
         topicPattern
         uischema

@@ -187,7 +187,7 @@ func OperationKindValidator(ok enums.IntegrationOperationKind) error {
 // RunTypeValidator is a validator for the "run_type" field enum values. It is called by the builders before save.
 func RunTypeValidator(rt enums.IntegrationRunType) error {
 	switch rt.String() {
-	case "MANUAL", "SCHEDULED", "WEBHOOK", "EVENT":
+	case "MANUAL", "SCHEDULED", "WEBHOOK", "EVENT", "RECONCILE":
 		return nil
 	default:
 		return fmt.Errorf("integrationrun: invalid enum value for run_type field: %q", rt)

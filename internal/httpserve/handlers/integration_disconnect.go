@@ -2,23 +2,27 @@ package handlers
 
 import (
 	"fmt"
-	"strings"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/utils/rout"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
-// DisconnectIntegration removes the stored integration configuration and secrets for a provider.
+// DisconnectIntegration executes the definition-driven teardown flow for one installed integration
 func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleDisconnectIntegrationRequest, models.DeleteIntegrationResponse{}, openapi.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
+	}
+
+	if isRegistrationContext(ctx) {
+		return nil
 	}
 
 	userCtx := ctx.Request().Context()
@@ -28,49 +32,43 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
-	if h.IntegrationStore == nil {
-		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapi)
+	if in.IntegrationID == "" {
+		logx.FromContext(userCtx).Error().Err(ErrIntegrationIDRequired).Msg("missing integrationID in request")
+
+		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapi)
 	}
 
-	provider := strings.TrimSpace(in.Provider)
-	providerType, err := parseProviderType(provider)
+	record, err := h.IntegrationsRuntime.ResolveIntegration(userCtx, integrationsruntime.IntegrationLookup{
+		IntegrationID: in.IntegrationID,
+		OwnerID:       caller.OrganizationID,
+	})
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration record")
+
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
 	}
 
-	integrationID := strings.TrimSpace(in.IntegrationID)
-	if integrationID == "" {
-		record, err := h.DBClient.Integration.Query().
-			Where(
-				integration.OwnerID(caller.OrganizationID),
-				integration.Kind(string(providerType)),
-			).
-			Only(userCtx)
-		if err != nil {
-			if ent.IsNotFound(err) {
-				return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", providerType, ErrIntegrationNotFound)), openapi)
-			}
-			return h.InternalServerError(ctx, wrapIntegrationError("find", err), openapi)
-		}
-		integrationID = record.ID
+	def, ok := h.IntegrationsRuntime.Registry().Definition(record.DefinitionID)
+	if !ok {
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
 	}
 
-	deletedProvider, deletedID, err := h.IntegrationStore.DeleteIntegration(userCtx, caller.OrganizationID, integrationID)
+	result, err := h.IntegrationsRuntime.Disconnect(userCtx, record)
 	if err != nil {
-		switch {
-		case ent.IsNotFound(err):
-			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", providerType, ErrIntegrationNotFound)), openapi)
-		default:
-			return h.InternalServerError(ctx, wrapIntegrationError("delete", err), openapi)
-		}
+		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("disconnect failed")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	displayName := string(deletedProvider)
-	out := models.DeleteIntegrationResponse{
-		Reply:     rout.Reply{Success: true},
-		Message:   fmt.Sprintf("%s integration disconnected", displayName),
-		DeletedID: deletedID,
+	resp := models.DeleteIntegrationResponse{
+		Reply:   rout.Reply{Success: true},
+		Message: lo.CoalesceOrEmpty(result.Message, fmt.Sprintf("%s integration disconnected", def.DisplayName)),
 	}
 
-	return h.Success(ctx, out)
+	resp.RedirectURL = result.RedirectURL
+	resp.Details = result.Details
+
+	resp.DeletedID = record.ID
+
+	return h.Success(ctx, resp)
 }

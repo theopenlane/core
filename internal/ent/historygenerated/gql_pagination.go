@@ -2075,6 +2075,33 @@ var (
 			}
 		},
 	}
+	// AssetHistoryOrderFieldObservedAt orders AssetHistory by observed_at.
+	AssetHistoryOrderFieldObservedAt = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: assethistory.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) assethistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return assethistory.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *AssetHistory) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2111,6 +2138,8 @@ func (f AssetHistoryOrderField) String() string {
 		str = "estimated_monthly_cost"
 	case AssetHistoryOrderFieldPurchaseDate.column:
 		str = "purchase_date"
+	case AssetHistoryOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -2157,6 +2186,8 @@ func (f *AssetHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetHistoryOrderFieldEstimatedMonthlyCost
 	case "purchase_date":
 		*f = *AssetHistoryOrderFieldPurchaseDate
+	case "observed_at":
+		*f = *AssetHistoryOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid AssetHistoryOrderField", str)
 	}
@@ -3751,6 +3782,47 @@ var (
 			}
 		},
 	}
+	// ContactHistoryOrderFieldExternalID orders ContactHistory by external_id.
+	ContactHistoryOrderFieldExternalID = &ContactHistoryOrderField{
+		Value: func(_m *ContactHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: contacthistory.FieldExternalID,
+		toTerm: contacthistory.ByExternalID,
+		toCursor: func(_m *ContactHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// ContactHistoryOrderFieldObservedAt orders ContactHistory by observed_at.
+	ContactHistoryOrderFieldObservedAt = &ContactHistoryOrderField{
+		Value: func(_m *ContactHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: contacthistory.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) contacthistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return contacthistory.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *ContactHistory) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -3773,6 +3845,10 @@ func (f ContactHistoryOrderField) String() string {
 		str = "email"
 	case ContactHistoryOrderFieldStatus.column:
 		str = "STATUS"
+	case ContactHistoryOrderFieldExternalID.column:
+		str = "external_id"
+	case ContactHistoryOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -3805,6 +3881,10 @@ func (f *ContactHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactHistoryOrderFieldEmail
 	case "STATUS":
 		*f = *ContactHistoryOrderFieldStatus
+	case "external_id":
+		*f = *ContactHistoryOrderFieldExternalID
+	case "observed_at":
+		*f = *ContactHistoryOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid ContactHistoryOrderField", str)
 	}
@@ -6118,6 +6198,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountHistoryOrderFieldDirectoryInstanceID orders DirectoryAccountHistory by directory_instance_id.
+	DirectoryAccountHistoryOrderFieldDirectoryInstanceID = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directoryaccounthistory.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccounthistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccounthistory.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryAccountHistoryOrderFieldDirectoryName orders DirectoryAccountHistory by directory_name.
 	DirectoryAccountHistoryOrderFieldDirectoryName = &DirectoryAccountHistoryOrderField{
 		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
@@ -6212,6 +6319,8 @@ func (f DirectoryAccountHistoryOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountHistoryOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryAccountHistoryOrderFieldDirectoryName.column:
 		str = "directory_name"
 	case DirectoryAccountHistoryOrderFieldExternalID.column:
@@ -6242,6 +6351,8 @@ func (f *DirectoryAccountHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountHistoryOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryAccountHistoryOrderFieldDirectoryInstanceID
 	case "directory_name":
 		*f = *DirectoryAccountHistoryOrderFieldDirectoryName
 	case "external_id":
@@ -6548,6 +6659,33 @@ var (
 			}
 		},
 	}
+	// DirectoryGroupHistoryOrderFieldDirectoryInstanceID orders DirectoryGroupHistory by directory_instance_id.
+	DirectoryGroupHistoryOrderFieldDirectoryInstanceID = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directorygrouphistory.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directorygrouphistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygrouphistory.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryGroupHistoryOrderFieldExternalID orders DirectoryGroupHistory by external_id.
 	DirectoryGroupHistoryOrderFieldExternalID = &DirectoryGroupHistoryOrderField{
 		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
@@ -6615,6 +6753,8 @@ func (f DirectoryGroupHistoryOrderField) String() string {
 		str = "created_at"
 	case DirectoryGroupHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryGroupHistoryOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryGroupHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryGroupHistoryOrderFieldEmail.column:
@@ -6643,6 +6783,8 @@ func (f *DirectoryGroupHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryGroupHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryGroupHistoryOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryGroupHistoryOrderFieldDirectoryInstanceID
 	case "external_id":
 		*f = *DirectoryGroupHistoryOrderFieldExternalID
 	case "email":
@@ -9225,6 +9367,47 @@ var (
 			}
 		},
 	}
+	// EntityHistoryOrderFieldExternalID orders EntityHistory by external_id.
+	EntityHistoryOrderFieldExternalID = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: entityhistory.FieldExternalID,
+		toTerm: entityhistory.ByExternalID,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldObservedAt orders EntityHistory by observed_at.
+	EntityHistoryOrderFieldObservedAt = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: entityhistory.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -9291,6 +9474,10 @@ func (f EntityHistoryOrderField) String() string {
 		str = "next_review_at"
 	case EntityHistoryOrderFieldContractRenewalAt.column:
 		str = "contract_renewal_at"
+	case EntityHistoryOrderFieldExternalID.column:
+		str = "external_id"
+	case EntityHistoryOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -9367,6 +9554,10 @@ func (f *EntityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityHistoryOrderFieldNextReviewAt
 	case "contract_renewal_at":
 		*f = *EntityHistoryOrderFieldContractRenewalAt
+	case "external_id":
+		*f = *EntityHistoryOrderFieldExternalID
+	case "observed_at":
+		*f = *EntityHistoryOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid EntityHistoryOrderField", str)
 	}
@@ -10032,11 +10223,24 @@ var (
 	// EvidenceHistoryOrderFieldCreationDate orders EvidenceHistory by creation_date.
 	EvidenceHistoryOrderFieldCreationDate = &EvidenceHistoryOrderField{
 		Value: func(_m *EvidenceHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CreationDate == nil {
+				return nil, nil
+			}
 			return _m.CreationDate, nil
 		},
 		column: evidencehistory.FieldCreationDate,
-		toTerm: evidencehistory.ByCreationDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidencehistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidencehistory.ByCreationDate(opts...)
+		},
 		toCursor: func(_m *EvidenceHistory) Cursor {
+			if _m.CreationDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.CreationDate,
@@ -10046,11 +10250,24 @@ var (
 	// EvidenceHistoryOrderFieldRenewalDate orders EvidenceHistory by renewal_date.
 	EvidenceHistoryOrderFieldRenewalDate = &EvidenceHistoryOrderField{
 		Value: func(_m *EvidenceHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.RenewalDate == nil {
+				return nil, nil
+			}
 			return _m.RenewalDate, nil
 		},
 		column: evidencehistory.FieldRenewalDate,
-		toTerm: evidencehistory.ByRenewalDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidencehistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidencehistory.ByRenewalDate(opts...)
+		},
 		toCursor: func(_m *EvidenceHistory) Cursor {
+			if _m.RenewalDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.RenewalDate,
@@ -21372,6 +21589,47 @@ var (
 			}
 		},
 	}
+	// RiskHistoryOrderFieldExternalID orders RiskHistory by external_id.
+	RiskHistoryOrderFieldExternalID = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: riskhistory.FieldExternalID,
+		toTerm: riskhistory.ByExternalID,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldObservedAt orders RiskHistory by observed_at.
+	RiskHistoryOrderFieldObservedAt = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: riskhistory.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) riskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return riskhistory.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *RiskHistory) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 	// RiskHistoryOrderFieldName orders RiskHistory by name.
 	RiskHistoryOrderFieldName = &RiskHistoryOrderField{
 		Value: func(_m *RiskHistory) (ent.Value, error) {
@@ -21468,6 +21726,10 @@ func (f RiskHistoryOrderField) String() string {
 		str = "created_at"
 	case RiskHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskHistoryOrderFieldExternalID.column:
+		str = "external_id"
+	case RiskHistoryOrderFieldObservedAt.column:
+		str = "observed_at"
 	case RiskHistoryOrderFieldName.column:
 		str = "name"
 	case RiskHistoryOrderFieldStatus.column:
@@ -21502,6 +21764,10 @@ func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *RiskHistoryOrderFieldExternalID
+	case "observed_at":
+		*f = *RiskHistoryOrderFieldObservedAt
 	case "name":
 		*f = *RiskHistoryOrderFieldName
 	case "STATUS":

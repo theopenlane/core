@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunBulkCreatePayload_direc
 				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
 			case "status":
 				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
 			case "startedAt":
@@ -169,6 +171,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunCreatePayload_directory
 				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
 			case "status":
 				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
 			case "startedAt":
@@ -289,6 +293,8 @@ func (ec *executionContext) fieldContext_DirectorySyncRunUpdatePayload_directory
 				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
 			case "status":
 				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
 			case "startedAt":

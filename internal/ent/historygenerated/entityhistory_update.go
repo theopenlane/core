@@ -1151,6 +1151,46 @@ func (_u *EntityHistoryUpdate) ClearLogoFileID() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *EntityHistoryUpdate) SetExternalID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableExternalID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityHistoryUpdate) ClearExternalID() *EntityHistoryUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityHistoryUpdate) SetObservedAt(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableObservedAt(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityHistoryUpdate) ClearObservedAt() *EntityHistoryUpdate {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdate) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -1615,6 +1655,18 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.LogoFileIDCleared() {
 		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -2755,6 +2807,46 @@ func (_u *EntityHistoryUpdateOne) ClearLogoFileID() *EntityHistoryUpdateOne {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *EntityHistoryUpdateOne) SetExternalID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableExternalID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityHistoryUpdateOne) ClearExternalID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityHistoryUpdateOne) SetObservedAt(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableObservedAt(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityHistoryUpdateOne) ClearObservedAt() *EntityHistoryUpdateOne {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdateOne) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -3249,6 +3341,18 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.LogoFileIDCleared() {
 		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

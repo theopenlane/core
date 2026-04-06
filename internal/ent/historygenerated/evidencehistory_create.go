@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -287,13 +288,13 @@ func (_c *EvidenceHistoryCreate) SetNillableCollectionProcedure(v *string) *Evid
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (_c *EvidenceHistoryCreate) SetCreationDate(v time.Time) *EvidenceHistoryCreate {
+func (_c *EvidenceHistoryCreate) SetCreationDate(v models.DateTime) *EvidenceHistoryCreate {
 	_c.mutation.SetCreationDate(v)
 	return _c
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (_c *EvidenceHistoryCreate) SetNillableCreationDate(v *time.Time) *EvidenceHistoryCreate {
+func (_c *EvidenceHistoryCreate) SetNillableCreationDate(v *models.DateTime) *EvidenceHistoryCreate {
 	if v != nil {
 		_c.SetCreationDate(*v)
 	}
@@ -301,13 +302,13 @@ func (_c *EvidenceHistoryCreate) SetNillableCreationDate(v *time.Time) *Evidence
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (_c *EvidenceHistoryCreate) SetRenewalDate(v time.Time) *EvidenceHistoryCreate {
+func (_c *EvidenceHistoryCreate) SetRenewalDate(v models.DateTime) *EvidenceHistoryCreate {
 	_c.mutation.SetRenewalDate(v)
 	return _c
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (_c *EvidenceHistoryCreate) SetNillableRenewalDate(v *time.Time) *EvidenceHistoryCreate {
+func (_c *EvidenceHistoryCreate) SetNillableRenewalDate(v *models.DateTime) *EvidenceHistoryCreate {
 	if v != nil {
 		_c.SetRenewalDate(*v)
 	}
@@ -458,7 +459,10 @@ func (_c *EvidenceHistoryCreate) defaults() error {
 		_c.mutation.SetCreationDate(v)
 	}
 	if _, ok := _c.mutation.RenewalDate(); !ok {
-		v := evidencehistory.DefaultRenewalDate
+		if evidencehistory.DefaultRenewalDate == nil {
+			return fmt.Errorf("historygenerated: uninitialized evidencehistory.DefaultRenewalDate (forgotten import historygenerated/runtime?)")
+		}
+		v := evidencehistory.DefaultRenewalDate()
 		_c.mutation.SetRenewalDate(v)
 	}
 	if _, ok := _c.mutation.IsAutomated(); !ok {
@@ -624,11 +628,11 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 	}
 	if value, ok := _c.mutation.CreationDate(); ok {
 		_spec.SetField(evidencehistory.FieldCreationDate, field.TypeTime, value)
-		_node.CreationDate = value
+		_node.CreationDate = &value
 	}
 	if value, ok := _c.mutation.RenewalDate(); ok {
 		_spec.SetField(evidencehistory.FieldRenewalDate, field.TypeTime, value)
-		_node.RenewalDate = value
+		_node.RenewalDate = &value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(evidencehistory.FieldSource, field.TypeString, value)

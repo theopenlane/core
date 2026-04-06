@@ -131,31 +131,49 @@ func (e *WorkflowEngine) getObjectTags(ctx context.Context, obj *workflows.Objec
 	return tagIDs, nil
 }
 
-// getObjectGroups retrieves group IDs for a workflow object
+// groupEdgeFn extracts a GroupQuery from an arbitrary Noder, returning false if unsupported.
+type groupEdgeFn func(generated.Noder) (*generated.GroupQuery, bool)
+
+// groupEdgeFns lists all group-relation edges traversed when resolving object group membership.
+// Add new edge types here as the schema evolves.
+var groupEdgeFns = []groupEdgeFn{
+	func(n generated.Noder) (*generated.GroupQuery, bool) {
+		q, ok := n.(interface{ QueryEditors() *generated.GroupQuery })
+		if !ok {
+			return nil, false
+		}
+		return q.QueryEditors(), true
+	},
+	func(n generated.Noder) (*generated.GroupQuery, bool) {
+		q, ok := n.(interface{ QueryViewers() *generated.GroupQuery })
+		if !ok {
+			return nil, false
+		}
+		return q.QueryViewers(), true
+	},
+	func(n generated.Noder) (*generated.GroupQuery, bool) {
+		q, ok := n.(interface{ QueryBlockedGroups() *generated.GroupQuery })
+		if !ok {
+			return nil, false
+		}
+		return q.QueryBlockedGroups(), true
+	},
+}
+
+// getObjectGroups retrieves group IDs for a workflow object across all supported group edges
 func (e *WorkflowEngine) getObjectGroups(ctx context.Context, obj *workflows.Object) ([]string, error) {
 	entity, err := e.loadObjectNode(ctx, obj)
 	if err != nil {
 		return nil, err
 	}
 
-	groupIDs := []string{}
-
-	if q, ok := entity.(interface{ QueryEditors() *generated.GroupQuery }); ok {
-		ids, err := q.QueryEditors().IDs(ctx)
-		if err != nil {
-			return nil, err
+	var groupIDs []string
+	for _, fn := range groupEdgeFns {
+		q, ok := fn(entity)
+		if !ok {
+			continue
 		}
-		groupIDs = append(groupIDs, ids...)
-	}
-	if q, ok := entity.(interface{ QueryViewers() *generated.GroupQuery }); ok {
-		ids, err := q.QueryViewers().IDs(ctx)
-		if err != nil {
-			return nil, err
-		}
-		groupIDs = append(groupIDs, ids...)
-	}
-	if q, ok := entity.(interface{ QueryBlockedGroups() *generated.GroupQuery }); ok {
-		ids, err := q.QueryBlockedGroups().IDs(ctx)
+		ids, err := q.IDs(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -170,7 +188,7 @@ func (e *WorkflowEngine) getObjectGroups(ctx context.Context, obj *workflows.Obj
 }
 
 // loadObjectNode resolves and caches the workflow object node
-func (e *WorkflowEngine) loadObjectNode(ctx context.Context, obj *workflows.Object) (any, error) {
+func (e *WorkflowEngine) loadObjectNode(ctx context.Context, obj *workflows.Object) (generated.Noder, error) {
 	if obj.Node != nil {
 		return obj.Node, nil
 	}

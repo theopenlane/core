@@ -54,18 +54,6 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 	commandIDs = append(commandIDs, ids...)
 
 	ids, err = gala.RegisterListeners(registry,
-		gala.Definition[gala.WorkflowAssignmentCreatedPayload]{
-			Topic:  gala.WorkflowAssignmentCreatedEventTopic,
-			Name:   string(gala.TopicWorkflowAssignmentCreated),
-			Handle: handleWorkflowAssignmentCreatedGala,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	commandIDs = append(commandIDs, ids...)
-
-	ids, err = gala.RegisterListeners(registry,
 		gala.Definition[gala.WorkflowAssignmentCompletedPayload]{
 			Topic:  gala.WorkflowAssignmentCompletedEventTopic,
 			Name:   string(gala.TopicWorkflowAssignmentCompleted),
@@ -172,16 +160,6 @@ func handleWorkflowActionCompletedGala(ctx gala.HandlerContext, payload gala.Wor
 	}
 
 	return listeners.HandleActionCompleted(ctx, payload)
-}
-
-// handleWorkflowAssignmentCreatedGala forwards assignment created command envelopes to workflow listeners
-func handleWorkflowAssignmentCreatedGala(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCreatedPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
-
-	return listeners.HandleAssignmentCreated(ctx, payload)
 }
 
 // handleWorkflowAssignmentCompletedGala forwards assignment completed command envelopes to workflow listeners

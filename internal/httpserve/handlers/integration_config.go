@@ -1,130 +1,121 @@
 package handlers
 
 import (
-	"context"
-	"errors"
-	"maps"
+	"fmt"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
-	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/iam/auth"
 
-	intauth "github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
-	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
-	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
-// ConfigureIntegrationProvider stores non-OAuth credentials/configuration for a provider
+// ConfigureIntegrationProvider stores non-OAuth credentials for a provider definition.
+// When installation_id is provided the credentials on that installation are updated.
+// When omitted a new installation is created and its ID is returned in the response
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationConfigPayload, openapi.IntegrationConfigResponse{}, openapiCtx.Registry)
+	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationConfigPayload, IntegrationConfigResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
 
-	requestCtx := ctx.Request().Context()
-
-	providerKey := payload.Provider
-	if providerKey == "" {
-		return h.BadRequest(ctx, rout.MissingField("provider"), openapiCtx)
+	if isRegistrationContext(ctx) {
+		return nil
 	}
+
+	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)
 	if !ok || caller == nil {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	orgID := caller.OrganizationID
-	if orgID == "" {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
-	}
-
-	if h.IntegrationRegistry == nil {
-		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
-	}
-
-	providerType := types.ProviderTypeFromString(providerKey)
-	if providerType == types.ProviderUnknown {
+	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
+	if !ok || !def.Active {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	spec, ok := h.IntegrationRegistry.Config(providerType)
-	if !ok {
-		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
-	}
-	if spec.Active == nil || !*spec.Active {
-		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
-	}
-
-	if len(spec.CredentialsSchema) == 0 {
-		return h.BadRequest(ctx, rout.MissingField("credentialsSchema"), openapiCtx)
-	}
-
-	attrs := payload.Body.ToMap()
-	if len(attrs) == 0 {
-		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
-	}
-
-	if key, ok := attrs["serviceAccountKey"].(string); ok {
-		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
-	}
-
-	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
-	documentLoader := gojsonschema.NewGoLoader(attrs)
-	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
+	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
+		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("failed to resolve installation")
+
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	if fieldErrs := jsonschemautil.FieldErrorsFromResult(result); len(fieldErrs) > 0 {
-		return h.BadRequest(ctx, fieldErrs[0], openapiCtx)
+	var credential *types.CredentialSet
+
+	if !jsonx.IsEmptyRawMessage(payload.Body) {
+		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
 	}
 
-	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerType, attrs); err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Msg("error persisting credential configuration")
+	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, payload.CredentialRef, credential, nil); err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("reconcile failed")
 
-		switch {
-		case errors.Is(err, activation.ErrHealthCheckFailed):
-			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
-		case errors.Is(err, activation.ErrOperationsRequired):
-			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
-		default:
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
+		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
+			SetStatus(enums.IntegrationStatusConnected).
+			Exec(requestCtx); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
+
+			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		installationRec.Status = enums.IntegrationStatusConnected
+	}
+
+	resp := IntegrationConfigResponse{
+		Reply:                rout.Reply{Success: true},
+		Provider:             def.ID,
+		IntegrationID:        installationRec.ID,
+		HealthStatus:         "ok",
+		HealthSummary:        "Validation passed during configuration",
+		InstallationMetadata: installationRec.InstallationMetadata.Attributes,
+	}
+
+	var primaryWebhookURL string
+	var primaryWebhookSecret string
+
+	systemCtx := privacy.DecisionContext(requestCtx, privacy.Allow)
+
+	for i, registration := range def.Webhooks {
+		webhook, webhookErr := h.IntegrationsRuntime.EnsureWebhook(systemCtx, installationRec, registration.Name, "")
+		if webhookErr != nil {
+			logx.FromContext(requestCtx).Error().Err(webhookErr).Str("installation_id", installationRec.ID).Str("webhook", registration.Name).Msg("failed to ensure installation webhook")
+
+			return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		if i == 0 && webhook != nil {
+			primaryWebhookURL = absoluteEndpointURL(ctx, lo.FromPtr(webhook.EndpointURL))
+			primaryWebhookSecret = webhook.SecretToken
 		}
 	}
 
-	if record, err := h.IntegrationStore.EnsureIntegration(requestCtx, orgID, providerType); err == nil {
-		if err := h.updateIntegrationProviderMetadata(requestCtx, record.ID, providerType); err != nil {
-			logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
-		}
-	} else {
-		logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to ensure integration record for metadata update")
+	if isNewInstallation {
+		resp.WebhookEndpointURL = primaryWebhookURL
+		resp.WebhookSecret = primaryWebhookSecret
 	}
 
-	out := openapi.IntegrationConfigResponse{
-		Reply:    rout.Reply{Success: true},
-		Provider: string(providerType),
-	}
-
-	return h.Success(ctx, out)
+	return h.Success(ctx, resp)
 }
 
-// persistCredentialConfiguration saves the provider credential configuration for the organization
-func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID string, provider types.ProviderType, data map[string]any) error {
-	if h.IntegrationActivation == nil {
-		return errActivationNotConfigured
+func absoluteEndpointURL(ctx echo.Context, path string) string {
+	if path == "" {
+		return ""
 	}
 
-	_, err := h.IntegrationActivation.Configure(ctx, activation.ConfigureRequest{
-		OrgID:        orgID,
-		Provider:     provider,
-		ProviderData: maps.Clone(data),
-		Validate:     true,
-	})
+	if path[0] != '/' {
+		return path
+	}
 
-	return err
+	return fmt.Sprintf("%s://%s%s", ctx.Scheme(), ctx.Request().Host, path)
 }

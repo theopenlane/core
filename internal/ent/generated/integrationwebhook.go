@@ -43,7 +43,9 @@ type IntegrationWebhook struct {
 	Name string `json:"name,omitempty"`
 	// status of the webhook endpoint
 	Status enums.IntegrationWebhookStatus `json:"status,omitempty"`
-	// destination URL for webhook delivery
+	// stable external identifier for this webhook endpoint; survives integration record replacement
+	EndpointID *string `json:"endpoint_id,omitempty"`
+	// path used to receive webhook deliveries for this endpoint
 	EndpointURL *string `json:"endpoint_url,omitempty"`
 	// secret token for webhook signature validation
 	SecretToken string `json:"-"`
@@ -109,7 +111,7 @@ func (*IntegrationWebhook) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case integrationwebhook.FieldAllowedEvents, integrationwebhook.FieldMetadata:
 			values[i] = new([]byte)
-		case integrationwebhook.FieldID, integrationwebhook.FieldCreatedBy, integrationwebhook.FieldUpdatedBy, integrationwebhook.FieldDeletedBy, integrationwebhook.FieldOwnerID, integrationwebhook.FieldIntegrationID, integrationwebhook.FieldProvider, integrationwebhook.FieldName, integrationwebhook.FieldStatus, integrationwebhook.FieldEndpointURL, integrationwebhook.FieldSecretToken, integrationwebhook.FieldLastDeliveryID, integrationwebhook.FieldLastDeliveryStatus, integrationwebhook.FieldLastDeliveryError, integrationwebhook.FieldExternalEventID:
+		case integrationwebhook.FieldID, integrationwebhook.FieldCreatedBy, integrationwebhook.FieldUpdatedBy, integrationwebhook.FieldDeletedBy, integrationwebhook.FieldOwnerID, integrationwebhook.FieldIntegrationID, integrationwebhook.FieldProvider, integrationwebhook.FieldName, integrationwebhook.FieldStatus, integrationwebhook.FieldEndpointID, integrationwebhook.FieldEndpointURL, integrationwebhook.FieldSecretToken, integrationwebhook.FieldLastDeliveryID, integrationwebhook.FieldLastDeliveryStatus, integrationwebhook.FieldLastDeliveryError, integrationwebhook.FieldExternalEventID:
 			values[i] = new(sql.NullString)
 		case integrationwebhook.FieldCreatedAt, integrationwebhook.FieldUpdatedAt, integrationwebhook.FieldDeletedAt, integrationwebhook.FieldLastDeliveryAt:
 			values[i] = new(sql.NullTime)
@@ -199,6 +201,13 @@ func (_m *IntegrationWebhook) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.IntegrationWebhookStatus(value.String)
+			}
+		case integrationwebhook.FieldEndpointID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field endpoint_id", values[i])
+			} else if value.Valid {
+				_m.EndpointID = new(string)
+				*_m.EndpointID = value.String
 			}
 		case integrationwebhook.FieldEndpointURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -339,6 +348,11 @@ func (_m *IntegrationWebhook) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.EndpointID; v != nil {
+		builder.WriteString("endpoint_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.EndpointURL; v != nil {
 		builder.WriteString("endpoint_url=")

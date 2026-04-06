@@ -92,6 +92,22 @@ func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
+	var res = new(models.DateTime)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalNEvidenceRequests2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐEvidenceRequests(ctx context.Context, v any) (models.EvidenceRequests, error) {
 	var res models.EvidenceRequests
 	err := res.UnmarshalGQL(v)

@@ -1,13 +1,16 @@
-
 mutation CreateBulkCSVDirectoryMembership($input: Upload!) {
   createBulkCSVDirectoryMembership(input: $input) {
     directoryMemberships {
+      addedAt
       createdAt
       createdBy
       directoryAccountID
       directoryGroupID
+      directoryInstanceID
       directorySyncRunID
       displayID
+      environmentID
+      environmentName
       firstSeenAt
       id
       integrationID
@@ -16,7 +19,11 @@ mutation CreateBulkCSVDirectoryMembership($input: Upload!) {
       metadata
       observedAt
       ownerID
+      platformID
+      removedAt
       role
+      scopeID
+      scopeName
       source
       updatedAt
       updatedBy
@@ -27,12 +34,16 @@ mutation CreateBulkCSVDirectoryMembership($input: Upload!) {
 mutation CreateBulkDirectoryMembership($input: [CreateDirectoryMembershipInput!]) {
   createBulkDirectoryMembership(input: $input) {
     directoryMemberships {
+      addedAt
       createdAt
       createdBy
       directoryAccountID
       directoryGroupID
+      directoryInstanceID
       directorySyncRunID
       displayID
+      environmentID
+      environmentName
       firstSeenAt
       id
       integrationID
@@ -41,7 +52,11 @@ mutation CreateBulkDirectoryMembership($input: [CreateDirectoryMembershipInput!]
       metadata
       observedAt
       ownerID
+      platformID
+      removedAt
       role
+      scopeID
+      scopeName
       source
       updatedAt
       updatedBy
@@ -52,12 +67,16 @@ mutation CreateBulkDirectoryMembership($input: [CreateDirectoryMembershipInput!]
 mutation CreateDirectoryMembership($input: CreateDirectoryMembershipInput!) {
   createDirectoryMembership(input: $input) {
     directoryMembership {
+      addedAt
       createdAt
       createdBy
       directoryAccountID
       directoryGroupID
+      directoryInstanceID
       directorySyncRunID
       displayID
+      environmentID
+      environmentName
       firstSeenAt
       id
       integrationID
@@ -66,7 +85,11 @@ mutation CreateDirectoryMembership($input: CreateDirectoryMembershipInput!) {
       metadata
       observedAt
       ownerID
+      platformID
+      removedAt
       role
+      scopeID
+      scopeName
       source
       updatedAt
       updatedBy
@@ -113,14 +136,19 @@ query GetAllDirectoryMemberships {
     }
   }
 }
+
 query GetDirectoryMembershipByID($directoryMembershipId: ID!) {
   directoryMembership(id: $directoryMembershipId) {
+    addedAt
     createdAt
     createdBy
     directoryAccountID
     directoryGroupID
+    directoryInstanceID
     directorySyncRunID
     displayID
+    environmentID
+    environmentName
     firstSeenAt
     id
     integrationID
@@ -129,7 +157,11 @@ query GetDirectoryMembershipByID($directoryMembershipId: ID!) {
     metadata
     observedAt
     ownerID
+    platformID
+    removedAt
     role
+    scopeID
+    scopeName
     source
     updatedAt
     updatedBy
@@ -169,15 +201,20 @@ query GetDirectoryMemberships($first: Int, $last: Int, $where: DirectoryMembersh
     }
   }
 }
+
 mutation UpdateDirectoryMembership($updateDirectoryMembershipId: ID!, $input: UpdateDirectoryMembershipInput!) {
   updateDirectoryMembership(id: $updateDirectoryMembershipId, input: $input) {
     directoryMembership {
+      addedAt
       createdAt
       createdBy
       directoryAccountID
       directoryGroupID
+      directoryInstanceID
       directorySyncRunID
       displayID
+      environmentID
+      environmentName
       firstSeenAt
       id
       integrationID
@@ -186,7 +223,11 @@ mutation UpdateDirectoryMembership($updateDirectoryMembershipId: ID!, $input: Up
       metadata
       observedAt
       ownerID
+      platformID
+      removedAt
       role
+      scopeID
+      scopeName
       source
       updatedAt
       updatedBy

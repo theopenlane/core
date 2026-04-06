@@ -29,6 +29,8 @@ secrets:
   - APOLLO_KEY
   - SECRET_GHCR_PUBLISH_TOKEN
 
+priority: ${OPENLANE_BUILDKITE_JOB_PRIORITY:-0}
+
 steps:
   - group: ":knife: Pre-check"
     key: "precheck"

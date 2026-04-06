@@ -238,6 +238,20 @@ func (_c *DirectoryAccountHistoryCreate) SetNillablePlatformID(v *string) *Direc
 	return _c
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_c *DirectoryAccountHistoryCreate) SetDirectoryInstanceID(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetDirectoryInstanceID(v)
+	return _c
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetDirectoryInstanceID(*v)
+	}
+	return _c
+}
+
 // SetIdentityHolderID sets the "identity_holder_id" field.
 func (_c *DirectoryAccountHistoryCreate) SetIdentityHolderID(v string) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetIdentityHolderID(v)
@@ -496,6 +510,62 @@ func (_c *DirectoryAccountHistoryCreate) SetNillableLastLoginAt(v *time.Time) *D
 	return _c
 }
 
+// SetFirstSeenAt sets the "first_seen_at" field.
+func (_c *DirectoryAccountHistoryCreate) SetFirstSeenAt(v time.Time) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetFirstSeenAt(v)
+	return _c
+}
+
+// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetFirstSeenAt(*v)
+	}
+	return _c
+}
+
+// SetLastSeenAt sets the "last_seen_at" field.
+func (_c *DirectoryAccountHistoryCreate) SetLastSeenAt(v time.Time) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetLastSeenAt(v)
+	return _c
+}
+
+// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetLastSeenAt(*v)
+	}
+	return _c
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_c *DirectoryAccountHistoryCreate) SetAddedAt(v time.Time) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetAddedAt(v)
+	return _c
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableAddedAt(v *time.Time) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetAddedAt(*v)
+	}
+	return _c
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_c *DirectoryAccountHistoryCreate) SetRemovedAt(v time.Time) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetRemovedAt(v)
+	return _c
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableRemovedAt(v *time.Time) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetRemovedAt(*v)
+	}
+	return _c
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (_c *DirectoryAccountHistoryCreate) SetObservedAt(v time.Time) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetObservedAt(v)
@@ -527,6 +597,12 @@ func (_c *DirectoryAccountHistoryCreate) SetNillableProfileHash(v *string) *Dire
 // SetProfile sets the "profile" field.
 func (_c *DirectoryAccountHistoryCreate) SetProfile(v map[string]interface{}) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetProfile(v)
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *DirectoryAccountHistoryCreate) SetMetadata(v map[string]interface{}) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetMetadata(v)
 	return _c
 }
 
@@ -824,6 +900,10 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 		_spec.SetField(directoryaccounthistory.FieldPlatformID, field.TypeString, value)
 		_node.PlatformID = value
 	}
+	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldDirectoryInstanceID, field.TypeString, value)
+		_node.DirectoryInstanceID = &value
+	}
 	if value, ok := _c.mutation.IdentityHolderID(); ok {
 		_spec.SetField(directoryaccounthistory.FieldIdentityHolderID, field.TypeString, value)
 		_node.IdentityHolderID = &value
@@ -900,6 +980,22 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 		_spec.SetField(directoryaccounthistory.FieldLastLoginAt, field.TypeTime, value)
 		_node.LastLoginAt = &value
 	}
+	if value, ok := _c.mutation.FirstSeenAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldFirstSeenAt, field.TypeTime, value)
+		_node.FirstSeenAt = &value
+	}
+	if value, ok := _c.mutation.LastSeenAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldLastSeenAt, field.TypeTime, value)
+		_node.LastSeenAt = &value
+	}
+	if value, ok := _c.mutation.AddedAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAddedAt, field.TypeTime, value)
+		_node.AddedAt = &value
+	}
+	if value, ok := _c.mutation.RemovedAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldRemovedAt, field.TypeTime, value)
+		_node.RemovedAt = &value
+	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(directoryaccounthistory.FieldObservedAt, field.TypeTime, value)
 		_node.ObservedAt = value
@@ -911,6 +1007,10 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 	if value, ok := _c.mutation.Profile(); ok {
 		_spec.SetField(directoryaccounthistory.FieldProfile, field.TypeJSON, value)
 		_node.Profile = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(directoryaccounthistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if value, ok := _c.mutation.RawProfileFileID(); ok {
 		_spec.SetField(directoryaccounthistory.FieldRawProfileFileID, field.TypeString, value)

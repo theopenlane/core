@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -261,7 +262,10 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 				Comment("the ID of the organization owner of the object").
 				Immutable(). // Immutable because it is set on creation and never changes
 				Optional().  // Optional because it doesn't need to be provided as input
-				NotEmpty())  // NotEmpty because it is required to be set in the database
+				NotEmpty().  // NotEmpty because it is required to be set in the database
+				Annotations(
+					entx.IntegrationMappingField().FromIntegration(),
+				))
 	}
 
 	// if the field name is not defined, skip adding fields

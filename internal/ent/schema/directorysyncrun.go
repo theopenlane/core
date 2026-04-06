@@ -53,6 +53,10 @@ func (DirectorySyncRun) Fields() []ent.Field {
 			Optional().
 			NotEmpty().
 			Immutable(),
+		field.String("directory_instance_id").
+			Comment("stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance").
+			Optional().
+			Nillable(),
 		field.Enum("status").
 			Comment("current state of the sync run").
 			GoType(enums.DirectorySyncRunStatus("")).
@@ -134,6 +138,7 @@ func (DirectorySyncRun) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "started_at").
 			Annotations(),
+		index.Fields("directory_instance_id", "started_at"),
 		index.Fields("platform_id", "started_at"),
 	}
 }

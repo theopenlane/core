@@ -84,6 +84,12 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -250,6 +256,12 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -416,6 +428,12 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -582,6 +600,12 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":

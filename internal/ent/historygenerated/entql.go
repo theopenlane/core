@@ -287,6 +287,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assethistory.FieldPurchaseDate:                {Type: field.TypeTime, Column: assethistory.FieldPurchaseDate},
 			assethistory.FieldCpe:                         {Type: field.TypeString, Column: assethistory.FieldCpe},
 			assethistory.FieldCategories:                  {Type: field.TypeJSON, Column: assethistory.FieldCategories},
+			assethistory.FieldIntegrationID:               {Type: field.TypeString, Column: assethistory.FieldIntegrationID},
+			assethistory.FieldObservedAt:                  {Type: field.TypeTime, Column: assethistory.FieldObservedAt},
 		},
 	}
 	graph.Nodes[4] = &sqlgraph.Node{
@@ -389,24 +391,27 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ContactHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			contacthistory.FieldHistoryTime: {Type: field.TypeTime, Column: contacthistory.FieldHistoryTime},
-			contacthistory.FieldRef:         {Type: field.TypeString, Column: contacthistory.FieldRef},
-			contacthistory.FieldOperation:   {Type: field.TypeEnum, Column: contacthistory.FieldOperation},
-			contacthistory.FieldCreatedAt:   {Type: field.TypeTime, Column: contacthistory.FieldCreatedAt},
-			contacthistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: contacthistory.FieldUpdatedAt},
-			contacthistory.FieldCreatedBy:   {Type: field.TypeString, Column: contacthistory.FieldCreatedBy},
-			contacthistory.FieldUpdatedBy:   {Type: field.TypeString, Column: contacthistory.FieldUpdatedBy},
-			contacthistory.FieldDeletedAt:   {Type: field.TypeTime, Column: contacthistory.FieldDeletedAt},
-			contacthistory.FieldDeletedBy:   {Type: field.TypeString, Column: contacthistory.FieldDeletedBy},
-			contacthistory.FieldTags:        {Type: field.TypeJSON, Column: contacthistory.FieldTags},
-			contacthistory.FieldOwnerID:     {Type: field.TypeString, Column: contacthistory.FieldOwnerID},
-			contacthistory.FieldFullName:    {Type: field.TypeString, Column: contacthistory.FieldFullName},
-			contacthistory.FieldTitle:       {Type: field.TypeString, Column: contacthistory.FieldTitle},
-			contacthistory.FieldCompany:     {Type: field.TypeString, Column: contacthistory.FieldCompany},
-			contacthistory.FieldEmail:       {Type: field.TypeString, Column: contacthistory.FieldEmail},
-			contacthistory.FieldPhoneNumber: {Type: field.TypeString, Column: contacthistory.FieldPhoneNumber},
-			contacthistory.FieldAddress:     {Type: field.TypeString, Column: contacthistory.FieldAddress},
-			contacthistory.FieldStatus:      {Type: field.TypeEnum, Column: contacthistory.FieldStatus},
+			contacthistory.FieldHistoryTime:   {Type: field.TypeTime, Column: contacthistory.FieldHistoryTime},
+			contacthistory.FieldRef:           {Type: field.TypeString, Column: contacthistory.FieldRef},
+			contacthistory.FieldOperation:     {Type: field.TypeEnum, Column: contacthistory.FieldOperation},
+			contacthistory.FieldCreatedAt:     {Type: field.TypeTime, Column: contacthistory.FieldCreatedAt},
+			contacthistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: contacthistory.FieldUpdatedAt},
+			contacthistory.FieldCreatedBy:     {Type: field.TypeString, Column: contacthistory.FieldCreatedBy},
+			contacthistory.FieldUpdatedBy:     {Type: field.TypeString, Column: contacthistory.FieldUpdatedBy},
+			contacthistory.FieldDeletedAt:     {Type: field.TypeTime, Column: contacthistory.FieldDeletedAt},
+			contacthistory.FieldDeletedBy:     {Type: field.TypeString, Column: contacthistory.FieldDeletedBy},
+			contacthistory.FieldTags:          {Type: field.TypeJSON, Column: contacthistory.FieldTags},
+			contacthistory.FieldOwnerID:       {Type: field.TypeString, Column: contacthistory.FieldOwnerID},
+			contacthistory.FieldFullName:      {Type: field.TypeString, Column: contacthistory.FieldFullName},
+			contacthistory.FieldTitle:         {Type: field.TypeString, Column: contacthistory.FieldTitle},
+			contacthistory.FieldCompany:       {Type: field.TypeString, Column: contacthistory.FieldCompany},
+			contacthistory.FieldEmail:         {Type: field.TypeString, Column: contacthistory.FieldEmail},
+			contacthistory.FieldPhoneNumber:   {Type: field.TypeString, Column: contacthistory.FieldPhoneNumber},
+			contacthistory.FieldAddress:       {Type: field.TypeString, Column: contacthistory.FieldAddress},
+			contacthistory.FieldStatus:        {Type: field.TypeEnum, Column: contacthistory.FieldStatus},
+			contacthistory.FieldExternalID:    {Type: field.TypeString, Column: contacthistory.FieldExternalID},
+			contacthistory.FieldIntegrationID: {Type: field.TypeString, Column: contacthistory.FieldIntegrationID},
+			contacthistory.FieldObservedAt:    {Type: field.TypeTime, Column: contacthistory.FieldObservedAt},
 		},
 	}
 	graph.Nodes[7] = &sqlgraph.Node{
@@ -577,6 +582,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomainhistory.FieldMappableDomainID:  {Type: field.TypeString, Column: customdomainhistory.FieldMappableDomainID},
 			customdomainhistory.FieldDNSVerificationID: {Type: field.TypeString, Column: customdomainhistory.FieldDNSVerificationID},
 			customdomainhistory.FieldTrustCenterID:     {Type: field.TypeString, Column: customdomainhistory.FieldTrustCenterID},
+			customdomainhistory.FieldDomainType:        {Type: field.TypeEnum, Column: customdomainhistory.FieldDomainType},
 		},
 	}
 	graph.Nodes[11] = &sqlgraph.Node{
@@ -623,47 +629,53 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "DirectoryAccountHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			directoryaccounthistory.FieldHistoryTime:        {Type: field.TypeTime, Column: directoryaccounthistory.FieldHistoryTime},
-			directoryaccounthistory.FieldRef:                {Type: field.TypeString, Column: directoryaccounthistory.FieldRef},
-			directoryaccounthistory.FieldOperation:          {Type: field.TypeEnum, Column: directoryaccounthistory.FieldOperation},
-			directoryaccounthistory.FieldCreatedAt:          {Type: field.TypeTime, Column: directoryaccounthistory.FieldCreatedAt},
-			directoryaccounthistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: directoryaccounthistory.FieldUpdatedAt},
-			directoryaccounthistory.FieldCreatedBy:          {Type: field.TypeString, Column: directoryaccounthistory.FieldCreatedBy},
-			directoryaccounthistory.FieldUpdatedBy:          {Type: field.TypeString, Column: directoryaccounthistory.FieldUpdatedBy},
-			directoryaccounthistory.FieldDisplayID:          {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayID},
-			directoryaccounthistory.FieldTags:               {Type: field.TypeJSON, Column: directoryaccounthistory.FieldTags},
-			directoryaccounthistory.FieldOwnerID:            {Type: field.TypeString, Column: directoryaccounthistory.FieldOwnerID},
-			directoryaccounthistory.FieldEnvironmentName:    {Type: field.TypeString, Column: directoryaccounthistory.FieldEnvironmentName},
-			directoryaccounthistory.FieldEnvironmentID:      {Type: field.TypeString, Column: directoryaccounthistory.FieldEnvironmentID},
-			directoryaccounthistory.FieldScopeName:          {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeName},
-			directoryaccounthistory.FieldScopeID:            {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeID},
-			directoryaccounthistory.FieldIntegrationID:      {Type: field.TypeString, Column: directoryaccounthistory.FieldIntegrationID},
-			directoryaccounthistory.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectorySyncRunID},
-			directoryaccounthistory.FieldPlatformID:         {Type: field.TypeString, Column: directoryaccounthistory.FieldPlatformID},
-			directoryaccounthistory.FieldIdentityHolderID:   {Type: field.TypeString, Column: directoryaccounthistory.FieldIdentityHolderID},
-			directoryaccounthistory.FieldDirectoryName:      {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectoryName},
-			directoryaccounthistory.FieldExternalID:         {Type: field.TypeString, Column: directoryaccounthistory.FieldExternalID},
-			directoryaccounthistory.FieldSecondaryKey:       {Type: field.TypeString, Column: directoryaccounthistory.FieldSecondaryKey},
-			directoryaccounthistory.FieldCanonicalEmail:     {Type: field.TypeString, Column: directoryaccounthistory.FieldCanonicalEmail},
-			directoryaccounthistory.FieldDisplayName:        {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayName},
-			directoryaccounthistory.FieldAvatarRemoteURL:    {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarRemoteURL},
-			directoryaccounthistory.FieldAvatarLocalFileID:  {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarLocalFileID},
-			directoryaccounthistory.FieldAvatarUpdatedAt:    {Type: field.TypeTime, Column: directoryaccounthistory.FieldAvatarUpdatedAt},
-			directoryaccounthistory.FieldGivenName:          {Type: field.TypeString, Column: directoryaccounthistory.FieldGivenName},
-			directoryaccounthistory.FieldFamilyName:         {Type: field.TypeString, Column: directoryaccounthistory.FieldFamilyName},
-			directoryaccounthistory.FieldJobTitle:           {Type: field.TypeString, Column: directoryaccounthistory.FieldJobTitle},
-			directoryaccounthistory.FieldDepartment:         {Type: field.TypeString, Column: directoryaccounthistory.FieldDepartment},
-			directoryaccounthistory.FieldOrganizationUnit:   {Type: field.TypeString, Column: directoryaccounthistory.FieldOrganizationUnit},
-			directoryaccounthistory.FieldAccountType:        {Type: field.TypeEnum, Column: directoryaccounthistory.FieldAccountType},
-			directoryaccounthistory.FieldStatus:             {Type: field.TypeEnum, Column: directoryaccounthistory.FieldStatus},
-			directoryaccounthistory.FieldMfaState:           {Type: field.TypeEnum, Column: directoryaccounthistory.FieldMfaState},
-			directoryaccounthistory.FieldLastSeenIP:         {Type: field.TypeString, Column: directoryaccounthistory.FieldLastSeenIP},
-			directoryaccounthistory.FieldLastLoginAt:        {Type: field.TypeTime, Column: directoryaccounthistory.FieldLastLoginAt},
-			directoryaccounthistory.FieldObservedAt:         {Type: field.TypeTime, Column: directoryaccounthistory.FieldObservedAt},
-			directoryaccounthistory.FieldProfileHash:        {Type: field.TypeString, Column: directoryaccounthistory.FieldProfileHash},
-			directoryaccounthistory.FieldProfile:            {Type: field.TypeJSON, Column: directoryaccounthistory.FieldProfile},
-			directoryaccounthistory.FieldRawProfileFileID:   {Type: field.TypeString, Column: directoryaccounthistory.FieldRawProfileFileID},
-			directoryaccounthistory.FieldSourceVersion:      {Type: field.TypeString, Column: directoryaccounthistory.FieldSourceVersion},
+			directoryaccounthistory.FieldHistoryTime:         {Type: field.TypeTime, Column: directoryaccounthistory.FieldHistoryTime},
+			directoryaccounthistory.FieldRef:                 {Type: field.TypeString, Column: directoryaccounthistory.FieldRef},
+			directoryaccounthistory.FieldOperation:           {Type: field.TypeEnum, Column: directoryaccounthistory.FieldOperation},
+			directoryaccounthistory.FieldCreatedAt:           {Type: field.TypeTime, Column: directoryaccounthistory.FieldCreatedAt},
+			directoryaccounthistory.FieldUpdatedAt:           {Type: field.TypeTime, Column: directoryaccounthistory.FieldUpdatedAt},
+			directoryaccounthistory.FieldCreatedBy:           {Type: field.TypeString, Column: directoryaccounthistory.FieldCreatedBy},
+			directoryaccounthistory.FieldUpdatedBy:           {Type: field.TypeString, Column: directoryaccounthistory.FieldUpdatedBy},
+			directoryaccounthistory.FieldDisplayID:           {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayID},
+			directoryaccounthistory.FieldTags:                {Type: field.TypeJSON, Column: directoryaccounthistory.FieldTags},
+			directoryaccounthistory.FieldOwnerID:             {Type: field.TypeString, Column: directoryaccounthistory.FieldOwnerID},
+			directoryaccounthistory.FieldEnvironmentName:     {Type: field.TypeString, Column: directoryaccounthistory.FieldEnvironmentName},
+			directoryaccounthistory.FieldEnvironmentID:       {Type: field.TypeString, Column: directoryaccounthistory.FieldEnvironmentID},
+			directoryaccounthistory.FieldScopeName:           {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeName},
+			directoryaccounthistory.FieldScopeID:             {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeID},
+			directoryaccounthistory.FieldIntegrationID:       {Type: field.TypeString, Column: directoryaccounthistory.FieldIntegrationID},
+			directoryaccounthistory.FieldDirectorySyncRunID:  {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectorySyncRunID},
+			directoryaccounthistory.FieldPlatformID:          {Type: field.TypeString, Column: directoryaccounthistory.FieldPlatformID},
+			directoryaccounthistory.FieldDirectoryInstanceID: {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectoryInstanceID},
+			directoryaccounthistory.FieldIdentityHolderID:    {Type: field.TypeString, Column: directoryaccounthistory.FieldIdentityHolderID},
+			directoryaccounthistory.FieldDirectoryName:       {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectoryName},
+			directoryaccounthistory.FieldExternalID:          {Type: field.TypeString, Column: directoryaccounthistory.FieldExternalID},
+			directoryaccounthistory.FieldSecondaryKey:        {Type: field.TypeString, Column: directoryaccounthistory.FieldSecondaryKey},
+			directoryaccounthistory.FieldCanonicalEmail:      {Type: field.TypeString, Column: directoryaccounthistory.FieldCanonicalEmail},
+			directoryaccounthistory.FieldDisplayName:         {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayName},
+			directoryaccounthistory.FieldAvatarRemoteURL:     {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarRemoteURL},
+			directoryaccounthistory.FieldAvatarLocalFileID:   {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarLocalFileID},
+			directoryaccounthistory.FieldAvatarUpdatedAt:     {Type: field.TypeTime, Column: directoryaccounthistory.FieldAvatarUpdatedAt},
+			directoryaccounthistory.FieldGivenName:           {Type: field.TypeString, Column: directoryaccounthistory.FieldGivenName},
+			directoryaccounthistory.FieldFamilyName:          {Type: field.TypeString, Column: directoryaccounthistory.FieldFamilyName},
+			directoryaccounthistory.FieldJobTitle:            {Type: field.TypeString, Column: directoryaccounthistory.FieldJobTitle},
+			directoryaccounthistory.FieldDepartment:          {Type: field.TypeString, Column: directoryaccounthistory.FieldDepartment},
+			directoryaccounthistory.FieldOrganizationUnit:    {Type: field.TypeString, Column: directoryaccounthistory.FieldOrganizationUnit},
+			directoryaccounthistory.FieldAccountType:         {Type: field.TypeEnum, Column: directoryaccounthistory.FieldAccountType},
+			directoryaccounthistory.FieldStatus:              {Type: field.TypeEnum, Column: directoryaccounthistory.FieldStatus},
+			directoryaccounthistory.FieldMfaState:            {Type: field.TypeEnum, Column: directoryaccounthistory.FieldMfaState},
+			directoryaccounthistory.FieldLastSeenIP:          {Type: field.TypeString, Column: directoryaccounthistory.FieldLastSeenIP},
+			directoryaccounthistory.FieldLastLoginAt:         {Type: field.TypeTime, Column: directoryaccounthistory.FieldLastLoginAt},
+			directoryaccounthistory.FieldFirstSeenAt:         {Type: field.TypeTime, Column: directoryaccounthistory.FieldFirstSeenAt},
+			directoryaccounthistory.FieldLastSeenAt:          {Type: field.TypeTime, Column: directoryaccounthistory.FieldLastSeenAt},
+			directoryaccounthistory.FieldAddedAt:             {Type: field.TypeTime, Column: directoryaccounthistory.FieldAddedAt},
+			directoryaccounthistory.FieldRemovedAt:           {Type: field.TypeTime, Column: directoryaccounthistory.FieldRemovedAt},
+			directoryaccounthistory.FieldObservedAt:          {Type: field.TypeTime, Column: directoryaccounthistory.FieldObservedAt},
+			directoryaccounthistory.FieldProfileHash:         {Type: field.TypeString, Column: directoryaccounthistory.FieldProfileHash},
+			directoryaccounthistory.FieldProfile:             {Type: field.TypeJSON, Column: directoryaccounthistory.FieldProfile},
+			directoryaccounthistory.FieldMetadata:            {Type: field.TypeJSON, Column: directoryaccounthistory.FieldMetadata},
+			directoryaccounthistory.FieldRawProfileFileID:    {Type: field.TypeString, Column: directoryaccounthistory.FieldRawProfileFileID},
+			directoryaccounthistory.FieldSourceVersion:       {Type: field.TypeString, Column: directoryaccounthistory.FieldSourceVersion},
 		},
 	}
 	graph.Nodes[13] = &sqlgraph.Node{
@@ -693,6 +705,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygrouphistory.FieldScopeID:                {Type: field.TypeString, Column: directorygrouphistory.FieldScopeID},
 			directorygrouphistory.FieldIntegrationID:          {Type: field.TypeString, Column: directorygrouphistory.FieldIntegrationID},
 			directorygrouphistory.FieldPlatformID:             {Type: field.TypeString, Column: directorygrouphistory.FieldPlatformID},
+			directorygrouphistory.FieldDirectoryInstanceID:    {Type: field.TypeString, Column: directorygrouphistory.FieldDirectoryInstanceID},
 			directorygrouphistory.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygrouphistory.FieldDirectorySyncRunID},
 			directorygrouphistory.FieldExternalID:             {Type: field.TypeString, Column: directorygrouphistory.FieldExternalID},
 			directorygrouphistory.FieldEmail:                  {Type: field.TypeString, Column: directorygrouphistory.FieldEmail},
@@ -702,9 +715,14 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygrouphistory.FieldStatus:                 {Type: field.TypeEnum, Column: directorygrouphistory.FieldStatus},
 			directorygrouphistory.FieldExternalSharingAllowed: {Type: field.TypeBool, Column: directorygrouphistory.FieldExternalSharingAllowed},
 			directorygrouphistory.FieldMemberCount:            {Type: field.TypeInt, Column: directorygrouphistory.FieldMemberCount},
+			directorygrouphistory.FieldFirstSeenAt:            {Type: field.TypeTime, Column: directorygrouphistory.FieldFirstSeenAt},
+			directorygrouphistory.FieldLastSeenAt:             {Type: field.TypeTime, Column: directorygrouphistory.FieldLastSeenAt},
+			directorygrouphistory.FieldAddedAt:                {Type: field.TypeTime, Column: directorygrouphistory.FieldAddedAt},
+			directorygrouphistory.FieldRemovedAt:              {Type: field.TypeTime, Column: directorygrouphistory.FieldRemovedAt},
 			directorygrouphistory.FieldObservedAt:             {Type: field.TypeTime, Column: directorygrouphistory.FieldObservedAt},
 			directorygrouphistory.FieldProfileHash:            {Type: field.TypeString, Column: directorygrouphistory.FieldProfileHash},
 			directorygrouphistory.FieldProfile:                {Type: field.TypeJSON, Column: directorygrouphistory.FieldProfile},
+			directorygrouphistory.FieldMetadata:               {Type: field.TypeJSON, Column: directorygrouphistory.FieldMetadata},
 			directorygrouphistory.FieldRawProfileFileID:       {Type: field.TypeString, Column: directorygrouphistory.FieldRawProfileFileID},
 			directorygrouphistory.FieldSourceVersion:          {Type: field.TypeString, Column: directorygrouphistory.FieldSourceVersion},
 		},
@@ -720,31 +738,34 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "DirectoryMembershipHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			directorymembershiphistory.FieldHistoryTime:        {Type: field.TypeTime, Column: directorymembershiphistory.FieldHistoryTime},
-			directorymembershiphistory.FieldRef:                {Type: field.TypeString, Column: directorymembershiphistory.FieldRef},
-			directorymembershiphistory.FieldOperation:          {Type: field.TypeEnum, Column: directorymembershiphistory.FieldOperation},
-			directorymembershiphistory.FieldCreatedAt:          {Type: field.TypeTime, Column: directorymembershiphistory.FieldCreatedAt},
-			directorymembershiphistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: directorymembershiphistory.FieldUpdatedAt},
-			directorymembershiphistory.FieldCreatedBy:          {Type: field.TypeString, Column: directorymembershiphistory.FieldCreatedBy},
-			directorymembershiphistory.FieldUpdatedBy:          {Type: field.TypeString, Column: directorymembershiphistory.FieldUpdatedBy},
-			directorymembershiphistory.FieldDisplayID:          {Type: field.TypeString, Column: directorymembershiphistory.FieldDisplayID},
-			directorymembershiphistory.FieldOwnerID:            {Type: field.TypeString, Column: directorymembershiphistory.FieldOwnerID},
-			directorymembershiphistory.FieldEnvironmentName:    {Type: field.TypeString, Column: directorymembershiphistory.FieldEnvironmentName},
-			directorymembershiphistory.FieldEnvironmentID:      {Type: field.TypeString, Column: directorymembershiphistory.FieldEnvironmentID},
-			directorymembershiphistory.FieldScopeName:          {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeName},
-			directorymembershiphistory.FieldScopeID:            {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeID},
-			directorymembershiphistory.FieldIntegrationID:      {Type: field.TypeString, Column: directorymembershiphistory.FieldIntegrationID},
-			directorymembershiphistory.FieldPlatformID:         {Type: field.TypeString, Column: directorymembershiphistory.FieldPlatformID},
-			directorymembershiphistory.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectorySyncRunID},
-			directorymembershiphistory.FieldDirectoryAccountID: {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryAccountID},
-			directorymembershiphistory.FieldDirectoryGroupID:   {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryGroupID},
-			directorymembershiphistory.FieldRole:               {Type: field.TypeEnum, Column: directorymembershiphistory.FieldRole},
-			directorymembershiphistory.FieldSource:             {Type: field.TypeString, Column: directorymembershiphistory.FieldSource},
-			directorymembershiphistory.FieldFirstSeenAt:        {Type: field.TypeTime, Column: directorymembershiphistory.FieldFirstSeenAt},
-			directorymembershiphistory.FieldLastSeenAt:         {Type: field.TypeTime, Column: directorymembershiphistory.FieldLastSeenAt},
-			directorymembershiphistory.FieldObservedAt:         {Type: field.TypeTime, Column: directorymembershiphistory.FieldObservedAt},
-			directorymembershiphistory.FieldLastConfirmedRunID: {Type: field.TypeString, Column: directorymembershiphistory.FieldLastConfirmedRunID},
-			directorymembershiphistory.FieldMetadata:           {Type: field.TypeJSON, Column: directorymembershiphistory.FieldMetadata},
+			directorymembershiphistory.FieldHistoryTime:         {Type: field.TypeTime, Column: directorymembershiphistory.FieldHistoryTime},
+			directorymembershiphistory.FieldRef:                 {Type: field.TypeString, Column: directorymembershiphistory.FieldRef},
+			directorymembershiphistory.FieldOperation:           {Type: field.TypeEnum, Column: directorymembershiphistory.FieldOperation},
+			directorymembershiphistory.FieldCreatedAt:           {Type: field.TypeTime, Column: directorymembershiphistory.FieldCreatedAt},
+			directorymembershiphistory.FieldUpdatedAt:           {Type: field.TypeTime, Column: directorymembershiphistory.FieldUpdatedAt},
+			directorymembershiphistory.FieldCreatedBy:           {Type: field.TypeString, Column: directorymembershiphistory.FieldCreatedBy},
+			directorymembershiphistory.FieldUpdatedBy:           {Type: field.TypeString, Column: directorymembershiphistory.FieldUpdatedBy},
+			directorymembershiphistory.FieldDisplayID:           {Type: field.TypeString, Column: directorymembershiphistory.FieldDisplayID},
+			directorymembershiphistory.FieldOwnerID:             {Type: field.TypeString, Column: directorymembershiphistory.FieldOwnerID},
+			directorymembershiphistory.FieldEnvironmentName:     {Type: field.TypeString, Column: directorymembershiphistory.FieldEnvironmentName},
+			directorymembershiphistory.FieldEnvironmentID:       {Type: field.TypeString, Column: directorymembershiphistory.FieldEnvironmentID},
+			directorymembershiphistory.FieldScopeName:           {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeName},
+			directorymembershiphistory.FieldScopeID:             {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeID},
+			directorymembershiphistory.FieldIntegrationID:       {Type: field.TypeString, Column: directorymembershiphistory.FieldIntegrationID},
+			directorymembershiphistory.FieldPlatformID:          {Type: field.TypeString, Column: directorymembershiphistory.FieldPlatformID},
+			directorymembershiphistory.FieldDirectoryInstanceID: {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryInstanceID},
+			directorymembershiphistory.FieldDirectorySyncRunID:  {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectorySyncRunID},
+			directorymembershiphistory.FieldDirectoryAccountID:  {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryAccountID},
+			directorymembershiphistory.FieldDirectoryGroupID:    {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryGroupID},
+			directorymembershiphistory.FieldRole:                {Type: field.TypeEnum, Column: directorymembershiphistory.FieldRole},
+			directorymembershiphistory.FieldSource:              {Type: field.TypeString, Column: directorymembershiphistory.FieldSource},
+			directorymembershiphistory.FieldFirstSeenAt:         {Type: field.TypeTime, Column: directorymembershiphistory.FieldFirstSeenAt},
+			directorymembershiphistory.FieldLastSeenAt:          {Type: field.TypeTime, Column: directorymembershiphistory.FieldLastSeenAt},
+			directorymembershiphistory.FieldAddedAt:             {Type: field.TypeTime, Column: directorymembershiphistory.FieldAddedAt},
+			directorymembershiphistory.FieldRemovedAt:           {Type: field.TypeTime, Column: directorymembershiphistory.FieldRemovedAt},
+			directorymembershiphistory.FieldObservedAt:          {Type: field.TypeTime, Column: directorymembershiphistory.FieldObservedAt},
+			directorymembershiphistory.FieldLastConfirmedRunID:  {Type: field.TypeString, Column: directorymembershiphistory.FieldLastConfirmedRunID},
+			directorymembershiphistory.FieldMetadata:            {Type: field.TypeJSON, Column: directorymembershiphistory.FieldMetadata},
 		},
 	}
 	graph.Nodes[15] = &sqlgraph.Node{
@@ -879,7 +900,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplatehistory.FieldVersion:              {Type: field.TypeInt, Column: emailtemplatehistory.FieldVersion},
 			emailtemplatehistory.FieldTemplateContext:      {Type: field.TypeEnum, Column: emailtemplatehistory.FieldTemplateContext},
 			emailtemplatehistory.FieldDefaults:             {Type: field.TypeJSON, Column: emailtemplatehistory.FieldDefaults},
-			emailtemplatehistory.FieldEmailBrandingID:      {Type: field.TypeString, Column: emailtemplatehistory.FieldEmailBrandingID},
 			emailtemplatehistory.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplatehistory.FieldIntegrationID},
 			emailtemplatehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowDefinitionID},
 			emailtemplatehistory.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: emailtemplatehistory.FieldWorkflowInstanceID},
@@ -959,6 +979,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldContractRenewalAt:                     {Type: field.TypeTime, Column: entityhistory.FieldContractRenewalAt},
 			entityhistory.FieldVendorMetadata:                        {Type: field.TypeJSON, Column: entityhistory.FieldVendorMetadata},
 			entityhistory.FieldLogoFileID:                            {Type: field.TypeString, Column: entityhistory.FieldLogoFileID},
+			entityhistory.FieldExternalID:                            {Type: field.TypeString, Column: entityhistory.FieldExternalID},
+			entityhistory.FieldObservedAt:                            {Type: field.TypeTime, Column: entityhistory.FieldObservedAt},
 		},
 	}
 	graph.Nodes[20] = &sqlgraph.Node{
@@ -1141,7 +1163,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findinghistory.FieldFindingStatusName:  {Type: field.TypeString, Column: findinghistory.FieldFindingStatusName},
 			findinghistory.FieldFindingStatusID:    {Type: field.TypeString, Column: findinghistory.FieldFindingStatusID},
 			findinghistory.FieldExternalID:         {Type: field.TypeString, Column: findinghistory.FieldExternalID},
-			findinghistory.FieldStatus:             {Type: field.TypeString, Column: findinghistory.FieldStatus},
 			findinghistory.FieldSecurityLevel:      {Type: field.TypeEnum, Column: findinghistory.FieldSecurityLevel},
 			findinghistory.FieldExternalOwnerID:    {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
 			findinghistory.FieldSource:             {Type: field.TypeString, Column: findinghistory.FieldSource},
@@ -1392,6 +1413,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldPlatformID:               {Type: field.TypeString, Column: integrationhistory.FieldPlatformID},
 			integrationhistory.FieldProviderMetadata:         {Type: field.TypeJSON, Column: integrationhistory.FieldProviderMetadata},
 			integrationhistory.FieldConfig:                   {Type: field.TypeJSON, Column: integrationhistory.FieldConfig},
+			integrationhistory.FieldInstallationMetadata:     {Type: field.TypeJSON, Column: integrationhistory.FieldInstallationMetadata},
 			integrationhistory.FieldProviderState:            {Type: field.TypeJSON, Column: integrationhistory.FieldProviderState},
 			integrationhistory.FieldMetadata:                 {Type: field.TypeJSON, Column: integrationhistory.FieldMetadata},
 			integrationhistory.FieldDefinitionID:             {Type: field.TypeString, Column: integrationhistory.FieldDefinitionID},
@@ -1687,6 +1709,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notificationtemplatehistory.FieldLocale:               {Type: field.TypeString, Column: notificationtemplatehistory.FieldLocale},
 			notificationtemplatehistory.FieldTopicPattern:         {Type: field.TypeString, Column: notificationtemplatehistory.FieldTopicPattern},
 			notificationtemplatehistory.FieldIntegrationID:        {Type: field.TypeString, Column: notificationtemplatehistory.FieldIntegrationID},
+			notificationtemplatehistory.FieldDestinations:         {Type: field.TypeJSON, Column: notificationtemplatehistory.FieldDestinations},
 			notificationtemplatehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: notificationtemplatehistory.FieldWorkflowDefinitionID},
 			notificationtemplatehistory.FieldEmailTemplateID:      {Type: field.TypeString, Column: notificationtemplatehistory.FieldEmailTemplateID},
 			notificationtemplatehistory.FieldTitleTemplate:        {Type: field.TypeString, Column: notificationtemplatehistory.FieldTitleTemplate},
@@ -2158,6 +2181,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldEnvironmentID:     {Type: field.TypeString, Column: riskhistory.FieldEnvironmentID},
 			riskhistory.FieldScopeName:         {Type: field.TypeString, Column: riskhistory.FieldScopeName},
 			riskhistory.FieldScopeID:           {Type: field.TypeString, Column: riskhistory.FieldScopeID},
+			riskhistory.FieldExternalID:        {Type: field.TypeString, Column: riskhistory.FieldExternalID},
+			riskhistory.FieldIntegrationID:     {Type: field.TypeString, Column: riskhistory.FieldIntegrationID},
+			riskhistory.FieldObservedAt:        {Type: field.TypeTime, Column: riskhistory.FieldObservedAt},
 			riskhistory.FieldExternalUUID:      {Type: field.TypeString, Column: riskhistory.FieldExternalUUID},
 			riskhistory.FieldName:              {Type: field.TypeString, Column: riskhistory.FieldName},
 			riskhistory.FieldStatus:            {Type: field.TypeEnum, Column: riskhistory.FieldStatus},
@@ -2925,7 +2951,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusName},
 			vulnerabilityhistory.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusID},
 			vulnerabilityhistory.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
-			vulnerabilityhistory.FieldStatus:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
 			vulnerabilityhistory.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldSecurityLevel},
 			vulnerabilityhistory.FieldExternalID:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
 			vulnerabilityhistory.FieldCveID:                   {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
@@ -4073,6 +4098,16 @@ func (f *AssetHistoryFilter) WhereCategories(p entql.BytesP) {
 	f.Where(p.Field(assethistory.FieldCategories))
 }
 
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *AssetHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(assethistory.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *AssetHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(assethistory.FieldObservedAt))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *CampaignHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -4596,6 +4631,21 @@ func (f *ContactHistoryFilter) WhereAddress(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ContactHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(contacthistory.FieldStatus))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *ContactHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldExternalID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *ContactHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *ContactHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(contacthistory.FieldObservedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -5348,6 +5398,11 @@ func (f *CustomDomainHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(customdomainhistory.FieldTrustCenterID))
 }
 
+// WhereDomainType applies the entql string predicate on the domain_type field.
+func (f *CustomDomainHistoryFilter) WhereDomainType(p entql.StringP) {
+	f.Where(p.Field(customdomainhistory.FieldDomainType))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *DNSVerificationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -5613,6 +5668,11 @@ func (f *DirectoryAccountHistoryFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directoryaccounthistory.FieldPlatformID))
 }
 
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectoryAccountHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldDirectoryInstanceID))
+}
+
 // WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
 func (f *DirectoryAccountHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
 	f.Where(p.Field(directoryaccounthistory.FieldIdentityHolderID))
@@ -5708,6 +5768,26 @@ func (f *DirectoryAccountHistoryFilter) WhereLastLoginAt(p entql.TimeP) {
 	f.Where(p.Field(directoryaccounthistory.FieldLastLoginAt))
 }
 
+// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
+func (f *DirectoryAccountHistoryFilter) WhereFirstSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccounthistory.FieldFirstSeenAt))
+}
+
+// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
+func (f *DirectoryAccountHistoryFilter) WhereLastSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccounthistory.FieldLastSeenAt))
+}
+
+// WhereAddedAt applies the entql time.Time predicate on the added_at field.
+func (f *DirectoryAccountHistoryFilter) WhereAddedAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccounthistory.FieldAddedAt))
+}
+
+// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
+func (f *DirectoryAccountHistoryFilter) WhereRemovedAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccounthistory.FieldRemovedAt))
+}
+
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
 func (f *DirectoryAccountHistoryFilter) WhereObservedAt(p entql.TimeP) {
 	f.Where(p.Field(directoryaccounthistory.FieldObservedAt))
@@ -5721,6 +5801,11 @@ func (f *DirectoryAccountHistoryFilter) WhereProfileHash(p entql.StringP) {
 // WhereProfile applies the entql json.RawMessage predicate on the profile field.
 func (f *DirectoryAccountHistoryFilter) WhereProfile(p entql.BytesP) {
 	f.Where(p.Field(directoryaccounthistory.FieldProfile))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *DirectoryAccountHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(directoryaccounthistory.FieldMetadata))
 }
 
 // WhereRawProfileFileID applies the entql string predicate on the raw_profile_file_id field.
@@ -5853,6 +5938,11 @@ func (f *DirectoryGroupHistoryFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directorygrouphistory.FieldPlatformID))
 }
 
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectoryGroupHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directorygrouphistory.FieldDirectoryInstanceID))
+}
+
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryGroupHistoryFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorygrouphistory.FieldDirectorySyncRunID))
@@ -5898,6 +5988,26 @@ func (f *DirectoryGroupHistoryFilter) WhereMemberCount(p entql.IntP) {
 	f.Where(p.Field(directorygrouphistory.FieldMemberCount))
 }
 
+// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
+func (f *DirectoryGroupHistoryFilter) WhereFirstSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directorygrouphistory.FieldFirstSeenAt))
+}
+
+// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
+func (f *DirectoryGroupHistoryFilter) WhereLastSeenAt(p entql.TimeP) {
+	f.Where(p.Field(directorygrouphistory.FieldLastSeenAt))
+}
+
+// WhereAddedAt applies the entql time.Time predicate on the added_at field.
+func (f *DirectoryGroupHistoryFilter) WhereAddedAt(p entql.TimeP) {
+	f.Where(p.Field(directorygrouphistory.FieldAddedAt))
+}
+
+// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
+func (f *DirectoryGroupHistoryFilter) WhereRemovedAt(p entql.TimeP) {
+	f.Where(p.Field(directorygrouphistory.FieldRemovedAt))
+}
+
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
 func (f *DirectoryGroupHistoryFilter) WhereObservedAt(p entql.TimeP) {
 	f.Where(p.Field(directorygrouphistory.FieldObservedAt))
@@ -5911,6 +6021,11 @@ func (f *DirectoryGroupHistoryFilter) WhereProfileHash(p entql.StringP) {
 // WhereProfile applies the entql json.RawMessage predicate on the profile field.
 func (f *DirectoryGroupHistoryFilter) WhereProfile(p entql.BytesP) {
 	f.Where(p.Field(directorygrouphistory.FieldProfile))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *DirectoryGroupHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(directorygrouphistory.FieldMetadata))
 }
 
 // WhereRawProfileFileID applies the entql string predicate on the raw_profile_file_id field.
@@ -6038,6 +6153,11 @@ func (f *DirectoryMembershipHistoryFilter) WherePlatformID(p entql.StringP) {
 	f.Where(p.Field(directorymembershiphistory.FieldPlatformID))
 }
 
+// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
+func (f *DirectoryMembershipHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
+	f.Where(p.Field(directorymembershiphistory.FieldDirectoryInstanceID))
+}
+
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryMembershipHistoryFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorymembershiphistory.FieldDirectorySyncRunID))
@@ -6071,6 +6191,16 @@ func (f *DirectoryMembershipHistoryFilter) WhereFirstSeenAt(p entql.TimeP) {
 // WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
 func (f *DirectoryMembershipHistoryFilter) WhereLastSeenAt(p entql.TimeP) {
 	f.Where(p.Field(directorymembershiphistory.FieldLastSeenAt))
+}
+
+// WhereAddedAt applies the entql time.Time predicate on the added_at field.
+func (f *DirectoryMembershipHistoryFilter) WhereAddedAt(p entql.TimeP) {
+	f.Where(p.Field(directorymembershiphistory.FieldAddedAt))
+}
+
+// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
+func (f *DirectoryMembershipHistoryFilter) WhereRemovedAt(p entql.TimeP) {
+	f.Where(p.Field(directorymembershiphistory.FieldRemovedAt))
 }
 
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
@@ -6658,11 +6788,6 @@ func (f *EmailTemplateHistoryFilter) WhereDefaults(p entql.BytesP) {
 	f.Where(p.Field(emailtemplatehistory.FieldDefaults))
 }
 
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *EmailTemplateHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(emailtemplatehistory.FieldEmailBrandingID))
-}
-
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *EmailTemplateHistoryFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(emailtemplatehistory.FieldIntegrationID))
@@ -7031,6 +7156,16 @@ func (f *EntityHistoryFilter) WhereVendorMetadata(p entql.BytesP) {
 // WhereLogoFileID applies the entql string predicate on the logo_file_id field.
 func (f *EntityHistoryFilter) WhereLogoFileID(p entql.StringP) {
 	f.Where(p.Field(entityhistory.FieldLogoFileID))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *EntityHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldExternalID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *EntityHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(entityhistory.FieldObservedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -7816,11 +7951,6 @@ func (f *FindingHistoryFilter) WhereFindingStatusID(p entql.StringP) {
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldExternalID))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *FindingHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(findinghistory.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.
@@ -8921,6 +9051,11 @@ func (f *IntegrationHistoryFilter) WhereProviderMetadata(p entql.BytesP) {
 // WhereConfig applies the entql json.RawMessage predicate on the config field.
 func (f *IntegrationHistoryFilter) WhereConfig(p entql.BytesP) {
 	f.Where(p.Field(integrationhistory.FieldConfig))
+}
+
+// WhereInstallationMetadata applies the entql json.RawMessage predicate on the installation_metadata field.
+func (f *IntegrationHistoryFilter) WhereInstallationMetadata(p entql.BytesP) {
+	f.Where(p.Field(integrationhistory.FieldInstallationMetadata))
 }
 
 // WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.
@@ -10196,6 +10331,11 @@ func (f *NotificationTemplateHistoryFilter) WhereTopicPattern(p entql.StringP) {
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *NotificationTemplateHistoryFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(notificationtemplatehistory.FieldIntegrationID))
+}
+
+// WhereDestinations applies the entql json.RawMessage predicate on the destinations field.
+func (f *NotificationTemplateHistoryFilter) WhereDestinations(p entql.BytesP) {
+	f.Where(p.Field(notificationtemplatehistory.FieldDestinations))
 }
 
 // WhereWorkflowDefinitionID applies the entql string predicate on the workflow_definition_id field.
@@ -12276,6 +12416,21 @@ func (f *RiskHistoryFilter) WhereScopeName(p entql.StringP) {
 // WhereScopeID applies the entql string predicate on the scope_id field.
 func (f *RiskHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldScopeID))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *RiskHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldExternalID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *RiskHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *RiskHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldObservedAt))
 }
 
 // WhereExternalUUID applies the entql string predicate on the external_uuid field.
@@ -15586,11 +15741,6 @@ func (f *VulnerabilityHistoryFilter) WhereVulnerabilityStatusID(p entql.StringP)
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldExternalOwnerID))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *VulnerabilityHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(vulnerabilityhistory.FieldStatus))
 }
 
 // WhereSecurityLevel applies the entql string predicate on the security_level field.

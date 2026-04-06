@@ -1190,6 +1190,8 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
 
+	redactHushConnection(res)
+
 	return res, err
 }
 
@@ -3256,6 +3258,9 @@ func (r *Resolver) IdentityHolder() gqlgenerated.IdentityHolderResolver {
 	return &identityHolderResolver{r}
 }
 
+// Integration returns gqlgenerated.IntegrationResolver implementation.
+func (r *Resolver) Integration() gqlgenerated.IntegrationResolver { return &integrationResolver{r} }
+
 // InternalPolicy returns gqlgenerated.InternalPolicyResolver implementation.
 func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
 	return &internalPolicyResolver{r}
@@ -3508,6 +3513,7 @@ type controlResolver struct{ *Resolver }
 type evidenceResolver struct{ *Resolver }
 type groupResolver struct{ *Resolver }
 type identityHolderResolver struct{ *Resolver }
+type integrationResolver struct{ *Resolver }
 type internalPolicyResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
 type platformResolver struct{ *Resolver }

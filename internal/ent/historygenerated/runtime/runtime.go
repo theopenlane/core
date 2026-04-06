@@ -8,6 +8,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
@@ -683,17 +684,17 @@ func init() {
 	// directoryaccounthistory.DefaultTags holds the default value on creation for the tags field.
 	directoryaccounthistory.DefaultTags = directoryaccounthistoryDescTags.Default.([]string)
 	// directoryaccounthistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[26].Descriptor()
+	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[27].Descriptor()
 	// directoryaccounthistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccounthistory.DefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.Default.(func() time.Time)
 	// directoryaccounthistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
 	directoryaccounthistory.UpdateDefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// directoryaccounthistoryDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[37].Descriptor()
+	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[42].Descriptor()
 	// directoryaccounthistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccounthistory.DefaultObservedAt = directoryaccounthistoryDescObservedAt.Default.(func() time.Time)
 	// directoryaccounthistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[38].Descriptor()
+	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[43].Descriptor()
 	// directoryaccounthistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directoryaccounthistory.DefaultProfileHash = directoryaccounthistoryDescProfileHash.Default.(string)
 	// directoryaccounthistoryDescID is the schema descriptor for id field.
@@ -732,15 +733,15 @@ func init() {
 	// directorygrouphistory.DefaultTags holds the default value on creation for the tags field.
 	directorygrouphistory.DefaultTags = directorygrouphistoryDescTags.Default.([]string)
 	// directorygrouphistoryDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
-	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[24].Descriptor()
+	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[25].Descriptor()
 	// directorygrouphistory.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygrouphistory.DefaultExternalSharingAllowed = directorygrouphistoryDescExternalSharingAllowed.Default.(bool)
 	// directorygrouphistoryDescObservedAt is the schema descriptor for observed_at field.
-	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[26].Descriptor()
+	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[31].Descriptor()
 	// directorygrouphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygrouphistory.DefaultObservedAt = directorygrouphistoryDescObservedAt.Default.(func() time.Time)
 	// directorygrouphistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[27].Descriptor()
+	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[32].Descriptor()
 	// directorygrouphistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directorygrouphistory.DefaultProfileHash = directorygrouphistoryDescProfileHash.Default.(string)
 	// directorygrouphistoryDescID is the schema descriptor for id field.
@@ -775,7 +776,7 @@ func init() {
 	// directorymembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	directorymembershiphistory.UpdateDefaultUpdatedAt = directorymembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// directorymembershiphistoryDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[23].Descriptor()
+	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[26].Descriptor()
 	// directorymembershiphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembershiphistory.DefaultObservedAt = directorymembershiphistoryDescObservedAt.Default.(func() time.Time)
 	// directorymembershiphistoryDescID is the schema descriptor for id field.
@@ -1098,11 +1099,11 @@ func init() {
 	// evidencehistoryDescCreationDate is the schema descriptor for creation_date field.
 	evidencehistoryDescCreationDate := evidencehistoryFields[22].Descriptor()
 	// evidencehistory.DefaultCreationDate holds the default value on creation for the creation_date field.
-	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() time.Time)
+	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() models.DateTime)
 	// evidencehistoryDescRenewalDate is the schema descriptor for renewal_date field.
 	evidencehistoryDescRenewalDate := evidencehistoryFields[23].Descriptor()
 	// evidencehistory.DefaultRenewalDate holds the default value on creation for the renewal_date field.
-	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(time.Time)
+	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(func() models.DateTime)
 	// evidencehistoryDescIsAutomated is the schema descriptor for is_automated field.
 	evidencehistoryDescIsAutomated := evidencehistoryFields[25].Descriptor()
 	// evidencehistory.DefaultIsAutomated holds the default value on creation for the is_automated field.
@@ -1217,23 +1218,23 @@ func init() {
 	// findinghistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	findinghistory.DefaultSystemOwned = findinghistoryDescSystemOwned.Default.(bool)
 	// findinghistoryDescCategories is the schema descriptor for categories field.
-	findinghistoryDescCategories := findinghistoryFields[31].Descriptor()
+	findinghistoryDescCategories := findinghistoryFields[30].Descriptor()
 	// findinghistory.DefaultCategories holds the default value on creation for the categories field.
 	findinghistory.DefaultCategories = findinghistoryDescCategories.Default.([]string)
 	// findinghistoryDescOpen is the schema descriptor for open field.
-	findinghistoryDescOpen := findinghistoryFields[39].Descriptor()
+	findinghistoryDescOpen := findinghistoryFields[38].Descriptor()
 	// findinghistory.DefaultOpen holds the default value on creation for the open field.
 	findinghistory.DefaultOpen = findinghistoryDescOpen.Default.(bool)
 	// findinghistoryDescReferences is the schema descriptor for references field.
-	findinghistoryDescReferences := findinghistoryFields[48].Descriptor()
+	findinghistoryDescReferences := findinghistoryFields[47].Descriptor()
 	// findinghistory.DefaultReferences holds the default value on creation for the references field.
 	findinghistory.DefaultReferences = findinghistoryDescReferences.Default.([]string)
 	// findinghistoryDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findinghistoryDescStepsToReproduce := findinghistoryFields[49].Descriptor()
+	findinghistoryDescStepsToReproduce := findinghistoryFields[48].Descriptor()
 	// findinghistory.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	findinghistory.DefaultStepsToReproduce = findinghistoryDescStepsToReproduce.Default.([]string)
 	// findinghistoryDescTargets is the schema descriptor for targets field.
-	findinghistoryDescTargets := findinghistoryFields[50].Descriptor()
+	findinghistoryDescTargets := findinghistoryFields[49].Descriptor()
 	// findinghistory.DefaultTargets holds the default value on creation for the targets field.
 	findinghistory.DefaultTargets = findinghistoryDescTargets.Default.([]string)
 	// findinghistoryDescID is the schema descriptor for id field.
@@ -1823,11 +1824,11 @@ func init() {
 	// notificationtemplatehistory.DefaultLocale holds the default value on creation for the locale field.
 	notificationtemplatehistory.DefaultLocale = notificationtemplatehistoryDescLocale.Default.(string)
 	// notificationtemplatehistoryDescActive is the schema descriptor for active field.
-	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[32].Descriptor()
+	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[33].Descriptor()
 	// notificationtemplatehistory.DefaultActive holds the default value on creation for the active field.
 	notificationtemplatehistory.DefaultActive = notificationtemplatehistoryDescActive.Default.(bool)
 	// notificationtemplatehistoryDescVersion is the schema descriptor for version field.
-	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[33].Descriptor()
+	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[34].Descriptor()
 	// notificationtemplatehistory.DefaultVersion holds the default value on creation for the version field.
 	notificationtemplatehistory.DefaultVersion = notificationtemplatehistoryDescVersion.Default.(int)
 	// notificationtemplatehistoryDescID is the schema descriptor for id field.
@@ -3144,19 +3145,19 @@ func init() {
 	// vulnerabilityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerabilityhistory.DefaultSystemOwned = vulnerabilityhistoryDescSystemOwned.Default.(bool)
 	// vulnerabilityhistoryDescOpen is the schema descriptor for open field.
-	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[39].Descriptor()
+	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[38].Descriptor()
 	// vulnerabilityhistory.DefaultOpen holds the default value on creation for the open field.
 	vulnerabilityhistory.DefaultOpen = vulnerabilityhistoryDescOpen.Default.(bool)
 	// vulnerabilityhistoryDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[40].Descriptor()
+	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[39].Descriptor()
 	// vulnerabilityhistory.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerabilityhistory.DefaultBlocking = vulnerabilityhistoryDescBlocking.Default.(bool)
 	// vulnerabilityhistoryDescReferences is the schema descriptor for references field.
-	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[44].Descriptor()
+	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[43].Descriptor()
 	// vulnerabilityhistory.DefaultReferences holds the default value on creation for the references field.
 	vulnerabilityhistory.DefaultReferences = vulnerabilityhistoryDescReferences.Default.([]string)
 	// vulnerabilityhistoryDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[45].Descriptor()
+	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[44].Descriptor()
 	// vulnerabilityhistory.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerabilityhistory.DefaultImpacts = vulnerabilityhistoryDescImpacts.Default.([]string)
 	// vulnerabilityhistoryDescID is the schema descriptor for id field.

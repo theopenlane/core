@@ -25,6 +25,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -94,6 +95,9 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	// setup db container
 	s.tf = entdb.NewTestFixture()
 
+	version, err := fgaversion.GetVersion()
+	s.Require().NoError(err)
+
 	// setup openFGA container
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
 		fgatest.WithModelFile(fgaModelFile),
@@ -102,6 +106,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
 			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
 		}),
+		fgatest.WithVersion(version),
 	)
 
 	fgaClient, err := s.ofgaTF.NewFgaClient(s.ctx)

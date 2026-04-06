@@ -52,6 +52,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldPlatformID holds the string denoting the platform_id field in the database.
 	FieldPlatformID = "platform_id"
+	// FieldDirectoryInstanceID holds the string denoting the directory_instance_id field in the database.
+	FieldDirectoryInstanceID = "directory_instance_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
@@ -70,12 +72,22 @@ const (
 	FieldExternalSharingAllowed = "external_sharing_allowed"
 	// FieldMemberCount holds the string denoting the member_count field in the database.
 	FieldMemberCount = "member_count"
+	// FieldFirstSeenAt holds the string denoting the first_seen_at field in the database.
+	FieldFirstSeenAt = "first_seen_at"
+	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
+	FieldLastSeenAt = "last_seen_at"
+	// FieldAddedAt holds the string denoting the added_at field in the database.
+	FieldAddedAt = "added_at"
+	// FieldRemovedAt holds the string denoting the removed_at field in the database.
+	FieldRemovedAt = "removed_at"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
 	// FieldProfileHash holds the string denoting the profile_hash field in the database.
 	FieldProfileHash = "profile_hash"
 	// FieldProfile holds the string denoting the profile field in the database.
 	FieldProfile = "profile"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// FieldRawProfileFileID holds the string denoting the raw_profile_file_id field in the database.
 	FieldRawProfileFileID = "raw_profile_file_id"
 	// FieldSourceVersion holds the string denoting the source_version field in the database.
@@ -103,6 +115,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldIntegrationID,
 	FieldPlatformID,
+	FieldDirectoryInstanceID,
 	FieldDirectorySyncRunID,
 	FieldExternalID,
 	FieldEmail,
@@ -112,9 +125,14 @@ var Columns = []string{
 	FieldStatus,
 	FieldExternalSharingAllowed,
 	FieldMemberCount,
+	FieldFirstSeenAt,
+	FieldLastSeenAt,
+	FieldAddedAt,
+	FieldRemovedAt,
 	FieldObservedAt,
 	FieldProfileHash,
 	FieldProfile,
+	FieldMetadata,
 	FieldRawProfileFileID,
 	FieldSourceVersion,
 }
@@ -275,6 +293,11 @@ func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
+// ByDirectoryInstanceID orders the results by the directory_instance_id field.
+func ByDirectoryInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryInstanceID, opts...).ToFunc()
+}
+
 // ByDirectorySyncRunID orders the results by the directory_sync_run_id field.
 func ByDirectorySyncRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectorySyncRunID, opts...).ToFunc()
@@ -318,6 +341,26 @@ func ByExternalSharingAllowed(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberCount orders the results by the member_count field.
 func ByMemberCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberCount, opts...).ToFunc()
+}
+
+// ByFirstSeenAt orders the results by the first_seen_at field.
+func ByFirstSeenAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFirstSeenAt, opts...).ToFunc()
+}
+
+// ByLastSeenAt orders the results by the last_seen_at field.
+func ByLastSeenAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastSeenAt, opts...).ToFunc()
+}
+
+// ByAddedAt orders the results by the added_at field.
+func ByAddedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddedAt, opts...).ToFunc()
+}
+
+// ByRemovedAt orders the results by the removed_at field.
+func ByRemovedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemovedAt, opts...).ToFunc()
 }
 
 // ByObservedAt orders the results by the observed_at field.

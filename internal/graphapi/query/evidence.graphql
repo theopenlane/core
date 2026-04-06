@@ -1,518 +1,515 @@
-mutation CreateBulkCSVEvidence($input: Upload!) {
-  createBulkCSVEvidence(input: $input) {
-    evidences {
-      collectionProcedure
-      createdAt
-      createdBy
-      creationDate
-      description
-      displayID
-      id
-      isAutomated
-      name
-      ownerID
-      renewalDate
-      source
-      status
-      tags
-      updatedAt
-      updatedBy
-      url
-    }
-  }
+mutation CreateBulkCSVEvidence ($input: Upload!) {
+	createBulkCSVEvidence(input: $input) {
+		evidences {
+			collectionProcedure
+			createdAt
+			createdBy
+			creationDate
+			description
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			id
+			isAutomated
+			name
+			ownerID
+			renewalDate
+			scopeID
+			scopeName
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+		}
+	}
 }
-
-mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
-  createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
-    evidence {
-      collectionProcedure
-      createdAt
-      createdBy
-      creationDate
-      description
-      displayID
-      id
-      isAutomated
-      name
-      ownerID
-      renewalDate
-      source
-      status
-      tags
-      updatedAt
-      updatedBy
-      url
-      files {
-        edges {
-          node {
-            id
-            presignedURL
-          }
-        }
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      tasks {
-        edges {
-          node {
-            id
-            displayID
-          }
-        }
-      }
-      controls {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-          }
-        }
-      }
-      controlObjectives {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-    }
-  }
+mutation CreateEvidence ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
+	createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
+		evidence {
+			collectionProcedure
+			createdAt
+			createdBy
+			creationDate
+			description
+			displayID
+			id
+			isAutomated
+			name
+			ownerID
+			renewalDate
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+			url
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			tasks {
+				edges {
+					node {
+						id
+						displayID
+					}
+				}
+			}
+			controls {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+					}
+				}
+			}
+			controlObjectives {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteEvidence($deleteEvidenceId: ID!) {
-  deleteEvidence(id: $deleteEvidenceId) {
-    deletedID
-  }
+mutation DeleteEvidence ($deleteEvidenceId: ID!) {
+	deleteEvidence(id: $deleteEvidenceId) {
+		deletedID
+	}
 }
-
 query GetAllEvidences {
-  evidences {
-    edges {
-      node {
-        collectionProcedure
-        createdAt
-        createdBy
-        creationDate
-        description
-        displayID
-        id
-        isAutomated
-        name
-        ownerID
-        renewalDate
-        source
-        status
-        tags
-        updatedAt
-        updatedBy
-        url
-        files {
-          edges {
-            node {
-              id
-              presignedURL
-            }
-          }
-        }
-        programs {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-        tasks {
-          edges {
-            node {
-              id
-              displayID
-            }
-          }
-        }
-        controls {
-          edges {
-            node {
-              id
-              displayID
-              refCode
-            }
-          }
-        }
-        subcontrols {
-          edges {
-            node {
-              id
-              displayID
-              refCode
-            }
-          }
-        }
-        controlObjectives {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+	evidences {
+		edges {
+			node {
+				collectionProcedure
+				createdAt
+				createdBy
+				creationDate
+				description
+				displayID
+				id
+				isAutomated
+				name
+				ownerID
+				renewalDate
+				source
+				status
+				tags
+				updatedAt
+				updatedBy
+				url
+				files {
+					edges {
+						node {
+							id
+							presignedURL
+						}
+					}
+				}
+				programs {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+				tasks {
+					edges {
+						node {
+							id
+							displayID
+						}
+					}
+				}
+				controls {
+					edges {
+						node {
+							id
+							displayID
+							refCode
+						}
+					}
+				}
+				subcontrols {
+					edges {
+						node {
+							id
+							displayID
+							refCode
+						}
+					}
+				}
+				controlObjectives {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetEvidenceByID($evidenceId: ID!) {
-  evidence(id: $evidenceId) {
-    collectionProcedure
-    createdAt
-    createdBy
-    creationDate
-    description
-    displayID
-    id
-    isAutomated
-    name
-    ownerID
-    renewalDate
-    source
-    status
-    tags
-    updatedAt
-    updatedBy
-    url
-    files {
-      edges {
-        node {
-          id
-          presignedURL
-        }
-      }
-    }
-    programs {
-      edges {
-        node {
-          id
-          displayID
-          name
-        }
-      }
-    }
-    tasks {
-      edges {
-        node {
-          id
-          displayID
-        }
-      }
-    }
-    controls {
-      edges {
-        node {
-          id
-          displayID
-          refCode
-        }
-      }
-    }
-    subcontrols {
-      edges {
-        node {
-          id
-          displayID
-          refCode
-        }
-      }
-    }
-    controlObjectives {
-      edges {
-        node {
-          id
-          displayID
-          name
-        }
-      }
-    }
-  }
+query GetEvidenceByID ($evidenceId: ID!) {
+	evidence(id: $evidenceId) {
+		collectionProcedure
+		createdAt
+		createdBy
+		creationDate
+		description
+		displayID
+		environmentID
+		environmentName
+		externalUUID
+		id
+		isAutomated
+		name
+		ownerID
+		renewalDate
+		scopeID
+		scopeName
+		source
+		status
+		tags
+		updatedAt
+		updatedBy
+		url
+		workflowEligibleMarker
+		files {
+			edges {
+				node {
+					id
+					presignedURL
+				}
+			}
+		}
+		programs {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		tasks {
+			edges {
+				node {
+					id
+					displayID
+				}
+			}
+		}
+		controls {
+			edges {
+				node {
+					id
+					displayID
+					refCode
+				}
+			}
+		}
+		subcontrols {
+			edges {
+				node {
+					id
+					displayID
+					refCode
+				}
+			}
+		}
+		controlObjectives {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetEvidences($where: EvidenceWhereInput) {
-  evidences(where: $where) {
-    edges {
-      node {
-        collectionProcedure
-        createdAt
-        createdBy
-        creationDate
-        description
-        displayID
-        id
-        isAutomated
-        name
-        ownerID
-        renewalDate
-        source
-        status
-        tags
-        updatedAt
-        updatedBy
-        url
-        files {
-          edges {
-            node {
-              id
-              presignedURL
-            }
-          }
-        }
-        programs {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-        tasks {
-          edges {
-            node {
-              id
-              displayID
-            }
-          }
-        }
-        controls {
-          edges {
-            node {
-              id
-              displayID
-              refCode
-            }
-          }
-        }
-        subcontrols {
-          edges {
-            node {
-              id
-              displayID
-              refCode
-            }
-          }
-        }
-        controlObjectives {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+query GetEvidences ($where: EvidenceWhereInput) {
+	evidences(where: $where) {
+		edges {
+			node {
+				collectionProcedure
+				createdAt
+				createdBy
+				creationDate
+				description
+				displayID
+				id
+				isAutomated
+				name
+				ownerID
+				renewalDate
+				source
+				status
+				tags
+				updatedAt
+				updatedBy
+				url
+				files {
+					edges {
+						node {
+							id
+							presignedURL
+						}
+					}
+				}
+				programs {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+				tasks {
+					edges {
+						node {
+							id
+							displayID
+						}
+					}
+				}
+				controls {
+					edges {
+						node {
+							id
+							displayID
+							refCode
+						}
+					}
+				}
+				subcontrols {
+					edges {
+						node {
+							id
+							displayID
+							refCode
+						}
+					}
+				}
+				controlObjectives {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
-  updateEvidence(
-    id: $updateEvidenceId
-    input: $input
-    evidenceFiles: $evidenceFiles
-  ) {
-    evidence {
-      collectionProcedure
-      createdAt
-      createdBy
-      creationDate
-      description
-      displayID
-      id
-      isAutomated
-      name
-      ownerID
-      renewalDate
-      source
-      status
-      tags
-      updatedAt
-      updatedBy
-      url
-      files {
-        edges {
-          node {
-            id
-            presignedURL
-          }
-        }
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      tasks {
-        edges {
-          node {
-            id
-            displayID
-          }
-        }
-      }
-      controls {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-          }
-        }
-      }
-      controlObjectives {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-    }
-  }
+mutation UpdateEvidence ($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
+	updateEvidence(id: $updateEvidenceId, input: $input, evidenceFiles: $evidenceFiles) {
+		evidence {
+			collectionProcedure
+			createdAt
+			createdBy
+			creationDate
+			description
+			displayID
+			id
+			isAutomated
+			name
+			ownerID
+			renewalDate
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+			url
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			tasks {
+				edges {
+					node {
+						id
+						displayID
+					}
+				}
+			}
+			controls {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+					}
+				}
+			}
+			controlObjectives {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateEvidenceComment($updateEvidenceCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
-  updateEvidenceComment(
-    id: $updateEvidenceCommentId
-    input: $input
-    noteFiles: $noteFiles
-  ) {
-    evidence {
-      collectionProcedure
-      createdAt
-      createdBy
-      creationDate
-      description
-      displayID
-      id
-      isAutomated
-      name
-      ownerID
-      renewalDate
-      source
-      status
-      tags
-      updatedAt
-      updatedBy
-      url
-      comments {
-        edges {
-          node {
-            id
-            displayID
-            text
-            createdAt
-            createdBy
-            updatedAt
-            updatedBy
-            files {
-              edges {
-                node {
-                  id
-                  storagePath
-                  storageScheme
-                  storageVolume
-                }
-              }
-            }
-          }
-        }
-      }
-      files {
-        edges {
-          node {
-            id
-            presignedURL
-          }
-        }
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      tasks {
-        edges {
-          node {
-            id
-            displayID
-          }
-        }
-      }
-      controls {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-          }
-        }
-      }
-      controlObjectives {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-    }
-  }
+mutation UpdateEvidenceComment ($updateEvidenceCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+	updateEvidenceComment(id: $updateEvidenceCommentId, input: $input, noteFiles: $noteFiles) {
+		evidence {
+			collectionProcedure
+			createdAt
+			createdBy
+			creationDate
+			description
+			displayID
+			id
+			isAutomated
+			name
+			ownerID
+			renewalDate
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+			url
+			comments {
+				edges {
+					node {
+						id
+						displayID
+						text
+						createdAt
+						createdBy
+						updatedAt
+						updatedBy
+						files {
+							edges {
+								node {
+									id
+									storagePath
+									storageScheme
+									storageVolume
+								}
+							}
+						}
+					}
+				}
+			}
+			files {
+				edges {
+					node {
+						id
+						presignedURL
+					}
+				}
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			tasks {
+				edges {
+					node {
+						id
+						displayID
+					}
+				}
+			}
+			controls {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+					}
+				}
+			}
+			controlObjectives {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+		}
+	}
 }

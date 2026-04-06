@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -336,14 +336,28 @@ func (_c *IntegrationCreate) SetNillableConfig(v *openapi.IntegrationConfig) *In
 	return _c
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_c *IntegrationCreate) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationCreate {
+	_c.mutation.SetInstallationMetadata(v)
+	return _c
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationCreate {
+	if v != nil {
+		_c.SetInstallationMetadata(*v)
+	}
+	return _c
+}
+
 // SetProviderState sets the "provider_state" field.
-func (_c *IntegrationCreate) SetProviderState(v state.IntegrationProviderState) *IntegrationCreate {
+func (_c *IntegrationCreate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationCreate {
 	_c.mutation.SetProviderState(v)
 	return _c
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_c *IntegrationCreate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationCreate {
+func (_c *IntegrationCreate) SetNillableProviderState(v *openapi.IntegrationProviderState) *IntegrationCreate {
 	if v != nil {
 		_c.SetProviderState(*v)
 	}
@@ -594,6 +608,21 @@ func (_c *IntegrationCreate) AddActionPlans(v ...*ActionPlan) *IntegrationCreate
 		ids[i] = v[i].ID
 	}
 	return _c.AddActionPlanIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_c *IntegrationCreate) AddAssetIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_c *IntegrationCreate) AddAssets(v ...*Asset) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssetIDs(ids...)
 }
 
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
@@ -940,6 +969,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		_spec.SetField(integration.FieldConfig, field.TypeJSON, value)
 		_node.Config = value
 	}
+	if value, ok := _c.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integration.FieldInstallationMetadata, field.TypeJSON, value)
+		_node.InstallationMetadata = value
+	}
 	if value, ok := _c.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)
 		_node.ProviderState = value
@@ -1174,6 +1207,23 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.IntegrationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

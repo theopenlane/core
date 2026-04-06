@@ -102,6 +102,8 @@ var (
 	IntegrationRunTypeWebhook IntegrationRunType = "WEBHOOK"
 	// IntegrationRunTypeEvent indicates an event-triggered run.
 	IntegrationRunTypeEvent IntegrationRunType = "EVENT"
+	// IntegrationRunTypeReconcile indicates a post-install reconciliation run
+	IntegrationRunTypeReconcile IntegrationRunType = "RECONCILE"
 )
 
 var integrationRunTypeValues = []IntegrationRunType{
@@ -109,6 +111,7 @@ var integrationRunTypeValues = []IntegrationRunType{
 	IntegrationRunTypeScheduled,
 	IntegrationRunTypeWebhook,
 	IntegrationRunTypeEvent,
+	IntegrationRunTypeReconcile,
 }
 
 // IntegrationRunTypes is a list of all valid IntegrationRunType values.

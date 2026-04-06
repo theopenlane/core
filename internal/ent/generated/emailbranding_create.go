@@ -721,16 +721,16 @@ func (_c *EmailBrandingCreate) createSpec() (*EmailBranding, *sqlgraph.CreateSpe
 	}
 	if nodes := _c.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   emailbranding.EmailTemplatesTable,
-			Columns: []string{emailbranding.EmailTemplatesColumn},
+			Columns: emailbranding.EmailTemplatesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
+		edge.Schema = _c.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

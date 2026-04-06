@@ -65,6 +65,7 @@ type SchemaConfig struct {
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
 	EmailBranding                      string // EmailBranding table.
+	EmailBrandingEmailTemplates        string // EmailBranding-email_templates->EmailTemplate table.
 	EmailTemplate                      string // EmailTemplate table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.
@@ -134,6 +135,9 @@ type SchemaConfig struct {
 	InternalPolicyNarratives           string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks                string // InternalPolicy-risks->Risk table.
+	InternalPolicyAssets               string // InternalPolicy-assets->Asset table.
+	InternalPolicyEntities             string // InternalPolicy-entities->Entity table.
+	InternalPolicyIdentityHolders      string // InternalPolicy-identity_holders->IdentityHolder table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
 	InviteGroups                       string // Invite-groups->Group table.
@@ -230,6 +234,7 @@ type SchemaConfig struct {
 	ReviewRemediations                 string // Review-remediations->Remediation table.
 	ReviewControls                     string // Review-controls->Control table.
 	ReviewSubcontrols                  string // Review-subcontrols->Subcontrol table.
+	ReviewInternalPolicies             string // Review-internal_policies->InternalPolicy table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.
@@ -259,6 +264,9 @@ type SchemaConfig struct {
 	SubcontrolProcedures               string // Subcontrol-procedures->Procedure table.
 	SubcontrolScans                    string // Subcontrol-scans->Scan table.
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
+	SubcontrolAssets                   string // Subcontrol-assets->Asset table.
+	SubcontrolEntities                 string // Subcontrol-entities->Entity table.
+	SubcontrolIdentityHolders          string // Subcontrol-identity_holders->IdentityHolder table.
 	Subprocessor                       string // Subprocessor table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.

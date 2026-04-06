@@ -1419,7 +1419,7 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 	}
 
 	mutation := e.client.db.Evidence.Create().
-		SetCreationDate(time.Now().Add(-time.Minute)).
+		SetCreationDate(models.DateTime(time.Now().Add(-time.Minute))).
 		SetName(e.Name)
 
 	if e.ProgramID != "" {
@@ -1919,6 +1919,25 @@ type TrustCenterComplianceBuilder struct {
 	TrustCenterID string
 	StandardID    string
 	Tags          []string
+}
+
+// EmailTemplateBuilder is used to create email templates
+type EmailTemplateBuilder struct {
+	client *client
+
+	// Fields
+	Name            string
+	Key             string
+	TemplateContext *enums.TemplateContext
+}
+
+// EmailBrandingBuilder is used to create email branding
+type EmailBrandingBuilder struct {
+	client *client
+
+	// Fields
+	Name         string
+	PrimaryColor string
 }
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
@@ -2627,4 +2646,49 @@ func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.S
 	}
 
 	return existing
+}
+
+func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailTemplate {
+	ctx = setContext(ctx, e.client.db)
+
+	if e.Name == "" {
+		e.Name = gofakeit.HipsterWord() + " Template"
+	}
+
+	if e.Key == "" {
+		e.Key = ulids.New().String()
+	}
+
+	if e.TemplateContext == nil {
+		e.TemplateContext = &enums.TemplateContextCampaignRecipient
+	}
+
+	emailTemplate, err := e.client.db.EmailTemplate.Create().
+		SetName(e.Name).
+		SetKey(e.Key).
+		SetTemplateContext(*e.TemplateContext).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return emailTemplate
+}
+
+func (e *EmailBrandingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailBranding {
+	ctx = setContext(ctx, e.client.db)
+
+	if e.Name == "" {
+		e.Name = gofakeit.Company() + " Email Branding"
+	}
+
+	if e.PrimaryColor == "" {
+		e.PrimaryColor = gofakeit.HexColor()
+	}
+
+	emailBranding, err := e.client.db.EmailBranding.Create().
+		SetName(e.Name).
+		SetPrimaryColor(e.PrimaryColor).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return emailBranding
 }

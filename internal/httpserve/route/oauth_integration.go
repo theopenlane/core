@@ -6,74 +6,74 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
-// registerIntegrationOAuthStartHandler registers the OAuth start handler for integrations
-func registerIntegrationOAuthStartHandler(router *Router) error {
+// registerIntegrationAuthStartHandler registers the auth start handler for integrations
+func registerIntegrationAuthStartHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
-		Path:        "/integrations/oauth/start",
+		Path:        "/integrations/auth/start",
 		Method:      http.MethodPost,
-		Name:        "StartIntegrationOAuth",
-		Description: "Start OAuth flow for integration",
+		Name:        "StartIntegrationAuth",
+		Description: "Start auth flow for integration",
 		Tags:        []string{"integrations"},
-		OperationID: "StartIntegrationOAuth",
+		OperationID: "StartIntegrationAuth",
 		Security:    handlers.AllSecurityRequirements(),
 		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.StartOAuthFlow,
+		Handler:     router.Handler.StartIntegrationAuth,
 	}
 
 	return router.AddV1HandlerRoute(config)
 }
 
-// registerIntegrationOAuthCallbackHandler registers the OAuth callback handler for integrations
-func registerIntegrationOAuthCallbackHandler(router *Router) error {
+// registerIntegrationAuthCallbackHandler registers the auth callback handler for integrations
+func registerIntegrationAuthCallbackHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
-		Path:        "/integrations/oauth/callback",
+		Path:        "/integrations/auth/callback",
 		Method:      http.MethodGet,
-		Name:        "IntegrationOAuthCallback",
-		Description: "Handle OAuth callback for integration",
+		Name:        "IntegrationAuthCallback",
+		Description: "Handle auth callback for integration",
 		Tags:        []string{"integrations"},
-		OperationID: "IntegrationOAuthCallback",
+		OperationID: "IntegrationAuthCallback",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
-		Handler:     router.Handler.HandleOAuthCallback,
-	}
-
-	return router.AddV1HandlerRoute(config)
-}
-
-// registerRefreshIntegrationTokenHandler registers the handler to refresh integration tokens
-func registerRefreshIntegrationTokenHandler(router *Router) error {
-	config := Config{
-		Path:        "/integrations/:provider/refresh",
-		Method:      http.MethodPost,
-		Name:        "RefreshIntegrationToken",
-		Description: "Refresh integration token",
-		Tags:        []string{"integrations"},
-		OperationID: "RefreshIntegrationToken",
-		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.RefreshIntegrationTokenHandler,
+		Handler:     router.Handler.HandleIntegrationAuthCallback,
 	}
 
 	return router.AddV1HandlerRoute(config)
 }
 
 func registerIntegrationConfigHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
-		Path:        "/integrations/:provider/config",
-		Method:      http.MethodPost,
-		Name:        "ConfigureIntegrationProvider",
-		Description: "Persist integration credentials or configuration",
-		Tags:        []string{"integrations"},
-		OperationID: "ConfigureIntegrationProvider",
-		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.ConfigureIntegrationProvider,
+		Path:           "/integrations/:definitionID/config",
+		Method:         http.MethodPost,
+		Name:           "ConfigureIntegrationProvider",
+		Description:    "Persist integration credentials or configuration",
+		Tags:           []string{"integrations"},
+		OperationID:    "ConfigureIntegrationProvider",
+		Security:       handlers.AllSecurityRequirements(),
+		Middlewares:    *authenticatedEndpoint,
+		Handler:        router.Handler.ConfigureIntegrationProvider,
+		ExcludeFromOAS: true,
 	}
 
 	return router.AddV1HandlerRoute(config)
 }
 
 func registerIntegrationProvidersHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/providers",
 		Method:      http.MethodGet,
@@ -89,9 +89,34 @@ func registerIntegrationProvidersHandler(router *Router) error {
 	return router.AddV1HandlerRoute(config)
 }
 
-func registerIntegrationOperationHandler(router *Router) error {
+// registerIntegrationDisconnectHandler registers the handler to disconnect an installed integration
+func registerIntegrationDisconnectHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
-		Path:        "/integrations/:provider/operations/run",
+		Path:        "/integrations/:integrationID/disconnect",
+		Method:      http.MethodPost,
+		Name:        "DisconnectIntegration",
+		Description: "Disconnect an installed integration and clean up credentials",
+		Tags:        []string{"integrations"},
+		OperationID: "DisconnectIntegration",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.DisconnectIntegration,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}
+
+func registerIntegrationOperationHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
+	config := Config{
+		Path:        "/integrations/:integrationID/operations/run",
 		Method:      http.MethodPost,
 		Name:        "RunIntegrationOperation",
 		Description: "Execute a provider operation using stored credentials",

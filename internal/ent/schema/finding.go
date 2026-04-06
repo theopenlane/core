@@ -56,15 +56,8 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
 			),
-		field.String("status").
-			Comment("lifecycle status of the finding").
-			Annotations(
-				entgql.Directives(
-					entgql.Deprecated("Use `finding_status_name` instead."),
-				),
-			).
-			Optional(),
 		field.Enum("security_level").
 			Comment("incoming source severity").
 			GoType(enums.SecurityLevel("")).
@@ -80,38 +73,59 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("external_owner_id"),
+				entx.IntegrationMappingField(),
 			),
 		field.String("source").
 			Comment("system that produced the finding, e.g. gcpscc").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("resource_name").
 			Comment("resource identifier provided by the source system").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("display_name").
 			Comment("display name for the finding when provided by the source").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("state").
 			Comment("state reported by the source system, such as ACTIVE or INACTIVE").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("category").
 			Comment("primary category of the finding").
 			Optional().
 			Annotations(
 				entgql.OrderField("category"),
+				entx.IntegrationMappingField(),
 			),
 		field.Strings("categories").
 			Comment("normalized categories for the finding").
 			Optional().
-			Default([]string{}),
+			Default([]string{}).
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("finding_class").
 			Comment("classification provided by the source, e.g. MISCONFIGURATION").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("severity").
 			Comment("severity label for the finding").
 			Optional().
 			Annotations(
 				entgql.OrderField("severity"),
 				entx.FieldSearchable(),
+				entx.IntegrationMappingField(),
 			),
 		field.Float("numeric_severity").
 			Comment("numeric severity score for the finding if provided").
@@ -131,7 +145,10 @@ func (Finding) Fields() []ent.Field {
 		field.Bool("open").
 			Comment("indicates if the finding is still open").
 			Default(true).
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Bool("blocks_production").
 			Comment("true when the finding blocks production changes").
 			Optional(),
@@ -149,17 +166,26 @@ func (Finding) Fields() []ent.Field {
 			Optional(),
 		field.Text("description").
 			Comment("long form description of the finding").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Text("recommendation").
 			Comment("short recommendation text from the source system (deprecated upstream)").
 			Optional(),
 		field.Text("recommended_actions").
 			Comment("markdown formatted remediation guidance for the finding").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Strings("references").
 			Comment("reference links for the finding").
 			Optional().
-			Default([]string{}),
+			Default([]string{}).
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Strings("steps_to_reproduce").
 			Comment("steps required to reproduce the finding").
 			Optional().
@@ -181,26 +207,44 @@ func (Finding) Fields() []ent.Field {
 			Comment("timestamp when the finding was last observed by the source").
 			GoType(models.DateTime{}).
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Time("reported_at").
 			Comment("timestamp when the finding was first reported by the source").
 			GoType(models.DateTime{}).
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Time("source_updated_at").
 			Comment("timestamp when the source last updated the finding").
 			GoType(models.DateTime{}).
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.String("external_uri").
 			Comment("link to the finding in the source system").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("raw metadata payload for the finding from the source system").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.JSON("raw_payload", map[string]any{}).
 			Comment("raw payload received from the integration for auditing and troubleshooting").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 	}
 }
 
@@ -318,6 +362,7 @@ func (Finding) Annotations() []schema.Annotation {
 			entx.WithOrgOwned(),
 			entx.WithSystemOwned(),
 		),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }
 

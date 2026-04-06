@@ -224,6 +224,7 @@ func (r Review) Edges() []ent.Edge {
 			edgeSchema: File{},
 			comment:    "supporting files or evidence for the review",
 		}),
+		defaultEdgeToWithPagination(r, InternalPolicy{}),
 	}
 }
 
@@ -270,6 +271,7 @@ func (Review) Indexes() []ent.Index {
 func (Review) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookReviewFiles(),
+		hooks.HookReviews(),
 	}
 }
 

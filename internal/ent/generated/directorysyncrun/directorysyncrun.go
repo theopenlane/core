@@ -42,6 +42,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldPlatformID holds the string denoting the platform_id field in the database.
 	FieldPlatformID = "platform_id"
+	// FieldDirectoryInstanceID holds the string denoting the directory_instance_id field in the database.
+	FieldDirectoryInstanceID = "directory_instance_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldStartedAt holds the string denoting the started_at field in the database.
@@ -151,6 +153,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldIntegrationID,
 	FieldPlatformID,
+	FieldDirectoryInstanceID,
 	FieldStatus,
 	FieldStartedAt,
 	FieldCompletedAt,
@@ -283,6 +286,11 @@ func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 // ByPlatformID orders the results by the platform_id field.
 func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
+// ByDirectoryInstanceID orders the results by the directory_instance_id field.
+func ByDirectoryInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryInstanceID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

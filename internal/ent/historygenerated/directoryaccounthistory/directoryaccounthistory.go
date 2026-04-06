@@ -54,6 +54,8 @@ const (
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldPlatformID holds the string denoting the platform_id field in the database.
 	FieldPlatformID = "platform_id"
+	// FieldDirectoryInstanceID holds the string denoting the directory_instance_id field in the database.
+	FieldDirectoryInstanceID = "directory_instance_id"
 	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
 	FieldIdentityHolderID = "identity_holder_id"
 	// FieldDirectoryName holds the string denoting the directory_name field in the database.
@@ -92,12 +94,22 @@ const (
 	FieldLastSeenIP = "last_seen_ip"
 	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
 	FieldLastLoginAt = "last_login_at"
+	// FieldFirstSeenAt holds the string denoting the first_seen_at field in the database.
+	FieldFirstSeenAt = "first_seen_at"
+	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
+	FieldLastSeenAt = "last_seen_at"
+	// FieldAddedAt holds the string denoting the added_at field in the database.
+	FieldAddedAt = "added_at"
+	// FieldRemovedAt holds the string denoting the removed_at field in the database.
+	FieldRemovedAt = "removed_at"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
 	// FieldProfileHash holds the string denoting the profile_hash field in the database.
 	FieldProfileHash = "profile_hash"
 	// FieldProfile holds the string denoting the profile field in the database.
 	FieldProfile = "profile"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// FieldRawProfileFileID holds the string denoting the raw_profile_file_id field in the database.
 	FieldRawProfileFileID = "raw_profile_file_id"
 	// FieldSourceVersion holds the string denoting the source_version field in the database.
@@ -126,6 +138,7 @@ var Columns = []string{
 	FieldIntegrationID,
 	FieldDirectorySyncRunID,
 	FieldPlatformID,
+	FieldDirectoryInstanceID,
 	FieldIdentityHolderID,
 	FieldDirectoryName,
 	FieldExternalID,
@@ -145,9 +158,14 @@ var Columns = []string{
 	FieldMfaState,
 	FieldLastSeenIP,
 	FieldLastLoginAt,
+	FieldFirstSeenAt,
+	FieldLastSeenAt,
+	FieldAddedAt,
+	FieldRemovedAt,
 	FieldObservedAt,
 	FieldProfileHash,
 	FieldProfile,
+	FieldMetadata,
 	FieldRawProfileFileID,
 	FieldSourceVersion,
 }
@@ -327,6 +345,11 @@ func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
+// ByDirectoryInstanceID orders the results by the directory_instance_id field.
+func ByDirectoryInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryInstanceID, opts...).ToFunc()
+}
+
 // ByIdentityHolderID orders the results by the identity_holder_id field.
 func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
@@ -420,6 +443,26 @@ func ByLastSeenIP(opts ...sql.OrderTermOption) OrderOption {
 // ByLastLoginAt orders the results by the last_login_at field.
 func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
+}
+
+// ByFirstSeenAt orders the results by the first_seen_at field.
+func ByFirstSeenAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFirstSeenAt, opts...).ToFunc()
+}
+
+// ByLastSeenAt orders the results by the last_seen_at field.
+func ByLastSeenAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastSeenAt, opts...).ToFunc()
+}
+
+// ByAddedAt orders the results by the added_at field.
+func ByAddedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddedAt, opts...).ToFunc()
+}
+
+// ByRemovedAt orders the results by the removed_at field.
+func ByRemovedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemovedAt, opts...).ToFunc()
 }
 
 // ByObservedAt orders the results by the observed_at field.

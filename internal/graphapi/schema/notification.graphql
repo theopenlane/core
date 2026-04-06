@@ -1,5 +1,14 @@
 extend type Mutation{
     """
+    Create a new notification
+    """
+    createNotification(
+        """
+        values of the notification
+        """
+        input: CreateNotificationInput!
+    ): NotificationCreatePayload!
+    """
     Update an existing notification
     """
     updateNotification(
@@ -42,4 +51,14 @@ type ActionNotificationsReadPayload {
     Updated notification IDs
     """
     readIDs: [ID]!
+}
+
+"""
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+    """
+    Created notification
+    """
+    notification: Notification!
 }

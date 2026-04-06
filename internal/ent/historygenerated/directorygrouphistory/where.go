@@ -138,6 +138,11 @@ func PlatformID(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldPlatformID, v))
 }
 
+// DirectoryInstanceID applies equality check predicate on the "directory_instance_id" field. It's identical to DirectoryInstanceIDEQ.
+func DirectoryInstanceID(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldDirectoryInstanceID, v))
+}
+
 // DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
 func DirectorySyncRunID(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -171,6 +176,26 @@ func ExternalSharingAllowed(v bool) predicate.DirectoryGroupHistory {
 // MemberCount applies equality check predicate on the "member_count" field. It's identical to MemberCountEQ.
 func MemberCount(v int) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldMemberCount, v))
+}
+
+// FirstSeenAt applies equality check predicate on the "first_seen_at" field. It's identical to FirstSeenAtEQ.
+func FirstSeenAt(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldFirstSeenAt, v))
+}
+
+// LastSeenAt applies equality check predicate on the "last_seen_at" field. It's identical to LastSeenAtEQ.
+func LastSeenAt(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldLastSeenAt, v))
+}
+
+// AddedAt applies equality check predicate on the "added_at" field. It's identical to AddedAtEQ.
+func AddedAt(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldAddedAt, v))
+}
+
+// RemovedAt applies equality check predicate on the "removed_at" field. It's identical to RemovedAtEQ.
+func RemovedAt(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldRemovedAt, v))
 }
 
 // ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
@@ -1168,6 +1193,81 @@ func PlatformIDContainsFold(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldContainsFold(FieldPlatformID, v))
 }
 
+// DirectoryInstanceIDEQ applies the EQ predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDEQ(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDNEQ applies the NEQ predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDNEQ(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNEQ(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDIn applies the In predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDIn(vs ...string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIn(FieldDirectoryInstanceID, vs...))
+}
+
+// DirectoryInstanceIDNotIn applies the NotIn predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDNotIn(vs ...string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotIn(FieldDirectoryInstanceID, vs...))
+}
+
+// DirectoryInstanceIDGT applies the GT predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDGT(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGT(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDGTE applies the GTE predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDGTE(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGTE(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDLT applies the LT predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDLT(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLT(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDLTE applies the LTE predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDLTE(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLTE(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDContains applies the Contains predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDContains(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldContains(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDHasPrefix applies the HasPrefix predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDHasPrefix(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldHasPrefix(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDHasSuffix applies the HasSuffix predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDHasSuffix(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldHasSuffix(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDIsNil applies the IsNil predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDIsNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldDirectoryInstanceID))
+}
+
+// DirectoryInstanceIDNotNil applies the NotNil predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDNotNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldDirectoryInstanceID))
+}
+
+// DirectoryInstanceIDEqualFold applies the EqualFold predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDEqualFold(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEqualFold(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDContainsFold applies the ContainsFold predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDContainsFold(v string) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldContainsFold(FieldDirectoryInstanceID, v))
+}
+
 // DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.
 func DirectorySyncRunIDEQ(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -1653,6 +1753,206 @@ func MemberCountNotNil() predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldMemberCount))
 }
 
+// FirstSeenAtEQ applies the EQ predicate on the "first_seen_at" field.
+func FirstSeenAtEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldFirstSeenAt, v))
+}
+
+// FirstSeenAtNEQ applies the NEQ predicate on the "first_seen_at" field.
+func FirstSeenAtNEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNEQ(FieldFirstSeenAt, v))
+}
+
+// FirstSeenAtIn applies the In predicate on the "first_seen_at" field.
+func FirstSeenAtIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIn(FieldFirstSeenAt, vs...))
+}
+
+// FirstSeenAtNotIn applies the NotIn predicate on the "first_seen_at" field.
+func FirstSeenAtNotIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotIn(FieldFirstSeenAt, vs...))
+}
+
+// FirstSeenAtGT applies the GT predicate on the "first_seen_at" field.
+func FirstSeenAtGT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGT(FieldFirstSeenAt, v))
+}
+
+// FirstSeenAtGTE applies the GTE predicate on the "first_seen_at" field.
+func FirstSeenAtGTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGTE(FieldFirstSeenAt, v))
+}
+
+// FirstSeenAtLT applies the LT predicate on the "first_seen_at" field.
+func FirstSeenAtLT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLT(FieldFirstSeenAt, v))
+}
+
+// FirstSeenAtLTE applies the LTE predicate on the "first_seen_at" field.
+func FirstSeenAtLTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLTE(FieldFirstSeenAt, v))
+}
+
+// FirstSeenAtIsNil applies the IsNil predicate on the "first_seen_at" field.
+func FirstSeenAtIsNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldFirstSeenAt))
+}
+
+// FirstSeenAtNotNil applies the NotNil predicate on the "first_seen_at" field.
+func FirstSeenAtNotNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldFirstSeenAt))
+}
+
+// LastSeenAtEQ applies the EQ predicate on the "last_seen_at" field.
+func LastSeenAtEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldLastSeenAt, v))
+}
+
+// LastSeenAtNEQ applies the NEQ predicate on the "last_seen_at" field.
+func LastSeenAtNEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNEQ(FieldLastSeenAt, v))
+}
+
+// LastSeenAtIn applies the In predicate on the "last_seen_at" field.
+func LastSeenAtIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIn(FieldLastSeenAt, vs...))
+}
+
+// LastSeenAtNotIn applies the NotIn predicate on the "last_seen_at" field.
+func LastSeenAtNotIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotIn(FieldLastSeenAt, vs...))
+}
+
+// LastSeenAtGT applies the GT predicate on the "last_seen_at" field.
+func LastSeenAtGT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGT(FieldLastSeenAt, v))
+}
+
+// LastSeenAtGTE applies the GTE predicate on the "last_seen_at" field.
+func LastSeenAtGTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGTE(FieldLastSeenAt, v))
+}
+
+// LastSeenAtLT applies the LT predicate on the "last_seen_at" field.
+func LastSeenAtLT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLT(FieldLastSeenAt, v))
+}
+
+// LastSeenAtLTE applies the LTE predicate on the "last_seen_at" field.
+func LastSeenAtLTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLTE(FieldLastSeenAt, v))
+}
+
+// LastSeenAtIsNil applies the IsNil predicate on the "last_seen_at" field.
+func LastSeenAtIsNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldLastSeenAt))
+}
+
+// LastSeenAtNotNil applies the NotNil predicate on the "last_seen_at" field.
+func LastSeenAtNotNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldLastSeenAt))
+}
+
+// AddedAtEQ applies the EQ predicate on the "added_at" field.
+func AddedAtEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldAddedAt, v))
+}
+
+// AddedAtNEQ applies the NEQ predicate on the "added_at" field.
+func AddedAtNEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNEQ(FieldAddedAt, v))
+}
+
+// AddedAtIn applies the In predicate on the "added_at" field.
+func AddedAtIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIn(FieldAddedAt, vs...))
+}
+
+// AddedAtNotIn applies the NotIn predicate on the "added_at" field.
+func AddedAtNotIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotIn(FieldAddedAt, vs...))
+}
+
+// AddedAtGT applies the GT predicate on the "added_at" field.
+func AddedAtGT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGT(FieldAddedAt, v))
+}
+
+// AddedAtGTE applies the GTE predicate on the "added_at" field.
+func AddedAtGTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGTE(FieldAddedAt, v))
+}
+
+// AddedAtLT applies the LT predicate on the "added_at" field.
+func AddedAtLT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLT(FieldAddedAt, v))
+}
+
+// AddedAtLTE applies the LTE predicate on the "added_at" field.
+func AddedAtLTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLTE(FieldAddedAt, v))
+}
+
+// AddedAtIsNil applies the IsNil predicate on the "added_at" field.
+func AddedAtIsNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldAddedAt))
+}
+
+// AddedAtNotNil applies the NotNil predicate on the "added_at" field.
+func AddedAtNotNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldAddedAt))
+}
+
+// RemovedAtEQ applies the EQ predicate on the "removed_at" field.
+func RemovedAtEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldRemovedAt, v))
+}
+
+// RemovedAtNEQ applies the NEQ predicate on the "removed_at" field.
+func RemovedAtNEQ(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNEQ(FieldRemovedAt, v))
+}
+
+// RemovedAtIn applies the In predicate on the "removed_at" field.
+func RemovedAtIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIn(FieldRemovedAt, vs...))
+}
+
+// RemovedAtNotIn applies the NotIn predicate on the "removed_at" field.
+func RemovedAtNotIn(vs ...time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotIn(FieldRemovedAt, vs...))
+}
+
+// RemovedAtGT applies the GT predicate on the "removed_at" field.
+func RemovedAtGT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGT(FieldRemovedAt, v))
+}
+
+// RemovedAtGTE applies the GTE predicate on the "removed_at" field.
+func RemovedAtGTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldGTE(FieldRemovedAt, v))
+}
+
+// RemovedAtLT applies the LT predicate on the "removed_at" field.
+func RemovedAtLT(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLT(FieldRemovedAt, v))
+}
+
+// RemovedAtLTE applies the LTE predicate on the "removed_at" field.
+func RemovedAtLTE(v time.Time) predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldLTE(FieldRemovedAt, v))
+}
+
+// RemovedAtIsNil applies the IsNil predicate on the "removed_at" field.
+func RemovedAtIsNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldRemovedAt))
+}
+
+// RemovedAtNotNil applies the NotNil predicate on the "removed_at" field.
+func RemovedAtNotNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldRemovedAt))
+}
+
 // ObservedAtEQ applies the EQ predicate on the "observed_at" field.
 func ObservedAtEQ(v time.Time) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldObservedAt, v))
@@ -1766,6 +2066,16 @@ func ProfileIsNil() predicate.DirectoryGroupHistory {
 // ProfileNotNil applies the NotNil predicate on the "profile" field.
 func ProfileNotNil() predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldProfile))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.DirectoryGroupHistory {
+	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldMetadata))
 }
 
 // RawProfileFileIDEQ applies the EQ predicate on the "raw_profile_file_id" field.

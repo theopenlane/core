@@ -1850,6 +1850,12 @@ type NoteDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createNotification mutation
+type NotificationCreatePayload struct {
+	// Created notification
+	Notification *generated.Notification `json:"notification"`
+}
+
 // Return response for createBulkNotificationPreference mutation
 type NotificationPreferenceBulkCreatePayload struct {
 	// Created notificationPreferences
@@ -3379,6 +3385,8 @@ type WorkflowInstanceBulkAdminPayload struct {
 type WorkflowMetadata struct {
 	// Available workflow object types
 	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
+	// Extensible workflow metadata payload for action configuration surfaces
+	Extensions map[string]any `json:"extensions"`
 }
 
 // Metadata for a workflow object type

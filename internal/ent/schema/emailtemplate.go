@@ -11,6 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -124,7 +125,6 @@ func (EmailTemplate) Fields() []ent.Field {
 		field.Enum("template_context").
 			Comment("runtime data context defining available variable keys for this template").
 			GoType(enums.TemplateContext("")).
-			Optional().
 			Annotations(
 				entgql.OrderField("TEMPLATE_CONTEXT"),
 			),
@@ -134,9 +134,6 @@ func (EmailTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.String("email_branding_id").
-			Comment("email branding configuration to apply for this template").
-			Optional(),
 		field.String("integration_id").
 			Comment("integration used to deliver emails for this template").
 			Optional(),
@@ -164,14 +161,7 @@ func (EmailTemplate) Indexes() []ent.Index {
 // Edges of the EmailTemplate.
 func (e EmailTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: e,
-			edgeSchema: EmailBranding{},
-			field:      "email_branding_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(EmailBranding{}.Name()),
-			},
-		}),
+		defaultEdgeFrom(e, EmailBranding{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: e,
 			edgeSchema: Integration{},
@@ -216,6 +206,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins(e)
 }
@@ -237,12 +228,17 @@ func (EmailTemplate) Hooks() []ent.Hook {
 // Policy of the EmailTemplate.
 func (EmailTemplate) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the EmailTemplate
+func (EmailTemplate) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }

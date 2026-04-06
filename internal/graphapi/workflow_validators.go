@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )
 
@@ -297,8 +298,14 @@ func validateNotificationActionParams(params json.RawMessage) error {
 		return err
 	}
 
-	if strings.TrimSpace(input.TemplateID) != "" && strings.TrimSpace(input.TemplateKey) != "" {
+	if input.TemplateID != "" && input.TemplateKey != "" {
 		return ErrNotificationTemplateBothIDAndKey
+	}
+
+	for _, target := range input.Targets {
+		if err := validateTarget(target); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -315,12 +322,25 @@ func validateIntegrationActionParams(params json.RawMessage) error {
 		return err
 	}
 
-	if strings.TrimSpace(input.Operation) == "" {
+	if input.OperationName == "" {
 		return ErrIntegrationOperationRequired
 	}
 
-	if strings.TrimSpace(input.Integration) == "" && strings.TrimSpace(input.Provider) == "" {
+	if input.InstallationID == "" && input.DefinitionID == "" {
 		return ErrIntegrationConfigRequired
+	}
+	if input.ScopeExpression == "" && (len(input.ScopePayload) > 0 || input.ScopeResource != "") {
+		return ErrIntegrationScopeExpressionRequired
+	}
+	if input.ScopeExpression != "" {
+		evaluator, err := engine.NewIntegrationScopeEvaluator()
+		if err != nil {
+			return ErrIntegrationScopeEvaluatorInit
+		}
+
+		if err := evaluator.Validate(input.ScopeExpression); err != nil {
+			return ErrIntegrationScopeExpressionInvalid
+		}
 	}
 
 	return nil

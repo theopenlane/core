@@ -1,0 +1,235 @@
+package runtime
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"testing"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
+)
+
+func TestExecuteOperationNilInstallation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil, nil)
+	if !errors.Is(err, ErrInstallationRequired) {
+		t.Fatalf("expected ErrInstallationRequired, got %v", err)
+	}
+}
+
+func TestExecuteOperationInvalidConfig(t *testing.T) {
+	t.Parallel()
+
+	reg := registry.New()
+	rt := NewForTesting(reg)
+
+	op := types.OperationRegistration{
+		Name:         "test-op",
+		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+	}
+
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, op, nil, json.RawMessage(`{}`))
+	if !errors.Is(err, ErrOperationConfigInvalid) {
+		t.Fatalf("expected ErrOperationConfigInvalid, got %v", err)
+	}
+}
+
+func TestExecuteOperationValidConfigNoSchema(t *testing.T) {
+	t.Parallel()
+
+	reg := registry.New()
+
+	called := false
+	_ = reg.Register(types.Definition{
+		DefinitionSpec: types.DefinitionSpec{
+			ID: "test-def",
+		},
+		Operations: []types.OperationRegistration{
+			{
+				Name: "test-op",
+				Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+					called = true
+					return json.RawMessage(`{"ok":true}`), nil
+				},
+			},
+		},
+	})
+
+	rt := NewForTesting(reg)
+
+	result, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			called = true
+			return json.RawMessage(`{"ok":true}`), nil
+		},
+	}, nil, nil)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if !called {
+		t.Fatal("expected handler to be called")
+	}
+
+	if string(result) != `{"ok":true}` {
+		t.Fatalf("expected {\"ok\":true}, got %s", string(result))
+	}
+}
+
+func TestExecuteOperationHandlerError(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	handlerErr := errors.New("handler failed")
+
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			return nil, handlerErr
+		},
+	}, nil, nil)
+	if !errors.Is(err, handlerErr) {
+		t.Fatalf("expected handler error, got %v", err)
+	}
+}
+
+func TestExecuteOperationValidConfigWithSchema(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	called := false
+	op := types.OperationRegistration{
+		Name:         "test-op",
+		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			called = true
+			return json.RawMessage(`{"ok":true}`), nil
+		},
+	}
+
+	result, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, op, nil, json.RawMessage(`{"url":"https://example.com"}`))
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if !called {
+		t.Fatal("expected handler to be called")
+	}
+
+	if string(result) != `{"ok":true}` {
+		t.Fatalf("expected ok response, got %s", string(result))
+	}
+}
+
+func TestExecuteOperationEmptyConfigSkipsValidation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	called := false
+	op := types.OperationRegistration{
+		Name:         "test-op",
+		ConfigSchema: json.RawMessage(`{"type":"object","required":["url"]}`),
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			called = true
+			return nil, nil
+		},
+	}
+
+	// Empty config should skip schema validation even when schema is present
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, op, nil, nil)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if !called {
+		t.Fatal("expected handler to be called with nil config")
+	}
+}
+
+func TestExecuteOperationWithCredentials(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	ref := types.NewCredentialSlotID("api-key")
+	credentials := types.CredentialBindings{
+		{Ref: ref, Credential: types.CredentialSet{Data: json.RawMessage(`{"key":"secret"}`)}},
+	}
+
+	var captured types.OperationRequest
+
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, credentials, nil)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if len(captured.Credentials) != 1 {
+		t.Fatalf("expected 1 credential binding, got %d", len(captured.Credentials))
+	}
+
+	if captured.Credentials[0].Ref != ref {
+		t.Fatalf("expected credential ref %v, got %v", ref, captured.Credentials[0].Ref)
+	}
+}
+
+func TestExecuteOperationPassesRequestFields(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}
+	config := json.RawMessage(`{"key":"value"}`)
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, config)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if captured.Integration != installation {
+		t.Fatal("expected installation to be passed through")
+	}
+
+	if string(captured.Config) != `{"key":"value"}` {
+		t.Fatalf("expected config to be passed through, got %s", string(captured.Config))
+	}
+}

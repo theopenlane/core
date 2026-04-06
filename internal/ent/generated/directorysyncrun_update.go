@@ -169,6 +169,26 @@ func (_u *DirectorySyncRunUpdate) ClearScopeID() *DirectorySyncRunUpdate {
 	return _u
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_u *DirectorySyncRunUpdate) SetDirectoryInstanceID(v string) *DirectorySyncRunUpdate {
+	_u.mutation.SetDirectoryInstanceID(v)
+	return _u
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdate) SetNillableDirectoryInstanceID(v *string) *DirectorySyncRunUpdate {
+	if v != nil {
+		_u.SetDirectoryInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
+func (_u *DirectorySyncRunUpdate) ClearDirectoryInstanceID() *DirectorySyncRunUpdate {
+	_u.mutation.ClearDirectoryInstanceID()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *DirectorySyncRunUpdate) SetStatus(v enums.DirectorySyncRunStatus) *DirectorySyncRunUpdate {
 	_u.mutation.SetStatus(v)
@@ -584,6 +604,12 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directorysyncrun.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorysyncrun.FieldDirectoryInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryInstanceIDCleared() {
+		_spec.ClearField(directorysyncrun.FieldDirectoryInstanceID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(directorysyncrun.FieldStatus, field.TypeEnum, value)
@@ -1023,6 +1049,26 @@ func (_u *DirectorySyncRunUpdateOne) SetNillableScopeID(v *string) *DirectorySyn
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *DirectorySyncRunUpdateOne) ClearScopeID() *DirectorySyncRunUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_u *DirectorySyncRunUpdateOne) SetDirectoryInstanceID(v string) *DirectorySyncRunUpdateOne {
+	_u.mutation.SetDirectoryInstanceID(v)
+	return _u
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_u *DirectorySyncRunUpdateOne) SetNillableDirectoryInstanceID(v *string) *DirectorySyncRunUpdateOne {
+	if v != nil {
+		_u.SetDirectoryInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
+func (_u *DirectorySyncRunUpdateOne) ClearDirectoryInstanceID() *DirectorySyncRunUpdateOne {
+	_u.mutation.ClearDirectoryInstanceID()
 	return _u
 }
 
@@ -1471,6 +1517,12 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directorysyncrun.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorysyncrun.FieldDirectoryInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryInstanceIDCleared() {
+		_spec.ClearField(directorysyncrun.FieldDirectoryInstanceID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(directorysyncrun.FieldStatus, field.TypeEnum, value)

@@ -369,6 +369,119 @@ func TestValidateFieldUpdateActionParams(t *testing.T) {
 	}
 }
 
+func TestValidateIntegrationActionParams(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		params  json.RawMessage
+		wantErr error
+	}{
+		{
+			name:    "empty params",
+			params:  nil,
+			wantErr: ErrIntegrationParamsRequired,
+		},
+		{
+			name:    "missing operation criteria",
+			params:  json.RawMessage(`{"provider":"githubapp"}`),
+			wantErr: ErrIntegrationOperationRequired,
+		},
+		{
+			name:    "missing target criteria",
+			params:  json.RawMessage(`{"operation_name":"vulnerabilities.collect"}`),
+			wantErr: ErrIntegrationConfigRequired,
+		},
+		{
+			name:    "valid explicit operation name with provider",
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect"}`),
+			wantErr: nil,
+		},
+		{
+			name:    "valid explicit operation name and integration id",
+			params:  json.RawMessage(`{"installation_id":"int_123","operation_name":"vulnerabilities.collect"}`),
+			wantErr: nil,
+		},
+		{
+			name:    "valid explicit operation name for provider",
+			params:  json.RawMessage(`{"definition_id":"def_01K0SLACK000000000000000001","operation_name":"health.default"}`),
+			wantErr: nil,
+		},
+		{
+			name:    "invalid scope expression",
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect","scope_expression":"provider ="}`),
+			wantErr: ErrIntegrationScopeExpressionInvalid,
+		},
+		{
+			name:    "scope payload without scope expression",
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect","scope_payload":{"key":"value"}}`),
+			wantErr: ErrIntegrationScopeExpressionRequired,
+		},
+		{
+			name:    "valid scope expression",
+			params:  json.RawMessage(`{"definition_id":"def_01K0GHAPP000000000000000001","operation_name":"vulnerabilities.collect","scope_expression":"provider == 'githubapp' && operation == 'vulnerabilities.collect'"}`),
+			wantErr: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateIntegrationActionParams(tt.params)
+
+			if tt.wantErr != nil {
+				require.Error(t, err)
+				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestValidateNotificationActionParams(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		params  json.RawMessage
+		wantErr error
+	}{
+		{
+			name:    "empty params",
+			params:  nil,
+			wantErr: nil,
+		},
+		{
+			name:    "template id and key conflict",
+			params:  json.RawMessage(`{"template_id":"tpl_1","template_key":"security.alert"}`),
+			wantErr: ErrNotificationTemplateBothIDAndKey,
+		},
+		{
+			name:    "valid user target",
+			params:  json.RawMessage(`{"targets":[{"type":"USER","id":"user123"}]}`),
+			wantErr: nil,
+		},
+		{
+			name:    "invalid target type",
+			params:  json.RawMessage(`{"targets":[{"type":"INVALID"}]}`),
+			wantErr: ErrTargetInvalidType,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateNotificationActionParams(tt.params)
+
+			if tt.wantErr != nil {
+				require.Error(t, err)
+				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
 func TestValidateTarget(t *testing.T) {
 	tests := []struct {
 		name    string

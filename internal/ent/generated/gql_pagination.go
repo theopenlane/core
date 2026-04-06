@@ -2641,6 +2641,33 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldObservedAt orders Asset by observed_at.
+	AssetOrderFieldObservedAt = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: asset.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) asset.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return asset.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Asset) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2675,6 +2702,8 @@ func (f AssetOrderField) String() string {
 		str = "estimated_monthly_cost"
 	case AssetOrderFieldPurchaseDate.column:
 		str = "purchase_date"
+	case AssetOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -2719,6 +2748,8 @@ func (f *AssetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetOrderFieldEstimatedMonthlyCost
 	case "purchase_date":
 		*f = *AssetOrderFieldPurchaseDate
+	case "observed_at":
+		*f = *AssetOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid AssetOrderField", str)
 	}
@@ -4386,6 +4417,47 @@ var (
 			}
 		},
 	}
+	// ContactOrderFieldExternalID orders Contact by external_id.
+	ContactOrderFieldExternalID = &ContactOrderField{
+		Value: func(_m *Contact) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: contact.FieldExternalID,
+		toTerm: contact.ByExternalID,
+		toCursor: func(_m *Contact) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// ContactOrderFieldObservedAt orders Contact by observed_at.
+	ContactOrderFieldObservedAt = &ContactOrderField{
+		Value: func(_m *Contact) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: contact.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) contact.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return contact.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Contact) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -4406,6 +4478,10 @@ func (f ContactOrderField) String() string {
 		str = "email"
 	case ContactOrderFieldStatus.column:
 		str = "STATUS"
+	case ContactOrderFieldExternalID.column:
+		str = "external_id"
+	case ContactOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -4436,6 +4512,10 @@ func (f *ContactOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactOrderFieldEmail
 	case "STATUS":
 		*f = *ContactOrderFieldStatus
+	case "external_id":
+		*f = *ContactOrderFieldExternalID
+	case "observed_at":
+		*f = *ContactOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid ContactOrderField", str)
 	}
@@ -7385,6 +7465,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldDirectoryInstanceID orders DirectoryAccount by directory_instance_id.
+	DirectoryAccountOrderFieldDirectoryInstanceID = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directoryaccount.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
 	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -7477,6 +7584,8 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryAccountOrderFieldDirectoryName.column:
 		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
@@ -7505,6 +7614,8 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryAccountOrderFieldDirectoryInstanceID
 	case "directory_name":
 		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
@@ -7838,6 +7949,33 @@ var (
 			}
 		},
 	}
+	// DirectoryGroupOrderFieldDirectoryInstanceID orders DirectoryGroup by directory_instance_id.
+	DirectoryGroupOrderFieldDirectoryInstanceID = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directorygroup.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directorygroup.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygroup.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryGroupOrderFieldExternalID orders DirectoryGroup by external_id.
 	DirectoryGroupOrderFieldExternalID = &DirectoryGroupOrderField{
 		Value: func(_m *DirectoryGroup) (ent.Value, error) {
@@ -7903,6 +8041,8 @@ func (f DirectoryGroupOrderField) String() string {
 		str = "created_at"
 	case DirectoryGroupOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryGroupOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryGroupOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryGroupOrderFieldEmail.column:
@@ -7929,6 +8069,8 @@ func (f *DirectoryGroupOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryGroupOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryGroupOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryGroupOrderFieldDirectoryInstanceID
 	case "external_id":
 		*f = *DirectoryGroupOrderFieldExternalID
 	case "email":
@@ -11026,6 +11168,47 @@ var (
 			}
 		},
 	}
+	// EntityOrderFieldExternalID orders Entity by external_id.
+	EntityOrderFieldExternalID = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: entity.FieldExternalID,
+		toTerm: entity.ByExternalID,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// EntityOrderFieldObservedAt orders Entity by observed_at.
+	EntityOrderFieldObservedAt = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: entity.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11090,6 +11273,10 @@ func (f EntityOrderField) String() string {
 		str = "next_review_at"
 	case EntityOrderFieldContractRenewalAt.column:
 		str = "contract_renewal_at"
+	case EntityOrderFieldExternalID.column:
+		str = "external_id"
+	case EntityOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -11164,6 +11351,10 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldNextReviewAt
 	case "contract_renewal_at":
 		*f = *EntityOrderFieldContractRenewalAt
+	case "external_id":
+		*f = *EntityOrderFieldExternalID
+	case "observed_at":
+		*f = *EntityOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid EntityOrderField", str)
 	}
@@ -12234,11 +12425,24 @@ var (
 	// EvidenceOrderFieldCreationDate orders Evidence by creation_date.
 	EvidenceOrderFieldCreationDate = &EvidenceOrderField{
 		Value: func(_m *Evidence) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CreationDate == nil {
+				return nil, nil
+			}
 			return _m.CreationDate, nil
 		},
 		column: evidence.FieldCreationDate,
-		toTerm: evidence.ByCreationDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidence.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidence.ByCreationDate(opts...)
+		},
 		toCursor: func(_m *Evidence) Cursor {
+			if _m.CreationDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.CreationDate,
@@ -12248,11 +12452,24 @@ var (
 	// EvidenceOrderFieldRenewalDate orders Evidence by renewal_date.
 	EvidenceOrderFieldRenewalDate = &EvidenceOrderField{
 		Value: func(_m *Evidence) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.RenewalDate == nil {
+				return nil, nil
+			}
 			return _m.RenewalDate, nil
 		},
 		column: evidence.FieldRenewalDate,
-		toTerm: evidence.ByRenewalDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidence.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidence.ByRenewalDate(opts...)
+		},
 		toCursor: func(_m *Evidence) Cursor {
+			if _m.RenewalDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.RenewalDate,
@@ -27645,6 +27862,47 @@ var (
 			}
 		},
 	}
+	// RiskOrderFieldExternalID orders Risk by external_id.
+	RiskOrderFieldExternalID = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: risk.FieldExternalID,
+		toTerm: risk.ByExternalID,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// RiskOrderFieldObservedAt orders Risk by observed_at.
+	RiskOrderFieldObservedAt = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: risk.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) risk.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return risk.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Risk) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 	// RiskOrderFieldName orders Risk by name.
 	RiskOrderFieldName = &RiskOrderField{
 		Value: func(_m *Risk) (ent.Value, error) {
@@ -27739,6 +27997,10 @@ func (f RiskOrderField) String() string {
 		str = "created_at"
 	case RiskOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskOrderFieldExternalID.column:
+		str = "external_id"
+	case RiskOrderFieldObservedAt.column:
+		str = "observed_at"
 	case RiskOrderFieldName.column:
 		str = "name"
 	case RiskOrderFieldStatus.column:
@@ -27771,6 +28033,10 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskOrderFieldUpdatedAt
+	case "external_id":
+		*f = *RiskOrderFieldExternalID
+	case "observed_at":
+		*f = *RiskOrderFieldObservedAt
 	case "name":
 		*f = *RiskOrderFieldName
 	case "STATUS":

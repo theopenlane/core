@@ -194,11 +194,13 @@ type ComplexityRoot struct {
 		HistoryTime                 func(childComplexity int) int
 		ID                          func(childComplexity int) int
 		Identifier                  func(childComplexity int) int
+		IntegrationID               func(childComplexity int) int
 		InternalNotes               func(childComplexity int) int
 		InternalOwner               func(childComplexity int) int
 		InternalOwnerGroupID        func(childComplexity int) int
 		InternalOwnerUserID         func(childComplexity int) int
 		Name                        func(childComplexity int) int
+		ObservedAt                  func(childComplexity int) int
 		Operation                   func(childComplexity int) int
 		OwnerID                     func(childComplexity int) int
 		PhysicalLocation            func(childComplexity int) int
@@ -321,23 +323,26 @@ type ComplexityRoot struct {
 	}
 
 	ContactHistory struct {
-		Address     func(childComplexity int) int
-		Company     func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Email       func(childComplexity int) int
-		FullName    func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		PhoneNumber func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Address       func(childComplexity int) int
+		Company       func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Email         func(childComplexity int) int
+		ExternalID    func(childComplexity int) int
+		FullName      func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IntegrationID func(childComplexity int) int
+		ObservedAt    func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		PhoneNumber   func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Status        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	ContactHistoryConnection struct {
@@ -495,6 +500,7 @@ type ComplexityRoot struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DNSVerificationID func(childComplexity int) int
+		DomainType        func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		InternalNotes     func(childComplexity int) int
@@ -555,48 +561,54 @@ type ComplexityRoot struct {
 	}
 
 	DirectoryAccountHistory struct {
-		AccountType        func(childComplexity int) int
-		AvatarLocalFileID  func(childComplexity int) int
-		AvatarRemoteURL    func(childComplexity int) int
-		AvatarUpdatedAt    func(childComplexity int) int
-		CanonicalEmail     func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		Department         func(childComplexity int) int
-		DirectoryName      func(childComplexity int) int
-		DirectorySyncRunID func(childComplexity int) int
-		DisplayID          func(childComplexity int) int
-		DisplayName        func(childComplexity int) int
-		EnvironmentID      func(childComplexity int) int
-		EnvironmentName    func(childComplexity int) int
-		ExternalID         func(childComplexity int) int
-		FamilyName         func(childComplexity int) int
-		GivenName          func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		IdentityHolderID   func(childComplexity int) int
-		IntegrationID      func(childComplexity int) int
-		JobTitle           func(childComplexity int) int
-		LastLoginAt        func(childComplexity int) int
-		LastSeenIP         func(childComplexity int) int
-		MfaState           func(childComplexity int) int
-		ObservedAt         func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OrganizationUnit   func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		PlatformID         func(childComplexity int) int
-		Profile            func(childComplexity int) int
-		ProfileHash        func(childComplexity int) int
-		RawProfileFileID   func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		ScopeID            func(childComplexity int) int
-		ScopeName          func(childComplexity int) int
-		SecondaryKey       func(childComplexity int) int
-		SourceVersion      func(childComplexity int) int
-		Status             func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		AccountType         func(childComplexity int) int
+		AddedAt             func(childComplexity int) int
+		AvatarLocalFileID   func(childComplexity int) int
+		AvatarRemoteURL     func(childComplexity int) int
+		AvatarUpdatedAt     func(childComplexity int) int
+		CanonicalEmail      func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		Department          func(childComplexity int) int
+		DirectoryInstanceID func(childComplexity int) int
+		DirectoryName       func(childComplexity int) int
+		DirectorySyncRunID  func(childComplexity int) int
+		DisplayID           func(childComplexity int) int
+		DisplayName         func(childComplexity int) int
+		EnvironmentID       func(childComplexity int) int
+		EnvironmentName     func(childComplexity int) int
+		ExternalID          func(childComplexity int) int
+		FamilyName          func(childComplexity int) int
+		FirstSeenAt         func(childComplexity int) int
+		GivenName           func(childComplexity int) int
+		HistoryTime         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		IdentityHolderID    func(childComplexity int) int
+		IntegrationID       func(childComplexity int) int
+		JobTitle            func(childComplexity int) int
+		LastLoginAt         func(childComplexity int) int
+		LastSeenAt          func(childComplexity int) int
+		LastSeenIP          func(childComplexity int) int
+		Metadata            func(childComplexity int) int
+		MfaState            func(childComplexity int) int
+		ObservedAt          func(childComplexity int) int
+		Operation           func(childComplexity int) int
+		OrganizationUnit    func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		PlatformID          func(childComplexity int) int
+		Profile             func(childComplexity int) int
+		ProfileHash         func(childComplexity int) int
+		RawProfileFileID    func(childComplexity int) int
+		Ref                 func(childComplexity int) int
+		RemovedAt           func(childComplexity int) int
+		ScopeID             func(childComplexity int) int
+		ScopeName           func(childComplexity int) int
+		SecondaryKey        func(childComplexity int) int
+		SourceVersion       func(childComplexity int) int
+		Status              func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
 	}
 
 	DirectoryAccountHistoryConnection struct {
@@ -611,10 +623,12 @@ type ComplexityRoot struct {
 	}
 
 	DirectoryGroupHistory struct {
+		AddedAt                func(childComplexity int) int
 		Classification         func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
+		DirectoryInstanceID    func(childComplexity int) int
 		DirectorySyncRunID     func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		DisplayName            func(childComplexity int) int
@@ -623,10 +637,13 @@ type ComplexityRoot struct {
 		EnvironmentName        func(childComplexity int) int
 		ExternalID             func(childComplexity int) int
 		ExternalSharingAllowed func(childComplexity int) int
+		FirstSeenAt            func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IntegrationID          func(childComplexity int) int
+		LastSeenAt             func(childComplexity int) int
 		MemberCount            func(childComplexity int) int
+		Metadata               func(childComplexity int) int
 		ObservedAt             func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -635,6 +652,7 @@ type ComplexityRoot struct {
 		ProfileHash            func(childComplexity int) int
 		RawProfileFileID       func(childComplexity int) int
 		Ref                    func(childComplexity int) int
+		RemovedAt              func(childComplexity int) int
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
 		SourceVersion          func(childComplexity int) int
@@ -656,32 +674,35 @@ type ComplexityRoot struct {
 	}
 
 	DirectoryMembershipHistory struct {
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		DirectoryAccountID func(childComplexity int) int
-		DirectoryGroupID   func(childComplexity int) int
-		DirectorySyncRunID func(childComplexity int) int
-		DisplayID          func(childComplexity int) int
-		EnvironmentID      func(childComplexity int) int
-		EnvironmentName    func(childComplexity int) int
-		FirstSeenAt        func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		IntegrationID      func(childComplexity int) int
-		LastConfirmedRunID func(childComplexity int) int
-		LastSeenAt         func(childComplexity int) int
-		Metadata           func(childComplexity int) int
-		ObservedAt         func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		PlatformID         func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		Role               func(childComplexity int) int
-		ScopeID            func(childComplexity int) int
-		ScopeName          func(childComplexity int) int
-		Source             func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		AddedAt             func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		DirectoryAccountID  func(childComplexity int) int
+		DirectoryGroupID    func(childComplexity int) int
+		DirectoryInstanceID func(childComplexity int) int
+		DirectorySyncRunID  func(childComplexity int) int
+		DisplayID           func(childComplexity int) int
+		EnvironmentID       func(childComplexity int) int
+		EnvironmentName     func(childComplexity int) int
+		FirstSeenAt         func(childComplexity int) int
+		HistoryTime         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		IntegrationID       func(childComplexity int) int
+		LastConfirmedRunID  func(childComplexity int) int
+		LastSeenAt          func(childComplexity int) int
+		Metadata            func(childComplexity int) int
+		ObservedAt          func(childComplexity int) int
+		Operation           func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		PlatformID          func(childComplexity int) int
+		Ref                 func(childComplexity int) int
+		RemovedAt           func(childComplexity int) int
+		Role                func(childComplexity int) int
+		ScopeID             func(childComplexity int) int
+		ScopeName           func(childComplexity int) int
+		Source              func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
 	}
 
 	DirectoryMembershipHistoryConnection struct {
@@ -793,7 +814,6 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
-		EmailBrandingID      func(childComplexity int) int
 		Format               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -855,6 +875,7 @@ type ComplexityRoot struct {
 		EntityTypeID                          func(childComplexity int) int
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
+		ExternalID                            func(childComplexity int) int
 		HasSoc2                               func(childComplexity int) int
 		HistoryTime                           func(childComplexity int) int
 		ID                                    func(childComplexity int) int
@@ -870,6 +891,7 @@ type ComplexityRoot struct {
 		MfaSupported                          func(childComplexity int) int
 		Name                                  func(childComplexity int) int
 		NextReviewAt                          func(childComplexity int) int
+		ObservedAt                            func(childComplexity int) int
 		Operation                             func(childComplexity int) int
 		OwnerID                               func(childComplexity int) int
 		ProvidedServices                      func(childComplexity int) int
@@ -1105,7 +1127,6 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
-		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		SystemInternalID   func(childComplexity int) int
 		SystemOwned        func(childComplexity int) int
@@ -1609,6 +1630,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
+		Destinations         func(childComplexity int) int
 		EmailTemplateID      func(childComplexity int) int
 		Format               func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
@@ -2176,14 +2198,17 @@ type ComplexityRoot struct {
 		DisplayID         func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
+		ExternalID        func(childComplexity int) int
 		ExternalUUID      func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
+		IntegrationID     func(childComplexity int) int
 		Likelihood        func(childComplexity int) int
 		Mitigation        func(childComplexity int) int
 		MitigationJSON    func(childComplexity int) int
 		Name              func(childComplexity int) int
+		ObservedAt        func(childComplexity int) int
 		Operation         func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Ref               func(childComplexity int) int
@@ -2968,7 +2993,6 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
-		Status                  func(childComplexity int) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -4151,6 +4175,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AssetHistory.Identifier(childComplexity), true
 
+	case "AssetHistory.integrationID":
+		if e.ComplexityRoot.AssetHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.IntegrationID(childComplexity), true
+
 	case "AssetHistory.internalNotes":
 		if e.ComplexityRoot.AssetHistory.InternalNotes == nil {
 			break
@@ -4185,6 +4216,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistory.Name(childComplexity), true
+
+	case "AssetHistory.observedAt":
+		if e.ComplexityRoot.AssetHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.ObservedAt(childComplexity), true
 
 	case "AssetHistory.operation":
 		if e.ComplexityRoot.AssetHistory.Operation == nil {
@@ -4886,6 +4924,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ContactHistory.Email(childComplexity), true
 
+	case "ContactHistory.externalID":
+		if e.ComplexityRoot.ContactHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.ExternalID(childComplexity), true
+
 	case "ContactHistory.fullName":
 		if e.ComplexityRoot.ContactHistory.FullName == nil {
 			break
@@ -4906,6 +4951,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ContactHistory.ID(childComplexity), true
+
+	case "ContactHistory.integrationID":
+		if e.ComplexityRoot.ContactHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.IntegrationID(childComplexity), true
+
+	case "ContactHistory.observedAt":
+		if e.ComplexityRoot.ContactHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.ObservedAt(childComplexity), true
 
 	case "ContactHistory.operation":
 		if e.ComplexityRoot.ContactHistory.Operation == nil {
@@ -5817,6 +5876,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.CustomDomainHistory.DNSVerificationID(childComplexity), true
 
+	case "CustomDomainHistory.domainType":
+		if e.ComplexityRoot.CustomDomainHistory.DomainType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainHistory.DomainType(childComplexity), true
+
 	case "CustomDomainHistory.historyTime":
 		if e.ComplexityRoot.CustomDomainHistory.HistoryTime == nil {
 			break
@@ -6118,6 +6184,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistory.AccountType(childComplexity), true
 
+	case "DirectoryAccountHistory.addedAt":
+		if e.ComplexityRoot.DirectoryAccountHistory.AddedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.AddedAt(childComplexity), true
+
 	case "DirectoryAccountHistory.avatarLocalFileID":
 		if e.ComplexityRoot.DirectoryAccountHistory.AvatarLocalFileID == nil {
 			break
@@ -6166,6 +6239,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccountHistory.Department(childComplexity), true
+
+	case "DirectoryAccountHistory.directoryInstanceID":
+		if e.ComplexityRoot.DirectoryAccountHistory.DirectoryInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.DirectoryInstanceID(childComplexity), true
 
 	case "DirectoryAccountHistory.directoryName":
 		if e.ComplexityRoot.DirectoryAccountHistory.DirectoryName == nil {
@@ -6223,6 +6303,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistory.FamilyName(childComplexity), true
 
+	case "DirectoryAccountHistory.firstSeenAt":
+		if e.ComplexityRoot.DirectoryAccountHistory.FirstSeenAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.FirstSeenAt(childComplexity), true
+
 	case "DirectoryAccountHistory.givenName":
 		if e.ComplexityRoot.DirectoryAccountHistory.GivenName == nil {
 			break
@@ -6272,12 +6359,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistory.LastLoginAt(childComplexity), true
 
+	case "DirectoryAccountHistory.lastSeenAt":
+		if e.ComplexityRoot.DirectoryAccountHistory.LastSeenAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.LastSeenAt(childComplexity), true
+
 	case "DirectoryAccountHistory.lastSeenIP":
 		if e.ComplexityRoot.DirectoryAccountHistory.LastSeenIP == nil {
 			break
 		}
 
 		return e.ComplexityRoot.DirectoryAccountHistory.LastSeenIP(childComplexity), true
+
+	case "DirectoryAccountHistory.metadata":
+		if e.ComplexityRoot.DirectoryAccountHistory.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.Metadata(childComplexity), true
 
 	case "DirectoryAccountHistory.mfaState":
 		if e.ComplexityRoot.DirectoryAccountHistory.MfaState == nil {
@@ -6348,6 +6449,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccountHistory.Ref(childComplexity), true
+
+	case "DirectoryAccountHistory.removedAt":
+		if e.ComplexityRoot.DirectoryAccountHistory.RemovedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.RemovedAt(childComplexity), true
 
 	case "DirectoryAccountHistory.scopeID":
 		if e.ComplexityRoot.DirectoryAccountHistory.ScopeID == nil {
@@ -6440,6 +6548,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistoryEdge.Node(childComplexity), true
 
+	case "DirectoryGroupHistory.addedAt":
+		if e.ComplexityRoot.DirectoryGroupHistory.AddedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.AddedAt(childComplexity), true
+
 	case "DirectoryGroupHistory.classification":
 		if e.ComplexityRoot.DirectoryGroupHistory.Classification == nil {
 			break
@@ -6467,6 +6582,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroupHistory.Description(childComplexity), true
+
+	case "DirectoryGroupHistory.directoryInstanceID":
+		if e.ComplexityRoot.DirectoryGroupHistory.DirectoryInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.DirectoryInstanceID(childComplexity), true
 
 	case "DirectoryGroupHistory.directorySyncRunID":
 		if e.ComplexityRoot.DirectoryGroupHistory.DirectorySyncRunID == nil {
@@ -6524,6 +6646,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryGroupHistory.ExternalSharingAllowed(childComplexity), true
 
+	case "DirectoryGroupHistory.firstSeenAt":
+		if e.ComplexityRoot.DirectoryGroupHistory.FirstSeenAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.FirstSeenAt(childComplexity), true
+
 	case "DirectoryGroupHistory.historyTime":
 		if e.ComplexityRoot.DirectoryGroupHistory.HistoryTime == nil {
 			break
@@ -6545,12 +6674,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryGroupHistory.IntegrationID(childComplexity), true
 
+	case "DirectoryGroupHistory.lastSeenAt":
+		if e.ComplexityRoot.DirectoryGroupHistory.LastSeenAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.LastSeenAt(childComplexity), true
+
 	case "DirectoryGroupHistory.memberCount":
 		if e.ComplexityRoot.DirectoryGroupHistory.MemberCount == nil {
 			break
 		}
 
 		return e.ComplexityRoot.DirectoryGroupHistory.MemberCount(childComplexity), true
+
+	case "DirectoryGroupHistory.metadata":
+		if e.ComplexityRoot.DirectoryGroupHistory.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.Metadata(childComplexity), true
 
 	case "DirectoryGroupHistory.observedAt":
 		if e.ComplexityRoot.DirectoryGroupHistory.ObservedAt == nil {
@@ -6607,6 +6750,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroupHistory.Ref(childComplexity), true
+
+	case "DirectoryGroupHistory.removedAt":
+		if e.ComplexityRoot.DirectoryGroupHistory.RemovedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.RemovedAt(childComplexity), true
 
 	case "DirectoryGroupHistory.scopeID":
 		if e.ComplexityRoot.DirectoryGroupHistory.ScopeID == nil {
@@ -6692,6 +6842,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryGroupHistoryEdge.Node(childComplexity), true
 
+	case "DirectoryMembershipHistory.addedAt":
+		if e.ComplexityRoot.DirectoryMembershipHistory.AddedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.AddedAt(childComplexity), true
+
 	case "DirectoryMembershipHistory.createdAt":
 		if e.ComplexityRoot.DirectoryMembershipHistory.CreatedAt == nil {
 			break
@@ -6719,6 +6876,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryGroupID(childComplexity), true
+
+	case "DirectoryMembershipHistory.directoryInstanceID":
+		if e.ComplexityRoot.DirectoryMembershipHistory.DirectoryInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryInstanceID(childComplexity), true
 
 	case "DirectoryMembershipHistory.directorySyncRunID":
 		if e.ComplexityRoot.DirectoryMembershipHistory.DirectorySyncRunID == nil {
@@ -6831,6 +6995,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipHistory.Ref(childComplexity), true
+
+	case "DirectoryMembershipHistory.removedAt":
+		if e.ComplexityRoot.DirectoryMembershipHistory.RemovedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.RemovedAt(childComplexity), true
 
 	case "DirectoryMembershipHistory.role":
 		if e.ComplexityRoot.DirectoryMembershipHistory.Role == nil {
@@ -7399,13 +7570,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.Description(childComplexity), true
 
-	case "EmailTemplateHistory.emailBrandingID":
-		if e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID(childComplexity), true
-
 	case "EmailTemplateHistory.format":
 		if e.ComplexityRoot.EmailTemplateHistory.Format == nil {
 			break
@@ -7770,6 +7934,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EntityHistory.EnvironmentName(childComplexity), true
 
+	case "EntityHistory.externalID":
+		if e.ComplexityRoot.EntityHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ExternalID(childComplexity), true
+
 	case "EntityHistory.hasSoc2":
 		if e.ComplexityRoot.EntityHistory.HasSoc2 == nil {
 			break
@@ -7874,6 +8045,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.NextReviewAt(childComplexity), true
+
+	case "EntityHistory.observedAt":
+		if e.ComplexityRoot.EntityHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ObservedAt(childComplexity), true
 
 	case "EntityHistory.operation":
 		if e.ComplexityRoot.EntityHistory.Operation == nil {
@@ -9204,13 +9382,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.State(childComplexity), true
-
-	case "FindingHistory.status":
-		if e.ComplexityRoot.FindingHistory.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.FindingHistory.Status(childComplexity), true
 
 	case "FindingHistory.stepsToReproduce":
 		if e.ComplexityRoot.FindingHistory.StepsToReproduce == nil {
@@ -11850,6 +12021,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplateHistory.Description(childComplexity), true
+
+	case "NotificationTemplateHistory.destinations":
+		if e.ComplexityRoot.NotificationTemplateHistory.Destinations == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.Destinations(childComplexity), true
 
 	case "NotificationTemplateHistory.emailTemplateID":
 		if e.ComplexityRoot.NotificationTemplateHistory.EmailTemplateID == nil {
@@ -15480,6 +15658,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.EnvironmentName(childComplexity), true
 
+	case "RiskHistory.externalID":
+		if e.ComplexityRoot.RiskHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ExternalID(childComplexity), true
+
 	case "RiskHistory.externalUUID":
 		if e.ComplexityRoot.RiskHistory.ExternalUUID == nil {
 			break
@@ -15508,6 +15693,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.Impact(childComplexity), true
 
+	case "RiskHistory.integrationID":
+		if e.ComplexityRoot.RiskHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.IntegrationID(childComplexity), true
+
 	case "RiskHistory.likelihood":
 		if e.ComplexityRoot.RiskHistory.Likelihood == nil {
 			break
@@ -15535,6 +15727,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.Name(childComplexity), true
+
+	case "RiskHistory.observedAt":
+		if e.ComplexityRoot.RiskHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ObservedAt(childComplexity), true
 
 	case "RiskHistory.operation":
 		if e.ComplexityRoot.RiskHistory.Operation == nil {
@@ -19701,13 +19900,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.SourceUpdatedAt(childComplexity), true
 
-	case "VulnerabilityHistory.status":
-		if e.ComplexityRoot.VulnerabilityHistory.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.VulnerabilityHistory.Status(childComplexity), true
-
 	case "VulnerabilityHistory.summary":
 		if e.ComplexityRoot.VulnerabilityHistory.Summary == nil {
 			break
@@ -23128,6 +23320,14 @@ type AssetHistory implements Node {
   the categories of the asset, e.g. web server, database, etc
   """
   categories: [String!]
+  """
+  integration that discovered this asset, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this asset was last observed by the source integration
+  """
+  observedAt: DateTime
 }
 """
 AssetHistoryAssetType is enum for the field asset_type
@@ -23208,6 +23408,7 @@ enum AssetHistoryOrderField {
   cost_center
   estimated_monthly_cost
   purchase_date
+  observed_at
 }
 """
 AssetHistorySourceType is enum for the field source_type
@@ -23965,6 +24166,37 @@ input AssetHistoryWhereInput {
   purchaseDateLTE: DateTime
   purchaseDateIsNil: Boolean
   purchaseDateNotNil: Boolean
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
 }
 type CampaignHistory implements Node {
   id: ID!
@@ -25208,6 +25440,18 @@ type ContactHistory implements Node {
   status of the contact
   """
   status: ContactHistoryUserStatus!
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that sourced this contact, when populated via integration ingest
+  """
+  integrationID: String
+  """
+  time when this contact was last observed by the source integration
+  """
+  observedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -25272,6 +25516,8 @@ enum ContactHistoryOrderField {
   company
   email
   STATUS
+  external_id
+  observed_at
 }
 """
 ContactHistoryUserStatus is enum for the field status
@@ -25282,6 +25528,7 @@ enum ContactHistoryUserStatus @goModel(model: "github.com/theopenlane/core/commo
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 ContactHistoryWhereInput is used for filtering ContactHistory objects.
@@ -25535,6 +25782,55 @@ input ContactHistoryWhereInput {
   statusNEQ: ContactHistoryUserStatus
   statusIn: [ContactHistoryUserStatus!]
   statusNotIn: [ContactHistoryUserStatus!]
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
 }
 type ControlHistory implements Node {
   id: ID!
@@ -27407,6 +27703,10 @@ type CustomDomainHistory implements Node {
   the ID of the trust center the domain belongs to, if applicable
   """
   trustCenterID: String
+  """
+  the type of this custom domain
+  """
+  domainType: CustomDomainHistoryCustomDomainType!
 }
 """
 A connection to a list of items.
@@ -27424,6 +27724,14 @@ type CustomDomainHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+CustomDomainHistoryCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+  PREVIEW
+  EXTERNAL
+  UNKNOWN
 }
 """
 An edge in a connection.
@@ -27716,6 +28024,13 @@ input CustomDomainHistoryWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  domain_type field predicates
+  """
+  domainType: CustomDomainHistoryCustomDomainType
+  domainTypeNEQ: CustomDomainHistoryCustomDomainType
+  domainTypeIn: [CustomDomainHistoryCustomDomainType!]
+  domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
 }
 type DNSVerificationHistory implements Node {
   id: ID!
@@ -28199,6 +28514,10 @@ type DirectoryAccountHistory implements Node {
   """
   platformID: String
   """
+  stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+  """
+  directoryInstanceID: String
+  """
   deduplicated identity holder linked to this directory account
   """
   identityHolderID: String
@@ -28275,6 +28594,22 @@ type DirectoryAccountHistory implements Node {
   """
   lastLoginAt: Time
   """
+  time this account was first observed by Openlane from directory ingest
+  """
+  firstSeenAt: Time
+  """
+  time this account was most recently confirmed by directory ingest
+  """
+  lastSeenAt: Time
+  """
+  provider-reported time the account was added or provisioned in the source directory
+  """
+  addedAt: Time
+  """
+  provider-reported or locally-recorded time the account was removed from the source directory
+  """
+  removedAt: Time
+  """
   time when this snapshot was recorded
   """
   observedAt: Time!
@@ -28286,6 +28621,10 @@ type DirectoryAccountHistory implements Node {
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
+  """
+  provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+  """
+  metadata: Map
   """
   object storage file identifier that holds the raw upstream payload
   """
@@ -28380,6 +28719,7 @@ enum DirectoryAccountHistoryOrderField {
   history_time
   created_at
   updated_at
+  directory_instance_id
   directory_name
   external_id
   canonical_email
@@ -28664,6 +29004,24 @@ input DirectoryAccountHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  directory_instance_id field predicates
+  """
+  directoryInstanceID: String
+  directoryInstanceIDNEQ: String
+  directoryInstanceIDIn: [String!]
+  directoryInstanceIDNotIn: [String!]
+  directoryInstanceIDGT: String
+  directoryInstanceIDGTE: String
+  directoryInstanceIDLT: String
+  directoryInstanceIDLTE: String
+  directoryInstanceIDContains: String
+  directoryInstanceIDHasPrefix: String
+  directoryInstanceIDHasSuffix: String
+  directoryInstanceIDIsNil: Boolean
+  directoryInstanceIDNotNil: Boolean
+  directoryInstanceIDEqualFold: String
+  directoryInstanceIDContainsFold: String
   """
   identity_holder_id field predicates
   """
@@ -28964,6 +29322,58 @@ input DirectoryAccountHistoryWhereInput {
   lastLoginAtIsNil: Boolean
   lastLoginAtNotNil: Boolean
   """
+  first_seen_at field predicates
+  """
+  firstSeenAt: Time
+  firstSeenAtNEQ: Time
+  firstSeenAtIn: [Time!]
+  firstSeenAtNotIn: [Time!]
+  firstSeenAtGT: Time
+  firstSeenAtGTE: Time
+  firstSeenAtLT: Time
+  firstSeenAtLTE: Time
+  firstSeenAtIsNil: Boolean
+  firstSeenAtNotNil: Boolean
+  """
+  last_seen_at field predicates
+  """
+  lastSeenAt: Time
+  lastSeenAtNEQ: Time
+  lastSeenAtIn: [Time!]
+  lastSeenAtNotIn: [Time!]
+  lastSeenAtGT: Time
+  lastSeenAtGTE: Time
+  lastSeenAtLT: Time
+  lastSeenAtLTE: Time
+  lastSeenAtIsNil: Boolean
+  lastSeenAtNotNil: Boolean
+  """
+  added_at field predicates
+  """
+  addedAt: Time
+  addedAtNEQ: Time
+  addedAtIn: [Time!]
+  addedAtNotIn: [Time!]
+  addedAtGT: Time
+  addedAtGTE: Time
+  addedAtLT: Time
+  addedAtLTE: Time
+  addedAtIsNil: Boolean
+  addedAtNotNil: Boolean
+  """
+  removed_at field predicates
+  """
+  removedAt: Time
+  removedAtNEQ: Time
+  removedAtIn: [Time!]
+  removedAtNotIn: [Time!]
+  removedAtGT: Time
+  removedAtGTE: Time
+  removedAtLT: Time
+  removedAtLTE: Time
+  removedAtIsNil: Boolean
+  removedAtNotNil: Boolean
+  """
   observed_at field predicates
   """
   observedAt: Time
@@ -29055,6 +29465,10 @@ type DirectoryGroupHistory implements Node {
   """
   platformID: String
   """
+  stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+  """
+  directoryInstanceID: String
+  """
   sync run that produced this snapshot
   """
   directorySyncRunID: String!
@@ -29091,6 +29505,22 @@ type DirectoryGroupHistory implements Node {
   """
   memberCount: Int
   """
+  time this group was first observed by Openlane from directory ingest
+  """
+  firstSeenAt: Time
+  """
+  time this group was most recently confirmed by directory ingest
+  """
+  lastSeenAt: Time
+  """
+  provider-reported time the group was added or provisioned in the source directory
+  """
+  addedAt: Time
+  """
+  provider-reported or locally-recorded time the group was removed from the source directory
+  """
+  removedAt: Time
+  """
   time when this snapshot was recorded
   """
   observedAt: Time!
@@ -29102,6 +29532,10 @@ type DirectoryGroupHistory implements Node {
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
+  """
+  provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+  """
+  metadata: Map
   """
   object storage file identifier containing the raw upstream payload
   """
@@ -29186,6 +29620,7 @@ enum DirectoryGroupHistoryOrderField {
   history_time
   created_at
   updated_at
+  directory_instance_id
   external_id
   email
   display_name
@@ -29450,6 +29885,24 @@ input DirectoryGroupHistoryWhereInput {
   platformIDEqualFold: String
   platformIDContainsFold: String
   """
+  directory_instance_id field predicates
+  """
+  directoryInstanceID: String
+  directoryInstanceIDNEQ: String
+  directoryInstanceIDIn: [String!]
+  directoryInstanceIDNotIn: [String!]
+  directoryInstanceIDGT: String
+  directoryInstanceIDGTE: String
+  directoryInstanceIDLT: String
+  directoryInstanceIDLTE: String
+  directoryInstanceIDContains: String
+  directoryInstanceIDHasPrefix: String
+  directoryInstanceIDHasSuffix: String
+  directoryInstanceIDIsNil: Boolean
+  directoryInstanceIDNotNil: Boolean
+  directoryInstanceIDEqualFold: String
+  directoryInstanceIDContainsFold: String
+  """
   directory_sync_run_id field predicates
   """
   directorySyncRunID: String
@@ -29552,6 +30005,58 @@ input DirectoryGroupHistoryWhereInput {
   memberCountIsNil: Boolean
   memberCountNotNil: Boolean
   """
+  first_seen_at field predicates
+  """
+  firstSeenAt: Time
+  firstSeenAtNEQ: Time
+  firstSeenAtIn: [Time!]
+  firstSeenAtNotIn: [Time!]
+  firstSeenAtGT: Time
+  firstSeenAtGTE: Time
+  firstSeenAtLT: Time
+  firstSeenAtLTE: Time
+  firstSeenAtIsNil: Boolean
+  firstSeenAtNotNil: Boolean
+  """
+  last_seen_at field predicates
+  """
+  lastSeenAt: Time
+  lastSeenAtNEQ: Time
+  lastSeenAtIn: [Time!]
+  lastSeenAtNotIn: [Time!]
+  lastSeenAtGT: Time
+  lastSeenAtGTE: Time
+  lastSeenAtLT: Time
+  lastSeenAtLTE: Time
+  lastSeenAtIsNil: Boolean
+  lastSeenAtNotNil: Boolean
+  """
+  added_at field predicates
+  """
+  addedAt: Time
+  addedAtNEQ: Time
+  addedAtIn: [Time!]
+  addedAtNotIn: [Time!]
+  addedAtGT: Time
+  addedAtGTE: Time
+  addedAtLT: Time
+  addedAtLTE: Time
+  addedAtIsNil: Boolean
+  addedAtNotNil: Boolean
+  """
+  removed_at field predicates
+  """
+  removedAt: Time
+  removedAtNEQ: Time
+  removedAtIn: [Time!]
+  removedAtNotIn: [Time!]
+  removedAtGT: Time
+  removedAtGTE: Time
+  removedAtLT: Time
+  removedAtLTE: Time
+  removedAtIsNil: Boolean
+  removedAtNotNil: Boolean
+  """
   observed_at field predicates
   """
   observedAt: Time
@@ -29639,6 +30144,10 @@ type DirectoryMembershipHistory implements Node {
   """
   platformID: String
   """
+  stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+  """
+  directoryInstanceID: String
+  """
   sync run that produced this snapshot
   """
   directorySyncRunID: String!
@@ -29663,9 +30172,17 @@ type DirectoryMembershipHistory implements Node {
   """
   firstSeenAt: Time
   """
-  most recent time the membership was detected
+  most recent time the membership was confirmed by directory ingest
   """
   lastSeenAt: Time
+  """
+  provider-reported time the membership was added in the source directory
+  """
+  addedAt: Time
+  """
+  provider-reported or locally-recorded time the membership was removed from the source directory
+  """
+  removedAt: Time
   """
   time when this record was created
   """
@@ -30006,6 +30523,24 @@ input DirectoryMembershipHistoryWhereInput {
   platformIDEqualFold: String
   platformIDContainsFold: String
   """
+  directory_instance_id field predicates
+  """
+  directoryInstanceID: String
+  directoryInstanceIDNEQ: String
+  directoryInstanceIDIn: [String!]
+  directoryInstanceIDNotIn: [String!]
+  directoryInstanceIDGT: String
+  directoryInstanceIDGTE: String
+  directoryInstanceIDLT: String
+  directoryInstanceIDLTE: String
+  directoryInstanceIDContains: String
+  directoryInstanceIDHasPrefix: String
+  directoryInstanceIDHasSuffix: String
+  directoryInstanceIDIsNil: Boolean
+  directoryInstanceIDNotNil: Boolean
+  directoryInstanceIDEqualFold: String
+  directoryInstanceIDContainsFold: String
+  """
   directory_sync_run_id field predicates
   """
   directorySyncRunID: String
@@ -30106,6 +30641,32 @@ input DirectoryMembershipHistoryWhereInput {
   lastSeenAtLTE: Time
   lastSeenAtIsNil: Boolean
   lastSeenAtNotNil: Boolean
+  """
+  added_at field predicates
+  """
+  addedAt: Time
+  addedAtNEQ: Time
+  addedAtIn: [Time!]
+  addedAtNotIn: [Time!]
+  addedAtGT: Time
+  addedAtGTE: Time
+  addedAtLT: Time
+  addedAtLTE: Time
+  addedAtIsNil: Boolean
+  addedAtNotNil: Boolean
+  """
+  removed_at field predicates
+  """
+  removedAt: Time
+  removedAtNEQ: Time
+  removedAtIn: [Time!]
+  removedAtNotIn: [Time!]
+  removedAtGT: Time
+  removedAtGTE: Time
+  removedAtLT: Time
+  removedAtLTE: Time
+  removedAtIsNil: Boolean
+  removedAtNotNil: Boolean
   """
   observed_at field predicates
   """
@@ -31271,15 +31832,11 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext
+  templateContext: EmailTemplateHistoryTemplateContext!
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
   defaults: Map
-  """
-  email branding configuration to apply for this template
-  """
-  emailBrandingID: String
   """
   integration used to deliver emails for this template
   """
@@ -31743,26 +32300,6 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
-  templateContextIsNil: Boolean
-  templateContextNotNil: Boolean
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   integration_id field predicates
   """
@@ -32043,6 +32580,14 @@ type EntityHistory implements Node {
   The logo file id for the entity
   """
   logoFileID: String
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  time when this entity was last observed by the source integration
+  """
+  observedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -32153,6 +32698,8 @@ enum EntityHistoryOrderField {
   REVIEW_FREQUENCY
   next_review_at
   contract_renewal_at
+  external_id
+  observed_at
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -32979,6 +33526,37 @@ input EntityHistoryWhereInput {
   logoFileIDNotNil: Boolean
   logoFileIDEqualFold: String
   logoFileIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
 }
 type EntityTypeHistory implements Node {
   id: ID!
@@ -33331,11 +33909,11 @@ type EvidenceHistory implements Node {
   """
   the date the evidence was retrieved
   """
-  creationDate: Time!
+  creationDate: DateTime!
   """
   the date the evidence should be renewed, defaults to a year from entry date
   """
-  renewalDate: Time
+  renewalDate: DateTime
   """
   the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
   """
@@ -33387,6 +33965,7 @@ type EvidenceHistoryEdge {
 EvidenceHistoryEvidenceStatus is enum for the field status
 """
 enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
+  REQUESTED
   DRAFT
   SUBMITTED
   READY_FOR_AUDITOR
@@ -33734,25 +34313,25 @@ input EvidenceHistoryWhereInput {
   """
   creation_date field predicates
   """
-  creationDate: Time
-  creationDateNEQ: Time
-  creationDateIn: [Time!]
-  creationDateNotIn: [Time!]
-  creationDateGT: Time
-  creationDateGTE: Time
-  creationDateLT: Time
-  creationDateLTE: Time
+  creationDate: DateTime
+  creationDateNEQ: DateTime
+  creationDateIn: [DateTime!]
+  creationDateNotIn: [DateTime!]
+  creationDateGT: DateTime
+  creationDateGTE: DateTime
+  creationDateLT: DateTime
+  creationDateLTE: DateTime
   """
   renewal_date field predicates
   """
-  renewalDate: Time
-  renewalDateNEQ: Time
-  renewalDateIn: [Time!]
-  renewalDateNotIn: [Time!]
-  renewalDateGT: Time
-  renewalDateGTE: Time
-  renewalDateLT: Time
-  renewalDateLTE: Time
+  renewalDate: DateTime
+  renewalDateNEQ: DateTime
+  renewalDateIn: [DateTime!]
+  renewalDateNotIn: [DateTime!]
+  renewalDateGT: DateTime
+  renewalDateGTE: DateTime
+  renewalDateLT: DateTime
+  renewalDateLTE: DateTime
   renewalDateIsNil: Boolean
   renewalDateNotNil: Boolean
   """
@@ -34940,10 +35519,6 @@ type FindingHistory implements Node {
   """
   externalID: String
   """
-  lifecycle status of the finding
-  """
-  status: String @deprecated(reason: "Use ` + "`" + `finding_status_name` + "`" + ` instead.")
-  """
   incoming source severity
   """
   securityLevel: FindingHistorySecurityLevel
@@ -35484,24 +36059,6 @@ input FindingHistoryWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -37421,6 +37978,10 @@ IdentityHolderHistoryIdentityHolderType is enum for the field identity_holder_ty
 enum IdentityHolderHistoryIdentityHolderType @goModel(model: "github.com/theopenlane/core/common/enums.IdentityHolderType") {
   EMPLOYEE
   CONTRACTOR
+  UNSPECIFIED
+  INTERN
+  SERVICE
+  PARTNER
 }
 """
 IdentityHolderHistoryOpType is enum for the field operation
@@ -37476,6 +38037,7 @@ enum IdentityHolderHistoryUserStatus @goModel(model: "github.com/theopenlane/cor
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 IdentityHolderHistoryWhereInput is used for filtering IdentityHolderHistory objects.
@@ -41606,6 +42168,10 @@ type NotificationTemplateHistory implements Node {
   integration associated with this template
   """
   integrationID: String
+  """
+  optional explicit provider destination identifiers for this template, such as Slack channel IDs
+  """
+  destinations: [String!]
   """
   workflow definition associated with this template
   """
@@ -50311,6 +50877,18 @@ type RiskHistory implements Node {
   """
   scopeID: String
   """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that surfaced this risk, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this risk was last observed by the source integration
+  """
+  observedAt: DateTime
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -50425,6 +51003,8 @@ enum RiskHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
+  observed_at
   name
   STATUS
   IMPACT
@@ -50760,6 +51340,55 @@ input RiskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
   """
   external_uuid field predicates
   """
@@ -59497,6 +60126,7 @@ enum UserSettingHistoryUserStatus @goModel(model: "github.com/theopenlane/core/c
   DEACTIVATED
   SUSPENDED
   ONBOARDING
+  UNKNOWN
 }
 """
 UserSettingHistoryWhereInput is used for filtering UserSettingHistory objects.
@@ -59791,10 +60421,6 @@ type VulnerabilityHistory implements Node {
   owner of the vulnerability
   """
   externalOwnerID: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String @deprecated(reason: "Use ` + "`" + `vulnerability_status_name` + "`" + ` instead.")
   """
   lifecycle status of the vulnerability
   """
@@ -60305,24 +60931,6 @@ input VulnerabilityHistoryWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   security_level field predicates
   """
@@ -61457,6 +62065,7 @@ enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.c
   GROUP
   ROLE
   RESOLVER
+  CHANNEL
 }
 type WorkflowDefinitionHistory implements Node {
   id: ID!

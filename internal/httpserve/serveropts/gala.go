@@ -8,8 +8,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -32,10 +30,7 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 		ConnectionURI: so.Config.Settings.JobQueue.ConnectionURI,
 		QueueName:     galaQueueName,
 		WorkerCount:   max(galaCfg.WorkerCount, 1),
-		QueueWorkers: map[string]int{
-			integrations.IntegrationQueueName: max(galaCfg.WorkerCount, 1),
-		},
-		MaxRetries: galaCfg.MaxRetries,
+		MaxRetries:    galaCfg.MaxRetries,
 	})
 	if err != nil {
 		return nil, nil, err
@@ -113,12 +108,6 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 	}
 
 	if err := register(notificationGala, hooks.RegisterGalaNotificationListeners); err != nil {
-		return err
-	}
-
-	if _, err := ingest.RegisterIngestListeners(galaApp.Registry(), dbClient); err != nil {
-		closeRuntimes()
-
 		return err
 	}
 

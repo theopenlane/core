@@ -126,7 +126,7 @@ func OperationValidator(o history.OpType) error {
 // TargetTypeValidator is a validator for the "target_type" field enum values. It is called by the builders before save.
 func TargetTypeValidator(tt enums.WorkflowTargetType) error {
 	switch tt.String() {
-	case "USER", "GROUP", "ROLE", "RESOLVER":
+	case "USER", "GROUP", "ROLE", "RESOLVER", "CHANNEL":
 		return nil
 	default:
 		return fmt.Errorf("workflowassignmenttargethistory: invalid enum value for target_type field: %q", tt)

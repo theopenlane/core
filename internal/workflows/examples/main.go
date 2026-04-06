@@ -262,7 +262,7 @@ func runDualApprovalDemo(ctx context.Context, config openlane.Config, apiClient 
 				},
 			},
 		},
-		Channels: []enums.Channel{enums.ChannelInApp},
+
 		Title:    "Control approval completed",
 		Body:     "Workflow {{instance_id}} approved control {{object_id}}.",
 	}
@@ -869,7 +869,7 @@ func runWebhookDemo(ctx context.Context, config openlane.Config, apiClient *open
 				},
 			},
 		},
-		Channels: []enums.Channel{enums.ChannelInApp},
+
 		Title:    "Control description updated",
 		Body:     "Workflow {{instance_id}} updated control {{object_id}} description.",
 	}
@@ -1034,7 +1034,6 @@ func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClie
 				},
 			},
 		},
-		Channels:    []enums.Channel{channel},
 		TemplateKey: template.Key,
 		Data: map[string]any{
 			"control_url": "https://console.theopenlane.io/controls/{{object.id}}",
@@ -1365,7 +1364,6 @@ func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient
 				},
 			},
 		},
-		Channels:    []enums.Channel{enums.ChannelSlack},
 		TemplateKey: template.Key,
 		Data: map[string]any{
 			"control_url": "https://console.theopenlane.io/controls/{{object.id}}",
@@ -1495,7 +1493,7 @@ func runFieldUpdateDemo(ctx context.Context, config openlane.Config, apiClient *
 				},
 			},
 		},
-		Channels: []enums.Channel{enums.ChannelInApp},
+
 		Title:    "Control auto-enriched",
 		Body:     "Workflow {{instance_id}} updated control {{object_id}} fields.",
 	}

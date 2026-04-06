@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -58,9 +59,9 @@ type Evidence struct {
 	// description of how the evidence was collected
 	CollectionProcedure string `json:"collection_procedure,omitempty"`
 	// the date the evidence was retrieved
-	CreationDate time.Time `json:"creation_date,omitempty"`
+	CreationDate *models.DateTime `json:"creation_date,omitempty"`
 	// the date the evidence should be renewed, defaults to a year from entry date
-	RenewalDate time.Time `json:"renewal_date,omitempty"`
+	RenewalDate *models.DateTime `json:"renewal_date,omitempty"`
 	// the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
 	Source string `json:"source,omitempty"`
 	// whether the evidence was automatically generated
@@ -261,13 +262,15 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case evidence.FieldCreationDate, evidence.FieldRenewalDate:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case evidence.FieldTags:
 			values[i] = new([]byte)
 		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
 		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
-		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
+		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -402,16 +405,18 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				_m.CollectionProcedure = value.String
 			}
 		case evidence.FieldCreationDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field creation_date", values[i])
 			} else if value.Valid {
-				_m.CreationDate = value.Time
+				_m.CreationDate = new(models.DateTime)
+				*_m.CreationDate = *value.S.(*models.DateTime)
 			}
 		case evidence.FieldRenewalDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field renewal_date", values[i])
 			} else if value.Valid {
-				_m.RenewalDate = value.Time
+				_m.RenewalDate = new(models.DateTime)
+				*_m.RenewalDate = *value.S.(*models.DateTime)
 			}
 		case evidence.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -599,11 +604,15 @@ func (_m *Evidence) String() string {
 	builder.WriteString("collection_procedure=")
 	builder.WriteString(_m.CollectionProcedure)
 	builder.WriteString(", ")
-	builder.WriteString("creation_date=")
-	builder.WriteString(_m.CreationDate.Format(time.ANSIC))
+	if v := _m.CreationDate; v != nil {
+		builder.WriteString("creation_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("renewal_date=")
-	builder.WriteString(_m.RenewalDate.Format(time.ANSIC))
+	if v := _m.RenewalDate; v != nil {
+		builder.WriteString("renewal_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(_m.Source)

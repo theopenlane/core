@@ -12,7 +12,13 @@ type info struct {
 }
 
 // ExportableSchemas contains all schemas that have Exportable annotation
-var ExportableSchemas = map[string]info{"ASSET": info{
+var ExportableSchemas = map[string]info{"ASSESSMENT": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "ASSET": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "CAMPAIGN": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "CONTACT": info{

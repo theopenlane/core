@@ -50,6 +50,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldPlatformID holds the string denoting the platform_id field in the database.
 	FieldPlatformID = "platform_id"
+	// FieldDirectoryInstanceID holds the string denoting the directory_instance_id field in the database.
+	FieldDirectoryInstanceID = "directory_instance_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldDirectoryAccountID holds the string denoting the directory_account_id field in the database.
@@ -64,6 +66,10 @@ const (
 	FieldFirstSeenAt = "first_seen_at"
 	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
 	FieldLastSeenAt = "last_seen_at"
+	// FieldAddedAt holds the string denoting the added_at field in the database.
+	FieldAddedAt = "added_at"
+	// FieldRemovedAt holds the string denoting the removed_at field in the database.
+	FieldRemovedAt = "removed_at"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
 	// FieldLastConfirmedRunID holds the string denoting the last_confirmed_run_id field in the database.
@@ -92,6 +98,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldIntegrationID,
 	FieldPlatformID,
+	FieldDirectoryInstanceID,
 	FieldDirectorySyncRunID,
 	FieldDirectoryAccountID,
 	FieldDirectoryGroupID,
@@ -99,6 +106,8 @@ var Columns = []string{
 	FieldSource,
 	FieldFirstSeenAt,
 	FieldLastSeenAt,
+	FieldAddedAt,
+	FieldRemovedAt,
 	FieldObservedAt,
 	FieldLastConfirmedRunID,
 	FieldMetadata,
@@ -242,6 +251,11 @@ func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
+// ByDirectoryInstanceID orders the results by the directory_instance_id field.
+func ByDirectoryInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryInstanceID, opts...).ToFunc()
+}
+
 // ByDirectorySyncRunID orders the results by the directory_sync_run_id field.
 func ByDirectorySyncRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectorySyncRunID, opts...).ToFunc()
@@ -275,6 +289,16 @@ func ByFirstSeenAt(opts ...sql.OrderTermOption) OrderOption {
 // ByLastSeenAt orders the results by the last_seen_at field.
 func ByLastSeenAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastSeenAt, opts...).ToFunc()
+}
+
+// ByAddedAt orders the results by the added_at field.
+func ByAddedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddedAt, opts...).ToFunc()
+}
+
+// ByRemovedAt orders the results by the removed_at field.
+func ByRemovedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemovedAt, opts...).ToFunc()
 }
 
 // ByObservedAt orders the results by the observed_at field.

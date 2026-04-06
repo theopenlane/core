@@ -5,8 +5,10 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 	"golang.org/x/mod/semver"
 
@@ -62,6 +64,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: ControlObjective{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("ControlObjectiveNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -83,6 +86,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: Risk{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("RiskNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -90,6 +94,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: ActionPlan{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("ActionPlanNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -97,6 +102,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: Procedure{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("ProcedureNames").MatchOn("name"),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
@@ -104,6 +110,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			edgeSchema: InternalPolicy{},
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				entx.CSVRef().FromColumn("PolicyNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -215,7 +222,6 @@ var controlFields = []ent.Field{
 		Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 		Optional().
 		Nillable().
-		Unique().
 		Annotations(
 			oscalgen.NewOSCALField(
 				oscalgen.OSCALFieldRoleUUID,
@@ -420,4 +426,12 @@ var controlFields = []ent.Field{
 			entx.CSVRef().FromColumn("ControlDelegateGroupName").MatchOn("name"),
 		).
 		Comment("the id of the group that is temporarily delegated to own the control"),
+}
+
+// Indexes of the Control Mixin
+func (ControlMixin) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_uuid", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
 }

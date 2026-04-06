@@ -35,4 +35,6 @@ var (
 	ErrStringFieldNil = errors.New("string field node is nil")
 	// ErrStringSliceFieldInvalid is returned when a string slice field contains non-string values
 	ErrStringSliceFieldInvalid = errors.New("string slice field contains non-string values")
+	// ErrWorkflowObjectNodeInvalid is returned when a loaded workflow object does not implement generated.Noder
+	ErrWorkflowObjectNodeInvalid = errors.New("workflow object node type is invalid")
 )

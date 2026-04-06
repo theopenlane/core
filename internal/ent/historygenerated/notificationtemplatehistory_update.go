@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
@@ -287,6 +288,24 @@ func (_u *NotificationTemplateHistoryUpdate) SetNillableIntegrationID(v *string)
 // ClearIntegrationID clears the value of the "integration_id" field.
 func (_u *NotificationTemplateHistoryUpdate) ClearIntegrationID() *NotificationTemplateHistoryUpdate {
 	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetDestinations sets the "destinations" field.
+func (_u *NotificationTemplateHistoryUpdate) SetDestinations(v []string) *NotificationTemplateHistoryUpdate {
+	_u.mutation.SetDestinations(v)
+	return _u
+}
+
+// AppendDestinations appends value to the "destinations" field.
+func (_u *NotificationTemplateHistoryUpdate) AppendDestinations(v []string) *NotificationTemplateHistoryUpdate {
+	_u.mutation.AppendDestinations(v)
+	return _u
+}
+
+// ClearDestinations clears the value of the "destinations" field.
+func (_u *NotificationTemplateHistoryUpdate) ClearDestinations() *NotificationTemplateHistoryUpdate {
+	_u.mutation.ClearDestinations()
 	return _u
 }
 
@@ -677,6 +696,17 @@ func (_u *NotificationTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node
 	if _u.mutation.IntegrationIDCleared() {
 		_spec.ClearField(notificationtemplatehistory.FieldIntegrationID, field.TypeString)
 	}
+	if value, ok := _u.mutation.Destinations(); ok {
+		_spec.SetField(notificationtemplatehistory.FieldDestinations, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDestinations(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, notificationtemplatehistory.FieldDestinations, value)
+		})
+	}
+	if _u.mutation.DestinationsCleared() {
+		_spec.ClearField(notificationtemplatehistory.FieldDestinations, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.WorkflowDefinitionID(); ok {
 		_spec.SetField(notificationtemplatehistory.FieldWorkflowDefinitionID, field.TypeString, value)
 	}
@@ -1029,6 +1059,24 @@ func (_u *NotificationTemplateHistoryUpdateOne) SetNillableIntegrationID(v *stri
 // ClearIntegrationID clears the value of the "integration_id" field.
 func (_u *NotificationTemplateHistoryUpdateOne) ClearIntegrationID() *NotificationTemplateHistoryUpdateOne {
 	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetDestinations sets the "destinations" field.
+func (_u *NotificationTemplateHistoryUpdateOne) SetDestinations(v []string) *NotificationTemplateHistoryUpdateOne {
+	_u.mutation.SetDestinations(v)
+	return _u
+}
+
+// AppendDestinations appends value to the "destinations" field.
+func (_u *NotificationTemplateHistoryUpdateOne) AppendDestinations(v []string) *NotificationTemplateHistoryUpdateOne {
+	_u.mutation.AppendDestinations(v)
+	return _u
+}
+
+// ClearDestinations clears the value of the "destinations" field.
+func (_u *NotificationTemplateHistoryUpdateOne) ClearDestinations() *NotificationTemplateHistoryUpdateOne {
+	_u.mutation.ClearDestinations()
 	return _u
 }
 
@@ -1448,6 +1496,17 @@ func (_u *NotificationTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_n
 	}
 	if _u.mutation.IntegrationIDCleared() {
 		_spec.ClearField(notificationtemplatehistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Destinations(); ok {
+		_spec.SetField(notificationtemplatehistory.FieldDestinations, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDestinations(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, notificationtemplatehistory.FieldDestinations, value)
+		})
+	}
+	if _u.mutation.DestinationsCleared() {
+		_spec.ClearField(notificationtemplatehistory.FieldDestinations, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.WorkflowDefinitionID(); ok {
 		_spec.SetField(notificationtemplatehistory.FieldWorkflowDefinitionID, field.TypeString, value)

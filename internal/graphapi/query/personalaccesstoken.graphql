@@ -1,168 +1,166 @@
-mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
-  createPersonalAccessToken(input: $input) {
-    personalAccessToken {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      revokedAt
-      revokedBy
-      revokedReason
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-      organizations {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      owner {
-        id
-      }
-    }
-  }
+mutation CreatePersonalAccessToken ($input: CreatePersonalAccessTokenInput!) {
+	createPersonalAccessToken(input: $input) {
+		personalAccessToken {
+			createdAt
+			createdBy
+			description
+			expiresAt
+			id
+			isActive
+			lastUsedAt
+			name
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			ssoAuthorizations
+			tags
+			token
+			updatedAt
+			updatedBy
+			organizations {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			owner {
+				id
+			}
+		}
+	}
 }
-
-mutation DeletePersonalAccessToken($deletePersonalAccessTokenId: ID!) {
-  deletePersonalAccessToken(id: $deletePersonalAccessTokenId) {
-    deletedID
-  }
+mutation DeletePersonalAccessToken ($deletePersonalAccessTokenId: ID!) {
+	deletePersonalAccessToken(id: $deletePersonalAccessTokenId) {
+		deletedID
+	}
 }
-
 query GetAllPersonalAccessTokens {
-  personalAccessTokens {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        expiresAt
-        id
-        isActive
-        lastUsedAt
-        name
-        revokedAt
-        revokedBy
-        revokedReason
-        scopes
-        tags
-        token
-        updatedAt
-        updatedBy
-        organizations {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+	personalAccessTokens {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+				organizations {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
-  personalAccessToken(id: $personalAccessTokenId) {
-    createdAt
-    createdBy
-    description
-    expiresAt
-    id
-    isActive
-    lastUsedAt
-    name
-    revokedAt
-    revokedBy
-    revokedReason
-    scopes
-    tags
-    token
-    updatedAt
-    updatedBy
-    organizations {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetPersonalAccessTokenByID ($personalAccessTokenId: ID!) {
+	personalAccessToken(id: $personalAccessTokenId) {
+		createdAt
+		createdBy
+		description
+		expiresAt
+		id
+		isActive
+		lastUsedAt
+		name
+		revokedAt
+		revokedBy
+		revokedReason
+		scopes
+		ssoAuthorizations
+		tags
+		token
+		updatedAt
+		updatedBy
+		organizations {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetPersonalAccessTokens($where: PersonalAccessTokenWhereInput) {
-  personalAccessTokens(where: $where) {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        expiresAt
-        id
-        isActive
-        lastUsedAt
-        name
-        revokedAt
-        revokedBy
-        revokedReason
-        scopes
-        tags
-        token
-        updatedAt
-        updatedBy
-        organizations {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-    }
-  }
+query GetPersonalAccessTokens ($where: PersonalAccessTokenWhereInput) {
+	personalAccessTokens(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				name
+				revokedAt
+				revokedBy
+				revokedReason
+				scopes
+				tags
+				token
+				updatedAt
+				updatedBy
+				organizations {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-}
-
-mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: UpdatePersonalAccessTokenInput!) {
-  updatePersonalAccessToken(id: $updatePersonalAccessTokenId, input: $input) {
-    personalAccessToken {
-      createdAt
-      createdBy
-      description
-      expiresAt
-      id
-      isActive
-      lastUsedAt
-      name
-      revokedAt
-      revokedBy
-      revokedReason
-      scopes
-      tags
-      token
-      updatedAt
-      updatedBy
-      organizations {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      owner {
-        id
-      }
-    }
-  }
+mutation UpdatePersonalAccessToken ($updatePersonalAccessTokenId: ID!, $input: UpdatePersonalAccessTokenInput!) {
+	updatePersonalAccessToken(id: $updatePersonalAccessTokenId, input: $input) {
+		personalAccessToken {
+			createdAt
+			createdBy
+			description
+			expiresAt
+			id
+			isActive
+			lastUsedAt
+			name
+			revokedAt
+			revokedBy
+			revokedReason
+			scopes
+			ssoAuthorizations
+			tags
+			token
+			updatedAt
+			updatedBy
+			organizations {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			owner {
+				id
+			}
+		}
+	}
 }

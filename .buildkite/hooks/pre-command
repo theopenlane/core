@@ -2,6 +2,27 @@
 
 set -euo pipefail
 
+OPENLANE_BUILDKITE_JOB_PRIORITY=0
+if [[ -n "${BUILDKITE_TAG:-}" ]]; then
+  OPENLANE_BUILDKITE_JOB_PRIORITY=100
+elif [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]; then
+  renovate=false
+  [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]] && renovate=true
+  fork=false
+  [[ "${BUILDKITE_BRANCH:-}" =~ : ]] && fork=true
+  if [[ "$renovate" == true || "$fork" == true ]]; then
+    OPENLANE_BUILDKITE_JOB_PRIORITY=-10
+  else
+    OPENLANE_BUILDKITE_JOB_PRIORITY=80
+  fi
+elif [[ "${BUILDKITE_BRANCH:-}" == "main" ]]; then
+  OPENLANE_BUILDKITE_JOB_PRIORITY=50
+elif [[ "${BUILDKITE_BRANCH:-}" =~ ^renovate/ ]]; then
+  OPENLANE_BUILDKITE_JOB_PRIORITY=-10
+fi
+
+export OPENLANE_BUILDKITE_JOB_PRIORITY
+
 echo "🔧 Setting up build environment..."
 
 # Create cache directories (tools may not be available yet)
@@ -16,13 +37,13 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 # Basic tool availability checks (only for tools that should be on base VM)
 echo "🔍 Checking base system tools..."
 if ! command -v git >/dev/null 2>&1; then
-    echo "❌ Git not found in PATH"
-    exit 1
+  echo "❌ Git not found in PATH"
+  exit 1
 fi
 
 # Common environment validation
 if [[ -z "${BUILDKITE_BUILD_ID:-}" ]]; then
-    echo "⚠️  Not running in Buildkite environment"
+  echo "⚠️  Not running in Buildkite environment"
 fi
 
 # Create temporary directories for build artifacts
@@ -32,42 +53,42 @@ mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/test-results"
 # Check disk space before starting build
 echo "📊 Checking disk space..."
 if disk_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$disk_usage" ]] && [[ "$disk_usage" =~ ^[0-9]+$ ]]; then
-    echo "📊 Current disk usage: ${disk_usage}%"
+  echo "📊 Current disk usage: ${disk_usage}%"
 
-    if [[ $disk_usage -gt 80 ]]; then
-        echo "🚨 CRITICAL: Disk usage is ${disk_usage}% - build may fail due to lack of space!"
-        echo "🧹 Running emergency go and docker cleanup..."
+  if [[ $disk_usage -gt 80 ]]; then
+    echo "🚨 CRITICAL: Disk usage is ${disk_usage}% - build may fail due to lack of space!"
+    echo "🧹 Running emergency go and docker cleanup..."
 
-        if command -v go >/dev/null 2>&1; then
-            echo "🧹 Running Go build cache cleanup..."
-            go clean -cache >/dev/null 2>&1 || true
-        fi
-
-        if command -v docker >/dev/null 2>&1; then
-            # Emergency cleanup - remove stopped containers and dangling images only
-            echo "🧹 Emergency cleanup..."
-            docker container prune -f >/dev/null 2>&1 || true
-            docker image prune -f >/dev/null 2>&1 || true
-
-            # Check if cleanup helped
-            if new_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$new_usage" ]] && [[ "$new_usage" =~ ^[0-9]+$ ]]; then
-                echo "📊 Disk usage after emergency cleanup: ${new_usage}%"
-
-                if [[ $new_usage -gt 85 ]]; then
-                    echo "❌ Disk usage still critically high after cleanup"
-                    echo "⚠️  Build may fail due to insufficient disk space"
-                else
-                    echo "✅ Emergency cleanup successful"
-                fi
-            else
-                echo "⚠️  Could not determine disk usage after cleanup"
-            fi
-        fi
-    elif [[ $disk_usage -gt 70 ]]; then
-        echo "⚠️  WARNING: Disk usage is ${disk_usage}% - cleanup recommended"
+    if command -v go >/dev/null 2>&1; then
+      echo "🧹 Running Go build cache cleanup..."
+      go clean -cache >/dev/null 2>&1 || true
     fi
+
+    if command -v docker >/dev/null 2>&1; then
+      # Emergency cleanup - remove stopped containers and dangling images only
+      echo "🧹 Emergency cleanup..."
+      docker container prune -f >/dev/null 2>&1 || true
+      docker image prune -f >/dev/null 2>&1 || true
+
+      # Check if cleanup helped
+      if new_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$new_usage" ]] && [[ "$new_usage" =~ ^[0-9]+$ ]]; then
+        echo "📊 Disk usage after emergency cleanup: ${new_usage}%"
+
+        if [[ $new_usage -gt 85 ]]; then
+          echo "❌ Disk usage still critically high after cleanup"
+          echo "⚠️  Build may fail due to insufficient disk space"
+        else
+          echo "✅ Emergency cleanup successful"
+        fi
+      else
+        echo "⚠️  Could not determine disk usage after cleanup"
+      fi
+    fi
+  elif [[ $disk_usage -gt 70 ]]; then
+    echo "⚠️  WARNING: Disk usage is ${disk_usage}% - cleanup recommended"
+  fi
 else
-    echo "⚠️  Could not determine disk usage, skipping disk space check"
+  echo "⚠️  Could not determine disk usage, skipping disk space check"
 fi
 
 echo "✅ Build environment setup complete"

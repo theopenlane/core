@@ -191,6 +191,26 @@ func (_u *DirectoryAccountUpdate) ClearScopeID() *DirectoryAccountUpdate {
 	return _u
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_u *DirectoryAccountUpdate) SetDirectoryInstanceID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetDirectoryInstanceID(v)
+	return _u
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetDirectoryInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
+func (_u *DirectoryAccountUpdate) ClearDirectoryInstanceID() *DirectoryAccountUpdate {
+	_u.mutation.ClearDirectoryInstanceID()
+	return _u
+}
+
 // SetIdentityHolderID sets the "identity_holder_id" field.
 func (_u *DirectoryAccountUpdate) SetIdentityHolderID(v string) *DirectoryAccountUpdate {
 	_u.mutation.SetIdentityHolderID(v)
@@ -531,6 +551,86 @@ func (_u *DirectoryAccountUpdate) ClearLastLoginAt() *DirectoryAccountUpdate {
 	return _u
 }
 
+// SetFirstSeenAt sets the "first_seen_at" field.
+func (_u *DirectoryAccountUpdate) SetFirstSeenAt(v time.Time) *DirectoryAccountUpdate {
+	_u.mutation.SetFirstSeenAt(v)
+	return _u
+}
+
+// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetFirstSeenAt(*v)
+	}
+	return _u
+}
+
+// ClearFirstSeenAt clears the value of the "first_seen_at" field.
+func (_u *DirectoryAccountUpdate) ClearFirstSeenAt() *DirectoryAccountUpdate {
+	_u.mutation.ClearFirstSeenAt()
+	return _u
+}
+
+// SetLastSeenAt sets the "last_seen_at" field.
+func (_u *DirectoryAccountUpdate) SetLastSeenAt(v time.Time) *DirectoryAccountUpdate {
+	_u.mutation.SetLastSeenAt(v)
+	return _u
+}
+
+// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetLastSeenAt(*v)
+	}
+	return _u
+}
+
+// ClearLastSeenAt clears the value of the "last_seen_at" field.
+func (_u *DirectoryAccountUpdate) ClearLastSeenAt() *DirectoryAccountUpdate {
+	_u.mutation.ClearLastSeenAt()
+	return _u
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_u *DirectoryAccountUpdate) SetAddedAt(v time.Time) *DirectoryAccountUpdate {
+	_u.mutation.SetAddedAt(v)
+	return _u
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableAddedAt(v *time.Time) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetAddedAt(*v)
+	}
+	return _u
+}
+
+// ClearAddedAt clears the value of the "added_at" field.
+func (_u *DirectoryAccountUpdate) ClearAddedAt() *DirectoryAccountUpdate {
+	_u.mutation.ClearAddedAt()
+	return _u
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_u *DirectoryAccountUpdate) SetRemovedAt(v time.Time) *DirectoryAccountUpdate {
+	_u.mutation.SetRemovedAt(v)
+	return _u
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableRemovedAt(v *time.Time) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetRemovedAt(*v)
+	}
+	return _u
+}
+
+// ClearRemovedAt clears the value of the "removed_at" field.
+func (_u *DirectoryAccountUpdate) ClearRemovedAt() *DirectoryAccountUpdate {
+	_u.mutation.ClearRemovedAt()
+	return _u
+}
+
 // SetProfileHash sets the "profile_hash" field.
 func (_u *DirectoryAccountUpdate) SetProfileHash(v string) *DirectoryAccountUpdate {
 	_u.mutation.SetProfileHash(v)
@@ -554,6 +654,18 @@ func (_u *DirectoryAccountUpdate) SetProfile(v map[string]interface{}) *Director
 // ClearProfile clears the value of the "profile" field.
 func (_u *DirectoryAccountUpdate) ClearProfile() *DirectoryAccountUpdate {
 	_u.mutation.ClearProfile()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *DirectoryAccountUpdate) SetMetadata(v map[string]interface{}) *DirectoryAccountUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *DirectoryAccountUpdate) ClearMetadata() *DirectoryAccountUpdate {
+	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -953,6 +1065,12 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directoryaccount.FieldDirectoryInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryInstanceIDCleared() {
+		_spec.ClearField(directoryaccount.FieldDirectoryInstanceID, field.TypeString)
+	}
 	if value, ok := _u.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
 	}
@@ -1043,6 +1161,30 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.LastLoginAtCleared() {
 		_spec.ClearField(directoryaccount.FieldLastLoginAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.FirstSeenAt(); ok {
+		_spec.SetField(directoryaccount.FieldFirstSeenAt, field.TypeTime, value)
+	}
+	if _u.mutation.FirstSeenAtCleared() {
+		_spec.ClearField(directoryaccount.FieldFirstSeenAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.LastSeenAt(); ok {
+		_spec.SetField(directoryaccount.FieldLastSeenAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastSeenAtCleared() {
+		_spec.ClearField(directoryaccount.FieldLastSeenAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AddedAt(); ok {
+		_spec.SetField(directoryaccount.FieldAddedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AddedAtCleared() {
+		_spec.ClearField(directoryaccount.FieldAddedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.RemovedAt(); ok {
+		_spec.SetField(directoryaccount.FieldRemovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.RemovedAtCleared() {
+		_spec.ClearField(directoryaccount.FieldRemovedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.ProfileHash(); ok {
 		_spec.SetField(directoryaccount.FieldProfileHash, field.TypeString, value)
 	}
@@ -1051,6 +1193,12 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.ProfileCleared() {
 		_spec.ClearField(directoryaccount.FieldProfile, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(directoryaccount.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(directoryaccount.FieldMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.RawProfileFileID(); ok {
 		_spec.SetField(directoryaccount.FieldRawProfileFileID, field.TypeString, value)
@@ -1606,6 +1754,26 @@ func (_u *DirectoryAccountUpdateOne) ClearScopeID() *DirectoryAccountUpdateOne {
 	return _u
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_u *DirectoryAccountUpdateOne) SetDirectoryInstanceID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetDirectoryInstanceID(v)
+	return _u
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetDirectoryInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearDirectoryInstanceID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearDirectoryInstanceID()
+	return _u
+}
+
 // SetIdentityHolderID sets the "identity_holder_id" field.
 func (_u *DirectoryAccountUpdateOne) SetIdentityHolderID(v string) *DirectoryAccountUpdateOne {
 	_u.mutation.SetIdentityHolderID(v)
@@ -1946,6 +2114,86 @@ func (_u *DirectoryAccountUpdateOne) ClearLastLoginAt() *DirectoryAccountUpdateO
 	return _u
 }
 
+// SetFirstSeenAt sets the "first_seen_at" field.
+func (_u *DirectoryAccountUpdateOne) SetFirstSeenAt(v time.Time) *DirectoryAccountUpdateOne {
+	_u.mutation.SetFirstSeenAt(v)
+	return _u
+}
+
+// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetFirstSeenAt(*v)
+	}
+	return _u
+}
+
+// ClearFirstSeenAt clears the value of the "first_seen_at" field.
+func (_u *DirectoryAccountUpdateOne) ClearFirstSeenAt() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearFirstSeenAt()
+	return _u
+}
+
+// SetLastSeenAt sets the "last_seen_at" field.
+func (_u *DirectoryAccountUpdateOne) SetLastSeenAt(v time.Time) *DirectoryAccountUpdateOne {
+	_u.mutation.SetLastSeenAt(v)
+	return _u
+}
+
+// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetLastSeenAt(*v)
+	}
+	return _u
+}
+
+// ClearLastSeenAt clears the value of the "last_seen_at" field.
+func (_u *DirectoryAccountUpdateOne) ClearLastSeenAt() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearLastSeenAt()
+	return _u
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_u *DirectoryAccountUpdateOne) SetAddedAt(v time.Time) *DirectoryAccountUpdateOne {
+	_u.mutation.SetAddedAt(v)
+	return _u
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableAddedAt(v *time.Time) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetAddedAt(*v)
+	}
+	return _u
+}
+
+// ClearAddedAt clears the value of the "added_at" field.
+func (_u *DirectoryAccountUpdateOne) ClearAddedAt() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearAddedAt()
+	return _u
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_u *DirectoryAccountUpdateOne) SetRemovedAt(v time.Time) *DirectoryAccountUpdateOne {
+	_u.mutation.SetRemovedAt(v)
+	return _u
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableRemovedAt(v *time.Time) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetRemovedAt(*v)
+	}
+	return _u
+}
+
+// ClearRemovedAt clears the value of the "removed_at" field.
+func (_u *DirectoryAccountUpdateOne) ClearRemovedAt() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearRemovedAt()
+	return _u
+}
+
 // SetProfileHash sets the "profile_hash" field.
 func (_u *DirectoryAccountUpdateOne) SetProfileHash(v string) *DirectoryAccountUpdateOne {
 	_u.mutation.SetProfileHash(v)
@@ -1969,6 +2217,18 @@ func (_u *DirectoryAccountUpdateOne) SetProfile(v map[string]interface{}) *Direc
 // ClearProfile clears the value of the "profile" field.
 func (_u *DirectoryAccountUpdateOne) ClearProfile() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearProfile()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *DirectoryAccountUpdateOne) SetMetadata(v map[string]interface{}) *DirectoryAccountUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *DirectoryAccountUpdateOne) ClearMetadata() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -2398,6 +2658,12 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directoryaccount.FieldDirectoryInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryInstanceIDCleared() {
+		_spec.ClearField(directoryaccount.FieldDirectoryInstanceID, field.TypeString)
+	}
 	if value, ok := _u.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
 	}
@@ -2488,6 +2754,30 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.LastLoginAtCleared() {
 		_spec.ClearField(directoryaccount.FieldLastLoginAt, field.TypeTime)
 	}
+	if value, ok := _u.mutation.FirstSeenAt(); ok {
+		_spec.SetField(directoryaccount.FieldFirstSeenAt, field.TypeTime, value)
+	}
+	if _u.mutation.FirstSeenAtCleared() {
+		_spec.ClearField(directoryaccount.FieldFirstSeenAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.LastSeenAt(); ok {
+		_spec.SetField(directoryaccount.FieldLastSeenAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastSeenAtCleared() {
+		_spec.ClearField(directoryaccount.FieldLastSeenAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AddedAt(); ok {
+		_spec.SetField(directoryaccount.FieldAddedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AddedAtCleared() {
+		_spec.ClearField(directoryaccount.FieldAddedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.RemovedAt(); ok {
+		_spec.SetField(directoryaccount.FieldRemovedAt, field.TypeTime, value)
+	}
+	if _u.mutation.RemovedAtCleared() {
+		_spec.ClearField(directoryaccount.FieldRemovedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.ProfileHash(); ok {
 		_spec.SetField(directoryaccount.FieldProfileHash, field.TypeString, value)
 	}
@@ -2496,6 +2786,12 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.ProfileCleared() {
 		_spec.ClearField(directoryaccount.FieldProfile, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(directoryaccount.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(directoryaccount.FieldMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.RawProfileFileID(); ok {
 		_spec.SetField(directoryaccount.FieldRawProfileFileID, field.TypeString, value)

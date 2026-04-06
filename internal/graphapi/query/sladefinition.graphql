@@ -1,194 +1,172 @@
-
-mutation CreateBulkCSVSLADefinition($input: Upload!) {
-  createBulkCSVSLADefinition(input: $input) {
-    slaDefinitions {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      slaDays
-      securityLevel
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVSLADefinition ($input: Upload!) {
+	createBulkCSVSLADefinition(input: $input) {
+		slaDefinitions {
+			createdAt
+			createdBy
+			displayID
+			id
+			ownerID
+			securityLevel
+			slaDays
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateBulkSLADefinition($input: [CreateSLADefinitionInput!]) {
-  createBulkSLADefinition(input: $input) {
-    slaDefinitions {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      slaDays
-      securityLevel
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkSLADefinition ($input: [CreateSLADefinitionInput!]) {
+	createBulkSLADefinition(input: $input) {
+		slaDefinitions {
+			createdAt
+			createdBy
+			displayID
+			id
+			ownerID
+			securityLevel
+			slaDays
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateSLADefinition($input: CreateSLADefinitionInput!) {
-  createSLADefinition(input: $input) {
-    slaDefinition {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      slaDays
-      securityLevel
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateSLADefinition ($input: CreateSLADefinitionInput!) {
+	createSLADefinition(input: $input) {
+		slaDefinition {
+			createdAt
+			createdBy
+			displayID
+			id
+			ownerID
+			securityLevel
+			slaDays
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteSLADefinition($deleteSLADefinitionId: ID!) {
-  deleteSLADefinition(id: $deleteSLADefinitionId) {
-    deletedID
-  }
+mutation DeleteBulkSLADefinition ($ids: [ID!]!) {
+	deleteBulkSLADefinition(ids: $ids) {
+		deletedIDs
+	}
 }
-
-mutation UpdateBulkSLADefinition($ids: [ID!]!, $input: UpdateSLADefinitionInput!) {
-  updateBulkSLADefinition(ids: $ids, input: $input) {
-    slaDefinitions {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      slaDays
-      securityLevel
-      tags
-      updatedAt
-      updatedBy
-    }
-    updatedIDs
-  }
+mutation DeleteSLADefinition ($deleteSLADefinitionId: ID!) {
+	deleteSLADefinition(id: $deleteSLADefinitionId) {
+		deletedID
+	}
 }
-
-mutation UpdateBulkCSVSLADefinition($input: Upload!) {
-  updateBulkCSVSLADefinition(input: $input) {
-    slaDefinitions {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      slaDays
-      securityLevel
-      tags
-      updatedAt
-      updatedBy
-    }
-    updatedIDs
-  }
+query GetAllSLADefinitions ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionOrder!]) {
+	slaDefinitions(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				ownerID
+				securityLevel
+				slaDays
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-mutation DeleteBulkSLADefinition($ids: [ID!]!) {
-  deleteBulkSLADefinition(ids: $ids) {
-    deletedIDs
-  }
+query GetSLADefinitionByID ($slaDefinitionId: ID!) {
+	slaDefinition(id: $slaDefinitionId) {
+		createdAt
+		createdBy
+		displayID
+		id
+		ownerID
+		securityLevel
+		slaDays
+		tags
+		updatedAt
+		updatedBy
+	}
 }
-
-query GetAllSLADefinitions($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionOrder!]){
-  slaDefinitions(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        displayID
-        id
-        ownerID
-        slaDays
-        securityLevel
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetSLADefinitions ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionOrder!], $where: SLADefinitionWhereInput) {
+	slaDefinitions(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				ownerID
+				securityLevel
+				slaDays
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-query GetSLADefinitionByID($slaDefinitionId: ID!) {
-  slaDefinition(id: $slaDefinitionId) {
-    createdAt
-    createdBy
-    displayID
-    id
-    ownerID
-    slaDays
-    securityLevel
-    tags
-    updatedAt
-    updatedBy
-  }
+mutation UpdateBulkCSVSLADefinition ($input: Upload!) {
+	updateBulkCSVSLADefinition(input: $input) {
+		slaDefinitions {
+			createdAt
+			createdBy
+			displayID
+			id
+			ownerID
+			securityLevel
+			slaDays
+			tags
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
 }
-
-query GetSLADefinitions($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SLADefinitionOrder!], $where: SLADefinitionWhereInput) {
-  slaDefinitions(
-      first: $first
-      last: $last
-      after: $after
-      before: $before
-      orderBy: $orderBy
-      where: $where
-    ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        displayID
-        id
-        ownerID
-        slaDays
-        securityLevel
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+mutation UpdateBulkSLADefinition ($ids: [ID!]!, $input: UpdateSLADefinitionInput!) {
+	updateBulkSLADefinition(ids: $ids, input: $input) {
+		slaDefinitions {
+			createdAt
+			createdBy
+			displayID
+			id
+			ownerID
+			securityLevel
+			slaDays
+			tags
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
 }
-mutation UpdateSLADefinition($updateSLADefinitionId: ID!, $input: UpdateSLADefinitionInput!) {
-  updateSLADefinition(id: $updateSLADefinitionId, input: $input) {
-    slaDefinition {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      slaDays
-      securityLevel
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateSLADefinition ($updateSLADefinitionId: ID!, $input: UpdateSLADefinitionInput!) {
+	updateSLADefinition(id: $updateSLADefinitionId, input: $input) {
+		slaDefinition {
+			createdAt
+			createdBy
+			displayID
+			id
+			ownerID
+			securityLevel
+			slaDays
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }

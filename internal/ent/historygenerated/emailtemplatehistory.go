@@ -82,8 +82,6 @@ type EmailTemplateHistory struct {
 	TemplateContext enums.TemplateContext `json:"template_context,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults map[string]interface{} `json:"defaults,omitempty"`
-	// email branding configuration to apply for this template
-	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// integration used to deliver emails for this template
 	IntegrationID string `json:"integration_id,omitempty"`
 	// workflow definition associated with this template
@@ -106,7 +104,7 @@ func (*EmailTemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldEmailBrandingID, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID:
+		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID:
 			values[i] = new(sql.NullString)
 		case emailtemplatehistory.FieldHistoryTime, emailtemplatehistory.FieldCreatedAt, emailtemplatehistory.FieldUpdatedAt, emailtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -321,12 +319,6 @@ func (_m *EmailTemplateHistory) assignValues(columns []string, values []any) err
 					return fmt.Errorf("unmarshal field defaults: %w", err)
 				}
 			}
-		case emailtemplatehistory.FieldEmailBrandingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
-			} else if value.Valid {
-				_m.EmailBrandingID = value.String
-			}
 		case emailtemplatehistory.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
@@ -474,9 +466,6 @@ func (_m *EmailTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("defaults=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Defaults))
-	builder.WriteString(", ")
-	builder.WriteString("email_branding_id=")
-	builder.WriteString(_m.EmailBrandingID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

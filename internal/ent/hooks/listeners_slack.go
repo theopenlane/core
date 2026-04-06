@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/slacknotify"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
@@ -48,27 +49,27 @@ func RegisterGalaSlackListeners(registry *gala.Registry) ([]gala.ListenerID, err
 
 // handleSubscriberMutationGala sends a Slack notification for subscriber create mutations.
 func handleSubscriberMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	return sendSlackNotificationWithEmail(
+	return slacknotify.SendNotificationWithEmail(
 		ctx.Context,
 		eventqueue.MutationStringValuePreferPayload(payload, ctx.Envelope.Headers.Properties, subscriber.FieldEmail),
-		subscriberTemplateOverride(),
+		slacknotify.SubscriberTemplateOverride(),
 		slacktemplates.SubscriberTemplateName,
 	)
 }
 
 // handleUserMutationGala sends a Slack notification for user create mutations.
 func handleUserMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	return sendSlackNotificationWithEmail(
+	return slacknotify.SendNotificationWithEmail(
 		ctx.Context,
 		eventqueue.MutationStringValuePreferPayload(payload, ctx.Envelope.Headers.Properties, user.FieldEmail),
-		userTemplateOverride(),
+		slacknotify.UserTemplateOverride(),
 		slacktemplates.UserTemplateName,
 	)
 }
 
 // handleDemoRequestMutationGala sends a Slack notification when an onboarding is created.
 func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !SlackNotificationsEnabled() {
+	if !slacknotify.NotificationsEnabled() {
 		return nil
 	}
 
@@ -88,7 +89,7 @@ func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 		email = caller.SubjectEmail
 	}
 
-	tmpl, err := loadSlackTemplate(ctx.Context, "", slacktemplates.DemoRequestName)
+	tmpl, err := slacknotify.LoadTemplate(ctx.Context, "", slacktemplates.DemoRequestName)
 	if err != nil {
 		return err
 	}
@@ -115,7 +116,7 @@ func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 		return err
 	}
 
-	return SendSlackNotification(ctx.Context, buf.String())
+	return slacknotify.SendNotification(ctx.Context, buf.String())
 }
 
 func mutationMapValue(payload eventqueue.MutationGalaPayload, field string) (map[string]any, bool) {

@@ -31,4 +31,4 @@
   object: organization:tc-org-2
 - user: user:tc-manager-tc-2
   relation: trust_center_admin
-  object: organization:tc-org-2 
+  object: organization:tc-org-2

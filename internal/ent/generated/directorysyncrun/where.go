@@ -128,6 +128,11 @@ func PlatformID(v string) predicate.DirectorySyncRun {
 	return predicate.DirectorySyncRun(sql.FieldEQ(FieldPlatformID, v))
 }
 
+// DirectoryInstanceID applies equality check predicate on the "directory_instance_id" field. It's identical to DirectoryInstanceIDEQ.
+func DirectoryInstanceID(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldEQ(FieldDirectoryInstanceID, v))
+}
+
 // StartedAt applies equality check predicate on the "started_at" field. It's identical to StartedAtEQ.
 func StartedAt(v time.Time) predicate.DirectorySyncRun {
 	return predicate.DirectorySyncRun(sql.FieldEQ(FieldStartedAt, v))
@@ -991,6 +996,81 @@ func PlatformIDEqualFold(v string) predicate.DirectorySyncRun {
 // PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
 func PlatformIDContainsFold(v string) predicate.DirectorySyncRun {
 	return predicate.DirectorySyncRun(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
+// DirectoryInstanceIDEQ applies the EQ predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDEQ(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldEQ(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDNEQ applies the NEQ predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDNEQ(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldNEQ(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDIn applies the In predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDIn(vs ...string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldIn(FieldDirectoryInstanceID, vs...))
+}
+
+// DirectoryInstanceIDNotIn applies the NotIn predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDNotIn(vs ...string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldNotIn(FieldDirectoryInstanceID, vs...))
+}
+
+// DirectoryInstanceIDGT applies the GT predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDGT(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldGT(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDGTE applies the GTE predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDGTE(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldGTE(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDLT applies the LT predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDLT(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldLT(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDLTE applies the LTE predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDLTE(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldLTE(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDContains applies the Contains predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDContains(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldContains(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDHasPrefix applies the HasPrefix predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDHasPrefix(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldHasPrefix(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDHasSuffix applies the HasSuffix predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDHasSuffix(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldHasSuffix(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDIsNil applies the IsNil predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDIsNil() predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldIsNull(FieldDirectoryInstanceID))
+}
+
+// DirectoryInstanceIDNotNil applies the NotNil predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDNotNil() predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldNotNull(FieldDirectoryInstanceID))
+}
+
+// DirectoryInstanceIDEqualFold applies the EqualFold predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDEqualFold(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldEqualFold(FieldDirectoryInstanceID, v))
+}
+
+// DirectoryInstanceIDContainsFold applies the ContainsFold predicate on the "directory_instance_id" field.
+func DirectoryInstanceIDContainsFold(v string) predicate.DirectorySyncRun {
+	return predicate.DirectorySyncRun(sql.FieldContainsFold(FieldDirectoryInstanceID, v))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

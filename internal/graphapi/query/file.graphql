@@ -1,97 +1,101 @@
-mutation DeleteFile($deleteFileId: ID!) {
-  deleteFile(id: $deleteFileId) {
-    deletedID
-  }
+mutation DeleteFile ($deleteFileId: ID!) {
+	deleteFile(id: $deleteFileId) {
+		deletedID
+	}
 }
-
 query GetAllFiles {
-  files {
-    edges {
-      node {
-        categoryType
-        createdAt
-        createdBy
-        detectedContentType
-        detectedMimeType
-        id
-        md5Hash
-        persistedFileSize
-        providedFileExtension
-        providedFileName
-        providedFileSize
-        storagePath
-        storageScheme
-        storageVolume
-        storeKey
-        tags
-        updatedAt
-        updatedBy
-        uri
-        storageRegion
-        storageProvider
-        metadata
-        lastAccessedAt
-      }
-    }
-  }
+	files {
+		edges {
+			node {
+				categoryType
+				createdAt
+				createdBy
+				detectedContentType
+				detectedMimeType
+				id
+				md5Hash
+				persistedFileSize
+				providedFileExtension
+				providedFileName
+				providedFileSize
+				storagePath
+				storageScheme
+				storageVolume
+				storeKey
+				tags
+				updatedAt
+				updatedBy
+				uri
+				storageRegion
+				storageProvider
+				metadata
+				lastAccessedAt
+			}
+		}
+	}
 }
-
-query GetFileByID($fileId: ID!) {
-  file(id: $fileId) {
-    categoryType
-    createdAt
-    createdBy
-    detectedContentType
-    detectedMimeType
-    id
-    md5Hash
-    persistedFileSize
-    providedFileExtension
-    providedFileName
-    providedFileSize
-    storagePath
-    storageScheme
-    storageVolume
-    storeKey
-    tags
-    updatedAt
-    updatedBy
-    uri
-    storageRegion
-    storageProvider
-    metadata
-    lastAccessedAt
-  }
+query GetFileByID ($fileId: ID!) {
+	file(id: $fileId) {
+		categoryType
+		createdAt
+		createdBy
+		detectedContentType
+		detectedMimeType
+		environmentID
+		environmentName
+		id
+		internalNotes
+		lastAccessedAt
+		md5Hash
+		metadata
+		persistedFileSize
+		providedFileExtension
+		providedFileName
+		providedFileSize
+		scopeID
+		scopeName
+		storagePath
+		storageProvider
+		storageRegion
+		storageScheme
+		storageVolume
+		storeKey
+		systemInternalID
+		systemOwned
+		tags
+		updatedAt
+		updatedBy
+		uri
+	}
 }
-
-query GetFiles($where: FileWhereInput) {
-  files(where: $where) {
-    edges {
-      node {
-        categoryType
-        createdAt
-        createdBy
-        detectedContentType
-        detectedMimeType
-        id
-        md5Hash
-        persistedFileSize
-        providedFileExtension
-        providedFileName
-        providedFileSize
-        storagePath
-        storageScheme
-        storageVolume
-        storeKey
-        tags
-        updatedAt
-        updatedBy
-        uri
-        storageRegion
-        storageProvider
-        metadata
-        lastAccessedAt
-      }
-    }
-  }
+query GetFiles ($where: FileWhereInput) {
+	files(where: $where) {
+		edges {
+			node {
+				categoryType
+				createdAt
+				createdBy
+				detectedContentType
+				detectedMimeType
+				id
+				md5Hash
+				persistedFileSize
+				providedFileExtension
+				providedFileName
+				providedFileSize
+				storagePath
+				storageScheme
+				storageVolume
+				storeKey
+				tags
+				updatedAt
+				updatedBy
+				uri
+				storageRegion
+				storageProvider
+				metadata
+				lastAccessedAt
+			}
+		}
+	}
 }

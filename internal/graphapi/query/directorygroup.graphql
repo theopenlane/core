@@ -1,25 +1,35 @@
-
 mutation CreateBulkCSVDirectoryGroup($input: Upload!) {
   createBulkCSVDirectoryGroup(input: $input) {
     directoryGroups {
+      addedAt
       classification
       createdAt
       createdBy
       description
+      directoryInstanceID
       directorySyncRunID
       displayID
       displayName
       email
+      environmentID
+      environmentName
       externalID
       externalSharingAllowed
+      firstSeenAt
       id
       integrationID
+      lastSeenAt
       memberCount
+      metadata
       observedAt
       ownerID
+      platformID
       profile
       profileHash
       rawProfileFileID
+      removedAt
+      scopeID
+      scopeName
       sourceVersion
       status
       tags
@@ -32,24 +42,35 @@ mutation CreateBulkCSVDirectoryGroup($input: Upload!) {
 mutation CreateBulkDirectoryGroup($input: [CreateDirectoryGroupInput!]) {
   createBulkDirectoryGroup(input: $input) {
     directoryGroups {
+      addedAt
       classification
       createdAt
       createdBy
       description
+      directoryInstanceID
       directorySyncRunID
       displayID
       displayName
       email
+      environmentID
+      environmentName
       externalID
       externalSharingAllowed
+      firstSeenAt
       id
       integrationID
+      lastSeenAt
       memberCount
+      metadata
       observedAt
       ownerID
+      platformID
       profile
       profileHash
       rawProfileFileID
+      removedAt
+      scopeID
+      scopeName
       sourceVersion
       status
       tags
@@ -62,24 +83,35 @@ mutation CreateBulkDirectoryGroup($input: [CreateDirectoryGroupInput!]) {
 mutation CreateDirectoryGroup($input: CreateDirectoryGroupInput!) {
   createDirectoryGroup(input: $input) {
     directoryGroup {
+      addedAt
       classification
       createdAt
       createdBy
       description
+      directoryInstanceID
       directorySyncRunID
       displayID
       displayName
       email
+      environmentID
+      environmentName
       externalID
       externalSharingAllowed
+      firstSeenAt
       id
       integrationID
+      lastSeenAt
       memberCount
+      metadata
       observedAt
       ownerID
+      platformID
       profile
       profileHash
       rawProfileFileID
+      removedAt
+      scopeID
+      scopeName
       sourceVersion
       status
       tags
@@ -133,26 +165,38 @@ query GetAllDirectoryGroups {
     }
   }
 }
+
 query GetDirectoryGroupByID($directoryGroupId: ID!) {
   directoryGroup(id: $directoryGroupId) {
+    addedAt
     classification
     createdAt
     createdBy
     description
+    directoryInstanceID
     directorySyncRunID
     displayID
     displayName
     email
+    environmentID
+    environmentName
     externalID
     externalSharingAllowed
+    firstSeenAt
     id
     integrationID
+    lastSeenAt
     memberCount
+    metadata
     observedAt
     ownerID
+    platformID
     profile
     profileHash
     rawProfileFileID
+    removedAt
+    scopeID
+    scopeName
     sourceVersion
     status
     tags
@@ -199,27 +243,39 @@ query GetDirectoryGroups($first: Int, $last: Int, $where: DirectoryGroupWhereInp
     }
   }
 }
+
 mutation UpdateDirectoryGroup($updateDirectoryGroupId: ID!, $input: UpdateDirectoryGroupInput!) {
   updateDirectoryGroup(id: $updateDirectoryGroupId, input: $input) {
     directoryGroup {
+      addedAt
       classification
       createdAt
       createdBy
       description
+      directoryInstanceID
       directorySyncRunID
       displayID
       displayName
       email
+      environmentID
+      environmentName
       externalID
       externalSharingAllowed
+      firstSeenAt
       id
       integrationID
+      lastSeenAt
       memberCount
+      metadata
       observedAt
       ownerID
+      platformID
       profile
       profileHash
       rawProfileFileID
+      removedAt
+      scopeID
+      scopeName
       sourceVersion
       status
       tags

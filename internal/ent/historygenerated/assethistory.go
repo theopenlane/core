@@ -122,7 +122,11 @@ type AssetHistory struct {
 	// the CPE (Common Platform Enumeration) of the asset, if applicable
 	Cpe string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
-	Categories   []string `json:"categories,omitempty"`
+	Categories []string `json:"categories,omitempty"`
+	// integration that discovered this asset, when sourced via integration ingest
+	IntegrationID string `json:"integration_id,omitempty"`
+	// time when this asset was last observed by the source integration
+	ObservedAt   *models.DateTime `json:"observed_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -131,7 +135,7 @@ func (*AssetHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case assethistory.FieldPurchaseDate:
+		case assethistory.FieldPurchaseDate, assethistory.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case assethistory.FieldTags, assethistory.FieldCategories:
 			values[i] = new([]byte)
@@ -141,7 +145,7 @@ func (*AssetHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case assethistory.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldDeletedBy, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDisplayName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe:
+		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldDeletedBy, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDisplayName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe, assethistory.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case assethistory.FieldHistoryTime, assethistory.FieldCreatedAt, assethistory.FieldUpdatedAt, assethistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -473,6 +477,19 @@ func (_m *AssetHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field categories: %w", err)
 				}
 			}
+		case assethistory.FieldIntegrationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationID = value.String
+			}
+		case assethistory.FieldObservedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
+			} else if value.Valid {
+				_m.ObservedAt = new(models.DateTime)
+				*_m.ObservedAt = *value.S.(*models.DateTime)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -664,6 +681,14 @@ func (_m *AssetHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("categories=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Categories))
+	builder.WriteString(", ")
+	builder.WriteString("integration_id=")
+	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	if v := _m.ObservedAt; v != nil {
+		builder.WriteString("observed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

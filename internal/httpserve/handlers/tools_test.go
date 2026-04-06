@@ -5,23 +5,20 @@ package handlers_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"net/url"
-	"strings"
 	"testing"
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
-	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
-	"golang.org/x/oauth2"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/samber/do/v2"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -33,8 +30,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -43,10 +39,11 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -104,6 +101,8 @@ type HandlerTestSuite struct {
 	suite.Suite
 	e                    *echo.Echo
 	db                   *ent.Client
+	galaDB               *ent.Client
+	sharedIntegrationsRT *runtime.Runtime
 	api                  *testclient.TestClient
 	h                    *handlers.Handler
 	router               *route.Router
@@ -117,6 +116,7 @@ type HandlerTestSuite struct {
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
 	sharedPool           *gala.Pool
+	galaRuntime          *gala.Gala
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
@@ -140,6 +140,9 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	// setup db container
 	suite.tf = entdb.NewTestFixture()
 
+	version, err := fgaversion.GetVersion()
+	require.NoError(suite.T(), err)
+
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModelFile(fgaModelFile),
@@ -148,10 +151,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
 			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
 		}),
+		fgatest.WithVersion(version),
 	)
-
-	// create shared instances once to avoid expensive recreation in each test
-	var err error
 
 	// shared token manager to avoid RSA key generation
 	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
@@ -184,6 +185,97 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		gala.WithWorkers(100), //nolint:mnd
 		gala.WithPoolName("ent_client_pool"),
 	)
+
+	// shared durable gala runtime for integration tests
+	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     suite.tf.URI,
+		QueueName:         "handler_integration_test",
+		WorkerCount:       5, //nolint:mnd
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+	})
+	require.NoError(suite.T(), err)
+
+	require.NoError(suite.T(), galaInstance.StartWorkers(context.Background()))
+
+	suite.galaRuntime = galaInstance
+
+	// suite-scoped ent client for gala listeners — stays open for the entire suite
+	// so durable job handlers never reference a closed connection
+	hc, err := entdb.NewTestHistoryClient(context.Background(), suite.tf)
+	require.NoError(suite.T(), err)
+
+	galaSessionConfig := sessions.NewSessionConfig(
+		suite.sharedSessionManager,
+		sessions.WithPersistence(suite.sharedRedisClient),
+	)
+
+	galaSessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
+
+	galaMockBackend := new(mocks.MockStripeBackend)
+	galaMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	galaMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	galaEntitlements, err := entitlements.NewStripeClient(
+		entitlements.WithAPIKey("not_a_stripe_key"),
+		entitlements.WithConfig(entitlements.Config{Enabled: true}),
+		entitlements.WithBackends(&stripe.Backends{
+			API:     galaMockBackend,
+			Connect: galaMockBackend,
+			Uploads: galaMockBackend,
+		}),
+	)
+	require.NoError(suite.T(), err)
+
+	galaOpts := []ent.Option{
+		ent.Authz(*suite.sharedFGAClient),
+		ent.Emailer(&emailtemplates.Config{CompanyName: "Meow Inc."}),
+		ent.TokenManager(suite.sharedTokenManager),
+		ent.SessionConfig(&galaSessionConfig),
+		ent.EntConfig(&entconfig.Config{Modules: entconfig.Modules{Enabled: true, UseSandbox: true}}),
+		ent.TOTP(suite.sharedOTPManager),
+		ent.Pool(suite.sharedPool),
+		ent.EntitlementManager(galaEntitlements),
+		ent.HistoryClient(hc),
+	}
+
+	galaJobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
+
+	galaDB, err := entdb.NewTestClient(context.Background(), suite.tf, galaJobOpts, nil, galaOpts)
+	require.NoError(suite.T(), err)
+
+	suite.galaDB = galaDB
+
+	// single integration runtime for the entire suite — listeners registered once
+	credStore, err := keystore.NewStore(suite.galaDB)
+	require.NoError(suite.T(), err)
+
+	rt, err := runtime.New(runtime.Config{
+		DB:       suite.galaDB,
+		Gala:     suite.galaRuntime,
+		Keystore: credStore,
+		DefinitionBuilders: []registry.Builder{
+			registry.Builder(buildTestOAuthDefinition),
+			githubapp.Builder(defaultGitHubAppSpec()),
+			configTestDefinitionBuilder(configTestProviderID, false),
+			configTestDefinitionBuilder(configTestFailHealthProviderID, true),
+			configTestDefinitionBuilder("def_01K0TESTOTH00000000000001", false),
+			definitionscim.Builder(),
+			webhookTestDefinitionBuilder(webhookTestDefinitionID),
+			githubTestDefinitionBuilder(disconnectTestDefinitionID),
+			operationTestDefinitionBuilder(operationTestDefinitionID, false),
+			operationTestDefinitionBuilder(operationTestInlineDefinitionID, true),
+			userInputOnlyTestDefinitionBuilder("def_01K0TESTUIONLY000000000001"),
+		},
+	})
+	require.NoError(suite.T(), err)
+
+	suite.sharedIntegrationsRT = rt
+
+	// provide ent client to gala's injector so ingest listeners can resolve it
+	do.ProvideValue(suite.galaRuntime.Injector(), suite.galaDB)
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
@@ -254,7 +346,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
-	suite.configureIntegrationRuntime(ctx)
+	suite.configureIntegrationOAuthRuntime()
 	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
 		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
 	}
@@ -355,11 +447,25 @@ func (suite *HandlerTestSuite) ClearTestData() {
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
+	if suite.galaRuntime != nil {
+		_ = suite.galaRuntime.StopWorkers(context.Background())
+		_ = suite.galaRuntime.Close()
+	}
+
+	if suite.galaDB != nil {
+		_ = suite.galaDB.CloseAll()
+	}
+
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
 	err := suite.ofgaTF.TeardownFixture()
 	require.NoError(suite.T(), err)
+}
+
+// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+func (suite *HandlerTestSuite) WaitForEvents() {
+	suite.galaRuntime.WaitIdle()
 }
 
 func setupRouter() (*route.Router, error) {
@@ -391,126 +497,91 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	return h
 }
 
-func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) {
-	store := keystore.NewStore(suite.db)
-	suite.h.IntegrationStore = store
+// testAuthDefinitionID is the canonical ID for the test OAuth definition.
+const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
-	providerType := types.ProviderType("github")
-	spec := config.ProviderSpec{
-		Name:        "github",
-		DisplayName: "GitHub",
-		Category:    "code",
-		AuthType:    types.AuthKindOAuth2,
-		Active:      lo.ToPtr(true),
-		OAuth: &config.OAuthSpec{
-			ClientID:     "test-client",
-			ClientSecret: "test-secret",
-			AuthURL:      "https://example.com/oauth/authorize",
-			TokenURL:     "https://example.com/oauth/token",
-			Scopes:       []string{"repo"},
-			RedirectURI:  "https://example.com/oauth/callback",
+var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
+
+// configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
+func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
+	suite.h.IntegrationsRuntime = suite.sharedIntegrationsRT
+}
+
+func buildTestOAuthDefinition() (types.Definition, error) {
+	return types.Definition{
+		DefinitionSpec: types.DefinitionSpec{
+			ID:          testAuthDefinitionID,
+			DisplayName: "Test OAuth",
+			Active:      true,
 		},
-	}
-
-	builder := providers.BuilderFunc{
-		ProviderType: providerType,
-		BuildFunc: func(context.Context, config.ProviderSpec) (providers.Provider, error) {
-			return &testOAuthProvider{provider: providerType}, nil
+		CredentialRegistrations: []types.CredentialRegistration{
+			{
+				Ref:         testAuthCredentialRef,
+				Name:        "Test OAuth Credential",
+				Description: "Auth-managed credential slot used by the test OAuth definition.",
+			},
 		},
-	}
-
-	reg, err := registry.NewRegistry(ctx, nil)
-	require.NoError(suite.T(), err)
-	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
-
-	suite.h.IntegrationRegistry = reg
-	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
-
-	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
-	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
-	assert.NoError(suite.T(), err)
-	suite.h.IntegrationOperations = manager
-
-	sessions := keymaker.NewMemorySessionStore()
-	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	assert.NoError(suite.T(), err)
-
-	activationSvc, err := activation.NewService(svc, store, suite.h.IntegrationOperations, reg)
-	assert.NoError(suite.T(), err)
-	suite.h.IntegrationActivation = activationSvc
-}
-
-type testOAuthProvider struct {
-	provider types.ProviderType
-}
-
-func (p *testOAuthProvider) Type() types.ProviderType {
-	return p.provider
-}
-
-func (p *testOAuthProvider) Capabilities() types.ProviderCapabilities {
-	return types.ProviderCapabilities{
-		SupportsRefreshTokens: true,
-	}
-}
-
-func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
-	state := strings.TrimSpace(input.State)
-	if state == "" {
-		state = "state"
-	}
-	values := url.Values{}
-	values.Set("state", state)
-	if len(input.Scopes) > 0 {
-		values.Set("scope", strings.Join(input.Scopes, " "))
-	}
-
-	authURL := fmt.Sprintf("https://example.com/oauth/authorize?%s", values.Encode())
-	return &testAuthSession{
-		provider: p.provider,
-		state:    state,
-		authURL:  authURL,
+		Connections: []types.ConnectionRegistration{
+			{
+				CredentialRef:  testAuthCredentialRef,
+				Name:           "Test OAuth",
+				Description:    "Authenticate the test definition using the OAuth callback fixture.",
+				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef},
+				Auth: &types.AuthRegistration{
+					CredentialRef: testAuthCredentialRef,
+					Start:         testAuthStart,
+					Complete:      testAuthComplete,
+				},
+				Disconnect: &types.DisconnectRegistration{
+					CredentialRef: testAuthCredentialRef,
+					Description:   "Remove the persisted test OAuth credential and disconnect this installation.",
+				},
+			},
+		},
 	}, nil
 }
 
-func (p *testOAuthProvider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	token := &oauth2.Token{
-		AccessToken:  "minted-access-token",
-		RefreshToken: "minted-refresh-token",
-		Expiry:       time.Now().Add(time.Hour),
+type testCallbackPayload struct {
+	State string `json:"state"`
+	Code  string `json:"code,omitempty"`
+}
+
+func testAuthStart(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+	oauthState := ulids.New().String()
+	stateBytes, _ := json.Marshal(map[string]string{"state": oauthState})
+
+	return types.AuthStartResult{
+		URL:   fmt.Sprintf("https://example.com/oauth/authorize?state=%s", oauthState),
+		State: stateBytes,
+	}, nil
+}
+
+func testAuthComplete(_ context.Context, callbackState json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
+	var cs, inp testCallbackPayload
+	json.Unmarshal(callbackState, &cs) //nolint:errcheck
+	inp = testCallbackPayload{
+		State: input.First("state"),
+		Code:  input.First("code"),
 	}
-	return types.NewCredentialBuilder(subject.Provider).
-		With(types.WithOAuthToken(token)).
-		Build()
-}
 
-type testAuthSession struct {
-	provider types.ProviderType
-	state    string
-	authURL  string
-}
-
-func (s *testAuthSession) ProviderType() types.ProviderType {
-	return s.provider
-}
-
-func (s *testAuthSession) State() string {
-	return s.state
-}
-
-func (s *testAuthSession) AuthURL() string {
-	return s.authURL
-}
-
-func (s *testAuthSession) Finish(context.Context, string) (types.CredentialPayload, error) {
-	token := &oauth2.Token{
-		AccessToken:  "test-access-token",
-		RefreshToken: "test-refresh-token",
-		Expiry:       time.Now().Add(time.Hour),
+	if inp.Code == "" {
+		return types.AuthCompleteResult{}, errors.New("missing oauth code")
 	}
-	return types.NewCredentialBuilder(s.provider).
-		With(types.WithOAuthToken(token)).
-		Build()
+
+	if cs.State != inp.State {
+		return types.AuthCompleteResult{}, errors.New("oauth state mismatch")
+	}
+
+	tokenData, _ := json.Marshal(map[string]string{
+		"access_token":  "test-access-token",
+		"refresh_token": "test-refresh-token",
+	})
+
+	return types.AuthCompleteResult{
+		Credential: types.CredentialSet{
+			Data: tokenData,
+		},
+	}, nil
 }
 
 // mockStripeClient creates a new stripe client with mock backend
@@ -524,7 +595,7 @@ func (suite *HandlerTestSuite) mockStripeClient() (*entitlements.StripeClient, e
 
 	suite.orgSubscriptionMocks()
 
-	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
+	return entitlements.NewStripeClient(entitlements.WithAPIKey("not_a_stripe_key"),
 		entitlements.WithConfig(entitlements.Config{
 			Enabled:             true,
 			StripeWebhookSecret: webhookSecret,

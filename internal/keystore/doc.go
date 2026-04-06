@@ -1,2 +1,2 @@
-// Package keystore manages credential persistence, token refresh, client pooling, and operation execution for integration providers
+// Package keystore manages installation-scoped credential persistence and pooled client initialization for integrations.
 package keystore

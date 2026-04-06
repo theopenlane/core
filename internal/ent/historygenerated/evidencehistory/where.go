@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -164,12 +165,12 @@ func CollectionProcedure(v string) predicate.EvidenceHistory {
 }
 
 // CreationDate applies equality check predicate on the "creation_date" field. It's identical to CreationDateEQ.
-func CreationDate(v time.Time) predicate.EvidenceHistory {
+func CreationDate(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldCreationDate, v))
 }
 
 // RenewalDate applies equality check predicate on the "renewal_date" field. It's identical to RenewalDateEQ.
-func RenewalDate(v time.Time) predicate.EvidenceHistory {
+func RenewalDate(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldRenewalDate, v))
 }
 
@@ -1459,82 +1460,82 @@ func CollectionProcedureContainsFold(v string) predicate.EvidenceHistory {
 }
 
 // CreationDateEQ applies the EQ predicate on the "creation_date" field.
-func CreationDateEQ(v time.Time) predicate.EvidenceHistory {
+func CreationDateEQ(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldCreationDate, v))
 }
 
 // CreationDateNEQ applies the NEQ predicate on the "creation_date" field.
-func CreationDateNEQ(v time.Time) predicate.EvidenceHistory {
+func CreationDateNEQ(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNEQ(FieldCreationDate, v))
 }
 
 // CreationDateIn applies the In predicate on the "creation_date" field.
-func CreationDateIn(vs ...time.Time) predicate.EvidenceHistory {
+func CreationDateIn(vs ...models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldIn(FieldCreationDate, vs...))
 }
 
 // CreationDateNotIn applies the NotIn predicate on the "creation_date" field.
-func CreationDateNotIn(vs ...time.Time) predicate.EvidenceHistory {
+func CreationDateNotIn(vs ...models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNotIn(FieldCreationDate, vs...))
 }
 
 // CreationDateGT applies the GT predicate on the "creation_date" field.
-func CreationDateGT(v time.Time) predicate.EvidenceHistory {
+func CreationDateGT(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldGT(FieldCreationDate, v))
 }
 
 // CreationDateGTE applies the GTE predicate on the "creation_date" field.
-func CreationDateGTE(v time.Time) predicate.EvidenceHistory {
+func CreationDateGTE(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldGTE(FieldCreationDate, v))
 }
 
 // CreationDateLT applies the LT predicate on the "creation_date" field.
-func CreationDateLT(v time.Time) predicate.EvidenceHistory {
+func CreationDateLT(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldLT(FieldCreationDate, v))
 }
 
 // CreationDateLTE applies the LTE predicate on the "creation_date" field.
-func CreationDateLTE(v time.Time) predicate.EvidenceHistory {
+func CreationDateLTE(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldLTE(FieldCreationDate, v))
 }
 
 // RenewalDateEQ applies the EQ predicate on the "renewal_date" field.
-func RenewalDateEQ(v time.Time) predicate.EvidenceHistory {
+func RenewalDateEQ(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldRenewalDate, v))
 }
 
 // RenewalDateNEQ applies the NEQ predicate on the "renewal_date" field.
-func RenewalDateNEQ(v time.Time) predicate.EvidenceHistory {
+func RenewalDateNEQ(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNEQ(FieldRenewalDate, v))
 }
 
 // RenewalDateIn applies the In predicate on the "renewal_date" field.
-func RenewalDateIn(vs ...time.Time) predicate.EvidenceHistory {
+func RenewalDateIn(vs ...models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldIn(FieldRenewalDate, vs...))
 }
 
 // RenewalDateNotIn applies the NotIn predicate on the "renewal_date" field.
-func RenewalDateNotIn(vs ...time.Time) predicate.EvidenceHistory {
+func RenewalDateNotIn(vs ...models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNotIn(FieldRenewalDate, vs...))
 }
 
 // RenewalDateGT applies the GT predicate on the "renewal_date" field.
-func RenewalDateGT(v time.Time) predicate.EvidenceHistory {
+func RenewalDateGT(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldGT(FieldRenewalDate, v))
 }
 
 // RenewalDateGTE applies the GTE predicate on the "renewal_date" field.
-func RenewalDateGTE(v time.Time) predicate.EvidenceHistory {
+func RenewalDateGTE(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldGTE(FieldRenewalDate, v))
 }
 
 // RenewalDateLT applies the LT predicate on the "renewal_date" field.
-func RenewalDateLT(v time.Time) predicate.EvidenceHistory {
+func RenewalDateLT(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldLT(FieldRenewalDate, v))
 }
 
 // RenewalDateLTE applies the LTE predicate on the "renewal_date" field.
-func RenewalDateLTE(v time.Time) predicate.EvidenceHistory {
+func RenewalDateLTE(v models.DateTime) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldLTE(FieldRenewalDate, v))
 }
 

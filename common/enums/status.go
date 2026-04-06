@@ -11,9 +11,10 @@ var (
 	UserStatusSuspended   UserStatus = "SUSPENDED"
 	UserStatusOnboarding  UserStatus = "ONBOARDING"
 	UserStatusInvalid     UserStatus = "INVALID"
+	UserStatusUnknown     UserStatus = "UNKNOWN"
 )
 
-var userStatusValues = []UserStatus{UserStatusActive, UserStatusInactive, UserStatusDeactivated, UserStatusSuspended, UserStatusOnboarding}
+var userStatusValues = []UserStatus{UserStatusActive, UserStatusInactive, UserStatusDeactivated, UserStatusSuspended, UserStatusOnboarding, UserStatusUnknown}
 
 // Values returns a slice of strings that represents all the possible values of the UserStatus enum.
 // Possible default values are "ACTIVE", "INACTIVE", "DEACTIVATED", and "SUSPENDED".

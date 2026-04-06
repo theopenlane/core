@@ -183,11 +183,6 @@ func Version(v int) predicate.EmailTemplateHistory {
 	return predicate.EmailTemplateHistory(sql.FieldEQ(FieldVersion, v))
 }
 
-// EmailBrandingID applies equality check predicate on the "email_branding_id" field. It's identical to EmailBrandingIDEQ.
-func EmailBrandingID(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldEQ(FieldEmailBrandingID, v))
-}
-
 // IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
 func IntegrationID(v string) predicate.EmailTemplateHistory {
 	return predicate.EmailTemplateHistory(sql.FieldEQ(FieldIntegrationID, v))
@@ -1743,16 +1738,6 @@ func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.EmailTemplateHi
 	return predicate.EmailTemplateHistory(sql.FieldNotIn(FieldTemplateContext, v...))
 }
 
-// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
-func TemplateContextIsNil() predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldTemplateContext))
-}
-
-// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
-func TemplateContextNotNil() predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldNotNull(FieldTemplateContext))
-}
-
 // DefaultsIsNil applies the IsNil predicate on the "defaults" field.
 func DefaultsIsNil() predicate.EmailTemplateHistory {
 	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldDefaults))
@@ -1761,81 +1746,6 @@ func DefaultsIsNil() predicate.EmailTemplateHistory {
 // DefaultsNotNil applies the NotNil predicate on the "defaults" field.
 func DefaultsNotNil() predicate.EmailTemplateHistory {
 	return predicate.EmailTemplateHistory(sql.FieldNotNull(FieldDefaults))
-}
-
-// EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
-func EmailBrandingIDEQ(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldEQ(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDNEQ applies the NEQ predicate on the "email_branding_id" field.
-func EmailBrandingIDNEQ(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldNEQ(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDIn applies the In predicate on the "email_branding_id" field.
-func EmailBrandingIDIn(vs ...string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldIn(FieldEmailBrandingID, vs...))
-}
-
-// EmailBrandingIDNotIn applies the NotIn predicate on the "email_branding_id" field.
-func EmailBrandingIDNotIn(vs ...string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldNotIn(FieldEmailBrandingID, vs...))
-}
-
-// EmailBrandingIDGT applies the GT predicate on the "email_branding_id" field.
-func EmailBrandingIDGT(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldGT(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDGTE applies the GTE predicate on the "email_branding_id" field.
-func EmailBrandingIDGTE(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldGTE(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDLT applies the LT predicate on the "email_branding_id" field.
-func EmailBrandingIDLT(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldLT(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDLTE applies the LTE predicate on the "email_branding_id" field.
-func EmailBrandingIDLTE(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldLTE(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDContains applies the Contains predicate on the "email_branding_id" field.
-func EmailBrandingIDContains(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldContains(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDHasPrefix applies the HasPrefix predicate on the "email_branding_id" field.
-func EmailBrandingIDHasPrefix(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldHasPrefix(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDHasSuffix applies the HasSuffix predicate on the "email_branding_id" field.
-func EmailBrandingIDHasSuffix(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldHasSuffix(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDIsNil applies the IsNil predicate on the "email_branding_id" field.
-func EmailBrandingIDIsNil() predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldEmailBrandingID))
-}
-
-// EmailBrandingIDNotNil applies the NotNil predicate on the "email_branding_id" field.
-func EmailBrandingIDNotNil() predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldNotNull(FieldEmailBrandingID))
-}
-
-// EmailBrandingIDEqualFold applies the EqualFold predicate on the "email_branding_id" field.
-func EmailBrandingIDEqualFold(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldEqualFold(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDContainsFold applies the ContainsFold predicate on the "email_branding_id" field.
-func EmailBrandingIDContainsFold(v string) predicate.EmailTemplateHistory {
-	return predicate.EmailTemplateHistory(sql.FieldContainsFold(FieldEmailBrandingID, v))
 }
 
 // IntegrationIDEQ applies the EQ predicate on the "integration_id" field.

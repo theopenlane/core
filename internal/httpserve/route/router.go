@@ -34,8 +34,8 @@ func convertEchoPathToOpenAPI(echoPath string) string {
 // addPathParametersFromPattern extracts path parameters from Echo-style path and adds them to OpenAPI operation
 func (r *Router) addPathParametersFromPattern(path string, operation *openapi3.Operation) {
 	// Extract parameter names from Echo-style path (e.g., :id, :name)
-	parts := strings.Split(path, "/")
-	for _, part := range parts {
+	parts := strings.SplitSeq(path, "/")
+	for part := range parts {
 		if strings.HasPrefix(part, ":") {
 			paramName := part[1:] // Remove the : prefix
 
@@ -330,6 +330,8 @@ type Config struct {
 	Handler func(echo.Context, *handlers.OpenAPIContext) error
 	// SimpleHandler is used for routes without OpenAPI context.
 	SimpleHandler func(echo.Context) error // For handlers that don't need OpenAPI context
+	// ExcludeFromOAS skips publishing this route in the OpenAPI specification.
+	ExcludeFromOAS bool
 }
 
 // registrationContext is a special echo.Context implementation used during OpenAPI registration
@@ -436,9 +438,11 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 		return err
 	}
 
-	// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
-	openAPIPath := convertEchoPathToOpenAPI("/v1" + config.Path)
-	r.OAS.AddOperation(openAPIPath, config.Method, operation)
+	if !config.ExcludeFromOAS {
+		// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
+		openAPIPath := convertEchoPathToOpenAPI("/v1" + config.Path)
+		r.OAS.AddOperation(openAPIPath, config.Method, operation)
+	}
 
 	return nil
 }
@@ -618,13 +622,12 @@ func RegisterRoutes(router *Router) error {
 		registerWebauthnAuthVerificationHandler,
 		registerUserInfoHandler,
 		registerOAuthRegisterHandler,
-		registerIntegrationOAuthStartHandler,
-		registerIntegrationOAuthCallbackHandler,
-		registerGitHubAppInstallHandler,
-		registerGitHubAppCallbackHandler,
-		registerRefreshIntegrationTokenHandler,
+		registerIntegrationAuthStartHandler,
+		registerIntegrationAuthCallbackHandler,
+		registerGitHubAppWebhookHandler,
 		registerIntegrationProvidersHandler,
 		registerIntegrationConfigHandler,
+		registerIntegrationDisconnectHandler,
 		registerIntegrationOperationHandler,
 		registerSwitchRoute,
 		registerLivenessHandler,
@@ -655,9 +658,9 @@ func RegisterRoutes(router *Router) error {
 		registerEndImpersonationHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,
+		registerIntegrationWebhookHandler,
 		registerSCIMRoutes,
 		registerResendWebhookHandler,
-		registerGitHubAppWebhookHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into
