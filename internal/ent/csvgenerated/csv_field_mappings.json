@@ -295,8 +295,28 @@
   ],
   "Risk": [
     {
+      "csvColumn": "ActionPlanNames",
+      "targetField": "ActionPlanIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "AssetNames",
+      "targetField": "AssetIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "EntityNames",
+      "targetField": "EntityIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "PlatformNames",
+      "targetField": "PlatformIDs",
       "isSlice": true
     },
     {
@@ -308,6 +328,11 @@
       "csvColumn": "StakeholderGroupName",
       "targetField": "StakeholderID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "SubcontrolRefCodes",
+      "targetField": "SubcontrolIDs",
+      "isSlice": true
     }
   ],
   "Scan": [

@@ -428,10 +428,8 @@ func addTaskAssigneeNotification(ctx context.Context, client *generated.Client, 
 		return ErrFailedToGetClient
 	}
 
-	consoleURL := client.EntConfig.Notifications.ConsoleURL
-
 	dataMap := map[string]any{
-		"url": getURLPathForObject(consoleURL, input.taskID, generated.TypeTask),
+		"url": getURLPathForObject(input.taskID, generated.TypeTask),
 	}
 
 	topic := enums.NotificationTopicTaskAssignment
@@ -473,8 +471,6 @@ func addDocumentNotification(ctx context.Context, client *generated.Client, inpu
 		userIDs[i] = gm.UserID
 	}
 
-	consoleURL := client.EntConfig.Notifications.ConsoleURL
-
 	objectName := ""
 	switch payload.MutationType {
 	case generated.TypeInternalPolicy:
@@ -487,7 +483,7 @@ func addDocumentNotification(ctx context.Context, client *generated.Client, inpu
 	}
 
 	dataMap := map[string]any{
-		"url": getURLPathForObject(consoleURL, input.docID, payload.MutationType),
+		"url": getURLPathForObject(input.docID, payload.MutationType),
 	}
 
 	topic := enums.NotificationTopicApproval

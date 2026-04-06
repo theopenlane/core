@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -39,6 +40,9 @@ type CSVLookupEntry struct {
 var CSVLookupRegistry = map[string]CSVLookupEntry{
 	"ActionPlan:name": {
 		Lookup: LookupActionPlanByName,
+	},
+	"Asset:name": {
+		Lookup: LookupAssetByName,
 	},
 	"Control:ref_code": {
 		Lookup: LookupControlByRefCode,
@@ -129,6 +133,51 @@ func LookupActionPlanByName(ctx context.Context, client *generated.Client, orgID
 		key := normalizeCSVKey(r.Name)
 		if existingID, exists := resolved[key]; exists && existingID != r.ID {
 			return nil, fmt.Errorf("name '%s' matched multiple ActionPlan records; use ActionPlanID directly or add additional columns to scope the lookup", r.Name)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupAssetByName resolves Asset name values to IDs.
+func LookupAssetByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Asset, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, asset.NameEqualFold(v))
+	}
+	records, err := client.Asset.Query().
+		Where(asset.OwnerID(orgID), asset.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Asset records; use AssetID directly or add additional columns to scope the lookup", r.Name)
 		}
 		resolved[key] = r.ID
 	}
@@ -1460,10 +1509,42 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Risk",
 		Rules: []CSVReferenceRule{
 			{
+				SourceColumn:    "ActionPlanNames",
+				TargetField:     "ActionPlanIDs",
+				TargetEntity:    "ActionPlan",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "AssetNames",
+				TargetField:     "AssetIDs",
+				TargetEntity:    "Asset",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ControlRefCodes",
 				TargetField:     "ControlIDs",
 				TargetEntity:    "Control",
 				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "EntityNames",
+				TargetField:     "EntityIDs",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "PlatformNames",
+				TargetField:     "PlatformIDs",
+				TargetEntity:    "Platform",
+				MatchField:      "name",
 				IsSlice:         true,
 				CreateIfMissing: false,
 			},
@@ -1481,6 +1562,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "Group",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SubcontrolRefCodes",
+				TargetField:     "SubcontrolIDs",
+				TargetEntity:    "Subcontrol",
+				MatchField:      "ref_code",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 		},
@@ -2940,9 +3029,14 @@ func (ReviewCSVUpdateInput) CSVInputWrapper() {}
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
 	Input generated.CreateRiskInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
+	AssetNames []string `csv:"AssetNames"`
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	EntityNames []string `csv:"EntityNames"`
+	PlatformNames []string `csv:"PlatformNames"`
 	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName string `csv:"StakeholderGroupName"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RiskCSVInput for CSV header preprocessing.
@@ -2953,9 +3047,14 @@ type RiskCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateRiskInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
+	AssetNames []string `csv:"AssetNames"`
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	EntityNames []string `csv:"EntityNames"`
+	PlatformNames []string `csv:"PlatformNames"`
 	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName string `csv:"StakeholderGroupName"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.

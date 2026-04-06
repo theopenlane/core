@@ -424,9 +424,7 @@ func addMentionNotification(ctx context.Context, client *generated.Client, input
 		return ErrFailedToGetClient
 	}
 
-	consoleURL := client.EntConfig.Notifications.ConsoleURL
-
-	url := getURLPathForObject(consoleURL, input.objectID, input.objectType)
+	url := getURLPathForObject(input.objectID, input.objectType)
 
 	dataMap := map[string]any{
 		"object_type": strcase.UpperSnakeCase(input.objectType),

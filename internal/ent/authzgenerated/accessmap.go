@@ -3384,24 +3384,24 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "platforms": {
 	ObjectType:      "platform",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "action_plans": {
 	ObjectType:      "action_plan",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "tasks": {
 	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "assets": {
 	ObjectType:      "asset",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "entities": {
 	ObjectType:      "entity",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "scans": {
 	ObjectType:      "scan",
 	SkipEditCheck:   false,
