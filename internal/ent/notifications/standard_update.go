@@ -101,8 +101,6 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		return detectVersionBump(info.revision, std.Revision) != ""
 	})
 
-	consoleURL := client.EntConfig.Notifications.ConsoleURL
-
 	lo.ForEach(lo.Entries(significantOrgs), func(entry lo.Entry[string, organizations], _ int) {
 		orgID := entry.Key
 		value := entry.Value
@@ -121,7 +119,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		}
 
 		data := map[string]any{
-			"url":                     getURLPathForObject(consoleURL, standardID, generated.TypeStandard),
+			"url":                     getURLPathForObject(standardID, generated.TypeStandard),
 			"standard_id":             standardID,
 			"standard_short_name":     std.ShortName,
 			"old_revision":            value.revision,
