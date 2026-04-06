@@ -13518,15 +13518,11 @@ input CreateInternalPolicyInput {
 	commentIDs: [ID!]
 	discussionIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
-<<<<<<< HEAD
-	internalPolicyFileName: UploadFileName
-||||||| aa80e6ab3
-=======
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	reviewIDs: [ID!]
->>>>>>> origin/main
+	internalPolicyFileName: UploadFileName
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -88020,10 +88016,6 @@ input UpdateInternalPolicyInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
-<<<<<<< HEAD
-	internalPolicyFileName: UploadFileName
-||||||| aa80e6ab3
-=======
 	addAssetIDs: [ID!]
 	removeAssetIDs: [ID!]
 	clearAssets: Boolean
@@ -88036,7 +88028,7 @@ input UpdateInternalPolicyInput {
 	addReviewIDs: [ID!]
 	removeReviewIDs: [ID!]
 	clearReviews: Boolean
->>>>>>> origin/main
+	internalPolicyFileName: UploadFileName
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID

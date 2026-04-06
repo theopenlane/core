@@ -43,6 +43,8 @@ query GetFileByID ($fileId: ID!) {
 		detectedMimeType
 		environmentID
 		environmentName
+		fileCategoryID
+		fileCategoryName
 		id
 		internalNotes
 		lastAccessedAt
