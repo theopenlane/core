@@ -120,7 +120,7 @@ func TestVendorScoringConfigCustomQuestionRoundTrip(t *testing.T) {
 	assert.Assert(t, fetchedConfigResp != nil)
 
 	fetchedQuestion, found := lo.Find(fetchedConfigResp.VendorScoringConfig.Questions.Custom, func(question models.VendorScoringQuestionDef) bool {
-		return question.Key == customQuestion.Key
+		return question.Name == customQuestion.Name
 	})
 	assert.Assert(t, found)
 	assert.Check(t, is.Equal(customQuestion.Name, fetchedQuestion.Name))
@@ -420,6 +420,16 @@ func TestVendorRiskScoreDefaultPlusCustomQuestions(t *testing.T) {
 	assert.NilError(t, err)
 
 	configID := configResp.CreateVendorScoringConfig.VendorScoringConfig.ID
+
+	// Fetch the config to get the assigned custom key
+	fetchedConfig, err := suite.client.api.GetVendorScoringConfigByID(scoringUser.UserCtx, configID)
+	assert.NilError(t, err)
+
+	assignedCustomQ, found := lo.Find(fetchedConfig.VendorScoringConfig.Questions.Custom, func(q models.VendorScoringQuestionDef) bool {
+		return q.Name == customQuestion.Name
+	})
+	assert.Assert(t, found)
+
 	falseAnswer := "false"
 
 	// Submit one default question
@@ -441,14 +451,14 @@ func TestVendorRiskScoreDefaultPlusCustomQuestions(t *testing.T) {
 	assert.Check(t, is.Equal(15.0, defaultResp.CreateVendorRiskScore.VendorRiskScore.Score))
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 15, "HIGH", 1)
 
-	// Submit the custom question
+	// Submit the custom question using the assigned key
 	customResp, err := suite.client.api.CreateVendorRiskScore(scoringUser.UserCtx, testclient.CreateVendorRiskScoreInput{
 		OwnerID:               &scoringUser.OrganizationID,
 		VendorScoringConfigID: &configID,
 		EntityID:              entity.ID,
-		QuestionKey:           customQuestion.Key,
-		QuestionName:          customQuestion.Name,
-		QuestionCategory:      customQuestion.Category,
+		QuestionKey:           assignedCustomQ.Key,
+		QuestionName:          assignedCustomQ.Name,
+		QuestionCategory:      assignedCustomQ.Category,
 		Impact:                enums.VendorRiskImpactHigh,
 		Likelihood:            enums.VendorRiskLikelihoodMedium,
 		Answer:                &falseAnswer,
