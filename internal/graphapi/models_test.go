@@ -439,6 +439,13 @@ type SLADefinitionBuilder struct {
 	SecurityLevel enums.SecurityLevel
 }
 
+type PlatformBuilder struct {
+	client *client
+
+	// Fields
+	Name string
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -2698,4 +2705,19 @@ func (e *EmailBrandingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 	requireNoError(t, err)
 
 	return emailBranding
+}
+
+func (p *PlatformBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Platform {
+	ctx = setContext(ctx, p.client.db)
+
+	if p.Name == "" {
+		p.Name = gofakeit.AppName() + ulids.New().String()
+	}
+
+	platform, err := p.client.db.Platform.Create().
+		SetName(p.Name).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return platform
 }

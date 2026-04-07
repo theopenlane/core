@@ -12376,6 +12376,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"architecture_diagrams",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.ArchitectureDiagramsTable,
+			Columns: []string{platform.ArchitectureDiagramsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"File",
+	)
+	graph.MustAddE(
+		"data_flow_diagrams",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DataFlowDiagramsTable,
+			Columns: []string{platform.DataFlowDiagramsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"File",
+	)
+	graph.MustAddE(
+		"trust_boundary_diagrams",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.TrustBoundaryDiagramsTable,
+			Columns: []string{platform.TrustBoundaryDiagramsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"File",
+	)
+	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -37376,6 +37412,48 @@ func (f *PlatformFilter) WhereHasFiles() {
 // WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
 func (f *PlatformFilter) WhereHasFilesWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasArchitectureDiagrams applies a predicate to check if query has an edge architecture_diagrams.
+func (f *PlatformFilter) WhereHasArchitectureDiagrams() {
+	f.Where(entql.HasEdge("architecture_diagrams"))
+}
+
+// WhereHasArchitectureDiagramsWith applies a predicate to check if query has an edge architecture_diagrams with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasArchitectureDiagramsWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("architecture_diagrams", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDataFlowDiagrams applies a predicate to check if query has an edge data_flow_diagrams.
+func (f *PlatformFilter) WhereHasDataFlowDiagrams() {
+	f.Where(entql.HasEdge("data_flow_diagrams"))
+}
+
+// WhereHasDataFlowDiagramsWith applies a predicate to check if query has an edge data_flow_diagrams with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasDataFlowDiagramsWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("data_flow_diagrams", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustBoundaryDiagrams applies a predicate to check if query has an edge trust_boundary_diagrams.
+func (f *PlatformFilter) WhereHasTrustBoundaryDiagrams() {
+	f.Where(entql.HasEdge("trust_boundary_diagrams"))
+}
+
+// WhereHasTrustBoundaryDiagramsWith applies a predicate to check if query has an edge trust_boundary_diagrams with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasTrustBoundaryDiagramsWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("trust_boundary_diagrams", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

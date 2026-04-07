@@ -7981,6 +7981,9 @@ type CreatePlatformInput struct {
 	EntityIDs                    []string       `json:"entityIDs,omitempty"`
 	EvidenceIDs                  []string       `json:"evidenceIDs,omitempty"`
 	FileIDs                      []string       `json:"fileIDs,omitempty"`
+	ArchitectureDiagramIDs       []string       `json:"architectureDiagramIDs,omitempty"`
+	DataFlowDiagramIDs           []string       `json:"dataFlowDiagramIDs,omitempty"`
+	TrustBoundaryDiagramIDs      []string       `json:"trustBoundaryDiagramIDs,omitempty"`
 	RiskIDs                      []string       `json:"riskIDs,omitempty"`
 	ControlIDs                   []string       `json:"controlIDs,omitempty"`
 	AssessmentIDs                []string       `json:"assessmentIDs,omitempty"`
@@ -26460,6 +26463,9 @@ type Platform struct {
 	Entities                   *EntityConnection              `json:"entities"`
 	Evidence                   *EvidenceConnection            `json:"evidence"`
 	Files                      *FileConnection                `json:"files"`
+	ArchitectureDiagrams       *FileConnection                `json:"architectureDiagrams"`
+	DataFlowDiagrams           *FileConnection                `json:"dataFlowDiagrams"`
+	TrustBoundaryDiagrams      *FileConnection                `json:"trustBoundaryDiagrams"`
 	Risks                      *RiskConnection                `json:"risks"`
 	Controls                   *ControlConnection             `json:"controls"`
 	Assessments                *AssessmentConnection          `json:"assessments"`
@@ -27363,6 +27369,15 @@ type PlatformWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// architecture_diagrams edge predicates
+	HasArchitectureDiagrams     *bool             `json:"hasArchitectureDiagrams,omitempty"`
+	HasArchitectureDiagramsWith []*FileWhereInput `json:"hasArchitectureDiagramsWith,omitempty"`
+	// data_flow_diagrams edge predicates
+	HasDataFlowDiagrams     *bool             `json:"hasDataFlowDiagrams,omitempty"`
+	HasDataFlowDiagramsWith []*FileWhereInput `json:"hasDataFlowDiagramsWith,omitempty"`
+	// trust_boundary_diagrams edge predicates
+	HasTrustBoundaryDiagrams     *bool             `json:"hasTrustBoundaryDiagrams,omitempty"`
+	HasTrustBoundaryDiagramsWith []*FileWhereInput `json:"hasTrustBoundaryDiagramsWith,omitempty"`
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
@@ -42214,6 +42229,15 @@ type UpdatePlatformInput struct {
 	AddFileIDs                      []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                   []string       `json:"removeFileIDs,omitempty"`
 	ClearFiles                      *bool          `json:"clearFiles,omitempty"`
+	AddArchitectureDiagramIDs       []string       `json:"addArchitectureDiagramIDs,omitempty"`
+	RemoveArchitectureDiagramIDs    []string       `json:"removeArchitectureDiagramIDs,omitempty"`
+	ClearArchitectureDiagrams       *bool          `json:"clearArchitectureDiagrams,omitempty"`
+	AddDataFlowDiagramIDs           []string       `json:"addDataFlowDiagramIDs,omitempty"`
+	RemoveDataFlowDiagramIDs        []string       `json:"removeDataFlowDiagramIDs,omitempty"`
+	ClearDataFlowDiagrams           *bool          `json:"clearDataFlowDiagrams,omitempty"`
+	AddTrustBoundaryDiagramIDs      []string       `json:"addTrustBoundaryDiagramIDs,omitempty"`
+	RemoveTrustBoundaryDiagramIDs   []string       `json:"removeTrustBoundaryDiagramIDs,omitempty"`
+	ClearTrustBoundaryDiagrams      *bool          `json:"clearTrustBoundaryDiagrams,omitempty"`
 	AddRiskIDs                      []string       `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs                   []string       `json:"removeRiskIDs,omitempty"`
 	ClearRisks                      *bool          `json:"clearRisks,omitempty"`

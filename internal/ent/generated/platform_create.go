@@ -1014,6 +1014,51 @@ func (_c *PlatformCreate) AddFiles(v ...*File) *PlatformCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddArchitectureDiagramIDs adds the "architecture_diagrams" edge to the File entity by IDs.
+func (_c *PlatformCreate) AddArchitectureDiagramIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddArchitectureDiagramIDs(ids...)
+	return _c
+}
+
+// AddArchitectureDiagrams adds the "architecture_diagrams" edges to the File entity.
+func (_c *PlatformCreate) AddArchitectureDiagrams(v ...*File) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddArchitectureDiagramIDs(ids...)
+}
+
+// AddDataFlowDiagramIDs adds the "data_flow_diagrams" edge to the File entity by IDs.
+func (_c *PlatformCreate) AddDataFlowDiagramIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddDataFlowDiagramIDs(ids...)
+	return _c
+}
+
+// AddDataFlowDiagrams adds the "data_flow_diagrams" edges to the File entity.
+func (_c *PlatformCreate) AddDataFlowDiagrams(v ...*File) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDataFlowDiagramIDs(ids...)
+}
+
+// AddTrustBoundaryDiagramIDs adds the "trust_boundary_diagrams" edge to the File entity by IDs.
+func (_c *PlatformCreate) AddTrustBoundaryDiagramIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddTrustBoundaryDiagramIDs(ids...)
+	return _c
+}
+
+// AddTrustBoundaryDiagrams adds the "trust_boundary_diagrams" edges to the File entity.
+func (_c *PlatformCreate) AddTrustBoundaryDiagrams(v ...*File) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustBoundaryDiagramIDs(ids...)
+}
+
 // AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
 func (_c *PlatformCreate) AddRiskIDs(ids ...string) *PlatformCreate {
 	_c.mutation.AddRiskIDs(ids...)
@@ -2040,6 +2085,57 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.PlatformFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ArchitectureDiagramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.ArchitectureDiagramsTable,
+			Columns: []string{platform.ArchitectureDiagramsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DataFlowDiagramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DataFlowDiagramsTable,
+			Columns: []string{platform.DataFlowDiagramsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustBoundaryDiagramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.TrustBoundaryDiagramsTable,
+			Columns: []string{platform.TrustBoundaryDiagramsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

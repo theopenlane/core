@@ -18067,6 +18067,9 @@ type CreatePlatformInput struct {
 	EntityIDs                      []string
 	EvidenceIDs                    []string
 	FileIDs                        []string
+	ArchitectureDiagramIDs         []string
+	DataFlowDiagramIDs             []string
+	TrustBoundaryDiagramIDs        []string
 	RiskIDs                        []string
 	ControlIDs                     []string
 	AssessmentIDs                  []string
@@ -18256,6 +18259,15 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.ArchitectureDiagramIDs; len(v) > 0 {
+		m.AddArchitectureDiagramIDs(v...)
+	}
+	if v := i.DataFlowDiagramIDs; len(v) > 0 {
+		m.AddDataFlowDiagramIDs(v...)
+	}
+	if v := i.TrustBoundaryDiagramIDs; len(v) > 0 {
+		m.AddTrustBoundaryDiagramIDs(v...)
+	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
@@ -18438,6 +18450,15 @@ type UpdatePlatformInput struct {
 	ClearFiles                          bool
 	AddFileIDs                          []string
 	RemoveFileIDs                       []string
+	ClearArchitectureDiagrams           bool
+	AddArchitectureDiagramIDs           []string
+	RemoveArchitectureDiagramIDs        []string
+	ClearDataFlowDiagrams               bool
+	AddDataFlowDiagramIDs               []string
+	RemoveDataFlowDiagramIDs            []string
+	ClearTrustBoundaryDiagrams          bool
+	AddTrustBoundaryDiagramIDs          []string
+	RemoveTrustBoundaryDiagramIDs       []string
 	ClearRisks                          bool
 	AddRiskIDs                          []string
 	RemoveRiskIDs                       []string
@@ -18841,6 +18862,33 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearArchitectureDiagrams {
+		m.ClearArchitectureDiagrams()
+	}
+	if v := i.AddArchitectureDiagramIDs; len(v) > 0 {
+		m.AddArchitectureDiagramIDs(v...)
+	}
+	if v := i.RemoveArchitectureDiagramIDs; len(v) > 0 {
+		m.RemoveArchitectureDiagramIDs(v...)
+	}
+	if i.ClearDataFlowDiagrams {
+		m.ClearDataFlowDiagrams()
+	}
+	if v := i.AddDataFlowDiagramIDs; len(v) > 0 {
+		m.AddDataFlowDiagramIDs(v...)
+	}
+	if v := i.RemoveDataFlowDiagramIDs; len(v) > 0 {
+		m.RemoveDataFlowDiagramIDs(v...)
+	}
+	if i.ClearTrustBoundaryDiagrams {
+		m.ClearTrustBoundaryDiagrams()
+	}
+	if v := i.AddTrustBoundaryDiagramIDs; len(v) > 0 {
+		m.AddTrustBoundaryDiagramIDs(v...)
+	}
+	if v := i.RemoveTrustBoundaryDiagramIDs; len(v) > 0 {
+		m.RemoveTrustBoundaryDiagramIDs(v...)
 	}
 	if i.ClearRisks {
 		m.ClearRisks()

@@ -3497,7 +3497,7 @@ type ComplexityRoot struct {
 		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
 		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
 		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
-		CreatePlatform                       func(childComplexity int, input generated.CreatePlatformInput) int
+		CreatePlatform                       func(childComplexity int, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) int
 		CreateProcedure                      func(childComplexity int, input generated.CreateProcedureInput) int
 		CreateProgram                        func(childComplexity int, input generated.CreateProgramInput) int
 		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
@@ -3856,7 +3856,7 @@ type ComplexityRoot struct {
 		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput) int
+		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) int
 		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
 		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
@@ -4580,6 +4580,7 @@ type ComplexityRoot struct {
 		AccessModelName                func(childComplexity int) int
 		ActiveWorkflowInstances        func(childComplexity int) int
 		ApplicableFrameworks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		ArchitectureDiagrams           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Assessments                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		BlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4597,6 +4598,7 @@ type ComplexityRoot struct {
 		Criticality                    func(childComplexity int) int
 		CriticalityID                  func(childComplexity int) int
 		CriticalityName                func(childComplexity int) int
+		DataFlowDiagrams               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		DataFlowSummary                func(childComplexity int) int
 		Description                    func(childComplexity int) int
 		DirectoryAccounts              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
@@ -4673,6 +4675,7 @@ type ComplexityRoot struct {
 		TechnicalOwnerUser             func(childComplexity int) int
 		TechnicalOwnerUserID           func(childComplexity int) int
 		TrustBoundaryDescription       func(childComplexity int) int
+		TrustBoundaryDiagrams          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
 		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -26374,7 +26377,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreatePlatform(childComplexity, args["input"].(generated.CreatePlatformInput)), true
+		return e.ComplexityRoot.Mutation.CreatePlatform(childComplexity, args["input"].(generated.CreatePlatformInput), args["architectureDiagrams"].([]*graphql.Upload), args["dataFlowDiagrams"].([]*graphql.Upload), args["trustBoundaryDiagrams"].([]*graphql.Upload)), true
 
 	case "Mutation.createProcedure":
 		if e.ComplexityRoot.Mutation.CreateProcedure == nil {
@@ -30677,7 +30680,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdatePlatform(childComplexity, args["id"].(string), args["input"].(generated.UpdatePlatformInput)), true
+		return e.ComplexityRoot.Mutation.UpdatePlatform(childComplexity, args["id"].(string), args["input"].(generated.UpdatePlatformInput), args["architectureDiagrams"].([]*graphql.Upload), args["dataFlowDiagrams"].([]*graphql.Upload), args["trustBoundaryDiagrams"].([]*graphql.Upload)), true
 
 	case "Mutation.updateProcedure":
 		if e.ComplexityRoot.Mutation.UpdateProcedure == nil {
@@ -34949,6 +34952,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Platform.ApplicableFrameworks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 
+	case "Platform.architectureDiagrams":
+		if e.ComplexityRoot.Platform.ArchitectureDiagrams == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_architectureDiagrams_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Platform.ArchitectureDiagrams(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
 	case "Platform.assessments":
 		if e.ComplexityRoot.Platform.Assessments == nil {
 			break
@@ -35087,6 +35102,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.CriticalityName(childComplexity), true
+
+	case "Platform.dataFlowDiagrams":
+		if e.ComplexityRoot.Platform.DataFlowDiagrams == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_dataFlowDiagrams_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Platform.DataFlowDiagrams(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "Platform.dataFlowSummary":
 		if e.ComplexityRoot.Platform.DataFlowSummary == nil {
@@ -35709,6 +35736,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.TrustBoundaryDescription(childComplexity), true
+
+	case "Platform.trustBoundaryDiagrams":
+		if e.ComplexityRoot.Platform.TrustBoundaryDiagrams == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_trustBoundaryDiagrams_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Platform.TrustBoundaryDiagrams(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "Platform.updatedAt":
 		if e.ComplexityRoot.Platform.UpdatedAt == nil {
@@ -69614,6 +69653,9 @@ input CreatePlatformInput {
   entityIDs: [ID!]
   evidenceIDs: [ID!]
   fileIDs: [ID!]
+  architectureDiagramIDs: [ID!]
+  dataFlowDiagramIDs: [ID!]
+  trustBoundaryDiagramIDs: [ID!]
   riskIDs: [ID!]
   controlIDs: [ID!]
   assessmentIDs: [ID!]
@@ -103606,6 +103648,99 @@ type Platform implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  architectureDiagrams(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  dataFlowDiagrams(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  trustBoundaryDiagrams(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -105223,6 +105358,21 @@ input PlatformWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  architecture_diagrams edge predicates
+  """
+  hasArchitectureDiagrams: Boolean
+  hasArchitectureDiagramsWith: [FileWhereInput!]
+  """
+  data_flow_diagrams edge predicates
+  """
+  hasDataFlowDiagrams: Boolean
+  hasDataFlowDiagramsWith: [FileWhereInput!]
+  """
+  trust_boundary_diagrams edge predicates
+  """
+  hasTrustBoundaryDiagrams: Boolean
+  hasTrustBoundaryDiagramsWith: [FileWhereInput!]
   """
   risks edge predicates
   """
@@ -131984,6 +132134,15 @@ input UpdatePlatformInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addArchitectureDiagramIDs: [ID!]
+  removeArchitectureDiagramIDs: [ID!]
+  clearArchitectureDiagrams: Boolean
+  addDataFlowDiagramIDs: [ID!]
+  removeDataFlowDiagramIDs: [ID!]
+  clearDataFlowDiagrams: Boolean
+  addTrustBoundaryDiagramIDs: [ID!]
+  removeTrustBoundaryDiagramIDs: [ID!]
+  clearTrustBoundaryDiagrams: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
@@ -146931,6 +147090,9 @@ extend type Mutation{
         values of the platform
         """
         input: CreatePlatformInput!
+        architectureDiagrams: [Upload!]
+        dataFlowDiagrams: [Upload!]
+        trustBoundaryDiagrams: [Upload!]
     ): PlatformCreatePayload!
     """
     Create multiple new platforms
@@ -146962,6 +147124,9 @@ extend type Mutation{
         New values for the platform
         """
         input: UpdatePlatformInput!
+        architectureDiagrams: [Upload!]
+        dataFlowDiagrams: [Upload!]
+        trustBoundaryDiagrams: [Upload!]
     ): PlatformUpdatePayload!
     """
     Delete an existing platform

@@ -73,6 +73,9 @@ type PlatformQuery struct {
 	withEntities                   *EntityQuery
 	withEvidence                   *EvidenceQuery
 	withFiles                      *FileQuery
+	withArchitectureDiagrams       *FileQuery
+	withDataFlowDiagrams           *FileQuery
+	withTrustBoundaryDiagrams      *FileQuery
 	withRisks                      *RiskQuery
 	withControls                   *ControlQuery
 	withAssessments                *AssessmentQuery
@@ -103,6 +106,9 @@ type PlatformQuery struct {
 	withNamedEntities              map[string]*EntityQuery
 	withNamedEvidence              map[string]*EvidenceQuery
 	withNamedFiles                 map[string]*FileQuery
+	withNamedArchitectureDiagrams  map[string]*FileQuery
+	withNamedDataFlowDiagrams      map[string]*FileQuery
+	withNamedTrustBoundaryDiagrams map[string]*FileQuery
 	withNamedRisks                 map[string]*RiskQuery
 	withNamedControls              map[string]*ControlQuery
 	withNamedAssessments           map[string]*AssessmentQuery
@@ -751,6 +757,81 @@ func (_q *PlatformQuery) QueryFiles() *FileQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.PlatformFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryArchitectureDiagrams chains the current query on the "architecture_diagrams" edge.
+func (_q *PlatformQuery) QueryArchitectureDiagrams() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.ArchitectureDiagramsTable, platform.ArchitectureDiagramsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDataFlowDiagrams chains the current query on the "data_flow_diagrams" edge.
+func (_q *PlatformQuery) QueryDataFlowDiagrams() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.DataFlowDiagramsTable, platform.DataFlowDiagramsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustBoundaryDiagrams chains the current query on the "trust_boundary_diagrams" edge.
+func (_q *PlatformQuery) QueryTrustBoundaryDiagrams() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.TrustBoundaryDiagramsTable, platform.TrustBoundaryDiagramsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1473,6 +1554,9 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withEntities:                   _q.withEntities.Clone(),
 		withEvidence:                   _q.withEvidence.Clone(),
 		withFiles:                      _q.withFiles.Clone(),
+		withArchitectureDiagrams:       _q.withArchitectureDiagrams.Clone(),
+		withDataFlowDiagrams:           _q.withDataFlowDiagrams.Clone(),
+		withTrustBoundaryDiagrams:      _q.withTrustBoundaryDiagrams.Clone(),
 		withRisks:                      _q.withRisks.Clone(),
 		withControls:                   _q.withControls.Clone(),
 		withAssessments:                _q.withAssessments.Clone(),
@@ -1761,6 +1845,39 @@ func (_q *PlatformQuery) WithFiles(opts ...func(*FileQuery)) *PlatformQuery {
 		opt(query)
 	}
 	_q.withFiles = query
+	return _q
+}
+
+// WithArchitectureDiagrams tells the query-builder to eager-load the nodes that are connected to
+// the "architecture_diagrams" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithArchitectureDiagrams(opts ...func(*FileQuery)) *PlatformQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withArchitectureDiagrams = query
+	return _q
+}
+
+// WithDataFlowDiagrams tells the query-builder to eager-load the nodes that are connected to
+// the "data_flow_diagrams" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithDataFlowDiagrams(opts ...func(*FileQuery)) *PlatformQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDataFlowDiagrams = query
+	return _q
+}
+
+// WithTrustBoundaryDiagrams tells the query-builder to eager-load the nodes that are connected to
+// the "trust_boundary_diagrams" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithTrustBoundaryDiagrams(opts ...func(*FileQuery)) *PlatformQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustBoundaryDiagrams = query
 	return _q
 }
 
@@ -2069,7 +2186,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		nodes       = []*Platform{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [44]bool{
+		loadedTypes = [47]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -2094,6 +2211,9 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withEntities != nil,
 			_q.withEvidence != nil,
 			_q.withFiles != nil,
+			_q.withArchitectureDiagrams != nil,
+			_q.withDataFlowDiagrams != nil,
+			_q.withTrustBoundaryDiagrams != nil,
 			_q.withRisks != nil,
 			_q.withControls != nil,
 			_q.withAssessments != nil,
@@ -2293,6 +2413,27 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
+	if query := _q.withArchitectureDiagrams; query != nil {
+		if err := _q.loadArchitectureDiagrams(ctx, query, nodes,
+			func(n *Platform) { n.Edges.ArchitectureDiagrams = []*File{} },
+			func(n *Platform, e *File) { n.Edges.ArchitectureDiagrams = append(n.Edges.ArchitectureDiagrams, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDataFlowDiagrams; query != nil {
+		if err := _q.loadDataFlowDiagrams(ctx, query, nodes,
+			func(n *Platform) { n.Edges.DataFlowDiagrams = []*File{} },
+			func(n *Platform, e *File) { n.Edges.DataFlowDiagrams = append(n.Edges.DataFlowDiagrams, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTrustBoundaryDiagrams; query != nil {
+		if err := _q.loadTrustBoundaryDiagrams(ctx, query, nodes,
+			func(n *Platform) { n.Edges.TrustBoundaryDiagrams = []*File{} },
+			func(n *Platform, e *File) { n.Edges.TrustBoundaryDiagrams = append(n.Edges.TrustBoundaryDiagrams, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withRisks; query != nil {
 		if err := _q.loadRisks(ctx, query, nodes,
 			func(n *Platform) { n.Edges.Risks = []*Risk{} },
@@ -2485,6 +2626,27 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Platform) { n.appendNamedFiles(name) },
 			func(n *Platform, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedArchitectureDiagrams {
+		if err := _q.loadArchitectureDiagrams(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedArchitectureDiagrams(name) },
+			func(n *Platform, e *File) { n.appendNamedArchitectureDiagrams(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDataFlowDiagrams {
+		if err := _q.loadDataFlowDiagrams(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedDataFlowDiagrams(name) },
+			func(n *Platform, e *File) { n.appendNamedDataFlowDiagrams(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustBoundaryDiagrams {
+		if err := _q.loadTrustBoundaryDiagrams(ctx, query, nodes,
+			func(n *Platform) { n.appendNamedTrustBoundaryDiagrams(name) },
+			func(n *Platform, e *File) { n.appendNamedTrustBoundaryDiagrams(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3546,6 +3708,99 @@ func (_q *PlatformQuery) loadFiles(ctx context.Context, query *FileQuery, nodes 
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadArchitectureDiagrams(ctx context.Context, query *FileQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *File)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.File(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.ArchitectureDiagramsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.platform_architecture_diagrams
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "platform_architecture_diagrams" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_architecture_diagrams" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadDataFlowDiagrams(ctx context.Context, query *FileQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *File)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.File(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.DataFlowDiagramsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.platform_data_flow_diagrams
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "platform_data_flow_diagrams" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_data_flow_diagrams" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadTrustBoundaryDiagrams(ctx context.Context, query *FileQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *File)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.File(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.TrustBoundaryDiagramsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.platform_trust_boundary_diagrams
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "platform_trust_boundary_diagrams" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_trust_boundary_diagrams" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -4720,6 +4975,48 @@ func (_q *PlatformQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedArchitectureDiagrams tells the query-builder to eager-load the nodes that are connected to the "architecture_diagrams"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedArchitectureDiagrams(name string, opts ...func(*FileQuery)) *PlatformQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedArchitectureDiagrams == nil {
+		_q.withNamedArchitectureDiagrams = make(map[string]*FileQuery)
+	}
+	_q.withNamedArchitectureDiagrams[name] = query
+	return _q
+}
+
+// WithNamedDataFlowDiagrams tells the query-builder to eager-load the nodes that are connected to the "data_flow_diagrams"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedDataFlowDiagrams(name string, opts ...func(*FileQuery)) *PlatformQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDataFlowDiagrams == nil {
+		_q.withNamedDataFlowDiagrams = make(map[string]*FileQuery)
+	}
+	_q.withNamedDataFlowDiagrams[name] = query
+	return _q
+}
+
+// WithNamedTrustBoundaryDiagrams tells the query-builder to eager-load the nodes that are connected to the "trust_boundary_diagrams"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithNamedTrustBoundaryDiagrams(name string, opts ...func(*FileQuery)) *PlatformQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustBoundaryDiagrams == nil {
+		_q.withNamedTrustBoundaryDiagrams = make(map[string]*FileQuery)
+	}
+	_q.withNamedTrustBoundaryDiagrams[name] = query
 	return _q
 }
 
