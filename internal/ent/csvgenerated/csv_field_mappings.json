@@ -225,6 +225,16 @@
       "isSlice": false
     },
     {
+      "csvColumn": "OutOfScopeAssetNames",
+      "targetField": "OutOfScopeAssetIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "OutOfScopeVendorNames",
+      "targetField": "OutOfScopeVendorIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "PlatformOwnerEmail",
       "targetField": "PlatformOwnerID",
       "isSlice": false
@@ -238,6 +248,21 @@
       "csvColumn": "SecurityOwnerUserEmail",
       "targetField": "SecurityOwnerUserID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "SourceAssetNames",
+      "targetField": "SourceAssetIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "SourceEntityNames",
+      "targetField": "SourceEntityIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "SystemDetailNames",
+      "targetField": "SystemDetailIDs",
+      "isSlice": true
     },
     {
       "csvColumn": "TechnicalOwnerGroupName",
@@ -295,8 +320,28 @@
   ],
   "Risk": [
     {
+      "csvColumn": "ActionPlanNames",
+      "targetField": "ActionPlanIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "AssetNames",
+      "targetField": "AssetIDs",
+      "isSlice": true
+    },
+    {
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "EntityNames",
+      "targetField": "EntityIDs",
+      "isSlice": true
+    },
+    {
+      "csvColumn": "PlatformNames",
+      "targetField": "PlatformIDs",
       "isSlice": true
     },
     {
@@ -308,6 +353,11 @@
       "csvColumn": "StakeholderGroupName",
       "targetField": "StakeholderID",
       "isSlice": false
+    },
+    {
+      "csvColumn": "SubcontrolRefCodes",
+      "targetField": "SubcontrolIDs",
+      "isSlice": true
     }
   ],
   "Scan": [
@@ -411,6 +461,13 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    }
+  ],
+  "VendorRiskScore": [
+    {
+      "csvColumn": "VendorRiskScoreEntityName",
+      "targetField": "EntityID",
+      "isSlice": false
     }
   ],
   "Vulnerability": [

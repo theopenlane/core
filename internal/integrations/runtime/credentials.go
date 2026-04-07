@@ -133,6 +133,10 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		if name, ok := m["name"].(string); ok && name != "" {
 			update.SetName(name)
 		}
+
+		if primary, ok := m["primaryDirectory"].(bool); ok {
+			update.SetPrimaryDirectory(primary)
+		}
 	}
 
 	if err := update.Exec(ctx); err != nil {

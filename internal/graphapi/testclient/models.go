@@ -1079,13 +1079,14 @@ type AssessmentResponse struct {
 	// the document containing the user's response data
 	DocumentDataID *string `json:"documentDataID,omitempty"`
 	// is this a draft response? can the user resume from where they left?
-	IsDraft        bool            `json:"isDraft"`
-	Owner          *Organization   `json:"owner,omitempty"`
-	Assessment     *Assessment     `json:"assessment"`
-	Campaign       *Campaign       `json:"campaign,omitempty"`
-	IdentityHolder *IdentityHolder `json:"identityHolder,omitempty"`
-	Entity         *Entity         `json:"entity,omitempty"`
-	Document       *DocumentData   `json:"document,omitempty"`
+	IsDraft          bool                       `json:"isDraft"`
+	Owner            *Organization              `json:"owner,omitempty"`
+	Assessment       *Assessment                `json:"assessment"`
+	Campaign         *Campaign                  `json:"campaign,omitempty"`
+	IdentityHolder   *IdentityHolder            `json:"identityHolder,omitempty"`
+	Entity           *Entity                    `json:"entity,omitempty"`
+	Document         *DocumentData              `json:"document,omitempty"`
+	VendorRiskScores *VendorRiskScoreConnection `json:"vendorRiskScores"`
 }
 
 func (AssessmentResponse) IsNode() {}
@@ -1435,6 +1436,9 @@ type AssessmentResponseWhereInput struct {
 	// document edge predicates
 	HasDocument     *bool                     `json:"hasDocument,omitempty"`
 	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
+	// vendor_risk_scores edge predicates
+	HasVendorRiskScores     *bool                        `json:"hasVendorRiskScores,omitempty"`
+	HasVendorRiskScoresWith []*VendorRiskScoreWhereInput `json:"hasVendorRiskScoresWith,omitempty"`
 }
 
 // Return response for updateAssessment mutation
@@ -5769,13 +5773,14 @@ type CreateAssessmentResponseInput struct {
 	// additional metadata about email delivery events
 	EmailMetadata map[string]any `json:"emailMetadata,omitempty"`
 	// when the assessment response is due
-	DueDate          *time.Time `json:"dueDate,omitempty"`
-	OwnerID          *string    `json:"ownerID,omitempty"`
-	AssessmentID     string     `json:"assessmentID"`
-	CampaignID       *string    `json:"campaignID,omitempty"`
-	IdentityHolderID *string    `json:"identityHolderID,omitempty"`
-	EntityID         *string    `json:"entityID,omitempty"`
-	DocumentID       *string    `json:"documentID,omitempty"`
+	DueDate            *time.Time `json:"dueDate,omitempty"`
+	OwnerID            *string    `json:"ownerID,omitempty"`
+	AssessmentID       string     `json:"assessmentID"`
+	CampaignID         *string    `json:"campaignID,omitempty"`
+	IdentityHolderID   *string    `json:"identityHolderID,omitempty"`
+	EntityID           *string    `json:"entityID,omitempty"`
+	DocumentID         *string    `json:"documentID,omitempty"`
+	VendorRiskScoreIDs []string   `json:"vendorRiskScoreIDs,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -6330,7 +6335,9 @@ type CreateDirectoryAccountInput struct {
 	// provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
-	SourceVersion        *string  `json:"sourceVersion,omitempty"`
+	SourceVersion *string `json:"sourceVersion,omitempty"`
+	// indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	PrimarySource        *bool    `json:"primarySource,omitempty"`
 	OwnerID              *string  `json:"ownerID,omitempty"`
 	EnvironmentID        *string  `json:"environmentID,omitempty"`
 	ScopeID              *string  `json:"scopeID,omitempty"`
@@ -6675,8 +6682,8 @@ type CreateEntityInput struct {
 	RiskRating *string `json:"riskRating,omitempty"`
 	// the risk score for the entity
 	RiskScore *int64 `json:"riskScore,omitempty"`
-	// the tier classification for the entity
-	Tier *string `json:"tier,omitempty"`
+	// the vendor risk tier classification, used to determine the depth of TPRM assessment required
+	Tier *enums.VendorTier `json:"tier,omitempty"`
 	// the cadence for reviewing the entity
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// when the entity is due for review
@@ -6710,6 +6717,7 @@ type CreateEntityInput struct {
 	ScanIDs                             []string         `json:"scanIDs,omitempty"`
 	CampaignIDs                         []string         `json:"campaignIDs,omitempty"`
 	AssessmentResponseIDs               []string         `json:"assessmentResponseIDs,omitempty"`
+	VendorRiskScoreIDs                  []string         `json:"vendorRiskScoreIDs,omitempty"`
 	IntegrationIDs                      []string         `json:"integrationIDs,omitempty"`
 	SubprocessorIDs                     []string         `json:"subprocessorIDs,omitempty"`
 	AuthMethodIDs                       []string         `json:"authMethodIDs,omitempty"`
@@ -7808,6 +7816,8 @@ type CreateOrganizationInput struct {
 	DirectoryGroupIDs                 []string                        `json:"directoryGroupIDs,omitempty"`
 	DirectorySyncRunIDs               []string                        `json:"directorySyncRunIDs,omitempty"`
 	DiscussionIDs                     []string                        `json:"discussionIDs,omitempty"`
+	VendorScoringConfigIDs            []string                        `json:"vendorScoringConfigIDs,omitempty"`
+	VendorRiskScoreIDs                []string                        `json:"vendorRiskScoreIDs,omitempty"`
 	CreateOrgSettings                 *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -7974,6 +7984,9 @@ type CreatePlatformInput struct {
 	EntityIDs                    []string       `json:"entityIDs,omitempty"`
 	EvidenceIDs                  []string       `json:"evidenceIDs,omitempty"`
 	FileIDs                      []string       `json:"fileIDs,omitempty"`
+	ArchitectureDiagramIDs       []string       `json:"architectureDiagramIDs,omitempty"`
+	DataFlowDiagramIDs           []string       `json:"dataFlowDiagramIDs,omitempty"`
+	TrustBoundaryDiagramIDs      []string       `json:"trustBoundaryDiagramIDs,omitempty"`
 	RiskIDs                      []string       `json:"riskIDs,omitempty"`
 	ControlIDs                   []string       `json:"controlIDs,omitempty"`
 	AssessmentIDs                []string       `json:"assessmentIDs,omitempty"`
@@ -9123,6 +9136,48 @@ type CreateUserSettingInput struct {
 	IsTfaEnabled *bool   `json:"isTfaEnabled,omitempty"`
 	UserID       *string `json:"userID,omitempty"`
 	DefaultOrgID *string `json:"defaultOrgID,omitempty"`
+}
+
+// CreateVendorRiskScoreInput is used for create VendorRiskScore object.
+// Input was generated by ent.
+type CreateVendorRiskScoreInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+	QuestionKey string `json:"questionKey"`
+	// question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+	QuestionName string `json:"questionName"`
+	// question description captured at assessment time
+	QuestionDescription *string `json:"questionDescription,omitempty"`
+	// question category captured at assessment time
+	QuestionCategory enums.VendorScoringCategory `json:"questionCategory"`
+	// user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+	Impact enums.VendorRiskImpact `json:"impact"`
+	// user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+	Likelihood enums.VendorRiskLikelihood `json:"likelihood"`
+	// factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+	Answer *string `json:"answer,omitempty"`
+	// optional justification or context for the assigned impact and likelihood
+	Notes                 *string `json:"notes,omitempty"`
+	OwnerID               *string `json:"ownerID,omitempty"`
+	VendorScoringConfigID *string `json:"vendorScoringConfigID,omitempty"`
+	EntityID              string  `json:"entityID"`
+	AssessmentResponseID  *string `json:"assessmentResponseID,omitempty"`
+}
+
+// CreateVendorScoringConfigInput is used for create VendorScoringConfig object.
+// Input was generated by ent.
+type CreateVendorScoringConfigInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+	Questions *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode *enums.VendorScoringMode `json:"scoringMode,omitempty"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds     *models.RiskThresholdsConfig `json:"riskThresholds,omitempty"`
+	OwnerID            *string                      `json:"ownerID,omitempty"`
+	VendorRiskScoreIDs []string                     `json:"vendorRiskScoreIDs,omitempty"`
 }
 
 // CreateVulnerabilityInput is used for create Vulnerability object.
@@ -10304,7 +10359,9 @@ type DirectoryAccount struct {
 	// object storage file identifier that holds the raw upstream payload
 	RawProfileFileID *string `json:"rawProfileFileID,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
-	SourceVersion *string         `json:"sourceVersion,omitempty"`
+	SourceVersion *string `json:"sourceVersion,omitempty"`
+	// indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	PrimarySource bool            `json:"primarySource"`
 	Owner         *Organization   `json:"owner,omitempty"`
 	Environment   *CustomTypeEnum `json:"environment,omitempty"`
 	Scope         *CustomTypeEnum `json:"scope,omitempty"`
@@ -10949,6 +11006,9 @@ type DirectoryAccountWhereInput struct {
 	SourceVersionNotNil       *bool    `json:"sourceVersionNotNil,omitempty"`
 	SourceVersionEqualFold    *string  `json:"sourceVersionEqualFold,omitempty"`
 	SourceVersionContainsFold *string  `json:"sourceVersionContainsFold,omitempty"`
+	// primary_source field predicates
+	PrimarySource    *bool `json:"primarySource,omitempty"`
+	PrimarySourceNeq *bool `json:"primarySourceNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -13782,8 +13842,10 @@ type Entity struct {
 	RiskRating *string `json:"riskRating,omitempty"`
 	// the risk score for the entity
 	RiskScore *int64 `json:"riskScore,omitempty"`
-	// the tier classification for the entity
-	Tier *string `json:"tier,omitempty"`
+	// number of scoring questions answered for the current risk score; used to contextualize partial assessments
+	RiskScoreCoverage *int64 `json:"riskScoreCoverage,omitempty"`
+	// the vendor risk tier classification, used to determine the depth of TPRM assessment required
+	Tier *enums.VendorTier `json:"tier,omitempty"`
 	// the cadence for reviewing the entity
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
 	// when the entity is due for review
@@ -13819,6 +13881,7 @@ type Entity struct {
 	Scans                             *ScanConnection               `json:"scans"`
 	Campaigns                         *CampaignConnection           `json:"campaigns"`
 	AssessmentResponses               *AssessmentResponseConnection `json:"assessmentResponses"`
+	VendorRiskScores                  *VendorRiskScoreConnection    `json:"vendorRiskScores"`
 	Integrations                      *IntegrationConnection        `json:"integrations"`
 	Subprocessors                     *SubprocessorConnection       `json:"subprocessors"`
 	AuthMethods                       *CustomTypeEnumConnection     `json:"authMethods"`
@@ -14758,22 +14821,24 @@ type EntityWhereInput struct {
 	RiskScoreLte    *int64  `json:"riskScoreLTE,omitempty"`
 	RiskScoreIsNil  *bool   `json:"riskScoreIsNil,omitempty"`
 	RiskScoreNotNil *bool   `json:"riskScoreNotNil,omitempty"`
+	// risk_score_coverage field predicates
+	RiskScoreCoverage       *int64  `json:"riskScoreCoverage,omitempty"`
+	RiskScoreCoverageNeq    *int64  `json:"riskScoreCoverageNEQ,omitempty"`
+	RiskScoreCoverageIn     []int64 `json:"riskScoreCoverageIn,omitempty"`
+	RiskScoreCoverageNotIn  []int64 `json:"riskScoreCoverageNotIn,omitempty"`
+	RiskScoreCoverageGt     *int64  `json:"riskScoreCoverageGT,omitempty"`
+	RiskScoreCoverageGte    *int64  `json:"riskScoreCoverageGTE,omitempty"`
+	RiskScoreCoverageLt     *int64  `json:"riskScoreCoverageLT,omitempty"`
+	RiskScoreCoverageLte    *int64  `json:"riskScoreCoverageLTE,omitempty"`
+	RiskScoreCoverageIsNil  *bool   `json:"riskScoreCoverageIsNil,omitempty"`
+	RiskScoreCoverageNotNil *bool   `json:"riskScoreCoverageNotNil,omitempty"`
 	// tier field predicates
-	Tier             *string  `json:"tier,omitempty"`
-	TierNeq          *string  `json:"tierNEQ,omitempty"`
-	TierIn           []string `json:"tierIn,omitempty"`
-	TierNotIn        []string `json:"tierNotIn,omitempty"`
-	TierGt           *string  `json:"tierGT,omitempty"`
-	TierGte          *string  `json:"tierGTE,omitempty"`
-	TierLt           *string  `json:"tierLT,omitempty"`
-	TierLte          *string  `json:"tierLTE,omitempty"`
-	TierContains     *string  `json:"tierContains,omitempty"`
-	TierHasPrefix    *string  `json:"tierHasPrefix,omitempty"`
-	TierHasSuffix    *string  `json:"tierHasSuffix,omitempty"`
-	TierIsNil        *bool    `json:"tierIsNil,omitempty"`
-	TierNotNil       *bool    `json:"tierNotNil,omitempty"`
-	TierEqualFold    *string  `json:"tierEqualFold,omitempty"`
-	TierContainsFold *string  `json:"tierContainsFold,omitempty"`
+	Tier       *enums.VendorTier  `json:"tier,omitempty"`
+	TierNeq    *enums.VendorTier  `json:"tierNEQ,omitempty"`
+	TierIn     []enums.VendorTier `json:"tierIn,omitempty"`
+	TierNotIn  []enums.VendorTier `json:"tierNotIn,omitempty"`
+	TierIsNil  *bool              `json:"tierIsNil,omitempty"`
+	TierNotNil *bool              `json:"tierNotNil,omitempty"`
 	// review_frequency field predicates
 	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
 	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
@@ -14909,6 +14974,9 @@ type EntityWhereInput struct {
 	// assessment_responses edge predicates
 	HasAssessmentResponses     *bool                           `json:"hasAssessmentResponses,omitempty"`
 	HasAssessmentResponsesWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponsesWith,omitempty"`
+	// vendor_risk_scores edge predicates
+	HasVendorRiskScores     *bool                        `json:"hasVendorRiskScores,omitempty"`
+	HasVendorRiskScoresWith []*VendorRiskScoreWhereInput `json:"hasVendorRiskScoresWith,omitempty"`
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -19756,24 +19824,26 @@ type Integration struct {
 	// the lifecycle status of the installation
 	Status enums.IntegrationStatus `json:"status"`
 	// snapshot of definition metadata captured on the installation
-	ProviderMetadataSnapshot map[string]any                 `json:"providerMetadataSnapshot,omitempty"`
-	Owner                    *Organization                  `json:"owner,omitempty"`
-	Environment              *CustomTypeEnum                `json:"environment,omitempty"`
-	Scope                    *CustomTypeEnum                `json:"scope,omitempty"`
-	Secrets                  *HushConnection                `json:"secrets"`
-	Files                    *FileConnection                `json:"files"`
-	Events                   *EventConnection               `json:"events"`
-	Findings                 *FindingConnection             `json:"findings"`
-	Vulnerabilities          *VulnerabilityConnection       `json:"vulnerabilities"`
-	Reviews                  *ReviewConnection              `json:"reviews"`
-	Remediations             *RemediationConnection         `json:"remediations"`
-	Tasks                    *TaskConnection                `json:"tasks"`
-	ActionPlans              *ActionPlanConnection          `json:"actionPlans"`
-	Assets                   *AssetConnection               `json:"assets"`
-	DirectoryAccounts        *DirectoryAccountConnection    `json:"directoryAccounts"`
-	DirectoryGroups          *DirectoryGroupConnection      `json:"directoryGroups"`
-	DirectoryMemberships     *DirectoryMembershipConnection `json:"directoryMemberships"`
-	DirectorySyncRuns        *DirectorySyncRunConnection    `json:"directorySyncRuns"`
+	ProviderMetadataSnapshot map[string]any `json:"providerMetadataSnapshot,omitempty"`
+	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
+	PrimaryDirectory     bool                           `json:"primaryDirectory"`
+	Owner                *Organization                  `json:"owner,omitempty"`
+	Environment          *CustomTypeEnum                `json:"environment,omitempty"`
+	Scope                *CustomTypeEnum                `json:"scope,omitempty"`
+	Secrets              *HushConnection                `json:"secrets"`
+	Files                *FileConnection                `json:"files"`
+	Events               *EventConnection               `json:"events"`
+	Findings             *FindingConnection             `json:"findings"`
+	Vulnerabilities      *VulnerabilityConnection       `json:"vulnerabilities"`
+	Reviews              *ReviewConnection              `json:"reviews"`
+	Remediations         *RemediationConnection         `json:"remediations"`
+	Tasks                *TaskConnection                `json:"tasks"`
+	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
+	Assets               *AssetConnection               `json:"assets"`
+	DirectoryAccounts    *DirectoryAccountConnection    `json:"directoryAccounts"`
+	DirectoryGroups      *DirectoryGroupConnection      `json:"directoryGroups"`
+	DirectoryMemberships *DirectoryMembershipConnection `json:"directoryMemberships"`
+	DirectorySyncRuns    *DirectorySyncRunConnection    `json:"directorySyncRuns"`
 	// platform associated with this integration
 	Platform              *Platform                       `json:"platform,omitempty"`
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
@@ -20135,6 +20205,9 @@ type IntegrationWhereInput struct {
 	StatusNeq   *enums.IntegrationStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.IntegrationStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.IntegrationStatus `json:"statusNotIn,omitempty"`
+	// primary_directory field predicates
+	PrimaryDirectory    *bool `json:"primaryDirectory,omitempty"`
+	PrimaryDirectoryNeq *bool `json:"primaryDirectoryNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -25042,6 +25115,8 @@ type Organization struct {
 	DirectoryMemberships            *DirectoryMembershipConnection        `json:"directoryMemberships"`
 	DirectorySyncRuns               *DirectorySyncRunConnection           `json:"directorySyncRuns"`
 	Discussions                     *DiscussionConnection                 `json:"discussions"`
+	VendorScoringConfigs            *VendorScoringConfigConnection        `json:"vendorScoringConfigs"`
+	VendorRiskScores                *VendorRiskScoreConnection            `json:"vendorRiskScores"`
 	Members                         *OrgMembershipConnection              `json:"members"`
 }
 
@@ -26027,6 +26102,12 @@ type OrganizationWhereInput struct {
 	// discussions edge predicates
 	HasDiscussions     *bool                   `json:"hasDiscussions,omitempty"`
 	HasDiscussionsWith []*DiscussionWhereInput `json:"hasDiscussionsWith,omitempty"`
+	// vendor_scoring_configs edge predicates
+	HasVendorScoringConfigs     *bool                            `json:"hasVendorScoringConfigs,omitempty"`
+	HasVendorScoringConfigsWith []*VendorScoringConfigWhereInput `json:"hasVendorScoringConfigsWith,omitempty"`
+	// vendor_risk_scores edge predicates
+	HasVendorRiskScores     *bool                        `json:"hasVendorRiskScores,omitempty"`
+	HasVendorRiskScoresWith []*VendorRiskScoreWhereInput `json:"hasVendorRiskScoresWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -26433,6 +26514,9 @@ type Platform struct {
 	Entities                   *EntityConnection              `json:"entities"`
 	Evidence                   *EvidenceConnection            `json:"evidence"`
 	Files                      *FileConnection                `json:"files"`
+	ArchitectureDiagrams       *FileConnection                `json:"architectureDiagrams"`
+	DataFlowDiagrams           *FileConnection                `json:"dataFlowDiagrams"`
+	TrustBoundaryDiagrams      *FileConnection                `json:"trustBoundaryDiagrams"`
 	Risks                      *RiskConnection                `json:"risks"`
 	Controls                   *ControlConnection             `json:"controls"`
 	Assessments                *AssessmentConnection          `json:"assessments"`
@@ -27336,6 +27420,15 @@ type PlatformWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// architecture_diagrams edge predicates
+	HasArchitectureDiagrams     *bool             `json:"hasArchitectureDiagrams,omitempty"`
+	HasArchitectureDiagramsWith []*FileWhereInput `json:"hasArchitectureDiagramsWith,omitempty"`
+	// data_flow_diagrams edge predicates
+	HasDataFlowDiagrams     *bool             `json:"hasDataFlowDiagrams,omitempty"`
+	HasDataFlowDiagramsWith []*FileWhereInput `json:"hasDataFlowDiagramsWith,omitempty"`
+	// trust_boundary_diagrams edge predicates
+	HasTrustBoundaryDiagrams     *bool             `json:"hasTrustBoundaryDiagrams,omitempty"`
+	HasTrustBoundaryDiagramsWith []*FileWhereInput `json:"hasTrustBoundaryDiagramsWith,omitempty"`
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
@@ -39455,8 +39548,10 @@ type UpdateDirectoryAccountInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
-	SourceVersion              *string  `json:"sourceVersion,omitempty"`
-	ClearSourceVersion         *bool    `json:"clearSourceVersion,omitempty"`
+	SourceVersion      *string `json:"sourceVersion,omitempty"`
+	ClearSourceVersion *bool   `json:"clearSourceVersion,omitempty"`
+	// indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	PrimarySource              *bool    `json:"primarySource,omitempty"`
 	OwnerID                    *string  `json:"ownerID,omitempty"`
 	ClearOwner                 *bool    `json:"clearOwner,omitempty"`
 	EnvironmentID              *string  `json:"environmentID,omitempty"`
@@ -39964,9 +40059,9 @@ type UpdateEntityInput struct {
 	// the risk score for the entity
 	RiskScore      *int64 `json:"riskScore,omitempty"`
 	ClearRiskScore *bool  `json:"clearRiskScore,omitempty"`
-	// the tier classification for the entity
-	Tier      *string `json:"tier,omitempty"`
-	ClearTier *bool   `json:"clearTier,omitempty"`
+	// the vendor risk tier classification, used to determine the depth of TPRM assessment required
+	Tier      *enums.VendorTier `json:"tier,omitempty"`
+	ClearTier *bool             `json:"clearTier,omitempty"`
 	// the cadence for reviewing the entity
 	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
 	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
@@ -40036,6 +40131,9 @@ type UpdateEntityInput struct {
 	AddAssessmentResponseIDs               []string         `json:"addAssessmentResponseIDs,omitempty"`
 	RemoveAssessmentResponseIDs            []string         `json:"removeAssessmentResponseIDs,omitempty"`
 	ClearAssessmentResponses               *bool            `json:"clearAssessmentResponses,omitempty"`
+	AddVendorRiskScoreIDs                  []string         `json:"addVendorRiskScoreIDs,omitempty"`
+	RemoveVendorRiskScoreIDs               []string         `json:"removeVendorRiskScoreIDs,omitempty"`
+	ClearVendorRiskScores                  *bool            `json:"clearVendorRiskScores,omitempty"`
 	AddIntegrationIDs                      []string         `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs                   []string         `json:"removeIntegrationIDs,omitempty"`
 	ClearIntegrations                      *bool            `json:"clearIntegrations,omitempty"`
@@ -41915,6 +42013,12 @@ type UpdateOrganizationInput struct {
 	AddDiscussionIDs                        []string                        `json:"addDiscussionIDs,omitempty"`
 	RemoveDiscussionIDs                     []string                        `json:"removeDiscussionIDs,omitempty"`
 	ClearDiscussions                        *bool                           `json:"clearDiscussions,omitempty"`
+	AddVendorScoringConfigIDs               []string                        `json:"addVendorScoringConfigIDs,omitempty"`
+	RemoveVendorScoringConfigIDs            []string                        `json:"removeVendorScoringConfigIDs,omitempty"`
+	ClearVendorScoringConfigs               *bool                           `json:"clearVendorScoringConfigs,omitempty"`
+	AddVendorRiskScoreIDs                   []string                        `json:"addVendorRiskScoreIDs,omitempty"`
+	RemoveVendorRiskScoreIDs                []string                        `json:"removeVendorRiskScoreIDs,omitempty"`
+	ClearVendorRiskScores                   *bool                           `json:"clearVendorRiskScores,omitempty"`
 	AddOrgMembers                           []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                        []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                       *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
@@ -42181,6 +42285,15 @@ type UpdatePlatformInput struct {
 	AddFileIDs                      []string       `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                   []string       `json:"removeFileIDs,omitempty"`
 	ClearFiles                      *bool          `json:"clearFiles,omitempty"`
+	AddArchitectureDiagramIDs       []string       `json:"addArchitectureDiagramIDs,omitempty"`
+	RemoveArchitectureDiagramIDs    []string       `json:"removeArchitectureDiagramIDs,omitempty"`
+	ClearArchitectureDiagrams       *bool          `json:"clearArchitectureDiagrams,omitempty"`
+	AddDataFlowDiagramIDs           []string       `json:"addDataFlowDiagramIDs,omitempty"`
+	RemoveDataFlowDiagramIDs        []string       `json:"removeDataFlowDiagramIDs,omitempty"`
+	ClearDataFlowDiagrams           *bool          `json:"clearDataFlowDiagrams,omitempty"`
+	AddTrustBoundaryDiagramIDs      []string       `json:"addTrustBoundaryDiagramIDs,omitempty"`
+	RemoveTrustBoundaryDiagramIDs   []string       `json:"removeTrustBoundaryDiagramIDs,omitempty"`
+	ClearTrustBoundaryDiagrams      *bool          `json:"clearTrustBoundaryDiagrams,omitempty"`
 	AddRiskIDs                      []string       `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs                   []string       `json:"removeRiskIDs,omitempty"`
 	ClearRisks                      *bool          `json:"clearRisks,omitempty"`
@@ -44087,6 +44200,59 @@ type UpdateUserSettingInput struct {
 	ClearDefaultOrg   *bool   `json:"clearDefaultOrg,omitempty"`
 }
 
+// UpdateVendorRiskScoreInput is used for update VendorRiskScore object.
+// Input was generated by ent.
+type UpdateVendorRiskScoreInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+	QuestionKey *string `json:"questionKey,omitempty"`
+	// question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+	QuestionName *string `json:"questionName,omitempty"`
+	// question description captured at assessment time
+	QuestionDescription      *string `json:"questionDescription,omitempty"`
+	ClearQuestionDescription *bool   `json:"clearQuestionDescription,omitempty"`
+	// question category captured at assessment time
+	QuestionCategory *enums.VendorScoringCategory `json:"questionCategory,omitempty"`
+	// user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+	Impact *enums.VendorRiskImpact `json:"impact,omitempty"`
+	// user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+	Likelihood *enums.VendorRiskLikelihood `json:"likelihood,omitempty"`
+	// factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+	Answer      *string `json:"answer,omitempty"`
+	ClearAnswer *bool   `json:"clearAnswer,omitempty"`
+	// optional justification or context for the assigned impact and likelihood
+	Notes                    *string `json:"notes,omitempty"`
+	ClearNotes               *bool   `json:"clearNotes,omitempty"`
+	VendorScoringConfigID    *string `json:"vendorScoringConfigID,omitempty"`
+	ClearVendorScoringConfig *bool   `json:"clearVendorScoringConfig,omitempty"`
+	EntityID                 *string `json:"entityID,omitempty"`
+	AssessmentResponseID     *string `json:"assessmentResponseID,omitempty"`
+	ClearAssessmentResponse  *bool   `json:"clearAssessmentResponse,omitempty"`
+}
+
+// UpdateVendorScoringConfigInput is used for update VendorScoringConfig object.
+// Input was generated by ent.
+type UpdateVendorScoringConfigInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+	Questions *models.VendorScoringQuestionsConfig `json:"questions,omitempty"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode *enums.VendorScoringMode `json:"scoringMode,omitempty"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds           *models.RiskThresholdsConfig `json:"riskThresholds,omitempty"`
+	OwnerID                  *string                      `json:"ownerID,omitempty"`
+	ClearOwner               *bool                        `json:"clearOwner,omitempty"`
+	AddVendorRiskScoreIDs    []string                     `json:"addVendorRiskScoreIDs,omitempty"`
+	RemoveVendorRiskScoreIDs []string                     `json:"removeVendorRiskScoreIDs,omitempty"`
+	ClearVendorRiskScores    *bool                        `json:"clearVendorRiskScores,omitempty"`
+}
+
 // UpdateVulnerabilityInput is used for update Vulnerability object.
 // Input was generated by ent.
 type UpdateVulnerabilityInput struct {
@@ -45078,6 +45244,556 @@ type UserWhereInput struct {
 	// program_memberships edge predicates
 	HasProgramMemberships     *bool                          `json:"hasProgramMemberships,omitempty"`
 	HasProgramMembershipsWith []*ProgramMembershipWhereInput `json:"hasProgramMembershipsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+}
+
+type VendorRiskScore struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+	QuestionKey string `json:"questionKey"`
+	// question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+	QuestionName string `json:"questionName"`
+	// question description captured at assessment time
+	QuestionDescription *string `json:"questionDescription,omitempty"`
+	// question category captured at assessment time
+	QuestionCategory enums.VendorScoringCategory `json:"questionCategory"`
+	// expected answer format captured at assessment time
+	AnswerType enums.VendorScoringAnswerType `json:"answerType"`
+	// user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+	Impact enums.VendorRiskImpact `json:"impact"`
+	// user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+	Likelihood enums.VendorRiskLikelihood `json:"likelihood"`
+	// hook-computed risk score: impactNumeric x likelihoodNumeric
+	Score float64 `json:"score"`
+	// factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+	Answer *string `json:"answer,omitempty"`
+	// optional justification or context for the assigned impact and likelihood
+	Notes *string `json:"notes,omitempty"`
+	// the scoring config this assessment belongs to; auto-resolved from org context if not provided
+	VendorScoringConfigID *string `json:"vendorScoringConfigID,omitempty"`
+	// the vendor entity being assessed
+	EntityID string `json:"entityID"`
+	// the assessment response this score belongs to; scopes scores to a specific assessment cycle
+	AssessmentResponseID *string              `json:"assessmentResponseID,omitempty"`
+	Owner                *Organization        `json:"owner,omitempty"`
+	VendorScoringConfig  *VendorScoringConfig `json:"vendorScoringConfig,omitempty"`
+	Entity               *Entity              `json:"entity"`
+	AssessmentResponse   *AssessmentResponse  `json:"assessmentResponse,omitempty"`
+}
+
+func (VendorRiskScore) IsNode() {}
+
+// Return response for createBulkVendorRiskScore mutation
+type VendorRiskScoreBulkCreatePayload struct {
+	// Created vendorRiskScores
+	VendorRiskScores []*VendorRiskScore `json:"vendorRiskScores,omitempty"`
+}
+
+// Return response for deleteBulkVendorRiskScore mutation
+type VendorRiskScoreBulkDeletePayload struct {
+	// Deleted vendorRiskScore IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVendorRiskScore mutation
+type VendorRiskScoreBulkUpdatePayload struct {
+	// Updated vendorRiskScores
+	VendorRiskScores []*VendorRiskScore `json:"vendorRiskScores,omitempty"`
+	// IDs of the updated vendorRiskScores
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type VendorRiskScoreConnection struct {
+	// A list of edges.
+	Edges []*VendorRiskScoreEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createVendorRiskScore mutation
+type VendorRiskScoreCreatePayload struct {
+	// Created vendorRiskScore
+	VendorRiskScore *VendorRiskScore `json:"vendorRiskScore"`
+}
+
+// Return response for deleteVendorRiskScore mutation
+type VendorRiskScoreDeletePayload struct {
+	// Deleted vendorRiskScore ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type VendorRiskScoreEdge struct {
+	// The item at the end of the edge.
+	Node *VendorRiskScore `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for VendorRiskScore connections
+type VendorRiskScoreOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order VendorRiskScores.
+	Field VendorRiskScoreOrderField `json:"field"`
+}
+
+// Return response for updateVendorRiskScore mutation
+type VendorRiskScoreUpdatePayload struct {
+	// Updated vendorRiskScore
+	VendorRiskScore *VendorRiskScore `json:"vendorRiskScore"`
+}
+
+// VendorRiskScoreWhereInput is used for filtering VendorRiskScore objects.
+// Input was generated by ent.
+type VendorRiskScoreWhereInput struct {
+	Not *VendorRiskScoreWhereInput   `json:"not,omitempty"`
+	And []*VendorRiskScoreWhereInput `json:"and,omitempty"`
+	Or  []*VendorRiskScoreWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// question_key field predicates
+	QuestionKey             *string  `json:"questionKey,omitempty"`
+	QuestionKeyNeq          *string  `json:"questionKeyNEQ,omitempty"`
+	QuestionKeyIn           []string `json:"questionKeyIn,omitempty"`
+	QuestionKeyNotIn        []string `json:"questionKeyNotIn,omitempty"`
+	QuestionKeyGt           *string  `json:"questionKeyGT,omitempty"`
+	QuestionKeyGte          *string  `json:"questionKeyGTE,omitempty"`
+	QuestionKeyLt           *string  `json:"questionKeyLT,omitempty"`
+	QuestionKeyLte          *string  `json:"questionKeyLTE,omitempty"`
+	QuestionKeyContains     *string  `json:"questionKeyContains,omitempty"`
+	QuestionKeyHasPrefix    *string  `json:"questionKeyHasPrefix,omitempty"`
+	QuestionKeyHasSuffix    *string  `json:"questionKeyHasSuffix,omitempty"`
+	QuestionKeyEqualFold    *string  `json:"questionKeyEqualFold,omitempty"`
+	QuestionKeyContainsFold *string  `json:"questionKeyContainsFold,omitempty"`
+	// question_name field predicates
+	QuestionName             *string  `json:"questionName,omitempty"`
+	QuestionNameNeq          *string  `json:"questionNameNEQ,omitempty"`
+	QuestionNameIn           []string `json:"questionNameIn,omitempty"`
+	QuestionNameNotIn        []string `json:"questionNameNotIn,omitempty"`
+	QuestionNameGt           *string  `json:"questionNameGT,omitempty"`
+	QuestionNameGte          *string  `json:"questionNameGTE,omitempty"`
+	QuestionNameLt           *string  `json:"questionNameLT,omitempty"`
+	QuestionNameLte          *string  `json:"questionNameLTE,omitempty"`
+	QuestionNameContains     *string  `json:"questionNameContains,omitempty"`
+	QuestionNameHasPrefix    *string  `json:"questionNameHasPrefix,omitempty"`
+	QuestionNameHasSuffix    *string  `json:"questionNameHasSuffix,omitempty"`
+	QuestionNameEqualFold    *string  `json:"questionNameEqualFold,omitempty"`
+	QuestionNameContainsFold *string  `json:"questionNameContainsFold,omitempty"`
+	// question_description field predicates
+	QuestionDescription             *string  `json:"questionDescription,omitempty"`
+	QuestionDescriptionNeq          *string  `json:"questionDescriptionNEQ,omitempty"`
+	QuestionDescriptionIn           []string `json:"questionDescriptionIn,omitempty"`
+	QuestionDescriptionNotIn        []string `json:"questionDescriptionNotIn,omitempty"`
+	QuestionDescriptionGt           *string  `json:"questionDescriptionGT,omitempty"`
+	QuestionDescriptionGte          *string  `json:"questionDescriptionGTE,omitempty"`
+	QuestionDescriptionLt           *string  `json:"questionDescriptionLT,omitempty"`
+	QuestionDescriptionLte          *string  `json:"questionDescriptionLTE,omitempty"`
+	QuestionDescriptionContains     *string  `json:"questionDescriptionContains,omitempty"`
+	QuestionDescriptionHasPrefix    *string  `json:"questionDescriptionHasPrefix,omitempty"`
+	QuestionDescriptionHasSuffix    *string  `json:"questionDescriptionHasSuffix,omitempty"`
+	QuestionDescriptionIsNil        *bool    `json:"questionDescriptionIsNil,omitempty"`
+	QuestionDescriptionNotNil       *bool    `json:"questionDescriptionNotNil,omitempty"`
+	QuestionDescriptionEqualFold    *string  `json:"questionDescriptionEqualFold,omitempty"`
+	QuestionDescriptionContainsFold *string  `json:"questionDescriptionContainsFold,omitempty"`
+	// question_category field predicates
+	QuestionCategory      *enums.VendorScoringCategory  `json:"questionCategory,omitempty"`
+	QuestionCategoryNeq   *enums.VendorScoringCategory  `json:"questionCategoryNEQ,omitempty"`
+	QuestionCategoryIn    []enums.VendorScoringCategory `json:"questionCategoryIn,omitempty"`
+	QuestionCategoryNotIn []enums.VendorScoringCategory `json:"questionCategoryNotIn,omitempty"`
+	// answer_type field predicates
+	AnswerType      *enums.VendorScoringAnswerType  `json:"answerType,omitempty"`
+	AnswerTypeNeq   *enums.VendorScoringAnswerType  `json:"answerTypeNEQ,omitempty"`
+	AnswerTypeIn    []enums.VendorScoringAnswerType `json:"answerTypeIn,omitempty"`
+	AnswerTypeNotIn []enums.VendorScoringAnswerType `json:"answerTypeNotIn,omitempty"`
+	// impact field predicates
+	Impact      *enums.VendorRiskImpact  `json:"impact,omitempty"`
+	ImpactNeq   *enums.VendorRiskImpact  `json:"impactNEQ,omitempty"`
+	ImpactIn    []enums.VendorRiskImpact `json:"impactIn,omitempty"`
+	ImpactNotIn []enums.VendorRiskImpact `json:"impactNotIn,omitempty"`
+	// likelihood field predicates
+	Likelihood      *enums.VendorRiskLikelihood  `json:"likelihood,omitempty"`
+	LikelihoodNeq   *enums.VendorRiskLikelihood  `json:"likelihoodNEQ,omitempty"`
+	LikelihoodIn    []enums.VendorRiskLikelihood `json:"likelihoodIn,omitempty"`
+	LikelihoodNotIn []enums.VendorRiskLikelihood `json:"likelihoodNotIn,omitempty"`
+	// score field predicates
+	Score      *float64  `json:"score,omitempty"`
+	ScoreNeq   *float64  `json:"scoreNEQ,omitempty"`
+	ScoreIn    []float64 `json:"scoreIn,omitempty"`
+	ScoreNotIn []float64 `json:"scoreNotIn,omitempty"`
+	ScoreGt    *float64  `json:"scoreGT,omitempty"`
+	ScoreGte   *float64  `json:"scoreGTE,omitempty"`
+	ScoreLt    *float64  `json:"scoreLT,omitempty"`
+	ScoreLte   *float64  `json:"scoreLTE,omitempty"`
+	// answer field predicates
+	Answer             *string  `json:"answer,omitempty"`
+	AnswerNeq          *string  `json:"answerNEQ,omitempty"`
+	AnswerIn           []string `json:"answerIn,omitempty"`
+	AnswerNotIn        []string `json:"answerNotIn,omitempty"`
+	AnswerGt           *string  `json:"answerGT,omitempty"`
+	AnswerGte          *string  `json:"answerGTE,omitempty"`
+	AnswerLt           *string  `json:"answerLT,omitempty"`
+	AnswerLte          *string  `json:"answerLTE,omitempty"`
+	AnswerContains     *string  `json:"answerContains,omitempty"`
+	AnswerHasPrefix    *string  `json:"answerHasPrefix,omitempty"`
+	AnswerHasSuffix    *string  `json:"answerHasSuffix,omitempty"`
+	AnswerIsNil        *bool    `json:"answerIsNil,omitempty"`
+	AnswerNotNil       *bool    `json:"answerNotNil,omitempty"`
+	AnswerEqualFold    *string  `json:"answerEqualFold,omitempty"`
+	AnswerContainsFold *string  `json:"answerContainsFold,omitempty"`
+	// notes field predicates
+	Notes             *string  `json:"notes,omitempty"`
+	NotesNeq          *string  `json:"notesNEQ,omitempty"`
+	NotesIn           []string `json:"notesIn,omitempty"`
+	NotesNotIn        []string `json:"notesNotIn,omitempty"`
+	NotesGt           *string  `json:"notesGT,omitempty"`
+	NotesGte          *string  `json:"notesGTE,omitempty"`
+	NotesLt           *string  `json:"notesLT,omitempty"`
+	NotesLte          *string  `json:"notesLTE,omitempty"`
+	NotesContains     *string  `json:"notesContains,omitempty"`
+	NotesHasPrefix    *string  `json:"notesHasPrefix,omitempty"`
+	NotesHasSuffix    *string  `json:"notesHasSuffix,omitempty"`
+	NotesIsNil        *bool    `json:"notesIsNil,omitempty"`
+	NotesNotNil       *bool    `json:"notesNotNil,omitempty"`
+	NotesEqualFold    *string  `json:"notesEqualFold,omitempty"`
+	NotesContainsFold *string  `json:"notesContainsFold,omitempty"`
+	// vendor_scoring_config_id field predicates
+	VendorScoringConfigID             *string  `json:"vendorScoringConfigID,omitempty"`
+	VendorScoringConfigIdneq          *string  `json:"vendorScoringConfigIDNEQ,omitempty"`
+	VendorScoringConfigIDIn           []string `json:"vendorScoringConfigIDIn,omitempty"`
+	VendorScoringConfigIDNotIn        []string `json:"vendorScoringConfigIDNotIn,omitempty"`
+	VendorScoringConfigIdgt           *string  `json:"vendorScoringConfigIDGT,omitempty"`
+	VendorScoringConfigIdgte          *string  `json:"vendorScoringConfigIDGTE,omitempty"`
+	VendorScoringConfigIdlt           *string  `json:"vendorScoringConfigIDLT,omitempty"`
+	VendorScoringConfigIdlte          *string  `json:"vendorScoringConfigIDLTE,omitempty"`
+	VendorScoringConfigIDContains     *string  `json:"vendorScoringConfigIDContains,omitempty"`
+	VendorScoringConfigIDHasPrefix    *string  `json:"vendorScoringConfigIDHasPrefix,omitempty"`
+	VendorScoringConfigIDHasSuffix    *string  `json:"vendorScoringConfigIDHasSuffix,omitempty"`
+	VendorScoringConfigIDIsNil        *bool    `json:"vendorScoringConfigIDIsNil,omitempty"`
+	VendorScoringConfigIDNotNil       *bool    `json:"vendorScoringConfigIDNotNil,omitempty"`
+	VendorScoringConfigIDEqualFold    *string  `json:"vendorScoringConfigIDEqualFold,omitempty"`
+	VendorScoringConfigIDContainsFold *string  `json:"vendorScoringConfigIDContainsFold,omitempty"`
+	// entity_id field predicates
+	EntityID             *string  `json:"entityID,omitempty"`
+	EntityIdneq          *string  `json:"entityIDNEQ,omitempty"`
+	EntityIDIn           []string `json:"entityIDIn,omitempty"`
+	EntityIDNotIn        []string `json:"entityIDNotIn,omitempty"`
+	EntityIdgt           *string  `json:"entityIDGT,omitempty"`
+	EntityIdgte          *string  `json:"entityIDGTE,omitempty"`
+	EntityIdlt           *string  `json:"entityIDLT,omitempty"`
+	EntityIdlte          *string  `json:"entityIDLTE,omitempty"`
+	EntityIDContains     *string  `json:"entityIDContains,omitempty"`
+	EntityIDHasPrefix    *string  `json:"entityIDHasPrefix,omitempty"`
+	EntityIDHasSuffix    *string  `json:"entityIDHasSuffix,omitempty"`
+	EntityIDEqualFold    *string  `json:"entityIDEqualFold,omitempty"`
+	EntityIDContainsFold *string  `json:"entityIDContainsFold,omitempty"`
+	// assessment_response_id field predicates
+	AssessmentResponseID             *string  `json:"assessmentResponseID,omitempty"`
+	AssessmentResponseIdneq          *string  `json:"assessmentResponseIDNEQ,omitempty"`
+	AssessmentResponseIDIn           []string `json:"assessmentResponseIDIn,omitempty"`
+	AssessmentResponseIDNotIn        []string `json:"assessmentResponseIDNotIn,omitempty"`
+	AssessmentResponseIdgt           *string  `json:"assessmentResponseIDGT,omitempty"`
+	AssessmentResponseIdgte          *string  `json:"assessmentResponseIDGTE,omitempty"`
+	AssessmentResponseIdlt           *string  `json:"assessmentResponseIDLT,omitempty"`
+	AssessmentResponseIdlte          *string  `json:"assessmentResponseIDLTE,omitempty"`
+	AssessmentResponseIDContains     *string  `json:"assessmentResponseIDContains,omitempty"`
+	AssessmentResponseIDHasPrefix    *string  `json:"assessmentResponseIDHasPrefix,omitempty"`
+	AssessmentResponseIDHasSuffix    *string  `json:"assessmentResponseIDHasSuffix,omitempty"`
+	AssessmentResponseIDIsNil        *bool    `json:"assessmentResponseIDIsNil,omitempty"`
+	AssessmentResponseIDNotNil       *bool    `json:"assessmentResponseIDNotNil,omitempty"`
+	AssessmentResponseIDEqualFold    *string  `json:"assessmentResponseIDEqualFold,omitempty"`
+	AssessmentResponseIDContainsFold *string  `json:"assessmentResponseIDContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// vendor_scoring_config edge predicates
+	HasVendorScoringConfig     *bool                            `json:"hasVendorScoringConfig,omitempty"`
+	HasVendorScoringConfigWith []*VendorScoringConfigWhereInput `json:"hasVendorScoringConfigWith,omitempty"`
+	// entity edge predicates
+	HasEntity     *bool               `json:"hasEntity,omitempty"`
+	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
+	// assessment_response edge predicates
+	HasAssessmentResponse     *bool                           `json:"hasAssessmentResponse,omitempty"`
+	HasAssessmentResponseWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponseWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+}
+
+type VendorScoringConfig struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+	Questions models.VendorScoringQuestionsConfig `json:"questions"`
+	// controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	ScoringMode enums.VendorScoringMode `json:"scoringMode"`
+	// org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	RiskThresholds   models.RiskThresholdsConfig `json:"riskThresholds"`
+	Owner            *Organization               `json:"owner,omitempty"`
+	VendorRiskScores *VendorRiskScoreConnection  `json:"vendorRiskScores"`
+}
+
+func (VendorScoringConfig) IsNode() {}
+
+// Return response for createBulkVendorScoringConfig mutation
+type VendorScoringConfigBulkCreatePayload struct {
+	// Created vendorScoringConfigs
+	VendorScoringConfigs []*VendorScoringConfig `json:"vendorScoringConfigs,omitempty"`
+}
+
+// Return response for deleteBulkVendorScoringConfig mutation
+type VendorScoringConfigBulkDeletePayload struct {
+	// Deleted vendorScoringConfig IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVendorScoringConfig mutation
+type VendorScoringConfigBulkUpdatePayload struct {
+	// Updated vendorScoringConfigs
+	VendorScoringConfigs []*VendorScoringConfig `json:"vendorScoringConfigs,omitempty"`
+	// IDs of the updated vendorScoringConfigs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type VendorScoringConfigConnection struct {
+	// A list of edges.
+	Edges []*VendorScoringConfigEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createVendorScoringConfig mutation
+type VendorScoringConfigCreatePayload struct {
+	// Created vendorScoringConfig
+	VendorScoringConfig *VendorScoringConfig `json:"vendorScoringConfig"`
+}
+
+// Return response for deleteVendorScoringConfig mutation
+type VendorScoringConfigDeletePayload struct {
+	// Deleted vendorScoringConfig ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type VendorScoringConfigEdge struct {
+	// The item at the end of the edge.
+	Node *VendorScoringConfig `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for VendorScoringConfig connections
+type VendorScoringConfigOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order VendorScoringConfigs.
+	Field VendorScoringConfigOrderField `json:"field"`
+}
+
+// Return response for updateVendorScoringConfig mutation
+type VendorScoringConfigUpdatePayload struct {
+	// Updated vendorScoringConfig
+	VendorScoringConfig *VendorScoringConfig `json:"vendorScoringConfig"`
+}
+
+// VendorScoringConfigWhereInput is used for filtering VendorScoringConfig objects.
+// Input was generated by ent.
+type VendorScoringConfigWhereInput struct {
+	Not *VendorScoringConfigWhereInput   `json:"not,omitempty"`
+	And []*VendorScoringConfigWhereInput `json:"and,omitempty"`
+	Or  []*VendorScoringConfigWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// scoring_mode field predicates
+	ScoringMode      *enums.VendorScoringMode  `json:"scoringMode,omitempty"`
+	ScoringModeNeq   *enums.VendorScoringMode  `json:"scoringModeNEQ,omitempty"`
+	ScoringModeIn    []enums.VendorScoringMode `json:"scoringModeIn,omitempty"`
+	ScoringModeNotIn []enums.VendorScoringMode `json:"scoringModeNotIn,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// vendor_risk_scores edge predicates
+	HasVendorRiskScores     *bool                        `json:"hasVendorRiskScores,omitempty"`
+	HasVendorRiskScoresWith []*VendorRiskScoreWhereInput `json:"hasVendorRiskScoresWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -49846,6 +50562,7 @@ const (
 	EntityOrderFieldStatusPageURL         EntityOrderField = "status_page_url"
 	EntityOrderFieldRiskRating            EntityOrderField = "risk_rating"
 	EntityOrderFieldRiskScore             EntityOrderField = "risk_score"
+	EntityOrderFieldRiskScoreCoverage     EntityOrderField = "risk_score_coverage"
 	EntityOrderFieldTier                  EntityOrderField = "tier"
 	EntityOrderFieldReviewFrequency       EntityOrderField = "REVIEW_FREQUENCY"
 	EntityOrderFieldNextReviewAt          EntityOrderField = "next_review_at"
@@ -49880,6 +50597,7 @@ var AllEntityOrderField = []EntityOrderField{
 	EntityOrderFieldStatusPageURL,
 	EntityOrderFieldRiskRating,
 	EntityOrderFieldRiskScore,
+	EntityOrderFieldRiskScoreCoverage,
 	EntityOrderFieldTier,
 	EntityOrderFieldReviewFrequency,
 	EntityOrderFieldNextReviewAt,
@@ -49890,7 +50608,7 @@ var AllEntityOrderField = []EntityOrderField{
 
 func (e EntityOrderField) IsValid() bool {
 	switch e {
-	case EntityOrderFieldCreatedAt, EntityOrderFieldUpdatedAt, EntityOrderFieldInternalOwner, EntityOrderFieldReviewedBy, EntityOrderFieldLastReviewedAt, EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus, EntityOrderFieldApprovedForUse, EntityOrderFieldHasSoc2, EntityOrderFieldSoc2PeriodEnd, EntityOrderFieldContractStartDate, EntityOrderFieldContractEndDate, EntityOrderFieldAutoRenews, EntityOrderFieldTerminationNoticeDays, EntityOrderFieldAnnualSpend, EntityOrderFieldSpendCurrency, EntityOrderFieldBillingModel, EntityOrderFieldRenewalRisk, EntityOrderFieldSsoEnforced, EntityOrderFieldMfaSupported, EntityOrderFieldMfaEnforced, EntityOrderFieldStatusPageURL, EntityOrderFieldRiskRating, EntityOrderFieldRiskScore, EntityOrderFieldTier, EntityOrderFieldReviewFrequency, EntityOrderFieldNextReviewAt, EntityOrderFieldContractRenewalAt, EntityOrderFieldExternalID, EntityOrderFieldObservedAt:
+	case EntityOrderFieldCreatedAt, EntityOrderFieldUpdatedAt, EntityOrderFieldInternalOwner, EntityOrderFieldReviewedBy, EntityOrderFieldLastReviewedAt, EntityOrderFieldName, EntityOrderFieldDisplayName, EntityOrderFieldStatus, EntityOrderFieldApprovedForUse, EntityOrderFieldHasSoc2, EntityOrderFieldSoc2PeriodEnd, EntityOrderFieldContractStartDate, EntityOrderFieldContractEndDate, EntityOrderFieldAutoRenews, EntityOrderFieldTerminationNoticeDays, EntityOrderFieldAnnualSpend, EntityOrderFieldSpendCurrency, EntityOrderFieldBillingModel, EntityOrderFieldRenewalRisk, EntityOrderFieldSsoEnforced, EntityOrderFieldMfaSupported, EntityOrderFieldMfaEnforced, EntityOrderFieldStatusPageURL, EntityOrderFieldRiskRating, EntityOrderFieldRiskScore, EntityOrderFieldRiskScoreCoverage, EntityOrderFieldTier, EntityOrderFieldReviewFrequency, EntityOrderFieldNextReviewAt, EntityOrderFieldContractRenewalAt, EntityOrderFieldExternalID, EntityOrderFieldObservedAt:
 		return true
 	}
 	return false
@@ -53928,6 +54646,130 @@ func (e *UserSettingOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e UserSettingOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which VendorRiskScore connections can be ordered.
+type VendorRiskScoreOrderField string
+
+const (
+	VendorRiskScoreOrderFieldCreatedAt        VendorRiskScoreOrderField = "created_at"
+	VendorRiskScoreOrderFieldUpdatedAt        VendorRiskScoreOrderField = "updated_at"
+	VendorRiskScoreOrderFieldQuestionKey      VendorRiskScoreOrderField = "question_key"
+	VendorRiskScoreOrderFieldQuestionCategory VendorRiskScoreOrderField = "question_category"
+	VendorRiskScoreOrderFieldImpact           VendorRiskScoreOrderField = "impact"
+	VendorRiskScoreOrderFieldLikelihood       VendorRiskScoreOrderField = "likelihood"
+	VendorRiskScoreOrderFieldScore            VendorRiskScoreOrderField = "score"
+)
+
+var AllVendorRiskScoreOrderField = []VendorRiskScoreOrderField{
+	VendorRiskScoreOrderFieldCreatedAt,
+	VendorRiskScoreOrderFieldUpdatedAt,
+	VendorRiskScoreOrderFieldQuestionKey,
+	VendorRiskScoreOrderFieldQuestionCategory,
+	VendorRiskScoreOrderFieldImpact,
+	VendorRiskScoreOrderFieldLikelihood,
+	VendorRiskScoreOrderFieldScore,
+}
+
+func (e VendorRiskScoreOrderField) IsValid() bool {
+	switch e {
+	case VendorRiskScoreOrderFieldCreatedAt, VendorRiskScoreOrderFieldUpdatedAt, VendorRiskScoreOrderFieldQuestionKey, VendorRiskScoreOrderFieldQuestionCategory, VendorRiskScoreOrderFieldImpact, VendorRiskScoreOrderFieldLikelihood, VendorRiskScoreOrderFieldScore:
+		return true
+	}
+	return false
+}
+
+func (e VendorRiskScoreOrderField) String() string {
+	return string(e)
+}
+
+func (e *VendorRiskScoreOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = VendorRiskScoreOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid VendorRiskScoreOrderField", str)
+	}
+	return nil
+}
+
+func (e VendorRiskScoreOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *VendorRiskScoreOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e VendorRiskScoreOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which VendorScoringConfig connections can be ordered.
+type VendorScoringConfigOrderField string
+
+const (
+	VendorScoringConfigOrderFieldCreatedAt   VendorScoringConfigOrderField = "created_at"
+	VendorScoringConfigOrderFieldUpdatedAt   VendorScoringConfigOrderField = "updated_at"
+	VendorScoringConfigOrderFieldScoringMode VendorScoringConfigOrderField = "scoring_mode"
+)
+
+var AllVendorScoringConfigOrderField = []VendorScoringConfigOrderField{
+	VendorScoringConfigOrderFieldCreatedAt,
+	VendorScoringConfigOrderFieldUpdatedAt,
+	VendorScoringConfigOrderFieldScoringMode,
+}
+
+func (e VendorScoringConfigOrderField) IsValid() bool {
+	switch e {
+	case VendorScoringConfigOrderFieldCreatedAt, VendorScoringConfigOrderFieldUpdatedAt, VendorScoringConfigOrderFieldScoringMode:
+		return true
+	}
+	return false
+}
+
+func (e VendorScoringConfigOrderField) String() string {
+	return string(e)
+}
+
+func (e *VendorScoringConfigOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = VendorScoringConfigOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid VendorScoringConfigOrderField", str)
+	}
+	return nil
+}
+
+func (e VendorScoringConfigOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *VendorScoringConfigOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e VendorScoringConfigOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

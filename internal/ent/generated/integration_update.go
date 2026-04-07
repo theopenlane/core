@@ -557,6 +557,20 @@ func (_u *IntegrationUpdate) ClearProviderMetadataSnapshot() *IntegrationUpdate 
 	return _u
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_u *IntegrationUpdate) SetPrimaryDirectory(v bool) *IntegrationUpdate {
+	_u.mutation.SetPrimaryDirectory(v)
+	return _u
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillablePrimaryDirectory(v *bool) *IntegrationUpdate {
+	if v != nil {
+		_u.SetPrimaryDirectory(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdate) SetOwner(v *Organization) *IntegrationUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -1505,6 +1519,9 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ProviderMetadataSnapshotCleared() {
 		_spec.ClearField(integration.FieldProviderMetadataSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3037,6 +3054,20 @@ func (_u *IntegrationUpdateOne) ClearProviderMetadataSnapshot() *IntegrationUpda
 	return _u
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_u *IntegrationUpdateOne) SetPrimaryDirectory(v bool) *IntegrationUpdateOne {
+	_u.mutation.SetPrimaryDirectory(v)
+	return _u
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillablePrimaryDirectory(v *bool) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetPrimaryDirectory(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -4015,6 +4046,9 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.ProviderMetadataSnapshotCleared() {
 		_spec.ClearField(integration.FieldProviderMetadataSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

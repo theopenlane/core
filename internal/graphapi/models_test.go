@@ -148,6 +148,7 @@ type EntityBuilder struct {
 	DisplayName string
 	TypeID      string
 	Description string
+	Tier        enums.VendorTier
 }
 
 type EntityTypeBuilder struct {
@@ -436,6 +437,13 @@ type SLADefinitionBuilder struct {
 	// Fields
 	SLADays       int
 	SecurityLevel enums.SecurityLevel
+}
+
+type PlatformBuilder struct {
+	client *client
+
+	// Fields
+	Name string
 }
 
 // Faker structs with random injected data
@@ -944,20 +952,26 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		e.Description = gofakeit.HipsterSentence()
 	}
 
+	if e.Tier == "" {
+		e.Tier = enums.VendorTierStandard
+	}
+
 	if e.TypeID == "" {
 		et := (&EntityTypeBuilder{client: e.client}).MustNew(ctx, t)
 		e.TypeID = et.ID
 	}
 
-	entity, err := e.client.db.Entity.Create().
+	entity := e.client.db.Entity.Create().
 		SetName(e.Name).
 		SetDisplayName(e.DisplayName).
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
-		Save(ctx)
+		SetTier(e.Tier)
+
+	savedEntity, err := entity.Save(ctx)
 	requireNoError(t, err)
 
-	return entity
+	return savedEntity
 }
 
 // MustNew identity holder builder is used to create, without authz checks, identity holders in the database
@@ -2691,4 +2705,19 @@ func (e *EmailBrandingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 	requireNoError(t, err)
 
 	return emailBranding
+}
+
+func (p *PlatformBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Platform {
+	ctx = setContext(ctx, p.client.db)
+
+	if p.Name == "" {
+		p.Name = gofakeit.AppName() + ulids.New().String()
+	}
+
+	platform, err := p.client.db.Platform.Create().
+		SetName(p.Name).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return platform
 }

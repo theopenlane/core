@@ -1,465 +1,666 @@
-mutation CreateBulkCSVPlatform ($input: Upload!) {
-	createBulkCSVPlatform(input: $input) {
-		platforms {
-			accessModelID
-			accessModelName
-			businessOwner
-			businessOwnerGroupID
-			businessOwnerUserID
-			businessPurpose
-			containsPii
-			costCenter
-			createdAt
-			createdBy
-			criticalityID
-			criticalityName
-			dataFlowSummary
-			description
-			displayID
-			encryptionStatusID
-			encryptionStatusName
-			environmentID
-			environmentName
-			estimatedMonthlyCost
-			externalReferenceID
-			externalUUID
-			id
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerUserID
-			metadata
-			name
-			ownerID
-			physicalLocation
-			platformDataClassificationID
-			platformDataClassificationName
-			platformKindID
-			platformKindName
-			platformOwnerID
-			purchaseDate
-			region
-			scopeID
-			scopeName
-			scopeStatement
-			securityOwner
-			securityOwnerGroupID
-			securityOwnerUserID
-			securityTierID
-			securityTierName
-			sourceIdentifier
-			sourceType
-			status
-			tags
-			technicalOwner
-			technicalOwnerGroupID
-			technicalOwnerUserID
-			trustBoundaryDescription
-			updatedAt
-			updatedBy
-			workflowEligibleMarker
-		}
-	}
+mutation CreateBulkCSVPlatform($input: Upload!) {
+  createBulkCSVPlatform(input: $input) {
+    platforms {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      externalUUID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
 }
-mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
-	createBulkPlatform(input: $input) {
-		platforms {
-			accessModelID
-			accessModelName
-			businessOwner
-			businessOwnerGroupID
-			businessOwnerUserID
-			businessPurpose
-			containsPii
-			costCenter
-			createdAt
-			createdBy
-			criticalityID
-			criticalityName
-			dataFlowSummary
-			description
-			displayID
-			encryptionStatusID
-			encryptionStatusName
-			environmentID
-			environmentName
-			estimatedMonthlyCost
-			externalReferenceID
-			externalUUID
-			id
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerUserID
-			metadata
-			name
-			ownerID
-			physicalLocation
-			platformDataClassificationID
-			platformDataClassificationName
-			platformKindID
-			platformKindName
-			platformOwnerID
-			purchaseDate
-			region
-			scopeID
-			scopeName
-			scopeStatement
-			securityOwner
-			securityOwnerGroupID
-			securityOwnerUserID
-			securityTierID
-			securityTierName
-			sourceIdentifier
-			sourceType
-			status
-			tags
-			technicalOwner
-			technicalOwnerGroupID
-			technicalOwnerUserID
-			trustBoundaryDescription
-			updatedAt
-			updatedBy
-			workflowEligibleMarker
-		}
-	}
+
+mutation CreateBulkPlatform($input: [CreatePlatformInput!]) {
+  createBulkPlatform(input: $input) {
+    platforms {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      externalUUID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+      architectureDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      dataFlowDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      trustBoundaryDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+    }
+  }
 }
-mutation CreatePlatform ($input: CreatePlatformInput!) {
-	createPlatform(input: $input) {
-		platform {
-			accessModelID
-			accessModelName
-			businessOwner
-			businessOwnerGroupID
-			businessOwnerUserID
-			businessPurpose
-			containsPii
-			costCenter
-			createdAt
-			createdBy
-			criticalityID
-			criticalityName
-			dataFlowSummary
-			description
-			displayID
-			encryptionStatusID
-			encryptionStatusName
-			environmentID
-			environmentName
-			estimatedMonthlyCost
-			externalReferenceID
-			externalUUID
-			id
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerUserID
-			metadata
-			name
-			ownerID
-			physicalLocation
-			platformDataClassificationID
-			platformDataClassificationName
-			platformKindID
-			platformKindName
-			platformOwnerID
-			purchaseDate
-			region
-			scopeID
-			scopeName
-			scopeStatement
-			securityOwner
-			securityOwnerGroupID
-			securityOwnerUserID
-			securityTierID
-			securityTierName
-			sourceIdentifier
-			sourceType
-			status
-			tags
-			technicalOwner
-			technicalOwnerGroupID
-			technicalOwnerUserID
-			trustBoundaryDescription
-			updatedAt
-			updatedBy
-			workflowEligibleMarker
-		}
-	}
+
+mutation CreatePlatform($input: CreatePlatformInput!, $architectureDiagrams: [Upload!], $dataFlowDiagrams: [Upload!], $trustBoundaryDiagrams: [Upload!]) {
+  createPlatform(
+    input: $input
+    architectureDiagrams: $architectureDiagrams
+    dataFlowDiagrams: $dataFlowDiagrams
+    trustBoundaryDiagrams: $trustBoundaryDiagrams
+  ) {
+    platform {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      externalUUID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+      sourceAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      sourceEntities {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeVendors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      architectureDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      dataFlowDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      trustBoundaryDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+    }
+  }
 }
-mutation DeletePlatform ($deletePlatformId: ID!) {
-	deletePlatform(id: $deletePlatformId) {
-		deletedID
-	}
+
+mutation DeletePlatform($deletePlatformId: ID!) {
+  deletePlatform(id: $deletePlatformId) {
+    deletedID
+  }
 }
-query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!]) {
-	platforms(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				accessModelID
-				accessModelName
-				businessOwner
-				businessOwnerGroupID
-				businessOwnerUserID
-				businessPurpose
-				containsPii
-				costCenter
-				createdAt
-				createdBy
-				criticalityID
-				criticalityName
-				dataFlowSummary
-				description
-				displayID
-				encryptionStatusID
-				encryptionStatusName
-				environmentID
-				environmentName
-				estimatedMonthlyCost
-				externalReferenceID
-				externalUUID
-				id
-				internalOwner
-				internalOwnerGroupID
-				internalOwnerUserID
-				metadata
-				name
-				ownerID
-				physicalLocation
-				platformDataClassificationID
-				platformDataClassificationName
-				platformKindID
-				platformKindName
-				platformOwnerID
-				purchaseDate
-				region
-				scopeID
-				scopeName
-				scopeStatement
-				securityOwner
-				securityOwnerGroupID
-				securityOwnerUserID
-				securityTierID
-				securityTierName
-				sourceIdentifier
-				sourceType
-				status
-				tags
-				technicalOwner
-				technicalOwnerGroupID
-				technicalOwnerUserID
-				trustBoundaryDescription
-				updatedAt
-				updatedBy
-				workflowEligibleMarker
-				identityHolders {
-					edges {
-						node {
-							id
-							fullName
-							email
-							displayID
-						}
-					}
-				}
-			}
-		}
-	}
+
+query GetAllPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!]) {
+  platforms(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accessModelID
+        accessModelName
+        businessOwner
+        businessOwnerGroupID
+        businessOwnerUserID
+        businessPurpose
+        containsPii
+        costCenter
+        createdAt
+        createdBy
+        criticalityID
+        criticalityName
+        dataFlowSummary
+        description
+        displayID
+        encryptionStatusID
+        encryptionStatusName
+        environmentID
+        environmentName
+        estimatedMonthlyCost
+        externalReferenceID
+        externalUUID
+        id
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        metadata
+        name
+        ownerID
+        physicalLocation
+        platformDataClassificationID
+        platformDataClassificationName
+        platformKindID
+        platformKindName
+        platformOwnerID
+        purchaseDate
+        region
+        scopeID
+        scopeName
+        scopeStatement
+        securityOwner
+        securityOwnerGroupID
+        securityOwnerUserID
+        securityTierID
+        securityTierName
+        sourceIdentifier
+        sourceType
+        status
+        tags
+        technicalOwner
+        technicalOwnerGroupID
+        technicalOwnerUserID
+        trustBoundaryDescription
+        updatedAt
+        updatedBy
+        workflowEligibleMarker
+        identityHolders {
+          edges {
+            node {
+              id
+              fullName
+              email
+              displayID
+            }
+          }
+        }
+      }
+    }
+  }
 }
-query GetPlatformByID ($platformId: ID!) {
-	platform(id: $platformId) {
-		accessModelID
-		accessModelName
-		businessOwner
-		businessOwnerGroupID
-		businessOwnerUserID
-		businessPurpose
-		containsPii
-		costCenter
-		createdAt
-		createdBy
-		criticalityID
-		criticalityName
-		dataFlowSummary
-		description
-		displayID
-		encryptionStatusID
-		encryptionStatusName
-		environmentID
-		environmentName
-		estimatedMonthlyCost
-		externalReferenceID
-		externalUUID
-		id
-		internalOwner
-		internalOwnerGroupID
-		internalOwnerUserID
-		metadata
-		name
-		ownerID
-		physicalLocation
-		platformDataClassificationID
-		platformDataClassificationName
-		platformKindID
-		platformKindName
-		platformOwnerID
-		purchaseDate
-		region
-		scopeID
-		scopeName
-		scopeStatement
-		securityOwner
-		securityOwnerGroupID
-		securityOwnerUserID
-		securityTierID
-		securityTierName
-		sourceIdentifier
-		sourceType
-		status
-		tags
-		technicalOwner
-		technicalOwnerGroupID
-		technicalOwnerUserID
-		trustBoundaryDescription
-		updatedAt
-		updatedBy
-		workflowEligibleMarker
-	}
+
+query GetPlatformByID($platformId: ID!) {
+  platform(id: $platformId) {
+    accessModelID
+    accessModelName
+    businessOwner
+    businessOwnerGroupID
+    businessOwnerUserID
+    businessPurpose
+    containsPii
+    costCenter
+    createdAt
+    createdBy
+    criticalityID
+    criticalityName
+    dataFlowSummary
+    description
+    displayID
+    encryptionStatusID
+    encryptionStatusName
+    environmentID
+    environmentName
+    estimatedMonthlyCost
+    externalReferenceID
+    externalUUID
+    id
+    internalOwner
+    internalOwnerGroupID
+    internalOwnerUserID
+    metadata
+    name
+    ownerID
+    physicalLocation
+    platformDataClassificationID
+    platformDataClassificationName
+    platformKindID
+    platformKindName
+    platformOwnerID
+    purchaseDate
+    region
+    scopeID
+    scopeName
+    scopeStatement
+    securityOwner
+    securityOwnerGroupID
+    securityOwnerUserID
+    securityTierID
+    securityTierName
+    sourceIdentifier
+    sourceType
+    status
+    tags
+    technicalOwner
+    technicalOwnerGroupID
+    technicalOwnerUserID
+    trustBoundaryDescription
+    updatedAt
+    updatedBy
+    workflowEligibleMarker
+  }
 }
-query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!], $where: PlatformWhereInput) {
-	platforms(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				accessModelID
-				accessModelName
-				businessOwner
-				businessOwnerGroupID
-				businessOwnerUserID
-				businessPurpose
-				containsPii
-				costCenter
-				createdAt
-				createdBy
-				criticalityID
-				criticalityName
-				dataFlowSummary
-				description
-				displayID
-				encryptionStatusID
-				encryptionStatusName
-				environmentID
-				environmentName
-				estimatedMonthlyCost
-				externalReferenceID
-				externalUUID
-				id
-				internalOwner
-				internalOwnerGroupID
-				internalOwnerUserID
-				metadata
-				name
-				ownerID
-				physicalLocation
-				platformDataClassificationID
-				platformDataClassificationName
-				platformKindID
-				platformKindName
-				platformOwnerID
-				purchaseDate
-				region
-				scopeID
-				scopeName
-				scopeStatement
-				securityOwner
-				securityOwnerGroupID
-				securityOwnerUserID
-				securityTierID
-				securityTierName
-				sourceIdentifier
-				sourceType
-				status
-				tags
-				technicalOwner
-				technicalOwnerGroupID
-				technicalOwnerUserID
-				trustBoundaryDescription
-				updatedAt
-				updatedBy
-				workflowEligibleMarker
-			}
-		}
-	}
+
+query GetPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!], $where: PlatformWhereInput) {
+  platforms(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accessModelID
+        accessModelName
+        businessOwner
+        businessOwnerGroupID
+        businessOwnerUserID
+        businessPurpose
+        containsPii
+        costCenter
+        createdAt
+        createdBy
+        criticalityID
+        criticalityName
+        dataFlowSummary
+        description
+        displayID
+        encryptionStatusID
+        encryptionStatusName
+        environmentID
+        environmentName
+        estimatedMonthlyCost
+        externalReferenceID
+        externalUUID
+        id
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        metadata
+        name
+        ownerID
+        physicalLocation
+        platformDataClassificationID
+        platformDataClassificationName
+        platformKindID
+        platformKindName
+        platformOwnerID
+        purchaseDate
+        region
+        scopeID
+        scopeName
+        scopeStatement
+        securityOwner
+        securityOwnerGroupID
+        securityOwnerUserID
+        securityTierID
+        securityTierName
+        sourceIdentifier
+        sourceType
+        status
+        tags
+        technicalOwner
+        technicalOwnerGroupID
+        technicalOwnerUserID
+        trustBoundaryDescription
+        updatedAt
+        updatedBy
+        workflowEligibleMarker
+      }
+    }
+  }
 }
-mutation UpdatePlatform ($updatePlatformId: ID!, $input: UpdatePlatformInput!) {
-	updatePlatform(id: $updatePlatformId, input: $input) {
-		platform {
-			accessModelID
-			accessModelName
-			businessOwner
-			businessOwnerGroupID
-			businessOwnerUserID
-			businessPurpose
-			containsPii
-			costCenter
-			createdAt
-			createdBy
-			criticalityID
-			criticalityName
-			dataFlowSummary
-			description
-			displayID
-			encryptionStatusID
-			encryptionStatusName
-			environmentID
-			environmentName
-			estimatedMonthlyCost
-			externalReferenceID
-			externalUUID
-			id
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerUserID
-			metadata
-			name
-			ownerID
-			physicalLocation
-			platformDataClassificationID
-			platformDataClassificationName
-			platformKindID
-			platformKindName
-			platformOwnerID
-			purchaseDate
-			region
-			scopeID
-			scopeName
-			scopeStatement
-			securityOwner
-			securityOwnerGroupID
-			securityOwnerUserID
-			securityTierID
-			securityTierName
-			sourceIdentifier
-			sourceType
-			status
-			tags
-			technicalOwner
-			technicalOwnerGroupID
-			technicalOwnerUserID
-			trustBoundaryDescription
-			updatedAt
-			updatedBy
-			workflowEligibleMarker
-		}
-	}
+
+mutation UpdatePlatform($updatePlatformId: ID!, $input: UpdatePlatformInput!, $architectureDiagrams: [Upload!], $dataFlowDiagrams: [Upload!], $trustBoundaryDiagrams: [Upload!]) {
+  updatePlatform(
+    id: $updatePlatformId
+    input: $input
+    architectureDiagrams: $architectureDiagrams
+    dataFlowDiagrams: $dataFlowDiagrams
+    trustBoundaryDiagrams: $trustBoundaryDiagrams
+  ) {
+    platform {
+      accessModelID
+      accessModelName
+      businessOwner
+      businessOwnerGroupID
+      businessOwnerUserID
+      businessPurpose
+      containsPii
+      costCenter
+      createdAt
+      createdBy
+      criticalityID
+      criticalityName
+      dataFlowSummary
+      description
+      displayID
+      encryptionStatusID
+      encryptionStatusName
+      environmentID
+      environmentName
+      estimatedMonthlyCost
+      externalReferenceID
+      externalUUID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      metadata
+      name
+      ownerID
+      physicalLocation
+      platformDataClassificationID
+      platformDataClassificationName
+      platformKindID
+      platformKindName
+      platformOwnerID
+      purchaseDate
+      region
+      scopeID
+      scopeName
+      scopeStatement
+      securityOwner
+      securityOwnerGroupID
+      securityOwnerUserID
+      securityTierID
+      securityTierName
+      sourceIdentifier
+      sourceType
+      status
+      tags
+      technicalOwner
+      technicalOwnerGroupID
+      technicalOwnerUserID
+      trustBoundaryDescription
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+      assets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      entities {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      sourceAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      sourceEntities {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeVendors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      architectureDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      dataFlowDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      trustBoundaryDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+    }
+  }
 }

@@ -634,6 +634,20 @@ func (_c *DirectoryAccountHistoryCreate) SetNillableSourceVersion(v *string) *Di
 	return _c
 }
 
+// SetPrimarySource sets the "primary_source" field.
+func (_c *DirectoryAccountHistoryCreate) SetPrimarySource(v bool) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetPrimarySource(v)
+	return _c
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillablePrimarySource(v *bool) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetPrimarySource(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *DirectoryAccountHistoryCreate) SetID(v string) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetID(v)
@@ -740,6 +754,10 @@ func (_c *DirectoryAccountHistoryCreate) defaults() error {
 		v := directoryaccounthistory.DefaultProfileHash
 		_c.mutation.SetProfileHash(v)
 	}
+	if _, ok := _c.mutation.PrimarySource(); !ok {
+		v := directoryaccounthistory.DefaultPrimarySource
+		_c.mutation.SetPrimarySource(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if directoryaccounthistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized directoryaccounthistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -795,6 +813,9 @@ func (_c *DirectoryAccountHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.ProfileHash(); !ok {
 		return &ValidationError{Name: "profile_hash", err: errors.New(`historygenerated: missing required field "DirectoryAccountHistory.profile_hash"`)}
+	}
+	if _, ok := _c.mutation.PrimarySource(); !ok {
+		return &ValidationError{Name: "primary_source", err: errors.New(`historygenerated: missing required field "DirectoryAccountHistory.primary_source"`)}
 	}
 	return nil
 }
@@ -1019,6 +1040,10 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 	if value, ok := _c.mutation.SourceVersion(); ok {
 		_spec.SetField(directoryaccounthistory.FieldSourceVersion, field.TypeString, value)
 		_node.SourceVersion = &value
+	}
+	if value, ok := _c.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccounthistory.FieldPrimarySource, field.TypeBool, value)
+		_node.PrimarySource = value
 	}
 	return _node, _spec
 }

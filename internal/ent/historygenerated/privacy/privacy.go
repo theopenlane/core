@@ -1793,6 +1793,54 @@ func (f UserSettingHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m 
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.UserSettingHistoryMutation", m)
 }
 
+// The VendorRiskScoreHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VendorRiskScoreHistoryQueryRuleFunc func(context.Context, *historygenerated.VendorRiskScoreHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VendorRiskScoreHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.VendorRiskScoreHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.VendorRiskScoreHistoryQuery", q)
+}
+
+// The VendorRiskScoreHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VendorRiskScoreHistoryMutationRuleFunc func(context.Context, *historygenerated.VendorRiskScoreHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VendorRiskScoreHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.VendorRiskScoreHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.VendorRiskScoreHistoryMutation", m)
+}
+
+// The VendorScoringConfigHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VendorScoringConfigHistoryQueryRuleFunc func(context.Context, *historygenerated.VendorScoringConfigHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VendorScoringConfigHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.VendorScoringConfigHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.VendorScoringConfigHistoryQuery", q)
+}
+
+// The VendorScoringConfigHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VendorScoringConfigHistoryMutationRuleFunc func(context.Context, *historygenerated.VendorScoringConfigHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VendorScoringConfigHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.VendorScoringConfigHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.VendorScoringConfigHistoryMutation", m)
+}
+
 // The VulnerabilityHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type VulnerabilityHistoryQueryRuleFunc func(context.Context, *historygenerated.VulnerabilityHistoryQuery) error
@@ -2136,6 +2184,10 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.UserSettingHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.VendorRiskScoreHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.VendorScoringConfigHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.VulnerabilityHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.WorkflowAssignmentHistoryQuery:
@@ -2296,6 +2348,10 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.UserHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.UserSettingHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.VendorRiskScoreHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.VendorScoringConfigHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.VulnerabilityHistoryMutation:
 		return m.Filter(), nil

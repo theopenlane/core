@@ -254,6 +254,40 @@ const (
 	IntegrationMappingDirectoryAccountObservedAt          = "observedAt"
 	IntegrationMappingDirectoryAccountOrganizationUnit    = "organizationUnit"
 	IntegrationMappingDirectoryAccountPlatformID          = "platformID"
+<<<<<<< HEAD
+||||||| 6a1620342
+	IntegrationMappingDirectoryAccountDirectoryName = "directoryName"
+	IntegrationMappingDirectoryAccountDirectorySyncRunID = "directorySyncRunID"
+	IntegrationMappingDirectoryAccountDisplayName = "displayName"
+	IntegrationMappingDirectoryAccountEnvironmentID = "environmentID"
+	IntegrationMappingDirectoryAccountEnvironmentName = "environmentName"
+	IntegrationMappingDirectoryAccountExternalID = "externalID"
+	IntegrationMappingDirectoryAccountFamilyName = "familyName"
+	IntegrationMappingDirectoryAccountFirstSeenAt = "firstSeenAt"
+	IntegrationMappingDirectoryAccountGivenName = "givenName"
+	IntegrationMappingDirectoryAccountIdentityHolderID = "identityHolderID"
+	IntegrationMappingDirectoryAccountIntegrationID = "integrationID"
+	IntegrationMappingDirectoryAccountJobTitle = "jobTitle"
+	IntegrationMappingDirectoryAccountLastLoginAt = "lastLoginAt"
+	IntegrationMappingDirectoryAccountLastSeenAt = "lastSeenAt"
+	IntegrationMappingDirectoryAccountLastSeenIP = "lastSeenIP"
+	IntegrationMappingDirectoryAccountMetadata = "metadata"
+	IntegrationMappingDirectoryAccountMfaState = "mfaState"
+	IntegrationMappingDirectoryAccountObservedAt = "observedAt"
+	IntegrationMappingDirectoryAccountOrganizationUnit = "organizationUnit"
+	IntegrationMappingDirectoryAccountPlatformID = "platformID"
+	IntegrationMappingDirectoryAccountProfile = "profile"
+	IntegrationMappingDirectoryAccountProfileHash = "profileHash"
+	IntegrationMappingDirectoryAccountRemovedAt = "removedAt"
+	IntegrationMappingDirectoryAccountScopeID = "scopeID"
+	IntegrationMappingDirectoryAccountScopeName = "scopeName"
+	IntegrationMappingDirectoryAccountSecondaryKey = "secondaryKey"
+	IntegrationMappingDirectoryAccountSourceVersion = "sourceVersion"
+	IntegrationMappingDirectoryAccountStatus = "status"
+	IntegrationMappingDirectoryAccountTags = "tags"
+=======
+	IntegrationMappingDirectoryAccountPrimarySource       = "primarySource"
+>>>>>>> origin/main
 	IntegrationMappingDirectoryAccountProfile             = "profile"
 	IntegrationMappingDirectoryAccountProfileHash         = "profileHash"
 	IntegrationMappingDirectoryAccountRemovedAt           = "removedAt"
@@ -1283,69 +1317,191 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
 				InputKey:  "profile",
 				GoField:   "Profile",
 				EntField:  "profile",
 				Type:      "json.RawMessage",
 				Required:  false,
+||||||| 6a1620342
+				InputKey: "profile",
+				GoField: "Profile",
+				EntField: "profile",
+				Type: "json.RawMessage",
+				Required: false,
+=======
+				InputKey:  "primarySource",
+				GoField:   "PrimarySource",
+				EntField:  "primary_source",
+				Type:      "bool",
+				Required:  true,
+>>>>>>> origin/main
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
 				InputKey:  "profileHash",
 				GoField:   "ProfileHash",
 				EntField:  "profile_hash",
 				Type:      "string",
 				Required:  true,
+||||||| 6a1620342
+				InputKey: "profileHash",
+				GoField: "ProfileHash",
+				EntField: "profile_hash",
+				Type: "string",
+				Required: true,
+=======
+				InputKey:  "profile",
+				GoField:   "Profile",
+				EntField:  "profile",
+				Type:      "json.RawMessage",
+				Required:  false,
+>>>>>>> origin/main
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
 				InputKey:  "removedAt",
 				GoField:   "RemovedAt",
 				EntField:  "removed_at",
 				Type:      "time.Time",
 				Required:  false,
+||||||| 6a1620342
+				InputKey: "removedAt",
+				GoField: "RemovedAt",
+				EntField: "removed_at",
+				Type: "time.Time",
+				Required: false,
+=======
+				InputKey:  "profileHash",
+				GoField:   "ProfileHash",
+				EntField:  "profile_hash",
+				Type:      "string",
+				Required:  true,
+>>>>>>> origin/main
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
 				InputKey:  "scopeID",
 				GoField:   "ScopeID",
 				EntField:  "scope_id",
 				Type:      "string",
+||||||| 6a1620342
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
+=======
+				InputKey:  "removedAt",
+				GoField:   "RemovedAt",
+				EntField:  "removed_at",
+				Type:      "time.Time",
+>>>>>>> origin/main
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
 				InputKey:  "scopeName",
 				GoField:   "ScopeName",
 				EntField:  "scope_name",
+||||||| 6a1620342
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
+=======
+				InputKey:  "scopeID",
+				GoField:   "ScopeID",
+				EntField:  "scope_id",
+>>>>>>> origin/main
 				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
 				InputKey:  "secondaryKey",
 				GoField:   "SecondaryKey",
 				EntField:  "secondary_key",
+||||||| 6a1620342
+				InputKey: "secondaryKey",
+				GoField: "SecondaryKey",
+				EntField: "secondary_key",
+				Type: "string",
+				Required: false,
+=======
+				InputKey:  "scopeName",
+				GoField:   "ScopeName",
+				EntField:  "scope_name",
+>>>>>>> origin/main
 				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
+				InputKey:  "sourceVersion",
+				GoField:   "SourceVersion",
+				EntField:  "source_version",
+||||||| 6a1620342
+				InputKey: "sourceVersion",
+				GoField: "SourceVersion",
+				EntField: "source_version",
+				Type: "string",
+				Required: false,
+=======
+				InputKey:  "secondaryKey",
+				GoField:   "SecondaryKey",
+				EntField:  "secondary_key",
+>>>>>>> origin/main
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+<<<<<<< HEAD
+				InputKey:  "status",
+				GoField:   "Status",
+				EntField:  "status",
+				Type:      "string",
+				Required:  true,
+||||||| 6a1620342
+				InputKey: "status",
+				GoField: "Status",
+				EntField: "status",
+				Type: "string",
+				Required: true,
+=======
 				InputKey:  "sourceVersion",
 				GoField:   "SourceVersion",
 				EntField:  "source_version",
 				Type:      "string",
 				Required:  false,
+>>>>>>> origin/main
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
+<<<<<<< HEAD
+||||||| 6a1620342
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
+=======
 				InputKey:  "status",
 				GoField:   "Status",
 				EntField:  "status",
@@ -1355,6 +1511,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+>>>>>>> origin/main
 				InputKey:  "tags",
 				GoField:   "Tags",
 				EntField:  "tags",
@@ -1392,6 +1549,40 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"observedAt":          {},
 			"organizationUnit":    {},
 			"platformID":          {},
+<<<<<<< HEAD
+||||||| 6a1620342
+			"directoryName": {},
+			"directorySyncRunID": {},
+			"displayName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"externalID": {},
+			"familyName": {},
+			"firstSeenAt": {},
+			"givenName": {},
+			"identityHolderID": {},
+			"integrationID": {},
+			"jobTitle": {},
+			"lastLoginAt": {},
+			"lastSeenAt": {},
+			"lastSeenIP": {},
+			"metadata": {},
+			"mfaState": {},
+			"observedAt": {},
+			"organizationUnit": {},
+			"platformID": {},
+			"profile": {},
+			"profileHash": {},
+			"removedAt": {},
+			"scopeID": {},
+			"scopeName": {},
+			"secondaryKey": {},
+			"sourceVersion": {},
+			"status": {},
+			"tags": {},
+=======
+			"primarySource":       {},
+>>>>>>> origin/main
 			"profile":             {},
 			"profileHash":         {},
 			"removedAt":           {},
@@ -1406,6 +1597,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID",
 			"mfaState",
 			"observedAt",
+			"primarySource",
 			"profileHash",
 			"status",
 		},

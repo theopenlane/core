@@ -180,6 +180,12 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeArchitectureDiagrams holds the string denoting the architecture_diagrams edge name in mutations.
+	EdgeArchitectureDiagrams = "architecture_diagrams"
+	// EdgeDataFlowDiagrams holds the string denoting the data_flow_diagrams edge name in mutations.
+	EdgeDataFlowDiagrams = "data_flow_diagrams"
+	// EdgeTrustBoundaryDiagrams holds the string denoting the trust_boundary_diagrams edge name in mutations.
+	EdgeTrustBoundaryDiagrams = "trust_boundary_diagrams"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -376,6 +382,27 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// ArchitectureDiagramsTable is the table that holds the architecture_diagrams relation/edge.
+	ArchitectureDiagramsTable = "files"
+	// ArchitectureDiagramsInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	ArchitectureDiagramsInverseTable = "files"
+	// ArchitectureDiagramsColumn is the table column denoting the architecture_diagrams relation/edge.
+	ArchitectureDiagramsColumn = "platform_architecture_diagrams"
+	// DataFlowDiagramsTable is the table that holds the data_flow_diagrams relation/edge.
+	DataFlowDiagramsTable = "files"
+	// DataFlowDiagramsInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	DataFlowDiagramsInverseTable = "files"
+	// DataFlowDiagramsColumn is the table column denoting the data_flow_diagrams relation/edge.
+	DataFlowDiagramsColumn = "platform_data_flow_diagrams"
+	// TrustBoundaryDiagramsTable is the table that holds the trust_boundary_diagrams relation/edge.
+	TrustBoundaryDiagramsTable = "files"
+	// TrustBoundaryDiagramsInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	TrustBoundaryDiagramsInverseTable = "files"
+	// TrustBoundaryDiagramsColumn is the table column denoting the trust_boundary_diagrams relation/edge.
+	TrustBoundaryDiagramsColumn = "platform_trust_boundary_diagrams"
 	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
 	RisksTable = "platform_risks"
 	// RisksInverseTable is the table name for the Risk entity.
@@ -642,7 +669,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [19]ent.Hook
+	Hooks        [20]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1191,6 +1218,48 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByArchitectureDiagramsCount orders the results by architecture_diagrams count.
+func ByArchitectureDiagramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArchitectureDiagramsStep(), opts...)
+	}
+}
+
+// ByArchitectureDiagrams orders the results by architecture_diagrams terms.
+func ByArchitectureDiagrams(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArchitectureDiagramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDataFlowDiagramsCount orders the results by data_flow_diagrams count.
+func ByDataFlowDiagramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDataFlowDiagramsStep(), opts...)
+	}
+}
+
+// ByDataFlowDiagrams orders the results by data_flow_diagrams terms.
+func ByDataFlowDiagrams(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDataFlowDiagramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustBoundaryDiagramsCount orders the results by trust_boundary_diagrams count.
+func ByTrustBoundaryDiagramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustBoundaryDiagramsStep(), opts...)
+	}
+}
+
+// ByTrustBoundaryDiagrams orders the results by trust_boundary_diagrams terms.
+func ByTrustBoundaryDiagrams(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustBoundaryDiagramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByRisksCount orders the results by risks count.
 func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1622,6 +1691,27 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newArchitectureDiagramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArchitectureDiagramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ArchitectureDiagramsTable, ArchitectureDiagramsColumn),
+	)
+}
+func newDataFlowDiagramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DataFlowDiagramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DataFlowDiagramsTable, DataFlowDiagramsColumn),
+	)
+}
+func newTrustBoundaryDiagramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustBoundaryDiagramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustBoundaryDiagramsTable, TrustBoundaryDiagramsColumn),
 	)
 }
 func newRisksStep() *sqlgraph.Step {

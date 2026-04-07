@@ -183,6 +183,11 @@ func Family(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldFamily, v))
 }
 
+// PrimaryDirectory applies equality check predicate on the "primary_directory" field. It's identical to PrimaryDirectoryEQ.
+func PrimaryDirectory(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldPrimaryDirectory, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldCreatedAt, v))
@@ -1866,6 +1871,16 @@ func ProviderMetadataSnapshotIsNil() predicate.Integration {
 // ProviderMetadataSnapshotNotNil applies the NotNil predicate on the "provider_metadata_snapshot" field.
 func ProviderMetadataSnapshotNotNil() predicate.Integration {
 	return predicate.Integration(sql.FieldNotNull(FieldProviderMetadataSnapshot))
+}
+
+// PrimaryDirectoryEQ applies the EQ predicate on the "primary_directory" field.
+func PrimaryDirectoryEQ(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldPrimaryDirectory, v))
+}
+
+// PrimaryDirectoryNEQ applies the NEQ predicate on the "primary_directory" field.
+func PrimaryDirectoryNEQ(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldNEQ(FieldPrimaryDirectory, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

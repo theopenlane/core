@@ -1,0 +1,18 @@
+{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+  "externalId": "directory-2-user",
+  "userName": "alex.smith.directory-2@company.com",
+  "name": {
+    "familyName": "Smith",
+    "givenName": "Alex"
+  },
+  "displayName": "Alex Smith Directory 2",
+  "emails": [
+    {
+      "value": "alex.smith.directory-2@company.com",
+      "type": "work",
+      "primary": true
+    }
+  ],
+  "active": true
+}

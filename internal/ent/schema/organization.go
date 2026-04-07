@@ -607,6 +607,16 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         Discussion{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         VendorScoringConfig{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         VendorRiskScore{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

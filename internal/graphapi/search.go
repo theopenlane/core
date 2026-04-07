@@ -801,10 +801,9 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 					s.Where(sql.ExprP("(links)::text LIKE $33", likeQuery)) // search by Links
 				},
 				entity.RiskRatingContainsFold(query), // search by RiskRating
-				entity.TierContainsFold(query),       // search by Tier
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $36", likeQuery)) // search by VendorMetadata
+					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $35", likeQuery)) // search by VendorMetadata
 				},
 				entity.LogoFileIDContainsFold(query), // search by LogoFileID
 				entity.ExternalIDContainsFold(query), // search by ExternalID

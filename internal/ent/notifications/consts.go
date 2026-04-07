@@ -2,7 +2,6 @@ package notifications
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 )
@@ -18,29 +17,25 @@ const (
 	trustCenterNDA   = "trust-center/NDAs"
 )
 
-// getURLPathForObject constructs the URL path for a given object type and ID
-func getURLPathForObject(base, objectID, objectType string) string {
-	if !strings.HasSuffix(base, "/") {
-		base += "/"
-	}
-
+// getURLPathForObject constructs the URL path for a given object type and ID to be used in notifications, allowing users to navigate directly to the relevant page in the console
+func getURLPathForObject(objectID, objectType string) string {
 	switch objectType {
 	case generated.TypeInternalPolicy:
-		return base + fmt.Sprintf(policyURLPath, objectID)
+		return fmt.Sprintf(policyURLPath, objectID)
 	case generated.TypeProcedure:
-		return base + fmt.Sprintf(procedureURLPath, objectID)
+		return fmt.Sprintf(procedureURLPath, objectID)
 	case generated.TypeRisk:
-		return base + fmt.Sprintf(riskURLPath, objectID)
+		return fmt.Sprintf(riskURLPath, objectID)
 	case generated.TypeTask:
-		return base + fmt.Sprintf(taskURLPath, objectID)
+		return fmt.Sprintf(taskURLPath, objectID)
 	case generated.TypeControl:
-		return base + fmt.Sprintf(controlURLPath, objectID)
+		return fmt.Sprintf(controlURLPath, objectID)
 	case generated.TypeStandard:
-		return base + fmt.Sprintf(standardURLPath, objectID)
+		return fmt.Sprintf(standardURLPath, objectID)
 	case generated.TypeEvidence:
-		return base + fmt.Sprintf(evidenceURLPath, objectID)
+		return fmt.Sprintf(evidenceURLPath, objectID)
 	case generated.TypeTrustCenterNDARequest:
-		return base + trustCenterNDA
+		return trustCenterNDA
 	}
 
 	return ""

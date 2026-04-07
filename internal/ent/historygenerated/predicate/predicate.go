@@ -218,6 +218,12 @@ type UserHistory func(*sql.Selector)
 // UserSettingHistory is the predicate function for usersettinghistory builders.
 type UserSettingHistory func(*sql.Selector)
 
+// VendorRiskScoreHistory is the predicate function for vendorriskscorehistory builders.
+type VendorRiskScoreHistory func(*sql.Selector)
+
+// VendorScoringConfigHistory is the predicate function for vendorscoringconfighistory builders.
+type VendorScoringConfigHistory func(*sql.Selector)
+
 // VulnerabilityHistory is the predicate function for vulnerabilityhistory builders.
 type VulnerabilityHistory func(*sql.Selector)
 

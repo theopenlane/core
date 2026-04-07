@@ -137,8 +137,10 @@ type EntityHistory struct {
 	RiskRating string `json:"risk_rating,omitempty"`
 	// the risk score for the entity
 	RiskScore int `json:"risk_score,omitempty"`
-	// the tier classification for the entity
-	Tier string `json:"tier,omitempty"`
+	// number of scoring questions answered for the current risk score; used to contextualize partial assessments
+	RiskScoreCoverage int `json:"risk_score_coverage,omitempty"`
+	// the vendor risk tier classification, used to determine the depth of TPRM assessment required
+	Tier enums.VendorTier `json:"tier,omitempty"`
 	// the cadence for reviewing the entity
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
 	// when the entity is due for review
@@ -171,7 +173,7 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case entityhistory.FieldAnnualSpend:
 			values[i] = new(sql.NullFloat64)
-		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore:
+		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore, entityhistory.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
 		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldDeletedBy, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
 			values[i] = new(sql.NullString)
@@ -556,11 +558,17 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.RiskScore = int(value.Int64)
 			}
+		case entityhistory.FieldRiskScoreCoverage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_score_coverage", values[i])
+			} else if value.Valid {
+				_m.RiskScoreCoverage = int(value.Int64)
+			}
 		case entityhistory.FieldTier:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tier", values[i])
 			} else if value.Valid {
-				_m.Tier = value.String
+				_m.Tier = enums.VendorTier(value.String)
 			}
 		case entityhistory.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -829,8 +837,11 @@ func (_m *EntityHistory) String() string {
 	builder.WriteString("risk_score=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RiskScore))
 	builder.WriteString(", ")
+	builder.WriteString("risk_score_coverage=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskScoreCoverage))
+	builder.WriteString(", ")
 	builder.WriteString("tier=")
-	builder.WriteString(_m.Tier)
+	builder.WriteString(fmt.Sprintf("%v", _m.Tier))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))

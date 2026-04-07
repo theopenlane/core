@@ -75,6 +75,12 @@ var ExportableSchemas = map[string]info{"ASSESSMENT": info{
 }, "TRUST_CENTER_SUBPROCESSOR": info{
 	hasOwnerField:       false,
 	hasSystemOwnedField: false,
+}, "VENDOR_RISK_SCORE": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "VENDOR_SCORING_CONFIG": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
 }, "VULNERABILITY": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,

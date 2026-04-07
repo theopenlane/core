@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 )
 
 // EntityCreate is the builder for creating a Entity entity.
@@ -757,14 +758,28 @@ func (_c *EntityCreate) SetNillableRiskScore(v *int) *EntityCreate {
 	return _c
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_c *EntityCreate) SetRiskScoreCoverage(v int) *EntityCreate {
+	_c.mutation.SetRiskScoreCoverage(v)
+	return _c
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableRiskScoreCoverage(v *int) *EntityCreate {
+	if v != nil {
+		_c.SetRiskScoreCoverage(*v)
+	}
+	return _c
+}
+
 // SetTier sets the "tier" field.
-func (_c *EntityCreate) SetTier(v string) *EntityCreate {
+func (_c *EntityCreate) SetTier(v enums.VendorTier) *EntityCreate {
 	_c.mutation.SetTier(v)
 	return _c
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_c *EntityCreate) SetNillableTier(v *string) *EntityCreate {
+func (_c *EntityCreate) SetNillableTier(v *enums.VendorTier) *EntityCreate {
 	if v != nil {
 		_c.SetTier(*v)
 	}
@@ -1088,6 +1103,21 @@ func (_c *EntityCreate) AddAssessmentResponses(v ...*AssessmentResponse) *Entity
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssessmentResponseIDs(ids...)
+}
+
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_c *EntityCreate) AddVendorRiskScoreIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddVendorRiskScoreIDs(ids...)
+	return _c
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_c *EntityCreate) AddVendorRiskScores(v ...*VendorRiskScore) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVendorRiskScoreIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -1419,6 +1449,11 @@ func (_c *EntityCreate) check() error {
 			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Tier(); ok {
+		if err := entity.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`generated: validator failed for field "Entity.tier": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
 		if err := entity.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
@@ -1632,8 +1667,12 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		_spec.SetField(entity.FieldRiskScore, field.TypeInt, value)
 		_node.RiskScore = value
 	}
+	if value, ok := _c.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entity.FieldRiskScoreCoverage, field.TypeInt, value)
+		_node.RiskScoreCoverage = value
+	}
 	if value, ok := _c.mutation.Tier(); ok {
-		_spec.SetField(entity.FieldTier, field.TypeString, value)
+		_spec.SetField(entity.FieldTier, field.TypeEnum, value)
 		_node.Tier = value
 	}
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
@@ -2022,6 +2061,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

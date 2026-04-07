@@ -35,6 +35,8 @@ type UserInput struct {
 	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
 	// IncludeGuestUsers controls whether guest-type accounts are included in the sync
 	IncludeGuestUsers bool `json:"includeGuestUsers,omitempty" jsonschema:"title=Include Guest Users"`
+	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // entraIDCred holds the provider-owned credential material for an Azure Entra ID installation

@@ -538,6 +538,20 @@ func (_u *IntegrationHistoryUpdate) ClearProviderMetadataSnapshot() *Integration
 	return _u
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_u *IntegrationHistoryUpdate) SetPrimaryDirectory(v bool) *IntegrationHistoryUpdate {
+	_u.mutation.SetPrimaryDirectory(v)
+	return _u
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillablePrimaryDirectory(v *bool) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetPrimaryDirectory(*v)
+	}
+	return _u
+}
+
 // Mutation returns the IntegrationHistoryMutation object of the builder.
 func (_u *IntegrationHistoryUpdate) Mutation() *IntegrationHistoryMutation {
 	return _u.mutation
@@ -788,6 +802,9 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.ProviderMetadataSnapshotCleared() {
 		_spec.ClearField(integrationhistory.FieldProviderMetadataSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1315,6 +1332,20 @@ func (_u *IntegrationHistoryUpdateOne) ClearProviderMetadataSnapshot() *Integrat
 	return _u
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_u *IntegrationHistoryUpdateOne) SetPrimaryDirectory(v bool) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetPrimaryDirectory(v)
+	return _u
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillablePrimaryDirectory(v *bool) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetPrimaryDirectory(*v)
+	}
+	return _u
+}
+
 // Mutation returns the IntegrationHistoryMutation object of the builder.
 func (_u *IntegrationHistoryUpdateOne) Mutation() *IntegrationHistoryMutation {
 	return _u.mutation
@@ -1595,6 +1626,9 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.ProviderMetadataSnapshotCleared() {
 		_spec.ClearField(integrationhistory.FieldProviderMetadataSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

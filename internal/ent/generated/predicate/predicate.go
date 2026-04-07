@@ -294,6 +294,12 @@ type User func(*sql.Selector)
 // UserSetting is the predicate function for usersetting builders.
 type UserSetting func(*sql.Selector)
 
+// VendorRiskScore is the predicate function for vendorriskscore builders.
+type VendorRiskScore func(*sql.Selector)
+
+// VendorScoringConfig is the predicate function for vendorscoringconfig builders.
+type VendorScoringConfig func(*sql.Selector)
+
 // Vulnerability is the predicate function for vulnerability builders.
 type Vulnerability func(*sql.Selector)
 

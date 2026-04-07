@@ -703,6 +703,20 @@ func (_u *DirectoryAccountHistoryUpdate) ClearSourceVersion() *DirectoryAccountH
 	return _u
 }
 
+// SetPrimarySource sets the "primary_source" field.
+func (_u *DirectoryAccountHistoryUpdate) SetPrimarySource(v bool) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetPrimarySource(v)
+	return _u
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillablePrimarySource(v *bool) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetPrimarySource(*v)
+	}
+	return _u
+}
+
 // Mutation returns the DirectoryAccountHistoryMutation object of the builder.
 func (_u *DirectoryAccountHistoryUpdate) Mutation() *DirectoryAccountHistoryMutation {
 	return _u.mutation
@@ -1024,6 +1038,9 @@ func (_u *DirectoryAccountHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccounthistory.FieldPrimarySource, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.DirectoryAccountHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1717,6 +1734,20 @@ func (_u *DirectoryAccountHistoryUpdateOne) ClearSourceVersion() *DirectoryAccou
 	return _u
 }
 
+// SetPrimarySource sets the "primary_source" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetPrimarySource(v bool) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetPrimarySource(v)
+	return _u
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillablePrimarySource(v *bool) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetPrimarySource(*v)
+	}
+	return _u
+}
+
 // Mutation returns the DirectoryAccountHistoryMutation object of the builder.
 func (_u *DirectoryAccountHistoryUpdateOne) Mutation() *DirectoryAccountHistoryMutation {
 	return _u.mutation
@@ -2068,6 +2099,9 @@ func (_u *DirectoryAccountHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccounthistory.FieldPrimarySource, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.DirectoryAccountHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

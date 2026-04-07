@@ -122,9 +122,9 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		IntegrationID: integrationID,
-		Body: handlers.IntegrationOperationBody{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
@@ -138,7 +138,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp handlers.IntegrationOperationResponse
+	var resp handlers.RunIntegrationOperationResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "ok", resp.Status)
@@ -161,9 +161,9 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestInlineDefinitionID)
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		IntegrationID: integrationID,
-		Body: handlers.IntegrationOperationBody{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestRepoSyncOperation.Name(),
 		},
 	})
@@ -177,7 +177,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp handlers.IntegrationOperationResponse
+	var resp handlers.RunIntegrationOperationResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "ok", resp.Status)
@@ -200,9 +200,9 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		IntegrationID: integrationID,
-		Body: handlers.IntegrationOperationBody{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestRepoSyncOperation.Name(),
 		},
 	})
@@ -216,7 +216,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp handlers.IntegrationOperationResponse
+	var resp handlers.RunIntegrationOperationResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "queued", resp.Status)
@@ -232,8 +232,8 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
 	op.OperationID = "RunIntegrationOperationUnauthorized"
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
-		Body: handlers.IntegrationOperationBody{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
@@ -258,8 +258,8 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
-		Body: handlers.IntegrationOperationBody{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
@@ -287,8 +287,8 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName()
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
-		Body: handlers.IntegrationOperationBody{},
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		Body: handlers.RunIntegrationOperationBody{},
 	})
 	require.NoError(t, err)
 
@@ -314,8 +314,8 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
-		Body: handlers.IntegrationOperationBody{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: "nonexistent.op",
 		},
 	})
@@ -345,9 +345,9 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
 
 	integrationID := suite.createOperationTestIntegration(t, testUser.UserCtx, testUser.OrganizationID, operationTestDefinitionID)
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		IntegrationID: integrationID,
-		Body: handlers.IntegrationOperationBody{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestValidatedOperation.Name(),
 			Config:    json.RawMessage(`{"missing":"target_field"}`),
 		},
@@ -376,8 +376,8 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(handlers.IntegrationOperationPayload{
-		Body: handlers.IntegrationOperationBody{
+	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+		Body: handlers.RunIntegrationOperationBody{
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})

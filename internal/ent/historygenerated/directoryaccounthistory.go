@@ -116,6 +116,8 @@ type DirectoryAccountHistory struct {
 	RawProfileFileID *string `json:"raw_profile_file_id,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion *string `json:"source_version,omitempty"`
+	// indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	PrimarySource bool `json:"primary_source,omitempty"`
 	selectValues  sql.SelectValues
 }
 
@@ -128,6 +130,8 @@ func (*DirectoryAccountHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directoryaccounthistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case directoryaccounthistory.FieldPrimarySource:
+			values[i] = new(sql.NullBool)
 		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldDirectoryInstanceID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldAvatarUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldFirstSeenAt, directoryaccounthistory.FieldLastSeenAt, directoryaccounthistory.FieldAddedAt, directoryaccounthistory.FieldRemovedAt, directoryaccounthistory.FieldObservedAt:
@@ -462,6 +466,12 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
+		case directoryaccounthistory.FieldPrimarySource:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_source", values[i])
+			} else if value.Valid {
+				_m.PrimarySource = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -680,6 +690,9 @@ func (_m *DirectoryAccountHistory) String() string {
 		builder.WriteString("source_version=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("primary_source=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PrimarySource))
 	builder.WriteByte(')')
 	return builder.String()
 }

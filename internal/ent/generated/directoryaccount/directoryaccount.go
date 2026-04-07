@@ -106,6 +106,8 @@ const (
 	FieldRawProfileFileID = "raw_profile_file_id"
 	// FieldSourceVersion holds the string denoting the source_version field in the database.
 	FieldSourceVersion = "source_version"
+	// FieldPrimarySource holds the string denoting the primary_source field in the database.
+	FieldPrimarySource = "primary_source"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -261,6 +263,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldRawProfileFileID,
 	FieldSourceVersion,
+	FieldPrimarySource,
 }
 
 var (
@@ -321,6 +324,8 @@ var (
 	DefaultObservedAt func() time.Time
 	// DefaultProfileHash holds the default value on creation for the "profile_hash" field.
 	DefaultProfileHash string
+	// DefaultPrimarySource holds the default value on creation for the "primary_source" field.
+	DefaultPrimarySource bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -572,6 +577,11 @@ func ByRawProfileFileID(opts ...sql.OrderTermOption) OrderOption {
 // BySourceVersion orders the results by the source_version field.
 func BySourceVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSourceVersion, opts...).ToFunc()
+}
+
+// ByPrimarySource orders the results by the primary_source field.
+func ByPrimarySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimarySource, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

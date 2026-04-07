@@ -81,6 +81,20 @@ func TestRegisterGalaWorkflowListenersRegistersCommandTopics(t *testing.T) {
 	require.False(t, registry.InterestedIn(gala.TopicName("workflows.command.triggered"), ""))
 }
 
+func TestRegisterGalaVendorScoringListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaVendorScoringListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpCreate.String()))
+}
+
 func TestRegisterGalaNotificationListeners(t *testing.T) {
 	t.Parallel()
 

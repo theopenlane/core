@@ -1832,6 +1832,35 @@ func HasDocumentWith(preds ...predicate.DocumentData) predicate.AssessmentRespon
 	})
 }
 
+// HasVendorRiskScores applies the HasEdge predicate on the "vendor_risk_scores" edge.
+func HasVendorRiskScores() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorRiskScoresWith applies the HasEdge predicate on the "vendor_risk_scores" edge with a given conditions (other predicates).
+func HasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := newVendorRiskScoresStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.AssessmentResponse) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.AndPredicates(predicates...))

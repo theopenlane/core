@@ -709,6 +709,20 @@ func (_u *DirectoryAccountUpdate) ClearSourceVersion() *DirectoryAccountUpdate {
 	return _u
 }
 
+// SetPrimarySource sets the "primary_source" field.
+func (_u *DirectoryAccountUpdate) SetPrimarySource(v bool) *DirectoryAccountUpdate {
+	_u.mutation.SetPrimarySource(v)
+	return _u
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillablePrimarySource(v *bool) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetPrimarySource(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *DirectoryAccountUpdate) SetOwner(v *Organization) *DirectoryAccountUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -1211,6 +1225,9 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directoryaccount.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2272,6 +2289,20 @@ func (_u *DirectoryAccountUpdateOne) ClearSourceVersion() *DirectoryAccountUpdat
 	return _u
 }
 
+// SetPrimarySource sets the "primary_source" field.
+func (_u *DirectoryAccountUpdateOne) SetPrimarySource(v bool) *DirectoryAccountUpdateOne {
+	_u.mutation.SetPrimarySource(v)
+	return _u
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillablePrimarySource(v *bool) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetPrimarySource(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *DirectoryAccountUpdateOne) SetOwner(v *Organization) *DirectoryAccountUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2804,6 +2835,9 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directoryaccount.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

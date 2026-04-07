@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up vendorScoringConfig by ID
+    """
+     vendorScoringConfig(
+        """
+        ID of the vendorScoringConfig
+        """
+        id: ID!
+    ):  VendorScoringConfig!
+}
+
+extend type Mutation{
+    """
+    Create a new vendorScoringConfig
+    """
+    createVendorScoringConfig(
+        """
+        values of the vendorScoringConfig
+        """
+        input: CreateVendorScoringConfigInput!
+    ): VendorScoringConfigCreatePayload!
+    """
+    Create multiple new vendorScoringConfigs
+    """
+    createBulkVendorScoringConfig(
+        """
+        values of the vendorScoringConfig
+        """
+        input: [CreateVendorScoringConfigInput!]
+    ): VendorScoringConfigBulkCreatePayload!
+    """
+    Create multiple new vendorScoringConfigs via file upload
+    """
+    createBulkCSVVendorScoringConfig(
+        """
+        csv file containing values of the vendorScoringConfig
+        """
+        input: Upload!
+    ): VendorScoringConfigBulkCreatePayload!
+    """
+    Update multiple existing vendorScoringConfigs
+    """
+    updateBulkVendorScoringConfig(
+        """
+        IDs of the vendorScoringConfigs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the vendorScoringConfigs with
+        """
+        input: UpdateVendorScoringConfigInput!
+    ): VendorScoringConfigBulkUpdatePayload!
+    """
+    Update multiple existing vendorScoringConfigs via file upload
+    """
+    updateBulkCSVVendorScoringConfig(
+        """
+        csv file containing values of the vendorScoringConfig, must include ID column
+        """
+        input: Upload!
+    ): VendorScoringConfigBulkUpdatePayload!
+    """
+    Update an existing vendorScoringConfig
+    """
+    updateVendorScoringConfig(
+        """
+        ID of the vendorScoringConfig
+        """
+        id: ID!
+        """
+        New values for the vendorScoringConfig
+        """
+        input: UpdateVendorScoringConfigInput!
+    ): VendorScoringConfigUpdatePayload!
+    """
+    Delete an existing vendorScoringConfig
+    """
+    deleteVendorScoringConfig(
+        """
+        ID of the vendorScoringConfig
+        """
+        id: ID!
+    ): VendorScoringConfigDeletePayload!
+    """
+    Delete multiple vendorScoringConfigs
+    """
+    deleteBulkVendorScoringConfig(
+        """
+        IDs of the vendorScoringConfigs to delete
+        """
+        ids: [ID!]!
+    ): VendorScoringConfigBulkDeletePayload!
+}
+
+"""
+Return response for createVendorScoringConfig mutation
+"""
+type VendorScoringConfigCreatePayload {
+    """
+    Created vendorScoringConfig
+    """
+    vendorScoringConfig: VendorScoringConfig!
+}
+
+"""
+Return response for updateVendorScoringConfig mutation
+"""
+type VendorScoringConfigUpdatePayload {
+    """
+    Updated vendorScoringConfig
+    """
+    vendorScoringConfig: VendorScoringConfig!
+}
+
+"""
+Return response for deleteVendorScoringConfig mutation
+"""
+type VendorScoringConfigDeletePayload {
+    """
+    Deleted vendorScoringConfig ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendorScoringConfig mutation
+"""
+type VendorScoringConfigBulkCreatePayload {
+    """
+    Created vendorScoringConfigs
+    """
+    vendorScoringConfigs: [VendorScoringConfig!]
+}
+
+"""
+Return response for updateBulkVendorScoringConfig mutation
+"""
+type VendorScoringConfigBulkUpdatePayload {
+    """
+    Updated vendorScoringConfigs
+    """
+    vendorScoringConfigs: [VendorScoringConfig!]
+    """
+    IDs of the updated vendorScoringConfigs
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkVendorScoringConfig mutation
+"""
+type VendorScoringConfigBulkDeletePayload {
+    """
+    Deleted vendorScoringConfig IDs
+    """
+    deletedIDs: [ID!]!
+}

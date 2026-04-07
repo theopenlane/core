@@ -635,6 +635,7 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "source_version", Type: field.TypeString, Nullable: true},
+		{Name: "primary_source", Type: field.TypeBool, Default: false},
 	}
 	// DirectoryAccountHistoryTable holds the schema information for the "directory_account_history" table.
 	DirectoryAccountHistoryTable = &schema.Table{
@@ -960,7 +961,8 @@ var (
 		{Name: "links", Type: field.TypeJSON, Nullable: true},
 		{Name: "risk_rating", Type: field.TypeString, Nullable: true},
 		{Name: "risk_score", Type: field.TypeInt, Nullable: true},
-		{Name: "tier", Type: field.TypeString, Nullable: true},
+		{Name: "risk_score_coverage", Type: field.TypeInt, Nullable: true},
+		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
@@ -1453,6 +1455,7 @@ var (
 		{Name: "family", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED"}, Default: "PENDING"},
 		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
+		{Name: "primary_directory", Type: field.TypeBool, Default: false},
 	}
 	// IntegrationHistoryTable holds the schema information for the "integration_history" table.
 	IntegrationHistoryTable = &schema.Table{
@@ -3117,6 +3120,78 @@ var (
 			},
 		},
 	}
+	// VendorRiskScoreHistoryColumns holds the columns for the "vendor_risk_score_history" table.
+	VendorRiskScoreHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "question_key", Type: field.TypeString},
+		{Name: "question_name", Type: field.TypeString},
+		{Name: "question_description", Type: field.TypeString, Nullable: true},
+		{Name: "question_category", Type: field.TypeEnum, Enums: []string{"DATA_ACCESS", "SECURITY_PRACTICES", "REGULATORY_COMPLIANCE", "FINANCIAL_STABILITY", "OPERATIONAL_DEPENDENCY", "BUSINESS_CONTINUITY", "SUPPLY_CHAIN_RISK", "INCIDENT_RESPONSE", "DATA_PRIVACY"}},
+		{Name: "answer_type", Type: field.TypeEnum, Enums: []string{"BOOLEAN", "TEXT", "SINGLE_SELECT", "NUMERIC"}},
+		{Name: "impact", Type: field.TypeEnum, Enums: []string{"VERY_LOW", "LOW", "MEDIUM", "HIGH", "CRITICAL"}},
+		{Name: "likelihood", Type: field.TypeEnum, Enums: []string{"VERY_LOW", "LOW", "MEDIUM", "HIGH", "VERY_HIGH"}},
+		{Name: "score", Type: field.TypeFloat64, Default: 0},
+		{Name: "answer", Type: field.TypeString, Nullable: true},
+		{Name: "notes", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_scoring_config_id", Type: field.TypeString, Nullable: true},
+		{Name: "entity_id", Type: field.TypeString},
+		{Name: "assessment_response_id", Type: field.TypeString, Nullable: true},
+	}
+	// VendorRiskScoreHistoryTable holds the schema information for the "vendor_risk_score_history" table.
+	VendorRiskScoreHistoryTable = &schema.Table{
+		Name:       "vendor_risk_score_history",
+		Columns:    VendorRiskScoreHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorRiskScoreHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorriskscorehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoreHistoryColumns[1]},
+			},
+		},
+	}
+	// VendorScoringConfigHistoryColumns holds the columns for the "vendor_scoring_config_history" table.
+	VendorScoringConfigHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "questions", Type: field.TypeJSON},
+		{Name: "scoring_mode", Type: field.TypeEnum, Enums: []string{"ANSWERED_ONLY", "FULL_QUESTIONNAIRE", "MANUAL"}, Default: "ANSWERED_ONLY"},
+		{Name: "risk_thresholds", Type: field.TypeJSON},
+	}
+	// VendorScoringConfigHistoryTable holds the schema information for the "vendor_scoring_config_history" table.
+	VendorScoringConfigHistoryTable = &schema.Table{
+		Name:       "vendor_scoring_config_history",
+		Columns:    VendorScoringConfigHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorScoringConfigHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorscoringconfighistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorScoringConfigHistoryColumns[1]},
+			},
+		},
+	}
 	// VulnerabilityHistoryColumns holds the columns for the "vulnerability_history" table.
 	VulnerabilityHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3503,6 +3578,8 @@ var (
 		TrustCenterWatermarkConfigHistoryTable,
 		UserHistoryTable,
 		UserSettingHistoryTable,
+		VendorRiskScoreHistoryTable,
+		VendorScoringConfigHistoryTable,
 		VulnerabilityHistoryTable,
 		WorkflowAssignmentHistoryTable,
 		WorkflowAssignmentTargetHistoryTable,
@@ -3723,6 +3800,12 @@ func init() {
 	}
 	UserSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_setting_history",
+	}
+	VendorRiskScoreHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_risk_score_history",
+	}
+	VendorScoringConfigHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_scoring_config_history",
 	}
 	VulnerabilityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "vulnerability_history",

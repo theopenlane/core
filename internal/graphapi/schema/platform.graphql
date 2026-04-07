@@ -46,6 +46,9 @@ extend type Mutation{
         values of the platform
         """
         input: CreatePlatformInput!
+        architectureDiagrams: [Upload!]
+        dataFlowDiagrams: [Upload!]
+        trustBoundaryDiagrams: [Upload!]
     ): PlatformCreatePayload!
     """
     Create multiple new platforms
@@ -77,6 +80,9 @@ extend type Mutation{
         New values for the platform
         """
         input: UpdatePlatformInput!
+        architectureDiagrams: [Upload!]
+        dataFlowDiagrams: [Upload!]
+        trustBoundaryDiagrams: [Upload!]
     ): PlatformUpdatePayload!
     """
     Delete an existing platform

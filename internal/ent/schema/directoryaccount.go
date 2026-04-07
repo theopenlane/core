@@ -234,6 +234,9 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("cursor or ETag supplied by the source system for auditing").
 			Optional().
 			Nillable(),
+		field.Bool("primary_source").
+			Comment("indicates this directory account originates from the installation designated as the primary directory source for its owner organization").
+			Default(false),
 	}
 }
 

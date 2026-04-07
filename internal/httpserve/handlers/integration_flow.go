@@ -41,7 +41,9 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	connection, err := def.ConnectionRegistration(in.CredentialRef)
+	credentialRef := types.NewCredentialSlotID(in.CredentialRef)
+
+	connection, err := def.ConnectionRegistration(credentialRef)
 	if err != nil {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
@@ -71,7 +73,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
 		DefinitionID:   def.ID,
 		InstallationID: installationRec.ID,
-		CredentialRef:  in.CredentialRef,
+		CredentialRef:  credentialRef,
 	})
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to begin auth flow")

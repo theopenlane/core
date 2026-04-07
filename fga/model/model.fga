@@ -175,6 +175,12 @@ type organization
     define entity_creator: [group#member]
     define can_create_entity: can_edit or entity_creator or can_manage_trust_center
 
+    define vendor_scoring_config_creator: [group#member]
+    define can_create_vendor_scoring_config: can_edit or vendor_scoring_config_creator
+
+    define vendor_risk_score_creator: [group#member]
+    define can_create_vendor_risk_score: can_edit or vendor_risk_score_creator
+
     define asset_creator: [group#member]
     define can_create_asset: can_edit or asset_creator
 
@@ -948,6 +954,7 @@ type assessment
 type assessment_response
   relations
     define can_view: [user] or response_owner or admin_viewer or viewer
+    define can_edit: [user] or response_owner or editor
     define can_delete: admin_viewer
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization, assessment, campaign, identity_holder, entity]
@@ -958,6 +965,28 @@ type assessment_response
     # editor and viewer relations for organization-level permissions
     define editor: [organization#owner] or can_edit from parent
     define viewer: [organization#owner] or editor or can_view from parent
+
+type vendor_scoring_config
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization]
+
+type vendor_risk_score
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, vendor_scoring_config, entity, assessment_response]
 
 # workflow definitions can be created by org admins or users in groups with create access
 type workflow_definition

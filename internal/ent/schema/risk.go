@@ -194,15 +194,49 @@ func (r Risk) Edges() []ent.Edge {
 				),
 			},
 		}),
-		defaultEdgeFromWithPagination(r, Subcontrol{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("SubcontrolRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
 		defaultEdgeFromWithPagination(r, InternalPolicy{}),
 		defaultEdgeFromWithPagination(r, Program{}), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
-		defaultEdgeFromWithPagination(r, Platform{}),
-		defaultEdgeToWithPagination(r, ActionPlan{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Platform{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("PlatformNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(Platform{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: ActionPlan{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ActionPlanNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(ActionPlan{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Task{}),
-		defaultEdgeToWithPagination(r, Asset{}),
-		defaultEdgeToWithPagination(r, Entity{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Asset{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("AssetNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(Asset{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Entity{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("EntityNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(Entity{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Scan{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
@@ -224,7 +258,6 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
-
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: r,
 			name:       "comments",

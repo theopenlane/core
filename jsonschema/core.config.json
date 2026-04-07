@@ -130,6 +130,9 @@
         },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
+        },
+        "oidclocal": {
+          "$ref": "#/$defs/oidclocal.Config"
         }
       },
       "additionalProperties": false,
@@ -945,6 +948,27 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines the config for Mime middleware"
+    },
+    "oidclocal.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "discoveryurl": {
+          "type": "string"
+        },
+        "redirecturl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "ratelimit.Config": {
       "properties": {
