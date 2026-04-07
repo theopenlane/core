@@ -212,6 +212,12 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_evidence(ctx, field)
 			case "files":
 				return ec.fieldContext_Platform_files(ctx, field)
+			case "architectureDiagrams":
+				return ec.fieldContext_Platform_architectureDiagrams(ctx, field)
+			case "dataFlowDiagrams":
+				return ec.fieldContext_Platform_dataFlowDiagrams(ctx, field)
+			case "trustBoundaryDiagrams":
+				return ec.fieldContext_Platform_trustBoundaryDiagrams(ctx, field)
 			case "risks":
 				return ec.fieldContext_Platform_risks(ctx, field)
 			case "controls":
@@ -451,6 +457,12 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_evidence(ctx, field)
 			case "files":
 				return ec.fieldContext_Platform_files(ctx, field)
+			case "architectureDiagrams":
+				return ec.fieldContext_Platform_architectureDiagrams(ctx, field)
+			case "dataFlowDiagrams":
+				return ec.fieldContext_Platform_dataFlowDiagrams(ctx, field)
+			case "trustBoundaryDiagrams":
+				return ec.fieldContext_Platform_trustBoundaryDiagrams(ctx, field)
 			case "risks":
 				return ec.fieldContext_Platform_risks(ctx, field)
 			case "controls":
@@ -719,6 +731,12 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_evidence(ctx, field)
 			case "files":
 				return ec.fieldContext_Platform_files(ctx, field)
+			case "architectureDiagrams":
+				return ec.fieldContext_Platform_architectureDiagrams(ctx, field)
+			case "dataFlowDiagrams":
+				return ec.fieldContext_Platform_dataFlowDiagrams(ctx, field)
+			case "trustBoundaryDiagrams":
+				return ec.fieldContext_Platform_trustBoundaryDiagrams(ctx, field)
 			case "risks":
 				return ec.fieldContext_Platform_risks(ctx, field)
 			case "controls":

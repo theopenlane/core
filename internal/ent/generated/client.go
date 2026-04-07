@@ -23696,6 +23696,63 @@ func (c *PlatformClient) QueryFiles(_m *Platform) *FileQuery {
 	return query
 }
 
+// QueryArchitectureDiagrams queries the architecture_diagrams edge of a Platform.
+func (c *PlatformClient) QueryArchitectureDiagrams(_m *Platform) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.ArchitectureDiagramsTable, platform.ArchitectureDiagramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDataFlowDiagrams queries the data_flow_diagrams edge of a Platform.
+func (c *PlatformClient) QueryDataFlowDiagrams(_m *Platform) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.DataFlowDiagramsTable, platform.DataFlowDiagramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustBoundaryDiagrams queries the trust_boundary_diagrams edge of a Platform.
+func (c *PlatformClient) QueryTrustBoundaryDiagrams(_m *Platform) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, platform.TrustBoundaryDiagramsTable, platform.TrustBoundaryDiagramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRisks queries the risks edge of a Platform.
 func (c *PlatformClient) QueryRisks(_m *Platform) *RiskQuery {
 	query := (&RiskClient{config: c.config}).Query()

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -221,6 +222,21 @@ func (s Platform) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(s, Entity{}),
 		defaultEdgeToWithPagination(s, Evidence{}),
 		defaultEdgeToWithPagination(s, File{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			name:       "architecture_diagrams",
+			t:          File.Type,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			name:       "data_flow_diagrams",
+			t:          File.Type,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			name:       "trust_boundary_diagrams",
+			t:          File.Type,
+		}),
 		defaultEdgeToWithPagination(s, Risk{}),
 		defaultEdgeToWithPagination(s, Control{}),
 		defaultEdgeToWithPagination(s, Assessment{}),
@@ -244,6 +260,7 @@ func (s Platform) Edges() []ent.Edge {
 			t:          Asset.Type,
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Asset{}.Name()),
+				entx.CSVRef().FromColumn("SourceAssetNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -252,17 +269,26 @@ func (s Platform) Edges() []ent.Edge {
 			t:          Entity.Type,
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Entity{}.Name()),
+				entx.CSVRef().FromColumn("SourceEntityNames").MatchOn("name"),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			name:       "out_of_scope_assets",
 			t:          Asset.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Asset{}.Name()),
+				entx.CSVRef().FromColumn("OutOfScopeAssetNames").MatchOn("name"),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			name:       "out_of_scope_vendors",
 			t:          Entity.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Entity{}.Name()),
+				entx.CSVRef().FromColumn("OutOfScopeVendorNames").MatchOn("name"),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
@@ -281,13 +307,25 @@ func (s Platform) Edges() []ent.Edge {
 			field:      "platform_owner_id",
 			ref:        "platforms_owned",
 			annotations: []schema.Annotation{
-				accessmap.EdgeAuthCheck(User{}.Name()),
+				// auth check to org members is handled by the interceptor, so skip here because a user never
+				// has direct access to another user
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: SystemDetail{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(SystemDetail{}.Name()),
+				entx.CSVRef().FromColumn("SystemDetailNames").MatchOn("system_name"),
+			},
 		}),
+	}
+}
+
+func (Platform) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookPlatformFiles(),
 	}
 }
 

@@ -374,10 +374,10 @@ type MutationResolver interface {
 	CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenCreatePayload, error)
 	UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error)
 	DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error)
-	CreatePlatform(ctx context.Context, input generated.CreatePlatformInput) (*model.PlatformCreatePayload, error)
+	CreatePlatform(ctx context.Context, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) (*model.PlatformCreatePayload, error)
 	CreateBulkPlatform(ctx context.Context, input []*generated.CreatePlatformInput) (*model.PlatformBulkCreatePayload, error)
 	CreateBulkCSVPlatform(ctx context.Context, input graphql.Upload) (*model.PlatformBulkCreatePayload, error)
-	UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput) (*model.PlatformUpdatePayload, error)
+	UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) (*model.PlatformUpdatePayload, error)
 	DeletePlatform(ctx context.Context, id string) (*model.PlatformDeletePayload, error)
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
 	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error)
@@ -2997,6 +2997,21 @@ func (ec *executionContext) field_Mutation_createPlatform_args(ctx context.Conte
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "architectureDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["architectureDiagrams"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["dataFlowDiagrams"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["trustBoundaryDiagrams"] = arg3
 	return args, nil
 }
 
@@ -7650,6 +7665,21 @@ func (ec *executionContext) field_Mutation_updatePlatform_args(ctx context.Conte
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "architectureDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["architectureDiagrams"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["dataFlowDiagrams"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["trustBoundaryDiagrams"] = arg4
 	return args, nil
 }
 
@@ -25384,7 +25414,7 @@ func (ec *executionContext) _Mutation_createPlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_createPlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreatePlatform(ctx, fc.Args["input"].(generated.CreatePlatformInput))
+			return ec.Resolvers.Mutation().CreatePlatform(ctx, fc.Args["input"].(generated.CreatePlatformInput), fc.Args["architectureDiagrams"].([]*graphql.Upload), fc.Args["dataFlowDiagrams"].([]*graphql.Upload), fc.Args["trustBoundaryDiagrams"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNPlatformCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformCreatePayload,
@@ -25519,7 +25549,7 @@ func (ec *executionContext) _Mutation_updatePlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_updatePlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdatePlatform(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePlatformInput))
+			return ec.Resolvers.Mutation().UpdatePlatform(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePlatformInput), fc.Args["architectureDiagrams"].([]*graphql.Upload), fc.Args["dataFlowDiagrams"].([]*graphql.Upload), fc.Args["trustBoundaryDiagrams"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNPlatformUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformUpdatePayload,

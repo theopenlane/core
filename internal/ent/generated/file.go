@@ -85,16 +85,19 @@ type File struct {
 	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
-	Edges                FileEdges `json:"edges"`
-	email_template_files *string
-	export_files         *string
-	finding_files        *string
-	integration_files    *string
-	note_files           *string
-	remediation_files    *string
-	review_files         *string
-	vulnerability_files  *string
-	selectValues         sql.SelectValues
+	Edges                            FileEdges `json:"edges"`
+	email_template_files             *string
+	export_files                     *string
+	finding_files                    *string
+	integration_files                *string
+	note_files                       *string
+	platform_architecture_diagrams   *string
+	platform_data_flow_diagrams      *string
+	platform_trust_boundary_diagrams *string
+	remediation_files                *string
+	review_files                     *string
+	vulnerability_files              *string
+	selectValues                     sql.SelectValues
 
 	// PresignedURL is the presigned URL for the file when using s3 storage
 	PresignedURL string `json:"presignedURL,omitempty"`
@@ -379,11 +382,17 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case file.ForeignKeys[4]: // note_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[5]: // remediation_files
+		case file.ForeignKeys[5]: // platform_architecture_diagrams
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[6]: // review_files
+		case file.ForeignKeys[6]: // platform_data_flow_diagrams
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[7]: // vulnerability_files
+		case file.ForeignKeys[7]: // platform_trust_boundary_diagrams
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[8]: // remediation_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[9]: // review_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[10]: // vulnerability_files
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -642,19 +651,40 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			}
 		case file.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_architecture_diagrams", values[i])
+			} else if value.Valid {
+				_m.platform_architecture_diagrams = new(string)
+				*_m.platform_architecture_diagrams = value.String
+			}
+		case file.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_data_flow_diagrams", values[i])
+			} else if value.Valid {
+				_m.platform_data_flow_diagrams = new(string)
+				*_m.platform_data_flow_diagrams = value.String
+			}
+		case file.ForeignKeys[7]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_trust_boundary_diagrams", values[i])
+			} else if value.Valid {
+				_m.platform_trust_boundary_diagrams = new(string)
+				*_m.platform_trust_boundary_diagrams = value.String
+			}
+		case file.ForeignKeys[8]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_files", values[i])
 			} else if value.Valid {
 				_m.remediation_files = new(string)
 				*_m.remediation_files = value.String
 			}
-		case file.ForeignKeys[6]:
+		case file.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_files", values[i])
 			} else if value.Valid {
 				_m.review_files = new(string)
 				*_m.review_files = value.String
 			}
-		case file.ForeignKeys[7]:
+		case file.ForeignKeys[10]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_files", values[i])
 			} else if value.Valid {

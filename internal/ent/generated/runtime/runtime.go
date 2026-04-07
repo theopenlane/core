@@ -5631,6 +5631,7 @@ func init() {
 	platformMixinHooks14 := platformMixin[14].Hooks()
 	platformMixinHooks15 := platformMixin[15].Hooks()
 	platformMixinHooks16 := platformMixin[16].Hooks()
+	platformHooks := schema.Platform{}.Hooks()
 
 	platform.Hooks[1] = platformMixinHooks0[0]
 
@@ -5667,6 +5668,8 @@ func init() {
 	platform.Hooks[17] = platformMixinHooks15[0]
 
 	platform.Hooks[18] = platformMixinHooks16[0]
+
+	platform.Hooks[19] = platformHooks[0]
 	platformMixinInters1 := platformMixin[1].Interceptors()
 	platformMixinInters5 := platformMixin[5].Interceptors()
 	platform.Interceptors[0] = platformMixinInters1[0]

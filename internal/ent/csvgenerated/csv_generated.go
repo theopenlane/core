@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -74,6 +75,9 @@ var CSVLookupRegistry = map[string]CSVLookupEntry{
 	},
 	"Subcontrol:ref_code": {
 		Lookup: LookupSubcontrolByRefCode,
+	},
+	"SystemDetail:system_name": {
+		Lookup: LookupSystemDetailBySystemName,
 	},
 	"Template:name": {
 		Lookup: LookupTemplateByName,
@@ -671,6 +675,51 @@ func LookupSubcontrolByRefCode(ctx context.Context, client *generated.Client, or
 		key := normalizeCSVKey(r.RefCode)
 		if existingID, exists := resolved[key]; exists && existingID != r.ID {
 			return nil, fmt.Errorf("ref_code '%s' matched multiple Subcontrol records; use SubcontrolID directly or add additional columns to scope the lookup", r.RefCode)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupSystemDetailBySystemName resolves SystemDetail system_name values to IDs.
+func LookupSystemDetailBySystemName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.SystemDetail, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, systemdetail.SystemNameEqualFold(v))
+	}
+	records, err := client.SystemDetail.Query().
+		Where(systemdetail.OwnerID(orgID), systemdetail.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.SystemName)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("system_name '%s' matched multiple SystemDetail records; use SystemDetailID directly or add additional columns to scope the lookup", r.SystemName)
 		}
 		resolved[key] = r.ID
 	}
@@ -1342,6 +1391,22 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 			{
+				SourceColumn:    "OutOfScopeAssetNames",
+				TargetField:     "OutOfScopeAssetIDs",
+				TargetEntity:    "Asset",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "OutOfScopeVendorNames",
+				TargetField:     "OutOfScopeVendorIDs",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "PlatformOwnerEmail",
 				TargetField:     "PlatformOwnerID",
 				TargetEntity:    "User",
@@ -1363,6 +1428,30 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "User",
 				MatchField:      "email",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SourceAssetNames",
+				TargetField:     "SourceAssetIDs",
+				TargetEntity:    "Asset",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SourceEntityNames",
+				TargetField:     "SourceEntityIDs",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SystemDetailNames",
+				TargetField:     "SystemDetailIDs",
+				TargetEntity:    "SystemDetail",
+				MatchField:      "system_name",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 			{
@@ -2843,15 +2932,20 @@ func (PersonalAccessTokenCSVUpdateInput) CSVInputWrapper() {}
 // PlatformCSVInput wraps CreatePlatformInput with CSV reference columns.
 type PlatformCSVInput struct {
 	Input                   generated.CreatePlatformInput
-	BusinessOwnerGroupName  string `csv:"BusinessOwnerGroupName"`
-	BusinessOwnerUserEmail  string `csv:"BusinessOwnerUserEmail"`
-	InternalOwnerGroupName  string `csv:"InternalOwnerGroupName"`
-	InternalOwnerUserEmail  string `csv:"InternalOwnerUserEmail"`
-	PlatformOwnerEmail      string `csv:"PlatformOwnerEmail"`
-	SecurityOwnerGroupName  string `csv:"SecurityOwnerGroupName"`
-	SecurityOwnerUserEmail  string `csv:"SecurityOwnerUserEmail"`
-	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
-	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
+	BusinessOwnerGroupName  string   `csv:"BusinessOwnerGroupName"`
+	BusinessOwnerUserEmail  string   `csv:"BusinessOwnerUserEmail"`
+	InternalOwnerGroupName  string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail  string   `csv:"InternalOwnerUserEmail"`
+	OutOfScopeAssetNames    []string `csv:"OutOfScopeAssetNames"`
+	OutOfScopeVendorNames   []string `csv:"OutOfScopeVendorNames"`
+	PlatformOwnerEmail      string   `csv:"PlatformOwnerEmail"`
+	SecurityOwnerGroupName  string   `csv:"SecurityOwnerGroupName"`
+	SecurityOwnerUserEmail  string   `csv:"SecurityOwnerUserEmail"`
+	SourceAssetNames        []string `csv:"SourceAssetNames"`
+	SourceEntityNames       []string `csv:"SourceEntityNames"`
+	SystemDetailNames       []string `csv:"SystemDetailNames"`
+	TechnicalOwnerGroupName string   `csv:"TechnicalOwnerGroupName"`
+	TechnicalOwnerUserEmail string   `csv:"TechnicalOwnerUserEmail"`
 }
 
 // CSVInputWrapper marks PlatformCSVInput for CSV header preprocessing.
@@ -2862,15 +2956,20 @@ type PlatformCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID                      string `csv:"ID"`
 	Input                   generated.UpdatePlatformInput
-	BusinessOwnerGroupName  string `csv:"BusinessOwnerGroupName"`
-	BusinessOwnerUserEmail  string `csv:"BusinessOwnerUserEmail"`
-	InternalOwnerGroupName  string `csv:"InternalOwnerGroupName"`
-	InternalOwnerUserEmail  string `csv:"InternalOwnerUserEmail"`
-	PlatformOwnerEmail      string `csv:"PlatformOwnerEmail"`
-	SecurityOwnerGroupName  string `csv:"SecurityOwnerGroupName"`
-	SecurityOwnerUserEmail  string `csv:"SecurityOwnerUserEmail"`
-	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
-	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
+	BusinessOwnerGroupName  string   `csv:"BusinessOwnerGroupName"`
+	BusinessOwnerUserEmail  string   `csv:"BusinessOwnerUserEmail"`
+	InternalOwnerGroupName  string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerUserEmail  string   `csv:"InternalOwnerUserEmail"`
+	OutOfScopeAssetNames    []string `csv:"OutOfScopeAssetNames"`
+	OutOfScopeVendorNames   []string `csv:"OutOfScopeVendorNames"`
+	PlatformOwnerEmail      string   `csv:"PlatformOwnerEmail"`
+	SecurityOwnerGroupName  string   `csv:"SecurityOwnerGroupName"`
+	SecurityOwnerUserEmail  string   `csv:"SecurityOwnerUserEmail"`
+	SourceAssetNames        []string `csv:"SourceAssetNames"`
+	SourceEntityNames       []string `csv:"SourceEntityNames"`
+	SystemDetailNames       []string `csv:"SystemDetailNames"`
+	TechnicalOwnerGroupName string   `csv:"TechnicalOwnerGroupName"`
+	TechnicalOwnerUserEmail string   `csv:"TechnicalOwnerUserEmail"`
 }
 
 // CSVInputWrapper marks PlatformCSVUpdateInput for CSV header preprocessing.

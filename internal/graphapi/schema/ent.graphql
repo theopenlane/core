@@ -13587,6 +13587,9 @@ input CreatePlatformInput {
   entityIDs: [ID!]
   evidenceIDs: [ID!]
   fileIDs: [ID!]
+  architectureDiagramIDs: [ID!]
+  dataFlowDiagramIDs: [ID!]
+  trustBoundaryDiagramIDs: [ID!]
   riskIDs: [ID!]
   controlIDs: [ID!]
   assessmentIDs: [ID!]
@@ -47579,6 +47582,99 @@ type Platform implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  architectureDiagrams(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  dataFlowDiagrams(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  trustBoundaryDiagrams(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -49196,6 +49292,21 @@ input PlatformWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  architecture_diagrams edge predicates
+  """
+  hasArchitectureDiagrams: Boolean
+  hasArchitectureDiagramsWith: [FileWhereInput!]
+  """
+  data_flow_diagrams edge predicates
+  """
+  hasDataFlowDiagrams: Boolean
+  hasDataFlowDiagramsWith: [FileWhereInput!]
+  """
+  trust_boundary_diagrams edge predicates
+  """
+  hasTrustBoundaryDiagrams: Boolean
+  hasTrustBoundaryDiagramsWith: [FileWhereInput!]
   """
   risks edge predicates
   """
@@ -75957,6 +76068,15 @@ input UpdatePlatformInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addArchitectureDiagramIDs: [ID!]
+  removeArchitectureDiagramIDs: [ID!]
+  clearArchitectureDiagrams: Boolean
+  addDataFlowDiagramIDs: [ID!]
+  removeDataFlowDiagramIDs: [ID!]
+  clearDataFlowDiagrams: Boolean
+  addTrustBoundaryDiagramIDs: [ID!]
+  removeTrustBoundaryDiagramIDs: [ID!]
+  clearTrustBoundaryDiagrams: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean

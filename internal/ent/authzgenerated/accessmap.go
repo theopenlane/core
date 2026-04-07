@@ -2916,6 +2916,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "architecture_diagrams": {
+	ObjectType:      "architecture_diagram",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "data_flow_diagrams": {
+	ObjectType:      "data_flow_diagram",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "trust_boundary_diagrams": {
+	ObjectType:      "trust_boundary_diagram",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "risks": {
 	ObjectType:      "risk",
 	SkipEditCheck:   false,
@@ -2973,11 +2985,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "out_of_scope_assets": {
-	ObjectType:      "out_of_scope_asset",
+	ObjectType:      "asset",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "out_of_scope_vendors": {
-	ObjectType:      "out_of_scope_vendor",
+	ObjectType:      "entity",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "applicable_frameworks": {
@@ -2989,13 +3001,13 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "platform_owner": {
-	ObjectType:      "user",
-	SkipEditCheck:   false,
+	ObjectType:      "platform_owner",
+	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "system_detail": {
 	ObjectType:      "system_detail",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "procedure": {"owner": {
 	ObjectType:      "owner",

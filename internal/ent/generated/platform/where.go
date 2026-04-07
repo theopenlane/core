@@ -4830,6 +4830,93 @@ func HasFilesWith(preds ...predicate.File) predicate.Platform {
 	})
 }
 
+// HasArchitectureDiagrams applies the HasEdge predicate on the "architecture_diagrams" edge.
+func HasArchitectureDiagrams() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArchitectureDiagramsTable, ArchitectureDiagramsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArchitectureDiagramsWith applies the HasEdge predicate on the "architecture_diagrams" edge with a given conditions (other predicates).
+func HasArchitectureDiagramsWith(preds ...predicate.File) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newArchitectureDiagramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDataFlowDiagrams applies the HasEdge predicate on the "data_flow_diagrams" edge.
+func HasDataFlowDiagrams() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DataFlowDiagramsTable, DataFlowDiagramsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDataFlowDiagramsWith applies the HasEdge predicate on the "data_flow_diagrams" edge with a given conditions (other predicates).
+func HasDataFlowDiagramsWith(preds ...predicate.File) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newDataFlowDiagramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustBoundaryDiagrams applies the HasEdge predicate on the "trust_boundary_diagrams" edge.
+func HasTrustBoundaryDiagrams() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustBoundaryDiagramsTable, TrustBoundaryDiagramsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustBoundaryDiagramsWith applies the HasEdge predicate on the "trust_boundary_diagrams" edge with a given conditions (other predicates).
+func HasTrustBoundaryDiagramsWith(preds ...predicate.File) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newTrustBoundaryDiagramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRisks applies the HasEdge predicate on the "risks" edge.
 func HasRisks() predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
