@@ -3318,9 +3318,6 @@ func (r *Resolver) Control() gqlgenerated.ControlResolver { return &controlResol
 // Evidence returns gqlgenerated.EvidenceResolver implementation.
 func (r *Resolver) Evidence() gqlgenerated.EvidenceResolver { return &evidenceResolver{r} }
 
-// File returns gqlgenerated.FileResolver implementation.
-func (r *Resolver) File() gqlgenerated.FileResolver { return &fileResolver{r} }
-
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
 
@@ -3502,7 +3499,6 @@ type campaignResolver struct{ *Resolver }
 type campaignTargetResolver struct{ *Resolver }
 type controlResolver struct{ *Resolver }
 type evidenceResolver struct{ *Resolver }
-type fileResolver struct{ *Resolver }
 type groupResolver struct{ *Resolver }
 type identityHolderResolver struct{ *Resolver }
 type integrationResolver struct{ *Resolver }

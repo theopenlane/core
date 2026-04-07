@@ -48,9 +48,9 @@ type File struct {
 	// the scope of the file
 	ScopeID string `json:"scope_id,omitempty"`
 	// the category of the file
-	FileCategoryName string `json:"file_category_name,omitempty"`
+	CategoryName string `json:"category_name,omitempty"`
 	// the category of the file
-	FileCategoryID string `json:"file_category_id,omitempty"`
+	CategoryID string `json:"category_id,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"provided_file_name,omitempty"`
 	// the extension of the file provided
@@ -115,8 +115,8 @@ type FileEdges struct {
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
 	Scope *CustomTypeEnum `json:"scope,omitempty"`
-	// FileCategory holds the value of the file_category edge.
-	FileCategory *CustomTypeEnum `json:"file_category,omitempty"`
+	// Category holds the value of the category edge.
+	Category *CustomTypeEnum `json:"category,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization []*Organization `json:"organization,omitempty"`
 	// Groups holds the value of the groups edge.
@@ -201,15 +201,15 @@ func (e FileEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "scope"}
 }
 
-// FileCategoryOrErr returns the FileCategory value or an error if the edge
+// CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e FileEdges) FileCategoryOrErr() (*CustomTypeEnum, error) {
-	if e.FileCategory != nil {
-		return e.FileCategory, nil
+func (e FileEdges) CategoryOrErr() (*CustomTypeEnum, error) {
+	if e.Category != nil {
+		return e.Category, nil
 	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
-	return nil, &NotLoadedError{edge: "file_category"}
+	return nil, &NotLoadedError{edge: "category"}
 }
 
 // OrganizationOrErr returns the Organization value or an error if the edge
@@ -385,7 +385,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldFileCategoryName, file.FieldFileCategoryID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -520,17 +520,17 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
-		case file.FieldFileCategoryName:
+		case file.FieldCategoryName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_category_name", values[i])
+				return fmt.Errorf("unexpected type %T for field category_name", values[i])
 			} else if value.Valid {
-				_m.FileCategoryName = value.String
+				_m.CategoryName = value.String
 			}
-		case file.FieldFileCategoryID:
+		case file.FieldCategoryID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_category_id", values[i])
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				_m.FileCategoryID = value.String
+				_m.CategoryID = value.String
 			}
 		case file.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -743,9 +743,9 @@ func (_m *File) QueryScope() *CustomTypeEnumQuery {
 	return NewFileClient(_m.config).QueryScope(_m)
 }
 
-// QueryFileCategory queries the "file_category" edge of the File entity.
-func (_m *File) QueryFileCategory() *CustomTypeEnumQuery {
-	return NewFileClient(_m.config).QueryFileCategory(_m)
+// QueryCategory queries the "category" edge of the File entity.
+func (_m *File) QueryCategory() *CustomTypeEnumQuery {
+	return NewFileClient(_m.config).QueryCategory(_m)
 }
 
 // QueryOrganization queries the "organization" edge of the File entity.
@@ -907,11 +907,11 @@ func (_m *File) String() string {
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
-	builder.WriteString("file_category_name=")
-	builder.WriteString(_m.FileCategoryName)
+	builder.WriteString("category_name=")
+	builder.WriteString(_m.CategoryName)
 	builder.WriteString(", ")
-	builder.WriteString("file_category_id=")
-	builder.WriteString(_m.FileCategoryID)
+	builder.WriteString("category_id=")
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
 	builder.WriteString(_m.ProvidedFileName)

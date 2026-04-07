@@ -1083,8 +1083,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldEnvironmentID:         {Type: field.TypeString, Column: filehistory.FieldEnvironmentID},
 			filehistory.FieldScopeName:             {Type: field.TypeString, Column: filehistory.FieldScopeName},
 			filehistory.FieldScopeID:               {Type: field.TypeString, Column: filehistory.FieldScopeID},
-			filehistory.FieldFileCategoryName:      {Type: field.TypeString, Column: filehistory.FieldFileCategoryName},
-			filehistory.FieldFileCategoryID:        {Type: field.TypeString, Column: filehistory.FieldFileCategoryID},
+			filehistory.FieldCategoryName:          {Type: field.TypeString, Column: filehistory.FieldCategoryName},
+			filehistory.FieldCategoryID:            {Type: field.TypeString, Column: filehistory.FieldCategoryID},
 			filehistory.FieldProvidedFileName:      {Type: field.TypeString, Column: filehistory.FieldProvidedFileName},
 			filehistory.FieldProvidedFileExtension: {Type: field.TypeString, Column: filehistory.FieldProvidedFileExtension},
 			filehistory.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: filehistory.FieldProvidedFileSize},
@@ -7662,14 +7662,14 @@ func (f *FileHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldScopeID))
 }
 
-// WhereFileCategoryName applies the entql string predicate on the file_category_name field.
-func (f *FileHistoryFilter) WhereFileCategoryName(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldFileCategoryName))
+// WhereCategoryName applies the entql string predicate on the category_name field.
+func (f *FileHistoryFilter) WhereCategoryName(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldCategoryName))
 }
 
-// WhereFileCategoryID applies the entql string predicate on the file_category_id field.
-func (f *FileHistoryFilter) WhereFileCategoryID(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldFileCategoryID))
+// WhereCategoryID applies the entql string predicate on the category_id field.
+func (f *FileHistoryFilter) WhereCategoryID(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldCategoryID))
 }
 
 // WhereProvidedFileName applies the entql string predicate on the provided_file_name field.

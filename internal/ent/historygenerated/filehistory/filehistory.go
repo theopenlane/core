@@ -53,10 +53,10 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
-	// FieldFileCategoryName holds the string denoting the file_category_name field in the database.
-	FieldFileCategoryName = "file_category_name"
-	// FieldFileCategoryID holds the string denoting the file_category_id field in the database.
-	FieldFileCategoryID = "file_category_id"
+	// FieldCategoryName holds the string denoting the category_name field in the database.
+	FieldCategoryName = "category_name"
+	// FieldCategoryID holds the string denoting the category_id field in the database.
+	FieldCategoryID = "category_id"
 	// FieldProvidedFileName holds the string denoting the provided_file_name field in the database.
 	FieldProvidedFileName = "provided_file_name"
 	// FieldProvidedFileExtension holds the string denoting the provided_file_extension field in the database.
@@ -117,8 +117,8 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
-	FieldFileCategoryName,
-	FieldFileCategoryID,
+	FieldCategoryName,
+	FieldCategoryID,
 	FieldProvidedFileName,
 	FieldProvidedFileExtension,
 	FieldProvidedFileSize,
@@ -272,14 +272,14 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
-// ByFileCategoryName orders the results by the file_category_name field.
-func ByFileCategoryName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileCategoryName, opts...).ToFunc()
+// ByCategoryName orders the results by the category_name field.
+func ByCategoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryName, opts...).ToFunc()
 }
 
-// ByFileCategoryID orders the results by the file_category_id field.
-func ByFileCategoryID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileCategoryID, opts...).ToFunc()
+// ByCategoryID orders the results by the category_id field.
+func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
 }
 
 // ByProvidedFileName orders the results by the provided_file_name field.

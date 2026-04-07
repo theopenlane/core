@@ -245,30 +245,30 @@ func (_c *FileHistoryCreate) SetNillableScopeID(v *string) *FileHistoryCreate {
 	return _c
 }
 
-// SetFileCategoryName sets the "file_category_name" field.
-func (_c *FileHistoryCreate) SetFileCategoryName(v string) *FileHistoryCreate {
-	_c.mutation.SetFileCategoryName(v)
+// SetCategoryName sets the "category_name" field.
+func (_c *FileHistoryCreate) SetCategoryName(v string) *FileHistoryCreate {
+	_c.mutation.SetCategoryName(v)
 	return _c
 }
 
-// SetNillableFileCategoryName sets the "file_category_name" field if the given value is not nil.
-func (_c *FileHistoryCreate) SetNillableFileCategoryName(v *string) *FileHistoryCreate {
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableCategoryName(v *string) *FileHistoryCreate {
 	if v != nil {
-		_c.SetFileCategoryName(*v)
+		_c.SetCategoryName(*v)
 	}
 	return _c
 }
 
-// SetFileCategoryID sets the "file_category_id" field.
-func (_c *FileHistoryCreate) SetFileCategoryID(v string) *FileHistoryCreate {
-	_c.mutation.SetFileCategoryID(v)
+// SetCategoryID sets the "category_id" field.
+func (_c *FileHistoryCreate) SetCategoryID(v string) *FileHistoryCreate {
+	_c.mutation.SetCategoryID(v)
 	return _c
 }
 
-// SetNillableFileCategoryID sets the "file_category_id" field if the given value is not nil.
-func (_c *FileHistoryCreate) SetNillableFileCategoryID(v *string) *FileHistoryCreate {
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableCategoryID(v *string) *FileHistoryCreate {
 	if v != nil {
-		_c.SetFileCategoryID(*v)
+		_c.SetCategoryID(*v)
 	}
 	return _c
 }
@@ -701,13 +701,13 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(filehistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
 	}
-	if value, ok := _c.mutation.FileCategoryName(); ok {
-		_spec.SetField(filehistory.FieldFileCategoryName, field.TypeString, value)
-		_node.FileCategoryName = value
+	if value, ok := _c.mutation.CategoryName(); ok {
+		_spec.SetField(filehistory.FieldCategoryName, field.TypeString, value)
+		_node.CategoryName = value
 	}
-	if value, ok := _c.mutation.FileCategoryID(); ok {
-		_spec.SetField(filehistory.FieldFileCategoryID, field.TypeString, value)
-		_node.FileCategoryID = value
+	if value, ok := _c.mutation.CategoryID(); ok {
+		_spec.SetField(filehistory.FieldCategoryID, field.TypeString, value)
+		_node.CategoryID = value
 	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

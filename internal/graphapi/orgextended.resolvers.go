@@ -9,9 +9,6 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
@@ -21,6 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.

@@ -1002,6 +1002,8 @@ type ComplexityRoot struct {
 	}
 
 	FileHistory struct {
+		CategoryID            func(childComplexity int) int
+		CategoryName          func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -1009,8 +1011,6 @@ type ComplexityRoot struct {
 		DetectedMimeType      func(childComplexity int) int
 		EnvironmentID         func(childComplexity int) int
 		EnvironmentName       func(childComplexity int) int
-		FileCategoryID        func(childComplexity int) int
-		FileCategoryName      func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
 		InternalNotes         func(childComplexity int) int
@@ -8703,6 +8703,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EvidenceHistoryEdge.Node(childComplexity), true
 
+	case "FileHistory.categoryID":
+		if e.ComplexityRoot.FileHistory.CategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.CategoryID(childComplexity), true
+
+	case "FileHistory.categoryName":
+		if e.ComplexityRoot.FileHistory.CategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.CategoryName(childComplexity), true
+
 	case "FileHistory.categoryType":
 		if e.ComplexityRoot.FileHistory.CategoryType == nil {
 			break
@@ -8751,20 +8765,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.EnvironmentName(childComplexity), true
-
-	case "FileHistory.fileCategoryID":
-		if e.ComplexityRoot.FileHistory.FileCategoryID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.FileHistory.FileCategoryID(childComplexity), true
-
-	case "FileHistory.fileCategoryName":
-		if e.ComplexityRoot.FileHistory.FileCategoryName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.FileHistory.FileCategoryName(childComplexity), true
 
 	case "FileHistory.historyTime":
 		if e.ComplexityRoot.FileHistory.HistoryTime == nil {
@@ -34907,11 +34907,11 @@ type FileHistory implements Node {
   """
   the category of the file
   """
-  fileCategoryName: String
+  categoryName: String
   """
   the category of the file
   """
-  fileCategoryID: String
+  categoryID: String
   """
   the name of the file provided in the payload key without the extension
   """
@@ -35270,41 +35270,41 @@ input FileHistoryWhereInput {
   scopeIDEqualFold: String
   scopeIDContainsFold: String
   """
-  file_category_name field predicates
+  category_name field predicates
   """
-  fileCategoryName: String
-  fileCategoryNameNEQ: String
-  fileCategoryNameIn: [String!]
-  fileCategoryNameNotIn: [String!]
-  fileCategoryNameGT: String
-  fileCategoryNameGTE: String
-  fileCategoryNameLT: String
-  fileCategoryNameLTE: String
-  fileCategoryNameContains: String
-  fileCategoryNameHasPrefix: String
-  fileCategoryNameHasSuffix: String
-  fileCategoryNameIsNil: Boolean
-  fileCategoryNameNotNil: Boolean
-  fileCategoryNameEqualFold: String
-  fileCategoryNameContainsFold: String
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameGT: String
+  categoryNameGTE: String
+  categoryNameLT: String
+  categoryNameLTE: String
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
   """
-  file_category_id field predicates
+  category_id field predicates
   """
-  fileCategoryID: String
-  fileCategoryIDNEQ: String
-  fileCategoryIDIn: [String!]
-  fileCategoryIDNotIn: [String!]
-  fileCategoryIDGT: String
-  fileCategoryIDGTE: String
-  fileCategoryIDLT: String
-  fileCategoryIDLTE: String
-  fileCategoryIDContains: String
-  fileCategoryIDHasPrefix: String
-  fileCategoryIDHasSuffix: String
-  fileCategoryIDIsNil: Boolean
-  fileCategoryIDNotNil: Boolean
-  fileCategoryIDEqualFold: String
-  fileCategoryIDContainsFold: String
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
   """
   provided_file_name field predicates
   """

@@ -24203,7 +24203,7 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				fieldSeen[file.FieldScopeID] = struct{}{}
 			}
 
-		case "fileCategory":
+		case "category":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -24212,10 +24212,10 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
 				return err
 			}
-			_q.withFileCategory = query
-			if _, ok := fieldSeen[file.FieldFileCategoryID]; !ok {
-				selectedFields = append(selectedFields, file.FieldFileCategoryID)
-				fieldSeen[file.FieldFileCategoryID] = struct{}{}
+			_q.withCategory = query
+			if _, ok := fieldSeen[file.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCategoryID)
+				fieldSeen[file.FieldCategoryID] = struct{}{}
 			}
 
 		case "organization":
@@ -24903,15 +24903,15 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, file.FieldScopeID)
 				fieldSeen[file.FieldScopeID] = struct{}{}
 			}
-		case "fileCategoryName":
-			if _, ok := fieldSeen[file.FieldFileCategoryName]; !ok {
-				selectedFields = append(selectedFields, file.FieldFileCategoryName)
-				fieldSeen[file.FieldFileCategoryName] = struct{}{}
+		case "categoryName":
+			if _, ok := fieldSeen[file.FieldCategoryName]; !ok {
+				selectedFields = append(selectedFields, file.FieldCategoryName)
+				fieldSeen[file.FieldCategoryName] = struct{}{}
 			}
-		case "fileCategoryID":
-			if _, ok := fieldSeen[file.FieldFileCategoryID]; !ok {
-				selectedFields = append(selectedFields, file.FieldFileCategoryID)
-				fieldSeen[file.FieldFileCategoryID] = struct{}{}
+		case "categoryID":
+			if _, ok := fieldSeen[file.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCategoryID)
+				fieldSeen[file.FieldCategoryID] = struct{}{}
 			}
 		case "providedFileName":
 			if _, ok := fieldSeen[file.FieldProvidedFileName]; !ok {

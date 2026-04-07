@@ -10969,15 +10969,15 @@ func (c *FileClient) QueryScope(_m *File) *CustomTypeEnumQuery {
 	return query
 }
 
-// QueryFileCategory queries the file_category edge of a File.
-func (c *FileClient) QueryFileCategory(_m *File) *CustomTypeEnumQuery {
+// QueryCategory queries the category edge of a File.
+func (c *FileClient) QueryCategory(_m *File) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, file.FileCategoryTable, file.FileCategoryColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.CategoryTable, file.CategoryColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum

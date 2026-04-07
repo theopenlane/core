@@ -12805,7 +12805,7 @@ input CreateFileInput {
 	"""
 	the category of the file
 	"""
-	fileCategoryName: String
+	categoryName: String
 	"""
 	the name of the file provided in the payload key without the extension
 	"""
@@ -12870,7 +12870,7 @@ input CreateFileInput {
 	lastAccessedAt: Time
 	environmentID: ID
 	scopeID: ID
-	fileCategoryID: ID
+	categoryID: ID
 	organizationIDs: [ID!]
 	groupIDs: [ID!]
 	contactIDs: [ID!]
@@ -28572,11 +28572,11 @@ type File implements Node {
 	"""
 	the category of the file
 	"""
-	fileCategoryName: String
+	categoryName: String
 	"""
 	the category of the file
 	"""
-	fileCategoryID: ID
+	categoryID: ID
 	"""
 	the name of the file provided in the payload key without the extension
 	"""
@@ -28641,7 +28641,7 @@ type File implements Node {
 	lastAccessedAt: Time
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
-	fileCategory: CustomTypeEnum
+	category: CustomTypeEnum
 	organization: [Organization!]
 	groups(
 		"""
@@ -28812,7 +28812,6 @@ type File implements Node {
 	originalTrustCenterDoc: [TrustCenterDoc!]
 	presignedURL: String
 	base64: String
-	name: String!
 }
 """
 A connection to a list of items.
@@ -29079,41 +29078,41 @@ input FileWhereInput {
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
 	"""
-	file_category_name field predicates
+	category_name field predicates
 	"""
-	fileCategoryName: String
-	fileCategoryNameNEQ: String
-	fileCategoryNameIn: [String!]
-	fileCategoryNameNotIn: [String!]
-	fileCategoryNameGT: String
-	fileCategoryNameGTE: String
-	fileCategoryNameLT: String
-	fileCategoryNameLTE: String
-	fileCategoryNameContains: String
-	fileCategoryNameHasPrefix: String
-	fileCategoryNameHasSuffix: String
-	fileCategoryNameIsNil: Boolean
-	fileCategoryNameNotNil: Boolean
-	fileCategoryNameEqualFold: String
-	fileCategoryNameContainsFold: String
+	categoryName: String
+	categoryNameNEQ: String
+	categoryNameIn: [String!]
+	categoryNameNotIn: [String!]
+	categoryNameGT: String
+	categoryNameGTE: String
+	categoryNameLT: String
+	categoryNameLTE: String
+	categoryNameContains: String
+	categoryNameHasPrefix: String
+	categoryNameHasSuffix: String
+	categoryNameIsNil: Boolean
+	categoryNameNotNil: Boolean
+	categoryNameEqualFold: String
+	categoryNameContainsFold: String
 	"""
-	file_category_id field predicates
+	category_id field predicates
 	"""
-	fileCategoryID: ID
-	fileCategoryIDNEQ: ID
-	fileCategoryIDIn: [ID!]
-	fileCategoryIDNotIn: [ID!]
-	fileCategoryIDGT: ID
-	fileCategoryIDGTE: ID
-	fileCategoryIDLT: ID
-	fileCategoryIDLTE: ID
-	fileCategoryIDContains: ID
-	fileCategoryIDHasPrefix: ID
-	fileCategoryIDHasSuffix: ID
-	fileCategoryIDIsNil: Boolean
-	fileCategoryIDNotNil: Boolean
-	fileCategoryIDEqualFold: ID
-	fileCategoryIDContainsFold: ID
+	categoryID: ID
+	categoryIDNEQ: ID
+	categoryIDIn: [ID!]
+	categoryIDNotIn: [ID!]
+	categoryIDGT: ID
+	categoryIDGTE: ID
+	categoryIDLT: ID
+	categoryIDLTE: ID
+	categoryIDContains: ID
+	categoryIDHasPrefix: ID
+	categoryIDHasSuffix: ID
+	categoryIDIsNil: Boolean
+	categoryIDNotNil: Boolean
+	categoryIDEqualFold: ID
+	categoryIDContainsFold: ID
 	"""
 	provided_file_name field predicates
 	"""
@@ -29392,10 +29391,10 @@ input FileWhereInput {
 	hasScope: Boolean
 	hasScopeWith: [CustomTypeEnumWhereInput!]
 	"""
-	file_category edge predicates
+	category edge predicates
 	"""
-	hasFileCategory: Boolean
-	hasFileCategoryWith: [CustomTypeEnumWhereInput!]
+	hasCategory: Boolean
+	hasCategoryWith: [CustomTypeEnumWhereInput!]
 	"""
 	organization edge predicates
 	"""
@@ -87480,8 +87479,8 @@ input UpdateFileInput {
 	"""
 	the category of the file
 	"""
-	fileCategoryName: String
-	clearFileCategoryName: Boolean
+	categoryName: String
+	clearCategoryName: Boolean
 	"""
 	the name of the file provided in the payload key without the extension
 	"""
@@ -87562,8 +87561,8 @@ input UpdateFileInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
-	fileCategoryID: ID
-	clearFileCategory: Boolean
+	categoryID: ID
+	clearCategory: Boolean
 	addOrganizationIDs: [ID!]
 	removeOrganizationIDs: [ID!]
 	clearOrganization: Boolean

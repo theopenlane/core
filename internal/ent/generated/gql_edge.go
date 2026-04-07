@@ -4778,10 +4778,10 @@ func (_m *File) Scope(ctx context.Context) (*CustomTypeEnum, error) {
 	return result, MaskNotFound(err)
 }
 
-func (_m *File) FileCategory(ctx context.Context) (*CustomTypeEnum, error) {
-	result, err := _m.Edges.FileCategoryOrErr()
+func (_m *File) Category(ctx context.Context) (*CustomTypeEnum, error) {
+	result, err := _m.Edges.CategoryOrErr()
 	if IsNotLoaded(err) {
-		result, err = _m.QueryFileCategory().Only(ctx)
+		result, err = _m.QueryCategory().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

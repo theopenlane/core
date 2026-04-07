@@ -8803,12 +8803,12 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
-	if fileCategoryName, exists := m.FileCategoryName(); exists {
-		create = create.SetFileCategoryName(fileCategoryName)
+	if categoryName, exists := m.CategoryName(); exists {
+		create = create.SetCategoryName(categoryName)
 	}
 
-	if fileCategoryID, exists := m.FileCategoryID(); exists {
-		create = create.SetFileCategoryID(fileCategoryID)
+	if categoryID, exists := m.CategoryID(); exists {
+		create = create.SetCategoryID(categoryID)
 	}
 
 	if providedFileName, exists := m.ProvidedFileName(); exists {
@@ -8998,16 +8998,16 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(file.ScopeID)
 		}
 
-		if fileCategoryName, exists := m.FileCategoryName(); exists {
-			create = create.SetFileCategoryName(fileCategoryName)
+		if categoryName, exists := m.CategoryName(); exists {
+			create = create.SetCategoryName(categoryName)
 		} else {
-			create = create.SetFileCategoryName(file.FileCategoryName)
+			create = create.SetCategoryName(file.CategoryName)
 		}
 
-		if fileCategoryID, exists := m.FileCategoryID(); exists {
-			create = create.SetFileCategoryID(fileCategoryID)
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
 		} else {
-			create = create.SetFileCategoryID(file.FileCategoryID)
+			create = create.SetCategoryID(file.CategoryID)
 		}
 
 		if providedFileName, exists := m.ProvidedFileName(); exists {
@@ -9167,8 +9167,8 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(file.EnvironmentID).
 			SetScopeName(file.ScopeName).
 			SetScopeID(file.ScopeID).
-			SetFileCategoryName(file.FileCategoryName).
-			SetFileCategoryID(file.FileCategoryID).
+			SetCategoryName(file.CategoryName).
+			SetCategoryID(file.CategoryID).
 			SetProvidedFileName(file.ProvidedFileName).
 			SetProvidedFileExtension(file.ProvidedFileExtension).
 			SetProvidedFileSize(file.ProvidedFileSize).

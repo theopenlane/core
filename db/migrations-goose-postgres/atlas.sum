@@ -1,4 +1,4 @@
-h1:HtE/wdU7idhJm35c+6tyWji7HHyHKB+CvysXM1M7B4c=
+h1:c0ph9bN9fmNL7KStTd9iaSRBoGRq5jUaYdDEUB4t81I=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -98,5 +98,5 @@ h1:HtE/wdU7idhJm35c+6tyWji7HHyHKB+CvysXM1M7B4c=
 20260405172944_vendorriskscore.sql h1:GwxQlD63ha3KC7ejLg2hZ4YZY0bwgKHbjmDLG3iIGAo=
 20260405172947_vendorriskscore_history.sql h1:S/+lZGLMGfH2MDJeOPSKugPg/31yGOHirDOsFpQIcJE=
 20260407160343_platform_files.sql h1:0zZdHG4tIMMBwAtNumPNcmkBbw04PuqQGNfQgMy7THU=
-20260407204432_file_category.sql h1:Qnd+DoeVv+Ly8dbEeygWepHmHhgMP/jVOuJ86OJEZzE=
-20260407204441_file_category_history.sql h1:GbB4nc8qTjLEb+SHArhgH2gpQOjO2kjFrBX7EJr0D60=
+20260407223345_file_category.sql h1:V3Ao6c1i+ZmXynmFTEh8YUKnLYTiLf5VOlLFskIsb+I=
+20260407223356_file_category_history.sql h1:7BLV9puHxPh3TGkFRJTa/p1htJkcTypLO3Bk4adNqAA=

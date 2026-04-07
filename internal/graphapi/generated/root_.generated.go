@@ -29,7 +29,6 @@ type ResolverRoot interface {
 	CampaignTarget() CampaignTargetResolver
 	Control() ControlResolver
 	Evidence() EvidenceResolver
-	File() FileResolver
 	Group() GroupResolver
 	IdentityHolder() IdentityHolderResolver
 	Integration() IntegrationResolver
@@ -2102,6 +2101,9 @@ type ComplexityRoot struct {
 
 	File struct {
 		Base64                 func(childComplexity int) int
+		Category               func(childComplexity int) int
+		CategoryID             func(childComplexity int) int
+		CategoryName           func(childComplexity int) int
 		CategoryType           func(childComplexity int) int
 		Contact                func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
@@ -2115,9 +2117,6 @@ type ComplexityRoot struct {
 		EnvironmentName        func(childComplexity int) int
 		Events                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence               func(childComplexity int) int
-		FileCategory           func(childComplexity int) int
-		FileCategoryID         func(childComplexity int) int
-		FileCategoryName       func(childComplexity int) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                     func(childComplexity int) int
 		IdentityHolder         func(childComplexity int) int
@@ -2126,7 +2125,6 @@ type ComplexityRoot struct {
 		LastAccessedAt         func(childComplexity int) int
 		Md5Hash                func(childComplexity int) int
 		Metadata               func(childComplexity int) int
-		Name                   func(childComplexity int) int
 		Organization           func(childComplexity int) int
 		OrganizationSetting    func(childComplexity int) int
 		OriginalTrustCenterDoc func(childComplexity int) int
@@ -17806,6 +17804,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.File.Base64(childComplexity), true
 
+	case "File.category":
+		if e.ComplexityRoot.File.Category == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.Category(childComplexity), true
+
+	case "File.categoryID":
+		if e.ComplexityRoot.File.CategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.CategoryID(childComplexity), true
+
+	case "File.categoryName":
+		if e.ComplexityRoot.File.CategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.CategoryName(childComplexity), true
+
 	case "File.categoryType":
 		if e.ComplexityRoot.File.CategoryType == nil {
 			break
@@ -17902,27 +17921,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.File.Evidence(childComplexity), true
 
-	case "File.fileCategory":
-		if e.ComplexityRoot.File.FileCategory == nil {
-			break
-		}
-
-		return e.ComplexityRoot.File.FileCategory(childComplexity), true
-
-	case "File.fileCategoryID":
-		if e.ComplexityRoot.File.FileCategoryID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.File.FileCategoryID(childComplexity), true
-
-	case "File.fileCategoryName":
-		if e.ComplexityRoot.File.FileCategoryName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.File.FileCategoryName(childComplexity), true
-
 	case "File.groups":
 		if e.ComplexityRoot.File.Groups == nil {
 			break
@@ -17988,13 +17986,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.File.Metadata(childComplexity), true
-
-	case "File.name":
-		if e.ComplexityRoot.File.Name == nil {
-			break
-		}
-
-		return e.ComplexityRoot.File.Name(childComplexity), true
 
 	case "File.organization":
 		if e.ComplexityRoot.File.Organization == nil {
@@ -67940,7 +67931,7 @@ input CreateFileInput {
   """
   the category of the file
   """
-  fileCategoryName: String
+  categoryName: String
   """
   the name of the file provided in the payload key without the extension
   """
@@ -68005,7 +67996,7 @@ input CreateFileInput {
   lastAccessedAt: Time
   environmentID: ID
   scopeID: ID
-  fileCategoryID: ID
+  categoryID: ID
   organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
@@ -82740,11 +82731,11 @@ type File implements Node {
   """
   the category of the file
   """
-  fileCategoryName: String
+  categoryName: String
   """
   the category of the file
   """
-  fileCategoryID: ID
+  categoryID: ID
   """
   the name of the file provided in the payload key without the extension
   """
@@ -82809,7 +82800,7 @@ type File implements Node {
   lastAccessedAt: Time
   environment: CustomTypeEnum
   scope: CustomTypeEnum
-  fileCategory: CustomTypeEnum
+  category: CustomTypeEnum
   organization: [Organization!]
   groups(
     """
@@ -83229,41 +83220,41 @@ input FileWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
-  file_category_name field predicates
+  category_name field predicates
   """
-  fileCategoryName: String
-  fileCategoryNameNEQ: String
-  fileCategoryNameIn: [String!]
-  fileCategoryNameNotIn: [String!]
-  fileCategoryNameGT: String
-  fileCategoryNameGTE: String
-  fileCategoryNameLT: String
-  fileCategoryNameLTE: String
-  fileCategoryNameContains: String
-  fileCategoryNameHasPrefix: String
-  fileCategoryNameHasSuffix: String
-  fileCategoryNameIsNil: Boolean
-  fileCategoryNameNotNil: Boolean
-  fileCategoryNameEqualFold: String
-  fileCategoryNameContainsFold: String
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameGT: String
+  categoryNameGTE: String
+  categoryNameLT: String
+  categoryNameLTE: String
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
   """
-  file_category_id field predicates
+  category_id field predicates
   """
-  fileCategoryID: ID
-  fileCategoryIDNEQ: ID
-  fileCategoryIDIn: [ID!]
-  fileCategoryIDNotIn: [ID!]
-  fileCategoryIDGT: ID
-  fileCategoryIDGTE: ID
-  fileCategoryIDLT: ID
-  fileCategoryIDLTE: ID
-  fileCategoryIDContains: ID
-  fileCategoryIDHasPrefix: ID
-  fileCategoryIDHasSuffix: ID
-  fileCategoryIDIsNil: Boolean
-  fileCategoryIDNotNil: Boolean
-  fileCategoryIDEqualFold: ID
-  fileCategoryIDContainsFold: ID
+  categoryID: ID
+  categoryIDNEQ: ID
+  categoryIDIn: [ID!]
+  categoryIDNotIn: [ID!]
+  categoryIDGT: ID
+  categoryIDGTE: ID
+  categoryIDLT: ID
+  categoryIDLTE: ID
+  categoryIDContains: ID
+  categoryIDHasPrefix: ID
+  categoryIDHasSuffix: ID
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: ID
+  categoryIDContainsFold: ID
   """
   provided_file_name field predicates
   """
@@ -83542,10 +83533,10 @@ input FileWhereInput {
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
   """
-  file_category edge predicates
+  category edge predicates
   """
-  hasFileCategory: Boolean
-  hasFileCategoryWith: [CustomTypeEnumWhereInput!]
+  hasCategory: Boolean
+  hasCategoryWith: [CustomTypeEnumWhereInput!]
   """
   organization edge predicates
   """
@@ -129731,8 +129722,8 @@ input UpdateFileInput {
   """
   the category of the file
   """
-  fileCategoryName: String
-  clearFileCategoryName: Boolean
+  categoryName: String
+  clearCategoryName: Boolean
   """
   the name of the file provided in the payload key without the extension
   """
@@ -129813,8 +129804,8 @@ input UpdateFileInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
-  fileCategoryID: ID
-  clearFileCategory: Boolean
+  categoryID: ID
+  clearCategory: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganization: Boolean
@@ -143218,7 +143209,6 @@ type FileDeletePayload {
 	{Name: "../schema/fileextended.graphql", Input: `extend type File {
     presignedURL: String
     base64: String
-    name: String!
 }
 
 input FileMetadataInput {

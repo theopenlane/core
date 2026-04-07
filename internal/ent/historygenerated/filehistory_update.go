@@ -244,43 +244,43 @@ func (_u *FileHistoryUpdate) ClearScopeID() *FileHistoryUpdate {
 	return _u
 }
 
-// SetFileCategoryName sets the "file_category_name" field.
-func (_u *FileHistoryUpdate) SetFileCategoryName(v string) *FileHistoryUpdate {
-	_u.mutation.SetFileCategoryName(v)
+// SetCategoryName sets the "category_name" field.
+func (_u *FileHistoryUpdate) SetCategoryName(v string) *FileHistoryUpdate {
+	_u.mutation.SetCategoryName(v)
 	return _u
 }
 
-// SetNillableFileCategoryName sets the "file_category_name" field if the given value is not nil.
-func (_u *FileHistoryUpdate) SetNillableFileCategoryName(v *string) *FileHistoryUpdate {
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableCategoryName(v *string) *FileHistoryUpdate {
 	if v != nil {
-		_u.SetFileCategoryName(*v)
+		_u.SetCategoryName(*v)
 	}
 	return _u
 }
 
-// ClearFileCategoryName clears the value of the "file_category_name" field.
-func (_u *FileHistoryUpdate) ClearFileCategoryName() *FileHistoryUpdate {
-	_u.mutation.ClearFileCategoryName()
+// ClearCategoryName clears the value of the "category_name" field.
+func (_u *FileHistoryUpdate) ClearCategoryName() *FileHistoryUpdate {
+	_u.mutation.ClearCategoryName()
 	return _u
 }
 
-// SetFileCategoryID sets the "file_category_id" field.
-func (_u *FileHistoryUpdate) SetFileCategoryID(v string) *FileHistoryUpdate {
-	_u.mutation.SetFileCategoryID(v)
+// SetCategoryID sets the "category_id" field.
+func (_u *FileHistoryUpdate) SetCategoryID(v string) *FileHistoryUpdate {
+	_u.mutation.SetCategoryID(v)
 	return _u
 }
 
-// SetNillableFileCategoryID sets the "file_category_id" field if the given value is not nil.
-func (_u *FileHistoryUpdate) SetNillableFileCategoryID(v *string) *FileHistoryUpdate {
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableCategoryID(v *string) *FileHistoryUpdate {
 	if v != nil {
-		_u.SetFileCategoryID(*v)
+		_u.SetCategoryID(*v)
 	}
 	return _u
 }
 
-// ClearFileCategoryID clears the value of the "file_category_id" field.
-func (_u *FileHistoryUpdate) ClearFileCategoryID() *FileHistoryUpdate {
-	_u.mutation.ClearFileCategoryID()
+// ClearCategoryID clears the value of the "category_id" field.
+func (_u *FileHistoryUpdate) ClearCategoryID() *FileHistoryUpdate {
+	_u.mutation.ClearCategoryID()
 	return _u
 }
 
@@ -769,17 +769,17 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(filehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileCategoryName(); ok {
-		_spec.SetField(filehistory.FieldFileCategoryName, field.TypeString, value)
+	if value, ok := _u.mutation.CategoryName(); ok {
+		_spec.SetField(filehistory.FieldCategoryName, field.TypeString, value)
 	}
-	if _u.mutation.FileCategoryNameCleared() {
-		_spec.ClearField(filehistory.FieldFileCategoryName, field.TypeString)
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(filehistory.FieldCategoryName, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileCategoryID(); ok {
-		_spec.SetField(filehistory.FieldFileCategoryID, field.TypeString, value)
+	if value, ok := _u.mutation.CategoryID(); ok {
+		_spec.SetField(filehistory.FieldCategoryID, field.TypeString, value)
 	}
-	if _u.mutation.FileCategoryIDCleared() {
-		_spec.ClearField(filehistory.FieldFileCategoryID, field.TypeString)
+	if _u.mutation.CategoryIDCleared() {
+		_spec.ClearField(filehistory.FieldCategoryID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
@@ -1120,43 +1120,43 @@ func (_u *FileHistoryUpdateOne) ClearScopeID() *FileHistoryUpdateOne {
 	return _u
 }
 
-// SetFileCategoryName sets the "file_category_name" field.
-func (_u *FileHistoryUpdateOne) SetFileCategoryName(v string) *FileHistoryUpdateOne {
-	_u.mutation.SetFileCategoryName(v)
+// SetCategoryName sets the "category_name" field.
+func (_u *FileHistoryUpdateOne) SetCategoryName(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetCategoryName(v)
 	return _u
 }
 
-// SetNillableFileCategoryName sets the "file_category_name" field if the given value is not nil.
-func (_u *FileHistoryUpdateOne) SetNillableFileCategoryName(v *string) *FileHistoryUpdateOne {
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableCategoryName(v *string) *FileHistoryUpdateOne {
 	if v != nil {
-		_u.SetFileCategoryName(*v)
+		_u.SetCategoryName(*v)
 	}
 	return _u
 }
 
-// ClearFileCategoryName clears the value of the "file_category_name" field.
-func (_u *FileHistoryUpdateOne) ClearFileCategoryName() *FileHistoryUpdateOne {
-	_u.mutation.ClearFileCategoryName()
+// ClearCategoryName clears the value of the "category_name" field.
+func (_u *FileHistoryUpdateOne) ClearCategoryName() *FileHistoryUpdateOne {
+	_u.mutation.ClearCategoryName()
 	return _u
 }
 
-// SetFileCategoryID sets the "file_category_id" field.
-func (_u *FileHistoryUpdateOne) SetFileCategoryID(v string) *FileHistoryUpdateOne {
-	_u.mutation.SetFileCategoryID(v)
+// SetCategoryID sets the "category_id" field.
+func (_u *FileHistoryUpdateOne) SetCategoryID(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetCategoryID(v)
 	return _u
 }
 
-// SetNillableFileCategoryID sets the "file_category_id" field if the given value is not nil.
-func (_u *FileHistoryUpdateOne) SetNillableFileCategoryID(v *string) *FileHistoryUpdateOne {
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableCategoryID(v *string) *FileHistoryUpdateOne {
 	if v != nil {
-		_u.SetFileCategoryID(*v)
+		_u.SetCategoryID(*v)
 	}
 	return _u
 }
 
-// ClearFileCategoryID clears the value of the "file_category_id" field.
-func (_u *FileHistoryUpdateOne) ClearFileCategoryID() *FileHistoryUpdateOne {
-	_u.mutation.ClearFileCategoryID()
+// ClearCategoryID clears the value of the "category_id" field.
+func (_u *FileHistoryUpdateOne) ClearCategoryID() *FileHistoryUpdateOne {
+	_u.mutation.ClearCategoryID()
 	return _u
 }
 
@@ -1675,17 +1675,17 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(filehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileCategoryName(); ok {
-		_spec.SetField(filehistory.FieldFileCategoryName, field.TypeString, value)
+	if value, ok := _u.mutation.CategoryName(); ok {
+		_spec.SetField(filehistory.FieldCategoryName, field.TypeString, value)
 	}
-	if _u.mutation.FileCategoryNameCleared() {
-		_spec.ClearField(filehistory.FieldFileCategoryName, field.TypeString)
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(filehistory.FieldCategoryName, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileCategoryID(); ok {
-		_spec.SetField(filehistory.FieldFileCategoryID, field.TypeString, value)
+	if value, ok := _u.mutation.CategoryID(); ok {
+		_spec.SetField(filehistory.FieldCategoryID, field.TypeString, value)
 	}
-	if _u.mutation.FileCategoryIDCleared() {
-		_spec.ClearField(filehistory.FieldFileCategoryID, field.TypeString)
+	if _u.mutation.CategoryIDCleared() {
+		_spec.ClearField(filehistory.FieldCategoryID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

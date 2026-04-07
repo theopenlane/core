@@ -1212,8 +1212,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldEnvironmentID:         {Type: field.TypeString, Column: file.FieldEnvironmentID},
 			file.FieldScopeName:             {Type: field.TypeString, Column: file.FieldScopeName},
 			file.FieldScopeID:               {Type: field.TypeString, Column: file.FieldScopeID},
-			file.FieldFileCategoryName:      {Type: field.TypeString, Column: file.FieldFileCategoryName},
-			file.FieldFileCategoryID:        {Type: field.TypeString, Column: file.FieldFileCategoryID},
+			file.FieldCategoryName:          {Type: field.TypeString, Column: file.FieldCategoryName},
+			file.FieldCategoryID:            {Type: field.TypeString, Column: file.FieldCategoryID},
 			file.FieldProvidedFileName:      {Type: field.TypeString, Column: file.FieldProvidedFileName},
 			file.FieldProvidedFileExtension: {Type: field.TypeString, Column: file.FieldProvidedFileExtension},
 			file.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: file.FieldProvidedFileSize},
@@ -7494,12 +7494,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomTypeEnum",
 	)
 	graph.MustAddE(
-		"file_category",
+		"category",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.FileCategoryTable,
-			Columns: []string{file.FileCategoryColumn},
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
 			Bidi:    false,
 		},
 		"File",
@@ -26416,14 +26416,14 @@ func (f *FileFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(file.FieldScopeID))
 }
 
-// WhereFileCategoryName applies the entql string predicate on the file_category_name field.
-func (f *FileFilter) WhereFileCategoryName(p entql.StringP) {
-	f.Where(p.Field(file.FieldFileCategoryName))
+// WhereCategoryName applies the entql string predicate on the category_name field.
+func (f *FileFilter) WhereCategoryName(p entql.StringP) {
+	f.Where(p.Field(file.FieldCategoryName))
 }
 
-// WhereFileCategoryID applies the entql string predicate on the file_category_id field.
-func (f *FileFilter) WhereFileCategoryID(p entql.StringP) {
-	f.Where(p.Field(file.FieldFileCategoryID))
+// WhereCategoryID applies the entql string predicate on the category_id field.
+func (f *FileFilter) WhereCategoryID(p entql.StringP) {
+	f.Where(p.Field(file.FieldCategoryID))
 }
 
 // WhereProvidedFileName applies the entql string predicate on the provided_file_name field.
@@ -26544,14 +26544,14 @@ func (f *FileFilter) WhereHasScopeWith(preds ...predicate.CustomTypeEnum) {
 	})))
 }
 
-// WhereHasFileCategory applies a predicate to check if query has an edge file_category.
-func (f *FileFilter) WhereHasFileCategory() {
-	f.Where(entql.HasEdge("file_category"))
+// WhereHasCategory applies a predicate to check if query has an edge category.
+func (f *FileFilter) WhereHasCategory() {
+	f.Where(entql.HasEdge("category"))
 }
 
-// WhereHasFileCategoryWith applies a predicate to check if query has an edge file_category with a given conditions (other predicates).
-func (f *FileFilter) WhereHasFileCategoryWith(preds ...predicate.CustomTypeEnum) {
-	f.Where(entql.HasEdgeWith("file_category", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasCategoryWith applies a predicate to check if query has an edge category with a given conditions (other predicates).
+func (f *FileFilter) WhereHasCategoryWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("category", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

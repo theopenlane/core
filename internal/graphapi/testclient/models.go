@@ -6851,7 +6851,7 @@ type CreateFileInput struct {
 	// the scope of the file
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the category of the file
-	FileCategoryName *string `json:"fileCategoryName,omitempty"`
+	CategoryName *string `json:"categoryName,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -6886,7 +6886,7 @@ type CreateFileInput struct {
 	LastAccessedAt            *time.Time `json:"lastAccessedAt,omitempty"`
 	EnvironmentID             *string    `json:"environmentID,omitempty"`
 	ScopeID                   *string    `json:"scopeID,omitempty"`
-	FileCategoryID            *string    `json:"fileCategoryID,omitempty"`
+	CategoryID                *string    `json:"categoryID,omitempty"`
 	OrganizationIDs           []string   `json:"organizationIDs,omitempty"`
 	GroupIDs                  []string   `json:"groupIDs,omitempty"`
 	ContactIDs                []string   `json:"contactIDs,omitempty"`
@@ -16031,9 +16031,9 @@ type File struct {
 	// the scope of the file
 	ScopeID *string `json:"scopeID,omitempty"`
 	// the category of the file
-	FileCategoryName *string `json:"fileCategoryName,omitempty"`
+	CategoryName *string `json:"categoryName,omitempty"`
 	// the category of the file
-	FileCategoryID *string `json:"fileCategoryID,omitempty"`
+	CategoryID *string `json:"categoryID,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -16068,7 +16068,7 @@ type File struct {
 	LastAccessedAt         *time.Time                   `json:"lastAccessedAt,omitempty"`
 	Environment            *CustomTypeEnum              `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum              `json:"scope,omitempty"`
-	FileCategory           *CustomTypeEnum              `json:"fileCategory,omitempty"`
+	Category               *CustomTypeEnum              `json:"category,omitempty"`
 	Organization           []*Organization              `json:"organization,omitempty"`
 	Groups                 *GroupConnection             `json:"groups"`
 	Contact                []*Contact                   `json:"contact,omitempty"`
@@ -16089,7 +16089,6 @@ type File struct {
 	OriginalTrustCenterDoc []*TrustCenterDoc            `json:"originalTrustCenterDoc,omitempty"`
 	PresignedURL           *string                      `json:"presignedURL,omitempty"`
 	Base64                 *string                      `json:"base64,omitempty"`
-	Name                   string                       `json:"name"`
 }
 
 func (File) IsNode() {}
@@ -16303,38 +16302,38 @@ type FileWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
-	// file_category_name field predicates
-	FileCategoryName             *string  `json:"fileCategoryName,omitempty"`
-	FileCategoryNameNeq          *string  `json:"fileCategoryNameNEQ,omitempty"`
-	FileCategoryNameIn           []string `json:"fileCategoryNameIn,omitempty"`
-	FileCategoryNameNotIn        []string `json:"fileCategoryNameNotIn,omitempty"`
-	FileCategoryNameGt           *string  `json:"fileCategoryNameGT,omitempty"`
-	FileCategoryNameGte          *string  `json:"fileCategoryNameGTE,omitempty"`
-	FileCategoryNameLt           *string  `json:"fileCategoryNameLT,omitempty"`
-	FileCategoryNameLte          *string  `json:"fileCategoryNameLTE,omitempty"`
-	FileCategoryNameContains     *string  `json:"fileCategoryNameContains,omitempty"`
-	FileCategoryNameHasPrefix    *string  `json:"fileCategoryNameHasPrefix,omitempty"`
-	FileCategoryNameHasSuffix    *string  `json:"fileCategoryNameHasSuffix,omitempty"`
-	FileCategoryNameIsNil        *bool    `json:"fileCategoryNameIsNil,omitempty"`
-	FileCategoryNameNotNil       *bool    `json:"fileCategoryNameNotNil,omitempty"`
-	FileCategoryNameEqualFold    *string  `json:"fileCategoryNameEqualFold,omitempty"`
-	FileCategoryNameContainsFold *string  `json:"fileCategoryNameContainsFold,omitempty"`
-	// file_category_id field predicates
-	FileCategoryID             *string  `json:"fileCategoryID,omitempty"`
-	FileCategoryIdneq          *string  `json:"fileCategoryIDNEQ,omitempty"`
-	FileCategoryIDIn           []string `json:"fileCategoryIDIn,omitempty"`
-	FileCategoryIDNotIn        []string `json:"fileCategoryIDNotIn,omitempty"`
-	FileCategoryIdgt           *string  `json:"fileCategoryIDGT,omitempty"`
-	FileCategoryIdgte          *string  `json:"fileCategoryIDGTE,omitempty"`
-	FileCategoryIdlt           *string  `json:"fileCategoryIDLT,omitempty"`
-	FileCategoryIdlte          *string  `json:"fileCategoryIDLTE,omitempty"`
-	FileCategoryIDContains     *string  `json:"fileCategoryIDContains,omitempty"`
-	FileCategoryIDHasPrefix    *string  `json:"fileCategoryIDHasPrefix,omitempty"`
-	FileCategoryIDHasSuffix    *string  `json:"fileCategoryIDHasSuffix,omitempty"`
-	FileCategoryIDIsNil        *bool    `json:"fileCategoryIDIsNil,omitempty"`
-	FileCategoryIDNotNil       *bool    `json:"fileCategoryIDNotNil,omitempty"`
-	FileCategoryIDEqualFold    *string  `json:"fileCategoryIDEqualFold,omitempty"`
-	FileCategoryIDContainsFold *string  `json:"fileCategoryIDContainsFold,omitempty"`
+	// category_name field predicates
+	CategoryName             *string  `json:"categoryName,omitempty"`
+	CategoryNameNeq          *string  `json:"categoryNameNEQ,omitempty"`
+	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
+	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
+	CategoryNameGt           *string  `json:"categoryNameGT,omitempty"`
+	CategoryNameGte          *string  `json:"categoryNameGTE,omitempty"`
+	CategoryNameLt           *string  `json:"categoryNameLT,omitempty"`
+	CategoryNameLte          *string  `json:"categoryNameLTE,omitempty"`
+	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
+	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
+	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
+	CategoryNameIsNil        *bool    `json:"categoryNameIsNil,omitempty"`
+	CategoryNameNotNil       *bool    `json:"categoryNameNotNil,omitempty"`
+	CategoryNameEqualFold    *string  `json:"categoryNameEqualFold,omitempty"`
+	CategoryNameContainsFold *string  `json:"categoryNameContainsFold,omitempty"`
+	// category_id field predicates
+	CategoryID             *string  `json:"categoryID,omitempty"`
+	CategoryIdneq          *string  `json:"categoryIDNEQ,omitempty"`
+	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
+	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
+	CategoryIdgt           *string  `json:"categoryIDGT,omitempty"`
+	CategoryIdgte          *string  `json:"categoryIDGTE,omitempty"`
+	CategoryIdlt           *string  `json:"categoryIDLT,omitempty"`
+	CategoryIdlte          *string  `json:"categoryIDLTE,omitempty"`
+	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
+	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
+	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
+	CategoryIDIsNil        *bool    `json:"categoryIDIsNil,omitempty"`
+	CategoryIDNotNil       *bool    `json:"categoryIDNotNil,omitempty"`
+	CategoryIDEqualFold    *string  `json:"categoryIDEqualFold,omitempty"`
+	CategoryIDContainsFold *string  `json:"categoryIDContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -16576,9 +16575,9 @@ type FileWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
-	// file_category edge predicates
-	HasFileCategory     *bool                       `json:"hasFileCategory,omitempty"`
-	HasFileCategoryWith []*CustomTypeEnumWhereInput `json:"hasFileCategoryWith,omitempty"`
+	// category edge predicates
+	HasCategory     *bool                       `json:"hasCategory,omitempty"`
+	HasCategoryWith []*CustomTypeEnumWhereInput `json:"hasCategoryWith,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -40366,8 +40365,8 @@ type UpdateFileInput struct {
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
 	// the category of the file
-	FileCategoryName      *string `json:"fileCategoryName,omitempty"`
-	ClearFileCategoryName *bool   `json:"clearFileCategoryName,omitempty"`
+	CategoryName      *string `json:"categoryName,omitempty"`
+	ClearCategoryName *bool   `json:"clearCategoryName,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName *string `json:"providedFileName,omitempty"`
 	// the extension of the file provided
@@ -40418,8 +40417,8 @@ type UpdateFileInput struct {
 	ClearEnvironment                *bool      `json:"clearEnvironment,omitempty"`
 	ScopeID                         *string    `json:"scopeID,omitempty"`
 	ClearScope                      *bool      `json:"clearScope,omitempty"`
-	FileCategoryID                  *string    `json:"fileCategoryID,omitempty"`
-	ClearFileCategory               *bool      `json:"clearFileCategory,omitempty"`
+	CategoryID                      *string    `json:"categoryID,omitempty"`
+	ClearCategory                   *bool      `json:"clearCategory,omitempty"`
 	AddOrganizationIDs              []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs           []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganization               *bool      `json:"clearOrganization,omitempty"`

@@ -56,9 +56,9 @@ type FileHistory struct {
 	// the scope of the file
 	ScopeID string `json:"scope_id,omitempty"`
 	// the category of the file
-	FileCategoryName string `json:"file_category_name,omitempty"`
+	CategoryName string `json:"category_name,omitempty"`
 	// the category of the file
-	FileCategoryID string `json:"file_category_id,omitempty"`
+	CategoryID string `json:"category_id,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"provided_file_name,omitempty"`
 	// the extension of the file provided
@@ -111,7 +111,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldFileCategoryName, filehistory.FieldFileCategoryID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldCategoryName, filehistory.FieldCategoryID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt, filehistory.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -242,17 +242,17 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
-		case filehistory.FieldFileCategoryName:
+		case filehistory.FieldCategoryName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_category_name", values[i])
+				return fmt.Errorf("unexpected type %T for field category_name", values[i])
 			} else if value.Valid {
-				_m.FileCategoryName = value.String
+				_m.CategoryName = value.String
 			}
-		case filehistory.FieldFileCategoryID:
+		case filehistory.FieldCategoryID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_category_id", values[i])
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				_m.FileCategoryID = value.String
+				_m.CategoryID = value.String
 			}
 		case filehistory.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -456,11 +456,11 @@ func (_m *FileHistory) String() string {
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
-	builder.WriteString("file_category_name=")
-	builder.WriteString(_m.FileCategoryName)
+	builder.WriteString("category_name=")
+	builder.WriteString(_m.CategoryName)
 	builder.WriteString(", ")
-	builder.WriteString("file_category_id=")
-	builder.WriteString(_m.FileCategoryID)
+	builder.WriteString("category_id=")
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
 	builder.WriteString(_m.ProvidedFileName)

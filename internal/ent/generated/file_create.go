@@ -226,30 +226,30 @@ func (_c *FileCreate) SetNillableScopeID(v *string) *FileCreate {
 	return _c
 }
 
-// SetFileCategoryName sets the "file_category_name" field.
-func (_c *FileCreate) SetFileCategoryName(v string) *FileCreate {
-	_c.mutation.SetFileCategoryName(v)
+// SetCategoryName sets the "category_name" field.
+func (_c *FileCreate) SetCategoryName(v string) *FileCreate {
+	_c.mutation.SetCategoryName(v)
 	return _c
 }
 
-// SetNillableFileCategoryName sets the "file_category_name" field if the given value is not nil.
-func (_c *FileCreate) SetNillableFileCategoryName(v *string) *FileCreate {
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_c *FileCreate) SetNillableCategoryName(v *string) *FileCreate {
 	if v != nil {
-		_c.SetFileCategoryName(*v)
+		_c.SetCategoryName(*v)
 	}
 	return _c
 }
 
-// SetFileCategoryID sets the "file_category_id" field.
-func (_c *FileCreate) SetFileCategoryID(v string) *FileCreate {
-	_c.mutation.SetFileCategoryID(v)
+// SetCategoryID sets the "category_id" field.
+func (_c *FileCreate) SetCategoryID(v string) *FileCreate {
+	_c.mutation.SetCategoryID(v)
 	return _c
 }
 
-// SetNillableFileCategoryID sets the "file_category_id" field if the given value is not nil.
-func (_c *FileCreate) SetNillableFileCategoryID(v *string) *FileCreate {
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_c *FileCreate) SetNillableCategoryID(v *string) *FileCreate {
 	if v != nil {
-		_c.SetFileCategoryID(*v)
+		_c.SetCategoryID(*v)
 	}
 	return _c
 }
@@ -490,9 +490,9 @@ func (_c *FileCreate) SetScope(v *CustomTypeEnum) *FileCreate {
 	return _c.SetScopeID(v.ID)
 }
 
-// SetFileCategory sets the "file_category" edge to the CustomTypeEnum entity.
-func (_c *FileCreate) SetFileCategory(v *CustomTypeEnum) *FileCreate {
-	return _c.SetFileCategoryID(v.ID)
+// SetCategory sets the "category" edge to the CustomTypeEnum entity.
+func (_c *FileCreate) SetCategory(v *CustomTypeEnum) *FileCreate {
+	return _c.SetCategoryID(v.ID)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -939,9 +939,9 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
-	if value, ok := _c.mutation.FileCategoryName(); ok {
-		_spec.SetField(file.FieldFileCategoryName, field.TypeString, value)
-		_node.FileCategoryName = value
+	if value, ok := _c.mutation.CategoryName(); ok {
+		_spec.SetField(file.FieldCategoryName, field.TypeString, value)
+		_node.CategoryName = value
 	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
@@ -1051,12 +1051,12 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.FileCategoryIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CategoryIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   file.FileCategoryTable,
-			Columns: []string{file.FileCategoryColumn},
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -1066,7 +1066,7 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.FileCategoryID = nodes[0]
+		_node.CategoryID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {

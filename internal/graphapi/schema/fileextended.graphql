@@ -1,7 +1,6 @@
 extend type File {
     presignedURL: String
     base64: String
-    name: String!
 }
 
 input FileMetadataInput {

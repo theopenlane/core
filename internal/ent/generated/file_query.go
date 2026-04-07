@@ -47,7 +47,7 @@ type FileQuery struct {
 	predicates                      []predicate.File
 	withEnvironment                 *CustomTypeEnumQuery
 	withScope                       *CustomTypeEnumQuery
-	withFileCategory                *CustomTypeEnumQuery
+	withCategory                    *CustomTypeEnumQuery
 	withOrganization                *OrganizationQuery
 	withGroups                      *GroupQuery
 	withContact                     *ContactQuery
@@ -173,8 +173,8 @@ func (_q *FileQuery) QueryScope() *CustomTypeEnumQuery {
 	return query
 }
 
-// QueryFileCategory chains the current query on the "file_category" edge.
-func (_q *FileQuery) QueryFileCategory() *CustomTypeEnumQuery {
+// QueryCategory chains the current query on the "category" edge.
+func (_q *FileQuery) QueryCategory() *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -187,7 +187,7 @@ func (_q *FileQuery) QueryFileCategory() *CustomTypeEnumQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, file.FileCategoryTable, file.FileCategoryColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, file.CategoryTable, file.CategoryColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -842,7 +842,7 @@ func (_q *FileQuery) Clone() *FileQuery {
 		predicates:                 append([]predicate.File{}, _q.predicates...),
 		withEnvironment:            _q.withEnvironment.Clone(),
 		withScope:                  _q.withScope.Clone(),
-		withFileCategory:           _q.withFileCategory.Clone(),
+		withCategory:               _q.withCategory.Clone(),
 		withOrganization:           _q.withOrganization.Clone(),
 		withGroups:                 _q.withGroups.Clone(),
 		withContact:                _q.withContact.Clone(),
@@ -890,14 +890,14 @@ func (_q *FileQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *FileQuery {
 	return _q
 }
 
-// WithFileCategory tells the query-builder to eager-load the nodes that are connected to
-// the "file_category" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *FileQuery) WithFileCategory(opts ...func(*CustomTypeEnumQuery)) *FileQuery {
+// WithCategory tells the query-builder to eager-load the nodes that are connected to
+// the "category" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithCategory(opts ...func(*CustomTypeEnumQuery)) *FileQuery {
 	query := (&CustomTypeEnumClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withFileCategory = query
+	_q.withCategory = query
 	return _q
 }
 
@@ -1187,7 +1187,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		loadedTypes = [21]bool{
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
-			_q.withFileCategory != nil,
+			_q.withCategory != nil,
 			_q.withOrganization != nil,
 			_q.withGroups != nil,
 			_q.withContact != nil,
@@ -1246,9 +1246,9 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
-	if query := _q.withFileCategory; query != nil {
-		if err := _q.loadFileCategory(ctx, query, nodes, nil,
-			func(n *File, e *CustomTypeEnum) { n.Edges.FileCategory = e }); err != nil {
+	if query := _q.withCategory; query != nil {
+		if err := _q.loadCategory(ctx, query, nodes, nil,
+			func(n *File, e *CustomTypeEnum) { n.Edges.Category = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1576,11 +1576,11 @@ func (_q *FileQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuery, 
 	}
 	return nil
 }
-func (_q *FileQuery) loadFileCategory(ctx context.Context, query *CustomTypeEnumQuery, nodes []*File, init func(*File), assign func(*File, *CustomTypeEnum)) error {
+func (_q *FileQuery) loadCategory(ctx context.Context, query *CustomTypeEnumQuery, nodes []*File, init func(*File), assign func(*File, *CustomTypeEnum)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*File)
 	for i := range nodes {
-		fk := nodes[i].FileCategoryID
+		fk := nodes[i].CategoryID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1597,7 +1597,7 @@ func (_q *FileQuery) loadFileCategory(ctx context.Context, query *CustomTypeEnum
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "file_category_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "category_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2640,8 +2640,8 @@ func (_q *FileQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withScope != nil {
 			_spec.Node.AddColumnOnce(file.FieldScopeID)
 		}
-		if _q.withFileCategory != nil {
-			_spec.Node.AddColumnOnce(file.FieldFileCategoryID)
+		if _q.withCategory != nil {
+			_spec.Node.AddColumnOnce(file.FieldCategoryID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
