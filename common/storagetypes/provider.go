@@ -90,7 +90,7 @@ type File struct {
 	// Parent is the parent object of the file, if any
 	Parent ParentObject `json:"parent"`
 	// Metadata contains additional file metadata
-	Metadata map[string]any `json:"metadata,omitempty"`
+	Metadata map[string]string `json:"metadata,omitempty"`
 	// CorrelatedObjectID is the ID of the object this file belongs to
 	CorrelatedObjectID string
 	// CorrelatedObjectType is the type of object this file belongs to

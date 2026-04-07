@@ -70,9 +70,11 @@ func HookFileDelete() ent.Hook {
 						}
 
 						if f.Metadata != nil {
-							metadata := make(map[string]any)
+							metadata := make(map[string]string)
 							for k, v := range f.Metadata {
-								metadata[k] = v
+								if str, ok := v.(string); ok {
+									metadata[k] = str
+								}
 							}
 							storageFile.Metadata = metadata
 						}
