@@ -9,6 +9,9 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -16,8 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-	"github.com/theopenlane/utils/rout"
 )
 
 // Permissions is the resolver for the permissions field.
@@ -129,7 +130,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		return nil, rout.ErrPermissionDenied
 	}
 
-	res, err := r.CreateGroup(ctx, groupInput, nil)
+	res, err := r.CreateGroup(ctx, groupInput, nil, nil)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}

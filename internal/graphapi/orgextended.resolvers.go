@@ -9,6 +9,9 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
@@ -18,13 +21,11 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.
 func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
-	res, err := r.CreateOrganization(ctx, organizationInput, nil)
+	res, err := r.CreateOrganization(ctx, organizationInput, nil, nil)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organization"})
 	}
