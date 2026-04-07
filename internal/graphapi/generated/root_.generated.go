@@ -3861,16 +3861,8 @@ type ComplexityRoot struct {
 		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-<<<<<<< HEAD
-		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) int
-||||||| 6a1620342
-		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
-=======
 		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
->>>>>>> origin/main
+		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) int
 		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
@@ -143234,10 +143226,6 @@ input FileMetadataInput {
     the display name for the file, defaults to the original filename
     """
     name: String
-    """
-    additional structured metadata to persist with the file
-    """
-    metadata: Map
 }
 `, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Query {

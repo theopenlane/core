@@ -28858,10 +28858,6 @@ input FileMetadataInput {
 	the display name for the file, defaults to the original filename
 	"""
 	name: String
-	"""
-	additional structured metadata to persist with the file
-	"""
-	metadata: Map
 }
 """
 Ordering options for File connections

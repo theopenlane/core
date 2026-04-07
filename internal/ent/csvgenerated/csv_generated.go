@@ -1872,11 +1872,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"UserSetting": {
 		SchemaName: "UserSetting",
 		Rules:      []CSVReferenceRule{},
-<<<<<<< HEAD
-||||||| 6a1620342
-		Rules: []CSVReferenceRule{
-		},
-=======
 	},
 	"VendorRiskScore": {
 		SchemaName: "VendorRiskScore",
@@ -1890,7 +1885,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 		},
->>>>>>> origin/main
 	},
 	"VendorScoringConfig": {
 		SchemaName: "VendorScoringConfig",
@@ -2938,28 +2932,6 @@ func (PersonalAccessTokenCSVUpdateInput) CSVInputWrapper() {}
 // PlatformCSVInput wraps CreatePlatformInput with CSV reference columns.
 type PlatformCSVInput struct {
 	Input                   generated.CreatePlatformInput
-<<<<<<< HEAD
-	BusinessOwnerGroupName  string `csv:"BusinessOwnerGroupName"`
-	BusinessOwnerUserEmail  string `csv:"BusinessOwnerUserEmail"`
-	InternalOwnerGroupName  string `csv:"InternalOwnerGroupName"`
-	InternalOwnerUserEmail  string `csv:"InternalOwnerUserEmail"`
-	PlatformOwnerEmail      string `csv:"PlatformOwnerEmail"`
-	SecurityOwnerGroupName  string `csv:"SecurityOwnerGroupName"`
-	SecurityOwnerUserEmail  string `csv:"SecurityOwnerUserEmail"`
-	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
-	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
-||||||| 6a1620342
-	Input generated.CreatePlatformInput
-	BusinessOwnerGroupName string `csv:"BusinessOwnerGroupName"`
-	BusinessOwnerUserEmail string `csv:"BusinessOwnerUserEmail"`
-	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
-	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
-	PlatformOwnerEmail string `csv:"PlatformOwnerEmail"`
-	SecurityOwnerGroupName string `csv:"SecurityOwnerGroupName"`
-	SecurityOwnerUserEmail string `csv:"SecurityOwnerUserEmail"`
-	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
-	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
-=======
 	BusinessOwnerGroupName  string   `csv:"BusinessOwnerGroupName"`
 	BusinessOwnerUserEmail  string   `csv:"BusinessOwnerUserEmail"`
 	InternalOwnerGroupName  string   `csv:"InternalOwnerGroupName"`
@@ -2974,7 +2946,6 @@ type PlatformCSVInput struct {
 	SystemDetailNames       []string `csv:"SystemDetailNames"`
 	TechnicalOwnerGroupName string   `csv:"TechnicalOwnerGroupName"`
 	TechnicalOwnerUserEmail string   `csv:"TechnicalOwnerUserEmail"`
->>>>>>> origin/main
 }
 
 // CSVInputWrapper marks PlatformCSVInput for CSV header preprocessing.
@@ -2985,29 +2956,6 @@ type PlatformCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID                      string `csv:"ID"`
 	Input                   generated.UpdatePlatformInput
-<<<<<<< HEAD
-	BusinessOwnerGroupName  string `csv:"BusinessOwnerGroupName"`
-	BusinessOwnerUserEmail  string `csv:"BusinessOwnerUserEmail"`
-	InternalOwnerGroupName  string `csv:"InternalOwnerGroupName"`
-	InternalOwnerUserEmail  string `csv:"InternalOwnerUserEmail"`
-	PlatformOwnerEmail      string `csv:"PlatformOwnerEmail"`
-	SecurityOwnerGroupName  string `csv:"SecurityOwnerGroupName"`
-	SecurityOwnerUserEmail  string `csv:"SecurityOwnerUserEmail"`
-	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
-	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
-||||||| 6a1620342
-	ID string `csv:"ID"`
-	Input generated.UpdatePlatformInput
-	BusinessOwnerGroupName string `csv:"BusinessOwnerGroupName"`
-	BusinessOwnerUserEmail string `csv:"BusinessOwnerUserEmail"`
-	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
-	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
-	PlatformOwnerEmail string `csv:"PlatformOwnerEmail"`
-	SecurityOwnerGroupName string `csv:"SecurityOwnerGroupName"`
-	SecurityOwnerUserEmail string `csv:"SecurityOwnerUserEmail"`
-	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
-	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
-=======
 	BusinessOwnerGroupName  string   `csv:"BusinessOwnerGroupName"`
 	BusinessOwnerUserEmail  string   `csv:"BusinessOwnerUserEmail"`
 	InternalOwnerGroupName  string   `csv:"InternalOwnerGroupName"`
@@ -3022,7 +2970,6 @@ type PlatformCSVUpdateInput struct {
 	SystemDetailNames       []string `csv:"SystemDetailNames"`
 	TechnicalOwnerGroupName string   `csv:"TechnicalOwnerGroupName"`
 	TechnicalOwnerUserEmail string   `csv:"TechnicalOwnerUserEmail"`
->>>>>>> origin/main
 }
 
 // CSVInputWrapper marks PlatformCSVUpdateInput for CSV header preprocessing.
@@ -3135,16 +3082,6 @@ func (ReviewCSVUpdateInput) CSVInputWrapper() {}
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
 	Input                 generated.CreateRiskInput
-<<<<<<< HEAD
-	ControlRefCodes       []string `csv:"ControlRefCodes"`
-	RiskDelegateGroupName string   `csv:"RiskDelegateGroupName"`
-	StakeholderGroupName  string   `csv:"StakeholderGroupName"`
-||||||| 6a1620342
-	Input generated.CreateRiskInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
-	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
-	StakeholderGroupName string `csv:"StakeholderGroupName"`
-=======
 	ActionPlanNames       []string `csv:"ActionPlanNames"`
 	AssetNames            []string `csv:"AssetNames"`
 	ControlRefCodes       []string `csv:"ControlRefCodes"`
@@ -3153,7 +3090,6 @@ type RiskCSVInput struct {
 	RiskDelegateGroupName string   `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName  string   `csv:"StakeholderGroupName"`
 	SubcontrolRefCodes    []string `csv:"SubcontrolRefCodes"`
->>>>>>> origin/main
 }
 
 // CSVInputWrapper marks RiskCSVInput for CSV header preprocessing.
@@ -3164,17 +3100,6 @@ type RiskCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID                    string `csv:"ID"`
 	Input                 generated.UpdateRiskInput
-<<<<<<< HEAD
-	ControlRefCodes       []string `csv:"ControlRefCodes"`
-	RiskDelegateGroupName string   `csv:"RiskDelegateGroupName"`
-	StakeholderGroupName  string   `csv:"StakeholderGroupName"`
-||||||| 6a1620342
-	ID string `csv:"ID"`
-	Input generated.UpdateRiskInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
-	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
-	StakeholderGroupName string `csv:"StakeholderGroupName"`
-=======
 	ActionPlanNames       []string `csv:"ActionPlanNames"`
 	AssetNames            []string `csv:"AssetNames"`
 	ControlRefCodes       []string `csv:"ControlRefCodes"`
@@ -3183,7 +3108,6 @@ type RiskCSVUpdateInput struct {
 	RiskDelegateGroupName string   `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName  string   `csv:"StakeholderGroupName"`
 	SubcontrolRefCodes    []string `csv:"SubcontrolRefCodes"`
->>>>>>> origin/main
 }
 
 // CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.

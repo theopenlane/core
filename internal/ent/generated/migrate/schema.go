@@ -2667,58 +2667,38 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-<<<<<<< HEAD
-				Symbol:     "files_remediations_files",
-				Columns:    []*schema.Column{FilesColumns[40]},
-||||||| 6a1620342
-				Symbol:     "files_remediations_files",
-				Columns:    []*schema.Column{FilesColumns[38]},
-=======
 				Symbol:     "files_platforms_architecture_diagrams",
-				Columns:    []*schema.Column{FilesColumns[38]},
+				Columns:    []*schema.Column{FilesColumns[40]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_platforms_data_flow_diagrams",
-				Columns:    []*schema.Column{FilesColumns[39]},
+				Columns:    []*schema.Column{FilesColumns[41]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_platforms_trust_boundary_diagrams",
-				Columns:    []*schema.Column{FilesColumns[40]},
+				Columns:    []*schema.Column{FilesColumns[42]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_remediations_files",
-				Columns:    []*schema.Column{FilesColumns[41]},
->>>>>>> origin/main
+				Columns:    []*schema.Column{FilesColumns[43]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_reviews_files",
-<<<<<<< HEAD
-				Columns:    []*schema.Column{FilesColumns[41]},
-||||||| 6a1620342
-				Columns:    []*schema.Column{FilesColumns[39]},
-=======
-				Columns:    []*schema.Column{FilesColumns[42]},
->>>>>>> origin/main
+				Columns:    []*schema.Column{FilesColumns[44]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_vulnerabilities_files",
-<<<<<<< HEAD
-				Columns:    []*schema.Column{FilesColumns[42]},
-||||||| 6a1620342
-				Columns:    []*schema.Column{FilesColumns[40]},
-=======
-				Columns:    []*schema.Column{FilesColumns[43]},
->>>>>>> origin/main
+				Columns:    []*schema.Column{FilesColumns[45]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -14062,32 +14042,16 @@ func init() {
 	FilesTable.ForeignKeys[1].RefTable = ExportsTable
 	FilesTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	FilesTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
-<<<<<<< HEAD
 	FilesTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
 	FilesTable.ForeignKeys[5].RefTable = FindingsTable
 	FilesTable.ForeignKeys[6].RefTable = IntegrationsTable
 	FilesTable.ForeignKeys[7].RefTable = NotesTable
-	FilesTable.ForeignKeys[8].RefTable = RemediationsTable
-	FilesTable.ForeignKeys[9].RefTable = ReviewsTable
-	FilesTable.ForeignKeys[10].RefTable = VulnerabilitiesTable
-||||||| 6a1620342
-	FilesTable.ForeignKeys[4].RefTable = FindingsTable
-	FilesTable.ForeignKeys[5].RefTable = IntegrationsTable
-	FilesTable.ForeignKeys[6].RefTable = NotesTable
-	FilesTable.ForeignKeys[7].RefTable = RemediationsTable
-	FilesTable.ForeignKeys[8].RefTable = ReviewsTable
-	FilesTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
-=======
-	FilesTable.ForeignKeys[4].RefTable = FindingsTable
-	FilesTable.ForeignKeys[5].RefTable = IntegrationsTable
-	FilesTable.ForeignKeys[6].RefTable = NotesTable
-	FilesTable.ForeignKeys[7].RefTable = PlatformsTable
 	FilesTable.ForeignKeys[8].RefTable = PlatformsTable
 	FilesTable.ForeignKeys[9].RefTable = PlatformsTable
-	FilesTable.ForeignKeys[10].RefTable = RemediationsTable
-	FilesTable.ForeignKeys[11].RefTable = ReviewsTable
-	FilesTable.ForeignKeys[12].RefTable = VulnerabilitiesTable
->>>>>>> origin/main
+	FilesTable.ForeignKeys[10].RefTable = PlatformsTable
+	FilesTable.ForeignKeys[11].RefTable = RemediationsTable
+	FilesTable.ForeignKeys[12].RefTable = ReviewsTable
+	FilesTable.ForeignKeys[13].RefTable = VulnerabilitiesTable
 	FileDownloadTokensTable.ForeignKeys[0].RefTable = UsersTable
 	FindingsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	FindingsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable

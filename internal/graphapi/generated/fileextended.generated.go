@@ -38,7 +38,7 @@ func (ec *executionContext) unmarshalInputFileMetadataInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "metadata"}
+	fieldsInOrder := [...]string{"name"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -52,13 +52,6 @@ func (ec *executionContext) unmarshalInputFileMetadataInput(ctx context.Context,
 				return it, err
 			}
 			it.Name = data
-		case "metadata":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
-			data, err := ec.unmarshalOMap2map(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Metadata = data
 		}
 	}
 	return it, nil
