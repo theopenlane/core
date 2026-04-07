@@ -1202,7 +1202,7 @@ func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string
 		name = strings.TrimSpace(name)
 		if name != "" {
 			upload.Metadata["name"] = name
-			upload.FileMetadata.Name = name
+			upload.Name = name
 		}
 	}
 }
