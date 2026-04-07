@@ -81,6 +81,7 @@ github.com/gorilla/securecookie v1.1.2/go.mod h1:NfCASbcHqRSY+3a8tlWJwsQap2VX5pw
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 h1:JeSE6pjso5THxAzdVpqr6/geYxZytqFMBCOtn/ujyeo=
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674/go.mod h1:r4w70xmWCQKmi1ONH4KIaBptdivuRPyosB9RmPlGEwA=
 github.com/gqlgo/gqlgenc v0.35.1 h1:wHg+0/SEU4Jp+gb5ted1i7jls2i3AqMuCOuUClOo+9Q=
+github.com/gqlgo/gqlgenc v0.35.1/go.mod h1:qszcs75kQw4fEP7szUpzPGPLtF8idQX7qGVrZDnvSuA=
 github.com/hashicorp/golang-lru/v2 v2.0.7 h1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs4luLUK2k=
 github.com/hashicorp/golang-lru/v2 v2.0.7/go.mod h1:QeFd9opnmA6QUJc5vARoKUSoFhyfM2/ZepoAG6RGpeM=
 github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f h1:7LYC+Yfkj3CTRcShK0KOL/w6iTiKyqqBA9a41Wnggw8=
@@ -183,13 +184,14 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.15.2 h1:Rh6StKd41FJdCxZqAb2I6aS3m8i5WuM8Xhf/oPf/nI4=
-github.com/theopenlane/core v1.15.2/go.mod h1:dqgNfvJAerKnW6m+nPtY8a61v5AJRAMcp70QWOUp8AA=
+github.com/theopenlane/core v1.15.9 h1:dK0HxndOSnsQlKPanr6wCCC7sApb7m6EqtbSuUQHsYg=
+github.com/theopenlane/core v1.15.9/go.mod h1:PhMYDPpaX3pPCheIomiIrwKe2CqAY8w14SIRmejCdsU=
 github.com/theopenlane/core/common v1.0.17 h1:kdrlGHfEGpx4PRhUq8G4xiIW+U0FmmLXD5XjF6wEozw=
 github.com/theopenlane/core/common v1.0.17/go.mod h1:+OOhH2NYhLgngkFgkwJZdFTgbB6e+X+pXVXBG8hrZ/M=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/go-client v0.9.3 h1:WkvQOHiFKtMJRXqKEeOOC7QnoUdl+NJRwJnqVfV+x4w=
+github.com/theopenlane/go-client v0.9.3/go.mod h1:wCuq66uUq4tnJcwKSlVpkPtPD+JGwfd3TzADrf5O1Wg=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.27.5 h1:FuRbVK2qEiRBelMKho1asHJpk8jSdtcG9/+0MMgx7HY=
