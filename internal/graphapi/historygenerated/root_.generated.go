@@ -3021,13 +3021,19 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityHistory struct {
+		AutoDismissedAt         func(childComplexity int) int
 		Blocking                func(childComplexity int) int
 		Category                func(childComplexity int) int
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		CveID                   func(childComplexity int) int
+		CweIds                  func(childComplexity int) int
+		DependencyScope         func(childComplexity int) int
 		Description             func(childComplexity int) int
 		DiscoveredAt            func(childComplexity int) int
+		DismissedAt             func(childComplexity int) int
+		DismissedComment        func(childComplexity int) int
+		DismissedReason         func(childComplexity int) int
 		DisplayID               func(childComplexity int) int
 		DisplayName             func(childComplexity int) int
 		EnvironmentID           func(childComplexity int) int
@@ -3036,15 +3042,20 @@ type ComplexityRoot struct {
 		ExternalID              func(childComplexity int) int
 		ExternalOwnerID         func(childComplexity int) int
 		ExternalURI             func(childComplexity int) int
+		FirstPatchedVersion     func(childComplexity int) int
+		FixedAt                 func(childComplexity int) int
 		HistoryTime             func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		Impact                  func(childComplexity int) int
 		Impacts                 func(childComplexity int) int
 		InternalNotes           func(childComplexity int) int
+		ManifestPath            func(childComplexity int) int
 		Metadata                func(childComplexity int) int
 		Open                    func(childComplexity int) int
 		Operation               func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
+		PackageEcosystem        func(childComplexity int) int
+		PackageName             func(childComplexity int) int
 		Priority                func(childComplexity int) int
 		Production              func(childComplexity int) int
 		Public                  func(childComplexity int) int
@@ -3070,6 +3081,7 @@ type ComplexityRoot struct {
 		Vector                  func(childComplexity int) int
 		VulnerabilityStatusID   func(childComplexity int) int
 		VulnerabilityStatusName func(childComplexity int) int
+		VulnerableVersionRange  func(childComplexity int) int
 	}
 
 	VulnerabilityHistoryConnection struct {
@@ -20047,6 +20059,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorScoringConfigHistoryEdge.Node(childComplexity), true
 
+	case "VulnerabilityHistory.autoDismissedAt":
+		if e.ComplexityRoot.VulnerabilityHistory.AutoDismissedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.AutoDismissedAt(childComplexity), true
+
 	case "VulnerabilityHistory.blocking":
 		if e.ComplexityRoot.VulnerabilityHistory.Blocking == nil {
 			break
@@ -20082,6 +20101,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.CveID(childComplexity), true
 
+	case "VulnerabilityHistory.cweIds":
+		if e.ComplexityRoot.VulnerabilityHistory.CweIds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.CweIds(childComplexity), true
+
+	case "VulnerabilityHistory.dependencyScope":
+		if e.ComplexityRoot.VulnerabilityHistory.DependencyScope == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DependencyScope(childComplexity), true
+
 	case "VulnerabilityHistory.description":
 		if e.ComplexityRoot.VulnerabilityHistory.Description == nil {
 			break
@@ -20095,6 +20128,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.DiscoveredAt(childComplexity), true
+
+	case "VulnerabilityHistory.dismissedAt":
+		if e.ComplexityRoot.VulnerabilityHistory.DismissedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DismissedAt(childComplexity), true
+
+	case "VulnerabilityHistory.dismissedComment":
+		if e.ComplexityRoot.VulnerabilityHistory.DismissedComment == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DismissedComment(childComplexity), true
+
+	case "VulnerabilityHistory.dismissedReason":
+		if e.ComplexityRoot.VulnerabilityHistory.DismissedReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DismissedReason(childComplexity), true
 
 	case "VulnerabilityHistory.displayID":
 		if e.ComplexityRoot.VulnerabilityHistory.DisplayID == nil {
@@ -20152,6 +20206,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.ExternalURI(childComplexity), true
 
+	case "VulnerabilityHistory.firstPatchedVersion":
+		if e.ComplexityRoot.VulnerabilityHistory.FirstPatchedVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.FirstPatchedVersion(childComplexity), true
+
+	case "VulnerabilityHistory.fixedAt":
+		if e.ComplexityRoot.VulnerabilityHistory.FixedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.FixedAt(childComplexity), true
+
 	case "VulnerabilityHistory.historyTime":
 		if e.ComplexityRoot.VulnerabilityHistory.HistoryTime == nil {
 			break
@@ -20187,6 +20255,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.InternalNotes(childComplexity), true
 
+	case "VulnerabilityHistory.manifestPath":
+		if e.ComplexityRoot.VulnerabilityHistory.ManifestPath == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.ManifestPath(childComplexity), true
+
 	case "VulnerabilityHistory.metadata":
 		if e.ComplexityRoot.VulnerabilityHistory.Metadata == nil {
 			break
@@ -20214,6 +20289,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.OwnerID(childComplexity), true
+
+	case "VulnerabilityHistory.packageEcosystem":
+		if e.ComplexityRoot.VulnerabilityHistory.PackageEcosystem == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.PackageEcosystem(childComplexity), true
+
+	case "VulnerabilityHistory.packageName":
+		if e.ComplexityRoot.VulnerabilityHistory.PackageName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.PackageName(childComplexity), true
 
 	case "VulnerabilityHistory.priority":
 		if e.ComplexityRoot.VulnerabilityHistory.Priority == nil {
@@ -20389,6 +20478,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.VulnerabilityStatusName(childComplexity), true
+
+	case "VulnerabilityHistory.vulnerableVersionRange":
+		if e.ComplexityRoot.VulnerabilityHistory.VulnerableVersionRange == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.VulnerableVersionRange(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.edges":
 		if e.ComplexityRoot.VulnerabilityHistoryConnection.Edges == nil {
@@ -23766,6 +23862,7 @@ enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/common/e
   DOMAIN
   DEVICE
   TELEPHONE
+  REPOSITORY
 }
 """
 A connection to a list of items.
@@ -61728,6 +61825,34 @@ type VulnerabilityHistory implements Node {
   """
   impacts: [String!]
   """
+  CWE identifiers associated with the vulnerability
+  """
+  cweIds: [String!]
+  """
+  version range affected by the vulnerability
+  """
+  vulnerableVersionRange: String
+  """
+  earliest version that fixes the vulnerability
+  """
+  firstPatchedVersion: String
+  """
+  name of the vulnerable package or dependency
+  """
+  packageName: String
+  """
+  ecosystem of the vulnerable package such as npm, pip, or maven
+  """
+  packageEcosystem: String
+  """
+  path to the manifest file declaring the vulnerable dependency
+  """
+  manifestPath: String
+  """
+  scope of the dependency such as runtime or development
+  """
+  dependencyScope: String
+  """
   timestamp when the vulnerability was published
   """
   publishedAt: DateTime
@@ -61739,6 +61864,26 @@ type VulnerabilityHistory implements Node {
   timestamp when the source last updated the vulnerability
   """
   sourceUpdatedAt: DateTime
+  """
+  timestamp when the vulnerability was dismissed
+  """
+  dismissedAt: DateTime
+  """
+  reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+  """
+  dismissedReason: String
+  """
+  free-text explanation provided when the vulnerability was dismissed
+  """
+  dismissedComment: String
+  """
+  timestamp when the vulnerability was marked as fixed
+  """
+  fixedAt: DateTime
+  """
+  timestamp when the vulnerability was automatically dismissed by the source system
+  """
+  autoDismissedAt: DateTime
   """
   link to the vulnerability in the source system
   """
@@ -62424,6 +62569,114 @@ input VulnerabilityHistoryWhereInput {
   validatedIsNil: Boolean
   validatedNotNil: Boolean
   """
+  vulnerable_version_range field predicates
+  """
+  vulnerableVersionRange: String
+  vulnerableVersionRangeNEQ: String
+  vulnerableVersionRangeIn: [String!]
+  vulnerableVersionRangeNotIn: [String!]
+  vulnerableVersionRangeGT: String
+  vulnerableVersionRangeGTE: String
+  vulnerableVersionRangeLT: String
+  vulnerableVersionRangeLTE: String
+  vulnerableVersionRangeContains: String
+  vulnerableVersionRangeHasPrefix: String
+  vulnerableVersionRangeHasSuffix: String
+  vulnerableVersionRangeIsNil: Boolean
+  vulnerableVersionRangeNotNil: Boolean
+  vulnerableVersionRangeEqualFold: String
+  vulnerableVersionRangeContainsFold: String
+  """
+  first_patched_version field predicates
+  """
+  firstPatchedVersion: String
+  firstPatchedVersionNEQ: String
+  firstPatchedVersionIn: [String!]
+  firstPatchedVersionNotIn: [String!]
+  firstPatchedVersionGT: String
+  firstPatchedVersionGTE: String
+  firstPatchedVersionLT: String
+  firstPatchedVersionLTE: String
+  firstPatchedVersionContains: String
+  firstPatchedVersionHasPrefix: String
+  firstPatchedVersionHasSuffix: String
+  firstPatchedVersionIsNil: Boolean
+  firstPatchedVersionNotNil: Boolean
+  firstPatchedVersionEqualFold: String
+  firstPatchedVersionContainsFold: String
+  """
+  package_name field predicates
+  """
+  packageName: String
+  packageNameNEQ: String
+  packageNameIn: [String!]
+  packageNameNotIn: [String!]
+  packageNameGT: String
+  packageNameGTE: String
+  packageNameLT: String
+  packageNameLTE: String
+  packageNameContains: String
+  packageNameHasPrefix: String
+  packageNameHasSuffix: String
+  packageNameIsNil: Boolean
+  packageNameNotNil: Boolean
+  packageNameEqualFold: String
+  packageNameContainsFold: String
+  """
+  package_ecosystem field predicates
+  """
+  packageEcosystem: String
+  packageEcosystemNEQ: String
+  packageEcosystemIn: [String!]
+  packageEcosystemNotIn: [String!]
+  packageEcosystemGT: String
+  packageEcosystemGTE: String
+  packageEcosystemLT: String
+  packageEcosystemLTE: String
+  packageEcosystemContains: String
+  packageEcosystemHasPrefix: String
+  packageEcosystemHasSuffix: String
+  packageEcosystemIsNil: Boolean
+  packageEcosystemNotNil: Boolean
+  packageEcosystemEqualFold: String
+  packageEcosystemContainsFold: String
+  """
+  manifest_path field predicates
+  """
+  manifestPath: String
+  manifestPathNEQ: String
+  manifestPathIn: [String!]
+  manifestPathNotIn: [String!]
+  manifestPathGT: String
+  manifestPathGTE: String
+  manifestPathLT: String
+  manifestPathLTE: String
+  manifestPathContains: String
+  manifestPathHasPrefix: String
+  manifestPathHasSuffix: String
+  manifestPathIsNil: Boolean
+  manifestPathNotNil: Boolean
+  manifestPathEqualFold: String
+  manifestPathContainsFold: String
+  """
+  dependency_scope field predicates
+  """
+  dependencyScope: String
+  dependencyScopeNEQ: String
+  dependencyScopeIn: [String!]
+  dependencyScopeNotIn: [String!]
+  dependencyScopeGT: String
+  dependencyScopeGTE: String
+  dependencyScopeLT: String
+  dependencyScopeLTE: String
+  dependencyScopeContains: String
+  dependencyScopeHasPrefix: String
+  dependencyScopeHasSuffix: String
+  dependencyScopeIsNil: Boolean
+  dependencyScopeNotNil: Boolean
+  dependencyScopeEqualFold: String
+  dependencyScopeContainsFold: String
+  """
   published_at field predicates
   """
   publishedAt: DateTime
@@ -62462,6 +62715,81 @@ input VulnerabilityHistoryWhereInput {
   sourceUpdatedAtLTE: DateTime
   sourceUpdatedAtIsNil: Boolean
   sourceUpdatedAtNotNil: Boolean
+  """
+  dismissed_at field predicates
+  """
+  dismissedAt: DateTime
+  dismissedAtNEQ: DateTime
+  dismissedAtIn: [DateTime!]
+  dismissedAtNotIn: [DateTime!]
+  dismissedAtGT: DateTime
+  dismissedAtGTE: DateTime
+  dismissedAtLT: DateTime
+  dismissedAtLTE: DateTime
+  dismissedAtIsNil: Boolean
+  dismissedAtNotNil: Boolean
+  """
+  dismissed_reason field predicates
+  """
+  dismissedReason: String
+  dismissedReasonNEQ: String
+  dismissedReasonIn: [String!]
+  dismissedReasonNotIn: [String!]
+  dismissedReasonGT: String
+  dismissedReasonGTE: String
+  dismissedReasonLT: String
+  dismissedReasonLTE: String
+  dismissedReasonContains: String
+  dismissedReasonHasPrefix: String
+  dismissedReasonHasSuffix: String
+  dismissedReasonIsNil: Boolean
+  dismissedReasonNotNil: Boolean
+  dismissedReasonEqualFold: String
+  dismissedReasonContainsFold: String
+  """
+  dismissed_comment field predicates
+  """
+  dismissedComment: String
+  dismissedCommentNEQ: String
+  dismissedCommentIn: [String!]
+  dismissedCommentNotIn: [String!]
+  dismissedCommentGT: String
+  dismissedCommentGTE: String
+  dismissedCommentLT: String
+  dismissedCommentLTE: String
+  dismissedCommentContains: String
+  dismissedCommentHasPrefix: String
+  dismissedCommentHasSuffix: String
+  dismissedCommentIsNil: Boolean
+  dismissedCommentNotNil: Boolean
+  dismissedCommentEqualFold: String
+  dismissedCommentContainsFold: String
+  """
+  fixed_at field predicates
+  """
+  fixedAt: DateTime
+  fixedAtNEQ: DateTime
+  fixedAtIn: [DateTime!]
+  fixedAtNotIn: [DateTime!]
+  fixedAtGT: DateTime
+  fixedAtGTE: DateTime
+  fixedAtLT: DateTime
+  fixedAtLTE: DateTime
+  fixedAtIsNil: Boolean
+  fixedAtNotNil: Boolean
+  """
+  auto_dismissed_at field predicates
+  """
+  autoDismissedAt: DateTime
+  autoDismissedAtNEQ: DateTime
+  autoDismissedAtIn: [DateTime!]
+  autoDismissedAtNotIn: [DateTime!]
+  autoDismissedAtGT: DateTime
+  autoDismissedAtGTE: DateTime
+  autoDismissedAtLT: DateTime
+  autoDismissedAtLTE: DateTime
+  autoDismissedAtIsNil: Boolean
+  autoDismissedAtNotNil: Boolean
   """
   external_uri field predicates
   """

@@ -734,10 +734,12 @@ query GlobalSearch($query: String!) {
       edges {
         node {
           cveID
+          dismissedReason
           displayID
           externalID
           externalOwnerID
           id
+          packageName
           severity
           tags
         }

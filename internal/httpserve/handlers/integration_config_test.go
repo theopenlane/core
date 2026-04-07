@@ -327,6 +327,49 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 	assert.Equal(t, "initial@example.iam.gserviceaccount.com", providerData["serviceAccountEmail"])
 }
 
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUserInputOnlyWithEmptyObjectBody() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderUpdateUserInputOnlyEmptyObjectBody"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  configTestProviderID,
+		CredentialRef: configTestCredentialRef.String(),
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
+	})
+
+	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  configTestProviderID,
+		IntegrationID: first.IntegrationID,
+		CredentialRef: configTestCredentialRef.String(),
+		Body:          json.RawMessage(`{}`),
+		UserInput:     json.RawMessage(mustMarshalJSON(t, map[string]any{"filterExpr": "payload.category == \"critical\""})),
+	})
+
+	assert.Equal(t, first.IntegrationID, second.IntegrationID)
+
+	stored := suite.db.Integration.GetX(testUser.UserCtx, first.IntegrationID)
+	assert.Equal(t, enums.IntegrationStatusConnected, stored.Status)
+	assert.Equal(t, `payload.category == "critical"`, decodeClientConfigField(t, stored.Config.ClientConfig, "filterExpr"))
+
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored, types.NewCredentialSlotID("config_test"))
+	assert.NoError(t, err)
+	assert.True(t, ok)
+
+	providerData, err := jsonx.ToMap(credential.Data)
+	assert.NoError(t, err)
+	assert.Equal(t, "initial-project", providerData["projectId"])
+	assert.Equal(t, "initial@example.iam.gserviceaccount.com", providerData["serviceAccountEmail"])
+}
+
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOnlyUpdateWithoutCredentialSchema() {
 	t := suite.T()
 

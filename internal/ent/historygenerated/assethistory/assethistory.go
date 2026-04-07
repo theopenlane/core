@@ -237,7 +237,7 @@ const DefaultAssetType enums.AssetType = "TECHNOLOGY"
 // AssetTypeValidator is a validator for the "asset_type" field enum values. It is called by the builders before save.
 func AssetTypeValidator(at enums.AssetType) error {
 	switch at.String() {
-	case "TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE":
+	case "TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE", "REPOSITORY":
 		return nil
 	default:
 		return fmt.Errorf("assethistory: invalid enum value for asset_type field: %q", at)

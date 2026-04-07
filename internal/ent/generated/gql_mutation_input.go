@@ -28201,9 +28201,21 @@ type CreateVulnerabilityInput struct {
 	Validated               *bool
 	References              []string
 	Impacts                 []string
+	CweIds                  []string
+	VulnerableVersionRange  *string
+	FirstPatchedVersion     *string
+	PackageName             *string
+	PackageEcosystem        *string
+	ManifestPath            *string
+	DependencyScope         *string
 	PublishedAt             *models.DateTime
 	DiscoveredAt            *models.DateTime
 	SourceUpdatedAt         *models.DateTime
+	DismissedAt             *models.DateTime
+	DismissedReason         *string
+	DismissedComment        *string
+	FixedAt                 *models.DateTime
+	AutoDismissedAt         *models.DateTime
 	ExternalURI             *string
 	Metadata                map[string]interface{}
 	RawPayload              map[string]interface{}
@@ -28315,6 +28327,27 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.Impacts; v != nil {
 		m.SetImpacts(v)
 	}
+	if v := i.CweIds; v != nil {
+		m.SetCweIds(v)
+	}
+	if v := i.VulnerableVersionRange; v != nil {
+		m.SetVulnerableVersionRange(*v)
+	}
+	if v := i.FirstPatchedVersion; v != nil {
+		m.SetFirstPatchedVersion(*v)
+	}
+	if v := i.PackageName; v != nil {
+		m.SetPackageName(*v)
+	}
+	if v := i.PackageEcosystem; v != nil {
+		m.SetPackageEcosystem(*v)
+	}
+	if v := i.ManifestPath; v != nil {
+		m.SetManifestPath(*v)
+	}
+	if v := i.DependencyScope; v != nil {
+		m.SetDependencyScope(*v)
+	}
 	if v := i.PublishedAt; v != nil {
 		m.SetPublishedAt(*v)
 	}
@@ -28323,6 +28356,21 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.SourceUpdatedAt; v != nil {
 		m.SetSourceUpdatedAt(*v)
+	}
+	if v := i.DismissedAt; v != nil {
+		m.SetDismissedAt(*v)
+	}
+	if v := i.DismissedReason; v != nil {
+		m.SetDismissedReason(*v)
+	}
+	if v := i.DismissedComment; v != nil {
+		m.SetDismissedComment(*v)
+	}
+	if v := i.FixedAt; v != nil {
+		m.SetFixedAt(*v)
+	}
+	if v := i.AutoDismissedAt; v != nil {
+		m.SetAutoDismissedAt(*v)
 	}
 	if v := i.ExternalURI; v != nil {
 		m.SetExternalURI(*v)
@@ -28467,12 +28515,37 @@ type UpdateVulnerabilityInput struct {
 	ClearImpacts                 bool
 	Impacts                      []string
 	AppendImpacts                []string
+	ClearCweIds                  bool
+	CweIds                       []string
+	AppendCweIds                 []string
+	ClearVulnerableVersionRange  bool
+	VulnerableVersionRange       *string
+	ClearFirstPatchedVersion     bool
+	FirstPatchedVersion          *string
+	ClearPackageName             bool
+	PackageName                  *string
+	ClearPackageEcosystem        bool
+	PackageEcosystem             *string
+	ClearManifestPath            bool
+	ManifestPath                 *string
+	ClearDependencyScope         bool
+	DependencyScope              *string
 	ClearPublishedAt             bool
 	PublishedAt                  *models.DateTime
 	ClearDiscoveredAt            bool
 	DiscoveredAt                 *models.DateTime
 	ClearSourceUpdatedAt         bool
 	SourceUpdatedAt              *models.DateTime
+	ClearDismissedAt             bool
+	DismissedAt                  *models.DateTime
+	ClearDismissedReason         bool
+	DismissedReason              *string
+	ClearDismissedComment        bool
+	DismissedComment             *string
+	ClearFixedAt                 bool
+	FixedAt                      *models.DateTime
+	ClearAutoDismissedAt         bool
+	AutoDismissedAt              *models.DateTime
 	ClearExternalURI             bool
 	ExternalURI                  *string
 	ClearMetadata                bool
@@ -28717,6 +28790,51 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if i.AppendImpacts != nil {
 		m.AppendImpacts(i.Impacts)
 	}
+	if i.ClearCweIds {
+		m.ClearCweIds()
+	}
+	if v := i.CweIds; v != nil {
+		m.SetCweIds(v)
+	}
+	if i.AppendCweIds != nil {
+		m.AppendCweIds(i.CweIds)
+	}
+	if i.ClearVulnerableVersionRange {
+		m.ClearVulnerableVersionRange()
+	}
+	if v := i.VulnerableVersionRange; v != nil {
+		m.SetVulnerableVersionRange(*v)
+	}
+	if i.ClearFirstPatchedVersion {
+		m.ClearFirstPatchedVersion()
+	}
+	if v := i.FirstPatchedVersion; v != nil {
+		m.SetFirstPatchedVersion(*v)
+	}
+	if i.ClearPackageName {
+		m.ClearPackageName()
+	}
+	if v := i.PackageName; v != nil {
+		m.SetPackageName(*v)
+	}
+	if i.ClearPackageEcosystem {
+		m.ClearPackageEcosystem()
+	}
+	if v := i.PackageEcosystem; v != nil {
+		m.SetPackageEcosystem(*v)
+	}
+	if i.ClearManifestPath {
+		m.ClearManifestPath()
+	}
+	if v := i.ManifestPath; v != nil {
+		m.SetManifestPath(*v)
+	}
+	if i.ClearDependencyScope {
+		m.ClearDependencyScope()
+	}
+	if v := i.DependencyScope; v != nil {
+		m.SetDependencyScope(*v)
+	}
 	if i.ClearPublishedAt {
 		m.ClearPublishedAt()
 	}
@@ -28734,6 +28852,36 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.SourceUpdatedAt; v != nil {
 		m.SetSourceUpdatedAt(*v)
+	}
+	if i.ClearDismissedAt {
+		m.ClearDismissedAt()
+	}
+	if v := i.DismissedAt; v != nil {
+		m.SetDismissedAt(*v)
+	}
+	if i.ClearDismissedReason {
+		m.ClearDismissedReason()
+	}
+	if v := i.DismissedReason; v != nil {
+		m.SetDismissedReason(*v)
+	}
+	if i.ClearDismissedComment {
+		m.ClearDismissedComment()
+	}
+	if v := i.DismissedComment; v != nil {
+		m.SetDismissedComment(*v)
+	}
+	if i.ClearFixedAt {
+		m.ClearFixedAt()
+	}
+	if v := i.FixedAt; v != nil {
+		m.SetFixedAt(*v)
+	}
+	if i.ClearAutoDismissedAt {
+		m.ClearAutoDismissedAt()
+	}
+	if v := i.AutoDismissedAt; v != nil {
+		m.SetAutoDismissedAt(*v)
 	}
 	if i.ClearExternalURI {
 		m.ClearExternalURI()

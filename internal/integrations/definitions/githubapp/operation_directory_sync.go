@@ -11,22 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// githubMemberPayload is the normalized payload for a GitHub organization member
-type githubMemberPayload struct {
-	// DatabaseID is the numeric GitHub user identifier
-	DatabaseID int `json:"database_id,omitempty"`
-	// Login is the GitHub username
-	Login string `json:"login,omitempty"`
-	// Name is the user's display name
-	Name string `json:"name,omitempty"`
-	// Email is the user's public email address
-	Email string `json:"email,omitempty"`
-	// AvatarURL is the user's avatar URL
-	AvatarURL string `json:"avatar_url,omitempty"`
-	// Org is the organization login this member belongs to
-	Org string `json:"org,omitempty"`
-}
-
 // orgMemberNode is a single organization member record returned by the GitHub GraphQL API
 type orgMemberNode struct {
 	// DatabaseID is the numeric GitHub user identifier
@@ -39,6 +23,8 @@ type orgMemberNode struct {
 	Email string
 	// AvatarURL is the user's avatar URL
 	AvatarURL string `graphql:"avatarUrl"`
+	// Org is the organization login populated after query
+	Org string `graphql:"-"`
 }
 
 // orgNode holds the login of a GitHub organization accessible to the installation
@@ -73,18 +59,11 @@ func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.Ing
 		}
 
 		for _, member := range members {
-			payload := githubMemberPayload{
-				DatabaseID: member.DatabaseID,
-				Login:      member.Login,
-				Name:       member.Name,
-				Email:      member.Email,
-				AvatarURL:  member.AvatarURL,
-				Org:        org.Login,
-			}
+			member.Org = org.Login
 
 			resource := fmt.Sprintf("%s/%s", org.Login, member.Login)
 
-			envelope, err := providerkit.MarshalEnvelope(resource, payload, ErrIngestPayloadEncode)
+			envelope, err := providerkit.MarshalEnvelope(resource, member, ErrIngestPayloadEncode)
 			if err != nil {
 				return nil, err
 			}
@@ -126,7 +105,7 @@ func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgN
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
-			return nil, ErrAPIRequest
+			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
 		orgs = append(orgs, query.Viewer.Organizations.Nodes...)
@@ -167,7 +146,7 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
-			return nil, ErrAPIRequest
+			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
 		members = append(members, query.Organization.MembersWithRole.Nodes...)

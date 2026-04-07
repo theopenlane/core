@@ -3,6 +3,8 @@ package operations
 import (
 	"context"
 
+	"github.com/riverqueue/river"
+
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -58,6 +60,10 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 				ScheduledAt: &scheduledAt,
 				Properties:  envelope.Properties(),
 			})
+
+			if execErr != nil {
+				return river.JobCancel(execErr)
+			}
 
 			return receipt.Err
 		},

@@ -50,7 +50,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	var credential *types.CredentialSet
 
-	if !jsonx.IsEmptyRawMessage(payload.Body) {
+	if payload.HasCredentialBody() {
 		credential = &types.CredentialSet{Data: jsonx.CloneRawMessage(payload.Body)}
 	}
 

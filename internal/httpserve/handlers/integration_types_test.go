@@ -57,6 +57,14 @@ func TestConfigureIntegrationRequestValidate(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "empty object body does not require credential ref",
+			payload: ConfigureIntegrationRequest{
+				DefinitionID: "def_test",
+				Body:         json.RawMessage(`{}`),
+			},
+			wantErr: false,
+		},
+		{
 			name: "null body does not require credential ref",
 			payload: ConfigureIntegrationRequest{
 				DefinitionID: "def_test",

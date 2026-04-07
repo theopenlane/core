@@ -3585,9 +3585,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldValidated:               {Type: field.TypeBool, Column: vulnerability.FieldValidated},
 			vulnerability.FieldReferences:              {Type: field.TypeJSON, Column: vulnerability.FieldReferences},
 			vulnerability.FieldImpacts:                 {Type: field.TypeJSON, Column: vulnerability.FieldImpacts},
+			vulnerability.FieldCweIds:                  {Type: field.TypeJSON, Column: vulnerability.FieldCweIds},
+			vulnerability.FieldVulnerableVersionRange:  {Type: field.TypeString, Column: vulnerability.FieldVulnerableVersionRange},
+			vulnerability.FieldFirstPatchedVersion:     {Type: field.TypeString, Column: vulnerability.FieldFirstPatchedVersion},
+			vulnerability.FieldPackageName:             {Type: field.TypeString, Column: vulnerability.FieldPackageName},
+			vulnerability.FieldPackageEcosystem:        {Type: field.TypeString, Column: vulnerability.FieldPackageEcosystem},
+			vulnerability.FieldManifestPath:            {Type: field.TypeString, Column: vulnerability.FieldManifestPath},
+			vulnerability.FieldDependencyScope:         {Type: field.TypeString, Column: vulnerability.FieldDependencyScope},
 			vulnerability.FieldPublishedAt:             {Type: field.TypeTime, Column: vulnerability.FieldPublishedAt},
 			vulnerability.FieldDiscoveredAt:            {Type: field.TypeTime, Column: vulnerability.FieldDiscoveredAt},
 			vulnerability.FieldSourceUpdatedAt:         {Type: field.TypeTime, Column: vulnerability.FieldSourceUpdatedAt},
+			vulnerability.FieldDismissedAt:             {Type: field.TypeTime, Column: vulnerability.FieldDismissedAt},
+			vulnerability.FieldDismissedReason:         {Type: field.TypeString, Column: vulnerability.FieldDismissedReason},
+			vulnerability.FieldDismissedComment:        {Type: field.TypeString, Column: vulnerability.FieldDismissedComment},
+			vulnerability.FieldFixedAt:                 {Type: field.TypeTime, Column: vulnerability.FieldFixedAt},
+			vulnerability.FieldAutoDismissedAt:         {Type: field.TypeTime, Column: vulnerability.FieldAutoDismissedAt},
 			vulnerability.FieldExternalURI:             {Type: field.TypeString, Column: vulnerability.FieldExternalURI},
 			vulnerability.FieldMetadata:                {Type: field.TypeJSON, Column: vulnerability.FieldMetadata},
 			vulnerability.FieldRawPayload:              {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
@@ -47003,6 +47015,41 @@ func (f *VulnerabilityFilter) WhereImpacts(p entql.BytesP) {
 	f.Where(p.Field(vulnerability.FieldImpacts))
 }
 
+// WhereCweIds applies the entql json.RawMessage predicate on the cwe_ids field.
+func (f *VulnerabilityFilter) WhereCweIds(p entql.BytesP) {
+	f.Where(p.Field(vulnerability.FieldCweIds))
+}
+
+// WhereVulnerableVersionRange applies the entql string predicate on the vulnerable_version_range field.
+func (f *VulnerabilityFilter) WhereVulnerableVersionRange(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldVulnerableVersionRange))
+}
+
+// WhereFirstPatchedVersion applies the entql string predicate on the first_patched_version field.
+func (f *VulnerabilityFilter) WhereFirstPatchedVersion(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldFirstPatchedVersion))
+}
+
+// WherePackageName applies the entql string predicate on the package_name field.
+func (f *VulnerabilityFilter) WherePackageName(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldPackageName))
+}
+
+// WherePackageEcosystem applies the entql string predicate on the package_ecosystem field.
+func (f *VulnerabilityFilter) WherePackageEcosystem(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldPackageEcosystem))
+}
+
+// WhereManifestPath applies the entql string predicate on the manifest_path field.
+func (f *VulnerabilityFilter) WhereManifestPath(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldManifestPath))
+}
+
+// WhereDependencyScope applies the entql string predicate on the dependency_scope field.
+func (f *VulnerabilityFilter) WhereDependencyScope(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDependencyScope))
+}
+
 // WherePublishedAt applies the entql time.Time predicate on the published_at field.
 func (f *VulnerabilityFilter) WherePublishedAt(p entql.TimeP) {
 	f.Where(p.Field(vulnerability.FieldPublishedAt))
@@ -47016,6 +47063,31 @@ func (f *VulnerabilityFilter) WhereDiscoveredAt(p entql.TimeP) {
 // WhereSourceUpdatedAt applies the entql time.Time predicate on the source_updated_at field.
 func (f *VulnerabilityFilter) WhereSourceUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(vulnerability.FieldSourceUpdatedAt))
+}
+
+// WhereDismissedAt applies the entql time.Time predicate on the dismissed_at field.
+func (f *VulnerabilityFilter) WhereDismissedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldDismissedAt))
+}
+
+// WhereDismissedReason applies the entql string predicate on the dismissed_reason field.
+func (f *VulnerabilityFilter) WhereDismissedReason(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDismissedReason))
+}
+
+// WhereDismissedComment applies the entql string predicate on the dismissed_comment field.
+func (f *VulnerabilityFilter) WhereDismissedComment(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDismissedComment))
+}
+
+// WhereFixedAt applies the entql time.Time predicate on the fixed_at field.
+func (f *VulnerabilityFilter) WhereFixedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldFixedAt))
+}
+
+// WhereAutoDismissedAt applies the entql time.Time predicate on the auto_dismissed_at field.
+func (f *VulnerabilityFilter) WhereAutoDismissedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldAutoDismissedAt))
 }
 
 // WhereExternalURI applies the entql string predicate on the external_uri field.

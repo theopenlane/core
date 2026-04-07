@@ -9236,12 +9236,36 @@ type CreateVulnerabilityInput struct {
 	References []string `json:"references,omitempty"`
 	// targets or assets impacted by the vulnerability
 	Impacts []string `json:"impacts,omitempty"`
+	// CWE identifiers associated with the vulnerability
+	CweIds []string `json:"cweIds,omitempty"`
+	// version range affected by the vulnerability
+	VulnerableVersionRange *string `json:"vulnerableVersionRange,omitempty"`
+	// earliest version that fixes the vulnerability
+	FirstPatchedVersion *string `json:"firstPatchedVersion,omitempty"`
+	// name of the vulnerable package or dependency
+	PackageName *string `json:"packageName,omitempty"`
+	// ecosystem of the vulnerable package such as npm, pip, or maven
+	PackageEcosystem *string `json:"packageEcosystem,omitempty"`
+	// path to the manifest file declaring the vulnerable dependency
+	ManifestPath *string `json:"manifestPath,omitempty"`
+	// scope of the dependency such as runtime or development
+	DependencyScope *string `json:"dependencyScope,omitempty"`
 	// timestamp when the vulnerability was published
 	PublishedAt *models.DateTime `json:"publishedAt,omitempty"`
 	// timestamp when the vulnerability was discovered in the environment
 	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
 	// timestamp when the source last updated the vulnerability
 	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// timestamp when the vulnerability was dismissed
+	DismissedAt *models.DateTime `json:"dismissedAt,omitempty"`
+	// reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+	DismissedReason *string `json:"dismissedReason,omitempty"`
+	// free-text explanation provided when the vulnerability was dismissed
+	DismissedComment *string `json:"dismissedComment,omitempty"`
+	// timestamp when the vulnerability was marked as fixed
+	FixedAt *models.DateTime `json:"fixedAt,omitempty"`
+	// timestamp when the vulnerability was automatically dismissed by the source system
+	AutoDismissedAt *models.DateTime `json:"autoDismissedAt,omitempty"`
 	// link to the vulnerability in the source system
 	ExternalURI *string `json:"externalURI,omitempty"`
 	// raw metadata payload for the vulnerability from the source system
@@ -44286,6 +44310,28 @@ type UpdateVulnerabilityInput struct {
 	Impacts       []string `json:"impacts,omitempty"`
 	AppendImpacts []string `json:"appendImpacts,omitempty"`
 	ClearImpacts  *bool    `json:"clearImpacts,omitempty"`
+	// CWE identifiers associated with the vulnerability
+	CweIds       []string `json:"cweIds,omitempty"`
+	AppendCweIds []string `json:"appendCweIds,omitempty"`
+	ClearCweIds  *bool    `json:"clearCweIds,omitempty"`
+	// version range affected by the vulnerability
+	VulnerableVersionRange      *string `json:"vulnerableVersionRange,omitempty"`
+	ClearVulnerableVersionRange *bool   `json:"clearVulnerableVersionRange,omitempty"`
+	// earliest version that fixes the vulnerability
+	FirstPatchedVersion      *string `json:"firstPatchedVersion,omitempty"`
+	ClearFirstPatchedVersion *bool   `json:"clearFirstPatchedVersion,omitempty"`
+	// name of the vulnerable package or dependency
+	PackageName      *string `json:"packageName,omitempty"`
+	ClearPackageName *bool   `json:"clearPackageName,omitempty"`
+	// ecosystem of the vulnerable package such as npm, pip, or maven
+	PackageEcosystem      *string `json:"packageEcosystem,omitempty"`
+	ClearPackageEcosystem *bool   `json:"clearPackageEcosystem,omitempty"`
+	// path to the manifest file declaring the vulnerable dependency
+	ManifestPath      *string `json:"manifestPath,omitempty"`
+	ClearManifestPath *bool   `json:"clearManifestPath,omitempty"`
+	// scope of the dependency such as runtime or development
+	DependencyScope      *string `json:"dependencyScope,omitempty"`
+	ClearDependencyScope *bool   `json:"clearDependencyScope,omitempty"`
 	// timestamp when the vulnerability was published
 	PublishedAt      *models.DateTime `json:"publishedAt,omitempty"`
 	ClearPublishedAt *bool            `json:"clearPublishedAt,omitempty"`
@@ -44295,6 +44341,21 @@ type UpdateVulnerabilityInput struct {
 	// timestamp when the source last updated the vulnerability
 	SourceUpdatedAt      *models.DateTime `json:"sourceUpdatedAt,omitempty"`
 	ClearSourceUpdatedAt *bool            `json:"clearSourceUpdatedAt,omitempty"`
+	// timestamp when the vulnerability was dismissed
+	DismissedAt      *models.DateTime `json:"dismissedAt,omitempty"`
+	ClearDismissedAt *bool            `json:"clearDismissedAt,omitempty"`
+	// reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+	DismissedReason      *string `json:"dismissedReason,omitempty"`
+	ClearDismissedReason *bool   `json:"clearDismissedReason,omitempty"`
+	// free-text explanation provided when the vulnerability was dismissed
+	DismissedComment      *string `json:"dismissedComment,omitempty"`
+	ClearDismissedComment *bool   `json:"clearDismissedComment,omitempty"`
+	// timestamp when the vulnerability was marked as fixed
+	FixedAt      *models.DateTime `json:"fixedAt,omitempty"`
+	ClearFixedAt *bool            `json:"clearFixedAt,omitempty"`
+	// timestamp when the vulnerability was automatically dismissed by the source system
+	AutoDismissedAt      *models.DateTime `json:"autoDismissedAt,omitempty"`
+	ClearAutoDismissedAt *bool            `json:"clearAutoDismissedAt,omitempty"`
 	// link to the vulnerability in the source system
 	ExternalURI      *string `json:"externalURI,omitempty"`
 	ClearExternalURI *bool   `json:"clearExternalURI,omitempty"`
@@ -45818,12 +45879,36 @@ type Vulnerability struct {
 	References []string `json:"references,omitempty"`
 	// targets or assets impacted by the vulnerability
 	Impacts []string `json:"impacts,omitempty"`
+	// CWE identifiers associated with the vulnerability
+	CweIds []string `json:"cweIds,omitempty"`
+	// version range affected by the vulnerability
+	VulnerableVersionRange *string `json:"vulnerableVersionRange,omitempty"`
+	// earliest version that fixes the vulnerability
+	FirstPatchedVersion *string `json:"firstPatchedVersion,omitempty"`
+	// name of the vulnerable package or dependency
+	PackageName *string `json:"packageName,omitempty"`
+	// ecosystem of the vulnerable package such as npm, pip, or maven
+	PackageEcosystem *string `json:"packageEcosystem,omitempty"`
+	// path to the manifest file declaring the vulnerable dependency
+	ManifestPath *string `json:"manifestPath,omitempty"`
+	// scope of the dependency such as runtime or development
+	DependencyScope *string `json:"dependencyScope,omitempty"`
 	// timestamp when the vulnerability was published
 	PublishedAt *models.DateTime `json:"publishedAt,omitempty"`
 	// timestamp when the vulnerability was discovered in the environment
 	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
 	// timestamp when the source last updated the vulnerability
 	SourceUpdatedAt *models.DateTime `json:"sourceUpdatedAt,omitempty"`
+	// timestamp when the vulnerability was dismissed
+	DismissedAt *models.DateTime `json:"dismissedAt,omitempty"`
+	// reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+	DismissedReason *string `json:"dismissedReason,omitempty"`
+	// free-text explanation provided when the vulnerability was dismissed
+	DismissedComment *string `json:"dismissedComment,omitempty"`
+	// timestamp when the vulnerability was marked as fixed
+	FixedAt *models.DateTime `json:"fixedAt,omitempty"`
+	// timestamp when the vulnerability was automatically dismissed by the source system
+	AutoDismissedAt *models.DateTime `json:"autoDismissedAt,omitempty"`
 	// link to the vulnerability in the source system
 	ExternalURI *string `json:"externalURI,omitempty"`
 	// raw metadata payload for the vulnerability from the source system
@@ -46432,6 +46517,102 @@ type VulnerabilityWhereInput struct {
 	ValidatedNeq    *bool `json:"validatedNEQ,omitempty"`
 	ValidatedIsNil  *bool `json:"validatedIsNil,omitempty"`
 	ValidatedNotNil *bool `json:"validatedNotNil,omitempty"`
+	// vulnerable_version_range field predicates
+	VulnerableVersionRange             *string  `json:"vulnerableVersionRange,omitempty"`
+	VulnerableVersionRangeNeq          *string  `json:"vulnerableVersionRangeNEQ,omitempty"`
+	VulnerableVersionRangeIn           []string `json:"vulnerableVersionRangeIn,omitempty"`
+	VulnerableVersionRangeNotIn        []string `json:"vulnerableVersionRangeNotIn,omitempty"`
+	VulnerableVersionRangeGt           *string  `json:"vulnerableVersionRangeGT,omitempty"`
+	VulnerableVersionRangeGte          *string  `json:"vulnerableVersionRangeGTE,omitempty"`
+	VulnerableVersionRangeLt           *string  `json:"vulnerableVersionRangeLT,omitempty"`
+	VulnerableVersionRangeLte          *string  `json:"vulnerableVersionRangeLTE,omitempty"`
+	VulnerableVersionRangeContains     *string  `json:"vulnerableVersionRangeContains,omitempty"`
+	VulnerableVersionRangeHasPrefix    *string  `json:"vulnerableVersionRangeHasPrefix,omitempty"`
+	VulnerableVersionRangeHasSuffix    *string  `json:"vulnerableVersionRangeHasSuffix,omitempty"`
+	VulnerableVersionRangeIsNil        *bool    `json:"vulnerableVersionRangeIsNil,omitempty"`
+	VulnerableVersionRangeNotNil       *bool    `json:"vulnerableVersionRangeNotNil,omitempty"`
+	VulnerableVersionRangeEqualFold    *string  `json:"vulnerableVersionRangeEqualFold,omitempty"`
+	VulnerableVersionRangeContainsFold *string  `json:"vulnerableVersionRangeContainsFold,omitempty"`
+	// first_patched_version field predicates
+	FirstPatchedVersion             *string  `json:"firstPatchedVersion,omitempty"`
+	FirstPatchedVersionNeq          *string  `json:"firstPatchedVersionNEQ,omitempty"`
+	FirstPatchedVersionIn           []string `json:"firstPatchedVersionIn,omitempty"`
+	FirstPatchedVersionNotIn        []string `json:"firstPatchedVersionNotIn,omitempty"`
+	FirstPatchedVersionGt           *string  `json:"firstPatchedVersionGT,omitempty"`
+	FirstPatchedVersionGte          *string  `json:"firstPatchedVersionGTE,omitempty"`
+	FirstPatchedVersionLt           *string  `json:"firstPatchedVersionLT,omitempty"`
+	FirstPatchedVersionLte          *string  `json:"firstPatchedVersionLTE,omitempty"`
+	FirstPatchedVersionContains     *string  `json:"firstPatchedVersionContains,omitempty"`
+	FirstPatchedVersionHasPrefix    *string  `json:"firstPatchedVersionHasPrefix,omitempty"`
+	FirstPatchedVersionHasSuffix    *string  `json:"firstPatchedVersionHasSuffix,omitempty"`
+	FirstPatchedVersionIsNil        *bool    `json:"firstPatchedVersionIsNil,omitempty"`
+	FirstPatchedVersionNotNil       *bool    `json:"firstPatchedVersionNotNil,omitempty"`
+	FirstPatchedVersionEqualFold    *string  `json:"firstPatchedVersionEqualFold,omitempty"`
+	FirstPatchedVersionContainsFold *string  `json:"firstPatchedVersionContainsFold,omitempty"`
+	// package_name field predicates
+	PackageName             *string  `json:"packageName,omitempty"`
+	PackageNameNeq          *string  `json:"packageNameNEQ,omitempty"`
+	PackageNameIn           []string `json:"packageNameIn,omitempty"`
+	PackageNameNotIn        []string `json:"packageNameNotIn,omitempty"`
+	PackageNameGt           *string  `json:"packageNameGT,omitempty"`
+	PackageNameGte          *string  `json:"packageNameGTE,omitempty"`
+	PackageNameLt           *string  `json:"packageNameLT,omitempty"`
+	PackageNameLte          *string  `json:"packageNameLTE,omitempty"`
+	PackageNameContains     *string  `json:"packageNameContains,omitempty"`
+	PackageNameHasPrefix    *string  `json:"packageNameHasPrefix,omitempty"`
+	PackageNameHasSuffix    *string  `json:"packageNameHasSuffix,omitempty"`
+	PackageNameIsNil        *bool    `json:"packageNameIsNil,omitempty"`
+	PackageNameNotNil       *bool    `json:"packageNameNotNil,omitempty"`
+	PackageNameEqualFold    *string  `json:"packageNameEqualFold,omitempty"`
+	PackageNameContainsFold *string  `json:"packageNameContainsFold,omitempty"`
+	// package_ecosystem field predicates
+	PackageEcosystem             *string  `json:"packageEcosystem,omitempty"`
+	PackageEcosystemNeq          *string  `json:"packageEcosystemNEQ,omitempty"`
+	PackageEcosystemIn           []string `json:"packageEcosystemIn,omitempty"`
+	PackageEcosystemNotIn        []string `json:"packageEcosystemNotIn,omitempty"`
+	PackageEcosystemGt           *string  `json:"packageEcosystemGT,omitempty"`
+	PackageEcosystemGte          *string  `json:"packageEcosystemGTE,omitempty"`
+	PackageEcosystemLt           *string  `json:"packageEcosystemLT,omitempty"`
+	PackageEcosystemLte          *string  `json:"packageEcosystemLTE,omitempty"`
+	PackageEcosystemContains     *string  `json:"packageEcosystemContains,omitempty"`
+	PackageEcosystemHasPrefix    *string  `json:"packageEcosystemHasPrefix,omitempty"`
+	PackageEcosystemHasSuffix    *string  `json:"packageEcosystemHasSuffix,omitempty"`
+	PackageEcosystemIsNil        *bool    `json:"packageEcosystemIsNil,omitempty"`
+	PackageEcosystemNotNil       *bool    `json:"packageEcosystemNotNil,omitempty"`
+	PackageEcosystemEqualFold    *string  `json:"packageEcosystemEqualFold,omitempty"`
+	PackageEcosystemContainsFold *string  `json:"packageEcosystemContainsFold,omitempty"`
+	// manifest_path field predicates
+	ManifestPath             *string  `json:"manifestPath,omitempty"`
+	ManifestPathNeq          *string  `json:"manifestPathNEQ,omitempty"`
+	ManifestPathIn           []string `json:"manifestPathIn,omitempty"`
+	ManifestPathNotIn        []string `json:"manifestPathNotIn,omitempty"`
+	ManifestPathGt           *string  `json:"manifestPathGT,omitempty"`
+	ManifestPathGte          *string  `json:"manifestPathGTE,omitempty"`
+	ManifestPathLt           *string  `json:"manifestPathLT,omitempty"`
+	ManifestPathLte          *string  `json:"manifestPathLTE,omitempty"`
+	ManifestPathContains     *string  `json:"manifestPathContains,omitempty"`
+	ManifestPathHasPrefix    *string  `json:"manifestPathHasPrefix,omitempty"`
+	ManifestPathHasSuffix    *string  `json:"manifestPathHasSuffix,omitempty"`
+	ManifestPathIsNil        *bool    `json:"manifestPathIsNil,omitempty"`
+	ManifestPathNotNil       *bool    `json:"manifestPathNotNil,omitempty"`
+	ManifestPathEqualFold    *string  `json:"manifestPathEqualFold,omitempty"`
+	ManifestPathContainsFold *string  `json:"manifestPathContainsFold,omitempty"`
+	// dependency_scope field predicates
+	DependencyScope             *string  `json:"dependencyScope,omitempty"`
+	DependencyScopeNeq          *string  `json:"dependencyScopeNEQ,omitempty"`
+	DependencyScopeIn           []string `json:"dependencyScopeIn,omitempty"`
+	DependencyScopeNotIn        []string `json:"dependencyScopeNotIn,omitempty"`
+	DependencyScopeGt           *string  `json:"dependencyScopeGT,omitempty"`
+	DependencyScopeGte          *string  `json:"dependencyScopeGTE,omitempty"`
+	DependencyScopeLt           *string  `json:"dependencyScopeLT,omitempty"`
+	DependencyScopeLte          *string  `json:"dependencyScopeLTE,omitempty"`
+	DependencyScopeContains     *string  `json:"dependencyScopeContains,omitempty"`
+	DependencyScopeHasPrefix    *string  `json:"dependencyScopeHasPrefix,omitempty"`
+	DependencyScopeHasSuffix    *string  `json:"dependencyScopeHasSuffix,omitempty"`
+	DependencyScopeIsNil        *bool    `json:"dependencyScopeIsNil,omitempty"`
+	DependencyScopeNotNil       *bool    `json:"dependencyScopeNotNil,omitempty"`
+	DependencyScopeEqualFold    *string  `json:"dependencyScopeEqualFold,omitempty"`
+	DependencyScopeContainsFold *string  `json:"dependencyScopeContainsFold,omitempty"`
 	// published_at field predicates
 	PublishedAt       *models.DateTime   `json:"publishedAt,omitempty"`
 	PublishedAtNeq    *models.DateTime   `json:"publishedAtNEQ,omitempty"`
@@ -46465,6 +46646,71 @@ type VulnerabilityWhereInput struct {
 	SourceUpdatedAtLte    *models.DateTime   `json:"sourceUpdatedAtLTE,omitempty"`
 	SourceUpdatedAtIsNil  *bool              `json:"sourceUpdatedAtIsNil,omitempty"`
 	SourceUpdatedAtNotNil *bool              `json:"sourceUpdatedAtNotNil,omitempty"`
+	// dismissed_at field predicates
+	DismissedAt       *models.DateTime   `json:"dismissedAt,omitempty"`
+	DismissedAtNeq    *models.DateTime   `json:"dismissedAtNEQ,omitempty"`
+	DismissedAtIn     []*models.DateTime `json:"dismissedAtIn,omitempty"`
+	DismissedAtNotIn  []*models.DateTime `json:"dismissedAtNotIn,omitempty"`
+	DismissedAtGt     *models.DateTime   `json:"dismissedAtGT,omitempty"`
+	DismissedAtGte    *models.DateTime   `json:"dismissedAtGTE,omitempty"`
+	DismissedAtLt     *models.DateTime   `json:"dismissedAtLT,omitempty"`
+	DismissedAtLte    *models.DateTime   `json:"dismissedAtLTE,omitempty"`
+	DismissedAtIsNil  *bool              `json:"dismissedAtIsNil,omitempty"`
+	DismissedAtNotNil *bool              `json:"dismissedAtNotNil,omitempty"`
+	// dismissed_reason field predicates
+	DismissedReason             *string  `json:"dismissedReason,omitempty"`
+	DismissedReasonNeq          *string  `json:"dismissedReasonNEQ,omitempty"`
+	DismissedReasonIn           []string `json:"dismissedReasonIn,omitempty"`
+	DismissedReasonNotIn        []string `json:"dismissedReasonNotIn,omitempty"`
+	DismissedReasonGt           *string  `json:"dismissedReasonGT,omitempty"`
+	DismissedReasonGte          *string  `json:"dismissedReasonGTE,omitempty"`
+	DismissedReasonLt           *string  `json:"dismissedReasonLT,omitempty"`
+	DismissedReasonLte          *string  `json:"dismissedReasonLTE,omitempty"`
+	DismissedReasonContains     *string  `json:"dismissedReasonContains,omitempty"`
+	DismissedReasonHasPrefix    *string  `json:"dismissedReasonHasPrefix,omitempty"`
+	DismissedReasonHasSuffix    *string  `json:"dismissedReasonHasSuffix,omitempty"`
+	DismissedReasonIsNil        *bool    `json:"dismissedReasonIsNil,omitempty"`
+	DismissedReasonNotNil       *bool    `json:"dismissedReasonNotNil,omitempty"`
+	DismissedReasonEqualFold    *string  `json:"dismissedReasonEqualFold,omitempty"`
+	DismissedReasonContainsFold *string  `json:"dismissedReasonContainsFold,omitempty"`
+	// dismissed_comment field predicates
+	DismissedComment             *string  `json:"dismissedComment,omitempty"`
+	DismissedCommentNeq          *string  `json:"dismissedCommentNEQ,omitempty"`
+	DismissedCommentIn           []string `json:"dismissedCommentIn,omitempty"`
+	DismissedCommentNotIn        []string `json:"dismissedCommentNotIn,omitempty"`
+	DismissedCommentGt           *string  `json:"dismissedCommentGT,omitempty"`
+	DismissedCommentGte          *string  `json:"dismissedCommentGTE,omitempty"`
+	DismissedCommentLt           *string  `json:"dismissedCommentLT,omitempty"`
+	DismissedCommentLte          *string  `json:"dismissedCommentLTE,omitempty"`
+	DismissedCommentContains     *string  `json:"dismissedCommentContains,omitempty"`
+	DismissedCommentHasPrefix    *string  `json:"dismissedCommentHasPrefix,omitempty"`
+	DismissedCommentHasSuffix    *string  `json:"dismissedCommentHasSuffix,omitempty"`
+	DismissedCommentIsNil        *bool    `json:"dismissedCommentIsNil,omitempty"`
+	DismissedCommentNotNil       *bool    `json:"dismissedCommentNotNil,omitempty"`
+	DismissedCommentEqualFold    *string  `json:"dismissedCommentEqualFold,omitempty"`
+	DismissedCommentContainsFold *string  `json:"dismissedCommentContainsFold,omitempty"`
+	// fixed_at field predicates
+	FixedAt       *models.DateTime   `json:"fixedAt,omitempty"`
+	FixedAtNeq    *models.DateTime   `json:"fixedAtNEQ,omitempty"`
+	FixedAtIn     []*models.DateTime `json:"fixedAtIn,omitempty"`
+	FixedAtNotIn  []*models.DateTime `json:"fixedAtNotIn,omitempty"`
+	FixedAtGt     *models.DateTime   `json:"fixedAtGT,omitempty"`
+	FixedAtGte    *models.DateTime   `json:"fixedAtGTE,omitempty"`
+	FixedAtLt     *models.DateTime   `json:"fixedAtLT,omitempty"`
+	FixedAtLte    *models.DateTime   `json:"fixedAtLTE,omitempty"`
+	FixedAtIsNil  *bool              `json:"fixedAtIsNil,omitempty"`
+	FixedAtNotNil *bool              `json:"fixedAtNotNil,omitempty"`
+	// auto_dismissed_at field predicates
+	AutoDismissedAt       *models.DateTime   `json:"autoDismissedAt,omitempty"`
+	AutoDismissedAtNeq    *models.DateTime   `json:"autoDismissedAtNEQ,omitempty"`
+	AutoDismissedAtIn     []*models.DateTime `json:"autoDismissedAtIn,omitempty"`
+	AutoDismissedAtNotIn  []*models.DateTime `json:"autoDismissedAtNotIn,omitempty"`
+	AutoDismissedAtGt     *models.DateTime   `json:"autoDismissedAtGT,omitempty"`
+	AutoDismissedAtGte    *models.DateTime   `json:"autoDismissedAtGTE,omitempty"`
+	AutoDismissedAtLt     *models.DateTime   `json:"autoDismissedAtLT,omitempty"`
+	AutoDismissedAtLte    *models.DateTime   `json:"autoDismissedAtLTE,omitempty"`
+	AutoDismissedAtIsNil  *bool              `json:"autoDismissedAtIsNil,omitempty"`
+	AutoDismissedAtNotNil *bool              `json:"autoDismissedAtNotNil,omitempty"`
 	// external_uri field predicates
 	ExternalURI             *string  `json:"externalURI,omitempty"`
 	ExternalURINeq          *string  `json:"externalURINEQ,omitempty"`
@@ -46553,6 +46799,8 @@ type VulnerabilityWhereInput struct {
 	ReferencesHas *string `json:"referencesHas,omitempty"`
 	// Filter for impactsHas to contain a specific value
 	ImpactsHas *string `json:"impactsHas,omitempty"`
+	// Filter for cweIdsHas to contain a specific value
+	CweIdsHas *string `json:"cweIdsHas,omitempty"`
 }
 
 type Webauthn struct {

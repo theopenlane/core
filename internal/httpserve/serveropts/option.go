@@ -188,6 +188,7 @@ func WithAuth() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// add oauth providers for social login
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
+		s.Config.Handler.ConsoleURL = s.Config.Settings.EntConfig.Notifications.ConsoleURL
 
 		// add auth middleware
 		opts := getAuthOptions(s)

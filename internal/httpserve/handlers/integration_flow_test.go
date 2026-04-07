@@ -10,13 +10,13 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -117,21 +117,26 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	callbackReq := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := callbackReq.URL.Query()
 	query.Set("code", "test-code")
+	query.Set("installation_id", "99")
+	query.Set("setup_action", "install")
 	query.Set("state", oauthState)
 	callbackReq.URL.RawQuery = query.Encode()
 
 	for _, name := range []string{stateCookieName, orgCookieName} {
 		callbackReq.AddCookie(cookies[name])
 	}
+	if redirectCookie, ok := cookies["redirect_to"]; ok {
+		callbackReq.AddCookie(redirectCookie)
+	}
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
 
-	var out rout.Reply
-	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &out))
-	assert.True(t, out.Success)
+	location, err := rec.Result().Location()
+	require.NoError(t, err)
+	assert.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, location.String())
 }
 
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
@@ -163,6 +168,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	for _, name := range []string{stateCookieName, orgCookieName} {
 		callbackReq.AddCookie(cookies[name])
 	}
+	if redirectCookie, ok := cookies["redirect_to"]; ok {
+		callbackReq.AddCookie(redirectCookie)
+	}
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
@@ -186,44 +194,19 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() {
+func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie() {
 	t := suite.T()
 
-	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRedirect", "Start integration OAuth flow")
-	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartIntegrationAuth)
-
-	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
-	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleIntegrationAuthCallback)
+	op := suite.createImpersonationOperation("StartIntegrationOAuthRedirectCookie", "Start integration OAuth flow")
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
+	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
-	authURL, err := url.Parse(startResp.AuthURL)
-	assert.NoError(t, err)
-	oauthState := authURL.Query().Get("state")
-	assert.NotEmpty(t, oauthState)
-
-	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
-	query := req.URL.Query()
-	query.Set("code", "test-code")
-	query.Set("state", oauthState)
-	req.URL.RawQuery = query.Encode()
-
-	for _, name := range []string{stateCookieName, orgCookieName} {
-		req.AddCookie(cookies[name])
-	}
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
-
-	assert.Equal(t, http.StatusOK, rec.Code)
-
-	var out rout.Reply
-	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &out))
-	assert.True(t, out.Success)
+	require.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value)
 }
 
 func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
@@ -290,6 +273,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
 	}
+	if redirectCookie, ok := cookies["redirect_to"]; ok {
+		req.AddCookie(redirectCookie)
+	}
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
@@ -319,6 +305,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
 
 	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
+	}
+	if redirectCookie, ok := cookies["redirect_to"]; ok {
+		req.AddCookie(redirectCookie)
 	}
 
 	rec := httptest.NewRecorder()
@@ -356,6 +345,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 
 	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
+	}
+	if redirectCookie, ok := cookies["redirect_to"]; ok {
+		req.AddCookie(redirectCookie)
 	}
 
 	rec := httptest.NewRecorder()
@@ -410,10 +402,13 @@ func (suite *HandlerTestSuite) completeOAuthInstallation(t *testing.T, ctx conte
 	for _, name := range []string{stateCookieName, orgCookieName} {
 		req.AddCookie(cookies[name])
 	}
+	if redirectCookie, ok := cookies["redirect_to"]; ok {
+		req.AddCookie(redirectCookie)
+	}
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(ctx))
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	assert.NoError(t, err)

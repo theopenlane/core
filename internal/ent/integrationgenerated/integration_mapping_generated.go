@@ -454,11 +454,17 @@ const (
 
 // Integration mapping keys for Vulnerability.
 const (
+	IntegrationMappingVulnerabilityAutoDismissedAt         = "autoDismissedAt"
 	IntegrationMappingVulnerabilityBlocking                = "blocking"
 	IntegrationMappingVulnerabilityCategory                = "category"
 	IntegrationMappingVulnerabilityCveID                   = "cveID"
+	IntegrationMappingVulnerabilityCweIds                  = "cweIds"
+	IntegrationMappingVulnerabilityDependencyScope         = "dependencyScope"
 	IntegrationMappingVulnerabilityDescription             = "description"
 	IntegrationMappingVulnerabilityDiscoveredAt            = "discoveredAt"
+	IntegrationMappingVulnerabilityDismissedAt             = "dismissedAt"
+	IntegrationMappingVulnerabilityDismissedComment        = "dismissedComment"
+	IntegrationMappingVulnerabilityDismissedReason         = "dismissedReason"
 	IntegrationMappingVulnerabilityDisplayName             = "displayName"
 	IntegrationMappingVulnerabilityEnvironmentID           = "environmentID"
 	IntegrationMappingVulnerabilityEnvironmentName         = "environmentName"
@@ -466,12 +472,17 @@ const (
 	IntegrationMappingVulnerabilityExternalID              = "externalID"
 	IntegrationMappingVulnerabilityExternalOwnerID         = "externalOwnerID"
 	IntegrationMappingVulnerabilityExternalURI             = "externalURI"
+	IntegrationMappingVulnerabilityFirstPatchedVersion     = "firstPatchedVersion"
+	IntegrationMappingVulnerabilityFixedAt                 = "fixedAt"
 	IntegrationMappingVulnerabilityImpact                  = "impact"
 	IntegrationMappingVulnerabilityImpacts                 = "impacts"
 	IntegrationMappingVulnerabilityInternalNotes           = "internalNotes"
+	IntegrationMappingVulnerabilityManifestPath            = "manifestPath"
 	IntegrationMappingVulnerabilityMetadata                = "metadata"
 	IntegrationMappingVulnerabilityOpen                    = "open"
 	IntegrationMappingVulnerabilityOwnerID                 = "ownerID"
+	IntegrationMappingVulnerabilityPackageEcosystem        = "packageEcosystem"
+	IntegrationMappingVulnerabilityPackageName             = "packageName"
 	IntegrationMappingVulnerabilityPriority                = "priority"
 	IntegrationMappingVulnerabilityProduction              = "production"
 	IntegrationMappingVulnerabilityPublic                  = "public"
@@ -492,6 +503,7 @@ const (
 	IntegrationMappingVulnerabilityVector                  = "vector"
 	IntegrationMappingVulnerabilityVulnerabilityStatusID   = "vulnerabilityStatusID"
 	IntegrationMappingVulnerabilityVulnerabilityStatusName = "vulnerabilityStatusName"
+	IntegrationMappingVulnerabilityVulnerableVersionRange  = "vulnerableVersionRange"
 )
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata
@@ -3175,6 +3187,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Vulnerability",
 		Fields: []IntegrationMappingField{
 			{
+				InputKey:  "autoDismissedAt",
+				GoField:   "AutoDismissedAt",
+				EntField:  "auto_dismissed_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "blocking",
 				GoField:   "Blocking",
 				EntField:  "blocking",
@@ -3202,6 +3223,24 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "cweIds",
+				GoField:   "CweIds",
+				EntField:  "cwe_ids",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dependencyScope",
+				GoField:   "DependencyScope",
+				EntField:  "dependency_scope",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "description",
 				GoField:   "Description",
 				EntField:  "description",
@@ -3215,6 +3254,33 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				GoField:   "DiscoveredAt",
 				EntField:  "discovered_at",
 				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dismissedAt",
+				GoField:   "DismissedAt",
+				EntField:  "dismissed_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dismissedComment",
+				GoField:   "DismissedComment",
+				EntField:  "dismissed_comment",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "dismissedReason",
+				GoField:   "DismissedReason",
+				EntField:  "dismissed_reason",
+				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
@@ -3283,6 +3349,24 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "firstPatchedVersion",
+				GoField:   "FirstPatchedVersion",
+				EntField:  "first_patched_version",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "fixedAt",
+				GoField:   "FixedAt",
+				EntField:  "fixed_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "impact",
 				GoField:   "Impact",
 				EntField:  "impact",
@@ -3310,6 +3394,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "manifestPath",
+				GoField:   "ManifestPath",
+				EntField:  "manifest_path",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "metadata",
 				GoField:   "Metadata",
 				EntField:  "metadata",
@@ -3331,6 +3424,24 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				InputKey:  "ownerID",
 				GoField:   "OwnerID",
 				EntField:  "owner_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "packageEcosystem",
+				GoField:   "PackageEcosystem",
+				EntField:  "package_ecosystem",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "packageName",
+				GoField:   "PackageName",
+				EntField:  "package_name",
 				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
@@ -3516,13 +3627,28 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				UpsertKey: false,
 				LookupKey: false,
 			},
+			{
+				InputKey:  "vulnerableVersionRange",
+				GoField:   "VulnerableVersionRange",
+				EntField:  "vulnerable_version_range",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
 		},
 		AllowedKeys: map[string]struct{}{
+			"autoDismissedAt":         {},
 			"blocking":                {},
 			"category":                {},
 			"cveID":                   {},
+			"cweIds":                  {},
+			"dependencyScope":         {},
 			"description":             {},
 			"discoveredAt":            {},
+			"dismissedAt":             {},
+			"dismissedComment":        {},
+			"dismissedReason":         {},
 			"displayName":             {},
 			"environmentID":           {},
 			"environmentName":         {},
@@ -3530,12 +3656,17 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID":              {},
 			"externalOwnerID":         {},
 			"externalURI":             {},
+			"firstPatchedVersion":     {},
+			"fixedAt":                 {},
 			"impact":                  {},
 			"impacts":                 {},
 			"internalNotes":           {},
+			"manifestPath":            {},
 			"metadata":                {},
 			"open":                    {},
 			"ownerID":                 {},
+			"packageEcosystem":        {},
+			"packageName":             {},
 			"priority":                {},
 			"production":              {},
 			"public":                  {},
@@ -3556,6 +3687,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"vector":                  {},
 			"vulnerabilityStatusID":   {},
 			"vulnerabilityStatusName": {},
+			"vulnerableVersionRange":  {},
 		},
 		RequiredKeys: []string{
 			"externalID",

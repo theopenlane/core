@@ -2,6 +2,7 @@ package githubapp
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"time"
 
@@ -67,7 +68,7 @@ func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) 
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
-			return nil, ErrAPIRequest
+			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
 		repositories = append(repositories, query.Viewer.Repositories.Nodes...)
