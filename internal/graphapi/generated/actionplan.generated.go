@@ -147,7 +147,7 @@ type MutationResolver interface {
 	CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error)
 	CreateBulkDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error)
 	CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error)
-	UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) (*model.DocumentDataUpdatePayload, error)
+	UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload, documentDataFileMetadata *model.FileMetadataInput) (*model.DocumentDataUpdatePayload, error)
 	DeleteDocumentData(ctx context.Context, id string) (*model.DocumentDataDeletePayload, error)
 	DeleteBulkDocumentData(ctx context.Context, ids []string) (*model.DocumentDataBulkDeletePayload, error)
 	UpdateBulkDocumentData(ctx context.Context, ids []string, input generated.UpdateDocumentDataInput) (*model.DocumentDataBulkUpdatePayload, error)
@@ -168,10 +168,10 @@ type MutationResolver interface {
 	UpdateEmailTemplate(ctx context.Context, id string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateUpdatePayload, error)
 	DeleteEmailTemplate(ctx context.Context, id string) (*model.EmailTemplateDeletePayload, error)
 	DeleteBulkEmailTemplate(ctx context.Context, ids []string) (*model.EmailTemplateBulkDeletePayload, error)
-	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, logoFile *graphql.Upload) (*model.EntityCreatePayload, error)
+	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.EntityCreatePayload, error)
 	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
-	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, logoFile *graphql.Upload) (*model.EntityUpdatePayload, error)
+	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.EntityUpdatePayload, error)
 	DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error)
 	DeleteBulkEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error)
 	UpdateBulkEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error)
@@ -218,10 +218,10 @@ type MutationResolver interface {
 	CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload) (*model.FindingControlBulkCreatePayload, error)
 	UpdateFindingControl(ctx context.Context, id string, input generated.UpdateFindingControlInput) (*model.FindingControlUpdatePayload, error)
 	DeleteFindingControl(ctx context.Context, id string) (*model.FindingControlDeletePayload, error)
-	CreateGroup(ctx context.Context, input generated.CreateGroupInput, avatarFile *graphql.Upload) (*model.GroupCreatePayload, error)
+	CreateGroup(ctx context.Context, input generated.CreateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.GroupCreatePayload, error)
 	CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error)
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error)
-	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload) (*model.GroupUpdatePayload, error)
+	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.GroupUpdatePayload, error)
 	DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error)
 	DeleteBulkGroup(ctx context.Context, ids []string) (*model.GroupBulkDeletePayload, error)
 	UpdateBulkGroup(ctx context.Context, ids []string, input generated.UpdateGroupInput) (*model.GroupBulkUpdatePayload, error)
@@ -262,11 +262,11 @@ type MutationResolver interface {
 	UpdateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkUpdatePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
-	CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error)
+	CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string) (*model.InternalPolicyCreatePayload, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
-	UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) (*model.InternalPolicyUpdatePayload, error)
+	UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput) (*model.InternalPolicyUpdatePayload, error)
 	DeleteInternalPolicy(ctx context.Context, id string) (*model.InternalPolicyDeletePayload, error)
 	DeleteBulkInternalPolicy(ctx context.Context, ids []string) (*model.InternalPolicyBulkDeletePayload, error)
 	UpdateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkUpdatePayload, error)
@@ -350,8 +350,8 @@ type MutationResolver interface {
 	DeleteNotificationTemplate(ctx context.Context, id string) (*model.NotificationTemplateDeletePayload, error)
 	DeleteBulkNotificationTemplate(ctx context.Context, ids []string) (*model.NotificationTemplateBulkDeletePayload, error)
 	CreateOnboarding(ctx context.Context, input generated.CreateOnboardingInput) (*model.OnboardingCreatePayload, error)
-	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error)
-	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error)
+	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.OrganizationCreatePayload, error)
+	UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.OrganizationUpdatePayload, error)
 	DeleteOrganization(ctx context.Context, id string) (*model.OrganizationDeletePayload, error)
 	CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*model.OrganizationSettingCreatePayload, error)
 	CreateBulkOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error)
@@ -380,11 +380,11 @@ type MutationResolver interface {
 	UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput) (*model.PlatformUpdatePayload, error)
 	DeletePlatform(ctx context.Context, id string) (*model.PlatformDeletePayload, error)
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
-	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string) (*model.ProcedureCreatePayload, error)
 	CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
-	UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) (*model.ProcedureUpdatePayload, error)
+	UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) (*model.ProcedureUpdatePayload, error)
 	DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error)
 	DeleteBulkProcedure(ctx context.Context, ids []string) (*model.ProcedureBulkDeletePayload, error)
 	UpdateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkUpdatePayload, error)
@@ -458,8 +458,8 @@ type MutationResolver interface {
 	UpdateSLADefinition(ctx context.Context, id string, input generated.UpdateSLADefinitionInput) (*model.SLADefinitionUpdatePayload, error)
 	DeleteSLADefinition(ctx context.Context, id string) (*model.SLADefinitionDeletePayload, error)
 	DeleteBulkSLADefinition(ctx context.Context, ids []string) (*model.SLADefinitionBulkDeletePayload, error)
-	CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload) (*model.StandardCreatePayload, error)
-	UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) (*model.StandardUpdatePayload, error)
+	CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.StandardCreatePayload, error)
+	UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.StandardUpdatePayload, error)
 	DeleteStandard(ctx context.Context, id string) (*model.StandardDeletePayload, error)
 	CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error)
 	CreateBulkSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error)
@@ -469,10 +469,10 @@ type MutationResolver interface {
 	DeleteBulkSubcontrol(ctx context.Context, ids []string) (*model.SubcontrolBulkDeletePayload, error)
 	UpdateBulkSubcontrol(ctx context.Context, ids []string, input generated.UpdateSubcontrolInput) (*model.SubcontrolBulkUpdatePayload, error)
 	UpdateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkUpdatePayload, error)
-	CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorCreatePayload, error)
+	CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.SubprocessorCreatePayload, error)
 	CreateBulkSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error)
 	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload) (*model.SubprocessorBulkCreatePayload, error)
-	UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorUpdatePayload, error)
+	UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.SubprocessorUpdatePayload, error)
 	UpdateBulkSubprocessor(ctx context.Context, ids []string, input generated.UpdateSubprocessorInput) (*model.SubprocessorBulkUpdatePayload, error)
 	DeleteSubprocessor(ctx context.Context, id string) (*model.SubprocessorDeletePayload, error)
 	DeleteBulkSubprocessor(ctx context.Context, ids []string) (*model.SubprocessorBulkDeletePayload, error)
@@ -524,19 +524,19 @@ type MutationResolver interface {
 	DeleteBulkTrustCenterCompliance(ctx context.Context, ids []string) (*model.TrustCenterComplianceBulkDeletePayload, error)
 	UpdateBulkTrustCenterCompliance(ctx context.Context, ids []string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceBulkUpdatePayload, error)
 	UpdateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkUpdatePayload, error)
-	CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) (*model.TrustCenterDocCreatePayload, error)
+	CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput) (*model.TrustCenterDocCreatePayload, error)
 	CreateBulkTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error)
-	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error)
+	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput, watermarkedTrustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFileMetadata *model.FileMetadataInput) (*model.TrustCenterDocUpdatePayload, error)
 	UpdateBulkTrustCenterDoc(ctx context.Context, ids []string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocBulkUpdatePayload, error)
 	DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error)
 	DeleteBulkTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error)
 	UpdateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkUpdatePayload, error)
 	CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error)
-	CreateTrustCenterEntity(ctx context.Context, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityCreatePayload, error)
+	CreateTrustCenterEntity(ctx context.Context, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.TrustCenterEntityCreatePayload, error)
 	CreateBulkTrustCenterEntity(ctx context.Context, input []*generated.CreateTrustCenterEntityInput) (*model.TrustCenterEntityBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustCenterEntityBulkCreatePayload, error)
-	UpdateTrustCenterEntity(ctx context.Context, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityUpdatePayload, error)
+	UpdateTrustCenterEntity(ctx context.Context, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.TrustCenterEntityUpdatePayload, error)
 	DeleteTrustCenterEntity(ctx context.Context, id string) (*model.TrustCenterEntityDeletePayload, error)
 	CreateTrustCenterFaq(ctx context.Context, input generated.CreateTrustCenterFAQInput) (*model.TrustCenterFAQCreatePayload, error)
 	CreateBulkTrustCenterFaq(ctx context.Context, input []*generated.CreateTrustCenterFAQInput) (*model.TrustCenterFAQBulkCreatePayload, error)
@@ -558,10 +558,10 @@ type MutationResolver interface {
 	DenyNDARequests(ctx context.Context, ids []string) (*model.BulkUpdateStatusPayload, error)
 	DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error)
 	RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error)
-	CreateTrustCenterPreviewSetting(ctx context.Context, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterPreviewSettingCreatePayload, error)
-	CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error)
-	UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
-	UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
+	CreateTrustCenterPreviewSetting(ctx context.Context, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) (*model.TrustCenterPreviewSettingCreatePayload, error)
+	CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) (*model.TrustCenterSettingCreatePayload, error)
+	UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) (*model.TrustCenterSettingUpdatePayload, error)
+	UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) (*model.TrustCenterSettingUpdatePayload, error)
 	PublishTrustCenterSetting(ctx context.Context) (*model.TrustCenterSettingUpdatePayload, error)
 	DeleteTrustCenterSetting(ctx context.Context, id string) (*model.TrustCenterSettingDeletePayload, error)
 	CreateTrustCenterSubprocessor(ctx context.Context, input generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorCreatePayload, error)
@@ -572,11 +572,11 @@ type MutationResolver interface {
 	DeleteTrustCenterSubprocessor(ctx context.Context, id string) (*model.TrustCenterSubprocessorDeletePayload, error)
 	DeleteBulkTrustCenterSubprocessor(ctx context.Context, ids []string) (*model.TrustCenterSubprocessorBulkDeletePayload, error)
 	UpdateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload) (*model.TrustCenterSubprocessorBulkUpdatePayload, error)
-	CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error)
-	UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error)
+	CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) (*model.TrustCenterWatermarkConfigCreatePayload, error)
+	UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) (*model.TrustCenterWatermarkConfigUpdatePayload, error)
 	DeleteTrustCenterWatermarkConfig(ctx context.Context, id string) (*model.TrustCenterWatermarkConfigDeletePayload, error)
-	CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*model.UserCreatePayload, error)
-	UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error)
+	CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.UserCreatePayload, error)
+	UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.UserUpdatePayload, error)
 	DeleteUser(ctx context.Context, id string) (*model.UserDeletePayload, error)
 	CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*model.UserSettingCreatePayload, error)
 	CreateBulkUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error)
@@ -2514,11 +2514,21 @@ func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["entityFiles"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "entityFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["logoFile"] = arg3
+	args["entityFilesMetadata"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg5
 	return args, nil
 }
 
@@ -2670,6 +2680,11 @@ func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["avatarFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -2920,6 +2935,11 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 		return nil, err
 	}
 	args["avatarFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -3084,6 +3104,11 @@ func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Conte
 		return nil, err
 	}
 	args["logoFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -3111,6 +3136,11 @@ func (ec *executionContext) field_Mutation_createSubprocessor_args(ctx context.C
 		return nil, err
 	}
 	args["logoFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -3209,6 +3239,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterDoc_args(ctx context
 		return nil, err
 	}
 	args["trustCenterDocFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "trustCenterDocFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["trustCenterDocFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -3236,6 +3271,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterEntity_args(ctx cont
 		return nil, err
 	}
 	args["logoFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -3290,16 +3330,31 @@ func (ec *executionContext) field_Mutation_createTrustCenterPreviewSetting_args(
 		return nil, err
 	}
 	args["logoFile"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["faviconFile"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	args["logoFileMetadata"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["heroImageFile"] = arg3
+	args["faviconFile"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["faviconFileMetadata"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFileMetadata"] = arg6
 	return args, nil
 }
 
@@ -3316,16 +3371,31 @@ func (ec *executionContext) field_Mutation_createTrustCenterSetting_args(ctx con
 		return nil, err
 	}
 	args["logoFile"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["faviconFile"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	args["logoFileMetadata"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["heroImageFile"] = arg3
+	args["faviconFile"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["faviconFileMetadata"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFileMetadata"] = arg6
 	return args, nil
 }
 
@@ -3353,6 +3423,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterWatermarkConfig_args
 		return nil, err
 	}
 	args["watermarkFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["watermarkFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -3375,11 +3450,16 @@ func (ec *executionContext) field_Mutation_createUploadInternalPolicy_args(ctx c
 		return nil, err
 	}
 	args["internalPolicyFile"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "internalPolicyFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["ownerID"] = arg1
+	args["internalPolicyFileMetadata"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["ownerID"] = arg2
 	return args, nil
 }
 
@@ -3391,11 +3471,16 @@ func (ec *executionContext) field_Mutation_createUploadProcedure_args(ctx contex
 		return nil, err
 	}
 	args["procedureFile"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "procedureFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["ownerID"] = arg1
+	args["procedureFileMetadata"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["ownerID"] = arg2
 	return args, nil
 }
 
@@ -3423,6 +3508,11 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 		return nil, err
 	}
 	args["avatarFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFileMetadata"] = arg2
 	return args, nil
 }
 
@@ -6908,6 +6998,11 @@ func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.C
 		return nil, err
 	}
 	args["documentDataFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "documentDataFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["documentDataFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -6977,11 +7072,21 @@ func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["entityFiles"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "entityFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["logoFile"] = arg3
+	args["entityFilesMetadata"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg5
 	return args, nil
 }
 
@@ -7146,6 +7251,11 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["avatarFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -7225,6 +7335,11 @@ func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context
 		return nil, err
 	}
 	args["internalPolicyFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "internalPolicyFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["internalPolicyFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -7443,6 +7558,11 @@ func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.C
 		return nil, err
 	}
 	args["avatarFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -7517,6 +7637,11 @@ func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Cont
 		return nil, err
 	}
 	args["procedureFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "procedureFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["procedureFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -7708,6 +7833,11 @@ func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Conte
 		return nil, err
 	}
 	args["logoFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -7766,6 +7896,11 @@ func (ec *executionContext) field_Mutation_updateSubprocessor_args(ctx context.C
 		return nil, err
 	}
 	args["logoFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -7920,11 +8055,21 @@ func (ec *executionContext) field_Mutation_updateTrustCenterDoc_args(ctx context
 		return nil, err
 	}
 	args["trustCenterDocFile"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkedTrustCenterDocFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "trustCenterDocFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["watermarkedTrustCenterDocFile"] = arg3
+	args["trustCenterDocFileMetadata"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkedTrustCenterDocFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["watermarkedTrustCenterDocFile"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkedTrustCenterDocFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["watermarkedTrustCenterDocFileMetadata"] = arg5
 	return args, nil
 }
 
@@ -7946,6 +8091,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterEntity_args(ctx cont
 		return nil, err
 	}
 	args["logoFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -8052,16 +8202,31 @@ func (ec *executionContext) field_Mutation_updateTrustCenterPreviewSetting_args(
 		return nil, err
 	}
 	args["logoFile"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["faviconFile"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	args["logoFileMetadata"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["heroImageFile"] = arg3
+	args["faviconFile"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["faviconFileMetadata"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFileMetadata"] = arg6
 	return args, nil
 }
 
@@ -8083,16 +8248,31 @@ func (ec *executionContext) field_Mutation_updateTrustCenterSetting_args(ctx con
 		return nil, err
 	}
 	args["logoFile"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "logoFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
 	if err != nil {
 		return nil, err
 	}
-	args["faviconFile"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	args["logoFileMetadata"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["heroImageFile"] = arg4
+	args["faviconFile"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["faviconFileMetadata"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFile"] = arg6
+	arg7, err := graphql.ProcessArgField(ctx, rawArgs, "heroImageFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["heroImageFileMetadata"] = arg7
 	return args, nil
 }
 
@@ -8130,6 +8310,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterWatermarkConfig_args
 		return nil, err
 	}
 	args["watermarkFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["watermarkFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -8183,6 +8368,11 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 		return nil, err
 	}
 	args["avatarFile"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFileMetadata", ec.unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFileMetadata"] = arg3
 	return args, nil
 }
 
@@ -14868,7 +15058,7 @@ func (ec *executionContext) _Mutation_updateDocumentData(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateDocumentData(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput), fc.Args["documentDataFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateDocumentData(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput), fc.Args["documentDataFile"].(*graphql.Upload), fc.Args["documentDataFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNDocumentDataUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload,
@@ -15825,7 +16015,7 @@ func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string), fc.Args["entityFiles"].([]*graphql.Upload), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string), fc.Args["entityFiles"].([]*graphql.Upload), fc.Args["entityFilesMetadata"].([]*model.FileMetadataInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityCreatePayload,
@@ -15960,7 +16150,7 @@ func (ec *executionContext) _Mutation_updateEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput), fc.Args["entityFiles"].([]*graphql.Upload), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput), fc.Args["entityFiles"].([]*graphql.Upload), fc.Args["entityFilesMetadata"].([]*model.FileMetadataInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityUpdatePayload,
@@ -18095,7 +18285,7 @@ func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_createGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload,
@@ -18230,7 +18420,7 @@ func (ec *executionContext) _Mutation_updateGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload,
@@ -20095,7 +20285,7 @@ func (ec *executionContext) _Mutation_createUploadInternalPolicy(ctx context.Con
 		ec.fieldContext_Mutation_createUploadInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["internalPolicyFileMetadata"].(*model.FileMetadataInput), fc.Args["ownerID"].(*string))
 		},
 		nil,
 		ec.marshalNInternalPolicyCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload,
@@ -20277,7 +20467,7 @@ func (ec *executionContext) _Mutation_updateInternalPolicy(ctx context.Context, 
 		ec.fieldContext_Mutation_updateInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateInternalPolicy(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput), fc.Args["internalPolicyFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateInternalPolicy(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput), fc.Args["internalPolicyFile"].(*graphql.Upload), fc.Args["internalPolicyFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload,
@@ -24087,7 +24277,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 		ec.fieldContext_Mutation_createOrganization,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateOrganization(ctx, fc.Args["input"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateOrganization(ctx, fc.Args["input"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload,
@@ -24132,7 +24322,7 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateOrganization,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateOrganization(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateOrganization(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNOrganizationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationUpdatePayload,
@@ -25447,7 +25637,7 @@ func (ec *executionContext) _Mutation_createUploadProcedure(ctx context.Context,
 		ec.fieldContext_Mutation_createUploadProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateUploadProcedure(ctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().CreateUploadProcedure(ctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["procedureFileMetadata"].(*model.FileMetadataInput), fc.Args["ownerID"].(*string))
 		},
 		nil,
 		ec.marshalNProcedureCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureCreatePayload,
@@ -25629,7 +25819,7 @@ func (ec *executionContext) _Mutation_updateProcedure(ctx context.Context, field
 		ec.fieldContext_Mutation_updateProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateProcedure(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput), fc.Args["procedureFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateProcedure(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput), fc.Args["procedureFile"].(*graphql.Upload), fc.Args["procedureFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNProcedureUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload,
@@ -28993,7 +29183,7 @@ func (ec *executionContext) _Mutation_createStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_createStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateStandard(ctx, fc.Args["input"].(generated.CreateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateStandard(ctx, fc.Args["input"].(generated.CreateStandardInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNStandardCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardCreatePayload,
@@ -29038,7 +29228,7 @@ func (ec *executionContext) _Mutation_updateStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateStandard(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateStandard(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNStandardUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardUpdatePayload,
@@ -29492,7 +29682,7 @@ func (ec *executionContext) _Mutation_createSubprocessor(ctx context.Context, fi
 		ec.fieldContext_Mutation_createSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateSubprocessor(ctx, fc.Args["input"].(generated.CreateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateSubprocessor(ctx, fc.Args["input"].(generated.CreateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNSubprocessorCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorCreatePayload,
@@ -29627,7 +29817,7 @@ func (ec *executionContext) _Mutation_updateSubprocessor(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateSubprocessor(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateSubprocessor(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNSubprocessorUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorUpdatePayload,
@@ -31997,7 +32187,7 @@ func (ec *executionContext) _Mutation_createTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_createTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterDoc(ctx, fc.Args["input"].(generated.CreateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterDoc(ctx, fc.Args["input"].(generated.CreateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(graphql.Upload), fc.Args["trustCenterDocFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterDocCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocCreatePayload,
@@ -32132,7 +32322,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_updateTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterDoc(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(*graphql.Upload), fc.Args["watermarkedTrustCenterDocFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterDoc(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(*graphql.Upload), fc.Args["trustCenterDocFileMetadata"].(*model.FileMetadataInput), fc.Args["watermarkedTrustCenterDocFile"].(*graphql.Upload), fc.Args["watermarkedTrustCenterDocFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterDocUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocUpdatePayload,
@@ -32406,7 +32596,7 @@ func (ec *executionContext) _Mutation_createTrustCenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_createTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterEntity(ctx, fc.Args["input"].(generated.CreateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterEntity(ctx, fc.Args["input"].(generated.CreateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityCreatePayload,
@@ -32541,7 +32731,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_updateTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityUpdatePayload,
@@ -33535,7 +33725,7 @@ func (ec *executionContext) _Mutation_createTrustCenterPreviewSetting(ctx contex
 		ec.fieldContext_Mutation_createTrustCenterPreviewSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterPreviewSetting(ctx, fc.Args["input"].(model.CreateTrustCenterPreviewSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterPreviewSetting(ctx, fc.Args["input"].(model.CreateTrustCenterPreviewSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["faviconFileMetadata"].(*model.FileMetadataInput), fc.Args["heroImageFile"].(*graphql.Upload), fc.Args["heroImageFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload,
@@ -33580,7 +33770,7 @@ func (ec *executionContext) _Mutation_createTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_createTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterSetting(ctx, fc.Args["input"].(generated.CreateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterSetting(ctx, fc.Args["input"].(generated.CreateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["faviconFileMetadata"].(*model.FileMetadataInput), fc.Args["heroImageFile"].(*graphql.Upload), fc.Args["heroImageFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload,
@@ -33625,7 +33815,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_updateTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["faviconFileMetadata"].(*model.FileMetadataInput), fc.Args["heroImageFile"].(*graphql.Upload), fc.Args["heroImageFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
@@ -33670,7 +33860,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterPreviewSetting(ctx contex
 		ec.fieldContext_Mutation_updateTrustCenterPreviewSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["heroImageFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["logoFileMetadata"].(*model.FileMetadataInput), fc.Args["faviconFile"].(*graphql.Upload), fc.Args["faviconFileMetadata"].(*model.FileMetadataInput), fc.Args["heroImageFile"].(*graphql.Upload), fc.Args["heroImageFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
@@ -34157,7 +34347,7 @@ func (ec *executionContext) _Mutation_createTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_createTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterWatermarkConfig(ctx, fc.Args["input"].(generated.CreateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterWatermarkConfig(ctx, fc.Args["input"].(generated.CreateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload), fc.Args["watermarkFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload,
@@ -34202,7 +34392,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_updateTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload), fc.Args["watermarkFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload,
@@ -34292,7 +34482,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		ec.fieldContext_Mutation_createUser,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateUser(ctx, fc.Args["input"].(generated.CreateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateUser(ctx, fc.Args["input"].(generated.CreateUserInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNUserCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserCreatePayload,
@@ -34337,7 +34527,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateUser,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["avatarFileMetadata"].(*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNUserUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserUpdatePayload,

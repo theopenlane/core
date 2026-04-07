@@ -1,13 +1,11 @@
 extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
-  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateOrganizationInput {
   addOrgMembers: [CreateOrgMembershipInput!]
   removeOrgMembers: [ID!]
   updateOrgSettings: UpdateOrganizationSettingInput
-  avatarFileMetadata: FileMetadataInput
 }
 
 extend input OrgMembershipWhereInput {

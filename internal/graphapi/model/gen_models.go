@@ -633,10 +633,7 @@ type CreateTrustCenterPreviewSettingInput struct {
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
 	// hero image local file ID
-	HeroImageFileID   *string        `json:"heroImageFileID,omitempty"`
-	LogoFileName      map[string]any `json:"logoFileName,omitempty"`
-	FaviconFileName   map[string]any `json:"faviconFileName,omitempty"`
-	HeroImageFileName map[string]any `json:"heroImageFileName,omitempty"`
+	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
 }
 
 // Return response for createBulkCustomDomain mutation
@@ -1170,6 +1167,8 @@ type FileDeletePayload struct {
 type FileMetadataInput struct {
 	// the display name for the file, defaults to the original filename
 	Name *string `json:"name,omitempty"`
+	// additional structured metadata to persist with the file
+	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
 // Return response for createBulkFinding mutation

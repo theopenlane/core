@@ -1,7 +1,0 @@
-extend input CreateInternalPolicyInput {
-  internalPolicyFileName: UploadFileName
-}
-
-extend input UpdateInternalPolicyInput {
-  internalPolicyFileName: UploadFileName
-}

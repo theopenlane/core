@@ -1,6 +1,7 @@
 extend type File {
     presignedURL: String
     base64: String
+    name: String!
 }
 
 input FileMetadataInput {
@@ -8,4 +9,8 @@ input FileMetadataInput {
     the display name for the file, defaults to the original filename
     """
     name: String
+    """
+    additional structured metadata to persist with the file
+    """
+    metadata: Map
 }

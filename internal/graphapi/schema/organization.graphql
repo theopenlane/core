@@ -20,6 +20,7 @@ extend type Mutation{
         """
         input: CreateOrganizationInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): OrganizationCreatePayload!
     """
     Update an existing organization
@@ -34,6 +35,7 @@ extend type Mutation{
         """
         input: UpdateOrganizationInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): OrganizationUpdatePayload!
     """
     Delete an existing organization

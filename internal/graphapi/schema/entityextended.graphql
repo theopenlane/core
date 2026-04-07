@@ -1,11 +1,7 @@
 extend input CreateEntityInput {
   note: CreateNoteInput
-  entityFilesMetadata: [FileMetadataInput!]
-  logoFileMetadata: FileMetadataInput
 }
 
 extend input UpdateEntityInput {
   note:  CreateNoteInput
-  entityFilesMetadata: [FileMetadataInput!]
-  logoFileMetadata: FileMetadataInput
 }

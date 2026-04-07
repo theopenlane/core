@@ -57,6 +57,7 @@ extend type Mutation{
         file containing values of the procedure
         """
         procedureFile: Upload!
+        procedureFileMetadata: FileMetadataInput
         """
         ID of the owner organization
         """
@@ -109,6 +110,7 @@ extend type Mutation{
 		file containing values of the procedure
 		"""
 		procedureFile: Upload
+        procedureFileMetadata: FileMetadataInput
     ): ProcedureUpdatePayload!
     """
     Delete an existing procedure

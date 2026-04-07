@@ -284,6 +284,8 @@ func TestMutationUpdateUser(t *testing.T) {
 				}
 			}
 
+			// tc.updateInput.
+
 			// update user
 			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile)
 			if tc.errorMsg != "" {

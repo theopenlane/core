@@ -19,7 +19,7 @@ import (
 )
 
 // CreateTrustCenterDoc is the resolver for the createTrustCenterDoc field.
-func (r *mutationResolver) CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) (*model.TrustCenterDocCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterDoc(ctx context.Context, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput) (*model.TrustCenterDocCreatePayload, error) {
 	if input.TrustCenterID == nil {
 		var err error
 		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterdoc")
@@ -95,7 +95,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, inpu
 }
 
 // UpdateTrustCenterDoc is the resolver for the updateTrustCenterDoc field.
-func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput, watermarkedTrustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFileMetadata *model.FileMetadataInput) (*model.TrustCenterDocUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterDoc.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})

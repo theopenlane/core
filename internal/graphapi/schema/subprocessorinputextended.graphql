@@ -1,7 +1,0 @@
-extend input CreateSubprocessorInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateSubprocessorInput {
-  logoFileName: UploadFileName
-}

@@ -18,7 +18,7 @@ import (
 )
 
 // CreateStandard is the resolver for the createStandard field.
-func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload) (*model.StandardCreatePayload, error) {
+func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.StandardCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 }
 
 // UpdateStandard is the resolver for the updateStandard field.
-func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) (*model.StandardUpdatePayload, error) {
+func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.StandardUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "standard"})

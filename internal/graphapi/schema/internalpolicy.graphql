@@ -57,6 +57,7 @@ extend type Mutation{
         file containing values of the internalPolicy
         """
         internalPolicyFile: Upload!
+        internalPolicyFileMetadata: FileMetadataInput
         """
         ID of the owner organization
         """
@@ -109,6 +110,7 @@ extend type Mutation{
 		file containing values of the internalPolicy
 		"""
 		internalPolicyFile: Upload
+        internalPolicyFileMetadata: FileMetadataInput
     ): InternalPolicyUpdatePayload!
     """
     Delete an existing internalPolicy

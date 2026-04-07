@@ -54,6 +54,7 @@ extend type Mutation{
         File to upload for the documentData
         """
         documentDataFile: Upload
+        documentDataFileMetadata: FileMetadataInput
     ): DocumentDataUpdatePayload!
     """
     Delete an existing documentData

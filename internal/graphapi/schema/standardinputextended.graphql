@@ -1,7 +1,0 @@
-extend input CreateStandardInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateStandardInput {
-  logoFileName: UploadFileName
-}

@@ -1,7 +1,0 @@
-extend input CreateTrustCenterEntityInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateTrustCenterEntityInput {
-  logoFileName: UploadFileName
-}

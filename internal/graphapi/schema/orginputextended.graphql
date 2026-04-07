@@ -1,7 +1,0 @@
-extend input CreateOrganizationInput {
-  avatarFileName: UploadFileName
-}
-
-extend input UpdateOrganizationInput {
-  avatarFileName: UploadFileName
-}

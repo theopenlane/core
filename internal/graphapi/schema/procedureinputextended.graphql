@@ -1,7 +1,0 @@
-extend input CreateProcedureInput {
-  procedureFileName: UploadFileName
-}
-
-extend input UpdateProcedureInput {
-  procedureFileName: UploadFileName
-}

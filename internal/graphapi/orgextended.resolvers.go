@@ -7,7 +7,6 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
@@ -205,11 +204,6 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 	return nil
 }
 
-// AvatarFileMetadata is the resolver for the avatarFileMetadata field.
-func (r *createOrganizationInputResolver) AvatarFileMetadata(ctx context.Context, obj *generated.CreateOrganizationInput, data *model.FileMetadataInput) error {
-	panic(fmt.Errorf("not implemented: AvatarFileMetadata - avatarFileMetadata"))
-}
-
 // AddOrgMembers is the resolver for the addOrgMembers field.
 func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []*generated.CreateOrgMembershipInput) error {
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
@@ -288,9 +282,4 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	}
 
 	return nil
-}
-
-// AvatarFileMetadata is the resolver for the avatarFileMetadata field.
-func (r *updateOrganizationInputResolver) AvatarFileMetadata(ctx context.Context, obj *generated.UpdateOrganizationInput, data *model.FileMetadataInput) error {
-	panic(fmt.Errorf("not implemented: AvatarFileMetadata - avatarFileMetadata"))
 }

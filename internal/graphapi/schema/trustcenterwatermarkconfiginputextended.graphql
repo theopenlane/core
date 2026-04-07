@@ -1,7 +1,0 @@
-extend input CreateTrustCenterWatermarkConfigInput {
-  watermarkFileName: UploadFileName
-}
-
-extend input UpdateTrustCenterWatermarkConfigInput {
-  watermarkFileName: UploadFileName
-}

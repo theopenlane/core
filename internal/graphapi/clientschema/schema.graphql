@@ -12577,9 +12577,6 @@ input CreateEntityInput {
 	logoFileID: ID
 	internalPolicyIDs: [ID!]
 	note: CreateNoteInput
-	entityFilesMetadata: [FileMetadataInput!]
-	logoFileMetadata: FileMetadataInput
-	logoFileName: UploadFileName
 }
 """
 CreateEntityTypeInput is used for create EntityType object.
@@ -13193,8 +13190,6 @@ input CreateGroupInput {
 	campaignIDs: [ID!]
 	campaignTargetIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
-	avatarFileMetadata: FileMetadataInput
-	avatarFileName: UploadFileName
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -13522,7 +13517,6 @@ input CreateInternalPolicyInput {
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	reviewIDs: [ID!]
-	internalPolicyFileName: UploadFileName
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -14267,8 +14261,6 @@ input CreateOrganizationInput {
 	directorySyncRunIDs: [ID!]
 	discussionIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
-	avatarFileMetadata: FileMetadataInput
-	avatarFileName: UploadFileName
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -14689,7 +14681,6 @@ input CreateProcedureInput {
 	discussionIDs: [ID!]
 	fileID: ID
 	workflowObjectRefIDs: [ID!]
-	procedureFileName: UploadFileName
 }
 """
 CreateProgramInput is used for create Program object.
@@ -15388,7 +15379,6 @@ input CreateStandardInput {
 	trustCenterDocIDs: [ID!]
 	applicablePlatformIDs: [ID!]
 	logoFileID: ID
-	logoFileName: UploadFileName
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -15586,7 +15576,6 @@ input CreateSubprocessorInput {
 	logoFileID: ID
 	trustCenterSubprocessorIDs: [ID!]
 	entityIDs: [ID!]
-	logoFileName: UploadFileName
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -15887,7 +15876,6 @@ input CreateTrustCenterDocInput {
 	standardID: ID
 	fileID: ID
 	originalFileID: ID
-	trustCenterDocFileName: UploadFileName
 }
 """
 Input for createTrustCenterDomain mutation
@@ -15920,7 +15908,6 @@ input CreateTrustCenterEntityInput {
 	logoFileID: ID
 	trustCenterID: ID
 	entityTypeID: ID
-	logoFileName: UploadFileName
 }
 """
 CreateTrustCenterFAQInput is used for create TrustCenterFAQ object.
@@ -16111,9 +16098,6 @@ input CreateTrustCenterPreviewSettingInput {
 	hero image local file ID
 	"""
 	heroImageFileID: ID
-	logoFileName: UploadFileName
-	faviconFileName: UploadFileName
-	heroImageFileName: UploadFileName
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -16205,9 +16189,6 @@ input CreateTrustCenterSettingInput {
 	logoFileID: ID
 	faviconFileID: ID
 	heroImageFileID: ID
-	logoFileName: UploadFileName
-	faviconFileName: UploadFileName
-	heroImageFileName: UploadFileName
 }
 """
 CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -16270,7 +16251,6 @@ input CreateTrustCenterWatermarkConfigInput {
 	editorIDs: [ID!]
 	trustCenterIDs: [ID!]
 	fileID: ID
-	watermarkFileName: UploadFileName
 }
 """
 CreateUserInput is used for create User object.
@@ -16360,8 +16340,6 @@ input CreateUserInput {
 	identityHolderProfileIDs: [ID!]
 	impersonationEventIDs: [ID!]
 	targetedImpersonationIDs: [ID!]
-	avatarFileMetadata: FileMetadataInput
-	avatarFileName: UploadFileName
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -28652,6 +28630,7 @@ type File implements Node {
 	originalTrustCenterDoc: [TrustCenterDoc!]
 	presignedURL: String
 	base64: String
+	name: String!
 }
 """
 A connection to a list of items.
@@ -28697,6 +28676,10 @@ input FileMetadataInput {
 	the display name for the file, defaults to the original filename
 	"""
 	name: String
+	"""
+	additional structured metadata to persist with the file
+	"""
+	metadata: Map
 }
 """
 Ordering options for File connections
@@ -43463,7 +43446,7 @@ type Mutation {
 		File to upload for the documentData
 		"""
 		documentDataFile: Upload
-	): DocumentDataUpdatePayload!
+	documentDataFileMetadata: FileMetadataInput): DocumentDataUpdatePayload!
 	"""
 	Delete an existing documentData
 	"""
@@ -43682,12 +43665,12 @@ type Mutation {
 		entity type name allows the name of the entity type to be passed in over an id
 		"""
 		entityTypeName: String
-	entityFiles: [Upload!],
+	entityFiles: [Upload!], entityFilesMetadata: [FileMetadataInput!],
 		"""
 		file to upload as the logo of the entity
 		"""
 		logoFile: Upload
-	): EntityCreatePayload!
+	logoFileMetadata: FileMetadataInput): EntityCreatePayload!
 	"""
 	Create multiple new entities
 	"""
@@ -43729,12 +43712,12 @@ type Mutation {
 		New values for the entity
 		"""
 		input: UpdateEntityInput!
-	entityFiles: [Upload!],
+	entityFiles: [Upload!], entityFilesMetadata: [FileMetadataInput!],
 		"""
 		file to upload as the logo of the entity
 		"""
 		logoFile: Upload
-	): EntityUpdatePayload!
+	logoFileMetadata: FileMetadataInput): EntityUpdatePayload!
 	"""
 	Delete an existing entity
 	"""
@@ -44217,7 +44200,7 @@ type Mutation {
 		values of the group
 		"""
 		input: CreateGroupInput!
-	avatarFile: Upload): GroupCreatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): GroupCreatePayload!
 	"""
 	Create multiple new groups
 	"""
@@ -44249,7 +44232,7 @@ type Mutation {
 		New values for the group
 		"""
 		input: UpdateGroupInput!
-	avatarFile: Upload): GroupUpdatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): GroupUpdatePayload!
 	"""
 	Delete an existing group
 	"""
@@ -44685,7 +44668,7 @@ type Mutation {
 		file containing values of the internalPolicy
 		"""
 		internalPolicyFile: Upload!
-
+	internalPolicyFileMetadata: FileMetadataInput,
 		"""
 		ID of the owner organization
 		"""
@@ -44741,7 +44724,7 @@ type Mutation {
 		file containing values of the internalPolicy
 		"""
 		internalPolicyFile: Upload
-	): InternalPolicyUpdatePayload!
+	internalPolicyFileMetadata: FileMetadataInput): InternalPolicyUpdatePayload!
 	"""
 	Delete an existing internalPolicy
 	"""
@@ -45682,7 +45665,7 @@ type Mutation {
 		values of the organization
 		"""
 		input: CreateOrganizationInput!
-	avatarFile: Upload): OrganizationCreatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): OrganizationCreatePayload!
 	"""
 	Update an existing organization
 	"""
@@ -45696,7 +45679,7 @@ type Mutation {
 		New values for the organization
 		"""
 		input: UpdateOrganizationInput!
-	avatarFile: Upload): OrganizationUpdatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): OrganizationUpdatePayload!
 	"""
 	Delete an existing organization
 	"""
@@ -46002,7 +45985,7 @@ type Mutation {
 		file containing values of the procedure
 		"""
 		procedureFile: Upload!
-
+	procedureFileMetadata: FileMetadataInput,
 		"""
 		ID of the owner organization
 		"""
@@ -46058,7 +46041,7 @@ type Mutation {
 		file containing values of the procedure
 		"""
 		procedureFile: Upload
-	): ProcedureUpdatePayload!
+	procedureFileMetadata: FileMetadataInput): ProcedureUpdatePayload!
 	"""
 	Delete an existing procedure
 	"""
@@ -46824,7 +46807,7 @@ type Mutation {
 		file to upload as the logo to represent the standard
 		"""
 		logoFile: Upload
-	): StandardCreatePayload!
+	logoFileMetadata: FileMetadataInput): StandardCreatePayload!
 	"""
 	Update an existing standard
 	"""
@@ -46843,7 +46826,7 @@ type Mutation {
 		file to upload as the logo to represent the standard
 		"""
 		logoFile: Upload
-	): StandardUpdatePayload!
+	logoFileMetadata: FileMetadataInput): StandardUpdatePayload!
 	"""
 	Delete an existing standard
 	"""
@@ -46948,7 +46931,7 @@ type Mutation {
 		file to upload as the logo of the subprocessor
 		"""
 		logoFile: Upload
-	): SubprocessorCreatePayload!
+	logoFileMetadata: FileMetadataInput): SubprocessorCreatePayload!
 	"""
 	Create multiple new subprocessors
 	"""
@@ -46985,7 +46968,7 @@ type Mutation {
 		file to upload as the logo of the subprocessor
 		"""
 		logoFile: Upload
-	): SubprocessorUpdatePayload!
+	logoFileMetadata: FileMetadataInput): SubprocessorUpdatePayload!
 	"""
 	Update multiple existing subprocessors
 	"""
@@ -47518,7 +47501,7 @@ type Mutation {
 		values of the trustCenterDoc
 		"""
 		input: CreateTrustCenterDocInput!
-	trustCenterDocFile: Upload!): TrustCenterDocCreatePayload!
+	trustCenterDocFile: Upload!, trustCenterDocFileMetadata: FileMetadataInput): TrustCenterDocCreatePayload!
 	"""
 	Create multiple new trustCenterDocs
 	"""
@@ -47550,7 +47533,7 @@ type Mutation {
 		New values for the trustCenterDoc
 		"""
 		input: UpdateTrustCenterDocInput!
-	trustCenterDocFile: Upload, watermarkedTrustCenterDocFile: Upload): TrustCenterDocUpdatePayload!
+	trustCenterDocFile: Upload, trustCenterDocFileMetadata: FileMetadataInput, watermarkedTrustCenterDocFile: Upload, watermarkedTrustCenterDocFileMetadata: FileMetadataInput): TrustCenterDocUpdatePayload!
 	"""
 	Update multiple existing trust center docs
 	"""
@@ -47614,7 +47597,7 @@ type Mutation {
 		logo file for the trustCenterEntity
 		"""
 		logoFile: Upload
-	): TrustCenterEntityCreatePayload!
+	logoFileMetadata: FileMetadataInput): TrustCenterEntityCreatePayload!
 	"""
 	Create multiple new trustCenterEntitys
 	"""
@@ -47651,7 +47634,7 @@ type Mutation {
 		logo file for the trustCenterEntity
 		"""
 		logoFile: Upload
-	): TrustCenterEntityUpdatePayload!
+	logoFileMetadata: FileMetadataInput): TrustCenterEntityUpdatePayload!
 	"""
 	Delete an existing trustCenterEntity
 	"""
@@ -47871,7 +47854,7 @@ type Mutation {
 		values of the preview trust center setting
 		"""
 		input: CreateTrustCenterPreviewSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterPreviewSettingCreatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterPreviewSettingCreatePayload!
 	"""
 	Create a new trustCenterSetting
 	"""
@@ -47880,7 +47863,7 @@ type Mutation {
 		values of the trustCenterSetting
 		"""
 		input: CreateTrustCenterSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterSettingCreatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterSettingCreatePayload!
 	"""
 	Update an existing trustCenterSetting by targeting the ID
 	"""
@@ -47894,7 +47877,7 @@ type Mutation {
 		New values for the trustCenterSetting
 		"""
 		input: UpdateTrustCenterSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterSettingUpdatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterSettingUpdatePayload!
 	"""
 	Update an existing trustCenterSetting preview settings
 	"""
@@ -47903,7 +47886,7 @@ type Mutation {
 		New values for the trustCenterSetting
 		"""
 		input: UpdateTrustCenterSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterSettingUpdatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterSettingUpdatePayload!
 	"""
 	Publish changes from preview to live environment
 	"""
@@ -48007,7 +47990,7 @@ type Mutation {
 		values of the trustCenterWatermarkConfig
 		"""
 		input: CreateTrustCenterWatermarkConfigInput!
-	watermarkFile: Upload): TrustCenterWatermarkConfigCreatePayload!
+	watermarkFile: Upload, watermarkFileMetadata: FileMetadataInput): TrustCenterWatermarkConfigCreatePayload!
 	"""
 	Update an existing trustCenterWatermarkConfig
 	"""
@@ -48021,7 +48004,7 @@ type Mutation {
 		New values for the trustCenterWatermarkConfig
 		"""
 		input: UpdateTrustCenterWatermarkConfigInput!
-	watermarkFile: Upload): TrustCenterWatermarkConfigUpdatePayload!
+	watermarkFile: Upload, watermarkFileMetadata: FileMetadataInput): TrustCenterWatermarkConfigUpdatePayload!
 	"""
 	Delete an existing trustCenterWatermarkConfig
 	"""
@@ -48039,7 +48022,7 @@ type Mutation {
 		values of the user
 		"""
 		input: CreateUserInput!
-	avatarFile: Upload): UserCreatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): UserCreatePayload!
 	"""
 	Update an existing user
 	"""
@@ -48053,7 +48036,7 @@ type Mutation {
 		New values for the user
 		"""
 		input: UpdateUserInput!
-	avatarFile: Upload): UserUpdatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): UserUpdatePayload!
 	"""
 	Delete an existing user
 	"""
@@ -86096,7 +86079,6 @@ input UpdateDocumentDataInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
-	documentDataFileName: UploadFileName
 }
 """
 UpdateEmailBrandingInput is used for update EmailBranding object.
@@ -86619,9 +86601,6 @@ input UpdateEntityInput {
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
 	note: CreateNoteInput
-	entityFilesMetadata: [FileMetadataInput!]
-	logoFileMetadata: FileMetadataInput
-	logoFileName: UploadFileName
 }
 """
 UpdateEntityTypeInput is used for update EntityType object.
@@ -87555,8 +87534,6 @@ input UpdateGroupInput {
 	as the specified group ID, existing permissions will be removed
 	"""
 	inheritGroupPermissions: ID
-	avatarFileMetadata: FileMetadataInput
-	avatarFileName: UploadFileName
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -88028,7 +88005,6 @@ input UpdateInternalPolicyInput {
 	addReviewIDs: [ID!]
 	removeReviewIDs: [ID!]
 	clearReviews: Boolean
-	internalPolicyFileName: UploadFileName
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -89011,8 +88987,6 @@ input UpdateOrganizationInput {
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
-	avatarFileMetadata: FileMetadataInput
-	avatarFileName: UploadFileName
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -89632,7 +89606,6 @@ input UpdateProcedureInput {
 	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
-	procedureFileName: UploadFileName
 	RevisionBump: VersionBump
 }
 """
@@ -90624,7 +90597,6 @@ input UpdateStandardInput {
 	logoFileID: ID
 	clearLogoFile: Boolean
 	RevisionBump: VersionBump
-	logoFileName: UploadFileName
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -90917,7 +90889,6 @@ input UpdateSubprocessorInput {
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
 	clearEntities: Boolean
-	logoFileName: UploadFileName
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -91348,8 +91319,6 @@ input UpdateTrustCenterDocInput {
 	clearFile: Boolean
 	originalFileID: ID
 	clearOriginalFile: Boolean
-	trustCenterDocFileName: UploadFileName
-	watermarkedTrustCenterDocFileName: UploadFileName
 }
 """
 UpdateTrustCenterEntityInput is used for update TrustCenterEntity object.
@@ -91369,7 +91338,6 @@ input UpdateTrustCenterEntityInput {
 	clearEditors: Boolean
 	logoFileID: ID
 	clearLogoFile: Boolean
-	logoFileName: UploadFileName
 }
 """
 UpdateTrustCenterFAQInput is used for update TrustCenterFAQ object.
@@ -91674,9 +91642,6 @@ input UpdateTrustCenterSettingInput {
 	clearFaviconFile: Boolean
 	heroImageFileID: ID
 	clearHeroImageFile: Boolean
-	logoFileName: UploadFileName
-	faviconFileName: UploadFileName
-	heroImageFileName: UploadFileName
 }
 """
 UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
@@ -91754,7 +91719,6 @@ input UpdateTrustCenterWatermarkConfigInput {
 	clearTrustCenter: Boolean
 	fileID: ID
 	clearFile: Boolean
-	watermarkFileName: UploadFileName
 }
 """
 UpdateUserInput is used for update User object.
@@ -91897,8 +91861,6 @@ input UpdateUserInput {
 	addTargetedImpersonationIDs: [ID!]
 	removeTargetedImpersonationIDs: [ID!]
 	clearTargetedImpersonations: Boolean
-	avatarFileMetadata: FileMetadataInput
-	avatarFileName: UploadFileName
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.

@@ -1,7 +1,0 @@
-extend input CreateEntityInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateEntityInput {
-  logoFileName: UploadFileName
-}

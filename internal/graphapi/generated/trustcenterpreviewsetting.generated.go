@@ -141,7 +141,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "title", "overview", "primaryColor", "logoRemoteURL", "logoFileID", "faviconRemoteURL", "faviconFileID", "themeMode", "font", "foregroundColor", "backgroundColor", "accentColor", "heroImageFileID", "logoFileName", "faviconFileName", "heroImageFileName"}
+	fieldsInOrder := [...]string{"trustCenterID", "title", "overview", "primaryColor", "logoRemoteURL", "logoFileID", "faviconRemoteURL", "faviconFileID", "themeMode", "font", "foregroundColor", "backgroundColor", "accentColor", "heroImageFileID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -246,27 +246,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 				return it, err
 			}
 			it.HeroImageFileID = data
-		case "logoFileName":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFileName"))
-			data, err := ec.unmarshalOUploadFileName2map(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoFileName = data
-		case "faviconFileName":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("faviconFileName"))
-			data, err := ec.unmarshalOUploadFileName2map(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FaviconFileName = data
-		case "heroImageFileName":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heroImageFileName"))
-			data, err := ec.unmarshalOUploadFileName2map(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.HeroImageFileName = data
 		}
 	}
 	return it, nil

@@ -29,6 +29,7 @@ type ResolverRoot interface {
 	CampaignTarget() CampaignTargetResolver
 	Control() ControlResolver
 	Evidence() EvidenceResolver
+	File() FileResolver
 	Group() GroupResolver
 	IdentityHolder() IdentityHolderResolver
 	Integration() IntegrationResolver
@@ -45,26 +46,16 @@ type ResolverRoot interface {
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
-	CreateInternalPolicyInput() CreateInternalPolicyInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateNotificationInput() CreateNotificationInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
-	CreateProcedureInput() CreateProcedureInputResolver
 	CreateScanInput() CreateScanInputResolver
-	CreateStandardInput() CreateStandardInputResolver
-	CreateSubprocessorInput() CreateSubprocessorInputResolver
-	CreateTrustCenterDocInput() CreateTrustCenterDocInputResolver
-	CreateTrustCenterEntityInput() CreateTrustCenterEntityInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
-	CreateTrustCenterSettingInput() CreateTrustCenterSettingInputResolver
-	CreateTrustCenterWatermarkConfigInput() CreateTrustCenterWatermarkConfigInputResolver
-	CreateUserInput() CreateUserInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateDiscussionInput() UpdateDiscussionInputResolver
-	UpdateDocumentDataInput() UpdateDocumentDataInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateEvidenceInput() UpdateEvidenceInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
@@ -75,16 +66,10 @@ type ResolverRoot interface {
 	UpdateRiskInput() UpdateRiskInputResolver
 	UpdateStandardInput() UpdateStandardInputResolver
 	UpdateSubcontrolInput() UpdateSubcontrolInputResolver
-	UpdateSubprocessorInput() UpdateSubprocessorInputResolver
 	UpdateTFASettingInput() UpdateTFASettingInputResolver
 	UpdateTaskInput() UpdateTaskInputResolver
-	UpdateTrustCenterDocInput() UpdateTrustCenterDocInputResolver
-	UpdateTrustCenterEntityInput() UpdateTrustCenterEntityInputResolver
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
-	UpdateTrustCenterSettingInput() UpdateTrustCenterSettingInputResolver
-	UpdateTrustCenterWatermarkConfigInput() UpdateTrustCenterWatermarkConfigInputResolver
-	UpdateUserInput() UpdateUserInputResolver
 }
 
 type DirectiveRoot struct {
@@ -2137,6 +2122,7 @@ type ComplexityRoot struct {
 		LastAccessedAt         func(childComplexity int) int
 		Md5Hash                func(childComplexity int) int
 		Metadata               func(childComplexity int) int
+		Name                   func(childComplexity int) int
 		Organization           func(childComplexity int) int
 		OrganizationSetting    func(childComplexity int) int
 		OriginalTrustCenterDoc func(childComplexity int) int
@@ -3473,7 +3459,7 @@ type ComplexityRoot struct {
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEmailBranding                  func(childComplexity int, input generated.CreateEmailBrandingInput) int
 		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
-		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, logoFile *graphql.Upload) int
+		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -3481,7 +3467,7 @@ type ComplexityRoot struct {
 		CreateFinding                        func(childComplexity int, input generated.CreateFindingInput) int
 		CreateFindingControl                 func(childComplexity int, input generated.CreateFindingControlInput) int
 		CreateFullProgram                    func(childComplexity int, input model.CreateFullProgramInput) int
-		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput, avatarFile *graphql.Upload) int
+		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		CreateGroupByClone                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
 		CreateGroupMembership                func(childComplexity int, input generated.CreateGroupMembershipInput) int
 		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
@@ -3503,7 +3489,7 @@ type ComplexityRoot struct {
 		CreateNotificationTemplate           func(childComplexity int, input generated.CreateNotificationTemplateInput) int
 		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
 		CreateOrgMembership                  func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
+		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
 		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) int
 		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
@@ -3519,9 +3505,9 @@ type ComplexityRoot struct {
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
-		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload) int
+		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
-		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
+		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
 		CreateSystemDetail                   func(childComplexity int, input generated.CreateSystemDetailInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
@@ -3530,19 +3516,19 @@ type ComplexityRoot struct {
 		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
 		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
-		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
+		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
-		CreateTrustCenterEntity              func(childComplexity int, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload) int
+		CreateTrustCenterEntity              func(childComplexity int, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterFaq                 func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
 		CreateTrustCenterNDARequest          func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
 		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
-		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
-		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
+		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
+		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
-		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
-		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
-		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
-		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
+		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
+		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string) int
+		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string) int
+		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
 		CreateVulnerability                  func(childComplexity int, input generated.CreateVulnerabilityInput) int
 		CreateWorkflowDefinition             func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
@@ -3824,10 +3810,10 @@ type ComplexityRoot struct {
 		UpdateDirectoryMembership            func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
 		UpdateDirectorySyncRun               func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
 		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
-		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
+		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload, documentDataFileMetadata *model.FileMetadataInput) int
 		UpdateEmailBranding                  func(childComplexity int, id string, input generated.UpdateEmailBrandingInput) int
 		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
-		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, logoFile *graphql.Upload) int
+		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -3835,12 +3821,12 @@ type ComplexityRoot struct {
 		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
 		UpdateFinding                        func(childComplexity int, id string, input generated.UpdateFindingInput) int
 		UpdateFindingControl                 func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
-		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload) int
+		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
 		UpdateIdentityHolder                 func(childComplexity int, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload) int
-		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) int
+		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput) int
 		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
@@ -3853,11 +3839,11 @@ type ComplexityRoot struct {
 		UpdateNotificationPreference         func(childComplexity int, id string, input generated.UpdateNotificationPreferenceInput) int
 		UpdateNotificationTemplate           func(childComplexity int, id string, input generated.UpdateNotificationTemplateInput) int
 		UpdateOrgMembership                  func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
+		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
 		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
+		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) int
 		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
@@ -3869,10 +3855,10 @@ type ComplexityRoot struct {
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
-		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) int
+		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
+		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateSystemDetail                   func(childComplexity int, id string, input generated.UpdateSystemDetailInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
@@ -3882,18 +3868,18 @@ type ComplexityRoot struct {
 		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
 		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
-		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
-		UpdateTrustCenterEntity              func(childComplexity int, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload) int
+		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput, watermarkedTrustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFileMetadata *model.FileMetadataInput) int
+		UpdateTrustCenterEntity              func(childComplexity int, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateTrustCenterFAQComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTrustCenterFaq                 func(childComplexity int, id string, input generated.UpdateTrustCenterFAQInput) int
 		UpdateTrustCenterNDARequest          func(childComplexity int, id string, input generated.UpdateTrustCenterNDARequestInput) int
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
-		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, heroImageFile *graphql.Upload) int
+		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
+		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
-		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
-		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
+		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
+		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
 		UpdateWorkflowDefinition             func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
@@ -17821,6 +17807,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.File.Metadata(childComplexity), true
 
+	case "File.name":
+		if e.ComplexityRoot.File.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.Name(childComplexity), true
+
 	case "File.organization":
 		if e.ComplexityRoot.File.Organization == nil {
 			break
@@ -25772,7 +25765,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string), args["entityFiles"].([]*graphql.Upload), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string), args["entityFiles"].([]*graphql.Upload), args["entityFilesMetadata"].([]*model.FileMetadataInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createEntityType":
 		if e.ComplexityRoot.Mutation.CreateEntityType == nil {
@@ -25868,7 +25861,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateGroup(childComplexity, args["input"].(generated.CreateGroupInput), args["avatarFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateGroup(childComplexity, args["input"].(generated.CreateGroupInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createGroupByClone":
 		if e.ComplexityRoot.Mutation.CreateGroupByClone == nil {
@@ -26132,7 +26125,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateOrganization(childComplexity, args["input"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateOrganization(childComplexity, args["input"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createOrganizationSetting":
 		if e.ComplexityRoot.Mutation.CreateOrganizationSetting == nil {
@@ -26324,7 +26317,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createSubcontrol":
 		if e.ComplexityRoot.Mutation.CreateSubcontrol == nil {
@@ -26348,7 +26341,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateSubprocessor(childComplexity, args["input"].(generated.CreateSubprocessorInput), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateSubprocessor(childComplexity, args["input"].(generated.CreateSubprocessorInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createSubscriber":
 		if e.ComplexityRoot.Mutation.CreateSubscriber == nil {
@@ -26456,7 +26449,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput), args["trustCenterDocFile"].(graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterDoc(childComplexity, args["input"].(generated.CreateTrustCenterDocInput), args["trustCenterDocFile"].(graphql.Upload), args["trustCenterDocFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createTrustCenterDomain":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterDomain == nil {
@@ -26480,7 +26473,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterEntity(childComplexity, args["input"].(generated.CreateTrustCenterEntityInput), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterEntity(childComplexity, args["input"].(generated.CreateTrustCenterEntityInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createTrustCenterFAQ":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterFaq == nil {
@@ -26528,7 +26521,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput), args["faviconFile"].(*graphql.Upload), args["faviconFileMetadata"].(*model.FileMetadataInput), args["heroImageFile"].(*graphql.Upload), args["heroImageFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createTrustCenterSetting":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterSetting == nil {
@@ -26540,7 +26533,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput), args["faviconFile"].(*graphql.Upload), args["faviconFileMetadata"].(*model.FileMetadataInput), args["heroImageFile"].(*graphql.Upload), args["heroImageFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createTrustCenterSubprocessor":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterSubprocessor == nil {
@@ -26564,7 +26557,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload), args["watermarkFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createUploadInternalPolicy":
 		if e.ComplexityRoot.Mutation.CreateUploadInternalPolicy == nil {
@@ -26576,7 +26569,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateUploadInternalPolicy(childComplexity, args["internalPolicyFile"].(graphql.Upload), args["ownerID"].(*string)), true
+		return e.ComplexityRoot.Mutation.CreateUploadInternalPolicy(childComplexity, args["internalPolicyFile"].(graphql.Upload), args["internalPolicyFileMetadata"].(*model.FileMetadataInput), args["ownerID"].(*string)), true
 
 	case "Mutation.createUploadProcedure":
 		if e.ComplexityRoot.Mutation.CreateUploadProcedure == nil {
@@ -26588,7 +26581,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateUploadProcedure(childComplexity, args["procedureFile"].(graphql.Upload), args["ownerID"].(*string)), true
+		return e.ComplexityRoot.Mutation.CreateUploadProcedure(childComplexity, args["procedureFile"].(graphql.Upload), args["procedureFileMetadata"].(*model.FileMetadataInput), args["ownerID"].(*string)), true
 
 	case "Mutation.createUser":
 		if e.ComplexityRoot.Mutation.CreateUser == nil {
@@ -26600,7 +26593,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateUser(childComplexity, args["input"].(generated.CreateUserInput), args["avatarFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.CreateUser(childComplexity, args["input"].(generated.CreateUserInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.createUserSetting":
 		if e.ComplexityRoot.Mutation.CreateUserSetting == nil {
@@ -29979,7 +29972,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput), args["documentDataFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput), args["documentDataFile"].(*graphql.Upload), args["documentDataFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateEmailBranding":
 		if e.ComplexityRoot.Mutation.UpdateEmailBranding == nil {
@@ -30015,7 +30008,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateEntityInput), args["entityFiles"].([]*graphql.Upload), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateEntityInput), args["entityFiles"].([]*graphql.Upload), args["entityFilesMetadata"].([]*model.FileMetadataInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateEntityType":
 		if e.ComplexityRoot.Mutation.UpdateEntityType == nil {
@@ -30111,7 +30104,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateGroup(childComplexity, args["id"].(string), args["input"].(generated.UpdateGroupInput), args["avatarFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateGroup(childComplexity, args["id"].(string), args["input"].(generated.UpdateGroupInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateGroupMembership":
 		if e.ComplexityRoot.Mutation.UpdateGroupMembership == nil {
@@ -30171,7 +30164,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateInternalPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateInternalPolicyInput), args["internalPolicyFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateInternalPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateInternalPolicyInput), args["internalPolicyFile"].(*graphql.Upload), args["internalPolicyFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateInternalPolicyComment":
 		if e.ComplexityRoot.Mutation.UpdateInternalPolicyComment == nil {
@@ -30327,7 +30320,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateOrganization(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrganizationInput), args["avatarFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateOrganization(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateOrganizationSetting":
 		if e.ComplexityRoot.Mutation.UpdateOrganizationSetting == nil {
@@ -30375,7 +30368,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateProcedure(childComplexity, args["id"].(string), args["input"].(generated.UpdateProcedureInput), args["procedureFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateProcedure(childComplexity, args["id"].(string), args["input"].(generated.UpdateProcedureInput), args["procedureFile"].(*graphql.Upload), args["procedureFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateProcedureComment":
 		if e.ComplexityRoot.Mutation.UpdateProcedureComment == nil {
@@ -30519,7 +30512,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateSubcontrol":
 		if e.ComplexityRoot.Mutation.UpdateSubcontrol == nil {
@@ -30555,7 +30548,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubprocessorInput), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubprocessorInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateSubscriber":
 		if e.ComplexityRoot.Mutation.UpdateSubscriber == nil {
@@ -30675,7 +30668,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput), args["trustCenterDocFile"].(*graphql.Upload), args["watermarkedTrustCenterDocFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterDoc(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterDocInput), args["trustCenterDocFile"].(*graphql.Upload), args["trustCenterDocFileMetadata"].(*model.FileMetadataInput), args["watermarkedTrustCenterDocFile"].(*graphql.Upload), args["watermarkedTrustCenterDocFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateTrustCenterEntity":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterEntity == nil {
@@ -30687,7 +30680,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterEntityInput), args["logoFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterEntityInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateTrustCenterFAQComment":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterFAQComment == nil {
@@ -30759,7 +30752,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput), args["faviconFile"].(*graphql.Upload), args["faviconFileMetadata"].(*model.FileMetadataInput), args["heroImageFile"].(*graphql.Upload), args["heroImageFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterSetting == nil {
@@ -30771,7 +30764,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload), args["heroImageFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["logoFileMetadata"].(*model.FileMetadataInput), args["faviconFile"].(*graphql.Upload), args["faviconFileMetadata"].(*model.FileMetadataInput), args["heroImageFile"].(*graphql.Upload), args["heroImageFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateTrustCenterSubprocessor":
 		if e.ComplexityRoot.Mutation.UpdateTrustCenterSubprocessor == nil {
@@ -30795,7 +30788,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateTrustCenterWatermarkConfig(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateTrustCenterWatermarkConfig(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload), args["watermarkFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateUser":
 		if e.ComplexityRoot.Mutation.UpdateUser == nil {
@@ -30807,7 +30800,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateUser(childComplexity, args["id"].(string), args["input"].(generated.UpdateUserInput), args["avatarFile"].(*graphql.Upload)), true
+		return e.ComplexityRoot.Mutation.UpdateUser(childComplexity, args["id"].(string), args["input"].(generated.UpdateUserInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
 
 	case "Mutation.updateUserSetting":
 		if e.ComplexityRoot.Mutation.UpdateUserSetting == nil {
@@ -54753,6 +54746,7 @@ extend type Mutation{
         File to upload for the documentData
         """
         documentDataFile: Upload
+        documentDataFileMetadata: FileMetadataInput
     ): DocumentDataUpdatePayload!
     """
     Delete an existing documentData
@@ -54858,10 +54852,6 @@ type DocumentDataBulkUpdatePayload {
     IDs of the updated documentDatas
     """
     updatedIDs: [ID!]
-}
-`, BuiltIn: false},
-	{Name: "../schema/documentdatainputextended.graphql", Input: `extend input UpdateDocumentDataInput {
-  documentDataFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/emailbranding.graphql", Input: `extend type Query {
@@ -140228,10 +140218,12 @@ extend type Mutation{
         """
         entityTypeName: String
         entityFiles: [Upload!]
+        entityFilesMetadata: [FileMetadataInput!]
         """
         file to upload as the logo of the entity
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): EntityCreatePayload!
     """
     Create multiple new entities
@@ -140272,10 +140264,12 @@ extend type Mutation{
         """
         input: UpdateEntityInput!
         entityFiles: [Upload!]
+        entityFilesMetadata: [FileMetadataInput!]
         """
         file to upload as the logo of the entity
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): EntityUpdatePayload!
     """
     Delete an existing entity
@@ -140385,22 +140379,10 @@ type EntityBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
   note: CreateNoteInput
-  entityFilesMetadata: [FileMetadataInput!]
-  logoFileMetadata: FileMetadataInput
 }
 
 extend input UpdateEntityInput {
   note:  CreateNoteInput
-  entityFilesMetadata: [FileMetadataInput!]
-  logoFileMetadata: FileMetadataInput
-}
-`, BuiltIn: false},
-	{Name: "../schema/entityinputextended.graphql", Input: `extend input CreateEntityInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateEntityInput {
-  logoFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/entitytype.graphql", Input: `extend type Query {
@@ -141056,6 +141038,7 @@ type FileDeletePayload {
 	{Name: "../schema/fileextended.graphql", Input: `extend type File {
     presignedURL: String
     base64: String
+    name: String!
 }
 
 input FileMetadataInput {
@@ -141063,6 +141046,10 @@ input FileMetadataInput {
     the display name for the file, defaults to the original filename
     """
     name: String
+    """
+    additional structured metadata to persist with the file
+    """
+    metadata: Map
 }
 `, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Query {
@@ -141348,6 +141335,7 @@ extend type Mutation{
         """
         input: CreateGroupInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): GroupCreatePayload!
     """
     Create multiple new groups
@@ -141380,6 +141368,7 @@ extend type Mutation{
         """
         input: UpdateGroupInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): GroupUpdatePayload!
     """
     Delete an existing group
@@ -141489,7 +141478,6 @@ type GroupBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
-  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateGroupInput {
@@ -141501,7 +141489,6 @@ extend input UpdateGroupInput {
   as the specified group ID, existing permissions will be removed
   """
   inheritGroupPermissions: ID
-  avatarFileMetadata: FileMetadataInput
 }
 
 extend input GroupMembershipWhereInput {
@@ -141739,13 +141726,6 @@ extend type Mutation{
       """
       cloneGroupMembers: ID
   ): GroupCreatePayload!
-}`, BuiltIn: false},
-	{Name: "../schema/groupinputextended.graphql", Input: `extend input CreateGroupInput {
-  avatarFileName: UploadFileName
-}
-
-extend input UpdateGroupInput {
-  avatarFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/groupmembership.graphql", Input: `extend type Query {
@@ -142509,6 +142489,7 @@ extend type Mutation{
         file containing values of the internalPolicy
         """
         internalPolicyFile: Upload!
+        internalPolicyFileMetadata: FileMetadataInput
         """
         ID of the owner organization
         """
@@ -142561,6 +142542,7 @@ extend type Mutation{
 		file containing values of the internalPolicy
 		"""
 		internalPolicyFile: Upload
+        internalPolicyFileMetadata: FileMetadataInput
     ): InternalPolicyUpdatePayload!
     """
     Delete an existing internalPolicy
@@ -142653,14 +142635,6 @@ type InternalPolicyBulkDeletePayload {
     Deleted internalPolicy IDs
     """
     deletedIDs: [ID!]!
-}
-`, BuiltIn: false},
-	{Name: "../schema/internalpolicyinputextended.graphql", Input: `extend input CreateInternalPolicyInput {
-  internalPolicyFileName: UploadFileName
-}
-
-extend input UpdateInternalPolicyInput {
-  internalPolicyFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/invite.graphql", Input: `extend type Query {
@@ -144457,6 +144431,7 @@ extend type Mutation{
         """
         input: CreateOrganizationInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): OrganizationCreatePayload!
     """
     Update an existing organization
@@ -144471,6 +144446,7 @@ extend type Mutation{
         """
         input: UpdateOrganizationInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): OrganizationUpdatePayload!
     """
     Delete an existing organization
@@ -144521,7 +144497,8 @@ type OrganizationBulkCreatePayload {
     Created organizations
     """
     organizations: [Organization!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/organizationsetting.graphql", Input: `extend type Query {
     """
     Look up organizationSetting by ID
@@ -144683,14 +144660,12 @@ type OrganizationSettingBulkUpdatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
   createOrgSettings: CreateOrganizationSettingInput
-  avatarFileMetadata: FileMetadataInput
 }
 
 extend input UpdateOrganizationInput {
   addOrgMembers: [CreateOrgMembershipInput!]
   removeOrgMembers: [ID!]
   updateOrgSettings: UpdateOrganizationSettingInput
-  avatarFileMetadata: FileMetadataInput
 }
 
 extend input OrgMembershipWhereInput {
@@ -144752,13 +144727,6 @@ type OrganizationTransferOwnershipPayload {
     Whether an invitation was sent (true if new owner wasn't a member)
     """
     invitationSent: Boolean!
-}`, BuiltIn: false},
-	{Name: "../schema/orginputextended.graphql", Input: `extend input CreateOrganizationInput {
-  avatarFileName: UploadFileName
-}
-
-extend input UpdateOrganizationInput {
-  avatarFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/orgmembership.graphql", Input: `extend type Query {
@@ -145213,6 +145181,7 @@ extend type Mutation{
         file containing values of the procedure
         """
         procedureFile: Upload!
+        procedureFileMetadata: FileMetadataInput
         """
         ID of the owner organization
         """
@@ -145265,6 +145234,7 @@ extend type Mutation{
 		file containing values of the procedure
 		"""
 		procedureFile: Upload
+        procedureFileMetadata: FileMetadataInput
     ): ProcedureUpdatePayload!
     """
     Delete an existing procedure
@@ -145357,14 +145327,6 @@ type ProcedureBulkDeletePayload {
     Deleted export IDs
     """
     deletedIDs: [ID!]!
-}
-`, BuiltIn: false},
-	{Name: "../schema/procedureinputextended.graphql", Input: `extend input CreateProcedureInput {
-  procedureFileName: UploadFileName
-}
-
-extend input UpdateProcedureInput {
-  procedureFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/program.graphql", Input: `extend type Query {
@@ -148037,6 +147999,7 @@ extend type Mutation{
         file to upload as the logo to represent the standard
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): StandardCreatePayload!
     """
     Update an existing standard
@@ -148054,6 +148017,7 @@ extend type Mutation{
         file to upload as the logo to represent the standard
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): StandardUpdatePayload!
     """
     Delete an existing standard
@@ -148104,13 +148068,6 @@ type StandardBulkCreatePayload {
     Created standards
     """
     standards: [Standard!]
-}`, BuiltIn: false},
-	{Name: "../schema/standardinputextended.graphql", Input: `extend input CreateStandardInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateStandardInput {
-  logoFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/subcontrol.graphql", Input: `extend type Subcontrol {
@@ -148324,6 +148281,7 @@ extend type Mutation{
         file to upload as the logo of the subprocessor
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): SubprocessorCreatePayload!
     """
     Create multiple new subprocessors
@@ -148359,6 +148317,7 @@ extend type Mutation{
         file to upload as the logo of the subprocessor
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): SubprocessorUpdatePayload!
     """
     Update multiple existing subprocessors
@@ -148464,13 +148423,6 @@ type SubprocessorBulkDeletePayload {
     Deleted subprocessor IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
-	{Name: "../schema/subprocessorinputextended.graphql", Input: `extend input CreateSubprocessorInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateSubprocessorInput {
-  logoFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/subscriber.graphql", Input: `extend type Query {
@@ -149500,6 +149452,7 @@ extend type Mutation{
         """
         input: CreateTrustCenterDocInput!
         trustCenterDocFile: Upload!
+        trustCenterDocFileMetadata: FileMetadataInput
     ): TrustCenterDocCreatePayload!
     """
     Create multiple new trustCenterDocs
@@ -149532,7 +149485,9 @@ extend type Mutation{
         """
         input: UpdateTrustCenterDocInput!
         trustCenterDocFile: Upload
+        trustCenterDocFileMetadata: FileMetadataInput
         watermarkedTrustCenterDocFile: Upload
+        watermarkedTrustCenterDocFileMetadata: FileMetadataInput
     ): TrustCenterDocUpdatePayload!
         """
     Update multiple existing trust center docs
@@ -149638,14 +149593,6 @@ type TrustCenterDocBulkUpdatePayload {
     IDs of the updated trust center docs
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
-	{Name: "../schema/trustcenterdocextended.graphql", Input: `extend input CreateTrustCenterDocInput {
-  trustCenterDocFileName: UploadFileName
-}
-
-extend input UpdateTrustCenterDocInput {
-  trustCenterDocFileName: UploadFileName
-  watermarkedTrustCenterDocFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
@@ -149705,6 +149652,7 @@ extend type Mutation{
         logo file for the trustCenterEntity
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): TrustCenterEntityCreatePayload!
     """
     Create multiple new trustCenterEntitys
@@ -149740,6 +149688,7 @@ extend type Mutation{
         logo file for the trustCenterEntity
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): TrustCenterEntityUpdatePayload!
     """
     Delete an existing trustCenterEntity
@@ -149790,13 +149739,6 @@ type TrustCenterEntityBulkCreatePayload {
     Created trustCenterEntitys
     """
     trustCenterEntities: [TrustCenterEntity!]
-}`, BuiltIn: false},
-	{Name: "../schema/trustcenterentityinputextended.graphql", Input: `extend input CreateTrustCenterEntityInput {
-  logoFileName: UploadFileName
-}
-
-extend input UpdateTrustCenterEntityInput {
-  logoFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenterextended.graphql", Input: `extend input UpdateTrustCenterInput {
@@ -150209,8 +150151,11 @@ type TrustCenterNDARequestBulkDeletePayload {
     """
     input: CreateTrustCenterPreviewSettingInput!
     logoFile: Upload
+    logoFileMetadata: FileMetadataInput
     faviconFile: Upload
+    faviconFileMetadata: FileMetadataInput
     heroImageFile: Upload
+    heroImageFileMetadata: FileMetadataInput
   ): TrustCenterPreviewSettingCreatePayload!
 }
 
@@ -150286,12 +150231,6 @@ input CreateTrustCenterPreviewSettingInput {
   heroImageFileID: ID
 }
 `, BuiltIn: false},
-	{Name: "../schema/trustcenterpreviewsettinginputextended.graphql", Input: `extend input CreateTrustCenterPreviewSettingInput {
-  logoFileName: UploadFileName
-  faviconFileName: UploadFileName
-  heroImageFileName: UploadFileName
-}
-`, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {
     """
     Look up trustCenterSetting by ID
@@ -150314,8 +150253,11 @@ extend type Mutation{
         """
         input: CreateTrustCenterSettingInput!
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
         faviconFile: Upload
+        faviconFileMetadata: FileMetadataInput
         heroImageFile: Upload
+        heroImageFileMetadata: FileMetadataInput
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting by targeting the ID
@@ -150330,8 +150272,11 @@ extend type Mutation{
         """
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
         faviconFile: Upload
+        faviconFileMetadata: FileMetadataInput
         heroImageFile: Upload
+        heroImageFileMetadata: FileMetadataInput
     ): TrustCenterSettingUpdatePayload!
     """
     Update an existing trustCenterSetting preview settings
@@ -150342,8 +150287,11 @@ extend type Mutation{
         """
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
         faviconFile: Upload
+        faviconFileMetadata: FileMetadataInput
         heroImageFile: Upload
+        heroImageFileMetadata: FileMetadataInput
     ): TrustCenterSettingUpdatePayload!
     """
     Publish changes from preview to live environment
@@ -150398,17 +150346,6 @@ type TrustCenterSettingBulkCreatePayload {
     Created trustCenterSettings
     """
     trustCenterSettings: [TrustCenterSetting!]
-}`, BuiltIn: false},
-	{Name: "../schema/trustcentersettinginputextended.graphql", Input: `extend input CreateTrustCenterSettingInput {
-  logoFileName: UploadFileName
-  faviconFileName: UploadFileName
-  heroImageFileName: UploadFileName
-}
-
-extend input UpdateTrustCenterSettingInput {
-  logoFileName: UploadFileName
-  faviconFileName: UploadFileName
-  heroImageFileName: UploadFileName
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersubprocessor.graphql", Input: `extend type Query {
@@ -150591,6 +150528,7 @@ extend type Mutation{
         """
         input: CreateTrustCenterWatermarkConfigInput!
         watermarkFile: Upload
+        watermarkFileMetadata: FileMetadataInput
     ): TrustCenterWatermarkConfigCreatePayload!
     """
     Update an existing trustCenterWatermarkConfig
@@ -150605,6 +150543,7 @@ extend type Mutation{
         """
         input: UpdateTrustCenterWatermarkConfigInput!
         watermarkFile: Upload
+        watermarkFileMetadata: FileMetadataInput
     ): TrustCenterWatermarkConfigUpdatePayload!
     """
     Delete an existing trustCenterWatermarkConfig
@@ -150657,14 +150596,6 @@ type TrustCenterWatermarkConfigBulkCreatePayload {
     trustCenterWatermarkConfigs: [TrustCenterWatermarkConfig!]
 }
 `, BuiltIn: false},
-	{Name: "../schema/trustcenterwatermarkconfiginputextended.graphql", Input: `extend input CreateTrustCenterWatermarkConfigInput {
-  watermarkFileName: UploadFileName
-}
-
-extend input UpdateTrustCenterWatermarkConfigInput {
-  watermarkFileName: UploadFileName
-}
-`, BuiltIn: false},
 	{Name: "../schema/user.graphql", Input: `extend type Query {
     """
     Look up user by ID
@@ -150694,6 +150625,7 @@ extend type Mutation{
         """
         input: CreateUserInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): UserCreatePayload!
     """
     Update an existing user
@@ -150708,6 +150640,7 @@ extend type Mutation{
         """
         input: UpdateUserInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): UserUpdatePayload!
     """
     Delete an existing user
@@ -150758,23 +150691,9 @@ type UserBulkCreatePayload {
     Created users
     """
     users: [User!]
-}`, BuiltIn: false},
-	{Name: "../schema/userextended.graphql", Input: `extend input CreateUserInput {
-  avatarFileMetadata: FileMetadataInput
-}
-
-extend input UpdateUserInput {
-  avatarFileMetadata: FileMetadataInput
 }
 `, BuiltIn: false},
-	{Name: "../schema/userinputextended.graphql", Input: `extend input CreateUserInput {
-  avatarFileName: UploadFileName
-}
-
-extend input UpdateUserInput {
-  avatarFileName: UploadFileName
-}
-`, BuiltIn: false},
+	{Name: "../schema/userextended.graphql", Input: ``, BuiltIn: false},
 	{Name: "../schema/usersetting.graphql", Input: `extend type Query {
     """
     Look up userSetting by ID

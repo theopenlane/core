@@ -1,7 +1,0 @@
-extend input CreateUserInput {
-  avatarFileMetadata: FileMetadataInput
-}
-
-extend input UpdateUserInput {
-  avatarFileMetadata: FileMetadataInput
-}

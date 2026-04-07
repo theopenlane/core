@@ -20,8 +20,11 @@ extend type Mutation{
         """
         input: CreateTrustCenterSettingInput!
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
         faviconFile: Upload
+        faviconFileMetadata: FileMetadataInput
         heroImageFile: Upload
+        heroImageFileMetadata: FileMetadataInput
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting by targeting the ID
@@ -36,8 +39,11 @@ extend type Mutation{
         """
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
         faviconFile: Upload
+        faviconFileMetadata: FileMetadataInput
         heroImageFile: Upload
+        heroImageFileMetadata: FileMetadataInput
     ): TrustCenterSettingUpdatePayload!
     """
     Update an existing trustCenterSetting preview settings
@@ -48,8 +54,11 @@ extend type Mutation{
         """
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
         faviconFile: Upload
+        faviconFileMetadata: FileMetadataInput
         heroImageFile: Upload
+        heroImageFileMetadata: FileMetadataInput
     ): TrustCenterSettingUpdatePayload!
     """
     Publish changes from preview to live environment

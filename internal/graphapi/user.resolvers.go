@@ -18,14 +18,14 @@ import (
 )
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*model.UserCreatePayload, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.UserCreatePayload, error) {
 	// TODO: look at allowing this resolver to invite the user instead of creating them directly
 	// for now, return permission denied
 	return nil, rout.ErrPermissionDenied
 }
 
 // UpdateUser is the resolver for the updateUser field.
-func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error) {
+func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.UserUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).User.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "user"})

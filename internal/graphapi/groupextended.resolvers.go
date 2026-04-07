@@ -7,7 +7,6 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/common/enums"
@@ -333,11 +332,6 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 	return nil
 }
 
-// AvatarFileMetadata is the resolver for the avatarFileMetadata field.
-func (r *createGroupInputResolver) AvatarFileMetadata(ctx context.Context, obj *generated.CreateGroupInput, data *model.FileMetadataInput) error {
-	panic(fmt.Errorf("not implemented: AvatarFileMetadata - avatarFileMetadata"))
-}
-
 // AddGroupMembers is the resolver for the addGroupMembers field.
 func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []*generated.CreateGroupMembershipInput) error {
 	if len(data) == 0 {
@@ -528,9 +522,4 @@ func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, 
 	}
 
 	return nil
-}
-
-// AvatarFileMetadata is the resolver for the avatarFileMetadata field.
-func (r *updateGroupInputResolver) AvatarFileMetadata(ctx context.Context, obj *generated.UpdateGroupInput, data *model.FileMetadataInput) error {
-	panic(fmt.Errorf("not implemented: AvatarFileMetadata - avatarFileMetadata"))
 }
