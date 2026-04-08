@@ -1,11 +1,10 @@
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
 
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // IntegrationProviderMetadata is a snapshot of definition metadata captured on installation
@@ -162,11 +161,16 @@ func (r *ConfigureIntegrationRequest) Validate() error {
 		return rout.NewMissingRequiredFieldError("definitionId")
 	}
 
-	if !jsonx.IsEmptyRawMessage(r.Body) && r.CredentialRef == "" {
+	if r.HasCredentialBody() && r.CredentialRef == "" {
 		return rout.NewMissingRequiredFieldError("credentialRef")
 	}
 
 	return nil
+}
+
+// HasCredentialBody reports whether the request includes a meaningful credential payload.
+func (r ConfigureIntegrationRequest) HasCredentialBody() bool {
+	return hasIntegrationCredentialBody(r.Body)
 }
 
 // Validate validates the IntegrationAuthStartRequest.
@@ -199,4 +203,13 @@ var ExampleRunIntegrationOperationRequest = RunIntegrationOperationRequest{
 	Body: RunIntegrationOperationBody{
 		Operation: "HealthCheck",
 	},
+}
+
+// hasIntegrationCredentialBody reports whether the config request contains a meaningful
+// credential payload. Empty objects are treated as absent so user-input-only updates can
+// send `body: {}` without triggering credential validation.
+func hasIntegrationCredentialBody(raw json.RawMessage) bool {
+	trimmed := bytes.TrimSpace(raw)
+
+	return len(trimmed) > 0 && !bytes.Equal(trimmed, []byte("null")) && !bytes.Equal(trimmed, []byte("{}"))
 }

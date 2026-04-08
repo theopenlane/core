@@ -82,10 +82,17 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 	}
 
 	cfg := *h.SessionConfig.CookieConfig
-	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
+	cookies := map[string]string{
 		"state":           begin.State,
 		"organization_id": caller.OrganizationID,
-	})
+	}
+
+	// ConsoleURL is the full base URL for the frontend (e.g. https://console.theopenlane.io).
+	// The redirect path is derived from the definition ID so the browser lands on the integration detail page.
+	redirectTo := h.ConsoleURL + "/organization-settings/integrations/" + def.ID
+	cookies["redirect_to"] = redirectTo
+
+	sessions.SetCookies(ctx.Response().Writer, cfg, cookies)
 
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
@@ -122,17 +129,23 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context, openapiCtx *Op
 
 	reqCtx = auth.WithCaller(reqCtx, auth.NewWebhookCaller(orgCookie.Value))
 
-	if _, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
+	_, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
 		State:    stateCookie.Value,
 		Callback: callbackInput,
-	}); err != nil {
+	})
+	if err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	cfg := *h.SessionConfig.CookieConfig
-	sessions.RemoveCookies(ctx.Response().Writer, cfg, "state", "organization_id")
+	redirectTo := h.ConsoleURL
+	if redirectCookie, cookieErr := sessions.GetCookie(ctx.Request(), "redirect_to"); cookieErr == nil {
+		redirectTo = redirectCookie.Value
+	}
 
-	return h.Success(ctx, rout.Reply{Success: true})
+	cfg := *h.SessionConfig.CookieConfig
+	sessions.RemoveCookies(ctx.Response().Writer, cfg, "state", "organization_id", "redirect_to")
+
+	return h.Redirect(ctx, redirectTo, openapiCtx)
 }
 
 // normalizeIntegrationAuthCallbackInput snapshots query params from the callback request

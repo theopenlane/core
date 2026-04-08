@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -63,6 +64,8 @@ const (
 	FieldExternalOwnerID = "external_owner_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldState holds the string denoting the state field in the database.
 	FieldState = "state"
 	// FieldIntent holds the string denoting the intent field in the database.
@@ -124,6 +127,7 @@ var Columns = []string{
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldTitle,
+	FieldStatus,
 	FieldState,
 	FieldIntent,
 	FieldSummary,
@@ -184,6 +188,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("remediationhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultStatus enums.RemediationStatus = "IN_PROGRESS"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.RemediationStatus) error {
+	switch s.String() {
+	case "OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO":
+		return nil
+	default:
+		return fmt.Errorf("remediationhistory: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -300,6 +316,11 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // ByState orders the results by the state field.
 func ByState(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldState, opts...).ToFunc()
@@ -380,4 +401,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.RemediationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RemediationStatus)(nil)
+	// enums.RemediationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RemediationStatus)(nil)
 )

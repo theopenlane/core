@@ -177,6 +177,58 @@ func (Risk) Fields() []ent.Field {
 				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
 			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
+		field.Time("mitigated_at").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("mitigated_at"),
+			).
+			Comment("the time when the risk was mitigated"),
+		field.Bool("review_required").
+			Optional().
+			Annotations(
+				entgql.OrderField("review_required"),
+			).
+			Default(true).
+			Comment("indicates if a periodic review is required for the risk"),
+		field.Time("last_reviewed_at").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("last_reviewed_at"),
+			).
+			Comment("the time when the risk was last reviewed"),
+		field.Enum("review_frequency").
+			GoType(enums.Frequency("")).
+			Default(enums.FrequencyYearly.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("review_frequency"),
+			),
+		field.Time("next_review_due_at").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("next_review_due_at"),
+			).
+			Comment("the time when the next review is due for the risk"),
+		field.Int("residual_score").
+			Optional().
+			Annotations(
+				entgql.OrderField("residual_score"),
+			).
+			Comment("score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)"),
+		field.Enum("risk_decision").
+			GoType(enums.RiskDecision("")).
+			Default(enums.RiskDecisionNone.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("risk_decision"),
+			).
+			Comment("the decision made for the risk - accept, transfer, avoid, mitigate, or none"),
 	}
 }
 
@@ -275,6 +327,8 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		defaultEdgeFromWithPagination(r, Review{}),
+		defaultEdgeFromWithPagination(r, Remediation{}),
 	}
 }
 

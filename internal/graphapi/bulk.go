@@ -9470,7 +9470,7 @@ func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []st
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences).AppendImpacts(input.AppendImpacts).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences).AppendImpacts(input.AppendImpacts).AppendCweIds(input.AppendCweIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", id).Msg("failed to update vulnerability in bulk operation")
 			continue
@@ -9511,7 +9511,7 @@ func (r *mutationResolver) bulkUpdateCSVVulnerability(ctx context.Context, input
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendReferences(input.Input.AppendReferences).AppendImpacts(input.Input.AppendImpacts).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendReferences(input.Input.AppendReferences).AppendImpacts(input.Input.AppendImpacts).AppendCweIds(input.Input.AppendCweIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", input.ID).Msg("failed to update vulnerability in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})

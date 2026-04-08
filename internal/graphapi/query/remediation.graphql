@@ -1,370 +1,387 @@
-mutation CreateBulkCSVRemediation ($input: Upload!) {
-	createBulkCSVRemediation(input: $input) {
-		remediations {
-			completedAt
-			createdAt
-			createdBy
-			displayID
-			dueAt
-			environmentID
-			environmentName
-			error
-			explanation
-			externalID
-			externalOwnerID
-			externalURI
-			id
-			instructions
-			intent
-			internalNotes
-			metadata
-			ownerID
-			ownerReference
-			prGeneratedAt
-			pullRequestURI
-			repositoryURI
-			scopeID
-			scopeName
-			source
-			state
-			summary
-			systemInternalID
-			systemOwned
-			tags
-			ticketReference
-			title
-			updatedAt
-			updatedBy
-		}
-	}
+mutation CreateBulkCSVRemediation($input: Upload!) {
+  createBulkCSVRemediation(input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
 }
-mutation CreateBulkRemediation ($input: [CreateRemediationInput!]) {
-	createBulkRemediation(input: $input) {
-		remediations {
-			completedAt
-			createdAt
-			createdBy
-			displayID
-			dueAt
-			environmentID
-			environmentName
-			error
-			explanation
-			externalID
-			externalOwnerID
-			externalURI
-			id
-			instructions
-			intent
-			internalNotes
-			metadata
-			ownerID
-			ownerReference
-			prGeneratedAt
-			pullRequestURI
-			repositoryURI
-			scopeID
-			scopeName
-			source
-			state
-			summary
-			systemInternalID
-			systemOwned
-			tags
-			ticketReference
-			title
-			updatedAt
-			updatedBy
-		}
-	}
+
+mutation CreateBulkRemediation($input: [CreateRemediationInput!]) {
+  createBulkRemediation(input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
 }
-mutation CreateRemediation ($input: CreateRemediationInput!) {
-	createRemediation(input: $input) {
-		remediation {
-			completedAt
-			createdAt
-			createdBy
-			displayID
-			dueAt
-			environmentID
-			environmentName
-			error
-			explanation
-			externalID
-			externalOwnerID
-			externalURI
-			id
-			instructions
-			intent
-			internalNotes
-			metadata
-			ownerID
-			ownerReference
-			prGeneratedAt
-			pullRequestURI
-			repositoryURI
-			scopeID
-			scopeName
-			source
-			state
-			summary
-			systemInternalID
-			systemOwned
-			tags
-			ticketReference
-			title
-			updatedAt
-			updatedBy
-		}
-	}
+
+mutation CreateRemediation($input: CreateRemediationInput!) {
+  createRemediation(input: $input) {
+    remediation {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
 }
-mutation DeleteBulkRemediation ($ids: [ID!]!) {
-	deleteBulkRemediation(ids: $ids) {
-		deletedIDs
-	}
+
+mutation DeleteBulkRemediation($ids: [ID!]!) {
+  deleteBulkRemediation(ids: $ids) {
+    deletedIDs
+  }
 }
-mutation DeleteRemediation ($deleteRemediationId: ID!) {
-	deleteRemediation(id: $deleteRemediationId) {
-		deletedID
-	}
+
+mutation DeleteRemediation($deleteRemediationId: ID!) {
+  deleteRemediation(id: $deleteRemediationId) {
+    deletedID
+  }
 }
+
 query GetAllRemediations {
-	remediations {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				completedAt
-				createdAt
-				createdBy
-				dueAt
-				error
-				explanation
-				externalID
-				externalOwnerID
-				externalURI
-				id
-				instructions
-				intent
-				metadata
-				ownerReference
-				prGeneratedAt
-				pullRequestURI
-				repositoryURI
-				source
-				state
-				summary
-				tags
-				ticketReference
-				title
-				updatedAt
-				updatedBy
-			}
-		}
-	}
+  remediations {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        dueAt
+        error
+        explanation
+        externalID
+        externalOwnerID
+        externalURI
+        id
+        instructions
+        intent
+        metadata
+        ownerReference
+        prGeneratedAt
+        pullRequestURI
+        repositoryURI
+        source
+        state
+        summary
+        tags
+        ticketReference
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
 }
-query GetRemediationByID ($remediationId: ID!) {
-	remediation(id: $remediationId) {
-		completedAt
-		createdAt
-		createdBy
-		displayID
-		dueAt
-		environmentID
-		environmentName
-		error
-		explanation
-		externalID
-		externalOwnerID
-		externalURI
-		id
-		instructions
-		intent
-		internalNotes
-		metadata
-		ownerID
-		ownerReference
-		prGeneratedAt
-		pullRequestURI
-		repositoryURI
-		scopeID
-		scopeName
-		source
-		state
-		summary
-		systemInternalID
-		systemOwned
-		tags
-		ticketReference
-		title
-		updatedAt
-		updatedBy
-	}
+
+query GetRemediationByID($remediationId: ID!) {
+  remediation(id: $remediationId) {
+    completedAt
+    createdAt
+    createdBy
+    displayID
+    dueAt
+    environmentID
+    environmentName
+    error
+    explanation
+    externalID
+    externalOwnerID
+    externalURI
+    id
+    instructions
+    intent
+    internalNotes
+    metadata
+    ownerID
+    ownerReference
+    prGeneratedAt
+    pullRequestURI
+    repositoryURI
+    scopeID
+    scopeName
+    source
+    state
+    status
+    summary
+    systemInternalID
+    systemOwned
+    tags
+    ticketReference
+    title
+    updatedAt
+    updatedBy
+  }
 }
-query GetRemediations ($first: Int, $last: Int, $where: RemediationWhereInput) {
-	remediations(first: $first, last: $last, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				completedAt
-				createdAt
-				createdBy
-				dueAt
-				error
-				explanation
-				externalID
-				externalOwnerID
-				externalURI
-				id
-				instructions
-				intent
-				metadata
-				ownerReference
-				prGeneratedAt
-				pullRequestURI
-				repositoryURI
-				source
-				state
-				summary
-				tags
-				ticketReference
-				title
-				updatedAt
-				updatedBy
-			}
-		}
-	}
+
+query GetRemediations($first: Int, $last: Int, $where: RemediationWhereInput) {
+  remediations(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        dueAt
+        error
+        explanation
+        externalID
+        externalOwnerID
+        externalURI
+        id
+        instructions
+        intent
+        metadata
+        ownerReference
+        prGeneratedAt
+        pullRequestURI
+        repositoryURI
+        source
+        state
+        summary
+        tags
+        ticketReference
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
 }
-mutation UpdateBulkCSVRemediation ($input: Upload!) {
-	updateBulkCSVRemediation(input: $input) {
-		remediations {
-			completedAt
-			createdAt
-			createdBy
-			displayID
-			dueAt
-			environmentID
-			environmentName
-			error
-			explanation
-			externalID
-			externalOwnerID
-			externalURI
-			id
-			instructions
-			intent
-			internalNotes
-			metadata
-			ownerID
-			ownerReference
-			prGeneratedAt
-			pullRequestURI
-			repositoryURI
-			scopeID
-			scopeName
-			source
-			state
-			summary
-			systemInternalID
-			systemOwned
-			tags
-			ticketReference
-			title
-			updatedAt
-			updatedBy
-		}
-		updatedIDs
-	}
+
+mutation UpdateBulkCSVRemediation($input: Upload!) {
+  updateBulkCSVRemediation(input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
 }
-mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
-	updateBulkRemediation(ids: $ids, input: $input) {
-		remediations {
-			completedAt
-			createdAt
-			createdBy
-			displayID
-			dueAt
-			environmentID
-			environmentName
-			error
-			explanation
-			externalID
-			externalOwnerID
-			externalURI
-			id
-			instructions
-			intent
-			internalNotes
-			metadata
-			ownerID
-			ownerReference
-			prGeneratedAt
-			pullRequestURI
-			repositoryURI
-			scopeID
-			scopeName
-			source
-			state
-			summary
-			systemInternalID
-			systemOwned
-			tags
-			ticketReference
-			title
-			updatedAt
-			updatedBy
-		}
-		updatedIDs
-	}
+
+mutation UpdateBulkRemediation($ids: [ID!]!, $input: UpdateRemediationInput!) {
+  updateBulkRemediation(ids: $ids, input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
 }
-mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediationInput!) {
-	updateRemediation(id: $updateRemediationId, input: $input) {
-		remediation {
-			completedAt
-			createdAt
-			createdBy
-			displayID
-			dueAt
-			environmentID
-			environmentName
-			error
-			explanation
-			externalID
-			externalOwnerID
-			externalURI
-			id
-			instructions
-			intent
-			internalNotes
-			metadata
-			ownerID
-			ownerReference
-			prGeneratedAt
-			pullRequestURI
-			repositoryURI
-			scopeID
-			scopeName
-			source
-			state
-			summary
-			systemInternalID
-			systemOwned
-			tags
-			ticketReference
-			title
-			updatedAt
-			updatedBy
-		}
-	}
+
+mutation UpdateRemediation($updateRemediationId: ID!, $input: UpdateRemediationInput!) {
+  updateRemediation(id: $updateRemediationId, input: $input) {
+    remediation {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+  }
 }

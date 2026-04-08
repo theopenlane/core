@@ -3301,6 +3301,7 @@ enum AssetAssetType @goModel(model: "github.com/theopenlane/core/common/enums.As
   DOMAIN
   DEVICE
   TELEPHONE
+  REPOSITORY
 }
 """
 A connection to a list of items.
@@ -13864,6 +13865,10 @@ input CreateRemediationInput {
   """
   title: String
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationRemediationStatus
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -14150,6 +14155,31 @@ input CreateRiskInput {
   structured details of the business costs in JSON format
   """
   businessCostsJSON: [Any!]
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  reviewFrequency: RiskFrequency
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskRiskDecision
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -14173,6 +14203,8 @@ input CreateRiskInput {
   delegateID: ID
   commentIDs: [ID!]
   discussionIDs: [ID!]
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
 }
 """
 CreateSLADefinitionInput is used for create SLADefinition object.
@@ -15519,6 +15551,34 @@ input CreateVulnerabilityInput {
   """
   impacts: [String!]
   """
+  CWE identifiers associated with the vulnerability
+  """
+  cweIds: [String!]
+  """
+  version range affected by the vulnerability
+  """
+  vulnerableVersionRange: String
+  """
+  earliest version that fixes the vulnerability
+  """
+  firstPatchedVersion: String
+  """
+  name of the vulnerable package or dependency
+  """
+  packageName: String
+  """
+  ecosystem of the vulnerable package such as npm, pip, or maven
+  """
+  packageEcosystem: String
+  """
+  path to the manifest file declaring the vulnerable dependency
+  """
+  manifestPath: String
+  """
+  scope of the dependency such as runtime or development
+  """
+  dependencyScope: String
+  """
   timestamp when the vulnerability was published
   """
   publishedAt: DateTime
@@ -15530,6 +15590,26 @@ input CreateVulnerabilityInput {
   timestamp when the source last updated the vulnerability
   """
   sourceUpdatedAt: DateTime
+  """
+  timestamp when the vulnerability was dismissed
+  """
+  dismissedAt: DateTime
+  """
+  reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+  """
+  dismissedReason: String
+  """
+  free-text explanation provided when the vulnerability was dismissed
+  """
+  dismissedComment: String
+  """
+  timestamp when the vulnerability was marked as fixed
+  """
+  fixedAt: DateTime
+  """
+  timestamp when the vulnerability was automatically dismissed by the source system
+  """
+  autoDismissedAt: DateTime
   """
   link to the vulnerability in the source system
   """
@@ -54964,6 +55044,10 @@ type Remediation implements Node {
   """
   title: String
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationRemediationStatus
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -55641,7 +55725,18 @@ enum RemediationOrderField {
   external_id
   external_owner_id
   title
+  status
   state
+}
+"""
+RemediationRemediationStatus is enum for the field status
+"""
+enum RemediationRemediationStatus @goModel(model: "github.com/theopenlane/core/common/enums.RemediationStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 RemediationWhereInput is used for filtering Remediation objects.
@@ -55929,6 +56024,15 @@ input RemediationWhereInput {
   titleNotNil: Boolean
   titleEqualFold: String
   titleContainsFold: String
+  """
+  status field predicates
+  """
+  status: RemediationRemediationStatus
+  statusNEQ: RemediationRemediationStatus
+  statusIn: [RemediationRemediationStatus!]
+  statusNotIn: [RemediationRemediationStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   state field predicates
   """
@@ -57737,6 +57841,31 @@ type Risk implements Node {
   the id of the group responsible for risk oversight on behalf of the stakeholder
   """
   delegateID: ID
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  reviewFrequency: RiskFrequency
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskRiskDecision
   owner: Organization
   blockedGroups(
     """
@@ -58246,6 +58375,68 @@ type Risk implements Node {
     """
     where: DiscussionWhereInput
   ): DiscussionConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
 }
 """
 A connection to a list of items.
@@ -58278,6 +58469,16 @@ type RiskEdge {
   cursor: Cursor!
 }
 """
+RiskFrequency is enum for the field review_frequency
+"""
+enum RiskFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 Ordering options for Risk connections
 """
 input RiskOrder {
@@ -58304,6 +58505,23 @@ enum RiskOrderField {
   LIKELIHOOD
   score
   business_costs
+  mitigated_at
+  review_required
+  last_reviewed_at
+  review_frequency
+  next_review_due_at
+  residual_score
+  risk_decision
+}
+"""
+RiskRiskDecision is enum for the field risk_decision
+"""
+enum RiskRiskDecision @goModel(model: "github.com/theopenlane/core/common/enums.RiskDecision") {
+  AVOID
+  MITIGATE
+  ACCEPT
+  TRANSFER
+  NONE
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -58811,6 +59029,83 @@ input RiskWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  mitigated_at field predicates
+  """
+  mitigatedAt: DateTime
+  mitigatedAtNEQ: DateTime
+  mitigatedAtIn: [DateTime!]
+  mitigatedAtNotIn: [DateTime!]
+  mitigatedAtGT: DateTime
+  mitigatedAtGTE: DateTime
+  mitigatedAtLT: DateTime
+  mitigatedAtLTE: DateTime
+  mitigatedAtIsNil: Boolean
+  mitigatedAtNotNil: Boolean
+  """
+  review_required field predicates
+  """
+  reviewRequired: Boolean
+  reviewRequiredNEQ: Boolean
+  reviewRequiredIsNil: Boolean
+  reviewRequiredNotNil: Boolean
+  """
+  last_reviewed_at field predicates
+  """
+  lastReviewedAt: DateTime
+  lastReviewedAtNEQ: DateTime
+  lastReviewedAtIn: [DateTime!]
+  lastReviewedAtNotIn: [DateTime!]
+  lastReviewedAtGT: DateTime
+  lastReviewedAtGTE: DateTime
+  lastReviewedAtLT: DateTime
+  lastReviewedAtLTE: DateTime
+  lastReviewedAtIsNil: Boolean
+  lastReviewedAtNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: RiskFrequency
+  reviewFrequencyNEQ: RiskFrequency
+  reviewFrequencyIn: [RiskFrequency!]
+  reviewFrequencyNotIn: [RiskFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_due_at field predicates
+  """
+  nextReviewDueAt: DateTime
+  nextReviewDueAtNEQ: DateTime
+  nextReviewDueAtIn: [DateTime!]
+  nextReviewDueAtNotIn: [DateTime!]
+  nextReviewDueAtGT: DateTime
+  nextReviewDueAtGTE: DateTime
+  nextReviewDueAtLT: DateTime
+  nextReviewDueAtLTE: DateTime
+  nextReviewDueAtIsNil: Boolean
+  nextReviewDueAtNotNil: Boolean
+  """
+  residual_score field predicates
+  """
+  residualScore: Int
+  residualScoreNEQ: Int
+  residualScoreIn: [Int!]
+  residualScoreNotIn: [Int!]
+  residualScoreGT: Int
+  residualScoreGTE: Int
+  residualScoreLT: Int
+  residualScoreLTE: Int
+  residualScoreIsNil: Boolean
+  residualScoreNotNil: Boolean
+  """
+  risk_decision field predicates
+  """
+  riskDecision: RiskRiskDecision
+  riskDecisionNEQ: RiskRiskDecision
+  riskDecisionIn: [RiskRiskDecision!]
+  riskDecisionNotIn: [RiskRiskDecision!]
+  riskDecisionIsNil: Boolean
+  riskDecisionNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -58925,6 +59220,16 @@ input RiskWhereInput {
   """
   hasDiscussions: Boolean
   hasDiscussionsWith: [DiscussionWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -76583,6 +76888,11 @@ input UpdateRemediationInput {
   title: String
   clearTitle: Boolean
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationRemediationStatus
+  clearStatus: Boolean
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -77005,6 +77315,38 @@ input UpdateRiskInput {
   businessCostsJSON: [Any!]
   appendBusinessCostsJSON: [Any!]
   clearBusinessCostsJSON: Boolean
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  clearMitigatedAt: Boolean
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  clearReviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  clearLastReviewedAt: Boolean
+  reviewFrequency: RiskFrequency
+  clearReviewFrequency: Boolean
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  clearNextReviewDueAt: Boolean
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  clearResidualScore: Boolean
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskRiskDecision
+  clearRiskDecision: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -77065,6 +77407,12 @@ input UpdateRiskInput {
   addDiscussionIDs: [ID!]
   removeDiscussionIDs: [ID!]
   clearDiscussions: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
 }
 """
 UpdateSLADefinitionInput is used for update SLADefinition object.
@@ -78910,6 +79258,42 @@ input UpdateVulnerabilityInput {
   appendImpacts: [String!]
   clearImpacts: Boolean
   """
+  CWE identifiers associated with the vulnerability
+  """
+  cweIds: [String!]
+  appendCweIds: [String!]
+  clearCweIds: Boolean
+  """
+  version range affected by the vulnerability
+  """
+  vulnerableVersionRange: String
+  clearVulnerableVersionRange: Boolean
+  """
+  earliest version that fixes the vulnerability
+  """
+  firstPatchedVersion: String
+  clearFirstPatchedVersion: Boolean
+  """
+  name of the vulnerable package or dependency
+  """
+  packageName: String
+  clearPackageName: Boolean
+  """
+  ecosystem of the vulnerable package such as npm, pip, or maven
+  """
+  packageEcosystem: String
+  clearPackageEcosystem: Boolean
+  """
+  path to the manifest file declaring the vulnerable dependency
+  """
+  manifestPath: String
+  clearManifestPath: Boolean
+  """
+  scope of the dependency such as runtime or development
+  """
+  dependencyScope: String
+  clearDependencyScope: Boolean
+  """
   timestamp when the vulnerability was published
   """
   publishedAt: DateTime
@@ -78924,6 +79308,31 @@ input UpdateVulnerabilityInput {
   """
   sourceUpdatedAt: DateTime
   clearSourceUpdatedAt: Boolean
+  """
+  timestamp when the vulnerability was dismissed
+  """
+  dismissedAt: DateTime
+  clearDismissedAt: Boolean
+  """
+  reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+  """
+  dismissedReason: String
+  clearDismissedReason: Boolean
+  """
+  free-text explanation provided when the vulnerability was dismissed
+  """
+  dismissedComment: String
+  clearDismissedComment: Boolean
+  """
+  timestamp when the vulnerability was marked as fixed
+  """
+  fixedAt: DateTime
+  clearFixedAt: Boolean
+  """
+  timestamp when the vulnerability was automatically dismissed by the source system
+  """
+  autoDismissedAt: DateTime
+  clearAutoDismissedAt: Boolean
   """
   link to the vulnerability in the source system
   """
@@ -81393,7 +81802,7 @@ type Vulnerability implements Node {
   """
   externalOwnerID: String
   """
-  lifecycle status of the vulnerability
+  security level of the vulnerability
   """
   securityLevel: VulnerabilitySecurityLevel
   """
@@ -81481,6 +81890,34 @@ type Vulnerability implements Node {
   """
   impacts: [String!]
   """
+  CWE identifiers associated with the vulnerability
+  """
+  cweIds: [String!]
+  """
+  version range affected by the vulnerability
+  """
+  vulnerableVersionRange: String
+  """
+  earliest version that fixes the vulnerability
+  """
+  firstPatchedVersion: String
+  """
+  name of the vulnerable package or dependency
+  """
+  packageName: String
+  """
+  ecosystem of the vulnerable package such as npm, pip, or maven
+  """
+  packageEcosystem: String
+  """
+  path to the manifest file declaring the vulnerable dependency
+  """
+  manifestPath: String
+  """
+  scope of the dependency such as runtime or development
+  """
+  dependencyScope: String
+  """
   timestamp when the vulnerability was published
   """
   publishedAt: DateTime
@@ -81492,6 +81929,26 @@ type Vulnerability implements Node {
   timestamp when the source last updated the vulnerability
   """
   sourceUpdatedAt: DateTime
+  """
+  timestamp when the vulnerability was dismissed
+  """
+  dismissedAt: DateTime
+  """
+  reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+  """
+  dismissedReason: String
+  """
+  free-text explanation provided when the vulnerability was dismissed
+  """
+  dismissedComment: String
+  """
+  timestamp when the vulnerability was marked as fixed
+  """
+  fixedAt: DateTime
+  """
+  timestamp when the vulnerability was automatically dismissed by the source system
+  """
+  autoDismissedAt: DateTime
   """
   link to the vulnerability in the source system
   """
@@ -82694,6 +83151,114 @@ input VulnerabilityWhereInput {
   validatedIsNil: Boolean
   validatedNotNil: Boolean
   """
+  vulnerable_version_range field predicates
+  """
+  vulnerableVersionRange: String
+  vulnerableVersionRangeNEQ: String
+  vulnerableVersionRangeIn: [String!]
+  vulnerableVersionRangeNotIn: [String!]
+  vulnerableVersionRangeGT: String
+  vulnerableVersionRangeGTE: String
+  vulnerableVersionRangeLT: String
+  vulnerableVersionRangeLTE: String
+  vulnerableVersionRangeContains: String
+  vulnerableVersionRangeHasPrefix: String
+  vulnerableVersionRangeHasSuffix: String
+  vulnerableVersionRangeIsNil: Boolean
+  vulnerableVersionRangeNotNil: Boolean
+  vulnerableVersionRangeEqualFold: String
+  vulnerableVersionRangeContainsFold: String
+  """
+  first_patched_version field predicates
+  """
+  firstPatchedVersion: String
+  firstPatchedVersionNEQ: String
+  firstPatchedVersionIn: [String!]
+  firstPatchedVersionNotIn: [String!]
+  firstPatchedVersionGT: String
+  firstPatchedVersionGTE: String
+  firstPatchedVersionLT: String
+  firstPatchedVersionLTE: String
+  firstPatchedVersionContains: String
+  firstPatchedVersionHasPrefix: String
+  firstPatchedVersionHasSuffix: String
+  firstPatchedVersionIsNil: Boolean
+  firstPatchedVersionNotNil: Boolean
+  firstPatchedVersionEqualFold: String
+  firstPatchedVersionContainsFold: String
+  """
+  package_name field predicates
+  """
+  packageName: String
+  packageNameNEQ: String
+  packageNameIn: [String!]
+  packageNameNotIn: [String!]
+  packageNameGT: String
+  packageNameGTE: String
+  packageNameLT: String
+  packageNameLTE: String
+  packageNameContains: String
+  packageNameHasPrefix: String
+  packageNameHasSuffix: String
+  packageNameIsNil: Boolean
+  packageNameNotNil: Boolean
+  packageNameEqualFold: String
+  packageNameContainsFold: String
+  """
+  package_ecosystem field predicates
+  """
+  packageEcosystem: String
+  packageEcosystemNEQ: String
+  packageEcosystemIn: [String!]
+  packageEcosystemNotIn: [String!]
+  packageEcosystemGT: String
+  packageEcosystemGTE: String
+  packageEcosystemLT: String
+  packageEcosystemLTE: String
+  packageEcosystemContains: String
+  packageEcosystemHasPrefix: String
+  packageEcosystemHasSuffix: String
+  packageEcosystemIsNil: Boolean
+  packageEcosystemNotNil: Boolean
+  packageEcosystemEqualFold: String
+  packageEcosystemContainsFold: String
+  """
+  manifest_path field predicates
+  """
+  manifestPath: String
+  manifestPathNEQ: String
+  manifestPathIn: [String!]
+  manifestPathNotIn: [String!]
+  manifestPathGT: String
+  manifestPathGTE: String
+  manifestPathLT: String
+  manifestPathLTE: String
+  manifestPathContains: String
+  manifestPathHasPrefix: String
+  manifestPathHasSuffix: String
+  manifestPathIsNil: Boolean
+  manifestPathNotNil: Boolean
+  manifestPathEqualFold: String
+  manifestPathContainsFold: String
+  """
+  dependency_scope field predicates
+  """
+  dependencyScope: String
+  dependencyScopeNEQ: String
+  dependencyScopeIn: [String!]
+  dependencyScopeNotIn: [String!]
+  dependencyScopeGT: String
+  dependencyScopeGTE: String
+  dependencyScopeLT: String
+  dependencyScopeLTE: String
+  dependencyScopeContains: String
+  dependencyScopeHasPrefix: String
+  dependencyScopeHasSuffix: String
+  dependencyScopeIsNil: Boolean
+  dependencyScopeNotNil: Boolean
+  dependencyScopeEqualFold: String
+  dependencyScopeContainsFold: String
+  """
   published_at field predicates
   """
   publishedAt: DateTime
@@ -82732,6 +83297,81 @@ input VulnerabilityWhereInput {
   sourceUpdatedAtLTE: DateTime
   sourceUpdatedAtIsNil: Boolean
   sourceUpdatedAtNotNil: Boolean
+  """
+  dismissed_at field predicates
+  """
+  dismissedAt: DateTime
+  dismissedAtNEQ: DateTime
+  dismissedAtIn: [DateTime!]
+  dismissedAtNotIn: [DateTime!]
+  dismissedAtGT: DateTime
+  dismissedAtGTE: DateTime
+  dismissedAtLT: DateTime
+  dismissedAtLTE: DateTime
+  dismissedAtIsNil: Boolean
+  dismissedAtNotNil: Boolean
+  """
+  dismissed_reason field predicates
+  """
+  dismissedReason: String
+  dismissedReasonNEQ: String
+  dismissedReasonIn: [String!]
+  dismissedReasonNotIn: [String!]
+  dismissedReasonGT: String
+  dismissedReasonGTE: String
+  dismissedReasonLT: String
+  dismissedReasonLTE: String
+  dismissedReasonContains: String
+  dismissedReasonHasPrefix: String
+  dismissedReasonHasSuffix: String
+  dismissedReasonIsNil: Boolean
+  dismissedReasonNotNil: Boolean
+  dismissedReasonEqualFold: String
+  dismissedReasonContainsFold: String
+  """
+  dismissed_comment field predicates
+  """
+  dismissedComment: String
+  dismissedCommentNEQ: String
+  dismissedCommentIn: [String!]
+  dismissedCommentNotIn: [String!]
+  dismissedCommentGT: String
+  dismissedCommentGTE: String
+  dismissedCommentLT: String
+  dismissedCommentLTE: String
+  dismissedCommentContains: String
+  dismissedCommentHasPrefix: String
+  dismissedCommentHasSuffix: String
+  dismissedCommentIsNil: Boolean
+  dismissedCommentNotNil: Boolean
+  dismissedCommentEqualFold: String
+  dismissedCommentContainsFold: String
+  """
+  fixed_at field predicates
+  """
+  fixedAt: DateTime
+  fixedAtNEQ: DateTime
+  fixedAtIn: [DateTime!]
+  fixedAtNotIn: [DateTime!]
+  fixedAtGT: DateTime
+  fixedAtGTE: DateTime
+  fixedAtLT: DateTime
+  fixedAtLTE: DateTime
+  fixedAtIsNil: Boolean
+  fixedAtNotNil: Boolean
+  """
+  auto_dismissed_at field predicates
+  """
+  autoDismissedAt: DateTime
+  autoDismissedAtNEQ: DateTime
+  autoDismissedAtIn: [DateTime!]
+  autoDismissedAtNotIn: [DateTime!]
+  autoDismissedAtGT: DateTime
+  autoDismissedAtGTE: DateTime
+  autoDismissedAtLT: DateTime
+  autoDismissedAtLTE: DateTime
+  autoDismissedAtIsNil: Boolean
+  autoDismissedAtNotNil: Boolean
   """
   external_uri field predicates
   """
@@ -82872,6 +83512,10 @@ input VulnerabilityWhereInput {
   Filter for impactsHas to contain a specific value
   """
   impactsHas: String
+  """
+  Filter for cweIdsHas to contain a specific value
+  """
+  cweIdsHas: String
 }
 type Webauthn implements Node {
   id: ID!

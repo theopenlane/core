@@ -61844,13 +61844,17 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"remediation_risks"`
+							NodeID string `sql:"remediation_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(remediation.RisksColumn), ids...))
+							joinT := sql.Table(remediation.RisksTable)
+							s.Join(joinT).On(s.C(risk.FieldID), joinT.C(remediation.RisksPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(remediation.RisksPrimaryKey[0]), ids...))
+							s.Select(joinT.C(remediation.RisksPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(remediation.RisksPrimaryKey[0]))
 						})
-						if err := query.GroupBy(remediation.RisksColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -61895,7 +61899,7 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(remediation.RisksColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(remediation.RisksPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -62526,6 +62530,11 @@ func (_q *RemediationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[remediation.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, remediation.FieldTitle)
 				fieldSeen[remediation.FieldTitle] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[remediation.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, remediation.FieldStatus)
+				fieldSeen[remediation.FieldStatus] = struct{}{}
 			}
 		case "state":
 			if _, ok := fieldSeen[remediation.FieldState]; !ok {
@@ -63689,13 +63698,17 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"review_risks"`
+							NodeID string `sql:"review_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(review.RisksColumn), ids...))
+							joinT := sql.Table(review.RisksTable)
+							s.Join(joinT).On(s.C(risk.FieldID), joinT.C(review.RisksPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(review.RisksPrimaryKey[0]), ids...))
+							s.Select(joinT.C(review.RisksPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(review.RisksPrimaryKey[0]))
 						})
-						if err := query.GroupBy(review.RisksColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.Select().Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -63740,7 +63753,7 @@ func (_q *ReviewQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(review.RisksColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(review.RisksPrimaryKey[0], limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -66209,6 +66222,192 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			_q.WithNamedDiscussions(alias, func(wq *DiscussionQuery) {
 				*wq = *query
 			})
+
+		case "reviews":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ReviewClient{config: _q.config}).Query()
+			)
+			args := newReviewPaginateArgs(fieldArgs(ctx, new(ReviewWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newReviewPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"risk_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(risk.ReviewsTable)
+							s.Join(joinT).On(s.C(review.FieldID), joinT.C(risk.ReviewsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(risk.ReviewsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(risk.ReviewsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(risk.ReviewsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[23][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Risk) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Reviews)
+							if nodes[i].Edges.totalCount[23] == nil {
+								nodes[i].Edges.totalCount[23] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[23][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, reviewImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(risk.ReviewsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedReviews(alias, func(wq *ReviewQuery) {
+				*wq = *query
+			})
+
+		case "remediations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RemediationClient{config: _q.config}).Query()
+			)
+			args := newRemediationPaginateArgs(fieldArgs(ctx, new(RemediationWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newRemediationPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Risk) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"risk_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(risk.RemediationsTable)
+							s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(risk.RemediationsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(risk.RemediationsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(risk.RemediationsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(risk.RemediationsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[24][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Risk) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Remediations)
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[24][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, remediationImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(risk.RemediationsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedRemediations(alias, func(wq *RemediationQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[risk.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, risk.FieldCreatedAt)
@@ -66368,6 +66567,41 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[risk.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldDelegateID)
 				fieldSeen[risk.FieldDelegateID] = struct{}{}
+			}
+		case "mitigatedAt":
+			if _, ok := fieldSeen[risk.FieldMitigatedAt]; !ok {
+				selectedFields = append(selectedFields, risk.FieldMitigatedAt)
+				fieldSeen[risk.FieldMitigatedAt] = struct{}{}
+			}
+		case "reviewRequired":
+			if _, ok := fieldSeen[risk.FieldReviewRequired]; !ok {
+				selectedFields = append(selectedFields, risk.FieldReviewRequired)
+				fieldSeen[risk.FieldReviewRequired] = struct{}{}
+			}
+		case "lastReviewedAt":
+			if _, ok := fieldSeen[risk.FieldLastReviewedAt]; !ok {
+				selectedFields = append(selectedFields, risk.FieldLastReviewedAt)
+				fieldSeen[risk.FieldLastReviewedAt] = struct{}{}
+			}
+		case "reviewFrequency":
+			if _, ok := fieldSeen[risk.FieldReviewFrequency]; !ok {
+				selectedFields = append(selectedFields, risk.FieldReviewFrequency)
+				fieldSeen[risk.FieldReviewFrequency] = struct{}{}
+			}
+		case "nextReviewDueAt":
+			if _, ok := fieldSeen[risk.FieldNextReviewDueAt]; !ok {
+				selectedFields = append(selectedFields, risk.FieldNextReviewDueAt)
+				fieldSeen[risk.FieldNextReviewDueAt] = struct{}{}
+			}
+		case "residualScore":
+			if _, ok := fieldSeen[risk.FieldResidualScore]; !ok {
+				selectedFields = append(selectedFields, risk.FieldResidualScore)
+				fieldSeen[risk.FieldResidualScore] = struct{}{}
+			}
+		case "riskDecision":
+			if _, ok := fieldSeen[risk.FieldRiskDecision]; !ok {
+				selectedFields = append(selectedFields, risk.FieldRiskDecision)
+				fieldSeen[risk.FieldRiskDecision] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -84520,6 +84754,41 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, vulnerability.FieldImpacts)
 				fieldSeen[vulnerability.FieldImpacts] = struct{}{}
 			}
+		case "cweIds":
+			if _, ok := fieldSeen[vulnerability.FieldCweIds]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldCweIds)
+				fieldSeen[vulnerability.FieldCweIds] = struct{}{}
+			}
+		case "vulnerableVersionRange":
+			if _, ok := fieldSeen[vulnerability.FieldVulnerableVersionRange]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldVulnerableVersionRange)
+				fieldSeen[vulnerability.FieldVulnerableVersionRange] = struct{}{}
+			}
+		case "firstPatchedVersion":
+			if _, ok := fieldSeen[vulnerability.FieldFirstPatchedVersion]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldFirstPatchedVersion)
+				fieldSeen[vulnerability.FieldFirstPatchedVersion] = struct{}{}
+			}
+		case "packageName":
+			if _, ok := fieldSeen[vulnerability.FieldPackageName]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldPackageName)
+				fieldSeen[vulnerability.FieldPackageName] = struct{}{}
+			}
+		case "packageEcosystem":
+			if _, ok := fieldSeen[vulnerability.FieldPackageEcosystem]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldPackageEcosystem)
+				fieldSeen[vulnerability.FieldPackageEcosystem] = struct{}{}
+			}
+		case "manifestPath":
+			if _, ok := fieldSeen[vulnerability.FieldManifestPath]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldManifestPath)
+				fieldSeen[vulnerability.FieldManifestPath] = struct{}{}
+			}
+		case "dependencyScope":
+			if _, ok := fieldSeen[vulnerability.FieldDependencyScope]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldDependencyScope)
+				fieldSeen[vulnerability.FieldDependencyScope] = struct{}{}
+			}
 		case "publishedAt":
 			if _, ok := fieldSeen[vulnerability.FieldPublishedAt]; !ok {
 				selectedFields = append(selectedFields, vulnerability.FieldPublishedAt)
@@ -84534,6 +84803,31 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[vulnerability.FieldSourceUpdatedAt]; !ok {
 				selectedFields = append(selectedFields, vulnerability.FieldSourceUpdatedAt)
 				fieldSeen[vulnerability.FieldSourceUpdatedAt] = struct{}{}
+			}
+		case "dismissedAt":
+			if _, ok := fieldSeen[vulnerability.FieldDismissedAt]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldDismissedAt)
+				fieldSeen[vulnerability.FieldDismissedAt] = struct{}{}
+			}
+		case "dismissedReason":
+			if _, ok := fieldSeen[vulnerability.FieldDismissedReason]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldDismissedReason)
+				fieldSeen[vulnerability.FieldDismissedReason] = struct{}{}
+			}
+		case "dismissedComment":
+			if _, ok := fieldSeen[vulnerability.FieldDismissedComment]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldDismissedComment)
+				fieldSeen[vulnerability.FieldDismissedComment] = struct{}{}
+			}
+		case "fixedAt":
+			if _, ok := fieldSeen[vulnerability.FieldFixedAt]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldFixedAt)
+				fieldSeen[vulnerability.FieldFixedAt] = struct{}{}
+			}
+		case "autoDismissedAt":
+			if _, ok := fieldSeen[vulnerability.FieldAutoDismissedAt]; !ok {
+				selectedFields = append(selectedFields, vulnerability.FieldAutoDismissedAt)
+				fieldSeen[vulnerability.FieldAutoDismissedAt] = struct{}{}
 			}
 		case "externalURI":
 			if _, ok := fieldSeen[vulnerability.FieldExternalURI]; !ok {

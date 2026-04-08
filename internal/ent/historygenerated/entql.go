@@ -2089,6 +2089,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			remediationhistory.FieldExternalID:       {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
 			remediationhistory.FieldExternalOwnerID:  {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
 			remediationhistory.FieldTitle:            {Type: field.TypeString, Column: remediationhistory.FieldTitle},
+			remediationhistory.FieldStatus:           {Type: field.TypeEnum, Column: remediationhistory.FieldStatus},
 			remediationhistory.FieldState:            {Type: field.TypeString, Column: remediationhistory.FieldState},
 			remediationhistory.FieldIntent:           {Type: field.TypeString, Column: remediationhistory.FieldIntent},
 			remediationhistory.FieldSummary:          {Type: field.TypeString, Column: remediationhistory.FieldSummary},
@@ -2204,6 +2205,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldBusinessCostsJSON: {Type: field.TypeJSON, Column: riskhistory.FieldBusinessCostsJSON},
 			riskhistory.FieldStakeholderID:     {Type: field.TypeString, Column: riskhistory.FieldStakeholderID},
 			riskhistory.FieldDelegateID:        {Type: field.TypeString, Column: riskhistory.FieldDelegateID},
+			riskhistory.FieldMitigatedAt:       {Type: field.TypeTime, Column: riskhistory.FieldMitigatedAt},
+			riskhistory.FieldReviewRequired:    {Type: field.TypeBool, Column: riskhistory.FieldReviewRequired},
+			riskhistory.FieldLastReviewedAt:    {Type: field.TypeTime, Column: riskhistory.FieldLastReviewedAt},
+			riskhistory.FieldReviewFrequency:   {Type: field.TypeEnum, Column: riskhistory.FieldReviewFrequency},
+			riskhistory.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: riskhistory.FieldNextReviewDueAt},
+			riskhistory.FieldResidualScore:     {Type: field.TypeInt, Column: riskhistory.FieldResidualScore},
+			riskhistory.FieldRiskDecision:      {Type: field.TypeEnum, Column: riskhistory.FieldRiskDecision},
 		},
 	}
 	graph.Nodes[50] = &sqlgraph.Node{
@@ -3043,9 +3051,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldValidated:               {Type: field.TypeBool, Column: vulnerabilityhistory.FieldValidated},
 			vulnerabilityhistory.FieldReferences:              {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldReferences},
 			vulnerabilityhistory.FieldImpacts:                 {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldImpacts},
+			vulnerabilityhistory.FieldCweIds:                  {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldCweIds},
+			vulnerabilityhistory.FieldVulnerableVersionRange:  {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerableVersionRange},
+			vulnerabilityhistory.FieldFirstPatchedVersion:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldFirstPatchedVersion},
+			vulnerabilityhistory.FieldPackageName:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldPackageName},
+			vulnerabilityhistory.FieldPackageEcosystem:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldPackageEcosystem},
+			vulnerabilityhistory.FieldManifestPath:            {Type: field.TypeString, Column: vulnerabilityhistory.FieldManifestPath},
+			vulnerabilityhistory.FieldDependencyScope:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldDependencyScope},
 			vulnerabilityhistory.FieldPublishedAt:             {Type: field.TypeTime, Column: vulnerabilityhistory.FieldPublishedAt},
 			vulnerabilityhistory.FieldDiscoveredAt:            {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDiscoveredAt},
 			vulnerabilityhistory.FieldSourceUpdatedAt:         {Type: field.TypeTime, Column: vulnerabilityhistory.FieldSourceUpdatedAt},
+			vulnerabilityhistory.FieldDismissedAt:             {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDismissedAt},
+			vulnerabilityhistory.FieldDismissedReason:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldDismissedReason},
+			vulnerabilityhistory.FieldDismissedComment:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldDismissedComment},
+			vulnerabilityhistory.FieldFixedAt:                 {Type: field.TypeTime, Column: vulnerabilityhistory.FieldFixedAt},
+			vulnerabilityhistory.FieldAutoDismissedAt:         {Type: field.TypeTime, Column: vulnerabilityhistory.FieldAutoDismissedAt},
 			vulnerabilityhistory.FieldExternalURI:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalURI},
 			vulnerabilityhistory.FieldMetadata:                {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldMetadata},
 			vulnerabilityhistory.FieldRawPayload:              {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
@@ -12068,6 +12088,11 @@ func (f *RemediationHistoryFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldTitle))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *RemediationHistoryFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldStatus))
+}
+
 // WhereState applies the entql string predicate on the state field.
 func (f *RemediationHistoryFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldState))
@@ -12591,6 +12616,41 @@ func (f *RiskHistoryFilter) WhereStakeholderID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *RiskHistoryFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldDelegateID))
+}
+
+// WhereMitigatedAt applies the entql time.Time predicate on the mitigated_at field.
+func (f *RiskHistoryFilter) WhereMitigatedAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldMitigatedAt))
+}
+
+// WhereReviewRequired applies the entql bool predicate on the review_required field.
+func (f *RiskHistoryFilter) WhereReviewRequired(p entql.BoolP) {
+	f.Where(p.Field(riskhistory.FieldReviewRequired))
+}
+
+// WhereLastReviewedAt applies the entql time.Time predicate on the last_reviewed_at field.
+func (f *RiskHistoryFilter) WhereLastReviewedAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldLastReviewedAt))
+}
+
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *RiskHistoryFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldReviewFrequency))
+}
+
+// WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.
+func (f *RiskHistoryFilter) WhereNextReviewDueAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldNextReviewDueAt))
+}
+
+// WhereResidualScore applies the entql int predicate on the residual_score field.
+func (f *RiskHistoryFilter) WhereResidualScore(p entql.IntP) {
+	f.Where(p.Field(riskhistory.FieldResidualScore))
+}
+
+// WhereRiskDecision applies the entql string predicate on the risk_decision field.
+func (f *RiskHistoryFilter) WhereRiskDecision(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldRiskDecision))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16213,6 +16273,41 @@ func (f *VulnerabilityHistoryFilter) WhereImpacts(p entql.BytesP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldImpacts))
 }
 
+// WhereCweIds applies the entql json.RawMessage predicate on the cwe_ids field.
+func (f *VulnerabilityHistoryFilter) WhereCweIds(p entql.BytesP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldCweIds))
+}
+
+// WhereVulnerableVersionRange applies the entql string predicate on the vulnerable_version_range field.
+func (f *VulnerabilityHistoryFilter) WhereVulnerableVersionRange(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldVulnerableVersionRange))
+}
+
+// WhereFirstPatchedVersion applies the entql string predicate on the first_patched_version field.
+func (f *VulnerabilityHistoryFilter) WhereFirstPatchedVersion(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldFirstPatchedVersion))
+}
+
+// WherePackageName applies the entql string predicate on the package_name field.
+func (f *VulnerabilityHistoryFilter) WherePackageName(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldPackageName))
+}
+
+// WherePackageEcosystem applies the entql string predicate on the package_ecosystem field.
+func (f *VulnerabilityHistoryFilter) WherePackageEcosystem(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldPackageEcosystem))
+}
+
+// WhereManifestPath applies the entql string predicate on the manifest_path field.
+func (f *VulnerabilityHistoryFilter) WhereManifestPath(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldManifestPath))
+}
+
+// WhereDependencyScope applies the entql string predicate on the dependency_scope field.
+func (f *VulnerabilityHistoryFilter) WhereDependencyScope(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDependencyScope))
+}
+
 // WherePublishedAt applies the entql time.Time predicate on the published_at field.
 func (f *VulnerabilityHistoryFilter) WherePublishedAt(p entql.TimeP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldPublishedAt))
@@ -16226,6 +16321,31 @@ func (f *VulnerabilityHistoryFilter) WhereDiscoveredAt(p entql.TimeP) {
 // WhereSourceUpdatedAt applies the entql time.Time predicate on the source_updated_at field.
 func (f *VulnerabilityHistoryFilter) WhereSourceUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldSourceUpdatedAt))
+}
+
+// WhereDismissedAt applies the entql time.Time predicate on the dismissed_at field.
+func (f *VulnerabilityHistoryFilter) WhereDismissedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDismissedAt))
+}
+
+// WhereDismissedReason applies the entql string predicate on the dismissed_reason field.
+func (f *VulnerabilityHistoryFilter) WhereDismissedReason(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDismissedReason))
+}
+
+// WhereDismissedComment applies the entql string predicate on the dismissed_comment field.
+func (f *VulnerabilityHistoryFilter) WhereDismissedComment(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDismissedComment))
+}
+
+// WhereFixedAt applies the entql time.Time predicate on the fixed_at field.
+func (f *VulnerabilityHistoryFilter) WhereFixedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldFixedAt))
+}
+
+// WhereAutoDismissedAt applies the entql time.Time predicate on the auto_dismissed_at field.
+func (f *VulnerabilityHistoryFilter) WhereAutoDismissedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldAutoDismissedAt))
 }
 
 // WhereExternalURI applies the entql string predicate on the external_uri field.

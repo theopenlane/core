@@ -227,6 +227,7 @@ type SchemaConfig struct {
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
 	RemediationControls                string // Remediation-controls->Control table.
 	RemediationSubcontrols             string // Remediation-subcontrols->Subcontrol table.
+	RemediationRisks                   string // Remediation-risks->Risk table.
 	Review                             string // Review table.
 	ReviewFindings                     string // Review-findings->Finding table.
 	ReviewVulnerabilities              string // Review-vulnerabilities->Vulnerability table.
@@ -234,6 +235,7 @@ type SchemaConfig struct {
 	ReviewRemediations                 string // Review-remediations->Remediation table.
 	ReviewControls                     string // Review-controls->Control table.
 	ReviewSubcontrols                  string // Review-subcontrols->Subcontrol table.
+	ReviewRisks                        string // Review-risks->Risk table.
 	ReviewInternalPolicies             string // Review-internal_policies->InternalPolicy table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.

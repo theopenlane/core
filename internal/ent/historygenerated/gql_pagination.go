@@ -20843,6 +20843,20 @@ var (
 			}
 		},
 	}
+	// RemediationHistoryOrderFieldStatus orders RemediationHistory by status.
+	RemediationHistoryOrderFieldStatus = &RemediationHistoryOrderField{
+		Value: func(_m *RemediationHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: remediationhistory.FieldStatus,
+		toTerm: remediationhistory.ByStatus,
+		toCursor: func(_m *RemediationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
 	// RemediationHistoryOrderFieldState orders RemediationHistory by state.
 	RemediationHistoryOrderFieldState = &RemediationHistoryOrderField{
 		Value: func(_m *RemediationHistory) (ent.Value, error) {
@@ -20875,6 +20889,8 @@ func (f RemediationHistoryOrderField) String() string {
 		str = "external_owner_id"
 	case RemediationHistoryOrderFieldTitle.column:
 		str = "title"
+	case RemediationHistoryOrderFieldStatus.column:
+		str = "status"
 	case RemediationHistoryOrderFieldState.column:
 		str = "state"
 	}
@@ -20905,6 +20921,8 @@ func (f *RemediationHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RemediationHistoryOrderFieldExternalOwnerID
 	case "title":
 		*f = *RemediationHistoryOrderFieldTitle
+	case "status":
+		*f = *RemediationHistoryOrderFieldStatus
 	case "state":
 		*f = *RemediationHistoryOrderFieldState
 	default:
@@ -21734,6 +21752,143 @@ var (
 			}
 		},
 	}
+	// RiskHistoryOrderFieldMitigatedAt orders RiskHistory by mitigated_at.
+	RiskHistoryOrderFieldMitigatedAt = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.MitigatedAt == nil {
+				return nil, nil
+			}
+			return _m.MitigatedAt, nil
+		},
+		column: riskhistory.FieldMitigatedAt,
+		toTerm: func(opts ...sql.OrderTermOption) riskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return riskhistory.ByMitigatedAt(opts...)
+		},
+		toCursor: func(_m *RiskHistory) Cursor {
+			if _m.MitigatedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.MitigatedAt,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldReviewRequired orders RiskHistory by review_required.
+	RiskHistoryOrderFieldReviewRequired = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.ReviewRequired, nil
+		},
+		column: riskhistory.FieldReviewRequired,
+		toTerm: riskhistory.ByReviewRequired,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewRequired,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldLastReviewedAt orders RiskHistory by last_reviewed_at.
+	RiskHistoryOrderFieldLastReviewedAt = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastReviewedAt == nil {
+				return nil, nil
+			}
+			return _m.LastReviewedAt, nil
+		},
+		column: riskhistory.FieldLastReviewedAt,
+		toTerm: func(opts ...sql.OrderTermOption) riskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return riskhistory.ByLastReviewedAt(opts...)
+		},
+		toCursor: func(_m *RiskHistory) Cursor {
+			if _m.LastReviewedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastReviewedAt,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldReviewFrequency orders RiskHistory by review_frequency.
+	RiskHistoryOrderFieldReviewFrequency = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: riskhistory.FieldReviewFrequency,
+		toTerm: riskhistory.ByReviewFrequency,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldNextReviewDueAt orders RiskHistory by next_review_due_at.
+	RiskHistoryOrderFieldNextReviewDueAt = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextReviewDueAt == nil {
+				return nil, nil
+			}
+			return _m.NextReviewDueAt, nil
+		},
+		column: riskhistory.FieldNextReviewDueAt,
+		toTerm: func(opts ...sql.OrderTermOption) riskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return riskhistory.ByNextReviewDueAt(opts...)
+		},
+		toCursor: func(_m *RiskHistory) Cursor {
+			if _m.NextReviewDueAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextReviewDueAt,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldResidualScore orders RiskHistory by residual_score.
+	RiskHistoryOrderFieldResidualScore = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.ResidualScore, nil
+		},
+		column: riskhistory.FieldResidualScore,
+		toTerm: riskhistory.ByResidualScore,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResidualScore,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldRiskDecision orders RiskHistory by risk_decision.
+	RiskHistoryOrderFieldRiskDecision = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.RiskDecision, nil
+		},
+		column: riskhistory.FieldRiskDecision,
+		toTerm: riskhistory.ByRiskDecision,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskDecision,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -21762,6 +21917,20 @@ func (f RiskHistoryOrderField) String() string {
 		str = "score"
 	case RiskHistoryOrderFieldBusinessCosts.column:
 		str = "business_costs"
+	case RiskHistoryOrderFieldMitigatedAt.column:
+		str = "mitigated_at"
+	case RiskHistoryOrderFieldReviewRequired.column:
+		str = "review_required"
+	case RiskHistoryOrderFieldLastReviewedAt.column:
+		str = "last_reviewed_at"
+	case RiskHistoryOrderFieldReviewFrequency.column:
+		str = "review_frequency"
+	case RiskHistoryOrderFieldNextReviewDueAt.column:
+		str = "next_review_due_at"
+	case RiskHistoryOrderFieldResidualScore.column:
+		str = "residual_score"
+	case RiskHistoryOrderFieldRiskDecision.column:
+		str = "risk_decision"
 	}
 	return str
 }
@@ -21800,6 +21969,20 @@ func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskHistoryOrderFieldScore
 	case "business_costs":
 		*f = *RiskHistoryOrderFieldBusinessCosts
+	case "mitigated_at":
+		*f = *RiskHistoryOrderFieldMitigatedAt
+	case "review_required":
+		*f = *RiskHistoryOrderFieldReviewRequired
+	case "last_reviewed_at":
+		*f = *RiskHistoryOrderFieldLastReviewedAt
+	case "review_frequency":
+		*f = *RiskHistoryOrderFieldReviewFrequency
+	case "next_review_due_at":
+		*f = *RiskHistoryOrderFieldNextReviewDueAt
+	case "residual_score":
+		*f = *RiskHistoryOrderFieldResidualScore
+	case "risk_decision":
+		*f = *RiskHistoryOrderFieldRiskDecision
 	default:
 		return fmt.Errorf("%s is not a valid RiskHistoryOrderField", str)
 	}

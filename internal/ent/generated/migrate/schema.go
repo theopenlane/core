@@ -393,7 +393,7 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"}, Default: "TECHNOLOGY"},
+		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE", "REPOSITORY"}, Default: "TECHNOLOGY"},
 		{Name: "name", Type: field.TypeString},
 		{Name: "display_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -5949,6 +5949,7 @@ var (
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "IN_PROGRESS"},
 		{Name: "state", Type: field.TypeString, Nullable: true},
 		{Name: "intent", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -5977,19 +5978,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "remediations_organizations_remediations",
-				Columns:    []*schema.Column{RemediationsColumns[33]},
+				Columns:    []*schema.Column{RemediationsColumns[34]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "remediations_custom_type_enums_environment",
-				Columns:    []*schema.Column{RemediationsColumns[34]},
+				Columns:    []*schema.Column{RemediationsColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "remediations_custom_type_enums_scope",
-				Columns:    []*schema.Column{RemediationsColumns[35]},
+				Columns:    []*schema.Column{RemediationsColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5998,12 +5999,12 @@ var (
 			{
 				Name:    "remediation_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RemediationsColumns[7], RemediationsColumns[33]},
+				Columns: []*schema.Column{RemediationsColumns[7], RemediationsColumns[34]},
 			},
 			{
 				Name:    "remediation_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RemediationsColumns[33]},
+				Columns: []*schema.Column{RemediationsColumns[34]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6011,7 +6012,7 @@ var (
 			{
 				Name:    "remediation_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RemediationsColumns[14], RemediationsColumns[15], RemediationsColumns[33]},
+				Columns: []*schema.Column{RemediationsColumns[14], RemediationsColumns[15], RemediationsColumns[34]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6135,13 +6136,18 @@ var (
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "business_costs_json", Type: field.TypeJSON, Nullable: true},
+		{Name: "mitigated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "review_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "last_reviewed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
+		{Name: "next_review_due_at", Type: field.TypeTime, Nullable: true},
+		{Name: "residual_score", Type: field.TypeInt, Nullable: true},
+		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE"}, Default: " NONE"},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risk_categories", Type: field.TypeString, Nullable: true},
 		{Name: "finding_risks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "remediation_risks", Type: field.TypeString, Nullable: true},
-		{Name: "review_risks", Type: field.TypeString, Nullable: true},
 		{Name: "risk_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_category_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
@@ -6158,85 +6164,73 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "risks_control_objectives_risks",
-				Columns:    []*schema.Column{RisksColumns[28]},
+				Columns:    []*schema.Column{RisksColumns[35]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risks",
-				Columns:    []*schema.Column{RisksColumns[29]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_custom_type_enums_risk_categories",
-				Columns:    []*schema.Column{RisksColumns[30]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_findings_risks",
-				Columns:    []*schema.Column{RisksColumns[31]},
-				RefColumns: []*schema.Column{FindingsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_organizations_risks",
-				Columns:    []*schema.Column{RisksColumns[32]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_remediations_risks",
-				Columns:    []*schema.Column{RisksColumns[33]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_reviews_risks",
-				Columns:    []*schema.Column{RisksColumns[34]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_custom_type_enums_risk_kind",
-				Columns:    []*schema.Column{RisksColumns[35]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_custom_type_enums_risk_category",
 				Columns:    []*schema.Column{RisksColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_environment",
+				Symbol:     "risks_custom_type_enums_risk_categories",
 				Columns:    []*schema.Column{RisksColumns[37]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_scope",
+				Symbol:     "risks_findings_risks",
 				Columns:    []*schema.Column{RisksColumns[38]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_organizations_risks",
+				Columns:    []*schema.Column{RisksColumns[39]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_custom_type_enums_risk_kind",
+				Columns:    []*schema.Column{RisksColumns[40]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_custom_type_enums_risk_category",
+				Columns:    []*schema.Column{RisksColumns[41]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_custom_type_enums_environment",
+				Columns:    []*schema.Column{RisksColumns[42]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_custom_type_enums_scope",
+				Columns:    []*schema.Column{RisksColumns[43]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_stakeholder",
-				Columns:    []*schema.Column{RisksColumns[39]},
+				Columns:    []*schema.Column{RisksColumns[44]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_delegate",
-				Columns:    []*schema.Column{RisksColumns[40]},
+				Columns:    []*schema.Column{RisksColumns[45]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_vulnerabilities_risks",
-				Columns:    []*schema.Column{RisksColumns[41]},
+				Columns:    []*schema.Column{RisksColumns[46]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6245,12 +6239,12 @@ var (
 			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[7], RisksColumns[32]},
+				Columns: []*schema.Column{RisksColumns[7], RisksColumns[39]},
 			},
 			{
 				Name:    "risk_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[32]},
+				Columns: []*schema.Column{RisksColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6258,7 +6252,7 @@ var (
 			{
 				Name:    "risk_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[16], RisksColumns[32]},
+				Columns: []*schema.Column{RisksColumns[16], RisksColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8102,9 +8096,21 @@ var (
 		{Name: "validated", Type: field.TypeBool, Nullable: true},
 		{Name: "references", Type: field.TypeJSON, Nullable: true},
 		{Name: "impacts", Type: field.TypeJSON, Nullable: true},
+		{Name: "cwe_ids", Type: field.TypeJSON, Nullable: true},
+		{Name: "vulnerable_version_range", Type: field.TypeString, Nullable: true},
+		{Name: "first_patched_version", Type: field.TypeString, Nullable: true},
+		{Name: "package_name", Type: field.TypeString, Nullable: true},
+		{Name: "package_ecosystem", Type: field.TypeString, Nullable: true},
+		{Name: "manifest_path", Type: field.TypeString, Nullable: true},
+		{Name: "dependency_scope", Type: field.TypeString, Nullable: true},
 		{Name: "published_at", Type: field.TypeTime, Nullable: true},
 		{Name: "discovered_at", Type: field.TypeTime, Nullable: true},
 		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "dismissed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "dismissed_reason", Type: field.TypeString, Nullable: true},
+		{Name: "dismissed_comment", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "fixed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "auto_dismissed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "external_uri", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
@@ -8121,25 +8127,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "vulnerabilities_organizations_vulnerabilities",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[44]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[56]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_environment",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[45]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[57]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_scope",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[46]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[58]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_vulnerability_status",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[47]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[59]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8148,12 +8154,12 @@ var (
 			{
 				Name:    "vulnerability_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[7], VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[7], VulnerabilitiesColumns[56]},
 			},
 			{
 				Name:    "vulnerability_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8161,7 +8167,7 @@ var (
 			{
 				Name:    "vulnerability_external_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[17], VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[17], VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8169,7 +8175,7 @@ var (
 			{
 				Name:    "vulnerability_cve_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[18], VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[18], VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -12624,6 +12630,31 @@ var (
 			},
 		},
 	}
+	// RemediationRisksColumns holds the columns for the "remediation_risks" table.
+	RemediationRisksColumns = []*schema.Column{
+		{Name: "remediation_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// RemediationRisksTable holds the schema information for the "remediation_risks" table.
+	RemediationRisksTable = &schema.Table{
+		Name:       "remediation_risks",
+		Columns:    RemediationRisksColumns,
+		PrimaryKey: []*schema.Column{RemediationRisksColumns[0], RemediationRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "remediation_risks_remediation_id",
+				Columns:    []*schema.Column{RemediationRisksColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "remediation_risks_risk_id",
+				Columns:    []*schema.Column{RemediationRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ReviewFindingsColumns holds the columns for the "review_findings" table.
 	ReviewFindingsColumns = []*schema.Column{
 		{Name: "review_id", Type: field.TypeString},
@@ -12770,6 +12801,31 @@ var (
 				Symbol:     "review_subcontrols_subcontrol_id",
 				Columns:    []*schema.Column{ReviewSubcontrolsColumns[1]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ReviewRisksColumns holds the columns for the "review_risks" table.
+	ReviewRisksColumns = []*schema.Column{
+		{Name: "review_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// ReviewRisksTable holds the schema information for the "review_risks" table.
+	ReviewRisksTable = &schema.Table{
+		Name:       "review_risks",
+		Columns:    ReviewRisksColumns,
+		PrimaryKey: []*schema.Column{ReviewRisksColumns[0], ReviewRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "review_risks_review_id",
+				Columns:    []*schema.Column{ReviewRisksColumns[0]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "review_risks_risk_id",
+				Columns:    []*schema.Column{ReviewRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -13856,12 +13912,14 @@ var (
 		RemediationActionPlansTable,
 		RemediationControlsTable,
 		RemediationSubcontrolsTable,
+		RemediationRisksTable,
 		ReviewFindingsTable,
 		ReviewVulnerabilitiesTable,
 		ReviewActionPlansTable,
 		ReviewRemediationsTable,
 		ReviewControlsTable,
 		ReviewSubcontrolsTable,
+		ReviewRisksTable,
 		ReviewInternalPoliciesTable,
 		RiskBlockedGroupsTable,
 		RiskEditorsTable,
@@ -14281,15 +14339,13 @@ func init() {
 	RisksTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[3].RefTable = FindingsTable
 	RisksTable.ForeignKeys[4].RefTable = OrganizationsTable
-	RisksTable.ForeignKeys[5].RefTable = RemediationsTable
-	RisksTable.ForeignKeys[6].RefTable = ReviewsTable
+	RisksTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
+	RisksTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[11].RefTable = GroupsTable
-	RisksTable.ForeignKeys[12].RefTable = GroupsTable
-	RisksTable.ForeignKeys[13].RefTable = VulnerabilitiesTable
+	RisksTable.ForeignKeys[9].RefTable = GroupsTable
+	RisksTable.ForeignKeys[10].RefTable = GroupsTable
+	RisksTable.ForeignKeys[11].RefTable = VulnerabilitiesTable
 	SLADefinitionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ScansTable.ForeignKeys[0].RefTable = EntitiesTable
 	ScansTable.ForeignKeys[1].RefTable = FindingsTable
@@ -14749,6 +14805,8 @@ func init() {
 	RemediationControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	RemediationSubcontrolsTable.ForeignKeys[0].RefTable = RemediationsTable
 	RemediationSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	RemediationRisksTable.ForeignKeys[0].RefTable = RemediationsTable
+	RemediationRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ReviewFindingsTable.ForeignKeys[0].RefTable = ReviewsTable
 	ReviewFindingsTable.ForeignKeys[1].RefTable = FindingsTable
 	ReviewVulnerabilitiesTable.ForeignKeys[0].RefTable = ReviewsTable
@@ -14761,6 +14819,8 @@ func init() {
 	ReviewControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	ReviewSubcontrolsTable.ForeignKeys[0].RefTable = ReviewsTable
 	ReviewSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	ReviewRisksTable.ForeignKeys[0].RefTable = ReviewsTable
+	ReviewRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ReviewInternalPoliciesTable.ForeignKeys[0].RefTable = ReviewsTable
 	ReviewInternalPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	RiskBlockedGroupsTable.ForeignKeys[0].RefTable = RisksTable

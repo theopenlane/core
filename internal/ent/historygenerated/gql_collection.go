@@ -10474,6 +10474,11 @@ func (_q *RemediationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, remediationhistory.FieldTitle)
 				fieldSeen[remediationhistory.FieldTitle] = struct{}{}
 			}
+		case "status":
+			if _, ok := fieldSeen[remediationhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, remediationhistory.FieldStatus)
+				fieldSeen[remediationhistory.FieldStatus] = struct{}{}
+			}
 		case "state":
 			if _, ok := fieldSeen[remediationhistory.FieldState]; !ok {
 				selectedFields = append(selectedFields, remediationhistory.FieldState)
@@ -11066,6 +11071,41 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDelegateID)
 				fieldSeen[riskhistory.FieldDelegateID] = struct{}{}
+			}
+		case "mitigatedAt":
+			if _, ok := fieldSeen[riskhistory.FieldMitigatedAt]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldMitigatedAt)
+				fieldSeen[riskhistory.FieldMitigatedAt] = struct{}{}
+			}
+		case "reviewRequired":
+			if _, ok := fieldSeen[riskhistory.FieldReviewRequired]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldReviewRequired)
+				fieldSeen[riskhistory.FieldReviewRequired] = struct{}{}
+			}
+		case "lastReviewedAt":
+			if _, ok := fieldSeen[riskhistory.FieldLastReviewedAt]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldLastReviewedAt)
+				fieldSeen[riskhistory.FieldLastReviewedAt] = struct{}{}
+			}
+		case "reviewFrequency":
+			if _, ok := fieldSeen[riskhistory.FieldReviewFrequency]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldReviewFrequency)
+				fieldSeen[riskhistory.FieldReviewFrequency] = struct{}{}
+			}
+		case "nextReviewDueAt":
+			if _, ok := fieldSeen[riskhistory.FieldNextReviewDueAt]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldNextReviewDueAt)
+				fieldSeen[riskhistory.FieldNextReviewDueAt] = struct{}{}
+			}
+		case "residualScore":
+			if _, ok := fieldSeen[riskhistory.FieldResidualScore]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldResidualScore)
+				fieldSeen[riskhistory.FieldResidualScore] = struct{}{}
+			}
+		case "riskDecision":
+			if _, ok := fieldSeen[riskhistory.FieldRiskDecision]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldRiskDecision)
+				fieldSeen[riskhistory.FieldRiskDecision] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -15459,6 +15499,41 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldImpacts)
 				fieldSeen[vulnerabilityhistory.FieldImpacts] = struct{}{}
 			}
+		case "cweIds":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldCweIds]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldCweIds)
+				fieldSeen[vulnerabilityhistory.FieldCweIds] = struct{}{}
+			}
+		case "vulnerableVersionRange":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerableVersionRange]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerableVersionRange)
+				fieldSeen[vulnerabilityhistory.FieldVulnerableVersionRange] = struct{}{}
+			}
+		case "firstPatchedVersion":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldFirstPatchedVersion]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldFirstPatchedVersion)
+				fieldSeen[vulnerabilityhistory.FieldFirstPatchedVersion] = struct{}{}
+			}
+		case "packageName":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldPackageName]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldPackageName)
+				fieldSeen[vulnerabilityhistory.FieldPackageName] = struct{}{}
+			}
+		case "packageEcosystem":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldPackageEcosystem]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldPackageEcosystem)
+				fieldSeen[vulnerabilityhistory.FieldPackageEcosystem] = struct{}{}
+			}
+		case "manifestPath":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldManifestPath]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldManifestPath)
+				fieldSeen[vulnerabilityhistory.FieldManifestPath] = struct{}{}
+			}
+		case "dependencyScope":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldDependencyScope]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldDependencyScope)
+				fieldSeen[vulnerabilityhistory.FieldDependencyScope] = struct{}{}
+			}
 		case "publishedAt":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldPublishedAt]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldPublishedAt)
@@ -15473,6 +15548,31 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldSourceUpdatedAt]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldSourceUpdatedAt)
 				fieldSeen[vulnerabilityhistory.FieldSourceUpdatedAt] = struct{}{}
+			}
+		case "dismissedAt":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldDismissedAt]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldDismissedAt)
+				fieldSeen[vulnerabilityhistory.FieldDismissedAt] = struct{}{}
+			}
+		case "dismissedReason":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldDismissedReason]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldDismissedReason)
+				fieldSeen[vulnerabilityhistory.FieldDismissedReason] = struct{}{}
+			}
+		case "dismissedComment":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldDismissedComment]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldDismissedComment)
+				fieldSeen[vulnerabilityhistory.FieldDismissedComment] = struct{}{}
+			}
+		case "fixedAt":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldFixedAt]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldFixedAt)
+				fieldSeen[vulnerabilityhistory.FieldFixedAt] = struct{}{}
+			}
+		case "autoDismissedAt":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldAutoDismissedAt]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldAutoDismissedAt)
+				fieldSeen[vulnerabilityhistory.FieldAutoDismissedAt] = struct{}{}
 			}
 		case "externalURI":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalURI]; !ok {

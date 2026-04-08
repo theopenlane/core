@@ -1,4 +1,4 @@
-h1:WfW8mxd/o33pAPEisjOYa9rLVnxRlEZgZmtFApzKkE4=
+h1:naXeXzbYVaesdBDbBF5ZKaK2td5J9ZQUeUi7uno/Sc0=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -98,5 +98,7 @@ h1:WfW8mxd/o33pAPEisjOYa9rLVnxRlEZgZmtFApzKkE4=
 20260405172944_vendorriskscore.sql h1:GwxQlD63ha3KC7ejLg2hZ4YZY0bwgKHbjmDLG3iIGAo=
 20260405172947_vendorriskscore_history.sql h1:S/+lZGLMGfH2MDJeOPSKugPg/31yGOHirDOsFpQIcJE=
 20260407160343_platform_files.sql h1:0zZdHG4tIMMBwAtNumPNcmkBbw04PuqQGNfQgMy7THU=
-20260408123342_file_category_and_name.sql h1:uGZCM9AjlNGojO7ibANwEsepO9CXb9t8OttYzi/0/D8=
-20260408123352_file_category_and_name_history.sql h1:luRsvmb9/8yvq55HLSd2XeRUD8xxYL70AvT0LyUzS5s=
+20260407224958_vulnfieldupdates.sql h1:R99QsNYNXdVGyDqJCnOao1ZTBgpmsWW3XfvG66QS/6E=
+20260407225000_vulnfieldupdates_history.sql h1:/O7u/7iOHrRnrE4jPQcJ65HIt3mrcT0yYtZHo+NPnDI=
+20260408044535_risk_fields.sql h1:n9clyMuYmhF3bZdSetseLALyt7Fx5vE1dDfx8UelMpY=
+20260408044538_risk_fields_history.sql h1:ncd06MV03ae12UQ362vQ/uRvBrv00/q3YdhlumzW3k0=

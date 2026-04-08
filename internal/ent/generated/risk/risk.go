@@ -86,6 +86,20 @@ const (
 	FieldStakeholderID = "stakeholder_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldMitigatedAt holds the string denoting the mitigated_at field in the database.
+	FieldMitigatedAt = "mitigated_at"
+	// FieldReviewRequired holds the string denoting the review_required field in the database.
+	FieldReviewRequired = "review_required"
+	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
+	FieldLastReviewedAt = "last_reviewed_at"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldNextReviewDueAt holds the string denoting the next_review_due_at field in the database.
+	FieldNextReviewDueAt = "next_review_due_at"
+	// FieldResidualScore holds the string denoting the residual_score field in the database.
+	FieldResidualScore = "residual_score"
+	// FieldRiskDecision holds the string denoting the risk_decision field in the database.
+	FieldRiskDecision = "risk_decision"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -132,6 +146,10 @@ const (
 	EdgeComments = "comments"
 	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
 	EdgeDiscussions = "discussions"
+	// EdgeReviews holds the string denoting the reviews edge name in mutations.
+	EdgeReviews = "reviews"
+	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
+	EdgeRemediations = "remediations"
 	// Table holds the table name of the risk in the database.
 	Table = "risks"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -273,6 +291,16 @@ const (
 	DiscussionsInverseTable = "discussions"
 	// DiscussionsColumn is the table column denoting the discussions relation/edge.
 	DiscussionsColumn = "risk_discussions"
+	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
+	ReviewsTable = "review_risks"
+	// ReviewsInverseTable is the table name for the Review entity.
+	// It exists in this package in order to avoid circular dependency with the "review" package.
+	ReviewsInverseTable = "reviews"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "remediation_risks"
+	// RemediationsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationsInverseTable = "remediations"
 )
 
 // Columns holds all SQL columns for risk fields.
@@ -312,6 +340,13 @@ var Columns = []string{
 	FieldBusinessCostsJSON,
 	FieldStakeholderID,
 	FieldDelegateID,
+	FieldMitigatedAt,
+	FieldReviewRequired,
+	FieldLastReviewedAt,
+	FieldReviewFrequency,
+	FieldNextReviewDueAt,
+	FieldResidualScore,
+	FieldRiskDecision,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "risks"
@@ -321,8 +356,6 @@ var ForeignKeys = []string{
 	"custom_type_enum_risks",
 	"custom_type_enum_risk_categories",
 	"finding_risks",
-	"remediation_risks",
-	"review_risks",
 	"vulnerability_risks",
 }
 
@@ -360,6 +393,12 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"risk_id", "task_id"}
+	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
+	// primary key for the reviews relation (M2M).
+	ReviewsPrimaryKey = []string{"review_id", "risk_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"remediation_id", "risk_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -400,6 +439,8 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultReviewRequired holds the default value on creation for the "review_required" field.
+	DefaultReviewRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -437,6 +478,30 @@ func LikelihoodValidator(l enums.RiskLikelihood) error {
 		return nil
 	default:
 		return fmt.Errorf("risk: invalid enum value for likelihood field: %q", l)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("risk: invalid enum value for review_frequency field: %q", rf)
+	}
+}
+
+const DefaultRiskDecision enums.RiskDecision = " NONE"
+
+// RiskDecisionValidator is a validator for the "risk_decision" field enum values. It is called by the builders before save.
+func RiskDecisionValidator(rd enums.RiskDecision) error {
+	switch rd.String() {
+	case "AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE":
+		return nil
+	default:
+		return fmt.Errorf("risk: invalid enum value for risk_decision field: %q", rd)
 	}
 }
 
@@ -596,6 +661,41 @@ func ByStakeholderID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateID orders the results by the delegate_id field.
 func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
+}
+
+// ByMitigatedAt orders the results by the mitigated_at field.
+func ByMitigatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMitigatedAt, opts...).ToFunc()
+}
+
+// ByReviewRequired orders the results by the review_required field.
+func ByReviewRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewRequired, opts...).ToFunc()
+}
+
+// ByLastReviewedAt orders the results by the last_reviewed_at field.
+func ByLastReviewedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastReviewedAt, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByNextReviewDueAt orders the results by the next_review_due_at field.
+func ByNextReviewDueAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextReviewDueAt, opts...).ToFunc()
+}
+
+// ByResidualScore orders the results by the residual_score field.
+func ByResidualScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResidualScore, opts...).ToFunc()
+}
+
+// ByRiskDecision orders the results by the risk_decision field.
+func ByRiskDecision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskDecision, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -870,6 +970,34 @@ func ByDiscussions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDiscussionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByReviewsCount orders the results by reviews count.
+func ByReviewsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReviewsStep(), opts...)
+	}
+}
+
+// ByReviews orders the results by reviews terms.
+func ByReviews(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRemediationsCount orders the results by remediations count.
+func ByRemediationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationsStep(), opts...)
+	}
+}
+
+// ByRemediations orders the results by remediations terms.
+func ByRemediations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1031,6 +1159,20 @@ func newDiscussionsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
 	)
 }
+func newReviewsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+	)
+}
+func newRemediationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+	)
+}
 
 var (
 	// enums.RiskStatus must implement graphql.Marshaler.
@@ -1051,4 +1193,18 @@ var (
 	_ graphql.Marshaler = (*enums.RiskLikelihood)(nil)
 	// enums.RiskLikelihood must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.RiskLikelihood)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
+)
+
+var (
+	// enums.RiskDecision must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskDecision)(nil)
+	// enums.RiskDecision must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskDecision)(nil)
 )

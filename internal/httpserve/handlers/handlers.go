@@ -81,6 +81,8 @@ type Handler struct {
 	SessionConfig *sessions.SessionConfig
 	// OauthProvider contains the configuration settings for all supported Oauth2 providers (for social login)
 	OauthProvider OauthProviderConfig
+	// ConsoleURL is the full base frontend URL (e.g. https://console.example.com) used for browser redirects after auth flows
+	ConsoleURL string
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints

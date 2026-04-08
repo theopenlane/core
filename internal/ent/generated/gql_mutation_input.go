@@ -20245,6 +20245,7 @@ type CreateRemediationInput struct {
 	ExternalID       *string
 	ExternalOwnerID  *string
 	Title            *string
+	Status           *enums.RemediationStatus
 	State            *string
 	Intent           *string
 	Summary          *string
@@ -20309,6 +20310,9 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.State; v != nil {
 		m.SetState(*v)
@@ -20448,6 +20452,8 @@ type UpdateRemediationInput struct {
 	ExternalOwnerID        *string
 	ClearTitle             bool
 	Title                  *string
+	ClearStatus            bool
+	Status                 *enums.RemediationStatus
 	ClearState             bool
 	State                  *string
 	ClearIntent            bool
@@ -20592,6 +20598,12 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearState {
 		m.ClearState()
@@ -21523,6 +21535,13 @@ type CreateRiskInput struct {
 	DetailsJSON       []interface{}
 	BusinessCosts     *string
 	BusinessCostsJSON []interface{}
+	MitigatedAt       *models.DateTime
+	ReviewRequired    *bool
+	LastReviewedAt    *models.DateTime
+	ReviewFrequency   *enums.Frequency
+	NextReviewDueAt   *models.DateTime
+	ResidualScore     *int
+	RiskDecision      *enums.RiskDecision
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -21546,6 +21565,8 @@ type CreateRiskInput struct {
 	DelegateID        *string
 	CommentIDs        []string
 	DiscussionIDs     []string
+	ReviewIDs         []string
+	RemediationIDs    []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -21607,6 +21628,27 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.BusinessCostsJSON; v != nil {
 		m.SetBusinessCostsJSON(v)
+	}
+	if v := i.MitigatedAt; v != nil {
+		m.SetMitigatedAt(*v)
+	}
+	if v := i.ReviewRequired; v != nil {
+		m.SetReviewRequired(*v)
+	}
+	if v := i.LastReviewedAt; v != nil {
+		m.SetLastReviewedAt(*v)
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if v := i.NextReviewDueAt; v != nil {
+		m.SetNextReviewDueAt(*v)
+	}
+	if v := i.ResidualScore; v != nil {
+		m.SetResidualScore(*v)
+	}
+	if v := i.RiskDecision; v != nil {
+		m.SetRiskDecision(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -21677,6 +21719,12 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.DiscussionIDs; len(v) > 0 {
 		m.AddDiscussionIDs(v...)
 	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -21730,6 +21778,20 @@ type UpdateRiskInput struct {
 	ClearBusinessCostsJSON  bool
 	BusinessCostsJSON       []interface{}
 	AppendBusinessCostsJSON []interface{}
+	ClearMitigatedAt        bool
+	MitigatedAt             *models.DateTime
+	ClearReviewRequired     bool
+	ReviewRequired          *bool
+	ClearLastReviewedAt     bool
+	LastReviewedAt          *models.DateTime
+	ClearReviewFrequency    bool
+	ReviewFrequency         *enums.Frequency
+	ClearNextReviewDueAt    bool
+	NextReviewDueAt         *models.DateTime
+	ClearResidualScore      bool
+	ResidualScore           *int
+	ClearRiskDecision       bool
+	RiskDecision            *enums.RiskDecision
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -21790,6 +21852,12 @@ type UpdateRiskInput struct {
 	ClearDiscussions        bool
 	AddDiscussionIDs        []string
 	RemoveDiscussionIDs     []string
+	ClearReviews            bool
+	AddReviewIDs            []string
+	RemoveReviewIDs         []string
+	ClearRemediations       bool
+	AddRemediationIDs       []string
+	RemoveRemediationIDs    []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -21922,6 +21990,48 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if i.AppendBusinessCostsJSON != nil {
 		m.AppendBusinessCostsJSON(i.BusinessCostsJSON)
+	}
+	if i.ClearMitigatedAt {
+		m.ClearMitigatedAt()
+	}
+	if v := i.MitigatedAt; v != nil {
+		m.SetMitigatedAt(*v)
+	}
+	if i.ClearReviewRequired {
+		m.ClearReviewRequired()
+	}
+	if v := i.ReviewRequired; v != nil {
+		m.SetReviewRequired(*v)
+	}
+	if i.ClearLastReviewedAt {
+		m.ClearLastReviewedAt()
+	}
+	if v := i.LastReviewedAt; v != nil {
+		m.SetLastReviewedAt(*v)
+	}
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
+	}
+	if i.ClearNextReviewDueAt {
+		m.ClearNextReviewDueAt()
+	}
+	if v := i.NextReviewDueAt; v != nil {
+		m.SetNextReviewDueAt(*v)
+	}
+	if i.ClearResidualScore {
+		m.ClearResidualScore()
+	}
+	if v := i.ResidualScore; v != nil {
+		m.SetResidualScore(*v)
+	}
+	if i.ClearRiskDecision {
+		m.ClearRiskDecision()
+	}
+	if v := i.RiskDecision; v != nil {
+		m.SetRiskDecision(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -22102,6 +22212,24 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveDiscussionIDs; len(v) > 0 {
 		m.RemoveDiscussionIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
 	}
 }
 
@@ -28237,9 +28365,21 @@ type CreateVulnerabilityInput struct {
 	Validated               *bool
 	References              []string
 	Impacts                 []string
+	CweIds                  []string
+	VulnerableVersionRange  *string
+	FirstPatchedVersion     *string
+	PackageName             *string
+	PackageEcosystem        *string
+	ManifestPath            *string
+	DependencyScope         *string
 	PublishedAt             *models.DateTime
 	DiscoveredAt            *models.DateTime
 	SourceUpdatedAt         *models.DateTime
+	DismissedAt             *models.DateTime
+	DismissedReason         *string
+	DismissedComment        *string
+	FixedAt                 *models.DateTime
+	AutoDismissedAt         *models.DateTime
 	ExternalURI             *string
 	Metadata                map[string]interface{}
 	RawPayload              map[string]interface{}
@@ -28351,6 +28491,27 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.Impacts; v != nil {
 		m.SetImpacts(v)
 	}
+	if v := i.CweIds; v != nil {
+		m.SetCweIds(v)
+	}
+	if v := i.VulnerableVersionRange; v != nil {
+		m.SetVulnerableVersionRange(*v)
+	}
+	if v := i.FirstPatchedVersion; v != nil {
+		m.SetFirstPatchedVersion(*v)
+	}
+	if v := i.PackageName; v != nil {
+		m.SetPackageName(*v)
+	}
+	if v := i.PackageEcosystem; v != nil {
+		m.SetPackageEcosystem(*v)
+	}
+	if v := i.ManifestPath; v != nil {
+		m.SetManifestPath(*v)
+	}
+	if v := i.DependencyScope; v != nil {
+		m.SetDependencyScope(*v)
+	}
 	if v := i.PublishedAt; v != nil {
 		m.SetPublishedAt(*v)
 	}
@@ -28359,6 +28520,21 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.SourceUpdatedAt; v != nil {
 		m.SetSourceUpdatedAt(*v)
+	}
+	if v := i.DismissedAt; v != nil {
+		m.SetDismissedAt(*v)
+	}
+	if v := i.DismissedReason; v != nil {
+		m.SetDismissedReason(*v)
+	}
+	if v := i.DismissedComment; v != nil {
+		m.SetDismissedComment(*v)
+	}
+	if v := i.FixedAt; v != nil {
+		m.SetFixedAt(*v)
+	}
+	if v := i.AutoDismissedAt; v != nil {
+		m.SetAutoDismissedAt(*v)
 	}
 	if v := i.ExternalURI; v != nil {
 		m.SetExternalURI(*v)
@@ -28503,12 +28679,37 @@ type UpdateVulnerabilityInput struct {
 	ClearImpacts                 bool
 	Impacts                      []string
 	AppendImpacts                []string
+	ClearCweIds                  bool
+	CweIds                       []string
+	AppendCweIds                 []string
+	ClearVulnerableVersionRange  bool
+	VulnerableVersionRange       *string
+	ClearFirstPatchedVersion     bool
+	FirstPatchedVersion          *string
+	ClearPackageName             bool
+	PackageName                  *string
+	ClearPackageEcosystem        bool
+	PackageEcosystem             *string
+	ClearManifestPath            bool
+	ManifestPath                 *string
+	ClearDependencyScope         bool
+	DependencyScope              *string
 	ClearPublishedAt             bool
 	PublishedAt                  *models.DateTime
 	ClearDiscoveredAt            bool
 	DiscoveredAt                 *models.DateTime
 	ClearSourceUpdatedAt         bool
 	SourceUpdatedAt              *models.DateTime
+	ClearDismissedAt             bool
+	DismissedAt                  *models.DateTime
+	ClearDismissedReason         bool
+	DismissedReason              *string
+	ClearDismissedComment        bool
+	DismissedComment             *string
+	ClearFixedAt                 bool
+	FixedAt                      *models.DateTime
+	ClearAutoDismissedAt         bool
+	AutoDismissedAt              *models.DateTime
 	ClearExternalURI             bool
 	ExternalURI                  *string
 	ClearMetadata                bool
@@ -28753,6 +28954,51 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if i.AppendImpacts != nil {
 		m.AppendImpacts(i.Impacts)
 	}
+	if i.ClearCweIds {
+		m.ClearCweIds()
+	}
+	if v := i.CweIds; v != nil {
+		m.SetCweIds(v)
+	}
+	if i.AppendCweIds != nil {
+		m.AppendCweIds(i.CweIds)
+	}
+	if i.ClearVulnerableVersionRange {
+		m.ClearVulnerableVersionRange()
+	}
+	if v := i.VulnerableVersionRange; v != nil {
+		m.SetVulnerableVersionRange(*v)
+	}
+	if i.ClearFirstPatchedVersion {
+		m.ClearFirstPatchedVersion()
+	}
+	if v := i.FirstPatchedVersion; v != nil {
+		m.SetFirstPatchedVersion(*v)
+	}
+	if i.ClearPackageName {
+		m.ClearPackageName()
+	}
+	if v := i.PackageName; v != nil {
+		m.SetPackageName(*v)
+	}
+	if i.ClearPackageEcosystem {
+		m.ClearPackageEcosystem()
+	}
+	if v := i.PackageEcosystem; v != nil {
+		m.SetPackageEcosystem(*v)
+	}
+	if i.ClearManifestPath {
+		m.ClearManifestPath()
+	}
+	if v := i.ManifestPath; v != nil {
+		m.SetManifestPath(*v)
+	}
+	if i.ClearDependencyScope {
+		m.ClearDependencyScope()
+	}
+	if v := i.DependencyScope; v != nil {
+		m.SetDependencyScope(*v)
+	}
 	if i.ClearPublishedAt {
 		m.ClearPublishedAt()
 	}
@@ -28770,6 +29016,36 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.SourceUpdatedAt; v != nil {
 		m.SetSourceUpdatedAt(*v)
+	}
+	if i.ClearDismissedAt {
+		m.ClearDismissedAt()
+	}
+	if v := i.DismissedAt; v != nil {
+		m.SetDismissedAt(*v)
+	}
+	if i.ClearDismissedReason {
+		m.ClearDismissedReason()
+	}
+	if v := i.DismissedReason; v != nil {
+		m.SetDismissedReason(*v)
+	}
+	if i.ClearDismissedComment {
+		m.ClearDismissedComment()
+	}
+	if v := i.DismissedComment; v != nil {
+		m.SetDismissedComment(*v)
+	}
+	if i.ClearFixedAt {
+		m.ClearFixedAt()
+	}
+	if v := i.FixedAt; v != nil {
+		m.SetFixedAt(*v)
+	}
+	if i.ClearAutoDismissedAt {
+		m.ClearAutoDismissedAt()
+	}
+	if v := i.AutoDismissedAt; v != nil {
+		m.SetAutoDismissedAt(*v)
 	}
 	if i.ClearExternalURI {
 		m.ClearExternalURI()

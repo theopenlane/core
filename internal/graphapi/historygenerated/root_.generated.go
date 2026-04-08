@@ -2123,6 +2123,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
@@ -2210,16 +2211,23 @@ type ComplexityRoot struct {
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
 		IntegrationID     func(childComplexity int) int
+		LastReviewedAt    func(childComplexity int) int
 		Likelihood        func(childComplexity int) int
+		MitigatedAt       func(childComplexity int) int
 		Mitigation        func(childComplexity int) int
 		MitigationJSON    func(childComplexity int) int
 		Name              func(childComplexity int) int
+		NextReviewDueAt   func(childComplexity int) int
 		ObservedAt        func(childComplexity int) int
 		Operation         func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Ref               func(childComplexity int) int
+		ResidualScore     func(childComplexity int) int
+		ReviewFrequency   func(childComplexity int) int
+		ReviewRequired    func(childComplexity int) int
 		RiskCategoryID    func(childComplexity int) int
 		RiskCategoryName  func(childComplexity int) int
+		RiskDecision      func(childComplexity int) int
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
 		ScopeID           func(childComplexity int) int
@@ -3024,13 +3032,19 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityHistory struct {
+		AutoDismissedAt         func(childComplexity int) int
 		Blocking                func(childComplexity int) int
 		Category                func(childComplexity int) int
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		CveID                   func(childComplexity int) int
+		CweIds                  func(childComplexity int) int
+		DependencyScope         func(childComplexity int) int
 		Description             func(childComplexity int) int
 		DiscoveredAt            func(childComplexity int) int
+		DismissedAt             func(childComplexity int) int
+		DismissedComment        func(childComplexity int) int
+		DismissedReason         func(childComplexity int) int
 		DisplayID               func(childComplexity int) int
 		DisplayName             func(childComplexity int) int
 		EnvironmentID           func(childComplexity int) int
@@ -3039,15 +3053,20 @@ type ComplexityRoot struct {
 		ExternalID              func(childComplexity int) int
 		ExternalOwnerID         func(childComplexity int) int
 		ExternalURI             func(childComplexity int) int
+		FirstPatchedVersion     func(childComplexity int) int
+		FixedAt                 func(childComplexity int) int
 		HistoryTime             func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		Impact                  func(childComplexity int) int
 		Impacts                 func(childComplexity int) int
 		InternalNotes           func(childComplexity int) int
+		ManifestPath            func(childComplexity int) int
 		Metadata                func(childComplexity int) int
 		Open                    func(childComplexity int) int
 		Operation               func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
+		PackageEcosystem        func(childComplexity int) int
+		PackageName             func(childComplexity int) int
 		Priority                func(childComplexity int) int
 		Production              func(childComplexity int) int
 		Public                  func(childComplexity int) int
@@ -3073,6 +3092,7 @@ type ComplexityRoot struct {
 		Vector                  func(childComplexity int) int
 		VulnerabilityStatusID   func(childComplexity int) int
 		VulnerabilityStatusName func(childComplexity int) int
+		VulnerableVersionRange  func(childComplexity int) int
 	}
 
 	VulnerabilityHistoryConnection struct {
@@ -15339,6 +15359,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RemediationHistory.State(childComplexity), true
 
+	case "RemediationHistory.status":
+		if e.ComplexityRoot.RemediationHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.Status(childComplexity), true
+
 	case "RemediationHistory.summary":
 		if e.ComplexityRoot.RemediationHistory.Summary == nil {
 			break
@@ -15822,12 +15849,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.IntegrationID(childComplexity), true
 
+	case "RiskHistory.lastReviewedAt":
+		if e.ComplexityRoot.RiskHistory.LastReviewedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.LastReviewedAt(childComplexity), true
+
 	case "RiskHistory.likelihood":
 		if e.ComplexityRoot.RiskHistory.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.RiskHistory.Likelihood(childComplexity), true
+
+	case "RiskHistory.mitigatedAt":
+		if e.ComplexityRoot.RiskHistory.MitigatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.MitigatedAt(childComplexity), true
 
 	case "RiskHistory.mitigation":
 		if e.ComplexityRoot.RiskHistory.Mitigation == nil {
@@ -15849,6 +15890,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.Name(childComplexity), true
+
+	case "RiskHistory.nextReviewDueAt":
+		if e.ComplexityRoot.RiskHistory.NextReviewDueAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.NextReviewDueAt(childComplexity), true
 
 	case "RiskHistory.observedAt":
 		if e.ComplexityRoot.RiskHistory.ObservedAt == nil {
@@ -15878,6 +15926,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.Ref(childComplexity), true
 
+	case "RiskHistory.residualScore":
+		if e.ComplexityRoot.RiskHistory.ResidualScore == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ResidualScore(childComplexity), true
+
+	case "RiskHistory.reviewFrequency":
+		if e.ComplexityRoot.RiskHistory.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ReviewFrequency(childComplexity), true
+
+	case "RiskHistory.reviewRequired":
+		if e.ComplexityRoot.RiskHistory.ReviewRequired == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ReviewRequired(childComplexity), true
+
 	case "RiskHistory.riskCategoryID":
 		if e.ComplexityRoot.RiskHistory.RiskCategoryID == nil {
 			break
@@ -15891,6 +15960,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.RiskCategoryName(childComplexity), true
+
+	case "RiskHistory.riskDecision":
+		if e.ComplexityRoot.RiskHistory.RiskDecision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.RiskDecision(childComplexity), true
 
 	case "RiskHistory.riskKindID":
 		if e.ComplexityRoot.RiskHistory.RiskKindID == nil {
@@ -20071,6 +20147,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorScoringConfigHistoryEdge.Node(childComplexity), true
 
+	case "VulnerabilityHistory.autoDismissedAt":
+		if e.ComplexityRoot.VulnerabilityHistory.AutoDismissedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.AutoDismissedAt(childComplexity), true
+
 	case "VulnerabilityHistory.blocking":
 		if e.ComplexityRoot.VulnerabilityHistory.Blocking == nil {
 			break
@@ -20106,6 +20189,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.CveID(childComplexity), true
 
+	case "VulnerabilityHistory.cweIds":
+		if e.ComplexityRoot.VulnerabilityHistory.CweIds == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.CweIds(childComplexity), true
+
+	case "VulnerabilityHistory.dependencyScope":
+		if e.ComplexityRoot.VulnerabilityHistory.DependencyScope == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DependencyScope(childComplexity), true
+
 	case "VulnerabilityHistory.description":
 		if e.ComplexityRoot.VulnerabilityHistory.Description == nil {
 			break
@@ -20119,6 +20216,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.DiscoveredAt(childComplexity), true
+
+	case "VulnerabilityHistory.dismissedAt":
+		if e.ComplexityRoot.VulnerabilityHistory.DismissedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DismissedAt(childComplexity), true
+
+	case "VulnerabilityHistory.dismissedComment":
+		if e.ComplexityRoot.VulnerabilityHistory.DismissedComment == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DismissedComment(childComplexity), true
+
+	case "VulnerabilityHistory.dismissedReason":
+		if e.ComplexityRoot.VulnerabilityHistory.DismissedReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.DismissedReason(childComplexity), true
 
 	case "VulnerabilityHistory.displayID":
 		if e.ComplexityRoot.VulnerabilityHistory.DisplayID == nil {
@@ -20176,6 +20294,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.ExternalURI(childComplexity), true
 
+	case "VulnerabilityHistory.firstPatchedVersion":
+		if e.ComplexityRoot.VulnerabilityHistory.FirstPatchedVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.FirstPatchedVersion(childComplexity), true
+
+	case "VulnerabilityHistory.fixedAt":
+		if e.ComplexityRoot.VulnerabilityHistory.FixedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.FixedAt(childComplexity), true
+
 	case "VulnerabilityHistory.historyTime":
 		if e.ComplexityRoot.VulnerabilityHistory.HistoryTime == nil {
 			break
@@ -20211,6 +20343,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.InternalNotes(childComplexity), true
 
+	case "VulnerabilityHistory.manifestPath":
+		if e.ComplexityRoot.VulnerabilityHistory.ManifestPath == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.ManifestPath(childComplexity), true
+
 	case "VulnerabilityHistory.metadata":
 		if e.ComplexityRoot.VulnerabilityHistory.Metadata == nil {
 			break
@@ -20238,6 +20377,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.OwnerID(childComplexity), true
+
+	case "VulnerabilityHistory.packageEcosystem":
+		if e.ComplexityRoot.VulnerabilityHistory.PackageEcosystem == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.PackageEcosystem(childComplexity), true
+
+	case "VulnerabilityHistory.packageName":
+		if e.ComplexityRoot.VulnerabilityHistory.PackageName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.PackageName(childComplexity), true
 
 	case "VulnerabilityHistory.priority":
 		if e.ComplexityRoot.VulnerabilityHistory.Priority == nil {
@@ -20413,6 +20566,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.VulnerabilityStatusName(childComplexity), true
+
+	case "VulnerabilityHistory.vulnerableVersionRange":
+		if e.ComplexityRoot.VulnerabilityHistory.VulnerableVersionRange == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.VulnerableVersionRange(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.edges":
 		if e.ComplexityRoot.VulnerabilityHistoryConnection.Edges == nil {
@@ -23794,6 +23954,7 @@ enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/common/e
   DOMAIN
   DEVICE
   TELEPHONE
+  REPOSITORY
 }
 """
 A connection to a list of items.
@@ -50001,6 +50162,10 @@ type RemediationHistory implements Node {
   """
   title: String
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationHistoryRemediationStatus
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -50126,7 +50291,18 @@ enum RemediationHistoryOrderField {
   external_id
   external_owner_id
   title
+  status
   state
+}
+"""
+RemediationHistoryRemediationStatus is enum for the field status
+"""
+enum RemediationHistoryRemediationStatus @goModel(model: "github.com/theopenlane/core/common/enums.RemediationStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 RemediationHistoryWhereInput is used for filtering RemediationHistory objects.
@@ -50450,6 +50626,15 @@ input RemediationHistoryWhereInput {
   titleNotNil: Boolean
   titleEqualFold: String
   titleContainsFold: String
+  """
+  status field predicates
+  """
+  status: RemediationHistoryRemediationStatus
+  statusNEQ: RemediationHistoryRemediationStatus
+  statusIn: [RemediationHistoryRemediationStatus!]
+  statusNotIn: [RemediationHistoryRemediationStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   state field predicates
   """
@@ -51521,6 +51706,31 @@ type RiskHistory implements Node {
   the id of the group responsible for risk oversight on behalf of the stakeholder
   """
   delegateID: String
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  reviewFrequency: RiskHistoryFrequency
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskHistoryRiskDecision
 }
 """
 A connection to a list of items.
@@ -51551,6 +51761,16 @@ type RiskHistoryEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+RiskHistoryFrequency is enum for the field review_frequency
+"""
+enum RiskHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
 }
 """
 RiskHistoryOpType is enum for the field operation
@@ -51588,6 +51808,23 @@ enum RiskHistoryOrderField {
   LIKELIHOOD
   score
   business_costs
+  mitigated_at
+  review_required
+  last_reviewed_at
+  review_frequency
+  next_review_due_at
+  residual_score
+  risk_decision
+}
+"""
+RiskHistoryRiskDecision is enum for the field risk_decision
+"""
+enum RiskHistoryRiskDecision @goModel(model: "github.com/theopenlane/core/common/enums.RiskDecision") {
+  AVOID
+  MITIGATE
+  ACCEPT
+  TRANSFER
+  NONE
 }
 """
 RiskHistoryRiskImpact is enum for the field impact
@@ -52130,6 +52367,83 @@ input RiskHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+  """
+  mitigated_at field predicates
+  """
+  mitigatedAt: DateTime
+  mitigatedAtNEQ: DateTime
+  mitigatedAtIn: [DateTime!]
+  mitigatedAtNotIn: [DateTime!]
+  mitigatedAtGT: DateTime
+  mitigatedAtGTE: DateTime
+  mitigatedAtLT: DateTime
+  mitigatedAtLTE: DateTime
+  mitigatedAtIsNil: Boolean
+  mitigatedAtNotNil: Boolean
+  """
+  review_required field predicates
+  """
+  reviewRequired: Boolean
+  reviewRequiredNEQ: Boolean
+  reviewRequiredIsNil: Boolean
+  reviewRequiredNotNil: Boolean
+  """
+  last_reviewed_at field predicates
+  """
+  lastReviewedAt: DateTime
+  lastReviewedAtNEQ: DateTime
+  lastReviewedAtIn: [DateTime!]
+  lastReviewedAtNotIn: [DateTime!]
+  lastReviewedAtGT: DateTime
+  lastReviewedAtGTE: DateTime
+  lastReviewedAtLT: DateTime
+  lastReviewedAtLTE: DateTime
+  lastReviewedAtIsNil: Boolean
+  lastReviewedAtNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: RiskHistoryFrequency
+  reviewFrequencyNEQ: RiskHistoryFrequency
+  reviewFrequencyIn: [RiskHistoryFrequency!]
+  reviewFrequencyNotIn: [RiskHistoryFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_due_at field predicates
+  """
+  nextReviewDueAt: DateTime
+  nextReviewDueAtNEQ: DateTime
+  nextReviewDueAtIn: [DateTime!]
+  nextReviewDueAtNotIn: [DateTime!]
+  nextReviewDueAtGT: DateTime
+  nextReviewDueAtGTE: DateTime
+  nextReviewDueAtLT: DateTime
+  nextReviewDueAtLTE: DateTime
+  nextReviewDueAtIsNil: Boolean
+  nextReviewDueAtNotNil: Boolean
+  """
+  residual_score field predicates
+  """
+  residualScore: Int
+  residualScoreNEQ: Int
+  residualScoreIn: [Int!]
+  residualScoreNotIn: [Int!]
+  residualScoreGT: Int
+  residualScoreGTE: Int
+  residualScoreLT: Int
+  residualScoreLTE: Int
+  residualScoreIsNil: Boolean
+  residualScoreNotNil: Boolean
+  """
+  risk_decision field predicates
+  """
+  riskDecision: RiskHistoryRiskDecision
+  riskDecisionNEQ: RiskHistoryRiskDecision
+  riskDecisionIn: [RiskHistoryRiskDecision!]
+  riskDecisionNotIn: [RiskHistoryRiskDecision!]
+  riskDecisionIsNil: Boolean
+  riskDecisionNotNil: Boolean
 }
 type SLADefinitionHistory implements Node {
   id: ID!
@@ -61734,7 +62048,7 @@ type VulnerabilityHistory implements Node {
   """
   externalOwnerID: String
   """
-  lifecycle status of the vulnerability
+  security level of the vulnerability
   """
   securityLevel: VulnerabilityHistorySecurityLevel
   """
@@ -61822,6 +62136,34 @@ type VulnerabilityHistory implements Node {
   """
   impacts: [String!]
   """
+  CWE identifiers associated with the vulnerability
+  """
+  cweIds: [String!]
+  """
+  version range affected by the vulnerability
+  """
+  vulnerableVersionRange: String
+  """
+  earliest version that fixes the vulnerability
+  """
+  firstPatchedVersion: String
+  """
+  name of the vulnerable package or dependency
+  """
+  packageName: String
+  """
+  ecosystem of the vulnerable package such as npm, pip, or maven
+  """
+  packageEcosystem: String
+  """
+  path to the manifest file declaring the vulnerable dependency
+  """
+  manifestPath: String
+  """
+  scope of the dependency such as runtime or development
+  """
+  dependencyScope: String
+  """
   timestamp when the vulnerability was published
   """
   publishedAt: DateTime
@@ -61833,6 +62175,26 @@ type VulnerabilityHistory implements Node {
   timestamp when the source last updated the vulnerability
   """
   sourceUpdatedAt: DateTime
+  """
+  timestamp when the vulnerability was dismissed
+  """
+  dismissedAt: DateTime
+  """
+  reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+  """
+  dismissedReason: String
+  """
+  free-text explanation provided when the vulnerability was dismissed
+  """
+  dismissedComment: String
+  """
+  timestamp when the vulnerability was marked as fixed
+  """
+  fixedAt: DateTime
+  """
+  timestamp when the vulnerability was automatically dismissed by the source system
+  """
+  autoDismissedAt: DateTime
   """
   link to the vulnerability in the source system
   """
@@ -62518,6 +62880,114 @@ input VulnerabilityHistoryWhereInput {
   validatedIsNil: Boolean
   validatedNotNil: Boolean
   """
+  vulnerable_version_range field predicates
+  """
+  vulnerableVersionRange: String
+  vulnerableVersionRangeNEQ: String
+  vulnerableVersionRangeIn: [String!]
+  vulnerableVersionRangeNotIn: [String!]
+  vulnerableVersionRangeGT: String
+  vulnerableVersionRangeGTE: String
+  vulnerableVersionRangeLT: String
+  vulnerableVersionRangeLTE: String
+  vulnerableVersionRangeContains: String
+  vulnerableVersionRangeHasPrefix: String
+  vulnerableVersionRangeHasSuffix: String
+  vulnerableVersionRangeIsNil: Boolean
+  vulnerableVersionRangeNotNil: Boolean
+  vulnerableVersionRangeEqualFold: String
+  vulnerableVersionRangeContainsFold: String
+  """
+  first_patched_version field predicates
+  """
+  firstPatchedVersion: String
+  firstPatchedVersionNEQ: String
+  firstPatchedVersionIn: [String!]
+  firstPatchedVersionNotIn: [String!]
+  firstPatchedVersionGT: String
+  firstPatchedVersionGTE: String
+  firstPatchedVersionLT: String
+  firstPatchedVersionLTE: String
+  firstPatchedVersionContains: String
+  firstPatchedVersionHasPrefix: String
+  firstPatchedVersionHasSuffix: String
+  firstPatchedVersionIsNil: Boolean
+  firstPatchedVersionNotNil: Boolean
+  firstPatchedVersionEqualFold: String
+  firstPatchedVersionContainsFold: String
+  """
+  package_name field predicates
+  """
+  packageName: String
+  packageNameNEQ: String
+  packageNameIn: [String!]
+  packageNameNotIn: [String!]
+  packageNameGT: String
+  packageNameGTE: String
+  packageNameLT: String
+  packageNameLTE: String
+  packageNameContains: String
+  packageNameHasPrefix: String
+  packageNameHasSuffix: String
+  packageNameIsNil: Boolean
+  packageNameNotNil: Boolean
+  packageNameEqualFold: String
+  packageNameContainsFold: String
+  """
+  package_ecosystem field predicates
+  """
+  packageEcosystem: String
+  packageEcosystemNEQ: String
+  packageEcosystemIn: [String!]
+  packageEcosystemNotIn: [String!]
+  packageEcosystemGT: String
+  packageEcosystemGTE: String
+  packageEcosystemLT: String
+  packageEcosystemLTE: String
+  packageEcosystemContains: String
+  packageEcosystemHasPrefix: String
+  packageEcosystemHasSuffix: String
+  packageEcosystemIsNil: Boolean
+  packageEcosystemNotNil: Boolean
+  packageEcosystemEqualFold: String
+  packageEcosystemContainsFold: String
+  """
+  manifest_path field predicates
+  """
+  manifestPath: String
+  manifestPathNEQ: String
+  manifestPathIn: [String!]
+  manifestPathNotIn: [String!]
+  manifestPathGT: String
+  manifestPathGTE: String
+  manifestPathLT: String
+  manifestPathLTE: String
+  manifestPathContains: String
+  manifestPathHasPrefix: String
+  manifestPathHasSuffix: String
+  manifestPathIsNil: Boolean
+  manifestPathNotNil: Boolean
+  manifestPathEqualFold: String
+  manifestPathContainsFold: String
+  """
+  dependency_scope field predicates
+  """
+  dependencyScope: String
+  dependencyScopeNEQ: String
+  dependencyScopeIn: [String!]
+  dependencyScopeNotIn: [String!]
+  dependencyScopeGT: String
+  dependencyScopeGTE: String
+  dependencyScopeLT: String
+  dependencyScopeLTE: String
+  dependencyScopeContains: String
+  dependencyScopeHasPrefix: String
+  dependencyScopeHasSuffix: String
+  dependencyScopeIsNil: Boolean
+  dependencyScopeNotNil: Boolean
+  dependencyScopeEqualFold: String
+  dependencyScopeContainsFold: String
+  """
   published_at field predicates
   """
   publishedAt: DateTime
@@ -62556,6 +63026,81 @@ input VulnerabilityHistoryWhereInput {
   sourceUpdatedAtLTE: DateTime
   sourceUpdatedAtIsNil: Boolean
   sourceUpdatedAtNotNil: Boolean
+  """
+  dismissed_at field predicates
+  """
+  dismissedAt: DateTime
+  dismissedAtNEQ: DateTime
+  dismissedAtIn: [DateTime!]
+  dismissedAtNotIn: [DateTime!]
+  dismissedAtGT: DateTime
+  dismissedAtGTE: DateTime
+  dismissedAtLT: DateTime
+  dismissedAtLTE: DateTime
+  dismissedAtIsNil: Boolean
+  dismissedAtNotNil: Boolean
+  """
+  dismissed_reason field predicates
+  """
+  dismissedReason: String
+  dismissedReasonNEQ: String
+  dismissedReasonIn: [String!]
+  dismissedReasonNotIn: [String!]
+  dismissedReasonGT: String
+  dismissedReasonGTE: String
+  dismissedReasonLT: String
+  dismissedReasonLTE: String
+  dismissedReasonContains: String
+  dismissedReasonHasPrefix: String
+  dismissedReasonHasSuffix: String
+  dismissedReasonIsNil: Boolean
+  dismissedReasonNotNil: Boolean
+  dismissedReasonEqualFold: String
+  dismissedReasonContainsFold: String
+  """
+  dismissed_comment field predicates
+  """
+  dismissedComment: String
+  dismissedCommentNEQ: String
+  dismissedCommentIn: [String!]
+  dismissedCommentNotIn: [String!]
+  dismissedCommentGT: String
+  dismissedCommentGTE: String
+  dismissedCommentLT: String
+  dismissedCommentLTE: String
+  dismissedCommentContains: String
+  dismissedCommentHasPrefix: String
+  dismissedCommentHasSuffix: String
+  dismissedCommentIsNil: Boolean
+  dismissedCommentNotNil: Boolean
+  dismissedCommentEqualFold: String
+  dismissedCommentContainsFold: String
+  """
+  fixed_at field predicates
+  """
+  fixedAt: DateTime
+  fixedAtNEQ: DateTime
+  fixedAtIn: [DateTime!]
+  fixedAtNotIn: [DateTime!]
+  fixedAtGT: DateTime
+  fixedAtGTE: DateTime
+  fixedAtLT: DateTime
+  fixedAtLTE: DateTime
+  fixedAtIsNil: Boolean
+  fixedAtNotNil: Boolean
+  """
+  auto_dismissed_at field predicates
+  """
+  autoDismissedAt: DateTime
+  autoDismissedAtNEQ: DateTime
+  autoDismissedAtIn: [DateTime!]
+  autoDismissedAtNotIn: [DateTime!]
+  autoDismissedAtGT: DateTime
+  autoDismissedAtGTE: DateTime
+  autoDismissedAtLT: DateTime
+  autoDismissedAtLTE: DateTime
+  autoDismissedAtIsNil: Boolean
+  autoDismissedAtNotNil: Boolean
   """
   external_uri field predicates
   """

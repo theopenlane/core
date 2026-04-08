@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/entx/history"
@@ -66,6 +67,8 @@ type RemediationHistory struct {
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// title or short description of the remediation effort
 	Title string `json:"title,omitempty"`
+	// status of the remediation, such as pending, in_progress, or completed
+	Status enums.RemediationStatus `json:"status,omitempty"`
 	// state of the remediation, such as pending or completed
 	State string `json:"state,omitempty"`
 	// intent or goal of the remediation effort
@@ -114,7 +117,7 @@ func (*RemediationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case remediationhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
+		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldStatus, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediationhistory.FieldHistoryTime, remediationhistory.FieldCreatedAt, remediationhistory.FieldUpdatedAt, remediationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -274,6 +277,12 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				_m.Title = value.String
+			}
+		case remediationhistory.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = enums.RemediationStatus(value.String)
 			}
 		case remediationhistory.FieldState:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -481,6 +490,9 @@ func (_m *RemediationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("state=")
 	builder.WriteString(_m.State)

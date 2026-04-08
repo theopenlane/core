@@ -3454,6 +3454,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "reviews": {
+	ObjectType:      "review",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "remediations": {
+	ObjectType:      "remediation",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "sla_definition": {"owner": {
 	ObjectType:      "owner",

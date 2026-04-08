@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
@@ -1596,6 +1597,46 @@ func TitleEqualFold(v string) predicate.RemediationHistory {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.RemediationHistory {
 	return predicate.RemediationHistory(sql.FieldContainsFold(FieldTitle, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v enums.RemediationStatus) predicate.RemediationHistory {
+	vc := v
+	return predicate.RemediationHistory(sql.FieldEQ(FieldStatus, vc))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v enums.RemediationStatus) predicate.RemediationHistory {
+	vc := v
+	return predicate.RemediationHistory(sql.FieldNEQ(FieldStatus, vc))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...enums.RemediationStatus) predicate.RemediationHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RemediationHistory(sql.FieldIn(FieldStatus, v...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...enums.RemediationStatus) predicate.RemediationHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RemediationHistory(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.RemediationHistory {
+	return predicate.RemediationHistory(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.RemediationHistory {
+	return predicate.RemediationHistory(sql.FieldNotNull(FieldStatus))
 }
 
 // StateEQ applies the EQ predicate on the "state" field.

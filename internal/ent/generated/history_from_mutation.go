@@ -17709,6 +17709,10 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetTitle(title)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if state, exists := m.State(); exists {
 		create = create.SetState(state)
 	}
@@ -17918,6 +17922,12 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetTitle(remediation.Title)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(remediation.Status)
+		}
+
 		if state, exists := m.State(); exists {
 			create = create.SetState(state)
 		} else {
@@ -18068,6 +18078,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetExternalID(remediation.ExternalID).
 			SetExternalOwnerID(remediation.ExternalOwnerID).
 			SetTitle(remediation.Title).
+			SetStatus(remediation.Status).
 			SetState(remediation.State).
 			SetIntent(remediation.Intent).
 			SetSummary(remediation.Summary).
@@ -18699,6 +18710,34 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if mitigatedAt, exists := m.MitigatedAt(); exists {
+		create = create.SetNillableMitigatedAt(&mitigatedAt)
+	}
+
+	if reviewRequired, exists := m.ReviewRequired(); exists {
+		create = create.SetReviewRequired(reviewRequired)
+	}
+
+	if lastReviewedAt, exists := m.LastReviewedAt(); exists {
+		create = create.SetNillableLastReviewedAt(&lastReviewedAt)
+	}
+
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
+		create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
+	}
+
+	if residualScore, exists := m.ResidualScore(); exists {
+		create = create.SetResidualScore(residualScore)
+	}
+
+	if riskDecision, exists := m.RiskDecision(); exists {
+		create = create.SetRiskDecision(riskDecision)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -18934,6 +18973,48 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDelegateID(risk.DelegateID)
 		}
 
+		if mitigatedAt, exists := m.MitigatedAt(); exists {
+			create = create.SetNillableMitigatedAt(&mitigatedAt)
+		} else {
+			create = create.SetNillableMitigatedAt(risk.MitigatedAt)
+		}
+
+		if reviewRequired, exists := m.ReviewRequired(); exists {
+			create = create.SetReviewRequired(reviewRequired)
+		} else {
+			create = create.SetReviewRequired(risk.ReviewRequired)
+		}
+
+		if lastReviewedAt, exists := m.LastReviewedAt(); exists {
+			create = create.SetNillableLastReviewedAt(&lastReviewedAt)
+		} else {
+			create = create.SetNillableLastReviewedAt(risk.LastReviewedAt)
+		}
+
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(risk.ReviewFrequency)
+		}
+
+		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
+			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
+		} else {
+			create = create.SetNillableNextReviewDueAt(risk.NextReviewDueAt)
+		}
+
+		if residualScore, exists := m.ResidualScore(); exists {
+			create = create.SetResidualScore(residualScore)
+		} else {
+			create = create.SetResidualScore(risk.ResidualScore)
+		}
+
+		if riskDecision, exists := m.RiskDecision(); exists {
+			create = create.SetRiskDecision(riskDecision)
+		} else {
+			create = create.SetRiskDecision(risk.RiskDecision)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -19003,6 +19084,13 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetBusinessCostsJSON(risk.BusinessCostsJSON).
 			SetStakeholderID(risk.StakeholderID).
 			SetDelegateID(risk.DelegateID).
+			SetNillableMitigatedAt(risk.MitigatedAt).
+			SetReviewRequired(risk.ReviewRequired).
+			SetNillableLastReviewedAt(risk.LastReviewedAt).
+			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
+			SetResidualScore(risk.ResidualScore).
+			SetRiskDecision(risk.RiskDecision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -25924,6 +26012,34 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetImpacts(impacts)
 	}
 
+	if cweIds, exists := m.CweIds(); exists {
+		create = create.SetCweIds(cweIds)
+	}
+
+	if vulnerableVersionRange, exists := m.VulnerableVersionRange(); exists {
+		create = create.SetVulnerableVersionRange(vulnerableVersionRange)
+	}
+
+	if firstPatchedVersion, exists := m.FirstPatchedVersion(); exists {
+		create = create.SetFirstPatchedVersion(firstPatchedVersion)
+	}
+
+	if packageName, exists := m.PackageName(); exists {
+		create = create.SetPackageName(packageName)
+	}
+
+	if packageEcosystem, exists := m.PackageEcosystem(); exists {
+		create = create.SetPackageEcosystem(packageEcosystem)
+	}
+
+	if manifestPath, exists := m.ManifestPath(); exists {
+		create = create.SetManifestPath(manifestPath)
+	}
+
+	if dependencyScope, exists := m.DependencyScope(); exists {
+		create = create.SetDependencyScope(dependencyScope)
+	}
+
 	if publishedAt, exists := m.PublishedAt(); exists {
 		create = create.SetNillablePublishedAt(&publishedAt)
 	}
@@ -25934,6 +26050,26 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if sourceUpdatedAt, exists := m.SourceUpdatedAt(); exists {
 		create = create.SetNillableSourceUpdatedAt(&sourceUpdatedAt)
+	}
+
+	if dismissedAt, exists := m.DismissedAt(); exists {
+		create = create.SetNillableDismissedAt(&dismissedAt)
+	}
+
+	if dismissedReason, exists := m.DismissedReason(); exists {
+		create = create.SetDismissedReason(dismissedReason)
+	}
+
+	if dismissedComment, exists := m.DismissedComment(); exists {
+		create = create.SetDismissedComment(dismissedComment)
+	}
+
+	if fixedAt, exists := m.FixedAt(); exists {
+		create = create.SetNillableFixedAt(&fixedAt)
+	}
+
+	if autoDismissedAt, exists := m.AutoDismissedAt(); exists {
+		create = create.SetNillableAutoDismissedAt(&autoDismissedAt)
 	}
 
 	if externalURI, exists := m.ExternalURI(); exists {
@@ -26225,6 +26361,48 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetImpacts(vulnerability.Impacts)
 		}
 
+		if cweIds, exists := m.CweIds(); exists {
+			create = create.SetCweIds(cweIds)
+		} else {
+			create = create.SetCweIds(vulnerability.CweIds)
+		}
+
+		if vulnerableVersionRange, exists := m.VulnerableVersionRange(); exists {
+			create = create.SetVulnerableVersionRange(vulnerableVersionRange)
+		} else {
+			create = create.SetVulnerableVersionRange(vulnerability.VulnerableVersionRange)
+		}
+
+		if firstPatchedVersion, exists := m.FirstPatchedVersion(); exists {
+			create = create.SetFirstPatchedVersion(firstPatchedVersion)
+		} else {
+			create = create.SetFirstPatchedVersion(vulnerability.FirstPatchedVersion)
+		}
+
+		if packageName, exists := m.PackageName(); exists {
+			create = create.SetPackageName(packageName)
+		} else {
+			create = create.SetPackageName(vulnerability.PackageName)
+		}
+
+		if packageEcosystem, exists := m.PackageEcosystem(); exists {
+			create = create.SetPackageEcosystem(packageEcosystem)
+		} else {
+			create = create.SetPackageEcosystem(vulnerability.PackageEcosystem)
+		}
+
+		if manifestPath, exists := m.ManifestPath(); exists {
+			create = create.SetManifestPath(manifestPath)
+		} else {
+			create = create.SetManifestPath(vulnerability.ManifestPath)
+		}
+
+		if dependencyScope, exists := m.DependencyScope(); exists {
+			create = create.SetDependencyScope(dependencyScope)
+		} else {
+			create = create.SetDependencyScope(vulnerability.DependencyScope)
+		}
+
 		if publishedAt, exists := m.PublishedAt(); exists {
 			create = create.SetNillablePublishedAt(&publishedAt)
 		} else {
@@ -26241,6 +26419,36 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetNillableSourceUpdatedAt(&sourceUpdatedAt)
 		} else {
 			create = create.SetNillableSourceUpdatedAt(vulnerability.SourceUpdatedAt)
+		}
+
+		if dismissedAt, exists := m.DismissedAt(); exists {
+			create = create.SetNillableDismissedAt(&dismissedAt)
+		} else {
+			create = create.SetNillableDismissedAt(vulnerability.DismissedAt)
+		}
+
+		if dismissedReason, exists := m.DismissedReason(); exists {
+			create = create.SetDismissedReason(dismissedReason)
+		} else {
+			create = create.SetDismissedReason(vulnerability.DismissedReason)
+		}
+
+		if dismissedComment, exists := m.DismissedComment(); exists {
+			create = create.SetDismissedComment(dismissedComment)
+		} else {
+			create = create.SetDismissedComment(vulnerability.DismissedComment)
+		}
+
+		if fixedAt, exists := m.FixedAt(); exists {
+			create = create.SetNillableFixedAt(&fixedAt)
+		} else {
+			create = create.SetNillableFixedAt(vulnerability.FixedAt)
+		}
+
+		if autoDismissedAt, exists := m.AutoDismissedAt(); exists {
+			create = create.SetNillableAutoDismissedAt(&autoDismissedAt)
+		} else {
+			create = create.SetNillableAutoDismissedAt(vulnerability.AutoDismissedAt)
 		}
 
 		if externalURI, exists := m.ExternalURI(); exists {
@@ -26337,9 +26545,21 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetValidated(vulnerability.Validated).
 			SetReferences(vulnerability.References).
 			SetImpacts(vulnerability.Impacts).
+			SetCweIds(vulnerability.CweIds).
+			SetVulnerableVersionRange(vulnerability.VulnerableVersionRange).
+			SetFirstPatchedVersion(vulnerability.FirstPatchedVersion).
+			SetPackageName(vulnerability.PackageName).
+			SetPackageEcosystem(vulnerability.PackageEcosystem).
+			SetManifestPath(vulnerability.ManifestPath).
+			SetDependencyScope(vulnerability.DependencyScope).
 			SetNillablePublishedAt(vulnerability.PublishedAt).
 			SetNillableDiscoveredAt(vulnerability.DiscoveredAt).
 			SetNillableSourceUpdatedAt(vulnerability.SourceUpdatedAt).
+			SetNillableDismissedAt(vulnerability.DismissedAt).
+			SetDismissedReason(vulnerability.DismissedReason).
+			SetDismissedComment(vulnerability.DismissedComment).
+			SetNillableFixedAt(vulnerability.FixedAt).
+			SetNillableAutoDismissedAt(vulnerability.AutoDismissedAt).
 			SetExternalURI(vulnerability.ExternalURI).
 			SetMetadata(vulnerability.Metadata).
 			SetRawPayload(vulnerability.RawPayload).
