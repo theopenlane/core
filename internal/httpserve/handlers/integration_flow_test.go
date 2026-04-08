@@ -209,6 +209,23 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 	require.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value)
 }
 
+func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie_WithTrailingSlashConsoleURL() {
+	t := suite.T()
+
+	suite.h.ConsoleURL = "http://console.example/"
+
+	op := suite.createImpersonationOperation("StartIntegrationOAuthRedirectCookieTrailingSlash", "Start integration OAuth flow")
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartIntegrationAuth)
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
+	cookies := cookieMap(startRec.Result().Cookies())
+
+	require.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value)
+}
+
 func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	t := suite.T()
 

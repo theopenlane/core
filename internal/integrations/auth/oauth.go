@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"maps"
 	"slices"
 	"time"
@@ -107,7 +108,7 @@ func CompleteOAuth(ctx context.Context, cfg OAuthConfig, state json.RawMessage, 
 
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, code, rparty, mapAuthCodeOptions[rp.CodeExchangeOpt](cfg.TokenParams)...)
 	if err != nil {
-		return OAuthMaterial{}, ErrOAuthCodeExchange
+		return OAuthMaterial{}, fmt.Errorf("%w: %w", ErrOAuthCodeExchange, err)
 	}
 
 	return buildOAuthMaterial(tokens.Token, tokens.IDTokenClaims)
@@ -118,7 +119,7 @@ func buildRelyingParty(ctx context.Context, cfg OAuthConfig) (rp.RelyingParty, e
 	if cfg.DiscoveryURL != "" {
 		rparty, err := rp.NewRelyingPartyOIDC(ctx, cfg.DiscoveryURL, cfg.ClientID, cfg.ClientSecret, cfg.RedirectURL, cfg.Scopes)
 		if err != nil {
-			return nil, ErrOAuthRelyingPartyInit
+			return nil, fmt.Errorf("%w: %w", ErrOAuthRelyingPartyInit, err)
 		}
 
 		return rparty, nil
@@ -137,7 +138,7 @@ func buildRelyingParty(ctx context.Context, cfg OAuthConfig) (rp.RelyingParty, e
 
 	rparty, err := rp.NewRelyingPartyOAuth(oauthCfg)
 	if err != nil {
-		return nil, ErrOAuthRelyingPartyInit
+		return nil, fmt.Errorf("%w: %w", ErrOAuthRelyingPartyInit, err)
 	}
 
 	return rparty, nil
