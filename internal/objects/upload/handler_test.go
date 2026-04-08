@@ -19,7 +19,7 @@ func TestBuildUploadOptionsInitialisesHints(t *testing.T) {
 		OriginalName:         "report.pdf",
 		FieldName:            "evidence",
 		CorrelatedObjectType: "trustCenter",
-		Metadata: map[string]string{
+		Metadata: map[string]any{
 			"custom": "value",
 		},
 		FileMetadata: pkgobjects.FileMetadata{
@@ -103,13 +103,13 @@ func TestMergeUploadedFileMetadata(t *testing.T) {
 		Parent:               storage.ParentObject{ID: "user-id", Type: "user"},
 		CorrelatedObjectID:   "object-id",
 		CorrelatedObjectType: "user",
-		Metadata: map[string]string{
+		Metadata: map[string]any{
 			"keep": "yes",
 		},
 	}
 
 	dest := &pkgobjects.File{
-		Metadata: map[string]string{},
+		Metadata: map[string]any{},
 	}
 
 	mergeUploadedFileMetadata(dest, "file-id", src)
