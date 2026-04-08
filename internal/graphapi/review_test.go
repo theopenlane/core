@@ -58,7 +58,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 				entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 				_, err := suite.client.api.UpdateEntity(testUser1.UserCtx, entity.ID, testclient.UpdateEntityInput{
 					ReviewFrequency: lo.ToPtr(frequency),
-				})
+				}, nil, nil, nil, nil)
 				assert.NilError(t, err)
 				return []string{entity.ID}, []string{entity.EntityTypeID}
 			},
@@ -458,7 +458,7 @@ func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
 
 			_, err := suite.client.api.UpdateEntity(testUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
 				ReviewFrequency: lo.ToPtr(freq.frequency),
-			})
+			}, nil, nil, nil, nil)
 			assert.NilError(t, err)
 
 			_, err = suite.client.api.CreateReview(testUser1.UserCtx, testclient.CreateReviewInput{
@@ -507,7 +507,7 @@ func TestReviewWithMutlipleConnectedEntities(t *testing.T) {
 
 	_, err := suite.client.api.UpdateEntity(testUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
 		ReviewFrequency: lo.ToPtr(enums.FrequencyMonthly),
-	})
+	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
 	_, err = suite.client.api.CreateReview(testUser1.UserCtx, testclient.CreateReviewInput{

@@ -249,7 +249,7 @@ func TestMutationCreateEntity(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateEntity(tc.ctx, tc.request, tc.entityTypeName)
+			resp, err := tc.client.CreateEntity(tc.ctx, tc.request, tc.entityTypeName, nil, nil, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -387,7 +387,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateEntity(tc.ctx, entity.ID, tc.request)
+			resp, err := tc.client.UpdateEntity(tc.ctx, entity.ID, tc.request, nil, nil, nil, nil)
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)

@@ -110,7 +110,7 @@ func TestQueryTrustCenterEntities(t *testing.T) {
 
 	entityWithFile, err := suite.client.api.CreateTrustCenterEntity(testUser1.UserCtx, testclient.CreateTrustCenterEntityInput{
 		Name: "Entity With File",
-	}, logoFile)
+	}, logoFile, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, entityWithFile != nil)
 	assert.Assert(t, entityWithFile.CreateTrustCenterEntity.TrustCenterEntity.ID != "")
@@ -267,7 +267,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
 			}
 
-			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, tc.logoFile)
+			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, tc.logoFile, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return
@@ -379,7 +379,7 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
 			}
 
-			resp, err := tc.client.UpdateTrustCenterEntity(tc.ctx, trustCenterEntity.ID, tc.request, tc.logoFile)
+			resp, err := tc.client.UpdateTrustCenterEntity(tc.ctx, trustCenterEntity.ID, tc.request, tc.logoFile, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return
@@ -505,7 +505,7 @@ func TestTrustCenterEntityHookCustomerEntityType(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := setContext(tc.ctx, suite.client.db)
 
-			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, nil)
+			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return

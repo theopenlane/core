@@ -677,7 +677,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	subprocessorWithFile, err := suite.client.api.CreateSubprocessor(testUser.UserCtx, testclient.CreateSubprocessorInput{
 		Name:        "Subprocessor With File",
 		Description: lo.ToPtr("A subprocessor with a logo file"),
-	}, logoFile)
+	}, logoFile, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, subprocessorWithFile != nil)
 	assert.Assert(t, subprocessorWithFile.CreateSubprocessor.Subprocessor.ID != "")

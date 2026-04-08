@@ -369,7 +369,7 @@ func TestMutationCreateGroup(t *testing.T) {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddGroupCreatorIDs: []string{group.ID},
-					}, nil)
+					}, nil, nil)
 				assert.NilError(t, err)
 			}
 
@@ -431,7 +431,7 @@ func TestMutationCreateGroup(t *testing.T) {
 	_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 		testclient.UpdateOrganizationInput{
 			RemoveGroupCreatorIDs: []string{group.ID},
-		}, nil)
+		}, nil, nil)
 	assert.NilError(t, err)
 
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: createdGroups}).MustDelete(testUser1.UserCtx, t)

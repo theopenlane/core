@@ -38,7 +38,7 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 			Overview:      lo.ToPtr("Test Overview"),
 			PrimaryColor:  lo.ToPtr("#FF0000"),
 			Environment:   lo.ToPtr(enums.TrustCenterEnvironmentLive),
-		})
+		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -77,7 +77,7 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 			SecondaryBackgroundColor: lo.ToPtr("#F0F0F0"),
 			SecondaryForegroundColor: lo.ToPtr("#333333"),
 			Environment:              lo.ToPtr(enums.TrustCenterEnvironmentLive),
-		})
+		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -110,7 +110,7 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 			ThemeMode:     lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
 			Font:          lo.ToPtr("Arial, sans-serif"),
 			Environment:   lo.ToPtr(enums.TrustCenterEnvironmentLive),
-		})
+		}, nil, nil, nil, nil)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -140,7 +140,7 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 			TrustCenterID: &trustCenter.ID,
 			Title:         lo.ToPtr("Unauthorized"),
 			Environment:   lo.ToPtr(enums.TrustCenterEnvironmentLive),
-		})
+		}, nil, nil, nil, nil)
 
 		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
@@ -295,7 +295,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.input, nil, nil, nil)
+			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.input, nil, nil, nil, nil, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return

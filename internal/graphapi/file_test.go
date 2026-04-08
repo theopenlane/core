@@ -38,7 +38,7 @@ func TestQueryFile(t *testing.T) {
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, testclient.UpdateUserInput{}, fileUpload)
+	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, testclient.UpdateUserInput{}, fileUpload, nil)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
@@ -181,7 +181,7 @@ func TestQueryFiles(t *testing.T) {
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, testclient.UpdateUserInput{}, fileUpload)
+	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, testclient.UpdateUserInput{}, fileUpload, nil)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
