@@ -27,7 +27,7 @@ func webhookBaseEntries(category, externalIDExpr string) []providerkit.CelMapEnt
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedComment, Expr: `'dismissed_comment' in payload ? payload.dismissed_comment : null`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityFixedAt, Expr: `'fixed_at' in payload ? payload.fixed_at : null`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityAutoDismissedAt, Expr: `'auto_dismissed_at' in payload ? payload.auto_dismissed_at : null`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'state' in payload ? payload.state == "OPEN" : false`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'state' in payload ? payload.state == "open" : false`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, Expr: "payload"},
 	}
 }
@@ -88,11 +88,6 @@ var (
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityPackageEcosystem, Expr: `'security_vulnerability' in payload && 'package' in payload.security_vulnerability && 'ecosystem' in payload.security_vulnerability.package ? payload.security_vulnerability.package.ecosystem : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityManifestPath, Expr: `'dependency' in payload && 'manifest_path' in payload.dependency ? payload.dependency.manifest_path : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityDependencyScope, Expr: `'dependency' in payload && 'scope' in payload.dependency ? payload.dependency.scope : ""`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'security_advisory' in payload && 'state' in payload && payload.state == 'OPEN' ? true : false`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'security_advisory' in payload && 'state' in payload ? payload.state : ""`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedAt, Expr: `'dismissed_at' in payload ? payload.dismissed_at : null`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedReason, Expr: `'dismissed_reason' in payload ? payload.dismissed_reason : null`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedComment, Expr: `'dismissed_comment' in payload ? payload.dismissed_comment : null`},
 	},
 	)
 	// mapExprDependabotPoll is the CEL mapping expression for Dependabot alerts collected via GraphQL poll
