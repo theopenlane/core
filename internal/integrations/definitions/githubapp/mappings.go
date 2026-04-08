@@ -138,11 +138,11 @@ var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 
 // mapExprDirectoryAccount is the CEL mapping expression for GitHub organization member payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `payload.DatabaseID != 0 ? string(payload.DatabaseID) : payload.Login`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `payload.Email`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `payload.Name != "" ? payload.Name : payload.Login`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAvatarRemoteURL, Expr: `payload.AvatarURL`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryName, Expr: `payload.Org`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `payload.databaseId != 0 ? string(payload.databaseId) : payload.login`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `payload.email`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `payload.name != "" ? payload.name : payload.login`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAvatarRemoteURL, Expr: `payload.avatarUrl`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryName, Expr: `payload.organization != "" && payload.organization.name != "" ? payload.organization.name : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn("ACTIVE")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
 })
