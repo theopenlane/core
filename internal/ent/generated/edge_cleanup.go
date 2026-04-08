@@ -2231,6 +2231,19 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	{
+		ids, err := FromContext(ctx).VendorScoringConfig.Query().Where(vendorscoringconfig.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying vendorscoringconfig ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := VendorScoringConfigEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up vendorscoringconfig edges")
+				return err
+			}
+		}
+	}
 	if exists, err := FromContext(ctx).VendorScoringConfig.Query().Where((vendorscoringconfig.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if vendorscoringconfigCount, err := FromContext(ctx).VendorScoringConfig.Delete().Where(vendorscoringconfig.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", vendorscoringconfigCount).Msg("error deleting vendorscoringconfig")
@@ -2238,6 +2251,19 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	{
+		ids, err := FromContext(ctx).VendorRiskScore.Query().Where(vendorriskscore.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying vendorriskscore ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := VendorRiskScoreEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up vendorriskscore edges")
+				return err
+			}
+		}
+	}
 	if exists, err := FromContext(ctx).VendorRiskScore.Query().Where((vendorriskscore.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if vendorriskscoreCount, err := FromContext(ctx).VendorRiskScore.Delete().Where(vendorriskscore.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", vendorriskscoreCount).Msg("error deleting vendorriskscore")
