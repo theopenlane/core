@@ -170,7 +170,7 @@ integrations:
     azureentraid:
         clientid: ""
         clientsecret: ""
-        redirecturl: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     githubapp:
         appid: ""
         appslug: ""
@@ -179,11 +179,11 @@ integrations:
     googleworkspace:
         clientid: ""
         clientsecret: ""
-        redirecturl: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     microsoftteams:
         clientid: ""
         clientsecret: ""
-        redirecturl: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     oidclocal:
         clientid: local-core-oidc
         clientsecret: local-core-oidc-secret
@@ -193,7 +193,7 @@ integrations:
     slack:
         clientid: ""
         clientsecret: ""
-        redirecturl: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:
